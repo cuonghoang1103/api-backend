@@ -254,6 +254,48 @@
       "name": "Lab 7 — Design-first waitlist",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 7 · 1 — The design-first order of work · Lab 7 · 2 — Predict the waitlist answers"
+    },
+    {
+      "slug": "api-8-1-so-lieu",
+      "name": "8.1 Latency budgets for an API call",
+      "level": "BEGINNER",
+      "description": "Luyện: Latency 1 — Orders of magnitude on LabFlow · Latency 2 — Write percentile(samples, p) · Latency 3 — Write parseServerTiming(header)"
+    },
+    {
+      "slug": "api-8-2-mot-may",
+      "name": "8.2 Load tests and the first bottleneck",
+      "level": "BEGINNER",
+      "description": "Luyện: Bottleneck 1 — What the 07:00 test showed · Bottleneck 2 — Write littleLatencyMs(inFlight, reqPerSec) · Bottleneck 3 — Write queueWait(jobs): one thread, synchronous work"
+    },
+    {
+      "slug": "api-8-2-payload",
+      "name": "8.3 Payload size, sparse fields and compression",
+      "level": "BEGINNER",
+      "description": "Luyện: Payload 1 — Bytes on a slow link · Payload 2 — Write transferMs(bytes, kbps, delayMs) · Payload 3 — Write pickEncoding(acceptEncoding, size, threshold)"
+    },
+    {
+      "slug": "api-8-3-mo-rong",
+      "name": "8.4 Designing APIs that scale out",
+      "level": "BEGINNER",
+      "description": "Luyện: Scale-out 1 — What broke behind the load balancer · Scale-out 2 — Write roundRobin(instances, n, down) · Scale-out 3 — Write claim(rows, scope, key, fp): the shared idempotency table"
+    },
+    {
+      "slug": "api-8-4-kha-dung",
+      "name": "8.5 SLOs, error budgets and load shedding",
+      "level": "BEGINNER",
+      "description": "Luyện: Availability 1 — Budgets and overload · Availability 2 — Write budget(slo, days) and chainAvailability(parts) · Availability 3 — Write shed(requests, max): limitInflight on paper"
+    },
+    {
+      "slug": "api-8-4-suy-giam",
+      "name": "8.6 Degrading on purpose and readiness",
+      "level": "BEGINNER",
+      "description": "Luyện: Degradation 1 — The database is down · Degradation 2 — Write labsResponse(state): the withLastGood contract · Degradation 3 — Write clientDecision(res, elapsedMs, budgetMs)"
+    },
+    {
+      "slug": "api-8-7-lab",
+      "name": "Lab 8 — Usage report: measure, fix, protect",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 8 · 1 — Reading the measurements · Lab 8 · 2 — Write usageReport(bookings, labIds, from, days) in one pass · Lab 8 · 3 — Write cacheDecision(entry, now, ttlMs)"
     }
   ]
 }

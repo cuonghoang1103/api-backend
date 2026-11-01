@@ -1,0 +1,431 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-8-4-kha-dung",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-8-4-kha-dung"
+  },
+  "exercises": [
+    {
+      "title": "Availability 1 — Budgets and overload",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "availability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 8.5 (perf/budget.mjs, perf/probe.mjs, perf/shed.mjs on LabFlow).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 8.5 (perf/budget.mjs, perf/probe.mjs, perf/shed.mjs trên LabFlow).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Minutes in 30 days = 43,200.|||Số phút trong 30 ngày = 43.200.",
+        "Goodput counts only answers someone still waits for.|||Goodput chỉ đếm câu trả lời còn người chờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Availability 1 — Budgets and overload\n\nAnswer in the answer panel (no code needed).\n\n1. What is the error budget of a 99.9% SLO over 30 days?Ngân sách lỗi của SLO 99,9% trong 30 ngày là bao nhiêu?\n2. Without shedding, 200 users gave 12 answered logins/s and 1,990 timeouts. What is that called?Không bỏ bớt tải, 200 người cho 12 lượt được trả lời mỗi giây và 1.990 lần hết giờ chờ. Hiện tượng đó tên gì?\n3. Which status tells a client that the SERVICE (not its own quota) cannot take the request right now?Mã nào nói với client rằng DỊCH VỤ (không phải hạn mức của nó) lúc này không nhận được request?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Availability 1 — Budgets and overload — answer key\n\n1. What is the error budget of a 99.9% SLO over 30 days?Ngân sách lỗi của SLO 99,9% trong 30 ngày là bao nhiêu?\n   Answer: a) 43.2 minutes\n   30 × 24 × 60 × 0.001 = 43.2. Each extra 9 divides it by ten: 99.99% leaves 4.3 minutes.VI: 30 × 24 × 60 × 0,001 = 43,2. Mỗi chữ 9 thêm vào chia nó cho mười: 99,99% còn 4,3 phút.\n\n2. Without shedding, 200 users gave 12 answered logins/s and 1,990 timeouts. What is that called?Không bỏ bớt tải, 200 người cho 12 lượt được trả lời mỗi giây và 1.990 lần hết giờ chờ. Hiện tượng đó tên gì?\n   Answer: a) Congestion collapse: throughput stays high, goodput falls\n   The server kept hashing passwords for clients that had left; Lan waited 13 s after the test ended.VI: Server vẫn băm mật khẩu cho những client đã bỏ đi; cô Lan chờ 13 giây sau khi bài test kết thúc.\n\n3. Which status tells a client that the SERVICE (not its own quota) cannot take the request right now?Mã nào nói với client rằng DỊCH VỤ (không phải hạn mức của nó) lúc này không nhận được request?\n   Answer: a) 503 with Retry-After\n   429 = you are over your quota (5.3); 503 = nobody can be served right now. Both may carry Retry-After (RFC 9110).VI: 429 = bạn vượt hạn mức (5.3); 503 = lúc này không phục vụ được ai. Cả hai đều có thể kèm Retry-After (RFC 9110).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 43.2 minutes</p><p>30 × 24 × 60 × 0.001 = 43.2. Each extra 9 divides it by ten: 99.99% leaves 4.3 minutes.</p><p><i>VI: 30 × 24 × 60 × 0,001 = 43,2. Mỗi chữ 9 thêm vào chia nó cho mười: 99,99% còn 4,3 phút.</i></p></li><li><p><b>a)</b> Congestion collapse: throughput stays high, goodput falls</p><p>The server kept hashing passwords for clients that had left; Lan waited 13 s after the test ended.</p><p><i>VI: Server vẫn băm mật khẩu cho những client đã bỏ đi; cô Lan chờ 13 giây sau khi bài test kết thúc.</i></p></li><li><p><b>a)</b> 503 with Retry-After</p><p>429 = you are over your quota (5.3); 503 = nobody can be served right now. Both may carry Retry-After (RFC 9110).</p><p><i>VI: 429 = bạn vượt hạn mức (5.3); 503 = lúc này không phục vụ được ai. Cả hai đều có thể kèm Retry-After (RFC 9110).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the error budget of a 99.9% SLO over 30 days?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngân sách lỗi của SLO 99,9% trong 30 ngày là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "43.2 minutes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "7.2 hours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0.1 minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4.3 minutes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>30 × 24 × 60 × 0.001 = 43.2. Each extra 9 divides it by ten: 99.99% leaves 4.3 minutes.</p><p><i>VI: 30 × 24 × 60 × 0,001 = 43,2. Mỗi chữ 9 thêm vào chia nó cho mười: 99,99% còn 4,3 phút.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Without shedding, 200 users gave 12 answered logins/s and 1,990 timeouts. What is that called?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không bỏ bớt tải, 200 người cho 12 lượt được trả lời mỗi giây và 1.990 lần hết giờ chờ. Hiện tượng đó tên gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Congestion collapse: throughput stays high, goodput falls"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The per-user login limit blocking new emails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A memory leak in Express under sustained load"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A deadlock between threadpool and event loop"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The server kept hashing passwords for clients that had left; Lan waited 13 s after the test ended.</p><p><i>VI: Server vẫn băm mật khẩu cho những client đã bỏ đi; cô Lan chờ 13 giây sau khi bài test kết thúc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which status tells a client that the SERVICE (not its own quota) cannot take the request right now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã nào nói với client rằng DỊCH VỤ (không phải hạn mức của nó) lúc này không nhận được request?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "503 with Retry-After"
+              },
+              {
+                "ma": "b",
+                "noiDung": "500"
+              },
+              {
+                "ma": "c",
+                "noiDung": "429 with Retry-After"
+              },
+              {
+                "ma": "d",
+                "noiDung": "408"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>429 = you are over your quota (5.3); 503 = nobody can be served right now. Both may carry Retry-After (RFC 9110).</p><p><i>VI: 429 = bạn vượt hạn mức (5.3); 503 = lúc này không phục vụ được ai. Cả hai đều có thể kèm Retry-After (RFC 9110).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing 429 and 503.|||Nhầm 429 với 503."
+        },
+        {
+          "loi": "Measuring availability only from server logs.|||Chỉ đo tính sẵn sàng từ log server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SLO",
+          "vi": "mục tiêu mức dịch vụ"
+        },
+        {
+          "en": "goodput",
+          "vi": "phần việc tới tay người còn chờ"
+        }
+      ]
+    },
+    {
+      "title": "Availability 2 — Write budget(slo, days) and chainAvailability(parts)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "availability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Two helpers for an SLO page. <code>budget(sloPercent, days)</code> returns the minutes that may go wrong in <code>days</code> days, rounded to 1 decimal. <code>chainAvailability(parts)</code> takes the availabilities (in %) of components that a request needs <em>one after another</em> and returns the availability of the whole chain in %, rounded to 3 decimals. An empty chain is 100.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai hàm phụ cho trang SLO. <code>budget(sloPercent, days)</code> trả số phút được phép hỏng trong <code>days</code> ngày, làm tròn 1 chữ số. <code>chainAvailability(parts)</code> nhận tính sẵn sàng (%) của các thành phần mà một request cần <em>nối tiếp nhau</em> và trả tính sẵn sàng của cả chuỗi tính bằng %, làm tròn 3 chữ số. Chuỗi rỗng là 100.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "sloPercent, days — numbers; parts — number[] (%)|||sloPercent, days — số; parts — number[] (%)",
+      "outputSpec": "minutes (1 decimal); percent (3 decimals)|||phút (1 chữ số); phần trăm (3 chữ số)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "budget(99.9, 30)",
+          "output": "43.2",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "1 − 99.9/100 = 0.001.|||1 − 99,9/100 = 0,001.",
+        "Availabilities in a chain multiply as fractions.|||Tính sẵn sàng nối tiếp nhân với nhau dưới dạng phân số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** minutes allowed to fail */\nfunction budget(sloPercent, days) {\n  // Write your solution here\n  return days * (100 - sloPercent);\n}\n/** availability of components needed one after another, in % */\nfunction chainAvailability(parts) {\n  return Math.min(...parts);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction budget(sloPercent, days) {\n  const minutes = days * 24 * 60 * (1 - sloPercent / 100);\n  return Math.round(minutes * 10) / 10;\n}\n\nfunction chainAvailability(parts) {\n  const all = parts.reduce((p, a) => p * (a / 100), 1);\n  return Math.round(all * 100 * 1000) / 1000;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>budget(99.9, 30) = 43.2; the four-part booking chain of lesson 8.5 = 99.79 — about 1.5 hours a month, worse than any part.</p>",
+      "solutionExplanationHtmlVi": "<p>budget(99.9, 30) = 43,2; chuỗi đặt phòng bốn thành phần của bài 8.5 = 99,79 — khoảng 1,5 giờ mỗi tháng, tệ hơn mọi thành phần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "99.9% over 30 days",
+              "vi": "99,9% trong 30 ngày"
+            },
+            "goi": "budget(99.9, 30)",
+            "mongDoi": 43.2
+          },
+          {
+            "moTa": {
+              "en": "The booking chain of lesson 8.5",
+              "vi": "Chuỗi đặt phòng của bài 8.5"
+            },
+            "goi": "chainAvailability([99.99, 99.95, 99.95, 99.9])",
+            "mongDoi": 99.79
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "budget(99.99, 30)",
+            "mongDoi": 4.3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "budget(99.5, 7)",
+            "mongDoi": 50.4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "chainAvailability([99.99, 99.95, 99.95])",
+            "mongDoi": 99.89,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "chainAvailability([])",
+            "mongDoi": 100,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the minimum of the chain instead of the product.|||Lấy giá trị nhỏ nhất của chuỗi thay vì tích."
+        },
+        {
+          "loi": "Multiplying percentages directly (99.9 × 99.9).|||Nhân thẳng phần trăm (99,9 × 99,9)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "error budget",
+          "vi": "ngân sách lỗi"
+        },
+        {
+          "en": "serial dependencies",
+          "vi": "phụ thuộc nối tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Availability 3 — Write shed(requests, max): limitInflight on paper",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "availability",
+        "load shedding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Model LabFlow’s <code>limitInflight(max)</code>. Requests arrive in order of <code>start</code> (ms); an accepted request is in flight from <code>start</code> until <code>start + dur</code> (it no longer counts at exactly its end time). When a request arrives, count the <em>accepted</em> requests in flight at that moment: if that is <code>max</code> or more, answer <code>503</code> (and it never runs); otherwise accept it with <code>200</code>. Return the status of each request.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng <code>limitInflight(max)</code> của LabFlow. Request tới theo thứ tự <code>start</code> (ms); request được nhận thì đang xử lý từ <code>start</code> tới <code>start + dur</code> (đúng lúc kết thúc thì không còn tính). Khi một request tới, đếm các request <em>đã nhận</em> đang xử lý lúc đó: từ <code>max</code> trở lên thì trả <code>503</code> (và nó không chạy); ngược lại nhận với <code>200</code>. Trả mã của từng request.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "requests — [{ start, dur }] sorted by start; max — number|||requests — [{ start, dur }] đã sắp theo start; max — số",
+      "outputSpec": "(200 | 503)[]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shed([{\"start\":0,\"dur\":31},{\"start\":1,\"dur\":31},{\"start\":2,\"dur\":31},{\"start\":40,\"dur\":31}], 2)",
+          "output": "[200,200,503,200]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep the [start, end) of accepted requests only.|||Chỉ giữ [start, end) của request đã nhận.",
+        "A rejected request never occupies a slot.|||Request bị từ chối không chiếm chỗ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** 200 or 503 for each request under an in-flight limit */\nfunction shed(requests, max) {\n  // Write your solution here\n  return requests.map((r, i) => (i < max ? 200 : 503));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction shed(requests, max) {\n  const accepted = [];                                       // [start, end] của các request đã nhận\n  return requests.map(({ start, dur }) => {\n    const inflight = accepted.filter(([s, e]) => s <= start && start < e).length;\n    if (inflight >= max) return 503;\n    accepted.push([start, start + dur]);\n    return 200;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With max = 8 and 31 ms jobs, the 9th simultaneous login gets 503 in microseconds instead of waiting — goodput 12 → 123/s in lesson 8.5.</p>",
+      "solutionExplanationHtmlVi": "<p>Với max = 8 và việc 31 ms, lượt đăng nhập thứ 9 cùng lúc nhận 503 trong vài micro giây thay vì chờ — goodput 12 → 123/s ở bài 8.5.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "max 2: the third gets 503 at once",
+              "vi": "max 2: cái thứ ba nhận 503 ngay"
+            },
+            "goi": "shed([{\"start\":0,\"dur\":31},{\"start\":1,\"dur\":31},{\"start\":2,\"dur\":31},{\"start\":40,\"dur\":31}], 2)",
+            "mongDoi": [
+              200,
+              200,
+              503,
+              200
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Ends exactly when the next starts",
+              "vi": "Kết thúc đúng lúc cái sau bắt đầu"
+            },
+            "goi": "shed([{\"start\":0,\"dur\":10},{\"start\":10,\"dur\":10}], 1)",
+            "mongDoi": [
+              200,
+              200
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "shed([], 8)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shed([{\"start\":0,\"dur\":5},{\"start\":1,\"dur\":1},{\"start\":2,\"dur\":1},{\"start\":3,\"dur\":9},{\"start\":4,\"dur\":1}], 2)",
+            "mongDoi": [
+              200,
+              200,
+              200,
+              200,
+              503
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "shed([{\"start\":0,\"dur\":100},{\"start\":0,\"dur\":100},{\"start\":50,\"dur\":1}], 1)",
+            "mongDoi": [
+              200,
+              503,
+              503
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting rejected requests as in flight.|||Đếm cả request bị từ chối là đang xử lý."
+        },
+        {
+          "loi": "Treating end time as still busy (≤ instead of <).|||Coi đúng lúc kết thúc vẫn bận (≤ thay vì <)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "load shedding",
+          "vi": "bỏ bớt tải"
+        },
+        {
+          "en": "in flight",
+          "vi": "đang xử lý"
+        }
+      ]
+    }
+  ]
+}

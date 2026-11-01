@@ -1,0 +1,411 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-8-2-mot-may",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-8-2-mot-may"
+  },
+  "exercises": [
+    {
+      "title": "Bottleneck 1 — What the 07:00 test showed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "load testing",
+        "event loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 8.2 (autocannon 8.0.0 and perf/mixed.mjs on LabFlow).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 8.2 (autocannon 8.0.0 và perf/mixed.mjs trên LabFlow).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Check the 2xx count first.|||Xem số 2xx trước.",
+        "1000 ms ÷ time per job = jobs per second per thread.|||1000 ms ÷ thời gian mỗi việc = số việc mỗi giây mỗi luồng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bottleneck 1 — What the 07:00 test showed\n\nAnswer in the answer panel (no code needed).\n\n1. autocannon on GET /v2/labs: 8,258 req/s, 116 2xx, 82,460 non-2xx. What was measured?autocannon vào GET /v2/labs: 8.258 req/s, 116 lần 2xx, 82.460 lần không phải 2xx. Đã đo cái gì?\n2. With scryptSync, logins ran at 30.2 req/s. Why about 30?Với scryptSync, đăng nhập chạy 30,2 req/s. Vì sao khoảng 30?\n3. After switching to the asynchronous scrypt, logins went to 113.6 req/s. What limits it now?Sau khi đổi sang scrypt bất đồng bộ, đăng nhập lên 113,6 req/s. Giờ cái gì giới hạn nó?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bottleneck 1 — What the 07:00 test showed — answer key\n\n1. autocannon on GET /v2/labs: 8,258 req/s, 116 2xx, 82,460 non-2xx. What was measured?autocannon vào GET /v2/labs: 8.258 req/s, 116 lần 2xx, 82.460 lần không phải 2xx. Đã đo cái gì?\n   Answer: c) How fast LabFlow answers 429 from its own per-IP limit\n   The limit is 100/min per IP (5.3). Always read the status codes; with the limit raised for the test: 9,414 req/s, all 2xx.VI: Giới hạn là 100 lần/phút mỗi IP (5.3). Luôn đọc mã trạng thái; nâng giới hạn khi test: 9.414 req/s, toàn 2xx.\n\n2. With scryptSync, logins ran at 30.2 req/s. Why about 30?Với scryptSync, đăng nhập chạy 30,2 req/s. Vì sao khoảng 30?\n   Answer: b) One scrypt takes ~31 ms on the only JavaScript thread: 1000 ÷ 31 ≈ 32\n   Synchronous work runs at the speed of one core, whatever the machine has.VI: Việc đồng bộ chạy với tốc độ một nhân, máy có bao nhiêu nhân cũng vậy.\n\n3. After switching to the asynchronous scrypt, logins went to 113.6 req/s. What limits it now?Sau khi đổi sang scrypt bất đồng bộ, đăng nhập lên 113,6 req/s. Giờ cái gì giới hạn nó?\n   Answer: c) libuv’s threadpool: 4 threads by default × ~32/s\n   UV_THREADPOOL_SIZE=8 gave 193/s — and made the bystander a bit slower on the same laptop.VI: UV_THREADPOOL_SIZE=8 cho 193/s — và làm người đứng ngoài chậm hơn chút trên cùng laptop.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> How fast LabFlow answers 429 from its own per-IP limit</p><p>The limit is 100/min per IP (5.3). Always read the status codes; with the limit raised for the test: 9,414 req/s, all 2xx.</p><p><i>VI: Giới hạn là 100 lần/phút mỗi IP (5.3). Luôn đọc mã trạng thái; nâng giới hạn khi test: 9.414 req/s, toàn 2xx.</i></p></li><li><p><b>b)</b> One scrypt takes ~31 ms on the only JavaScript thread: 1000 ÷ 31 ≈ 32</p><p>Synchronous work runs at the speed of one core, whatever the machine has.</p><p><i>VI: Việc đồng bộ chạy với tốc độ một nhân, máy có bao nhiêu nhân cũng vậy.</i></p></li><li><p><b>c)</b> libuv’s threadpool: 4 threads by default × ~32/s</p><p>UV_THREADPOOL_SIZE=8 gave 193/s — and made the bystander a bit slower on the same laptop.</p><p><i>VI: UV_THREADPOOL_SIZE=8 cho 193/s — và làm người đứng ngoài chậm hơn chút trên cùng laptop.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>autocannon on GET /v2/labs: 8,258 req/s, 116 2xx, 82,460 non-2xx. What was measured?</p><p style=\"opacity:.75;font-size:.92em\"><i>autocannon vào GET /v2/labs: 8.258 req/s, 116 lần 2xx, 82.460 lần không phải 2xx. Đã đo cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A crash after 116 requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The speed of autocannon itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "How fast LabFlow answers 429 from its own per-IP limit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The real capacity of the lab list"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The limit is 100/min per IP (5.3). Always read the status codes; with the limit raised for the test: 9,414 req/s, all 2xx.</p><p><i>VI: Giới hạn là 100 lần/phút mỗi IP (5.3). Luôn đọc mã trạng thái; nâng giới hạn khi test: 9.414 req/s, toàn 2xx.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With scryptSync, logins ran at 30.2 req/s. Why about 30?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với scryptSync, đăng nhập chạy 30,2 req/s. Vì sao khoảng 30?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "autocannon used 30 connections"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One scrypt takes ~31 ms on the only JavaScript thread: 1000 ÷ 31 ≈ 32"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The rate limit allows 30 logins per second"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL can only answer 30 queries per second"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Synchronous work runs at the speed of one core, whatever the machine has.</p><p><i>VI: Việc đồng bộ chạy với tốc độ một nhân, máy có bao nhiêu nhân cũng vậy.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After switching to the asynchronous scrypt, logins went to 113.6 req/s. What limits it now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi đổi sang scrypt bất đồng bộ, đăng nhập lên 113,6 req/s. Giờ cái gì giới hạn nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The event loop, which is still blocked"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The 10 connections of autocannon"
+              },
+              {
+                "ma": "c",
+                "noiDung": "libuv’s threadpool: 4 threads by default × ~32/s"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Compression of the response"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>UV_THREADPOOL_SIZE=8 gave 193/s — and made the bystander a bit slower on the same laptop.</p><p><i>VI: UV_THREADPOOL_SIZE=8 cho 193/s — và làm người đứng ngoài chậm hơn chút trên cùng laptop.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting req/s without the status codes.|||Báo req/s mà không kèm mã trạng thái."
+        },
+        {
+          "loi": "Thinking async makes scrypt itself faster.|||Tưởng bất đồng bộ làm bản thân scrypt nhanh hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event loop",
+          "vi": "luồng duy nhất chạy JavaScript"
+        },
+        {
+          "en": "threadpool",
+          "vi": "các luồng phụ của libuv"
+        }
+      ]
+    },
+    {
+      "title": "Bottleneck 2 — Write littleLatencyMs(inFlight, reqPerSec)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "load testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Little’s law: requests in flight = throughput × time per request. Given how many requests are always in flight (autocannon’s connections) and the measured throughput, return the average time per request in <strong>milliseconds</strong>, rounded to 2 decimals. Throughput 0 or negative ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Định luật Little: số request đang xử lý = thông lượng × thời gian mỗi request. Cho số request luôn đang xử lý (số kết nối của autocannon) và thông lượng đo được, trả về thời gian trung bình mỗi request tính bằng <strong>mili giây</strong>, làm tròn 2 chữ số. Thông lượng 0 hoặc âm ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "inFlight — number; reqPerSec — number|||inFlight — số; reqPerSec — số",
+      "outputSpec": "ms per request (2 decimals) or null|||ms mỗi request (2 chữ số) hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "littleLatencyMs(10, 1083.7)",
+          "output": "9.23",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "time = inFlight ÷ throughput, in seconds.|||thời gian = inFlight ÷ thông lượng, tính bằng giây.",
+        "Math.round(x * 100) / 100 for 2 decimals.|||Math.round(x * 100) / 100 để lấy 2 chữ số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** average ms per request from Little's law */\nfunction littleLatencyMs(inFlight, reqPerSec) {\n  // Write your solution here\n  return reqPerSec / inFlight;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction littleLatencyMs(inFlight, reqPerSec) {\n  if (!(reqPerSec > 0)) return null;\n  return Math.round((inFlight / reqPerSec) * 1000 * 100) / 100;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10 connections at 1,083.7 req/s ⇒ 9.23 ms; autocannon reported 8.7 ms on average — the test is consistent.</p>",
+      "solutionExplanationHtmlVi": "<p>10 kết nối với 1.083,7 req/s ⇒ 9,23 ms; autocannon báo trung bình 8,7 ms — bài test nhất quán.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Bookings list, lesson 8.2",
+              "vi": "Danh sách đặt phòng, bài 8.2"
+            },
+            "goi": "littleLatencyMs(10, 1083.7)",
+            "mongDoi": 9.23
+          },
+          {
+            "moTa": {
+              "en": "Lab list",
+              "vi": "Danh sách phòng"
+            },
+            "goi": "littleLatencyMs(10, 9414.19)",
+            "mongDoi": 1.06
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "littleLatencyMs(10, 0)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "littleLatencyMs(100, 136)",
+            "mongDoi": 735.29,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting × 1000 (seconds vs milliseconds).|||Quên × 1000 (giây với mili giây)."
+        },
+        {
+          "loi": "Dividing the wrong way round.|||Chia ngược."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Little’s law",
+          "vi": "định luật Little"
+        },
+        {
+          "en": "throughput",
+          "vi": "thông lượng"
+        }
+      ]
+    },
+    {
+      "title": "Bottleneck 3 — Write queueWait(jobs): one thread, synchronous work",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "event loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Simulate Node’s single JavaScript thread when every handler is <em>synchronous</em>. <code>jobs</code> arrive in order; each has an arrival time <code>at</code> (ms) and a <code>cost</code> (ms of CPU). A job starts when it has arrived <em>and</em> the thread is free, then holds the thread for <code>cost</code>. Return, for each job, its response time = finish − arrival.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng luồng JavaScript duy nhất của Node khi mọi handler đều <em>đồng bộ</em>. <code>jobs</code> tới theo thứ tự; mỗi việc có thời điểm tới <code>at</code> (ms) và <code>cost</code> (ms CPU). Một việc bắt đầu khi nó đã tới <em>và</em> luồng rảnh, rồi giữ luồng trong <code>cost</code>. Trả về, cho từng việc, thời gian trả lời = lúc xong − lúc tới.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "jobs — [{ at, cost }] sorted by at|||jobs — [{ at, cost }] đã sắp theo at",
+      "outputSpec": "number[] — response time of each job|||number[] — thời gian trả lời của từng việc",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "queueWait([{\"at\":0,\"cost\":31},{\"at\":5,\"cost\":1},{\"at\":6,\"cost\":31}])",
+          "output": "[31,27,57]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Track when the thread becomes free.|||Theo dõi lúc luồng rảnh lại.",
+        "start = max(at, free)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** response time of each job on ONE thread */\nfunction queueWait(jobs) {\n  // Write your solution here\n  return jobs.map((j) => j.cost);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction queueWait(jobs) {\n  let free = 0;                                   // lúc luồng duy nhất rảnh lại\n  return jobs.map(({ at, cost }) => {\n    const start = Math.max(at, free);\n    free = start + cost;\n    return start + cost - at;                     // tổng thời gian chờ + làm của request này\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A 1 ms lab-list request behind a few 31 ms logins answers in tens of ms — the shape of lesson 8.2’s p99 463 ms.</p>",
+      "solutionExplanationHtmlVi": "<p>Một request danh sách phòng 1 ms đứng sau vài lượt đăng nhập 31 ms trả lời sau hàng chục ms — đúng dáng p99 463 ms của bài 8.2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A lab-list request behind a login",
+              "vi": "Danh sách phòng đứng sau một lượt đăng nhập"
+            },
+            "goi": "queueWait([{\"at\":0,\"cost\":31},{\"at\":5,\"cost\":1},{\"at\":6,\"cost\":31}])",
+            "mongDoi": [
+              31,
+              27,
+              57
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The thread is free in between",
+              "vi": "Luồng rảnh ở giữa"
+            },
+            "goi": "queueWait([{\"at\":0,\"cost\":2},{\"at\":10,\"cost\":2}])",
+            "mongDoi": [
+              2,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "queueWait([])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "queueWait([{\"at\":0,\"cost\":31},{\"at\":0,\"cost\":31},{\"at\":0,\"cost\":31},{\"at\":1,\"cost\":1}])",
+            "mongDoi": [
+              31,
+              62,
+              93,
+              93
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "queueWait([{\"at\":3,\"cost\":0},{\"at\":3,\"cost\":4},{\"at\":100,\"cost\":1}])",
+            "mongDoi": [
+              0,
+              4,
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning only cost — ignoring the queue in front.|||Chỉ trả cost — bỏ qua hàng đợi phía trước."
+        },
+        {
+          "loi": "Letting a job start before it arrives.|||Cho việc bắt đầu trước khi nó tới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blocking",
+          "vi": "chặn luồng"
+        },
+        {
+          "en": "queueing delay",
+          "vi": "thời gian xếp hàng"
+        }
+      ]
+    }
+  ]
+}

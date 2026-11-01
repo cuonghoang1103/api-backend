@@ -1,0 +1,417 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-8-1-so-lieu",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-8-1-so-lieu"
+  },
+  "exercises": [
+    {
+      "title": "Latency 1 — Orders of magnitude on LabFlow",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "latency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from the latency table measured in lesson 8.1 (Node 22, PostgreSQL 18, one laptop).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bảng độ trễ đo ở bài 8.1 (Node 22, PostgreSQL 18, một laptop).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare units first: ns, µs, ms.|||So đơn vị trước: ns, µs, ms.",
+        "A screen is as slow as its slowest call.|||Một màn hình chậm như lời gọi chậm nhất của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Latency 1 — Orders of magnitude on LabFlow\n\nAnswer in the answer panel (no code needed).\n\n1. Server-Timing on login said validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. What is the biggest leg?Server-Timing của đăng nhập ghi validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. Chặng lớn nhất là gì?\n2. A home screen calls 5 endpoints in parallel; each is slow 1% of the time. About how many screen loads are slow?Màn hình chính gọi song song 5 endpoint; mỗi cái chậm 1% số lần. Khoảng bao nhiêu lần mở màn hình bị chậm?\n3. Which measured number is the most expensive single step?Số đo nào là bước đơn lẻ đắt nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Latency 1 — Orders of magnitude on LabFlow — answer key\n\n1. Server-Timing on login said validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. What is the biggest leg?Server-Timing của đăng nhập ghi validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. Chặng lớn nhất là gì?\n   Answer: b) scrypt — 97% of the request\n   31.19 of 32.00 ms. Optimising anything else in login is pointless; scrypt is slow on purpose (6.1).VI: 31,19 trong 32,00 ms. Tối ưu thứ khác trong đăng nhập là vô ích; scrypt cố ý chậm (6.1).\n\n2. A home screen calls 5 endpoints in parallel; each is slow 1% of the time. About how many screen loads are slow?Màn hình chính gọi song song 5 endpoint; mỗi cái chậm 1% số lần. Khoảng bao nhiêu lần mở màn hình bị chậm?\n   Answer: b) About 4.9% (1 − 0.99⁵)\n   The screen is slow when ANY call is slow: 1 − 0.99⁵ ≈ 4.9%. That is why APIs promise p99, not averages.VI: Màn hình chậm khi BẤT KỲ lời gọi nào chậm: 1 − 0,99⁵ ≈ 4,9%. Vì thế API hứa theo p99, không theo trung bình.\n\n3. Which measured number is the most expensive single step?Số đo nào là bước đơn lẻ đắt nhất?\n   Answer: a) A first request to a far server (DNS + TCP + TLS): 197 ms\n   New connections are expensive: 197 ms vs 37 ms on a reused connection — open them early and keep them alive.VI: Kết nối mới thì đắt: 197 ms so với 37 ms trên kết nối dùng lại — mở sớm và giữ sống.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> scrypt — 97% of the request</p><p>31.19 of 32.00 ms. Optimising anything else in login is pointless; scrypt is slow on purpose (6.1).</p><p><i>VI: 31,19 trong 32,00 ms. Tối ưu thứ khác trong đăng nhập là vô ích; scrypt cố ý chậm (6.1).</i></p></li><li><p><b>b)</b> About 4.9% (1 − 0.99⁵)</p><p>The screen is slow when ANY call is slow: 1 − 0.99⁵ ≈ 4.9%. That is why APIs promise p99, not averages.</p><p><i>VI: Màn hình chậm khi BẤT KỲ lời gọi nào chậm: 1 − 0,99⁵ ≈ 4,9%. Vì thế API hứa theo p99, không theo trung bình.</i></p></li><li><p><b>a)</b> A first request to a far server (DNS + TCP + TLS): 197 ms</p><p>New connections are expensive: 197 ms vs 37 ms on a reused connection — open them early and keep them alive.</p><p><i>VI: Kết nối mới thì đắt: 197 ms so với 37 ms trên kết nối dùng lại — mở sớm và giữ sống.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Server-Timing on login said validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. What is the biggest leg?</p><p style=\"opacity:.75;font-size:.92em\"><i>Server-Timing của đăng nhập ghi validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00. Chặng lớn nhất là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The network, because total is larger than scrypt"
+              },
+              {
+                "ma": "b",
+                "noiDung": "scrypt — 97% of the request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "JSON serialisation, which Server-Timing does not show"
+              },
+              {
+                "ma": "d",
+                "noiDung": "validate — it runs on every request"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>31.19 of 32.00 ms. Optimising anything else in login is pointless; scrypt is slow on purpose (6.1).</p><p><i>VI: 31,19 trong 32,00 ms. Tối ưu thứ khác trong đăng nhập là vô ích; scrypt cố ý chậm (6.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A home screen calls 5 endpoints in parallel; each is slow 1% of the time. About how many screen loads are slow?</p><p style=\"opacity:.75;font-size:.92em\"><i>Màn hình chính gọi song song 5 endpoint; mỗi cái chậm 1% số lần. Khoảng bao nhiêu lần mở màn hình bị chậm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5% exactly, because 5 × 1%"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 4.9% (1 − 0.99⁵)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 0.2% (1% ÷ 5)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 1%, the same as each endpoint"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The screen is slow when ANY call is slow: 1 − 0.99⁵ ≈ 4.9%. That is why APIs promise p99, not averages.</p><p><i>VI: Màn hình chậm khi BẤT KỲ lời gọi nào chậm: 1 − 0,99⁵ ≈ 4,9%. Vì thế API hứa theo p99, không theo trung bình.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which measured number is the most expensive single step?</p><p style=\"opacity:.75;font-size:.92em\"><i>Số đo nào là bước đơn lẻ đắt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A first request to a far server (DNS + TCP + TLS): 197 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Signing a JWT with HMAC: 2 µs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Filtering 10,000 bookings in RAM: 82 µs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A PostgreSQL primary-key query: 110 µs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>New connections are expensive: 197 ms vs 37 ms on a reused connection — open them early and keep them alive.</p><p><i>VI: Kết nối mới thì đắt: 197 ms so với 37 ms trên kết nối dùng lại — mở sớm và giữ sống.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading µs as ms.|||Đọc µs thành ms."
+        },
+        {
+          "loi": "Averaging percentiles across calls.|||Lấy trung bình các phân vị của nhiều lời gọi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "percentile",
+          "vi": "phân vị"
+        },
+        {
+          "en": "Server-Timing",
+          "vi": "header báo thời gian từng bước ở server"
+        }
+      ]
+    },
+    {
+      "title": "Latency 2 — Write percentile(samples, p)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "latency",
+        "percentile"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return the p-th percentile of a list of times, exactly as LabFlow’s perf scripts do: sort a <em>copy</em> ascending, take the element at index <code>floor(n × p)</code>, but never past the last element. <code>p</code> is a fraction (0.5 = median, 0.99 = p99). Empty list ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về phân vị thứ p của một danh sách thời gian, đúng như các script perf của LabFlow: sắp một <em>bản sao</em> tăng dần, lấy phần tử ở chỉ số <code>floor(n × p)</code>, nhưng không vượt quá phần tử cuối. <code>p</code> là phân số (0.5 = median, 0.99 = p99). Danh sách rỗng ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "samples — number[] (ms); p — number in [0, 1]|||samples — number[] (ms); p — số trong [0, 1]",
+      "outputSpec": "a number from samples, or null|||một số trong samples, hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "percentile([3,1,1000,2], 0.5)",
+          "output": "3",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "sort() without a compare function sorts numbers as text.|||sort() không có hàm so sánh sắp số như chuỗi.",
+        "Copy before sorting: [...samples].|||Sao chép trước khi sắp: [...samples]."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** p-th percentile of response times (p is a fraction) */\nfunction percentile(samples, p) {\n  // Write your solution here\n  return samples.reduce((a, b) => a + b, 0) / samples.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction percentile(samples, p) {\n  if (samples.length === 0) return null;\n  const s = [...samples].sort((a, b) => a - b);\n  return s[Math.min(s.length - 1, Math.floor(s.length * p))];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sorted [1, 2, 3, 1000] at p = 0.5 gives index 2 ⇒ 3; the average would be 251.5, a number no request had.</p>",
+      "solutionExplanationHtmlVi": "<p>Sắp [1, 2, 3, 1000] với p = 0.5 cho chỉ số 2 ⇒ 3; trung bình là 251,5, con số không request nào có.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The average would lie",
+              "vi": "Trung bình sẽ nói dối"
+            },
+            "goi": "percentile([3,1,1000,2], 0.5)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "p99 of five samples",
+              "vi": "p99 của năm mẫu"
+            },
+            "goi": "percentile([5,9,1,7,3], 0.99)",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "percentile([], 0.5)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "percentile([10,2,33,4,5,6,7,8,9,100], 1)",
+            "mongDoi": 100,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "percentile([100,25,9], 0)",
+            "mongDoi": 9,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the average instead of a percentile.|||Trả trung bình thay vì phân vị."
+        },
+        {
+          "loi": "Index n × p without the cap ⇒ undefined at p = 1.|||Chỉ số n × p không chặn ⇒ undefined khi p = 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "median (p50)",
+          "vi": "trung vị"
+        },
+        {
+          "en": "tail latency",
+          "vi": "độ trễ phần đuôi"
+        }
+      ]
+    },
+    {
+      "title": "Latency 3 — Write parseServerTiming(header)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "HTTP",
+        "observability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Turn a <code>Server-Timing</code> header into an object <code>{ name: dur }</code>. Metrics are separated by commas; inside a metric, parameters are separated by <code>;</code>. Keep only <code>dur</code> (as a number; the parameter name is case-insensitive). A metric without a valid <code>dur</code> maps to <code>null</code>; <code>desc</code> and other parameters are ignored. Spaces around parts are allowed. Empty or missing header ⇒ <code>{}</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi header <code>Server-Timing</code> thành object <code>{ tên: dur }</code>. Các metric cách nhau bởi dấu phẩy; trong một metric, tham số cách nhau bởi <code>;</code>. Chỉ giữ <code>dur</code> (dạng số; tên tham số không phân biệt hoa thường). Metric không có <code>dur</code> hợp lệ ⇒ <code>null</code>; <code>desc</code> và tham số khác bỏ qua. Cho phép khoảng trắng quanh các phần. Header rỗng hoặc thiếu ⇒ <code>{}</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "header — string | undefined|||header — chuỗi | undefined",
+      "outputSpec": "object name ⇒ number | null|||object tên ⇒ số | null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseServerTiming(\"validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00\")",
+          "output": "{\"validate\":0.11,\"scrypt\":31.19,\"total\":32}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(\",\") then split(\";\") then split(\"=\").|||split(\",\") rồi split(\";\") rồi split(\"=\").",
+        "Number(\"abc\") is NaN — check with Number.isFinite.|||Number(\"abc\") là NaN — kiểm bằng Number.isFinite."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Server-Timing header ⇒ { name: dur } */\nfunction parseServerTiming(header) {\n  // Write your solution here\n  const out = {};\n  for (const m of header.split(', ')) { const [n, d] = m.split(';dur='); out[n] = d; }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseServerTiming(header) {\n  const out = {};\n  if (!header) return out;\n  for (const metric of header.split(',')) {\n    const [name, ...params] = metric.split(';').map((x) => x.trim());\n    if (!name) continue;\n    let dur = null;\n    for (const p of params) {\n      const [k, v] = p.split('=').map((x) => x.trim());\n      if (k.toLowerCase() === 'dur' && v !== undefined && v !== '' && Number.isFinite(Number(v))) dur = Number(v);\n    }\n    out[name] = dur;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 8.1’s login header becomes { validate: 0.11, scrypt: 31.19, total: 32 } — and a dashboard can now say “scrypt is 97% of login”.</p>",
+      "solutionExplanationHtmlVi": "<p>Header đăng nhập ở bài 8.1 thành { validate: 0.11, scrypt: 31.19, total: 32 } — và một bảng theo dõi giờ nói được “scrypt chiếm 97% đăng nhập”.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Login in lesson 8.1",
+              "vi": "Đăng nhập ở bài 8.1"
+            },
+            "goi": "parseServerTiming(\"validate;dur=0.11, scrypt;dur=31.19, total;dur=32.00\")",
+            "mongDoi": {
+              "validate": 0.11,
+              "scrypt": 31.19,
+              "total": 32
+            }
+          },
+          {
+            "moTa": {
+              "en": "desc first; a metric without dur",
+              "vi": "desc đứng trước; metric không có dur"
+            },
+            "goi": "parseServerTiming(\"cache;desc=\\\"Cache Read\\\";dur=23.2, missedCache\")",
+            "mongDoi": {
+              "cache": 23.2,
+              "missedCache": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseServerTiming(\"\")",
+            "mongDoi": {},
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseServerTiming(\" db ; DUR=3.2 ,total;dur=4.79\")",
+            "mongDoi": {
+              "db": 3.2,
+              "total": 4.79
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseServerTiming(\"auth;dur=abc\")",
+            "mongDoi": {
+              "auth": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping dur as a string \"31.19\".|||Giữ dur dạng chuỗi \"31.19\"."
+        },
+        {
+          "loi": "Assuming dur is always the second part — desc may come first.|||Coi dur luôn ở vị trí thứ hai — desc có thể đứng trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Server-Timing",
+          "vi": "header thời gian phía server"
+        },
+        {
+          "en": "metric",
+          "vi": "một số đo có tên"
+        }
+      ]
+    }
+  ]
+}

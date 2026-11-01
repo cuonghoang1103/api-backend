@@ -448,6 +448,11 @@ module.exports = myFunction;
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 2.2: The event loop, phase by phase</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: the event loop and why Node does not block while waiting for I/O. Different: Academy explains the event loop in simplified form; Courses walks through its phases. It also adds: six phases, proving the run order yourself, setTimeout(0) vs setImmediate, why timers are never exact; lesson 2.4 also measures event-loop blocking with real numbers.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-2-mot-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Measure it in API &amp; System Design (Courses) — lesson 8.2: a load test and the first real bottleneck</span><span class="lc-sub">Same rule as this lesson: CPU-heavy synchronous work blocks the event loop and freezes every other request. Different: there you measure it on a real API — one scryptSync per login made an unrelated endpoint’s p99 go from 3 ms to 463 ms — and fix it with the asynchronous scrypt on libuv’s threadpool (p99 8 ms).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -482,6 +487,11 @@ module.exports = myFunction;
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-2-event-loop" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 2.2: Event loop, đi qua từng pha</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: event loop và vì sao Node không bị chặn khi chờ I/O. Khác: Academy giải thích event loop ở dạng đơn giản hoá; Courses đi qua từng pha của nó. Ở đó có thêm: sáu pha, tự chứng minh thứ tự chạy, setTimeout(0) so với setImmediate, vì sao timer không bao giờ chính xác; bài 2.4 còn đo chuyện chặn event loop bằng số thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-2-mot-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Đo thật ở khoá API &amp; System Design (Courses) — bài 8.2: test tải và nút thắt thật đầu tiên</span><span class="lc-sub">Giống bài này: việc nặng CPU chạy đồng bộ chặn event loop và làm đứng mọi request khác. Khác: ở đó bạn đo trên một API thật — mỗi lượt đăng nhập một lần scryptSync làm p99 của một endpoint không liên quan từ 3 ms lên 463 ms — rồi sửa bằng scrypt bất đồng bộ trên threadpool của libuv (p99 8 ms).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

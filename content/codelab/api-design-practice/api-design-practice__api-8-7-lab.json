@@ -1,0 +1,500 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-8-7-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-8-7-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 8 · 1 — Reading the measurements",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>GET /v2/reports/usage?from=2026-11-02&days=30 with 20,000 seeded bookings, five managers in parallel (Lab 8).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>GET /v2/reports/usage?from=2026-11-02&days=30 với 20.000 lượt đặt mẫu, năm quản lý cùng lúc (Lab 8).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does this work wait, or burn CPU?|||Hỏi: việc này có chờ, hay đốt CPU?",
+        "Look at the bystander, not only the report.|||Nhìn người đứng ngoài, không chỉ báo cáo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 8 · 1 — Reading the measurements\n\nAnswer in the answer panel (no code needed).\n\n1. The starter took 335 ms per report and the lab list’s p50 became 3.1 s. Why did the lab list suffer?Bản khởi đầu tốn 335 ms mỗi báo cáo và p50 của danh sách phòng thành 3,1 giây. Vì sao danh sách phòng bị ảnh hưởng?\n2. Adding limitInflight(2) to the starter gave non-2xx 0 and no improvement. Why?Thêm limitInflight(2) vào bản khởi đầu cho non-2xx 0 và không khá hơn. Vì sao?\n3. One pass gave 516 reports/s; adding a 60 s cache gave 4,532/s. Why fix the algorithm first?Một lượt quét cho 516 báo cáo/s; thêm cache 60 s cho 4.532/s. Vì sao sửa thuật toán trước?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 8 · 1 — Reading the measurements — answer key\n\n1. The starter took 335 ms per report and the lab list’s p50 became 3.1 s. Why did the lab list suffer?Bản khởi đầu tốn 335 ms mỗi báo cáo và p50 của danh sách phòng thành 3,1 giây. Vì sao danh sách phòng bị ảnh hưởng?\n   Answer: d) The report loops synchronously 2.4 million times and holds the event loop\n   30 days × 4 labs × 20,000 bookings, each creating Date objects — the event loop is busy, everyone queues.VI: 30 ngày × 4 phòng × 20.000 lượt đặt, mỗi lần tạo đối tượng Date — event loop bận, mọi người xếp hàng.\n\n2. Adding limitInflight(2) to the starter gave non-2xx 0 and no improvement. Why?Thêm limitInflight(2) vào bản khởi đầu cho non-2xx 0 và không khá hơn. Vì sao?\n   Answer: a) A synchronous handler finishes before the next request is read, so in-flight never exceeds one\n   Shedding protects work that waits (threadpool, database). Fix the blocking first.VI: Bỏ bớt tải bảo vệ việc có chờ (threadpool, CSDL). Gỡ chặn trước.\n\n3. One pass gave 516 reports/s; adding a 60 s cache gave 4,532/s. Why fix the algorithm first?Một lượt quét cho 516 báo cáo/s; thêm cache 60 s cho 4.532/s. Vì sao sửa thuật toán trước?\n   Answer: c) A cache in front of the 335 ms version still freezes LabFlow on every miss (each new query, every minute)\n   A cache hides the cost only on hits; misses still pay it in full.VI: Cache chỉ giấu cái giá khi trúng; trượt vẫn trả đủ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The report loops synchronously 2.4 million times and holds the event loop</p><p>30 days × 4 labs × 20,000 bookings, each creating Date objects — the event loop is busy, everyone queues.</p><p><i>VI: 30 ngày × 4 phòng × 20.000 lượt đặt, mỗi lần tạo đối tượng Date — event loop bận, mọi người xếp hàng.</i></p></li><li><p><b>a)</b> A synchronous handler finishes before the next request is read, so in-flight never exceeds one</p><p>Shedding protects work that waits (threadpool, database). Fix the blocking first.</p><p><i>VI: Bỏ bớt tải bảo vệ việc có chờ (threadpool, CSDL). Gỡ chặn trước.</i></p></li><li><p><b>c)</b> A cache in front of the 335 ms version still freezes LabFlow on every miss (each new query, every minute)</p><p>A cache hides the cost only on hits; misses still pay it in full.</p><p><i>VI: Cache chỉ giấu cái giá khi trúng; trượt vẫn trả đủ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The starter took 335 ms per report and the lab list’s p50 became 3.1 s. Why did the lab list suffer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản khởi đầu tốn 335 ms mỗi báo cáo và p50 của danh sách phòng thành 3,1 giây. Vì sao danh sách phòng bị ảnh hưởng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both endpoints share the same rate limit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The proxy sends both to the same instance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The report locks the bookings table in PostgreSQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The report loops synchronously 2.4 million times and holds the event loop"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>30 days × 4 labs × 20,000 bookings, each creating Date objects — the event loop is busy, everyone queues.</p><p><i>VI: 30 ngày × 4 phòng × 20.000 lượt đặt, mỗi lần tạo đối tượng Date — event loop bận, mọi người xếp hàng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Adding limitInflight(2) to the starter gave non-2xx 0 and no improvement. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm limitInflight(2) vào bản khởi đầu cho non-2xx 0 và không khá hơn. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A synchronous handler finishes before the next request is read, so in-flight never exceeds one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "limitInflight only applies to POST routes, and the report is a GET request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The limit only works when it is set to 1, because 2 lets every request through"
+              },
+              {
+                "ma": "d",
+                "noiDung": "autocannon ignores 503 answers and keeps counting them as 2xx responses"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Shedding protects work that waits (threadpool, database). Fix the blocking first.</p><p><i>VI: Bỏ bớt tải bảo vệ việc có chờ (threadpool, CSDL). Gỡ chặn trước.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>One pass gave 516 reports/s; adding a 60 s cache gave 4,532/s. Why fix the algorithm first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lượt quét cho 516 báo cáo/s; thêm cache 60 s cho 4.532/s. Vì sao sửa thuật toán trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Caches do not work on JSON bodies larger than 10 KB, so the report would never be cached"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The algorithm fix makes the cache unnecessary, so the cache is only added for the rubric"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A cache in front of the 335 ms version still freezes LabFlow on every miss (each new query, every minute)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The cache would serve wrong numbers, because bookings change between two requests"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A cache hides the cost only on hits; misses still pay it in full.</p><p><i>VI: Cache chỉ giấu cái giá khi trúng; trượt vẫn trả đủ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding a cache before fixing a blocking algorithm.|||Thêm cache trước khi sửa thuật toán chặn luồng."
+        },
+        {
+          "loi": "Expecting load shedding to fix CPU-bound handlers.|||Mong bỏ bớt tải chữa được handler tốn CPU."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bystander",
+          "vi": "người đứng ngoài bị ảnh hưởng"
+        },
+        {
+          "en": "cache miss",
+          "vi": "trượt cache"
+        }
+      ]
+    },
+    {
+      "title": "Lab 8 · 2 — Write usageReport(bookings, labIds, from, days) in one pass",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "performance",
+        "algorithms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The fixed report. For each day from <code>from</code> (a UTC date, <code>YYYY-MM-DD</code>) for <code>days</code> days, and for each lab in <code>labIds</code> (in that order: day by day, labs inside), return <code>{ day, labId, bookings, hours }</code>: the number of non-cancelled bookings that start on that UTC day in that lab, and their total hours. Bookings outside the range are ignored. Scan <code>bookings</code> only once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Báo cáo đã sửa. Với mỗi ngày từ <code>from</code> (ngày UTC, <code>YYYY-MM-DD</code>) trong <code>days</code> ngày, và mỗi phòng trong <code>labIds</code> (theo thứ tự: từng ngày, các phòng bên trong), trả <code>{ day, labId, bookings, hours }</code>: số lượt đặt không bị huỷ bắt đầu trong ngày UTC đó ở phòng đó, và tổng số giờ của chúng. Lượt đặt ngoài khoảng thì bỏ qua. Chỉ quét <code>bookings</code> một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bookings — [{ labId, status, startAt, endAt }] (ISO UTC); labIds — string[]; from — date; days — number|||bookings — [{ labId, status, startAt, endAt }] (ISO UTC); labIds — string[]; from — ngày; days — số",
+      "outputSpec": "[{ day, labId, bookings, hours }] — days × labs rows|||[{ day, labId, bookings, hours }] — days × labs dòng",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "usageReport([{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T00:00:00.000Z\",\"endAt\":\"2026-11-02T02:00:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-02T02:00:00.000Z\",\"endAt\":\"2026-11-02T04:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T05:30:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T08:00:00.000Z\",\"endAt\":\"2026-11-03T10:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-10-31T08:00:00.000Z\",\"endAt\":\"2026-10-31T10:00:00.000Z\"}], [\"lab_1\",\"lab_2\"], \"2026-11-02\", 2)",
+          "output": "[{\"day\":\"2026-11-02\",\"labId\":\"lab_1\",\"bookings\":1,\"hours\":2},{\"day\":\"2026-11-02\",\"labId\":\"lab_2\",\"bookings\":1,\"hours\":1.5},{\"day\":\"2026-11-03\",\"labId\":\"lab_1\",\"bookings\":1,\"hours\":2},{\"day\":\"2026-11-03\",\"labId\":\"lab_2\",\"bookings\":0,\"hours\":0}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Create every (day, lab) cell first, with zeros.|||Tạo sẵn mọi ô (ngày, phòng) với số 0.",
+        "startAt.slice(0, 10) is the UTC day — no Date object needed.|||startAt.slice(0, 10) là ngày UTC — không cần tạo Date."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** usage per (day, lab) — must scan bookings only once */\nfunction usageReport(bookings, labIds, from, days) {\n  // Write your solution here\n  const rows = [];\n  for (let d = 0; d < days; d++) {\n    const day = new Date(Date.parse(from) + d * 86400000).toISOString().slice(0, 10);\n    for (const lab of labIds) {\n      const mine = bookings.filter((b) => b.labId === lab && b.startAt.slice(0, 10) === day);\n      rows.push({ day, labId: lab, bookings: mine.length, hours: mine.length * 2 });\n    }\n  }\n  return rows;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction usageReport(bookings, labIds, from, days) {\n  const dayList = Array.from({ length: days }, (_, d) => new Date(Date.parse(from) + d * 86400000).toISOString().slice(0, 10));\n  const cell = new Map();\n  for (const day of dayList) for (const lab of labIds) cell.set(day + '|' + lab, { bookings: 0, hours: 0 });\n  for (const b of bookings) {\n    if (b.status === 'CANCELLED') continue;\n    const c = cell.get(b.startAt.slice(0, 10) + '|' + b.labId);\n    if (!c) continue;\n    c.bookings++;\n    c.hours += (Date.parse(b.endAt) - Date.parse(b.startAt)) / 3600000;\n  }\n  const rows = [];\n  for (const day of dayList) for (const lab of labIds) rows.push({ day, labId: lab, ...cell.get(day + '|' + lab) });\n  return rows;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same answer byte for byte as the starter (cmp before.json after.json), in one pass: 335 ms → 3–4 ms in Lab 8.</p>",
+      "solutionExplanationHtmlVi": "<p>Câu trả lời giống hệt từng byte với bản khởi đầu (cmp before.json after.json), trong một lượt quét: 335 ms → 3–4 ms ở Lab 8.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two days, two labs",
+              "vi": "Hai ngày, hai phòng"
+            },
+            "goi": "usageReport([{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T00:00:00.000Z\",\"endAt\":\"2026-11-02T02:00:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-02T02:00:00.000Z\",\"endAt\":\"2026-11-02T04:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T05:30:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T08:00:00.000Z\",\"endAt\":\"2026-11-03T10:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-10-31T08:00:00.000Z\",\"endAt\":\"2026-10-31T10:00:00.000Z\"}], [\"lab_1\",\"lab_2\"], \"2026-11-02\", 2)",
+            "mongDoi": [
+              {
+                "day": "2026-11-02",
+                "labId": "lab_1",
+                "bookings": 1,
+                "hours": 2
+              },
+              {
+                "day": "2026-11-02",
+                "labId": "lab_2",
+                "bookings": 1,
+                "hours": 1.5
+              },
+              {
+                "day": "2026-11-03",
+                "labId": "lab_1",
+                "bookings": 1,
+                "hours": 2
+              },
+              {
+                "day": "2026-11-03",
+                "labId": "lab_2",
+                "bookings": 0,
+                "hours": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No bookings — the cell still exists",
+              "vi": "Không có lượt đặt — ô vẫn tồn tại"
+            },
+            "goi": "usageReport([], [\"lab_1\"], \"2026-11-02\", 1)",
+            "mongDoi": [
+              {
+                "day": "2026-11-02",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "usageReport([{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T00:00:00.000Z\",\"endAt\":\"2026-11-02T02:00:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-02T02:00:00.000Z\",\"endAt\":\"2026-11-02T04:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T05:30:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T08:00:00.000Z\",\"endAt\":\"2026-11-03T10:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-10-31T08:00:00.000Z\",\"endAt\":\"2026-10-31T10:00:00.000Z\"}], [\"lab_2\",\"lab_1\"], \"2026-10-31\", 3)",
+            "mongDoi": [
+              {
+                "day": "2026-10-31",
+                "labId": "lab_2",
+                "bookings": 1,
+                "hours": 2
+              },
+              {
+                "day": "2026-10-31",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              },
+              {
+                "day": "2026-11-01",
+                "labId": "lab_2",
+                "bookings": 0,
+                "hours": 0
+              },
+              {
+                "day": "2026-11-01",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              },
+              {
+                "day": "2026-11-02",
+                "labId": "lab_2",
+                "bookings": 1,
+                "hours": 1.5
+              },
+              {
+                "day": "2026-11-02",
+                "labId": "lab_1",
+                "bookings": 1,
+                "hours": 2
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "usageReport([{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T00:00:00.000Z\",\"endAt\":\"2026-11-02T02:00:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-02T02:00:00.000Z\",\"endAt\":\"2026-11-02T04:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T05:30:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T08:00:00.000Z\",\"endAt\":\"2026-11-03T10:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-10-31T08:00:00.000Z\",\"endAt\":\"2026-10-31T10:00:00.000Z\"}], [\"lab_3\"], \"2026-11-02\", 1)",
+            "mongDoi": [
+              {
+                "day": "2026-11-02",
+                "labId": "lab_3",
+                "bookings": 0,
+                "hours": 0
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "usageReport([{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T00:00:00.000Z\",\"endAt\":\"2026-11-02T02:00:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-02T02:00:00.000Z\",\"endAt\":\"2026-11-02T04:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T05:30:00.000Z\"},{\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T08:00:00.000Z\",\"endAt\":\"2026-11-03T10:00:00.000Z\"},{\"labId\":\"lab_2\",\"status\":\"PENDING\",\"startAt\":\"2026-10-31T08:00:00.000Z\",\"endAt\":\"2026-10-31T10:00:00.000Z\"}], [\"lab_1\"], \"2026-12-30\", 3)",
+            "mongDoi": [
+              {
+                "day": "2026-12-30",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              },
+              {
+                "day": "2026-12-31",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              },
+              {
+                "day": "2027-01-01",
+                "labId": "lab_1",
+                "bookings": 0,
+                "hours": 0
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Filtering all bookings inside the day × lab loop (the starter: O(days·labs·N)).|||Lọc mọi lượt đặt bên trong vòng ngày × phòng (bản khởi đầu: O(days·labs·N))."
+        },
+        {
+          "loi": "Counting cancelled bookings, or leaving out empty cells.|||Đếm cả lượt đã huỷ, hoặc bỏ sót các ô rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one pass",
+          "vi": "một lượt quét"
+        },
+        {
+          "en": "group by",
+          "vi": "gom nhóm"
+        }
+      ]
+    },
+    {
+      "title": "Lab 8 · 3 — Write cacheDecision(entry, now, ttlMs)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The cache of Lab 8 keeps <code>{ at }</code> (ms) for each query. Return <code>{ hit: false }</code> if there is no entry or it is older than <code>ttlMs</code> (exactly <code>ttlMs</code> old still counts as a hit). Otherwise <code>{ hit: true, age }</code> with <code>age</code> = whole seconds since <code>at</code>, rounded down — the value of the <code>Age</code> header.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache của Lab 8 giữ <code>{ at }</code> (ms) cho mỗi truy vấn. Trả <code>{ hit: false }</code> nếu không có mục nào hoặc mục cũ hơn <code>ttlMs</code> (cũ đúng <code>ttlMs</code> vẫn tính là trúng). Ngược lại <code>{ hit: true, age }</code> với <code>age</code> = số giây tròn kể từ <code>at</code>, làm tròn xuống — giá trị của header <code>Age</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "entry — { at } | null; now, ttlMs — numbers (ms)|||entry — { at } | null; now, ttlMs — số (ms)",
+      "outputSpec": "{ hit: false } | { hit: true, age }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cacheDecision({\"at\":1000}, 3500, 60000)",
+          "output": "{\"hit\":true,\"age\":2}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare now − at with ttlMs.|||So now − at với ttlMs.",
+        "Math.floor for whole seconds.|||Math.floor để lấy giây tròn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** is the cached report still fresh? */\nfunction cacheDecision(entry, now, ttlMs) {\n  // Write your solution here\n  return { hit: !!entry, age: entry ? now - entry.at : 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cacheDecision(entry, now, ttlMs) {\n  if (!entry || now - entry.at > ttlMs) return { hit: false };\n  return { hit: true, age: Math.floor((now - entry.at) / 1000) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Inside the handler, after requireAuth and requireRole: a hit costs 0.7 ms; Age tells the client how old the numbers are.</p>",
+      "solutionExplanationHtmlVi": "<p>Bên trong handler, sau requireAuth và requireRole: trúng cache tốn 0,7 ms; Age cho client biết số liệu cũ bao lâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "2.5 s old",
+              "vi": "Cũ 2,5 giây"
+            },
+            "goi": "cacheDecision({\"at\":1000}, 3500, 60000)",
+            "mongDoi": {
+              "hit": true,
+              "age": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "First request",
+              "vi": "Request đầu tiên"
+            },
+            "goi": "cacheDecision(null, 3500, 60000)",
+            "mongDoi": {
+              "hit": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "cacheDecision({\"at\":0}, 60001, 60000)",
+            "mongDoi": {
+              "hit": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "cacheDecision({\"at\":0}, 60000, 60000)",
+            "mongDoi": {
+              "hit": true,
+              "age": 60
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Age in milliseconds.|||Age tính bằng mili giây."
+        },
+        {
+          "loi": "Off by one at exactly ttlMs.|||Lệch một đúng tại ttlMs."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTL",
+          "vi": "thời gian sống của mục cache"
+        },
+        {
+          "en": "Age",
+          "vi": "tuổi của câu trả lời"
+        }
+      ]
+    }
+  ]
+}

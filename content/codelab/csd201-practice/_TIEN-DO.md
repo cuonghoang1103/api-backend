@@ -55,12 +55,15 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
   (mảng viết `1,2,3`, `-` = rỗng), `RANDOM` = so với lời giải VÉT CẠN nằm trong lớp kiểm trên hàng nghìn đầu vào ngẫu nhiên
   (hạt giống cố định, in ca sai đầu tiên — y như Ex*.java của gen/java/csN tự kiểm PASS/FAIL), `PERF` = ⏱.
 
-## Còn thiếu (làm tiếp theo đúng khuôn)
+## Còn thiếu / việc tiếp theo
 
-thêm đề thật khác vào `csd201-on-pe` nếu muốn (khuôn: `dePeFile({ hoc: {tệp: lời giải}, mainJava, cho, data, dataAn })`,
-lời giải chèn vào tệp THẬT bằng `chenSau(tệpThật, [[mốc, mã], …], hàmPhụ)` trong `csd201-on-pe.mjs`).
+Mọi bài dạy của khoá đã có module (Mục 0 → Ch8, Nâng cao 9.1–9.2, ⭐ CS.1–CS.10, 🎯 Luyện PE 11.1). Việc tuỳ chọn:
+- Thêm đề thật khác vào `csd201-on-pe` (khuôn: `dePeFile({ hoc: {tệp: lời giải}, mainJava, cho, data, dataAn })`, lời giải chèn
+  vào tệp THẬT bằng `chenSau(tệpThật, [[mốc, mã], …], hàmPhụ)` trong `csd201-on-pe.mjs`; tệp đề vendored ở `nguon/_pe/`).
+- Nạp lên prod sau khi deploy (lệnh ở cuối tệp) — CHƯA nạp.
 Nguồn ý đề + code thật: `~/Documents/FLM-nguon/_repo/CSD201/gen/src/practice/chN.txt` + `gen/java/chN/Pe*.java`,
 `gen/src/extra/csN-on.txt` + `gen/java/csN/Ex*.java` (CHỈ ĐỌC — không sửa flm-nguon).
+- Frontend: `frontend/src/lib/codelabToc.ts` đã có `KHOA_CUA_TRACK['csd201-practice']` + `TEN_CHUONG` 0–11.
 
 ## Khuôn & lệnh
 

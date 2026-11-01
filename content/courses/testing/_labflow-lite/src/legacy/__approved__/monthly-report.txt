@@ -1,0 +1,35 @@
+LAB BE-201 - 2026/09
+2026-09-30 14:00-16:00 25 seats
+2026-09-01 08:00-09:00 10 seats
+2026-09-02 08:00-12:00 35 seats
+Bookings: 3
+Hours: 7
+Large (>30 seats): 1
+Weekend/holiday: 2
+----
+LAB BE-305 - 2026/09
+No bookings.
+----
+LAB BE-201 - 2026/10
+2026-10-06 08:00-10:00 20 seats
+2026-10-03 13:30-15:00 30 seats
+2026-10-04 09:00-11:30 31 seats (pending)
+2026-10-20 18:00-21:00 28 seats
+Bookings: 4
+Hours: 9
+Large (>30 seats): 1
+Weekend/holiday: 2
+----
+LAB BE-305 - 2026/10
+2026-10-06 10:00-12:30 40 seats
+Bookings: 1
+Hours: 2.5
+Large (>30 seats): 1
+Weekend/holiday: 0
+----
+LAB BE-201 - 2026/11
+No bookings.
+----
+LAB BE-305 - 2026/11
+No bookings.
+----

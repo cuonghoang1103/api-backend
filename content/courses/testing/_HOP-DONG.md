@@ -1,7 +1,7 @@
 # Hợp đồng soạn khoá "Testing" (/courses/testing)
 
 > Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và Chương 2
-> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6, 7, 8, 9. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
+> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6, 7, 8, 9, 10. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
 > deck `tst-03-*`, `tst-04-*`, `tst-lab-3/4`. Chỗ nào file này không nói, bắt chước đúng các file đó.
 
 ## 0. Khoá này là gì, dạy ai
@@ -60,7 +60,7 @@
 ```bash
 cp -r content/courses/testing/_labflow-lite <SCRATCH>/lab/labflow-lite
 cd <SCRATCH>/lab/labflow-lite && npm ci            # Node 22 (chuẩn: 22.23.3), Vitest 5.0.5, fast-check 4, Express 5, Supertest 7
-npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch6), 116 passed / 15 file (cuối Ch8), 176 passed / 20 file (cuối Ch9: + src/ci) — đây là “unit suite”
+npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch6), 116 passed / 15 file (cuối Ch8), 176 passed / 20 file (cuối Ch9: + src/ci), 229 passed / 28 file (cuối Ch10) — đây là “unit suite”
 npm run test:web                                    # = vitest run --config vitest.web.config.js web/ · 16 passed (Ch6, jsdom)
 npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
 for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5 dot-bien-6; do node scripts/$s.mjs | tail -1; done   # 6 × 8/8
@@ -68,10 +68,11 @@ npm run test:e2e                                    # = playwright test e2e/ --p
 npm run test:e2e:all                                # 5 project · 37 passed
 node scripts/dot-bien-7.mjs | tail -1               # 8/8, ~1,5 phút (mỗi đột biến build + server + Chromium)
 npm run test:cov                                    # = vitest run src/ --coverage (Ch8, v8, ngưỡng 85/80/80/85) · lines 98,41%
-npm run test:mutation                               # = stryker run (Ch8, src/rules) · 98,73%, ~12 s; ngưỡng break 80
+npm run test:mutation                               # = stryker run (Ch8, src/rules) · 98,73% (Ch8–9), 98,99% cuối Ch10 (390 diệt, 4 sống: code.js 1, days.js 2 tương đương, recurring.js 1 tương đương), ~15 s; ngưỡng break 80
 node scripts/dot-bien-8.mjs | tail -1               # 8/8 + “green in 10/10 shuffled orders”, ~10 s
 node scripts/cham-lab-9.mjs lab9/loi-giai.yml       # Ch9: actionlint 0 + 8/8 luật (vài giây; lab9/ci.yml gốc = 0/8)
 act pull_request -e demo9/pr-event.json --cache-server-path .act/cache --artifact-server-path .act/artifacts   # Ch9: workflow tham khảo, ci-ok xanh (~7 phút, cần act + Docker)
+node scripts/dot-bien-10.mjs                        # Ch10: 3 dòng xanh (đặc tả clubFee trên v0 + bản refactor, weeklyDates trên bản tham khảo) + 8/8, ~6 s
 ```
 - ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ bài/slide/lab luôn ghi **`npm run test:unit`** (script `"test:unit": "vitest run src/"`,
   giới thiệu ở phần Setup của Lab 1, dùng nhất quán Ch1–Ch5 từ 01/11 theo yêu cầu điều phối). Không viết “npm test xanh”.
@@ -126,6 +127,21 @@ act pull_request -e demo9/pr-event.json --cache-server-path .act/cache --artifac
   ghi nhánh xanh “Job failed” khi matrix có nhánh đỏ, exit 1 cả khi job đỏ có continue-on-error, nhận 2 artifact trùng tên (giữ bản sau), bỏ qua job runs-on
   lạ mà vẫn exit 0, không in dòng nào cho job bị skipped. Phần CHỈ GitHub (branch protection/ruleset, skipped = success, fail-fast huỷ, v4 từ chối tên trùng,
   concurrency) dạy như TÀI LIỆU có ngày đọc (01/11/2026), hình minh hoạ dựng bằng HTML có ghi rõ.
+- Ch10 (01/11, không thêm gói npm): `src/rules/waitlist.js` (BR-09, dựng bằng TDD — 7 bước ở `demo10/tdd/N-do|N-xanh|7-refactor`, mỗi thư mục là
+  một cặp test + code; `N-do` = test bước N chạy trên code bước N−1, CỐ Ý đỏ), `src/booking/waitlistService.js` (`cancelBooking`; repo bộ nhớ có thêm
+  `remove(id)` trả về dòng đã xoá — thêm SAU `count`, không đụng chuỗi mà dot-bien-2/4 tìm), `demo10/truong-phai/` (classicist vs mockist: `mockist-v1`
+  CỐ Ý đỏ trên code hiện tại; `thu-loi` cài lại v1 ⇒ cả hai xanh; `rows.splice(i, 1)[0]` → `rows.splice(i, 1)` ⇒ mockist xanh, classicist đỏ).
+  Code cũ 10.2: `src/legacy/db.js` (pg tới 127.0.0.1:54399 — cổng KHÔNG ai dùng, để lần gọi ngây thơ ra ECONNREFUSED; đổi bằng `LEGACY_DATABASE_URL`; loại
+  khỏi coverage), bản gốc `demo10/legacy/monthlyReport.v0.js` (+ `v1-seams.js`, `v2.js` = `src/legacy/monthlyReport.js` hiện tại), lõi thuần
+  `src/report/monthly.js`; characterization `demo10/dac-ta/1..4` (1, 2 CỐ Ý đỏ), file đã duyệt `__approved__/monthly-report.txt` (ghi bằng v0, `src/legacy/__approved__/`
+  là bản sao giống từng byte), `demo10/dac-ta/dot-bien-dac-ta.mjs <test>` (10 thay đổi trong v0: mẫu 3 dòng 3/10, golden master 10/10). v0 golden ĐỎ dưới
+  `TZ=America/New_York` (getDay theo giờ máy) — UTC và Asia/Ho_Chi_Minh xanh; bản refactor xanh cả ba. 10.3: `demo10/review/pr57.test.js` (+ `__snapshots__`,
+  PR nộp lên — có `{ retry: 3 }` và dữ liệu `Math.random`, đỏ ~10/30 khi bỏ retry) và `pr57-sau-review.test.js`; `so-sanh.mjs` (5 thay đổi: nộp 2/5, review 5/5);
+  nhánh `pr/57-waitlist-tests` CHỈ có trong git của bản scratch (ảnh chụp không có .git). 10.4: `src/rules/busy.js` (`mergeBusy`) + `demo10/phong-van/cham.mjs`
+  (6 bug: bộ yếu 0/6, mẫu 6/6). Lab 10: `lab10/clubFee.v0.js` (gốc), `lab10/recurring.ref.js` (= `src/rules/recurring.js`), `lab10/yeu/` (1/8),
+  `src/legacy/clubFee.js` (vỏ gọi `src/rules/clubFee.js` — LÚC BẮT ĐẦU lab nó là bản v0), `scripts/dot-bien-10.mjs` (chạy test của người học trên code KHÔNG
+  phải của họ: v0 + bản tham khảo, đột biến cài vào đó, file của người học trả lại trong finally). Đo được: Stryker trên waitlist.js 100% (45/45);
+  bản refactor `!!club.member` làm đỏ dòng `member: 'yes'` (v0 dùng `== true`).
 - Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
   `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
   không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
@@ -181,7 +197,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
   Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`);
   `tst-05-1` = v2 (sửa “no port” → Supertest tự mở cổng tạm); `tst-07-4` = v2 (slide 8: chạy dau-tien trên firefox+webkit KHÔNG xanh hết;
-  slide 7 bớt chữ cho khỏi chạm chân trang); `tst-08-1` = v2 (slide 8: cột src/ đo thật); còn lại v1 (Ch8: tst-08-2…4 + tst-lab-8 đẩy TST/v1 01/11; Ch9: tst-09-1…4 + tst-lab-9 đẩy TST/v1 01/11, 54 ảnh). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  slide 7 bớt chữ cho khỏi chạm chân trang); `tst-08-1` = v2 (slide 8: cột src/ đo thật); còn lại v1 (Ch8: tst-08-2…4 + tst-lab-8 đẩy TST/v1 01/11; Ch9: tst-09-1…4 + tst-lab-9 đẩy TST/v1 01/11, 54 ảnh; Ch10: tst-10-1…4 + tst-lab-10 đẩy TST/v1 01/11). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -213,7 +229,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 44 đề, 255 đột biến + 22 thay đổi vô hại (Ch7: 5 đề, 27 đột biến + 5 vô hại, 32/32; Ch8: 5 đề, 31 đột biến + 2 vô hại, 33/33; Ch9: 5 đề, 34 đột biến + 4 vô hại, 38/38 — kể cả đề kiểm chính file YAML `.github/workflows/test.yml`), kiểm trên một bản sao mới của
+`testing/_de-codelab-mutation.json` — 49 đề, 290 đột biến + 27 thay đổi vô hại (Ch10: 5 đề, 35 đột biến + 5 vô hại, 40/40; Ch7: 5 đề, 27 đột biến + 5 vô hại, 32/32; Ch8: 5 đề, 31 đột biến + 2 vô hại, 33/33; Ch9: 5 đề, 34 đột biến + 4 vô hại, 38/38 — kể cả đề kiểm chính file YAML `.github/workflows/test.yml`), kiểm trên một bản sao mới của
 `_labflow-lite` (`npm ci`, Docker bật) bằng
 `node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
 Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `runner: "playwright"` (Ch7: chạy `npx playwright test <testThamKhao> <args>`,
@@ -270,6 +286,11 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-9-3 | tst-9-3-bat-buoc | decideMerge | skipped/cancelled thành đạt · job bị xoá khỏi needs không ai biết · cho qua 1 lỗi · kiểm cái đã chạy thay cái bắt buộc · mất lý do · **vô hại:** destructuring |
 | tst-cl-9-4 | tst-9-4-ma-tran | splitIntoShards, pickShard | file ngắn trước · hoà phụ thuộc thứ tự đầu vào · vào shard NẶNG nhất · file mới tốn 0 · nhận shard 0/3 · đánh số từ 0 · **vô hại:** cách dựng mảng rỗng |
 | tst-cl-lab-9 | tst-9-5-lab-ci | checkWorkflow (8 luật, src/ci/policy.js) | R1 bỏ sót npm install · R2 thiếu cache qua · R3 service không health check qua · R3 cổng nào cũng được · R4 chỉ xét job toàn lệnh cài · R6 cổng không đọc kết quả qua · R7 quarantine trong job chặn qua · R8 Node 20 qua |
+| tst-cl-10-1 | tst-10-1-tdd | joinWaitlist, offerNext, acceptOffer, cancelBooking | người giữ khung được chờ · người thứ 4 được chờ · hàng đầy báo WAITLIST_FULL cho người đã chờ · sửa hàng của người gọi · giữ lời mời 60 phút · 10:30 vẫn nhận · người được mời còn trong hàng · **vô hại:** index + slice |
+| tst-cl-10-2 | tst-10-2-code-cu | monthlyReport v0 (demo10/legacy, không sửa) | 30 chỗ thành lớn · mất lượt chờ duyệt · Chủ nhật không còn cuối tuần · bỏ ngày lễ đầu năm · làm tròn giờ chẵn · mất “(pending)” · đổi dòng tháng trống · đếm mọi phòng · **vô hại:** i += 1 |
+| tst-cl-10-3 | tst-10-3-review | cancelBooking, joinWaitlist, offerNext | không gửi thư · mời người cuối hàng · người thứ 4 được chờ · thư mất tên khung · kết quả giấu người được mời · **vô hại:** lưu thêm `source`, chỉ ghi Map khi đổi |
+| tst-cl-10-4 | tst-10-4-phong-van | mergeBusy | chạm nhau không gộp · lồng nhau bị cắt · tin thứ tự đầu vào · sắp theo giờ kết thúc · đảo mảng người gọi · lồng nhau thành khối riêng · **vô hại:** `blocks.at(-1)` |
+| tst-cl-lab-10 | tst-10-5-lab-tdd-code-cu | weeklyDates, quoteClubFee, clubFee | bắt đầu trễ một tuần · từ chối 15 tuần · bỏ buổi ngày cuối kỳ · đặt vào ngày lễ · 40 chỗ trả phí lớn · 4 giờ mất giảm giá · làm tròn xuống · Chủ nhật mất giá cuối tuần · `member: 'yes'` được giảm |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
 `kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu

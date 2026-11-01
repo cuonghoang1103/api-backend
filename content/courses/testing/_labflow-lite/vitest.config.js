@@ -9,7 +9,7 @@ export default defineConfig({
     coverage: {                          // lesson 8.1: npm run test:cov
       provider: 'v8',
       include: ['src/**/*.js'],          // count every source file, also the ones no test imports
-      exclude: ['src/**/*.test.js', 'src/api/main.js', 'src/booking/pgRepo.js', 'src/app.js'], // main.js only calls listen · pgRepo.js: test:int · app.js: lesson 0.2, tested by test/pyramid.*
+      exclude: ['src/**/*.test.js', 'src/api/main.js', 'src/booking/pgRepo.js', 'src/app.js', 'src/legacy/db.js'], // main.js only calls listen · pgRepo.js: test:int · app.js: lesson 0.2, tested by test/pyramid.* · legacy/db.js: the real connection, replaced by a seam (10.2)
       reporter: [['text', { skipFull: false }], 'html', 'json-summary'],
       thresholds: { lines: 85, branches: 80, functions: 80, statements: 85 },
     },

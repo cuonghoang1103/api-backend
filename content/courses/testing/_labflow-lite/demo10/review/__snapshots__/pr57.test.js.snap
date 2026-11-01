@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`waitlist > should work 1`] = `
+{
+  "booking": {
+    "date": "2026-11-16",
+    "end": "10:00",
+    "id": 1,
+    "lab": "BE-201",
+    "minutes": 120,
+    "role": "STUDENT",
+    "seats": 20,
+    "start": "08:00",
+    "status": "CONFIRMED",
+  },
+  "outbox": [
+    {
+      "subject": "A seat is free: BE-201 2026-11-16 08:00-10:00 (answer within 30 minutes)",
+      "to": "an@labflow.example",
+    },
+  ],
+  "result": {
+    "cancelled": 1,
+    "offeredTo": "an@labflow.example",
+  },
+  "waitlists": [
+    [
+      "BE-201 2026-11-16 08:00-10:00",
+      [
+        {
+          "userId": "chi@labflow.example",
+        },
+      ],
+    ],
+  ],
+}
+`;

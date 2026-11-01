@@ -31,6 +31,11 @@ export function createMemoryRepo() {
       await latency();
       return [...rows];
     },
+    async remove(id) { // Chapter 10: cancelling deletes the row and returns it (null if there was none)
+      await latency();
+      const i = rows.findIndex((b) => b.id === id);
+      return i === -1 ? null : rows.splice(i, 1)[0];
+    },
     count: () => rows.length,
   };
 }

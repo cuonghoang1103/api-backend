@@ -2262,6 +2262,16 @@ const L33 = {
       ['sp5', '§4.3.2 Different individual review techniques (PDF 137), §4.4 Types of review (PDF 144), §4.5 Critical factors, benefits and limits (PDF 150)', '§4.3.2 Các kỹ thuật review cá nhân (PDF 137), §4.4 Các loại review (PDF 144), §4.5 Yếu tố then chốt, lợi ích và giới hạn (PDF 150)'],
       ['sp4', '§4.1.5 Types of reviews — walkthrough, inspection, technical review, informal review: pp.88–95 (PDF 103–110)', '§4.1.5 Các loại review — walkthrough, inspection, technical review, informal review: trang 88–95 (PDF 103–110)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 10)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-3-review" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 10.3: reviewing tests in a pull request</span><span class="lc-sub">Same as this lesson: a checklist-based review that looks for defects in a work product before it runs in production. Different: the work product is a test file in a real pull request; Courses measures each of six test smells (testing the mock, a broad snapshot, vague names, random data, asserting implementation, retry) — the submitted tests give the right answer for 2 of 5 changes, the reviewed ones for 5 of 5.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-3-review" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 10.3: review test trong pull request</span><span class="lc-sub">Giống bài này: review theo checklist để tìm defect trong một sản phẩm công việc trước khi nó chạy thật. Khác: sản phẩm ở đây là một file test trong pull request thật; Courses đo từng mùi trong sáu mùi test (test chính mock, snapshot quá rộng, tên mơ hồ, dữ liệu ngẫu nhiên, kiểm cài đặt, retry) — bộ test nộp lên trả lời đúng 2/5 thay đổi, bộ đã review đúng 5/5.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

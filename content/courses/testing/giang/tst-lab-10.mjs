@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 10 (deck tst-lab-10, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-lab-10', 'Lab 10 — Test-first feature, pinned legacy, safe refactor', 'Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn', [
+  [1, 'Lab 10 — Test-first feature, pinned legacy, safe refactor',
+    `<p>This lab is a normal week in a team: one old function nobody may change, and one new rule to build. One grader checks both, against code you did not write.</p>`,
+    `<p>Lab này là một tuần bình thường trong nhóm: một hàm cũ không ai được làm đổi, và một luật mới phải xây. Một máy chấm kiểm cả hai, trên code không phải do bạn viết.</p>`],
+  [2, 'Your mission',
+    `<p>Pin the old quote first, then build the weekly rule test by test, then refactor under the pin. The order is the lesson: never refactor code you have not pinned.</p>`,
+    `<p>Ghim hàm báo giá cũ trước, rồi xây luật hằng tuần từng test một, rồi refactor bên dưới cái ghim. Thứ tự chính là bài học: đừng bao giờ refactor code chưa được ghim.</p>`],
+  [3, 'The code you inherit, and the rule you build',
+    `<p>The quote reads the real clock and ignores the event date, and an unknown building gives NaN. Both are wrong, and both get a test that keeps them exactly as they are until someone decides otherwise.</p>`,
+    `<p>Hàm báo giá đọc đồng hồ thật và bỏ qua ngày sự kiện, còn toà nhà lạ thì ra NaN. Cả hai đều sai, và cả hai đều có một test giữ nguyên chúng cho tới khi có người quyết định khác.</p>`],
+  [4, 'Eight planted bugs',
+    `<p>Four bugs sit in the old quote and four in the team's version of the weekly rule. Each one sits on a boundary: 40 seats, 4 hours, a rounding half, Sunday, the first week, 15 weeks, the last day of term, a holiday.</p>`,
+    `<p>Bốn bug nằm trong hàm báo giá cũ và bốn trong bản luật hằng tuần của nhóm. Con nào cũng nằm trên một biên: 40 chỗ, 4 giờ, nửa đơn vị làm tròn, Chủ nhật, tuần đầu, 15 tuần, ngày cuối kỳ, ngày lễ.</p>`],
+  [5, 'The first attempt: green, and 1/8',
+    `<p>Four green tests catch one bug in eight. Greater than zero is true for every wrong price, and counting dates cannot see a series that starts a week late.</p>`,
+    `<p>Bốn test xanh bắt được một bug trên tám. Lớn hơn không thì đúng với mọi mức giá sai, còn đếm số ngày thì không thấy được chuỗi bắt đầu trễ một tuần.</p>`],
+  [6, 'The reference: three green lines, 8/8',
+    `<p>The reference is green on the old code, on the team's code and on the refactor, and kills all eight bugs in about six seconds. Below it, the pin catches a reviewer's harmless-looking change that would give one club twenty percent off.</p>`,
+    `<p>Lời giải xanh trên code cũ, trên code của nhóm và trên bản refactor, và diệt cả tám bug trong khoảng sáu giây. Bên dưới, cái ghim bắt được một thay đổi trông vô hại của người review, thứ sẽ giảm giá hai mươi phần trăm cho một câu lạc bộ.</p>`],
+  [7, 'Rubric (10 points, pass 7)',
+    `<p>The mutants are only four points. The rest rewards the habits of this chapter: proof that the tests came first, a pin with a fixed clock, and a refactor that leaves the pin untouched.</p>`,
+    `<p>Đột biến chỉ là bốn điểm. Phần còn lại thưởng cho thói quen của chương: bằng chứng test đến trước, cái ghim với đồng hồ cố định, và lần refactor không đụng tới cái ghim.</p>`],
+  [8, 'Hints, from light to strong',
+    `<p>Let the failure tell you the real number, then write it down. For the new rule, write the whole test list before the first test.</p>`,
+    `<p>Hãy để lỗi nói cho bạn con số thật, rồi ghi nó lại. Với luật mới, viết trọn danh sách test trước test đầu tiên.</p>`],
+  [9, 'Before you call it done',
+    `<p>Three green lines and eight of eight, a log that shows each red before its green, and a characterization file that has not changed since the day you wrote it.</p>`,
+    `<p>Ba dòng xanh và tám trên tám, một nhật ký cho thấy mỗi lần đỏ trước lần xanh, và một file test đặc tả không đổi kể từ ngày bạn viết nó.</p>`],
+]);

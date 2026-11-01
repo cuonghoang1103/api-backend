@@ -386,6 +386,11 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Assert on the outcome, not the calls</span><span class="lz-d">&quot;<code>save</code> was called once&quot; passes after a refactor that broke the behaviour. &quot;The stored record has status paid&quot; does not.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Make it fail once, deliberately</span><span class="lz-d">A new test that has never failed might be asserting nothing — a missing <code>await</code>, an assertion in a callback that never runs.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 10.1: TDD, and the classicist vs mockist choice</span><span class="lc-sub">Same: inject what you replace, assert on the outcome rather than the calls. Deeper there: a feature built test-first in seven recorded red/green steps, and the same service tested both ways — a harmless refactor turns the mockist test red, a repository bug leaves it green.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -557,6 +562,11 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Khẳng định về KẾT CỤC, đừng khẳng định về các lời gọi</span><span class="lz-d">&quot;<code>save</code> đã được gọi một lần&quot; vẫn qua sau một lần tái cấu trúc làm hỏng hành vi. Còn &quot;bản ghi đã lưu có trạng thái paid&quot; thì không.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Hãy cố ý làm nó hỏng một lần</span><span class="lz-d">Một bài kiểm thử mới chưa từng hỏng lần nào có thể là đang chẳng khẳng định gì — thiếu một <code>await</code>, hoặc một phép khẳng định nằm trong một callback chẳng bao giờ chạy.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 10.1: TDD, và chọn classicist hay mockist</span><span class="lc-sub">Giống: tiêm thứ cần thay, khẳng định kết cục thay vì các lời gọi. Sâu thêm ở đó: một tính năng viết test trước qua bảy bước đỏ/xanh có ghi lại, và cùng một service được test theo cả hai kiểu — refactor vô hại làm test mockist đỏ, bug ở repository lại để nó xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

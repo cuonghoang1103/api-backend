@@ -203,6 +203,11 @@ POST   /v2/issues/{id}/resolve   If-Match           200              403 · 409 
   <span class="lc-body"><span class="lc-title">You met this in SWR302 — lesson 5.8: Planguage and quality trade-offs</span><span class="lc-sub">Same: a quality requirement must be measurable (scale, meter, goal). This lesson adds saying it in minute two of an interview — “p99 under 500 ms at 50 bookings/s” — and checking it against a measured capacity.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-4-phong-van" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing course — 10.4: testing interview questions</span><span class="lc-sub">The same interview, from the testing side: “how would you test this endpoint”, mock or real database, coverage or mutation, flaky tests — every strong answer backed by a number measured in the Testing course, plus a 20-minute live-coding round.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -373,6 +378,11 @@ POST   /v2/issues/{id}/resolve   If-Match           200              403 · 409 
 <a class="link-card lien-ket-cheo" href="/courses/software-requirements/learn?lessonSlug=swr302-5-8-ch14-planguage" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp điều này ở SWR302 — bài 5.8: Planguage và đánh đổi chất lượng</span><span class="lc-sub">Giống: yêu cầu chất lượng phải đo được (thang đo, cách đo, mục tiêu). Bài này thêm: nói nó ra ở phút thứ hai của buổi phỏng vấn — “p99 dưới 500 ms ở 50 lượt đặt/s” — và so với công suất đã đo.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-4-phong-van" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing course — 10.4: câu hỏi phỏng vấn về testing</span><span class="lc-sub">Cùng vòng phỏng vấn, phía test: "bạn sẽ test endpoint này thế nào", mock hay CSDL thật, độ phủ hay đột biến, test chập chờn — mỗi câu trả lời mạnh dựa trên một số đo của khoá Testing, kèm bài code trực tiếp 20 phút.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>

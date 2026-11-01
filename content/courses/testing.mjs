@@ -1,6 +1,6 @@
 /**
- * Testing — khoá học CuongThai (Courses, GENERAL). Mục 0 + Chương 1–9 SOẠN CHI TIẾT 31/10–01/11/2026 (./testing/s00-intro.mjs, s01-unit-dau-tien.mjs, s02-bat-dong-bo.mjs, s03-test-double.mjs, s04-tich-hop-db.mjs, s05-api-http.mjs, s06-react.mjs, s07-e2e.mjs, s08-chat-luong.mjs, s09-ci.mjs;
- * dự án xuyên khoá LabFlow Lite; slide deck tst-* ở scripts/slides-src, ảnh R2 images/academy/TST/v1). Chương 10–11 vẫn là KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"): chương + bài + đề cương,
+ * Testing — khoá học CuongThai (Courses, GENERAL). Mục 0 + Chương 1–10 SOẠN CHI TIẾT 31/10–01/11/2026 (./testing/s00-intro.mjs, s01-unit-dau-tien.mjs, s02-bat-dong-bo.mjs, s03-test-double.mjs, s04-tich-hop-db.mjs, s05-api-http.mjs, s06-react.mjs, s07-e2e.mjs, s08-chat-luong.mjs, s09-ci.mjs, s10-tdd-doi-that.mjs;
+ * dự án xuyên khoá LabFlow Lite; slide deck tst-* ở scripts/slides-src, ảnh R2 images/academy/TST/v1). Chương 11 vẫn là KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"): chương + bài + đề cương,
  * bài giảng chi tiết soạn sau theo quy trình khoá Docker (content/courses/docker/_HOP-DONG.md). Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
@@ -14,6 +14,7 @@ import s06 from './testing/s06-react.mjs';
 import s07 from './testing/s07-e2e.mjs';
 import s08 from './testing/s08-chat-luong.mjs';
 import s09 from './testing/s09-ci.mjs';
+import s10 from './testing/s10-tdd-doi-that.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -32,7 +33,7 @@ export default {
     requirements: 'Biết JavaScript cơ bản (hàm, mảng, object, import/export, try/catch) và dùng được terminal; cần Node.js 22.12 trở lên (bài 0.3 hướng dẫn cài). Không cần biết gì về testing, TypeScript, React, Docker hay SQL — chương nào dùng tới thì dạy tới đó. Khoá tự đủ; nếu đang học SWT301 (Software Testing) trên Academy thì hai bên bổ sung nhau: SWT301 dạy lý thuyết ISTQB và thiết kế test case trên giấy/Report 5.x, khoá này biến chính các kỹ thuật đó (phân vùng, giá trị biên, bảng quyết định…) thành test tự động chạy thật trên dự án LabFlow Lite.',
     documentsNote: 'Tài liệu chính: vitest.dev • jestjs.io • testing-library.com • playwright.dev • testcontainers.com • martinfowler.com/testing.',
   },
-  sections: [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, ...khung('tst', [
+  sections: [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, ...khung('tst', [
     ['Section 0 — Why test, and how to study this course', 'Mục 0 — Vì sao phải test, và cách học khoá này', 'Test là gì, vì sao công ty đòi hỏi nó, và một lộ trình học không nản.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What testing is, and why every company asks about it', 'Bắt đầu tại đây (1/2) — Test là gì, và vì sao công ty nào cũng hỏi', 'Test bằng hình ảnh đời thường · Kiểm thử tự động khác kiểm thử tay · Lịch sử: xUnit, JUnit, TDD của Kent Beck · Test giúp gì trong đồ án và khi đi làm · Câu hỏi phỏng vấn hay gặp'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Life without tests: real incidents, and how to learn without giving up', 'Bắt đầu tại đây (2/2) — Khi không có test: sự cố thật, và cách học không bỏ cuộc', 'Sự cố thật do thiếu test (có nguồn) · Tình huống đồ án: sửa một chỗ hỏng ba chỗ · Nỗi sợ "viết test tốn thời gian" · Lộ trình tối thiểu và đầy đủ'],
@@ -105,5 +106,5 @@ export default {
       ['frontend', 'Testing the frontend and the full flow', 'Test frontend và luồng đầy đủ', 'Component + Playwright đặt phòng lab'],
       ['ci', 'Shipping it in CI, and the final checklist', 'Đưa vào CI, và checklist cuối', 'Workflow hoàn chỉnh · Checklist năng lực cả khoá'],
     ]],
-  ]).slice(10)],
+  ]).slice(11)],
 };

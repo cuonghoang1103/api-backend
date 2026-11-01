@@ -430,6 +430,11 @@ gh pr view 431 --comments        <span class="tok-comment"># description + every
 
 <div class="pitfall"><strong>Trap:</strong> the reviewer who only ever comments on style. Twelve remarks about naming and spacing on a pull request with a race condition in it is worse than no review at all — it consumes the author's goodwill, spends the review budget, and lets the real defect through with an approval attached. Put a formatter and a linter in CI (Chapter 12), then spend human attention on correctness.</div>
 <p class="note-ct"><strong>The norm worth arguing for:</strong> review within one working day. A pull request that waits three days is a branch drifting from main, a colleague blocked, and a context the author has already forgotten. Fast, slightly shallower reviews beat slow, thorough ones — because the alternative to a fast review is usually no review, just an approval.</p>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-3-review" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 10.3: reviewing the tests in a pull request</span><span class="lc-sub">Same: labelled, kind comments on the code, not the person. Deeper there: what to look for in the TESTS of a PR — six smells, each measured on a real pull request (the submitted tests were right about 2 of 5 changes, the reviewed ones about 5 of 5).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -546,6 +551,11 @@ gh pr view 431 --comments        <span class="tok-comment"># mô tả + mọi b�
 
 <div class="pitfall"><strong>Bẫy:</strong> người review chỉ bình luận về kiểu cách. Mười hai nhận xét về đặt tên và khoảng trắng trên một pull request có race condition bên trong thì còn tệ hơn không review gì cả — nó ngốn thiện chí của tác giả, tiêu hết ngân sách review, và để khiếm khuyết thật lọt qua kèm một chữ approve. Hãy đặt formatter và linter vào CI (Chương 12), rồi dành sự chú ý của con người cho tính đúng đắn.</div>
 <p class="note-ct"><strong>Chuẩn mực đáng tranh đấu cho:</strong> review trong vòng một ngày làm việc. Một pull request nằm chờ ba ngày là một nhánh đang trôi xa main, một đồng nghiệp bị kẹt, và một ngữ cảnh mà tác giả đã quên mất. Review nhanh và hơi nông vẫn hơn review chậm và kỹ — vì phương án thay thế của một lượt review nhanh thường không phải review kỹ, mà là không review, chỉ có một chữ approve.</p>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-3-review" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 10.3: review phần test trong pull request</span><span class="lc-sub">Giống: bình luận có nhãn, tử tế, nói về code chứ không nói về người. Sâu thêm ở đó: tìm gì trong phần TEST của một PR — sáu mùi, mỗi mùi đo trên một pull request thật (bộ test nộp lên đúng 2/5 thay đổi, bộ đã review đúng 5/5).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

@@ -3013,6 +3013,16 @@ ${TDD_CYCLE3}
       ['junit', 'Ch.20 Test Driven Development with JUnit 5, PDF p.420 (§20.2 the flights-management application p.422, §20.4 refactoring p.432, §20.5 new features by working TDD p.437); Ch.21 Behavior Driven Development with JUnit 5, PDF p.452 (§21.1 introducing BDD p.453, §21.2 Cucumber p.456, §21.3 JBehave p.476); Ch.22 Implementing a test pyramid strategy, PDF p.493 (§22.1 testing levels p.494, §22.2 unit p.495, §22.3 integration p.505)', 'Ch.20 Test Driven Development with JUnit 5, PDF tr.420 (§20.2 ứng dụng quản lý chuyến bay tr.422, §20.4 refactor tr.432, §20.5 thêm tính năng theo TDD tr.437); Ch.21 Behavior Driven Development with JUnit 5, PDF tr.452 (§21.1 giới thiệu BDD tr.453, §21.2 Cucumber tr.456, §21.3 JBehave tr.476); Ch.22 Implementing a test pyramid strategy, PDF tr.493 (§22.1 các cấp test tr.494, §22.2 unit tr.495, §22.3 integration tr.505)'],
       ['sp5', 'PDF p.95 — "test-first programming" / test-driven development; PDF p.56 and p.308 — BDD and ATDD notations for acceptance criteria; §3.2 PDF pp.82–84 — iterative-incremental and agile models', 'PDF tr.95 — "test-first programming" / test-driven development; PDF tr.56 và tr.308 — cách viết acceptance criteria kiểu BDD và ATDD; §3.2 PDF tr.82–84 — mô hình lặp-tăng dần và Agile'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 10)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 10.1: TDD in practice, every red recorded</span><span class="lc-sub">Same as this lesson: the red–green–refactor cycle and test-first design. Different: Courses builds a real LabFlow feature (a waitlist) in seven recorded steps, each red shown with its real Vitest output; Stryker then kills 45 of 45 mutants of the result, and the same cancel service is tested classicist and mockist style — a harmless refactor turns the mockist test red, a repository bug leaves it green.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 10.1: TDD làm thật, ghi lại từng lần đỏ</span><span class="lc-sub">Giống bài này: vòng đỏ – xanh – refactor và thiết kế bằng test viết trước. Khác: Courses dựng một tính năng LabFlow thật (danh sách chờ) qua bảy bước có ghi lại, lần đỏ nào cũng kèm output Vitest thật; sau đó Stryker diệt 45/45 đột biến của kết quả, và cùng một service huỷ lượt đặt được test theo kiểu classicist và mockist — một refactor vô hại làm test mockist đỏ, một bug ở repository lại để nó xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

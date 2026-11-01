@@ -67,3 +67,17 @@ Chương 9 Courses (01/11) — Test trong CI:
 | Courses `nodejs` `nodejs-14-5-do-phu-flaky-ci` | `tst-9-1-github-actions` | hai chiều (theo yêu cầu điều phối Ch9 — trước đây Node chỉ một chiều) | CI chạy bộ test mỗi lần push | workflow của dự án khoá học, tổng duyệt bằng act |
 
 Không cặp Chương 9: Lab 9 và quiz (SWT301 không có bài sửa pipeline); 9.2 không cặp SWT301 (SWT301 không dạy reporter/artifact).
+
+Chương 10 Courses (01/11) — TDD và testing trong đội thật:
+
+| Phía kia | Courses testing | Chiều | Giống | Courses sâu thêm |
+|---|---|---|---|---|
+| SWT301 `swt301-tdd-bdd` (9.6) | `tst-10-1-tdd` | hai chiều (SWT301 thêm một cặp `bi()` cuối bài) | vòng đỏ – xanh – refactor, test viết trước dẫn thiết kế | danh sách chờ BR-09 qua 7 bước có output đỏ/xanh thật; Stryker 45/45; classicist vs mockist đo bằng refactor vô hại và bug repository |
+| SWT301 `swt301-maintenance-test-plan` (2.5) | `tst-10-2-code-cu` | hai chiều | kiểm thử bảo trì: bảo vệ thứ đang chạy trước khi đổi, phân tích tác động | characterization test qua seam (Feathers) cho báo cáo LabFlow v0; 3/10 vs 10/10 đột biến; golden master; refactor dưới test; bẫy múi giờ |
+| SWT301 `swt301-review-types-techniques` (3.3) | `tst-10-3-review` | hai chiều | review theo checklist tìm defect trong sản phẩm công việc | đối tượng review là file test của một PR thật; sáu mùi đo bằng đột biến / refactor vô hại (2/5 vs 5/5), retry che 10/30 |
+| Courses `git` `git-6-2-review` | `tst-10-3-review` | hai chiều | bình luận có nhãn (Conventional Comments), nói về code không nói về người | tìm gì trong phần TEST của PR, mỗi mùi có số đo |
+| Courses `nodejs` `nodejs-14-2-unit-test` | `tst-10-1-tdd` | hai chiều | tiêm phụ thuộc, khẳng định kết cục thay vì lời gọi | TDD từng bước; mockist đỏ khi refactor vô hại, xanh khi repository có bug |
+| Courses `interview-prep` `pv-4-4-testing`, `pv-7-2-live-coding` | `tst-10-4-phong-van` | MỘT chiều (khoá interview-prep còn là khung — gắn chiều ngược khi soạn) | — | câu hỏi phỏng vấn testing trả lời bằng số đo của khoá; bài code trực tiếp 20 phút mergeBusy (bộ yếu 0/6, mẫu 6/6) |
+| Courses `api-design` `api-11-1-khung` | `tst-10-4-phong-van` | hai chiều (Chương 11 API Design đã commit def9418f8 trong lúc soạn — thêm thẻ ngược cuối ml-en/ml-vi của 11.1) | khung trả lời câu hỏi phỏng vấn | phần testing của vòng phỏng vấn |
+
+Không cặp Chương 10: Lab 10 và quiz. 10.4 không cặp SWT301 (SWT301 không có bài phỏng vấn).

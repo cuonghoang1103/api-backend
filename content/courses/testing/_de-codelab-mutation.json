@@ -1,5 +1,5 @@
 {
-  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173. Chương 8: đề Vitest có \"args\" thêm vào lệnh vitest run — [\"--sequence.shuffle\", \"--repeats=9\"] bắt test chập chờn (phải xanh ở mọi thứ tự, mọi lần lặp), [\"--testTimeout=500\"] bắt test ngủ thật. Chương 9: đề kiểm cả file workflow YAML (test đọc .github/workflows/test.yml bằng gói yaml) và các module src/ci/* (cổng ci-ok, tóm tắt job, chia shard, 8 luật của Lab 9).",
+  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173. Chương 8: đề Vitest có \"args\" thêm vào lệnh vitest run — [\"--sequence.shuffle\", \"--repeats=9\"] bắt test chập chờn (phải xanh ở mọi thứ tự, mọi lần lặp), [\"--testTimeout=500\"] bắt test ngủ thật. Chương 9: đề kiểm cả file workflow YAML (test đọc .github/workflows/test.yml bằng gói yaml) và các module src/ci/* (cổng ci-ok, tóm tắt job, chia shard, 8 luật của Lab 9). Chương 10: đề TDD (danh sách chờ), đặc tả hành vi code cũ (file v0 trong demo10/legacy, test là golden master có file đã duyệt), viết lại test sau review (voHai = refactor mà bộ test cũ làm đỏ), code trực tiếp mergeBusy, và Lab 10 (BR-10 + phí câu lạc bộ đã refactor).",
   "de": [
     {
       "id": "tst-cl-1-1",
@@ -2473,6 +2473,336 @@
           "from": "Number.parseInt(v, 10) < minNode",
           "to": "Number.parseInt(v, 10) < minNode - 2",
           "label": "R8: Node 20 passes"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-10-1",
+      "bai": "tst-10-1-tdd",
+      "tieuDe": "Waitlist, built test-first|||Danh sách chờ, viết test trước",
+      "ham": "joinWaitlist, offerNext, acceptOffer, cancelBooking",
+      "fileDung": [
+        "src/rules/waitlist.js",
+        "src/booking/waitlistService.js"
+      ],
+      "testThamKhao": [
+        "src/rules/waitlist.test.js",
+        "src/booking/waitlistService.test.js"
+      ],
+      "yeuCau": "Test BR-09: at most 3 students wait for one slot; the student who holds the slot cannot wait for it; a student already waiting is told ALREADY_WAITING (even when the line is full); joining never changes the queue it was given; a freed slot is offered to the first in line for exactly 30 minutes (accepted at 10:29, refused at 10:30); cancelBooking deletes the booking, removes the offered student from the line and e-mails them.|||Test BR-09: tối đa 3 sinh viên chờ một khung; người đang giữ khung không được chờ chính khung đó; người đã chờ nhận ALREADY_WAITING (kể cả khi hàng đã đầy); tham gia không bao giờ sửa hàng được truyền vào; khung được trả lại thì mời người đầu hàng trong đúng 30 phút (10:29 nhận, 10:30 từ chối); cancelBooking xoá lượt đặt, đưa người được mời ra khỏi hàng và gửi thư cho họ.",
+      "dotBien": [
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "if (userId === holderId) return refuse('IS_HOLDER');",
+          "to": "if (false) return refuse('IS_HOLDER');",
+          "label": "the holder can wait for their own slot"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "queue.length >= WAITLIST_MAX",
+          "to": "queue.length > WAITLIST_MAX",
+          "label": "a fourth student can wait"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "  if (queue.some((w) => w.userId === userId)) return refuse('ALREADY_WAITING');\n  if (queue.length >= WAITLIST_MAX) return refuse('WAITLIST_FULL');",
+          "to": "  if (queue.length >= WAITLIST_MAX) return refuse('WAITLIST_FULL');\n  if (queue.some((w) => w.userId === userId)) return refuse('ALREADY_WAITING');",
+          "label": "a student already in a full line is told WAITLIST_FULL"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "const next = [...queue, { userId }];",
+          "to": "const next = queue; next.push({ userId });",
+          "label": "joining changes the caller's queue"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "minutesLater(now, OFFER_MINUTES)",
+          "to": "minutesLater(now, 60)",
+          "label": "the offer is held for 60 minutes"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "now < offer.expiresAt",
+          "to": "now <= offer.expiresAt",
+          "label": "the offer is still accepted at 10:30"
+        },
+        {
+          "file": "src/booking/waitlistService.js",
+          "from": "waitlists.set(key, queue);",
+          "to": "",
+          "label": "the offered student stays in the line"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "const [first, ...rest] = queue;",
+          "to": "const first = queue[0]; const rest = queue.slice(1);",
+          "label": "index and slice instead of destructuring"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-10-2",
+      "bai": "tst-10-2-code-cu",
+      "tieuDe": "Characterize a legacy report before anyone touches it|||Đặc tả hành vi một báo cáo cũ trước khi ai đụng vào",
+      "ham": "monthlyReport (LabFlow v0, untouched)",
+      "fileDung": [
+        "demo10/legacy/monthlyReport.v0.js"
+      ],
+      "testThamKhao": [
+        "demo10/dac-ta/4-golden.test.js"
+      ],
+      "yeuCau": "Without editing the legacy file, pin what monthlyReport prints today: replace the database, the holiday service and the clock through seams (vi.mock, vi.stubGlobal, fake timers), choose inputs that reach every branch (other lab, other month, cancelled, pending, 30/31 seats, Saturday, Sunday, both holidays, an empty month, half hours) and keep the whole output as an approved file.|||Không sửa file cũ, ghim lại đúng những gì monthlyReport in ra hôm nay: thay CSDL, dịch vụ ngày lễ và đồng hồ qua seam (vi.mock, vi.stubGlobal, fake timers), chọn dữ liệu đi qua mọi nhánh (phòng khác, tháng khác, đã huỷ, chờ duyệt, 30/31 chỗ, thứ Bảy, Chủ nhật, cả hai ngày lễ, tháng trống, nửa giờ) và giữ toàn bộ output thành một file đã duyệt.",
+      "dotBien": [
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "b.seats > 30",
+          "to": "b.seats >= 30",
+          "label": "a 30-seat booking counts as large"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "b.status != 'CANCELLED'",
+          "to": "b.status == 'CONFIRMED'",
+          "label": "pending bookings disappear from the report"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "day == 0 || day == 6",
+          "to": "day == 6",
+          "label": "Sunday is no longer a weekend"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "hol.indexOf(b.date) != -1",
+          "to": "hol.indexOf(b.date) > 0",
+          "label": "the first holiday of the year is ignored"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "Math.round(mins / 60 * 10) / 10",
+          "to": "Math.round(mins / 60)",
+          "label": "hours rounded to whole hours"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "(b.status == 'PENDING' ? ' (pending)' : '')",
+          "to": "''",
+          "label": "the (pending) mark is lost"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "txt += 'No bookings.\\n';",
+          "to": "txt += 'No bookings this month.\\n';",
+          "label": "the empty-month line changes (the office Excel import breaks)"
+        },
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "b.lab == lab && ",
+          "to": "",
+          "label": "every lab is counted in every report"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "demo10/legacy/monthlyReport.v0.js",
+          "from": "for (var i = 0; i < rows.length; i++) {",
+          "to": "for (var i = 0; i < rows.length; i += 1) {",
+          "label": "i += 1 instead of i++"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-10-3",
+      "bai": "tst-10-3-review",
+      "tieuDe": "Rewrite the tests of pull request #57|||Viết lại test của pull request #57",
+      "ham": "cancelBooking, joinWaitlist, offerNext",
+      "fileDung": [
+        "src/booking/waitlistService.js",
+        "src/rules/waitlist.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "demo10/review/pr57-sau-review.test.js"
+      ],
+      "yeuCau": "Replace the six smells of PR #57 (testing the mock, a broad snapshot, vague names, random data, a spy on waitlists.set, retry) with tests that name a behaviour, control their data and check only what a user of the code can see: who gets the offer and the e-mail, who is still waiting, and that a fourth student is refused. A harmless refactor must not turn them red.|||Thay sáu mùi của PR #57 (test chính mock, snapshot quá rộng, tên mơ hồ, dữ liệu ngẫu nhiên, spy vào waitlists.set, retry) bằng test gọi tên một hành vi, kiểm soát dữ liệu và chỉ kiểm điều người dùng code thấy được: ai nhận lời mời và thư, ai còn chờ, và người thứ tư bị từ chối. Refactor vô hại không được làm chúng đỏ.",
+      "dotBien": [
+        {
+          "file": "src/booking/waitlistService.js",
+          "from": "if (offer) {",
+          "to": "if (false) {",
+          "label": "nobody is e-mailed"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "const [first, ...rest] = queue;",
+          "to": "const [first, ...rest] = [...queue].reverse();",
+          "label": "the slot goes to the last in line"
+        },
+        {
+          "file": "src/rules/waitlist.js",
+          "from": "queue.length >= WAITLIST_MAX",
+          "to": "queue.length > WAITLIST_MAX",
+          "label": "a fourth student can wait"
+        },
+        {
+          "file": "src/booking/waitlistService.js",
+          "from": "subject: 'A seat is free: ' + key + ' (answer",
+          "to": "subject: 'A seat is free (answer",
+          "label": "the e-mail no longer says which slot"
+        },
+        {
+          "file": "src/booking/waitlistService.js",
+          "from": "offeredTo: offer ? offer.userId : null",
+          "to": "offeredTo: null",
+          "label": "the result hides who was offered the slot"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/booking/service.js",
+          "from": "repo.insert({ ...input, minutes: slot.minutes, status })",
+          "to": "repo.insert({ ...input, minutes: slot.minutes, status, source: 'web' })",
+          "label": "bookings also store where they came from"
+        },
+        {
+          "file": "src/booking/waitlistService.js",
+          "from": "waitlists.set(key, queue);",
+          "to": "if (offer) waitlists.set(key, queue);",
+          "label": "the waitlist Map is written only when it changed"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-10-4",
+      "bai": "tst-10-4-phong-van",
+      "tieuDe": "Live coding: test mergeBusy in 20 minutes|||Code trực tiếp: test mergeBusy trong 20 phút",
+      "ham": "mergeBusy",
+      "fileDung": [
+        "src/rules/busy.js"
+      ],
+      "testThamKhao": [
+        "src/rules/busy.test.js"
+      ],
+      "yeuCau": "In 20 minutes, test mergeBusy(ranges): an empty day; separate bookings stay apart and come back sorted by start; overlapping, touching (10:00 ends, 10:00 starts) and nested bookings merge — also when the outer one is listed second; the input array is not changed; a time that is not HH:MM is rejected with TypeError.|||Trong 20 phút, test mergeBusy(ranges): ngày không có lượt đặt; các lượt rời nhau giữ riêng và trả về theo giờ bắt đầu; lượt chồng nhau, chạm nhau (10:00 kết thúc, 10:00 bắt đầu) và lồng nhau được gộp — kể cả khi lượt bao ngoài đứng sau; mảng đầu vào không bị đổi; giờ không đúng HH:MM bị từ chối bằng TypeError.",
+      "dotBien": [
+        {
+          "file": "src/rules/busy.js",
+          "from": "start <= last[1]",
+          "to": "start < last[1]",
+          "label": "touching bookings stay apart"
+        },
+        {
+          "file": "src/rules/busy.js",
+          "from": "Math.max(last[1], end)",
+          "to": "end",
+          "label": "a booking inside another one cuts the block short"
+        },
+        {
+          "file": "src/rules/busy.js",
+          "from": ".sort((a, b) => a[0] - b[0])",
+          "to": "",
+          "label": "input order is trusted (no sort)"
+        },
+        {
+          "file": "src/rules/busy.js",
+          "from": "a[0] - b[0]",
+          "to": "a[1] - b[1]",
+          "label": "sorted by end time instead of start"
+        },
+        {
+          "file": "src/rules/busy.js",
+          "from": "ranges.map(",
+          "to": "ranges.sort((a, b) => a.start.localeCompare(b.start)).map(",
+          "label": "the caller's array is reordered"
+        },
+        {
+          "file": "src/rules/busy.js",
+          "from": "if (last && start <= last[1])",
+          "to": "if (last && start <= last[1] && end > last[1])",
+          "label": "a booking inside another one becomes its own block"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/rules/busy.js",
+          "from": "const last = blocks[blocks.length - 1];",
+          "to": "const last = blocks.at(-1);",
+          "label": "blocks.at(-1) instead of an index"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-10",
+      "bai": "tst-10-5-lab-tdd-code-cu",
+      "tieuDe": "Lab 10: weekly bookings test-first, the club fee pinned and refactored|||Lab 10: đặt lịch hằng tuần viết test trước, phí câu lạc bộ được ghim rồi refactor",
+      "ham": "weeklyDates (BR-10), clubFee / quoteClubFee",
+      "fileDung": [
+        "src/rules/recurring.js",
+        "src/rules/clubFee.js",
+        "src/legacy/clubFee.js"
+      ],
+      "testThamKhao": [
+        "src/rules/recurring.test.js",
+        "src/legacy/clubFee.test.js"
+      ],
+      "yeuCau": "Test weeklyDates (BR-10: same weekday each week, 1–15 weeks, a holiday is skipped without adding a week, the last day of term still gets its class, later weeks are AFTER_TERM, BAD_WEEKS, STARTS_AFTER_TERM) and pin the club fee quote exactly as v0 computed it (40/41 seats, 4 hours, rounding to the nearest 1,000, Saturday and Sunday rate, the LF-212 bug, NaN for an unknown building) with a fixed clock.|||Test weeklyDates (BR-10: cùng thứ mỗi tuần, 1–15 tuần, ngày lễ bị bỏ qua mà không thêm tuần, ngày cuối kỳ vẫn có buổi, các tuần sau là AFTER_TERM, BAD_WEEKS, STARTS_AFTER_TERM) và ghim phí báo giá câu lạc bộ đúng như v0 tính (40/41 chỗ, 4 giờ, làm tròn tới 1.000 gần nhất, giá thứ Bảy và Chủ nhật, bug LF-212, NaN cho toà nhà không có giá) bằng đồng hồ cố định.",
+      "dotBien": [
+        {
+          "file": "src/rules/recurring.js",
+          "from": "toDay(firstDate) + 7 * i",
+          "to": "toDay(firstDate) + 7 * (i + 1)",
+          "label": "the series starts one week late"
+        },
+        {
+          "file": "src/rules/recurring.js",
+          "from": "weeks > MAX_WEEKS",
+          "to": "weeks >= MAX_WEEKS",
+          "label": "a 15-week series is refused"
+        },
+        {
+          "file": "src/rules/recurring.js",
+          "from": "if (toDay(date) > toDay(until))",
+          "to": "if (toDay(date) >= toDay(until))",
+          "label": "a class on the last day of term is dropped"
+        },
+        {
+          "file": "src/rules/recurring.js",
+          "from": "else if (holidays.includes(date))",
+          "to": "else if (false)",
+          "label": "a class is booked on a holiday"
+        },
+        {
+          "file": "src/rules/clubFee.js",
+          "from": "seats > BIG_EVENT_SEATS",
+          "to": "seats >= BIG_EVENT_SEATS",
+          "label": "an event for exactly 40 seats pays the big-event fee"
+        },
+        {
+          "file": "src/rules/clubFee.js",
+          "from": "hours >= LONG_EVENT_HOURS",
+          "to": "hours > LONG_EVENT_HOURS",
+          "label": "a 4-hour event loses its long-event discount"
+        },
+        {
+          "file": "src/rules/clubFee.js",
+          "from": "Math.round(Math.max(price, 0) / 1000)",
+          "to": "Math.floor(Math.max(price, 0) / 1000)",
+          "label": "prices are rounded down instead of to the nearest 1,000"
+        },
+        {
+          "file": "src/rules/clubFee.js",
+          "from": "day.getDay() === 0 || ",
+          "to": "",
+          "label": "Sunday is no longer charged the weekend rate"
+        },
+        {
+          "file": "src/legacy/clubFee.js",
+          "from": "member: club.member == true",
+          "to": "member: !!club.member",
+          "label": "a club with member: 'yes' gets the discount v0 never gave"
         }
       ]
     }

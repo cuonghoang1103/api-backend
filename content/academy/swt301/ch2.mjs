@@ -2928,6 +2928,16 @@ const L25 = {
       ['sp5', '§3.6 Testing new product versions (PDF 119): maintenance 120, release development 123, regression 124; §6.2.1 Test planning (PDF 256)', '§3.6 Testing new product versions (PDF 119): bảo trì 120, phát triển bản mới 123, regression 124; §6.2.1 Test planning (PDF 256)'],
       ['sp4', '§3.6 "Testing New Product Versions" — pp.65–68 (PDF 80–83)', '§3.6 "Testing New Product Versions" — trang 65–68 (PDF 80–83)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 10)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-2-code-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 10.2: adding tests to legacy code</span><span class="lc-sub">Same as this lesson: maintenance testing — protect what already works before a change, and analyse what the change can touch. Different: Courses takes an untested LabFlow v0 report (global database, network, clock), pins its behaviour with characterization tests through seams (Michael Feathers), measures them with real mutants (3/10 with one sample, 10/10 with a golden master) and then refactors it under those tests.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-2-code-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 10.2: thêm test cho code cũ</span><span class="lc-sub">Giống bài này: kiểm thử bảo trì — bảo vệ thứ đang chạy trước khi thay đổi, và phân tích thay đổi chạm tới đâu. Khác: Courses lấy một báo cáo LabFlow v0 chưa có test (CSDL toàn cục, mạng, đồng hồ), ghim hành vi bằng characterization test qua seam (Michael Feathers), đo bằng đột biến thật (3/10 với một mẫu, 10/10 với golden master) rồi refactor dưới sự bảo vệ của chúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

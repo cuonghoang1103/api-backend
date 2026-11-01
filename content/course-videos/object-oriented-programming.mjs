@@ -8,27 +8,27 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     // 0.1 — About PRO192 & the course map → a full Java course as the getting-started overview
-    "pro192-gioi-thieu": { yt: "xTtL8E4LzTQ", credit: "Bro Code — Java Full Course for free ☕" },
+    "pro192-gioi-thieu": { yt: "xTtL8E4LzTQ", credit: "Bro Code — Java Full Course for free ☕", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
     // 1.1 — Why objects? Procedural vs OO (conceptual OOP overview)
-    "pro192-1-1-tu-duy-oo": { yt: "pTB0EiLXUC8", credit: "Programming with Mosh — Object-Oriented Programming, Simplified" },
+    "pro192-1-1-tu-duy-oo": { yt: "pTB0EiLXUC8", credit: "Programming with Mosh — Object-Oriented Programming, Simplified", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/01-tu-duy-doi-tuong-java-co-ban/01-01-slide-tu-duy-doi-tuong-tron-7058cd0b.mp4' }, defaultVideoTrack: 'VI'},
     // 1.2 — Java syntax essentials (from C to Java)
-    "pro192-1-2-cu-phap-java": { yt: "eIrMbAQSU34", credit: "Programming with Mosh — Java Full Course for Beginners" },
+    "pro192-1-2-cu-phap-java": { yt: "eIrMbAQSU34", credit: "Programming with Mosh — Java Full Course for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/01-tu-duy-doi-tuong-java-co-ban/01-04-slide-cu-phap-java-tron-f81afe6d.mp4' }, defaultVideoTrack: 'VI'},
     // 2.1 — Fields, methods & constructors
-    "pro192-2-1-lop-doi-tuong": { yt: "pgBk8HC7jbU", credit: "Coding with John — Java Constructors - Full Tutorial" },
+    "pro192-2-1-lop-doi-tuong": { yt: "pgBk8HC7jbU", credit: "Coding with John — Java Constructors - Full Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/02-lop-va-doi-tuong/02-02-slide-dong-goi-lop-tron-8b53cf6b.mp4' }, defaultVideoTrack: 'VI'},
     // 3.1 — Encapsulation & abstraction
-    "pro192-3-1-dong-goi": { yt: "eboNNUADeIc", credit: "Bro Code — Java encapsulation 💊" },
+    "pro192-3-1-dong-goi": { yt: "eboNNUADeIc", credit: "Bro Code — Java encapsulation 💊", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/03-dong-goi-truu-tuong/03-01-slide-package-access-tron-575245cd.mp4' }, defaultVideoTrack: 'VI'},
     // 4.1 — Inheritance
-    "pro192-4-1-ke-thua": { yt: "GTP5lVEKXaU", credit: "Bro Code — Learn Java inheritance in 9 minutes! 👨‍👧‍👦" },
+    "pro192-4-1-ke-thua": { yt: "GTP5lVEKXaU", credit: "Bro Code — Learn Java inheritance in 9 minutes! 👨‍👧‍👦", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/04-ke-thua-da-hinh/04-01-slide-ke-thua-tron-20e007a7.mp4' }, defaultVideoTrack: 'VI'},
     // 4.2 — Polymorphism
-    "pro192-4-2-da-hinh": { yt: "jhDUxynEQRI", credit: "Coding with John — Java Polymorphism Fully Explained In 7 Minutes" },
+    "pro192-4-2-da-hinh": { yt: "jhDUxynEQRI", credit: "Coding with John — Java Polymorphism Fully Explained In 7 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/04-ke-thua-da-hinh/04-02-slide-da-hinh-tron-68f17b3b.mp4' }, defaultVideoTrack: 'VI'},
     // 5.1 — Abstract classes & interfaces
-    "pro192-5-1-abstract-interface": { yt: "HvPlEJ3LHgE", credit: "Coding with John — Abstract Classes and Methods in Java Explained in 7 Minutes" },
+    "pro192-5-1-abstract-interface": { yt: "HvPlEJ3LHgE", credit: "Coding with John — Abstract Classes and Methods in Java Explained in 7 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/05-lop-truu-tuong-interface/05-01-slide-interface-abstract-tron-f32cea58.mp4' }, defaultVideoTrack: 'VI'},
     // 6.1 — try, catch, finally & throw
-    "pro192-6-1-ngoai-le": { yt: "1XAfapkBQjk", credit: "Coding with John — Exception Handling in Java Tutorial" },
+    "pro192-6-1-ngoai-le": { yt: "1XAfapkBQjk", credit: "Coding with John — Exception Handling in Java Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/06-xu-ly-ngoai-le/06-01-slide-xu-ly-ngoai-le-tron-f2d49ea3.mp4' }, defaultVideoTrack: 'VI'},
     // 7.1 — Managing many objects (array of objects)
-    "pro192-7-1-mang-doi-tuong": { yt: "nhIB2S6NiFA", credit: "Bro Code — Java array of objects 🍱" },
+    "pro192-7-1-mang-doi-tuong": { yt: "nhIB2S6NiFA", credit: "Bro Code — Java array of objects 🍱", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/07-mang-doi-tuong/07-01-slide-mang-doi-tuong-tron-3c97bb4c.mp4' }, defaultVideoTrack: 'VI'},
     // 8.1 — List, Set & Map (Collections API)
-    "pro192-8-1-collections": { yt: "Kn1RbK02YpM", credit: "Telusko — #91 Collection API in Java" },
+    "pro192-8-1-collections": { yt: "Kn1RbK02YpM", credit: "Telusko — #91 Collection API in Java", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-01-slide-collections-tron-d2200835.mp4' }, defaultVideoTrack: 'VI'},
     // 9.1 — Reading & writing files
     "pro192-9-1-file-io": { yt: "ScUJx4aWRi0", credit: "Coding with John — Java File Input/Output - It's Way Easier Than You Think" },
     // N2.1 — Good OO design & SOLID basics
@@ -102,9 +102,9 @@ export default {
     'pro192-lab-8-collections': { yt: 'H62Jfv1DJlU', credit: 'Coding with John — Map and HashMap in Java - Full Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-51-lab-8-collections-tron-0f33897b.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-slide-cs5-1': { yt: 'e2zmmkc5xI0', credit: 'Oracle Developers — Java Bytecode Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-1-jvm-tron-e4b5b4c1.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-luyen-pe-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-04-luyen-pe-2-tron-74d71835.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-slide-cs5-2': { yt: 'kwFP-zCLV2M', credit: 'Java — Mastering JVM Memory Troubleshooting - From OutOfMemoryErrors to Leaks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-tron-0cf30315.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-slide-cs5-2': { yt: 'kwFP-zCLV2M', credit: 'Java — Mastering JVM Memory Troubleshooting - From OutOfMemoryErrors to Leaks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-tron-0cf30315.mp4' }, defaultVideoTrack: 'VI'},
     // YouTube bổ sung 31/10/2026
-    'pro192-slide-pro2-1': { yt: 'fQKbV-NeY18', credit: 'Amit Thinks — Install NetBeans IDE 27 with Java JDK 24 on Windows 11 | Beginner\'s Guide (2025)' },
+    'pro192-slide-pro2-1': { yt: 'fQKbV-NeY18', credit: 'Amit Thinks — Install NetBeans IDE 27 with Java JDK 24 on Windows 11 | Beginner\'s Guide (2025)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-087fe194.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-on-ch6': { yt: 'XhH93_woZIY', credit: 'Bro Code — Java custom exceptions 🛑' },
     'pro192-on-ch7': { yt: '2j64wdFNWyE', credit: 'Telusko — #32 Array of Objects in Java' },
     'pro192-lab-7-danh-sach-doi-tuong': { yt: 'lFbBI85oTnY', credit: 'Java — Write Efficient Bug-free and Simple Comparators in Java - JEP Café #17' },
@@ -113,5 +113,8 @@ export default {
     'pro192-cs2-on': { yt: 'cbRwk-usJFs', credit: 'The Curious Coder — Java 8 Stream API Interview Questions | 20 Coding Problems Solved Live 🔥' },
     'pro192-slide-cs4-1': { yt: 'dCt9sfZV8Sg', credit: 'Telusko — #58 Object Class equals toString hashcode in Java' },
     'pro192-cs4-on': { yt: 'pUXeNAeyY34', credit: 'Java — Immutable Collections' },
+    'pro192-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

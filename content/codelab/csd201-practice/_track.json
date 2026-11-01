@@ -326,6 +326,12 @@
       "name": "8.5 🧪 Practice — brute force, a PE-style message log, choosing a compression",
       "level": "INTERMEDIATE",
       "description": "Luyện: PE style: brute-force matching, every position and the number of comparisons · The message log (close to a real PE): f1 KMP search, f2 RLE, f3 Huffman bits · Which compression wins? RLE, LZW and Huffman on the same text"
+    },
+    {
+      "slug": "csd201-on-pe",
+      "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
+      "level": "ADVANCED",
+      "description": "Luyện: 🎯 Real paper SP26 Paper 1 — ShipmentCLL (count, remove by id) + FruitBST (insert, count in a range) · 🎯 Real paper SP26 Block 5 Paper 4, Q1 — MyList of Drum: conditional addLast, insert as 3rd and 5th, delete after the first max, sort the last 4 · 🎯 Real paper SP26 Block 5 Paper 4, Q2 — BSTree of Tiger: insert by sound, filtered pre-order, delete by copying, rotate left · 🎯 Real paper SP26 Block 5 Paper 4, Q3 — Graph: part of a BFS order, Dijkstra paths and the last vertices added to S"
     }
   ]
 }

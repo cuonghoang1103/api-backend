@@ -1,0 +1,8 @@
+Fruits:
+F03 F02 F04 F05 F01 F99
+Apple Banana Mango Orange Grape DragonFruit
+200 150 100 180 120 50
+1.2 0.8 2.5 1.5 3.0 4.5
+F02
+F03
+F08

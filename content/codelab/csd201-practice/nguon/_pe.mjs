@@ -16,6 +16,8 @@ export const LIB = doc('Lib.java');
 export const QUEUE_NODE = doc('QueueNode.java');
 export const QUEUE_INT = doc('QueueInt.java');
 export const STACK_INT = doc('StackInt.java');
+/** Tệp THẬT của các đề (given materials, đổi CRLF→LF): pe1_* = SP26 Paper 1, pe3_* = SP26 Block 5 Paper 4. */
+export const PE_THAT = (f) => doc(f);
 
 /** Main.java đúng như given materials (lớp t, số câu f1..fN, điểm mỗi câu). */
 export function mainPe(lop, soF, diem = 1) {
@@ -58,7 +60,11 @@ const asciiRule = (file) => ({ id: 'P1', en: `${file} is plain ASCII — no Viet
  *      boiCanh: { en, vi }, data: <data.txt của đề>, dataAn: [<data.txt khác>…], goiY, loiHayGap, giaiThich, quyTac? }
  */
 export function dePeFile(s) {
-  const cho = { 'Main.java': mainPe(s.lop, s.soF, s.diem ?? 1), 'Lib.java': LIB, ...s.cho };
+  // s.hoc = { 'A.java': lời giải có dấu, … } khi người học sửa NHIỀU tệp (đề SP26 P1: ShipmentCLL + FruitBST); s.mainJava = Main thật
+  const hoc = s.hoc || { [s.tepHoc]: s.giai };
+  const tepHocDs = Object.keys(hoc);
+  s = { ...s, tepHoc: tepHocDs.join(', ') };
+  const cho = { 'Main.java': s.mainJava || mainPe(s.lop, s.soF, s.diem ?? 1), 'Lib.java': LIB, ...s.cho };
   const ca = [];
   const lan = [{ data: s.data, an: false, ten: 'the paper’s data.txt', tenVi: 'data.txt của đề' }, ...(s.dataAn || []).map((d, i) => ({ data: d, an: true, ten: `other data.txt #${i + 1}`, tenVi: `data.txt khác #${i + 1}` }))];
   for (const l of lan) {
@@ -74,26 +80,26 @@ export function dePeFile(s) {
     the: ['pe-format', 'data.txt', ...(s.the || [])],
     moTa: {
       en: `${s.boiCanh.en}
-<p><b>The exam format.</b> The given project contains ${tepCho} and <code>${s.tepHoc}</code>. Only <code>${s.tepHoc}</code> may be edited, and only in <b>part (2)</b>: complete the functions below, keep every pre-given statement of <code>f1…f${s.soF}</code> and add your statements between the marked comment lines (you may add helper functions). Each <code>fK()</code> loads its own lines of <code>data.txt</code>, writes the answer to <code>fK.txt</code>, and <code>Main</code> prints that file after "Your output:". Choosing <code>K</code> in the menu runs <code>fK</code> only — exactly how the marking software runs your project, one choice per run.</p>
+<p><b>The exam format.</b> The given project contains ${tepCho} and <code>${s.tepHoc}</code>. Only <code>${s.tepHoc}</code> may be edited, and only where the paper allows it (${s.hoc ? 'the bodies marked "Student\'s code starts from here"' : '<b>part (2)</b>'}): complete the functions below, keep every pre-given statement and add your statements in the marked places (you may add helper functions). Each <code>fK()</code> loads its own lines of <code>data.txt</code>, writes the answer to <code>fK.txt</code>, and <code>Main</code> prints that file. Choosing <code>K</code> in the menu runs <code>fK</code> only — exactly how the marking software runs your project, one choice per run.</p>
 ${dsCau('en')}
 <p>The sample outputs below are produced from the paper’s <code>data.txt</code> (also in the download, next to <code>cham.mjs</code>). The hidden cases run the same choices on other <code>data.txt</code> files with the same layout — code that only matches the sample (hard-coded names, positions) fails them.</p>`,
       vi: `${s.boiCanh.vi}
-<p><b>Khuôn đề thi.</b> Project cho sẵn ${tepCho} và <code>${s.tepHoc}</code>. Chỉ được sửa <code>${s.tepHoc}</code>, và chỉ ở <b>phần (2)</b>: hoàn thiện các hàm dưới đây, giữ nguyên mọi câu lệnh cho sẵn của <code>f1…f${s.soF}</code> và chèn câu lệnh của bạn vào giữa hai dòng chú thích đánh dấu (được thêm hàm phụ). Mỗi <code>fK()</code> nạp các dòng riêng của <code>data.txt</code>, ghi đáp án vào <code>fK.txt</code>, và <code>Main</code> in tệp đó sau "Your output:". Chọn <code>K</code> ở menu là chạy riêng <code>fK</code> — đúng cách phần mềm chấm chạy project, mỗi lần một lựa chọn.</p>
+<p><b>Khuôn đề thi.</b> Project cho sẵn ${tepCho} và <code>${s.tepHoc}</code>. Chỉ được sửa <code>${s.tepHoc}</code>, và chỉ ở chỗ đề cho phép (${s.hoc ? 'thân các hàm đánh dấu "Student\'s code starts from here"' : '<b>phần (2)</b>'}): hoàn thiện các hàm dưới đây, giữ nguyên mọi câu lệnh cho sẵn và chèn câu lệnh của bạn vào chỗ đánh dấu (được thêm hàm phụ). Mỗi <code>fK()</code> nạp các dòng riêng của <code>data.txt</code>, ghi đáp án vào <code>fK.txt</code>, và <code>Main</code> in tệp đó. Chọn <code>K</code> ở menu là chạy riêng <code>fK</code> — đúng cách phần mềm chấm chạy project, mỗi lần một lựa chọn.</p>
 ${dsCau('vi')}
 <p>Output mẫu bên dưới chạy với <code>data.txt</code> của đề (có trong bản tải, cạnh <code>cham.mjs</code>). Các ca ẩn chạy cùng các lựa chọn với những <code>data.txt</code> khác cùng bố cục — code chỉ khớp mẫu (gõ cứng tên, vị trí) sẽ trượt.</p>`,
     },
     yeuCau: {
-      en: [`Edit only part (2) of ${s.tepHoc}; ${Object.keys(cho).join(', ')} stay exactly as given (rule G1).`, 'No Vietnamese accents anywhere in your file (rule P1) — Java 8 (javac --release 8, like the exam room’s JDK 1.8).', `Run it like the exam: node cham.mjs runs Main once per choice 1–${s.soF} with the paper’s data.txt and with hidden data files.`],
-      vi: [`Chỉ sửa phần (2) của ${s.tepHoc}; ${Object.keys(cho).join(', ')} giữ nguyên như đề cho (luật G1).`, 'Không có tiếng Việt có dấu ở bất kỳ đâu trong tệp của bạn (luật P1) — Java 8 (javac --release 8, như JDK 1.8 của phòng thi).', `Chạy như phòng thi: node cham.mjs chạy Main một lần cho mỗi lựa chọn 1–${s.soF} với data.txt của đề và với các tệp dữ liệu ẩn.`],
+      en: [`Edit only ${s.tepHoc}, where the paper allows; ${Object.keys(cho).join(', ')} stay exactly as given (rule G1).`, 'No Vietnamese accents anywhere in your file(s) (rule P…) — Java 8 (javac --release 8, like the exam room’s JDK 1.8).', `Run it like the exam: node cham.mjs runs Main once per choice 1–${s.soF} with the paper’s data.txt and with hidden data files.`],
+      vi: [`Chỉ sửa ${s.tepHoc}, ở chỗ đề cho phép; ${Object.keys(cho).join(', ')} giữ nguyên như đề cho (luật G1).`, 'Không có tiếng Việt có dấu ở bất kỳ đâu trong tệp của bạn (luật P…) — Java 8 (javac --release 8, như JDK 1.8 của phòng thi).', `Chạy như phòng thi: node cham.mjs chạy Main một lần cho mỗi lựa chọn 1–${s.soF} với data.txt của đề và với các tệp dữ liệu ẩn.`],
     },
     dauVao: { en: `The menu choice (1–${s.soF}); the program reads data.txt from the working folder.`, vi: `Lựa chọn menu (1–${s.soF}); chương trình đọc data.txt trong thư mục chạy.` },
-    dauRa: { en: 'The menu, "Your output:" and the content of fK.txt, exactly as the given Main prints it.', vi: 'Menu, "Your output:" và nội dung fK.txt, đúng như Main cho sẵn in ra.' },
+    dauRa: { en: 'The menu and the content of fK.txt, exactly as the given Main prints it.', vi: 'Menu và nội dung fK.txt, đúng như Main cho sẵn in ra.' },
     main: 'Main',
-    tep: { ...cho, [s.tepHoc]: s.giai },
+    tep: { ...cho, ...hoc },
     ca,
     soViDu: s.soF,
     tepThem: { 'data.txt': s.data },
-    quyTac: [giuNguyen(cho), asciiRule(s.tepHoc), ...(s.quyTac || [])],
+    quyTac: [giuNguyen(cho), ...tepHocDs.map((f, i) => ({ ...asciiRule(f), id: `P${i + 1}` })), ...(s.quyTac || [])],
     rangBuoc: [{ en: 'Run from the exercise folder (data.txt must be in the working directory, as in NetBeans where it sits in the project folder).', vi: 'Chạy trong thư mục bài (data.txt phải ở thư mục làm việc, như trong NetBeans nó nằm ở thư mục project).' }],
     goiY: s.goiY, loiHayGap: s.loiHayGap, giaiThich: s.giaiThich,
   });

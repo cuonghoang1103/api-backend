@@ -1,0 +1,646 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-9-4-loai-chi-muc",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-9-4-loai-chi-muc"
+  },
+  "exercises": [
+    {
+      "title": "GIN for jsonb containment",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "GIN",
+        "jsonb @>"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "gin",
+        "jsonb"
+      ],
+      "problemHtml": "<p>Marketing filters events by JSON properties: <code>SELECT count(*) FROM event WHERE props @&gt; '{\"plan\": \"pro\"}'</code>. A B-tree cannot look inside a document. Create the index type that can.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE INDEX … ON event USING GIN (props)</code>.</li>\n  <li>The containment query must use it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Marketing lọc sự kiện theo thuộc tính JSON: <code>SELECT count(*) FROM event WHERE props @&gt; '{\"plan\": \"pro\"}'</code>. B-tree không nhìn vào trong tài liệu được. Tạo loại chỉ mục làm được.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE INDEX … ON event USING GIN (props)</code>.</li>\n  <li>Truy vấn chứa phải dùng nó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "uses_gin\n--------\ntrue    ",
+          "explanation": "Expected result of check \"The @> query uses a Bitmap Index Scan\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Truy vấn @> dùng Bitmap Index Scan\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "GIN = Generalized INverted index: maps each element/key to the rows containing it.|||GIN = chỉ mục đảo tổng quát: ánh xạ mỗi phần tử/khoá tới các dòng chứa nó.",
+        "Write USING GIN after the table name.|||Viết USING GIN sau tên bảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_props ON event USING GIN (props);   -- one entry per key/value inside every document\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>GIN indexes the inside of composite values: jsonb keys/values, array elements, words of a tsvector. Chapter 13 adds the smaller <code>jsonb_path_ops</code> operator class.</p>",
+      "solutionExplanationHtmlVi": "<p>GIN đánh chỉ mục bên trong giá trị tổ hợp: khoá/giá trị jsonb, phần tử mảng, từ của tsvector. Chương 13 thêm lớp toán tử nhỏ hơn <code>jsonb_path_ops</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The @> query uses a Bitmap Index Scan|||Truy vấn @> dùng Bitmap Index Scan",
+            "kiemTra": "SELECT plan_nodes('SELECT count(*) FROM event WHERE props @> ''{\"plan\": \"pro\"}''') ~ 'Bitmap Index Scan' AS uses_gin",
+            "mongDoi": {
+              "cot": [
+                "uses_gin"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The index is GIN|||Chỉ mục là GIN",
+            "kiemTra": "SELECT am.amname FROM pg_index i JOIN pg_class c ON c.oid = i.indexrelid JOIN pg_am am ON am.oid = c.relam WHERE i.indrelid = 'event'::regclass AND NOT i.indisprimary",
+            "mongDoi": {
+              "cot": [
+                "amname"
+              ],
+              "hang": [
+                [
+                  "gin"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Another key works too|||Khoá khác cũng chạy",
+            "kiemTra": "SET LOCAL enable_seqscan = off; SELECT plan_nodes('SELECT count(*) FROM event WHERE props @> ''{\"device\": \"ios\"}''') ~ 'Bitmap Index Scan' AS uses_gin",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "uses_gin"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A B-tree on props: it can only compare whole documents, not containment.|||B-tree trên props: chỉ so được cả tài liệu, không so \"chứa\"."
+        },
+        {
+          "loi": "An expression index on one key: helps that key only and only for =, not @&gt;.|||Chỉ mục biểu thức trên một khoá: chỉ giúp khoá đó và chỉ cho =, không cho @&gt;."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GIN",
+          "vi": "chỉ mục đảo"
+        }
+      ]
+    },
+    {
+      "title": "BRIN: a tiny index for time-ordered data",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "BRIN",
+        "physical order",
+        "index size"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "brin"
+      ],
+      "problemHtml": "<p><code>event</code> is append-only: rows arrive in created_at order. Create a <b>BRIN</b> index on created_at — a few hundred bytes instead of hundreds of kilobytes — and check that the day query <code>WHERE created_at &gt;= '2024-03-01' AND created_at &lt; '2024-03-02'</code> can use it.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE INDEX … ON event USING BRIN (created_at)</code>.</li>\n  <li>No B-tree on created_at.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>event</code> chỉ chèn thêm: dòng đến theo thứ tự created_at. Tạo chỉ mục <b>BRIN</b> trên created_at — vài trăm byte thay vì hàng trăm kilobyte — và kiểm truy vấn theo ngày <code>WHERE created_at &gt;= '2024-03-01' AND created_at &lt; '2024-03-02'</code> dùng được nó.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE INDEX … ON event USING BRIN (created_at)</code>.</li>\n  <li>Không có B-tree trên created_at.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "uses_index\n----------\ntrue      ",
+          "explanation": "Expected result of check \"The day query uses the BRIN index\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Truy vấn theo ngày dùng chỉ mục BRIN\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "BRIN = Block Range INdex: one summary (min, max) per range of pages.|||BRIN = chỉ mục khoảng khối: một bản tóm tắt (min, max) cho mỗi dải trang.",
+        "It only helps when the column correlates with the physical row order.|||Nó chỉ giúp khi cột tương quan với thứ tự vật lý của dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_created_brin ON event USING BRIN (created_at);\n-- stores min/max of created_at per block range: only works because the table is physically in time order\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For huge append-only tables (logs, events, sensor data) BRIN gives \"skip most of the table\" for a fraction of the size of a B-tree. The lesson measured it on 500 000 rows.</p>",
+      "solutionExplanationHtmlVi": "<p>Với bảng chỉ-chèn khổng lồ (log, sự kiện, dữ liệu cảm biến), BRIN cho \"bỏ qua phần lớn bảng\" với kích thước bằng một phần nhỏ của B-tree. Bài giảng đã đo trên 500 000 dòng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The day query uses the BRIN index|||Truy vấn theo ngày dùng chỉ mục BRIN",
+            "kiemTra": "SELECT plan_nodes('SELECT * FROM event WHERE created_at >= ''2024-03-01'' AND created_at < ''2024-03-02''') ~ 'Bitmap Index Scan' AS uses_index",
+            "mongDoi": {
+              "cot": [
+                "uses_index"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "It is BRIN and much smaller than a B-tree would be|||Nó là BRIN và nhỏ hơn hẳn B-tree",
+            "kiemTra": "SELECT am.amname, pg_relation_size(c.oid) < 50000 AS tiny FROM pg_index i JOIN pg_class c ON c.oid = i.indexrelid JOIN pg_am am ON am.oid = c.relam WHERE i.indrelid = 'event'::regclass AND NOT i.indisprimary",
+            "mongDoi": {
+              "cot": [
+                "amname",
+                "tiny"
+              ],
+              "hang": [
+                [
+                  "brin",
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "USING BRIN|||USING BRIN",
+            "khop": "USING\\s+BRIN\\s*\\(\\s*created_at\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A B-tree: works too, but is hundreds of times larger on a big log table.|||B-tree: cũng chạy, nhưng lớn hơn hàng trăm lần trên bảng log lớn."
+        },
+        {
+          "loi": "BRIN on a randomly ordered column (email): every block range covers everything, the index is useless.|||BRIN trên cột thứ tự ngẫu nhiên (email): mỗi dải khối bao mọi giá trị, chỉ mục vô dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BRIN",
+          "vi": "chỉ mục khoảng khối"
+        }
+      ]
+    },
+    {
+      "title": "At most one pending order per customer: a partial unique index",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "UNIQUE index",
+        "partial unique",
+        "constraint via index"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "unique",
+        "ctshop"
+      ],
+      "problemHtml": "<p>The checkout must never create a second <b>pending</b> order for the same customer (a double click). Paid, shipped and cancelled orders are unlimited. Enforce it in the database with one index.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE UNIQUE INDEX … ON orders (customer_id) WHERE status = 'pending'</code>.</li>\n  <li>A plain UNIQUE constraint cannot have a WHERE — this is why the index form exists.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang thanh toán không bao giờ được tạo đơn <b>pending</b> thứ hai cho cùng một khách (bấm đúp). Đơn paid, shipped, cancelled thì không giới hạn. Ép luật này trong CSDL bằng một chỉ mục.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE UNIQUE INDEX … ON orders (customer_id) WHERE status = 'pending'</code>.</li>\n  <li>Ràng buộc UNIQUE thường không có WHERE — đó là lý do có dạng chỉ mục.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO orders (customer_id, status) VALUES (3, 'pending')|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO orders (customer_id, status) VALUES (3, 'pending')",
+          "output": "Rejected by a constraint (error).|||Bị ràng buộc chặn (báo lỗi).",
+          "explanation": "Check \"A second pending order of customer 3 is rejected\".|||Kiểm \"Đơn pending thứ hai của khách 3 bị chặn\"."
+        }
+      ],
+      "hintsJson": [
+        "A unique index IS a constraint: duplicates fail with 23505.|||Chỉ mục unique CHÍNH LÀ một ràng buộc: trùng thì lỗi 23505.",
+        "Add WHERE to make it apply only to pending rows.|||Thêm WHERE để nó chỉ áp cho dòng pending."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE UNIQUE INDEX uq_orders_one_pending ON orders (customer_id) WHERE status = 'pending';\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Partial unique indexes express rules like \"one active X per Y\" that plain constraints cannot. The insert of the second pending order fails atomically, even if two requests race.</p>",
+      "solutionExplanationHtmlVi": "<p>Chỉ mục unique từng phần diễn đạt được luật kiểu \"mỗi Y chỉ một X đang hoạt động\" mà ràng buộc thường không làm được. Lần chèn đơn pending thứ hai hỏng một cách nguyên tử, kể cả khi hai yêu cầu chạy đua.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "bi-chan",
+            "moTa": "A second pending order of customer 3 is rejected|||Đơn pending thứ hai của khách 3 bị chặn",
+            "thu": "INSERT INTO orders (customer_id, status) VALUES (3, 'pending')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "More paid orders are fine|||Thêm đơn paid thì được",
+            "thu": "INSERT INTO orders (customer_id, status) VALUES (3, 'paid'), (3, 'paid')"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "After paying, a new pending order is allowed|||Trả tiền xong thì được tạo đơn pending mới",
+            "thu": "UPDATE orders SET status = 'paid' WHERE id = 7; INSERT INTO orders (customer_id) VALUES (3)",
+            "an": true
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Customer 8 cannot get two pending orders either|||Khách 8 cũng không có được hai đơn pending",
+            "thu": "INSERT INTO orders (customer_id) VALUES (8), (8)",
+            "maLoi": "23505",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "UNIQUE on customer_id for all rows — cannot even be created (customers already have several orders).|||UNIQUE trên customer_id cho mọi dòng — không tạo nổi (khách đã có nhiều đơn)."
+        },
+        {
+          "loi": "A partial index without UNIQUE — fast, but enforces nothing.|||Chỉ mục từng phần thiếu UNIQUE — nhanh, nhưng không ép gì cả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partial unique index",
+          "vi": "chỉ mục duy nhất từng phần"
+        }
+      ]
+    },
+    {
+      "title": "No double booking: EXCLUDE with a GiST index",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 14,
+      "points": 30,
+      "concepts": [
+        "EXCLUDE USING gist",
+        "range overlap &&",
+        "int4range trick instead of btree_gist"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "gist",
+        "exclude",
+        "range"
+      ],
+      "problemHtml": "<p>Lab rooms are booked by time range. Add a constraint <code>no_overlap</code> to <code>booking</code> so that two bookings of the <b>same room</b> can never overlap in time, while different rooms may overlap freely. (The usual form <code>room_id WITH =</code> needs the extension btree_gist, which this grader does not have; turn the room id into a one-point range: <code>int4range(room_id, room_id, '[]') WITH =</code>.)</p>\n<pre>room (id PK, name) — 3 rooms\nbooking (id identity PK, room_id → room, who, during tstzrange) — empty</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ALTER TABLE booking ADD CONSTRAINT no_overlap EXCLUDE USING gist (int4range(room_id, room_id, '[]') WITH =, during WITH &amp;&amp;)</code>.</li>\n  <li>Back-to-back bookings ([9:00, 10:00) then [10:00, 11:00)) must be allowed.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng lab được đặt theo khoảng thời gian. Thêm ràng buộc <code>no_overlap</code> cho <code>booking</code> để hai lượt đặt của <b>cùng một phòng</b> không bao giờ chồng lấn thời gian, còn phòng khác nhau thì thoải mái. (Dạng thường <code>room_id WITH =</code> cần extension btree_gist, máy chấm này không có; hãy biến id phòng thành khoảng một điểm: <code>int4range(room_id, room_id, '[]') WITH =</code>.)</p>\n<pre>room (id PK, name) — 3 phòng\nbooking (id identity PK, room_id → room, who, during tstzrange) — rỗng</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ALTER TABLE booking ADD CONSTRAINT no_overlap EXCLUDE USING gist (int4range(room_id, room_id, '[]') WITH =, during WITH &amp;&amp;)</code>.</li>\n  <li>Đặt nối tiếp ([9:00, 10:00) rồi [10:00, 11:00)) phải được phép.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO booking (room_id, who, during) VALUES (1, 'An', '[2026-11-02 09:00+07, 2026-11-02 10:00+07)'), (1, 'Bình', '[2026-11-02 10:00+07, 2026-11-02 11:00+07)')|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO booking (room_id, who, during) VALUES (1, 'An', '[2026-11-02 09:00+07, 2026-11-02 10:00+07)'), (1, 'Bình', '[2026-11-02 10:00+07, 2026-11-02 11:00+07)')",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"Back-to-back bookings in one room are fine\".|||Kiểm \"Đặt nối tiếp trong một phòng thì được\"."
+        }
+      ],
+      "hintsJson": [
+        "EXCLUDE (a WITH op1, b WITH op2) rejects a row if ANY existing row makes all the operators true.|||EXCLUDE (a WITH op1, b WITH op2) chặn một dòng nếu CÓ dòng cũ nào làm mọi toán tử đều đúng.",
+        "Half-open ranges [start, end) touch without overlapping.|||Khoảng nửa mở [đầu, cuối) chạm nhau mà không chồng lấn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "booking.sql",
+          "language": "sql",
+          "code": "-- booking.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- booking.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE room (id int PRIMARY KEY, name text NOT NULL);\nINSERT INTO room VALUES (1, 'Lab A'), (2, 'Lab B'), (3, 'Hội trường');\nCREATE TABLE booking (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  room_id int NOT NULL REFERENCES room(id),\n  who     text NOT NULL,\n  during  tstzrange NOT NULL\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE booking ADD CONSTRAINT no_overlap\n  EXCLUDE USING gist (\n    int4range(room_id, room_id, '[]') WITH =,    -- \"same room\" (a one-point range, so GiST can compare it)\n    during WITH &&                               -- \"overlapping time\"\n  );\n-- with the btree_gist extension you would simply write: room_id WITH =, during WITH &&\n"
+        },
+        {
+          "name": "booking.sql",
+          "language": "sql",
+          "code": "-- booking.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- booking.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE room (id int PRIMARY KEY, name text NOT NULL);\nINSERT INTO room VALUES (1, 'Lab A'), (2, 'Lab B'), (3, 'Hội trường');\nCREATE TABLE booking (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  room_id int NOT NULL REFERENCES room(id),\n  who     text NOT NULL,\n  during  tstzrange NOT NULL\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An exclusion constraint generalizes UNIQUE from \"equal\" to any operator — here \"same room AND overlapping time\". It is backed by a GiST index and, like UNIQUE, is safe under concurrent inserts. Checking overlaps in the application cannot be made race-free without locks.</p>",
+      "solutionExplanationHtmlVi": "<p>Ràng buộc loại trừ tổng quát hoá UNIQUE từ \"bằng nhau\" sang toán tử bất kỳ — ở đây là \"cùng phòng VÀ chồng lấn thời gian\". Nó dựa trên một chỉ mục GiST và, như UNIQUE, an toàn khi chèn đồng thời. Kiểm chồng lấn ở ứng dụng không thể không có kẽ hở nếu thiếu khoá.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE room (id int PRIMARY KEY, name text NOT NULL);\nINSERT INTO room VALUES (1, 'Lab A'), (2, 'Lab B'), (3, 'Hội trường');\nCREATE TABLE booking (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  room_id int NOT NULL REFERENCES room(id),\n  who     text NOT NULL,\n  during  tstzrange NOT NULL\n);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Back-to-back bookings in one room are fine|||Đặt nối tiếp trong một phòng thì được",
+            "thu": "INSERT INTO booking (room_id, who, during) VALUES (1, 'An', '[2026-11-02 09:00+07, 2026-11-02 10:00+07)'), (1, 'Bình', '[2026-11-02 10:00+07, 2026-11-02 11:00+07)')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An overlap in the same room is rejected|||Chồng lấn trong cùng phòng bị chặn",
+            "thu": "INSERT INTO booking (room_id, who, during) VALUES (1, 'An', '[2026-11-02 09:00+07, 2026-11-02 10:00+07)'), (1, 'Chi', '[2026-11-02 09:30+07, 2026-11-02 10:30+07)')",
+            "maLoi": "23P01"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The same time in another room is fine|||Cùng giờ ở phòng khác thì được",
+            "thu": "INSERT INTO booking (room_id, who, during) VALUES (1, 'An', '[2026-11-02 09:00+07, 2026-11-02 10:00+07)'), (2, 'Chi', '[2026-11-02 09:30+07, 2026-11-02 10:30+07)')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A booking inside another one is rejected|||Lượt đặt nằm trong lượt khác bị chặn",
+            "thu": "INSERT INTO booking (room_id, who, during) VALUES (3, 'An', '[2026-11-02 08:00+07, 2026-11-02 12:00+07)'), (3, 'Dũng', '[2026-11-02 10:00+07, 2026-11-02 10:15+07)')",
+            "maLoi": "23P01",
+            "an": true
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The constraint is called no_overlap|||Ràng buộc tên no_overlap",
+            "kiemTra": "SELECT conname, contype FROM pg_constraint WHERE conrelid = 'booking'::regclass AND contype = 'x'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "conname",
+                "contype"
+              ],
+              "hang": [
+                [
+                  "no_overlap",
+                  "x"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only <code>during WITH &amp;&amp;</code>: two different rooms can no longer be booked at the same time.|||Chỉ <code>during WITH &amp;&amp;</code>: hai phòng khác nhau không còn đặt cùng giờ được."
+        },
+        {
+          "loi": "UNIQUE (room_id, during): only blocks the exact same range — 9:30–10:30 slips past 9:00–10:00.|||UNIQUE (room_id, during): chỉ chặn khoảng giống hệt — 9:30–10:30 lọt qua 9:00–10:00."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXCLUDE constraint",
+          "vi": "ràng buộc loại trừ"
+        },
+        {
+          "en": "GiST",
+          "vi": "chỉ mục cây tìm kiếm tổng quát"
+        },
+        {
+          "en": "tstzrange",
+          "vi": "khoảng thời gian có múi giờ"
+        }
+      ]
+    },
+    {
+      "title": "One index type per question",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "B-tree",
+        "GIN",
+        "BRIN",
+        "GiST",
+        "Hash"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "concepts"
+      ],
+      "problemHtml": "<p>Pick the index type that fits each need best.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn loại chỉ mục hợp nhất cho từng nhu cầu.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what OPERATOR the query uses: =, &lt;, @&gt;, &amp;&amp; …|||Hỏi truy vấn dùng TOÁN TỬ nào: =, &lt;, @&gt;, &amp;&amp; …",
+        "The operator decides the index type.|||Toán tử quyết định loại chỉ mục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One index type per question\n\nAnswer in the answer panel (no code needed).\n\n1. Need → index typeNhu cầu → loại chỉ mục\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One index type per question — answer key\n\n1. Need → index typeNhu cầu → loại chỉ mục\n   - r1.loai: B-tree\n   - r2.loai: GIN\n   - r3.loai: BRIN\n   - r4.loai: GiST\n   - r5.loai: GIN\n   B-tree: equality, ranges, sorting. GIN: \"contains\" on composite values (jsonb, arrays, tsvector). BRIN: huge tables physically ordered by the column. GiST: geometric/range operators such as overlap, used by EXCLUDE. Hash: equality only, rarely better than B-tree.VI: B-tree: so bằng, khoảng, sắp xếp. GIN: \"chứa\" trên giá trị tổ hợp (jsonb, mảng, tsvector). BRIN: bảng khổng lồ có thứ tự vật lý theo cột. GiST: toán tử hình học/khoảng như chồng lấn, dùng cho EXCLUDE. Hash: chỉ so bằng, hiếm khi hơn B-tree.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>B-tree: equality, ranges, sorting. GIN: \"contains\" on composite values (jsonb, arrays, tsvector). BRIN: huge tables physically ordered by the column. GiST: geometric/range operators such as overlap, used by EXCLUDE. Hash: equality only, rarely better than B-tree.</p><p><i>VI: B-tree: so bằng, khoảng, sắp xếp. GIN: \"chứa\" trên giá trị tổ hợp (jsonb, mảng, tsvector). BRIN: bảng khổng lồ có thứ tự vật lý theo cột. GiST: toán tử hình học/khoảng như chồng lấn, dùng cho EXCLUDE. Hash: chỉ so bằng, hiếm khi hơn B-tree.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Need → index type</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhu cầu → loại chỉ mục</i></p>",
+            "cot": [
+              {
+                "ma": "nc",
+                "ten": "Need / Nhu cầu"
+              },
+              {
+                "ma": "loai",
+                "ten": "Type",
+                "luaChon": [
+                  "B-tree",
+                  "GIN",
+                  "BRIN",
+                  "GiST",
+                  "Hash"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "nc": "orders of a customer, sorted by date / đơn của một khách, sắp theo ngày"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "nc": "products whose tags array contains 'sale' / sản phẩm có mảng tags chứa 'sale'"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "nc": "2 billion log rows, queried by time range, inserted in time order / 2 tỉ dòng log, truy vấn theo khoảng thời gian, chèn theo thứ tự thời gian"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "nc": "no two reservations of a room overlap / không hai lượt đặt phòng nào chồng lấn"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "nc": "full-text search on article bodies (tsvector) / tìm kiếm toàn văn (tsvector)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.loai": "B-tree",
+              "r2.loai": "GIN",
+              "r3.loai": "BRIN",
+              "r4.loai": "GiST",
+              "r5.loai": "GIN"
+            },
+            "giaiThich": "<p>B-tree: equality, ranges, sorting. GIN: \"contains\" on composite values (jsonb, arrays, tsvector). BRIN: huge tables physically ordered by the column. GiST: geometric/range operators such as overlap, used by EXCLUDE. Hash: equality only, rarely better than B-tree.</p><p><i>VI: B-tree: so bằng, khoảng, sắp xếp. GIN: \"chứa\" trên giá trị tổ hợp (jsonb, mảng, tsvector). BRIN: bảng khổng lồ có thứ tự vật lý theo cột. GiST: toán tử hình học/khoảng như chồng lấn, dùng cho EXCLUDE. Hash: chỉ so bằng, hiếm khi hơn B-tree.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using B-tree for everything, including jsonb containment.|||Dùng B-tree cho mọi thứ, kể cả phép chứa jsonb."
+        },
+        {
+          "loi": "BRIN on data that is not physically ordered.|||BRIN trên dữ liệu không có thứ tự vật lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "operator class",
+          "vi": "lớp toán tử"
+        }
+      ]
+    }
+  ]
+}

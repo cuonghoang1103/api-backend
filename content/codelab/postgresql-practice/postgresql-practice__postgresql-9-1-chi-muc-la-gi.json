@@ -1,0 +1,457 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-9-1-chi-muc-la-gi",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-9-1-chi-muc-la-gi"
+  },
+  "exercises": [
+    {
+      "title": "Make the email lookup use an index",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "CREATE INDEX",
+        "B-tree",
+        "Index Scan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "explain"
+      ],
+      "problemHtml": "<p>The login page runs <code>SELECT * FROM event WHERE email = 'user250@example.com'</code> thousands of times a day, and today it reads all 20 000 rows (<code>Seq Scan</code>). Create the index that lets PostgreSQL jump straight to the row.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One <code>CREATE INDEX … ON event (email)</code> (any name).</li>\n  <li>Do not change the query or the data.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang đăng nhập chạy <code>SELECT * FROM event WHERE email = 'user250@example.com'</code> hàng nghìn lần mỗi ngày, và hôm nay nó đọc cả 20 000 dòng (<code>Seq Scan</code>). Tạo chỉ mục giúp PostgreSQL nhảy thẳng tới dòng đó.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một lệnh <code>CREATE INDEX … ON event (email)</code> (tên tuỳ ý).</li>\n  <li>Không đổi truy vấn hay dữ liệu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "uses_index\n----------\ntrue      ",
+          "explanation": "Expected result of check \"The lookup now uses an Index Scan\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Truy vấn tra cứu giờ dùng Index Scan\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The index must be on the column the WHERE compares.|||Chỉ mục phải nằm trên đúng cột mà WHERE so sánh.",
+        "CREATE INDEX name ON table (column).|||CREATE INDEX tên ON bảng (cột)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_email ON event (email);   -- a sorted B-tree: lookup in ~log(n) page reads\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A B-tree keeps the email values sorted with pointers to their rows. Finding one value takes a few page reads instead of reading the whole table — the plan changes from <code>Seq Scan</code> to <code>Index Scan</code>. The checks ask PostgreSQL for its plan; they do not care what you named the index.</p>",
+      "solutionExplanationHtmlVi": "<p>B-tree giữ các giá trị email đã sắp kèm con trỏ tới dòng. Tìm một giá trị chỉ tốn vài lần đọc trang thay vì đọc cả bảng — kế hoạch đổi từ <code>Seq Scan</code> sang <code>Index Scan</code>. Các kiểm hỏi PostgreSQL kế hoạch của nó; tên chỉ mục bạn đặt không quan trọng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The lookup now uses an Index Scan|||Truy vấn tra cứu giờ dùng Index Scan",
+            "kiemTra": "SELECT plan_nodes('SELECT * FROM event WHERE email = ''user250@example.com''') ~ 'Index' AS uses_index",
+            "mongDoi": {
+              "cot": [
+                "uses_index"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Any other email too|||Email khác cũng vậy",
+            "kiemTra": "SELECT plan_nodes('SELECT * FROM event WHERE email = ''user19999@example.com''') ~ 'Index' AS uses_index",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "uses_index"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Same answer as before (one row)|||Vẫn cùng kết quả (một dòng)",
+            "kiemTra": "SELECT count(*) AS rows FROM event WHERE email = 'user250@example.com'",
+            "mongDoi": {
+              "cot": [
+                "rows"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "CREATE INDEX on email|||CREATE INDEX trên email",
+            "khop": "CREATE\\s+(UNIQUE\\s+)?INDEX[\\s\\S]*\\(\\s*email\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Indexing another column (user_id): the planner still has to scan.|||Đánh chỉ mục cột khác (user_id): planner vẫn phải quét."
+        },
+        {
+          "loi": "An index on lower(email) does not serve <code>email = …</code> — the expressions must match.|||Chỉ mục trên lower(email) không phục vụ <code>email = …</code> — biểu thức phải khớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index",
+          "vi": "chỉ mục",
+          "giaiThich": "Cấu trúc phụ (thường B-tree) giúp tìm dòng theo cột mà không đọc cả bảng; đổi lại mỗi lần ghi phải cập nhật nó."
+        },
+        {
+          "en": "B-tree",
+          "vi": "cây B (chỉ mục mặc định)"
+        }
+      ]
+    },
+    {
+      "title": "See the plan change: EXPLAIN before and after",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "EXPLAIN (COSTS OFF)",
+        "Index Cond"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "explain"
+      ],
+      "problemHtml": "<p>Create the index <code>idx_event_email</code> on <code>event(email)</code>, then show the plan of <code>SELECT * FROM event WHERE email = 'user250@example.com'</code> with <code>EXPLAIN (COSTS OFF)</code>. The last statement of your script is the EXPLAIN — its output is graded.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly the index name <code>idx_event_email</code> (it appears in the plan).</li>\n  <li><code>EXPLAIN (COSTS OFF)</code> without ANALYZE.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo chỉ mục <code>idx_event_email</code> trên <code>event(email)</code>, rồi hiện kế hoạch của <code>SELECT * FROM event WHERE email = 'user250@example.com'</code> bằng <code>EXPLAIN (COSTS OFF)</code>. Câu cuối cùng trong script là EXPLAIN — output của nó được chấm.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng tên chỉ mục <code>idx_event_email</code> (nó hiện trong kế hoạch).</li>\n  <li><code>EXPLAIN (COSTS OFF)</code> không ANALYZE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "QUERY PLAN                  \n----------------------------\nIndex Scan using idx_event_…\n  Index Cond: (email = 'use…",
+          "explanation": "Expected result of check \"Index Scan using idx_event_email\" (row order matters).|||Kết quả mong đợi của kiểm \"Index Scan using idx_event_email\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Two statements: CREATE INDEX, then EXPLAIN.|||Hai câu: CREATE INDEX, rồi EXPLAIN.",
+        "Index Cond is the condition the index answers.|||Index Cond là điều kiện mà chỉ mục trả lời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_email ON event (email);\nEXPLAIN (COSTS OFF)\nSELECT * FROM event WHERE email = 'user250@example.com';\n-- Index Scan using idx_event_email on event\n--   Index Cond: (email = 'user250@example.com'::text)\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Before the index the plan is <code>Seq Scan + Filter</code>; after it, <code>Index Scan using idx_event_email</code> with <code>Index Cond</code>. A <code>Filter</code> line means rows were read and then thrown away; an <code>Index Cond</code> means the index found them.</p>",
+      "solutionExplanationHtmlVi": "<p>Trước khi có chỉ mục, kế hoạch là <code>Seq Scan + Filter</code>; sau đó là <code>Index Scan using idx_event_email</code> với <code>Index Cond</code>. Dòng <code>Filter</code> nghĩa là đọc rồi bỏ; <code>Index Cond</code> nghĩa là chỉ mục tìm ra dòng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Index Scan using idx_event_email|||Index Scan using idx_event_email",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "QUERY PLAN"
+              ],
+              "hang": [
+                [
+                  "Index Scan using idx_event_email on event"
+                ],
+                [
+                  "  Index Cond: (email = 'user250@example.com'::text)"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "EXPLAIN without ANALYZE|||EXPLAIN không ANALYZE",
+            "khop": "^(?![\\s\\S]*\\bANALY[SZ]E\\b)[\\s\\S]*\\bEXPLAIN\\b",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The index exists with that name|||Chỉ mục tồn tại với đúng tên",
+            "kiemTra": "SELECT indexname FROM pg_indexes WHERE tablename = 'event' AND indexname = 'idx_event_email'",
+            "mongDoi": {
+              "cot": [
+                "indexname"
+              ],
+              "hang": [
+                [
+                  "idx_event_email"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "EXPLAIN alone: <code>Seq Scan on event / Filter: …</code> — no index yet.|||Chỉ EXPLAIN: <code>Seq Scan on event / Filter: …</code> — chưa có chỉ mục."
+        },
+        {
+          "loi": "A different index name — the plan text names the index you created.|||Tên chỉ mục khác — dòng kế hoạch ghi tên chỉ mục bạn tạo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        },
+        {
+          "en": "Index Cond",
+          "vi": "điều kiện chỉ mục trả lời"
+        }
+      ]
+    },
+    {
+      "title": "What an index buys and what it costs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "B-tree",
+        "write cost"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "index",
+        "concepts"
+      ],
+      "problemHtml": "<p>Check your mental model of a B-tree index.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm tra mô hình tư duy về chỉ mục B-tree.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of a phone book: sorted, so you jump.|||Nghĩ tới danh bạ: đã sắp nên nhảy được.",
+        "Writes pay for every index.|||Thao tác ghi trả giá cho mọi chỉ mục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What an index buys and what it costs\n\nAnswer in the answer panel (no code needed).\n\n1. A table grows from 1 million to 100 million rows. Roughly how many more pages does a B-tree lookup of one value read?Bảng tăng từ 1 triệu lên 100 triệu dòng. Tra một giá trị qua B-tree đọc thêm khoảng bao nhiêu trang?\n2. What does every extra index cost?Mỗi chỉ mục thêm vào tốn gì?\n3. Which query can a B-tree on event(email) serve?Truy vấn nào chỉ mục B-tree trên event(email) phục vụ được?\n4. Does the primary key of event already have an index?Khoá chính của event đã có chỉ mục chưa?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What an index buys and what it costs — answer key\n\n1. A table grows from 1 million to 100 million rows. Roughly how many more pages does a B-tree lookup of one value read?Bảng tăng từ 1 triệu lên 100 triệu dòng. Tra một giá trị qua B-tree đọc thêm khoảng bao nhiêu trang?\n   Answer: b) one or two more levels — depth grows like log(n)\n   Each B-tree page holds hundreds of keys, so ×100 rows adds about one level.VI: Mỗi trang B-tree chứa hàng trăm khoá, nên ×100 dòng chỉ thêm khoảng một tầng.\n\n2. What does every extra index cost?Mỗi chỉ mục thêm vào tốn gì?\n   Answer: a) disk space and work on every INSERT/UPDATE/DELETE of the table\n   Every write must also update every index (unless HOT applies). Index what your queries need, not every column.VI: Mỗi lần ghi phải cập nhật mọi chỉ mục (trừ khi HOT áp dụng). Đánh chỉ mục theo truy vấn cần, không phải mọi cột.\n\n3. Which query can a B-tree on event(email) serve?Truy vấn nào chỉ mục B-tree trên event(email) phục vụ được?\n   Answer: d) WHERE email > 'user5' ORDER BY email\n   A B-tree is sorted, so it serves =, <, >, BETWEEN, ORDER BY and LIKE 'prefix%' (with the right opclass). A leading wildcard or a function on the column needs another kind of index.VI: B-tree đã sắp nên phục vụ =, <, >, BETWEEN, ORDER BY và LIKE 'tiền tố%' (đúng opclass). Ký tự đại diện ở đầu hay hàm trên cột cần loại chỉ mục khác.\n\n4. Does the primary key of event already have an index?Khoá chính của event đã có chỉ mục chưa?\n   Answer: a) yes — PRIMARY KEY and UNIQUE always create a unique B-tree\n   PostgreSQL enforces uniqueness through an index, so every PK/UNIQUE constraint comes with one. Foreign keys, however, do NOT get one automatically.VI: PostgreSQL thực thi tính duy nhất bằng chỉ mục, nên mọi ràng buộc PK/UNIQUE đều kèm một chỉ mục. Khoá ngoại thì KHÔNG tự có.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> one or two more levels — depth grows like log(n)</p><p>Each B-tree page holds hundreds of keys, so ×100 rows adds about one level.</p><p><i>VI: Mỗi trang B-tree chứa hàng trăm khoá, nên ×100 dòng chỉ thêm khoảng một tầng.</i></p></li><li><p><b>a)</b> disk space and work on every INSERT/UPDATE/DELETE of the table</p><p>Every write must also update every index (unless HOT applies). Index what your queries need, not every column.</p><p><i>VI: Mỗi lần ghi phải cập nhật mọi chỉ mục (trừ khi HOT áp dụng). Đánh chỉ mục theo truy vấn cần, không phải mọi cột.</i></p></li><li><p><b>d)</b> <code>WHERE email &gt; 'user5' ORDER BY email</code></p><p>A B-tree is sorted, so it serves =, &lt;, &gt;, BETWEEN, ORDER BY and LIKE 'prefix%' (with the right opclass). A leading wildcard or a function on the column needs another kind of index.</p><p><i>VI: B-tree đã sắp nên phục vụ =, &lt;, &gt;, BETWEEN, ORDER BY và LIKE 'tiền tố%' (đúng opclass). Ký tự đại diện ở đầu hay hàm trên cột cần loại chỉ mục khác.</i></p></li><li><p><b>a)</b> yes — PRIMARY KEY and UNIQUE always create a unique B-tree</p><p>PostgreSQL enforces uniqueness through an index, so every PK/UNIQUE constraint comes with one. Foreign keys, however, do NOT get one automatically.</p><p><i>VI: PostgreSQL thực thi tính duy nhất bằng chỉ mục, nên mọi ràng buộc PK/UNIQUE đều kèm một chỉ mục. Khoá ngoại thì KHÔNG tự có.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A table grows from 1 million to 100 million rows. Roughly how many more pages does a B-tree lookup of one value read?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng tăng từ 1 triệu lên 100 triệu dòng. Tra một giá trị qua B-tree đọc thêm khoảng bao nhiêu trang?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the same as a sequential scan"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one or two more levels — depth grows like log(n)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exactly twice as many"
+              },
+              {
+                "ma": "d",
+                "noiDung": "about 100 times more pages"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each B-tree page holds hundreds of keys, so ×100 rows adds about one level.</p><p><i>VI: Mỗi trang B-tree chứa hàng trăm khoá, nên ×100 dòng chỉ thêm khoảng một tầng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does every extra index cost?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi chỉ mục thêm vào tốn gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "disk space and work on every INSERT/UPDATE/DELETE of the table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only memory while queries run"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it slows down SELECTs that do not use it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing once it is built"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every write must also update every index (unless HOT applies). Index what your queries need, not every column.</p><p><i>VI: Mỗi lần ghi phải cập nhật mọi chỉ mục (trừ khi HOT áp dụng). Đánh chỉ mục theo truy vấn cần, không phải mọi cột.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which query can a B-tree on <code>event(email)</code> serve?</p><p style=\"opacity:.75;font-size:.92em\"><i>Truy vấn nào chỉ mục B-tree trên <code>event(email)</code> phục vụ được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<code>WHERE length(email) = 20</code>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>WHERE email LIKE '%@example.com'</code>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>WHERE lower(email) = 'x'</code>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<code>WHERE email &gt; 'user5' ORDER BY email</code>"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A B-tree is sorted, so it serves =, &lt;, &gt;, BETWEEN, ORDER BY and LIKE 'prefix%' (with the right opclass). A leading wildcard or a function on the column needs another kind of index.</p><p><i>VI: B-tree đã sắp nên phục vụ =, &lt;, &gt;, BETWEEN, ORDER BY và LIKE 'tiền tố%' (đúng opclass). Ký tự đại diện ở đầu hay hàm trên cột cần loại chỉ mục khác.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Does the primary key of <code>event</code> already have an index?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá chính của <code>event</code> đã có chỉ mục chưa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "yes — PRIMARY KEY and UNIQUE always create a unique B-tree"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only if the table has more than 1 000 rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no, you must create it yourself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only for integer keys"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>PostgreSQL enforces uniqueness through an index, so every PK/UNIQUE constraint comes with one. Foreign keys, however, do NOT get one automatically.</p><p><i>VI: PostgreSQL thực thi tính duy nhất bằng chỉ mục, nên mọi ràng buộc PK/UNIQUE đều kèm một chỉ mục. Khoá ngoại thì KHÔNG tự có.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Indexing every column \"just in case\" — inserts slow down, disk fills up.|||Đánh chỉ mục mọi cột \"cho chắc\" — chèn chậm đi, đĩa đầy lên."
+        },
+        {
+          "loi": "Assuming foreign keys are indexed automatically (they are not in PostgreSQL).|||Cho rằng khoá ngoại tự có chỉ mục (trong PostgreSQL thì không)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index",
+          "vi": "chỉ mục",
+          "giaiThich": "Cấu trúc phụ (thường B-tree) giúp tìm dòng theo cột mà không đọc cả bảng; đổi lại mỗi lần ghi phải cập nhật nó."
+        }
+      ]
+    }
+  ]
+}

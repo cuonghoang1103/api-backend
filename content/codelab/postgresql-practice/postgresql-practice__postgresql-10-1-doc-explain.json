@@ -1,0 +1,529 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-10-1-doc-explain",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-10-1-doc-explain"
+  },
+  "exercises": [
+    {
+      "title": "Read a plan from the inside out",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "plan tree",
+        "execution order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain"
+      ],
+      "problemHtml": "<p>Order the nodes of this plan in the order rows start flowing (the innermost, most indented node produces rows first):</p><pre>Limit\n  -&gt;  Sort\n        Sort Key: (sum(e.amount)) DESC\n        -&gt;  HashAggregate\n              Group Key: u.country\n              -&gt;  Hash Join\n                    Hash Cond: (e.user_id = u.id)\n                    -&gt;  Seq Scan on event e\n                    -&gt;  Hash\n                          -&gt;  Seq Scan on users u</pre><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các nút của kế hoạch này theo thứ tự dòng bắt đầu chảy (nút trong cùng, thụt sâu nhất, sinh dòng trước):</p><pre>Limit\n  -&gt;  Sort\n        Sort Key: (sum(e.amount)) DESC\n        -&gt;  HashAggregate\n              Group Key: u.country\n              -&gt;  Hash Join\n                    Hash Cond: (e.user_id = u.id)\n                    -&gt;  Seq Scan on event e\n                    -&gt;  Hash\n                          -&gt;  Seq Scan on users u</pre><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Indentation = depth; deeper nodes feed shallower ones.|||Thụt lề = độ sâu; nút sâu hơn cấp dữ liệu cho nút nông hơn.",
+        "The Hash child of a Hash Join is built before the join emits anything.|||Nút Hash của Hash Join được dựng xong trước khi phép nối phát dòng nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read a plan from the inside out\n\nAnswer in the answer panel (no code needed).\n\n1. From the leaves to the rootTừ lá lên gốc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read a plan from the inside out — answer key\n\n1. From the leaves to the rootTừ lá lên gốc\n   Answer: m5) Seq Scan on users u, loaded into the Hash / đọc users vào bảng băm  →  m6) Seq Scan on event e, each row probes the hash / đọc event, mỗi dòng dò bảng băm  →  m2) Hash Join emits matching pairs / Hash Join phát ra các cặp khớp  →  m4) HashAggregate sums per country / HashAggregate cộng theo quốc gia  →  m3) Sort by the sum / Sort theo tổng  →  m1) Limit cuts the first rows / Limit cắt các dòng đầu\n   A Hash Join first builds its hash table from the inner (Hash) child, then streams the outer child through it. Every parent consumes its children's output; the top node is the last to finish.VI: Hash Join dựng bảng băm từ con bên trong (Hash) trước, rồi cho con bên ngoài chảy qua. Mỗi nút cha tiêu thụ output của con; nút trên cùng xong sau cùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A Hash Join first builds its hash table from the inner (Hash) child, then streams the outer child through it. Every parent consumes its children's output; the top node is the last to finish.</p><p><i>VI: Hash Join dựng bảng băm từ con bên trong (Hash) trước, rồi cho con bên ngoài chảy qua. Mỗi nút cha tiêu thụ output của con; nút trên cùng xong sau cùng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From the leaves to the root</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ lá lên gốc</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Limit cuts the first rows / Limit cắt các dòng đầu"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Hash Join emits matching pairs / Hash Join phát ra các cặp khớp"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Sort by the sum / Sort theo tổng"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "HashAggregate sums per country / HashAggregate cộng theo quốc gia"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Seq Scan on users u, loaded into the Hash / đọc users vào bảng băm"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Seq Scan on event e, each row probes the hash / đọc event, mỗi dòng dò bảng băm"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m6",
+              "m2",
+              "m4",
+              "m3",
+              "m1"
+            ],
+            "giaiThich": "<p>A Hash Join first builds its hash table from the inner (Hash) child, then streams the outer child through it. Every parent consumes its children's output; the top node is the last to finish.</p><p><i>VI: Hash Join dựng bảng băm từ con bên trong (Hash) trước, rồi cho con bên ngoài chảy qua. Mỗi nút cha tiêu thụ output của con; nút trên cùng xong sau cùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the plan top-down like code.|||Đọc kế hoạch từ trên xuống như đọc mã."
+        },
+        {
+          "loi": "Thinking the outer Seq Scan runs before the hash table is built.|||Nghĩ rằng Seq Scan bên ngoài chạy trước khi bảng băm được dựng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "plan node",
+          "vi": "nút kế hoạch"
+        }
+      ]
+    },
+    {
+      "title": "EXPLAIN ANALYZE: how many rows did the filter throw away?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "EXPLAIN ANALYZE",
+        "actual rows",
+        "Rows Removed by Filter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain"
+      ],
+      "problemHtml": "<p>Run <code>SELECT * FROM event WHERE status = 'pending'</code> under <code>EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF)</code> — the options remove every number that changes between runs, so the output is exactly comparable. Your script's last statement is that EXPLAIN.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>All five options, in any order.</li>\n  <li>Read the line <code>Rows Removed by Filter</code> — that is wasted work.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy <code>SELECT * FROM event WHERE status = 'pending'</code> dưới <code>EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF)</code> — các tuỳ chọn này bỏ mọi con số thay đổi giữa các lần chạy, nên output so khớp được tuyệt đối. Câu cuối trong script là lệnh EXPLAIN đó.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đủ năm tuỳ chọn, thứ tự tuỳ ý.</li>\n  <li>Đọc dòng <code>Rows Removed by Filter</code> — đó là công sức bỏ phí.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "QUERY PLAN                  \n----------------------------\nSeq Scan on event (actual r…\n  Filter: (status = 'pendin…\n  Rows Removed by Filter: 1…",
+          "explanation": "Expected result of check \"200 rows kept, 19 800 removed\" (row order matters).|||Kết quả mong đợi của kiểm \"Giữ 200 dòng, bỏ 19 800\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "ANALYZE executes the query and adds actual rows/loops to every node.|||ANALYZE chạy thật truy vấn và thêm số dòng/vòng thực tế vào mọi nút.",
+        "PostgreSQL 18 prints actual rows with two decimals (an average per loop).|||PostgreSQL 18 in số dòng thực tế kèm hai chữ số thập phân (trung bình mỗi vòng lặp)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF)\nSELECT * FROM event WHERE status = 'pending';\n-- Seq Scan on event (actual rows=200.00 loops=1)\n--   Filter: (status = 'pending'::text)\n--   Rows Removed by Filter: 19800        ← read 20 000 rows to keep 200\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Rows Removed by Filter: 19800\" for 200 kept rows is the classic signature of a missing (or unusable) index: 99 % of the work is reading rows only to throw them away. The next exercise fixes it.</p>",
+      "solutionExplanationHtmlVi": "<p>\"Rows Removed by Filter: 19800\" cho 200 dòng được giữ là dấu hiệu kinh điển của chỉ mục bị thiếu (hoặc không dùng được): 99 % công sức là đọc dòng để rồi vứt đi. Bài sau sửa nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "200 rows kept, 19 800 removed|||Giữ 200 dòng, bỏ 19 800",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "QUERY PLAN"
+              ],
+              "hang": [
+                [
+                  "Seq Scan on event (actual rows=200.00 loops=1)"
+                ],
+                [
+                  "  Filter: (status = 'pending'::text)"
+                ],
+                [
+                  "  Rows Removed by Filter: 19800"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "EXPLAIN with ANALYZE|||EXPLAIN có ANALYZE",
+            "khop": "EXPLAIN\\s*\\([^)]*ANALY[SZ]E",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Timing switched off|||Đã tắt đo thời gian",
+            "khop": "TIMING\\s+OFF",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Plain EXPLAIN — no actual numbers, no \"Rows Removed by Filter\".|||EXPLAIN thường — không có số thực tế, không có \"Rows Removed by Filter\"."
+        },
+        {
+          "loi": "Leaving TIMING and BUFFERS on when comparing plans — the numbers differ on every run.|||Để TIMING và BUFFERS bật khi so kế hoạch — số liệu khác nhau mỗi lần chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        },
+        {
+          "en": "Rows Removed by Filter",
+          "vi": "số dòng bị bộ lọc loại"
+        }
+      ]
+    },
+    {
+      "title": "Remove the wasted work you just measured",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "diagnose from EXPLAIN ANALYZE",
+        "targeted index"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "index"
+      ],
+      "problemHtml": "<p>Make <code>SELECT * FROM event WHERE status = 'pending'</code> stop discarding rows: after your change, <code>EXPLAIN ANALYZE</code> of that query must contain no <code>Rows Removed by Filter</code> and still return the 200 pending events. Choose the smallest index that does it.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One CREATE INDEX (a partial one is the smallest).</li>\n  <li>Do not change the query.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm cho <code>SELECT * FROM event WHERE status = 'pending'</code> thôi vứt dòng: sau thay đổi của bạn, <code>EXPLAIN ANALYZE</code> của truy vấn đó không còn dòng <code>Rows Removed by Filter</code> và vẫn trả 200 sự kiện pending. Chọn chỉ mục nhỏ nhất làm được.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một lệnh CREATE INDEX (chỉ mục từng phần là nhỏ nhất).</li>\n  <li>Không đổi truy vấn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "no_waste | still_200\n---------+----------\ntrue     | true     ",
+          "explanation": "Expected result of check \"No row is read only to be discarded\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Không dòng nào bị đọc chỉ để vứt đi\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The Filter line names the column and value to index.|||Dòng Filter nêu cột và giá trị cần đánh chỉ mục.",
+        "Only 1 % of rows match: a partial index on exactly that predicate is tiny.|||Chỉ 1 % dòng khớp: chỉ mục từng phần trên đúng điều kiện đó rất nhỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_pending ON event (status) WHERE status = 'pending';\n-- or (created_at) WHERE status = 'pending' (see 9.3); a full index on status works too, 100 times bigger\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The workflow of chapter 10: measure with EXPLAIN ANALYZE, find the node that does the most useless work, fix that node, measure again. Here the fix turns \"Seq Scan + Filter (19 800 removed)\" into an index scan that touches only the 200 rows needed.</p>",
+      "solutionExplanationHtmlVi": "<p>Quy trình của chương 10: đo bằng EXPLAIN ANALYZE, tìm nút làm nhiều việc vô ích nhất, sửa nút đó, đo lại. Ở đây cách sửa biến \"Seq Scan + Filter (bỏ 19 800)\" thành quét chỉ mục chỉ chạm 200 dòng cần thiết.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "No row is read only to be discarded|||Không dòng nào bị đọc chỉ để vứt đi",
+            "kiemTra": "SELECT plan_analyze('SELECT * FROM event WHERE status = ''pending''') !~ 'Rows Removed by Filter' AS no_waste, plan_analyze('SELECT * FROM event WHERE status = ''pending''') ~ 'actual rows=200' AS still_200",
+            "mongDoi": {
+              "cot": [
+                "no_waste",
+                "still_200"
+              ],
+              "hang": [
+                [
+                  true,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Still 200 rows|||Vẫn 200 dòng",
+            "kiemTra": "SELECT count(*) AS pending FROM event WHERE status = 'pending'",
+            "mongDoi": {
+              "cot": [
+                "pending"
+              ],
+              "hang": [
+                [
+                  200
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "A small index|||Một chỉ mục nhỏ",
+            "kiemTra": "SELECT bool_and(pg_relation_size(i.indexrelid) < 100000) AS small FROM pg_index i WHERE i.indrelid = 'event'::regclass AND NOT i.indisprimary",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "small"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A full index on status (all 20 000 entries) — it works, but is ~100× bigger than needed.|||Chỉ mục đầy đủ trên status (đủ 20 000 mục) — chạy được, nhưng lớn hơn cần thiết khoảng 100 lần."
+        },
+        {
+          "loi": "Indexing a column that is not in the filter.|||Đánh chỉ mục cột không có trong bộ lọc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        },
+        {
+          "en": "index",
+          "vi": "chỉ mục",
+          "giaiThich": "Cấu trúc phụ (thường B-tree) giúp tìm dòng theo cột mà không đọc cả bảng; đổi lại mỗi lần ghi phải cập nhật nó."
+        }
+      ]
+    },
+    {
+      "title": "Estimate, actual, loops: what the numbers mean",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "rows estimate",
+        "actual rows × loops"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain"
+      ],
+      "problemHtml": "<p>Interpret these fragments of EXPLAIN ANALYZE output.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Diễn giải các mẩu output EXPLAIN ANALYZE sau.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Total rows of a node = actual rows × loops.|||Tổng số dòng của một nút = actual rows × loops.",
+        "Compare estimate and actual on every node, top to bottom.|||So ước lượng và thực tế ở mọi nút, từ trên xuống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Estimate, actual, loops: what the numbers mean\n\nAnswer in the answer panel (no code needed).\n\n1. Index Scan using users_pkey on users u (actual rows=1.00 loops=200) — how many rows did this node return in total?Index Scan using users_pkey on users u (actual rows=1.00 loops=200) — nút này trả tổng cộng bao nhiêu dòng?\n2. Seq Scan on event (rows=200) (actual rows=200.00 loops=1) — is the estimate good?Seq Scan on event (rows=200) (actual rows=200.00 loops=1) — ước lượng có tốt không?\n3. Sort Method: external merge Disk: 928kB means…Sort Method: external merge Disk: 928kB nghĩa là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Estimate, actual, loops: what the numbers mean — answer key\n\n1. Index Scan using users_pkey on users u (actual rows=1.00 loops=200) — how many rows did this node return in total?Index Scan using users_pkey on users u (actual rows=1.00 loops=200) — nút này trả tổng cộng bao nhiêu dòng?\n   Answer: b) 200 — 1 row per loop × 200 loops\n   Inside a Nested Loop the inner node runs once per outer row; \"actual rows\" is per execution.VI: Trong Nested Loop, nút bên trong chạy một lần cho mỗi dòng ngoài; \"actual rows\" tính cho mỗi lần chạy.\n\n2. Seq Scan on event (rows=200) (actual rows=200.00 loops=1) — is the estimate good?Seq Scan on event (rows=200) (actual rows=200.00 loops=1) — ước lượng có tốt không?\n   Answer: b) yes — estimate and actual match, the statistics are fine\n   Good estimates are the first thing to check. A Seq Scan can still be the right plan.VI: Ước lượng tốt là thứ cần kiểm đầu tiên. Seq Scan vẫn có thể là kế hoạch đúng.\n\n3. Sort Method: external merge Disk: 928kB means…Sort Method: external merge Disk: 928kB nghĩa là…\n   Answer: c) the sort did not fit in work_mem and spilled to temporary files\n   External merge = sort in chunks on disk. Raising work_mem (for that session or query) or sorting fewer rows fixes it — lesson 10.4.VI: External merge = sắp theo từng khúc trên đĩa. Tăng work_mem (cho phiên hay truy vấn đó) hoặc sắp ít dòng hơn là sửa được — bài 10.4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 200 — 1 row per loop × 200 loops</p><p>Inside a Nested Loop the inner node runs once per outer row; \"actual rows\" is per execution.</p><p><i>VI: Trong Nested Loop, nút bên trong chạy một lần cho mỗi dòng ngoài; \"actual rows\" tính cho mỗi lần chạy.</i></p></li><li><p><b>b)</b> yes — estimate and actual match, the statistics are fine</p><p>Good estimates are the first thing to check. A Seq Scan can still be the right plan.</p><p><i>VI: Ước lượng tốt là thứ cần kiểm đầu tiên. Seq Scan vẫn có thể là kế hoạch đúng.</i></p></li><li><p><b>c)</b> the sort did not fit in work_mem and spilled to temporary files</p><p>External merge = sort in chunks on disk. Raising work_mem (for that session or query) or sorting fewer rows fixes it — lesson 10.4.</p><p><i>VI: External merge = sắp theo từng khúc trên đĩa. Tăng work_mem (cho phiên hay truy vấn đó) hoặc sắp ít dòng hơn là sửa được — bài 10.4.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p><code>Index Scan using users_pkey on users u (actual rows=1.00 loops=200)</code> — how many rows did this node return in total?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>Index Scan using users_pkey on users u (actual rows=1.00 loops=200)</code> — nút này trả tổng cộng bao nhiêu dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0 — the .00 means nothing matched"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 — 1 row per loop × 200 loops"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 — the node ran a single time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "201 — loops plus one returned row"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Inside a Nested Loop the inner node runs once per outer row; \"actual rows\" is per execution.</p><p><i>VI: Trong Nested Loop, nút bên trong chạy một lần cho mỗi dòng ngoài; \"actual rows\" tính cho mỗi lần chạy.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p><code>Seq Scan on event (rows=200) (actual rows=200.00 loops=1)</code> — is the estimate good?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>Seq Scan on event (rows=200) (actual rows=200.00 loops=1)</code> — ước lượng có tốt không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "cannot tell without BUFFERS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "yes — estimate and actual match, the statistics are fine"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no — the seq scan proves the stats are wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no — estimates are always too low"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Good estimates are the first thing to check. A Seq Scan can still be the right plan.</p><p><i>VI: Ước lượng tốt là thứ cần kiểm đầu tiên. Seq Scan vẫn có thể là kế hoạch đúng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p><code>Sort Method: external merge  Disk: 928kB</code> means…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>Sort Method: external merge  Disk: 928kB</code> nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the sort used an index"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the table is stored on disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the sort did not fit in work_mem and spilled to temporary files"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the query read 928 kB from the table"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>External merge = sort in chunks on disk. Raising work_mem (for that session or query) or sorting fewer rows fixes it — lesson 10.4.</p><p><i>VI: External merge = sắp theo từng khúc trên đĩa. Tăng work_mem (cho phiên hay truy vấn đó) hoặc sắp ít dòng hơn là sửa được — bài 10.4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring loops and thinking an inner index scan returned one row.|||Bỏ qua loops và nghĩ nút quét chỉ mục bên trong chỉ trả một dòng."
+        },
+        {
+          "loi": "Treating every Seq Scan as a problem.|||Coi mọi Seq Scan là vấn đề."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loops",
+          "vi": "số lần nút được chạy"
+        }
+      ]
+    }
+  ]
+}

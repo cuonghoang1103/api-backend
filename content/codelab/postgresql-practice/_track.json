@@ -242,6 +242,60 @@
       "name": "8.5 Lab 4 — CT Shop: the growth dashboard (CTE + window functions)",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 4 — CT Shop: the growth dashboard"
+    },
+    {
+      "slug": "postgresql-9-1-chi-muc-la-gi",
+      "name": "9.1 What an index is: B-tree, Seq Scan vs Index Scan",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Make the email lookup use an index · See the plan change: EXPLAIN before and after · What an index buys and what it costs"
+    },
+    {
+      "slug": "postgresql-9-2-to-hop-covering",
+      "name": "9.2 Which columns, composite indexes & covering",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: One index for filter + sort: the composite index · A covering index: Index Only Scan · Which queries can (a, b) serve? · Index the foreign key you join and sort on (CT Shop)"
+    },
+    {
+      "slug": "postgresql-9-3-khong-dung-selectivity-partial",
+      "name": "9.3 When indexes are NOT used, selectivity & partial indexes",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Case-insensitive login with an expression index · A partial index for the pending queue · Why is my index ignored? · Rewrite a non-sargable filter"
+    },
+    {
+      "slug": "postgresql-9-4-loai-chi-muc",
+      "name": "9.4 Index types: B-tree, GIN, BRIN, GiST & unique",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: GIN for jsonb containment · BRIN: a tiny index for time-ordered data · At most one pending order per customer: a partial unique index · No double booking: EXCLUDE with a GiST index · One index type per question"
+    },
+    {
+      "slug": "postgresql-10-1-doc-explain",
+      "name": "10.1 Reading a plan: EXPLAIN vs EXPLAIN ANALYZE",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Read a plan from the inside out · EXPLAIN ANALYZE: how many rows did the filter throw away? · Remove the wasted work you just measured · Estimate, actual, loops: what the numbers mean"
+    },
+    {
+      "slug": "postgresql-10-2-chien-luoc-join",
+      "name": "10.2 Join strategies: Nested Loop, Hash & Merge",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Which join strategy fits? · A selective join: index lookups on both sides · Diagnose with enable_hashjoin = off (this transaction only) · How a Hash Join runs"
+    },
+    {
+      "slug": "postgresql-10-3-thong-ke-uoc-luong",
+      "name": "10.3 Statistics: how the planner estimates, and when it's wrong",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Read the statistics ANALYZE collected · Correlated columns: fix the estimate with CREATE STATISTICS · When estimates go wrong"
+    },
+    {
+      "slug": "postgresql-10-4-buffers-tinh-chinh",
+      "name": "10.4 BUFFERS and a tuning workflow",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Stop the sort from spilling to disk — for this transaction only · The tuning workflow, in order · Reading BUFFERS"
+    },
+    {
+      "slug": "postgresql-lab-5-chi-muc-explain-ct-shop",
+      "name": "10.5 Lab 5 — CT Shop: many orders — indexes and EXPLAIN",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 5 — CT Shop: make the busy pages fast"
     }
   ]
 }

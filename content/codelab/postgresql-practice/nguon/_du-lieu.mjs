@@ -95,3 +95,45 @@ const LD_SALE_TXT = `sale (id PK, region, seller, amount numeric(10,2), sold_on 
  1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01
  5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10`;
 export const O_SALE = { csdl: SALE, tenCsdl: 'sale', ld: { en: `<h4>Sample table (chapter 8)</h4>${pre(LD_SALE_TXT)}`, vi: `<h4>Bảng mẫu (chương 8)</h4>${pre(LD_SALE_TXT)}` } };
+
+/**
+ * Bảng `event` của Chương 9–10 (bài giảng: 500 000 dòng; ở đây 20 000 dòng TẤT ĐỊNH sinh bằng generate_series — không random()
+ * — rồi ANALYZE, để bộ lập kế hoạch có thống kê thật và chọn kế hoạch giống nhau ở mọi máy). Nạp ~0,2 s mỗi kiểm.
+ * status: 'pending' 1 % (g % 100 = 0) · 'done' ~33 % · 'active' ~66 % · user_id 1–2000 (10 sự kiện mỗi user)
+ * Kèm bảng users (2 000 dòng) và các hàm kiểm kế hoạch PLAN_ALL (plan_nodes / plan_text / plan_rows / plan_analyze).
+ */
+import { PLAN_ALL } from './_chung.mjs';
+export const EVENT = `SET TimeZone = 'UTC';
+CREATE TABLE event (
+  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id    int           NOT NULL,
+  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'
+  amount     numeric(10,2) NOT NULL,
+  email      text          NOT NULL,
+  created_at timestamptz   NOT NULL,
+  props      jsonb         NOT NULL
+);
+INSERT INTO event (user_id, status, amount, email, created_at, props)
+SELECT g % 2000 + 1,
+       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,
+       (g % 500) + 0.99,
+       'user' || g || '@example.com',
+       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',
+       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,
+                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])
+FROM generate_series(1, 20000) g;
+CREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);
+INSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;
+ANALYZE event; ANALYZE users;
+-- grader helpers (functions that print plans) — not part of the lesson schema
+${PLAN_ALL}`;
+const LD_EVENT_TXT = `event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)
+      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %
+      email 'user<g>@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {"plan": "free"|"pro", "device": …}
+users (id PK, name, country)   2 000 rows
+No index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.
+Helpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.`;
+export const O_EVENT = {
+  csdl: EVENT, tenCsdl: 'event',
+  ld: { en: `<h4>Sample tables (chapters 9–10)</h4>${pre(LD_EVENT_TXT)}<p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>`, vi: `<h4>Bảng mẫu (chương 9–10)</h4>${pre(LD_EVENT_TXT)}<p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>` },
+};

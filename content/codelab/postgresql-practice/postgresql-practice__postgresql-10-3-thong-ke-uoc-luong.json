@@ -1,0 +1,427 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-10-3-thong-ke-uoc-luong",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-10-3-thong-ke-uoc-luong"
+  },
+  "exercises": [
+    {
+      "title": "Read the statistics ANALYZE collected",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "pg_stats",
+        "n_distinct",
+        "most_common_vals / freqs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "statistics"
+      ],
+      "problemHtml": "<p>The planner estimates <code>WHERE status = 'pending'</code> from the statistics in <code>pg_stats</code>. Return <code>n_distinct, most_common_vals, most_common_freqs</code> of column <code>event.status</code> (cast the two arrays to text).</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>FROM pg_stats WHERE tablename = 'event' AND attname = 'status'</code>.</li>\n  <li><code>most_common_vals::text, most_common_freqs::text</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Planner ước lượng <code>WHERE status = 'pending'</code> từ thống kê trong <code>pg_stats</code>. Trả về <code>n_distinct, most_common_vals, most_common_freqs</code> của cột <code>event.status</code> (ép hai mảng sang text).</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>FROM pg_stats WHERE tablename = 'event' AND attname = 'status'</code>.</li>\n  <li><code>most_common_vals::text, most_common_freqs::text</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "n_distinct | most_common_vals      | most_common_freqs\n-----------+-----------------------+------------------\n3          | {active,done,pending} | {0.66,0.33,0.01} ",
+          "explanation": "Expected result of check \"3 values, frequencies 0.66 / 0.33 / 0.01\" (row order does not matter).|||Kết quả mong đợi của kiểm \"3 giá trị, tần suất 0.66 / 0.33 / 0.01\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "pg_stats is a readable view over pg_statistic.|||pg_stats là view dễ đọc trên pg_statistic.",
+        "Selectivity of status = 'pending' ≈ its most_common_freq (0.01).|||Độ chọn lọc của status = 'pending' ≈ most_common_freq của nó (0.01)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT n_distinct,\n       most_common_vals::text  AS most_common_vals,     -- {active,done,pending}\n       most_common_freqs::text AS most_common_freqs     -- {0.66,0.33,0.01}: pending ⇒ 1 % ⇒ ~200 rows\nFROM pg_stats\nWHERE tablename = 'event' AND attname = 'status';\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ANALYZE samples up to 300 × default_statistics_target rows (30 000 by default) and stores, per column, the number of distinct values, the most common values with their frequencies and a histogram. Estimates multiply these selectivities by the table size.</p>",
+      "solutionExplanationHtmlVi": "<p>ANALYZE lấy mẫu tối đa 300 × default_statistics_target dòng (mặc định 30 000) và lưu, cho từng cột, số giá trị khác nhau, các giá trị phổ biến nhất kèm tần suất và một biểu đồ tần suất. Ước lượng = các độ chọn lọc đó nhân với kích thước bảng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "3 values, frequencies 0.66 / 0.33 / 0.01|||3 giá trị, tần suất 0.66 / 0.33 / 0.01",
+            "mongDoi": {
+              "cot": [
+                "n_distinct",
+                "most_common_vals",
+                "most_common_freqs"
+              ],
+              "hang": [
+                [
+                  3,
+                  "{active,done,pending}",
+                  "{0.66,0.33,0.01}"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "After a bulk insert + ANALYZE the stats change|||Sau khi chèn lô + ANALYZE, thống kê đổi",
+            "an": true,
+            "themCsdl": "INSERT INTO event (user_id, status, amount, email, created_at, props) SELECT 1, 'pending', 1, 'bulk' || g || '@x.vn', now(), '{}' FROM generate_series(1, 4000) g; ANALYZE event",
+            "mongDoi": {
+              "cot": [
+                "n_distinct",
+                "most_common_vals",
+                "most_common_freqs"
+              ],
+              "hang": [
+                [
+                  3,
+                  "{active,done,pending}",
+                  "{0.55,0.275,0.175}"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Reads pg_stats|||Đọc pg_stats",
+            "khop": "\\bpg_stats\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the table instead — that is what the planner does NOT do when planning.|||Đếm cả bảng thay vào đó — đó chính là việc planner KHÔNG làm khi lập kế hoạch."
+        },
+        {
+          "loi": "Expecting fresh numbers after a big change without ANALYZE (autovacuum may not have run yet).|||Mong số liệu mới ngay sau thay đổi lớn mà không ANALYZE (autovacuum có thể chưa chạy)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pg_stats",
+          "vi": "view thống kê cột"
+        },
+        {
+          "en": "selectivity",
+          "vi": "độ chọn lọc"
+        }
+      ]
+    },
+    {
+      "title": "Correlated columns: fix the estimate with CREATE STATISTICS",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "independence assumption",
+        "CREATE STATISTICS (dependencies)",
+        "ANALYZE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "statistics",
+        "planner"
+      ],
+      "problemHtml": "<p><code>SELECT * FROM customer WHERE city = 'C7' AND region = 'R2'</code> returns 400 rows, but the planner estimates 20 000 × 1/50 × 1/5 = <b>80</b>: it assumes city and region are independent, while city actually determines region. Teach the planner the dependency so the estimate becomes 400.</p>\n<pre>customer (id PK, city, region) — 20 000 rows, 50 cities (400 customers each), 5 regions; every city lies in exactly one region. ANALYZEd.\nplan_rows(q) returns the planner's row ESTIMATE for query text q.</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE STATISTICS … (dependencies) ON city, region FROM customer</code>.</li>\n  <li>Extended statistics are only filled by the next ANALYZE — run it.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>SELECT * FROM customer WHERE city = 'C7' AND region = 'R2'</code> trả 400 dòng, nhưng planner ước lượng 20 000 × 1/50 × 1/5 = <b>80</b>: nó giả định city và region độc lập, trong khi city quyết định region. Dạy planner về sự phụ thuộc này để ước lượng thành 400.</p>\n<pre>customer (id PK, city, region) — 20 000 dòng, 50 thành phố (mỗi nơi 400 khách), 5 vùng; mỗi thành phố thuộc đúng một vùng. Đã ANALYZE.\nplan_rows(q) trả số dòng ƯỚC LƯỢNG của planner cho truy vấn q.</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE STATISTICS … (dependencies) ON city, region FROM customer</code>.</li>\n  <li>Thống kê mở rộng chỉ được điền ở lần ANALYZE kế tiếp — hãy chạy nó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "estimate\n--------\n400     ",
+          "explanation": "Expected result of check \"The estimate is now 400\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Ước lượng giờ là 400\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The planner multiplies selectivities of separate conditions — wrong when columns are correlated.|||Planner nhân độ chọn lọc của các điều kiện riêng — sai khi các cột tương quan.",
+        "CREATE STATISTICS only declares; ANALYZE computes.|||CREATE STATISTICS chỉ khai báo; ANALYZE mới tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "customer.sql",
+          "language": "sql",
+          "code": "-- customer.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- customer.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE customer (id int PRIMARY KEY, city text NOT NULL, region text NOT NULL);\n-- 50 cities, each city belongs to exactly ONE of 5 regions ⇒ city determines region (correlated columns)\nINSERT INTO customer SELECT g, 'C' || (g % 50), 'R' || (g % 50 % 5) FROM generate_series(1, 20000) g;\nANALYZE customer;\n-- grader helpers\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE STATISTICS st_customer_city_region (dependencies) ON city, region FROM customer;\nANALYZE customer;             -- computes the dependency city ⇒ region\n"
+        },
+        {
+          "name": "customer.sql",
+          "language": "sql",
+          "code": "-- customer.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- customer.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE customer (id int PRIMARY KEY, city text NOT NULL, region text NOT NULL);\n-- 50 cities, each city belongs to exactly ONE of 5 regions ⇒ city determines region (correlated columns)\nINSERT INTO customer SELECT g, 'C' || (g % 50), 'R' || (g % 50 % 5) FROM generate_series(1, 20000) g;\nANALYZE customer;\n-- grader helpers\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A 5× under-estimate is enough to push the planner into nested loops meant for few rows. Functional-dependency statistics tell it that region adds no selectivity once city is known, so the estimate matches reality.</p>",
+      "solutionExplanationHtmlVi": "<p>Ước lượng thấp 5 lần đủ đẩy planner vào vòng lặp lồng dành cho ít dòng. Thống kê phụ thuộc hàm cho nó biết region không thêm độ chọn lọc khi đã biết city, nên ước lượng khớp thực tế.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE customer (id int PRIMARY KEY, city text NOT NULL, region text NOT NULL);\n-- 50 cities, each city belongs to exactly ONE of 5 regions ⇒ city determines region (correlated columns)\nINSERT INTO customer SELECT g, 'C' || (g % 50), 'R' || (g % 50 % 5) FROM generate_series(1, 20000) g;\nANALYZE customer;\n-- grader helpers\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The estimate is now 400|||Ước lượng giờ là 400",
+            "kiemTra": "SELECT plan_rows('SELECT * FROM customer WHERE city = ''C7'' AND region = ''R2''') AS estimate",
+            "mongDoi": {
+              "cot": [
+                "estimate"
+              ],
+              "hang": [
+                [
+                  400
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Extended statistics exist|||Đã có thống kê mở rộng",
+            "kiemTra": "SELECT stxkind::text FROM pg_statistic_ext WHERE stxrelid = 'customer'::regclass",
+            "mongDoi": {
+              "cot": [
+                "stxkind"
+              ],
+              "hang": [
+                [
+                  "{f}"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Another city/region pair is estimated right too|||Cặp thành phố/vùng khác cũng ước lượng đúng",
+            "kiemTra": "SELECT plan_rows('SELECT * FROM customer WHERE city = ''C33'' AND region = ''R3''') AS estimate",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "estimate"
+              ],
+              "hang": [
+                [
+                  400
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Creating the statistics object and forgetting ANALYZE — the estimate stays 80.|||Tạo đối tượng thống kê mà quên ANALYZE — ước lượng vẫn là 80."
+        },
+        {
+          "loi": "Running ANALYZE alone — per-column statistics cannot express the dependency.|||Chỉ chạy ANALYZE — thống kê theo từng cột không diễn đạt được sự phụ thuộc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "extended statistics",
+          "vi": "thống kê mở rộng"
+        },
+        {
+          "en": "functional dependency",
+          "vi": "phụ thuộc hàm"
+        }
+      ]
+    },
+    {
+      "title": "When estimates go wrong",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "stale statistics",
+        "correlation",
+        "functions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "statistics"
+      ],
+      "problemHtml": "<p>Pick the most likely cause and the right fix.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn nguyên nhân khả dĩ nhất và cách sửa đúng.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare estimate and actual first; then ask where the estimate came from.|||So ước lượng với thực tế trước; rồi hỏi ước lượng đến từ đâu.",
+        "Statistics are per column unless you create extended statistics.|||Thống kê theo từng cột trừ khi bạn tạo thống kê mở rộng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# When estimates go wrong\n\nAnswer in the answer panel (no code needed).\n\n1. Right after importing 2 million rows, a query on the new rows estimates 1 row and runs a slow nested loop.Ngay sau khi nhập 2 triệu dòng, một truy vấn trên dòng mới ước lượng 1 dòng và chạy vòng lặp lồng chậm.\n2. WHERE lower(email) = 'x' is estimated at 0.5 % of rows no matter what.WHERE lower(email) = 'x' luôn được ước lượng 0.5 % số dòng.\n3. A column has 10 000 distinct values but the histogram is coarse and estimates for rare values are off.Một cột có 10 000 giá trị khác nhau nhưng biểu đồ thô và ước lượng cho giá trị hiếm bị lệch.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# When estimates go wrong — answer key\n\n1. Right after importing 2 million rows, a query on the new rows estimates 1 row and runs a slow nested loop.Ngay sau khi nhập 2 triệu dòng, một truy vấn trên dòng mới ước lượng 1 dòng và chạy vòng lặp lồng chậm.\n   Answer: b) stale statistics: run ANALYZE after the import\n   Autovacuum's ANALYZE may not have run yet; a bulk import should end with an explicit ANALYZE.VI: ANALYZE của autovacuum có thể chưa chạy; nhập lô xong nên ANALYZE tường minh.\n\n2. WHERE lower(email) = 'x' is estimated at 0.5 % of rows no matter what.WHERE lower(email) = 'x' luôn được ước lượng 0.5 % số dòng.\n   Answer: c) no stats on the expression: add an expression index or statistics\n   Without stats the planner uses a default selectivity. ANALYZE collects stats for indexed expressions and for CREATE STATISTICS on expressions (PG 14+).VI: Không có thống kê thì planner dùng độ chọn lọc mặc định. ANALYZE thu thống kê cho biểu thức có chỉ mục và cho CREATE STATISTICS trên biểu thức (PG 14+).\n\n3. A column has 10 000 distinct values but the histogram is coarse and estimates for rare values are off.Một cột có 10 000 giá trị khác nhau nhưng biểu đồ thô và ước lượng cho giá trị hiếm bị lệch.\n   Answer: a) raise the column statistics target, then ANALYZE\n   A larger target keeps more most-common values and histogram buckets, at the cost of a slower ANALYZE.VI: Mục tiêu lớn hơn giữ nhiều giá trị phổ biến và ô biểu đồ hơn, đổi lại ANALYZE chậm hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> stale statistics: run ANALYZE after the import</p><p>Autovacuum's ANALYZE may not have run yet; a bulk import should end with an explicit ANALYZE.</p><p><i>VI: ANALYZE của autovacuum có thể chưa chạy; nhập lô xong nên ANALYZE tường minh.</i></p></li><li><p><b>c)</b> no stats on the expression: add an expression index or statistics</p><p>Without stats the planner uses a default selectivity. ANALYZE collects stats for indexed expressions and for CREATE STATISTICS on expressions (PG 14+).</p><p><i>VI: Không có thống kê thì planner dùng độ chọn lọc mặc định. ANALYZE thu thống kê cho biểu thức có chỉ mục và cho CREATE STATISTICS trên biểu thức (PG 14+).</i></p></li><li><p><b>a)</b> raise the column statistics target, then ANALYZE</p><p>A larger target keeps more most-common values and histogram buckets, at the cost of a slower ANALYZE.</p><p><i>VI: Mục tiêu lớn hơn giữ nhiều giá trị phổ biến và ô biểu đồ hơn, đổi lại ANALYZE chậm hơn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Right after importing 2 million rows, a query on the new rows estimates 1 row and runs a slow nested loop.</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngay sau khi nhập 2 triệu dòng, một truy vấn trên dòng mới ước lượng 1 dòng và chạy vòng lặp lồng chậm.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "memory: work_mem is too small for the join"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stale statistics: run ANALYZE after the import"
+              },
+              {
+                "ma": "c",
+                "noiDung": "corruption: the index must be rebuilt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "bloat: the table needs a VACUUM FULL first"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Autovacuum's ANALYZE may not have run yet; a bulk import should end with an explicit ANALYZE.</p><p><i>VI: ANALYZE của autovacuum có thể chưa chạy; nhập lô xong nên ANALYZE tường minh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p><code>WHERE lower(email) = 'x'</code> is estimated at 0.5 % of rows no matter what.</p><p style=\"opacity:.75;font-size:.92em\"><i><code>WHERE lower(email) = 'x'</code> luôn được ước lượng 0.5 % số dòng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "text columns never get any statistics"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the planner refuses to estimate any function call"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no stats on the expression: add an expression index or statistics"
+              },
+              {
+                "ma": "d",
+                "noiDung": "lower() cannot be estimated, so it is always 0.5 %"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Without stats the planner uses a default selectivity. ANALYZE collects stats for indexed expressions and for CREATE STATISTICS on expressions (PG 14+).</p><p><i>VI: Không có thống kê thì planner dùng độ chọn lọc mặc định. ANALYZE thu thống kê cho biểu thức có chỉ mục và cho CREATE STATISTICS trên biểu thức (PG 14+).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A column has 10 000 distinct values but the histogram is coarse and estimates for rare values are off.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một cột có 10 000 giá trị khác nhau nhưng biểu đồ thô và ước lượng cho giá trị hiếm bị lệch.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "raise the column statistics target, then ANALYZE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "drop and re-create the column with a new type"
+              },
+              {
+                "ma": "c",
+                "noiDung": "turn off enable_seqscan for the whole server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "add more RAM so the planner sees more rows"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A larger target keeps more most-common values and histogram buckets, at the cost of a slower ANALYZE.</p><p><i>VI: Mục tiêu lớn hơn giữ nhiều giá trị phổ biến và ô biểu đồ hơn, đổi lại ANALYZE chậm hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing a bad estimate with enable_* switches in production.|||Sửa ước lượng sai bằng công tắc enable_* trên production."
+        },
+        {
+          "loi": "Forgetting ANALYZE after large data changes.|||Quên ANALYZE sau thay đổi dữ liệu lớn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "statistics target",
+          "vi": "mức chi tiết thống kê"
+        }
+      ]
+    }
+  ]
+}

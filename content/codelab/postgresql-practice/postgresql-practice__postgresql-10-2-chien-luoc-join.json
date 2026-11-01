@@ -1,0 +1,511 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-10-2-chien-luoc-join",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-10-2-chien-luoc-join"
+  },
+  "exercises": [
+    {
+      "title": "Which join strategy fits?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "Nested Loop",
+        "Hash Join",
+        "Merge Join"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "join"
+      ],
+      "problemHtml": "<p>For each situation pick the strategy the planner would normally choose.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi tình huống chọn chiến lược mà planner thường chọn.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "How many outer rows? Is there an index on the inner join key?|||Bao nhiêu dòng ngoài? Phía trong có chỉ mục trên khoá nối không?",
+        "Hash and Merge need an equality condition.|||Hash và Merge cần điều kiện bằng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which join strategy fits?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → strategyTình huống → chiến lược\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which join strategy fits? — answer key\n\n1. Situation → strategyTình huống → chiến lược\n   - r1.cl: Nested Loop\n   - r2.cl: Hash Join\n   - r3.cl: Merge Join\n   - r4.cl: Nested Loop\n   Nested Loop: few outer rows, cheap lookup on the inner side (an index), and the only strategy for non-equality joins. Hash Join: equality, big unsorted inputs; builds a hash of the smaller side. Merge Join: equality, both inputs sorted on the key.VI: Nested Loop: ít dòng ngoài, tra phía trong rẻ (có chỉ mục), và là chiến lược duy nhất cho phép nối không phải bằng. Hash Join: phép bằng, đầu vào lớn chưa sắp; dựng bảng băm cho phía nhỏ hơn. Merge Join: phép bằng, cả hai đầu vào đã sắp theo khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nested Loop: few outer rows, cheap lookup on the inner side (an index), and the only strategy for non-equality joins. Hash Join: equality, big unsorted inputs; builds a hash of the smaller side. Merge Join: equality, both inputs sorted on the key.</p><p><i>VI: Nested Loop: ít dòng ngoài, tra phía trong rẻ (có chỉ mục), và là chiến lược duy nhất cho phép nối không phải bằng. Hash Join: phép bằng, đầu vào lớn chưa sắp; dựng bảng băm cho phía nhỏ hơn. Merge Join: phép bằng, cả hai đầu vào đã sắp theo khoá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → strategy</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → chiến lược</i></p>",
+            "cot": [
+              {
+                "ma": "th",
+                "ten": "Situation / Tình huống"
+              },
+              {
+                "ma": "cl",
+                "ten": "Strategy",
+                "luaChon": [
+                  "Nested Loop",
+                  "Hash Join",
+                  "Merge Join"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "th": "one event found by email, then its user by primary key / một sự kiện tìm theo email, rồi user của nó theo khoá chính"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "th": "all 20 000 events joined to all 2 000 users for a report, no useful order / mọi sự kiện nối với mọi user cho báo cáo, không có thứ tự sẵn"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "th": "two big inputs both already sorted on the join key (e.g. read through indexes) / hai đầu vào lớn đều đã sắp theo khoá nối"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "th": "a join condition that is not equality (e.g. a.x &lt; b.y) / điều kiện nối không phải phép bằng"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.cl": "Nested Loop",
+              "r2.cl": "Hash Join",
+              "r3.cl": "Merge Join",
+              "r4.cl": "Nested Loop"
+            },
+            "giaiThich": "<p>Nested Loop: few outer rows, cheap lookup on the inner side (an index), and the only strategy for non-equality joins. Hash Join: equality, big unsorted inputs; builds a hash of the smaller side. Merge Join: equality, both inputs sorted on the key.</p><p><i>VI: Nested Loop: ít dòng ngoài, tra phía trong rẻ (có chỉ mục), và là chiến lược duy nhất cho phép nối không phải bằng. Hash Join: phép bằng, đầu vào lớn chưa sắp; dựng bảng băm cho phía nhỏ hơn. Merge Join: phép bằng, cả hai đầu vào đã sắp theo khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing Nested Loop is always bad — it is the best plan for a handful of rows.|||Tin rằng Nested Loop luôn tệ — nó là kế hoạch tốt nhất cho vài dòng."
+        },
+        {
+          "loi": "Expecting a Hash Join on a &lt; condition.|||Mong Hash Join cho điều kiện &lt;."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Nested Loop",
+          "vi": "vòng lặp lồng"
+        },
+        {
+          "en": "Hash Join",
+          "vi": "nối băm"
+        },
+        {
+          "en": "Merge Join",
+          "vi": "nối trộn"
+        }
+      ]
+    },
+    {
+      "title": "A selective join: index lookups on both sides",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "Nested Loop with Index Scans"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "join",
+        "index"
+      ],
+      "problemHtml": "<p>The support tool runs <code>SELECT u.name FROM event e JOIN users u ON u.id = e.user_id WHERE e.email = 'user5@example.com'</code>. Today the outer side is a Seq Scan of 20 000 events. Create one index so that <b>both</b> sides of the Nested Loop are index lookups.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>users already has its primary-key index; event needs one on the filtered column.</li>\n  <li>The plan must contain a Nested Loop and no Seq Scan.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công cụ hỗ trợ chạy <code>SELECT u.name FROM event e JOIN users u ON u.id = e.user_id WHERE e.email = 'user5@example.com'</code>. Hôm nay phía ngoài là Seq Scan 20 000 sự kiện. Tạo một chỉ mục để <b>cả hai</b> phía của Nested Loop đều là tra chỉ mục.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>users đã có chỉ mục khoá chính; event cần chỉ mục trên cột được lọc.</li>\n  <li>Kế hoạch phải có Nested Loop và không có Seq Scan.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "nested_loop | no_seq_scan\n------------+------------\ntrue        | true       ",
+          "explanation": "Expected result of check \"Nested Loop with no Seq Scan\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Nested Loop không còn Seq Scan\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Find the Seq Scan node in the current plan: its Filter tells you the column.|||Tìm nút Seq Scan trong kế hoạch hiện tại: Filter của nó chỉ ra cột.",
+        "An index on the join column of event does not help this direction.|||Chỉ mục trên cột nối của event không giúp chiều này."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_event_email ON event (email);\n-- Nested Loop\n--   ->  Index Scan using idx_event_email on event e      (1 row)\n--   ->  Index Scan using users_pkey on users u            (1 lookup per outer row)\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For a single-row lookup the ideal plan is index → nested loop → index: a handful of page reads in total. Nested Loop is only slow when the outer side is large or the inner side has no index.</p>",
+      "solutionExplanationHtmlVi": "<p>Với tra cứu một dòng, kế hoạch lý tưởng là chỉ mục → vòng lặp lồng → chỉ mục: tổng cộng vài lần đọc trang. Nested Loop chỉ chậm khi phía ngoài lớn hoặc phía trong không có chỉ mục.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Nested Loop with no Seq Scan|||Nested Loop không còn Seq Scan",
+            "kiemTra": "SELECT plan_text('SELECT u.name FROM event e JOIN users u ON u.id = e.user_id WHERE e.email = ''user5@example.com''') ~ 'Nested Loop' AS nested_loop, plan_text('SELECT u.name FROM event e JOIN users u ON u.id = e.user_id WHERE e.email = ''user5@example.com''') !~ 'Seq Scan' AS no_seq_scan",
+            "mongDoi": {
+              "cot": [
+                "nested_loop",
+                "no_seq_scan"
+              ],
+              "hang": [
+                [
+                  true,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Same answer|||Cùng kết quả",
+            "kiemTra": "SELECT u.name FROM event e JOIN users u ON u.id = e.user_id WHERE e.email = 'user5@example.com'",
+            "mongDoi": {
+              "cot": [
+                "name"
+              ],
+              "hang": [
+                [
+                  "user 6"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Index on email|||Chỉ mục trên email",
+            "khop": "\\(\\s*email\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Indexing event.user_id: the planner still has to find the event by email first.|||Đánh chỉ mục event.user_id: planner vẫn phải tìm sự kiện theo email trước."
+        },
+        {
+          "loi": "Forcing a Hash Join \"because joins should be hashed\".|||Ép Hash Join \"vì nối thì phải băm\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Nested Loop",
+          "vi": "vòng lặp lồng"
+        }
+      ]
+    },
+    {
+      "title": "Diagnose with enable_hashjoin = off (this transaction only)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "SET LOCAL",
+        "enable_hashjoin",
+        "Memoize"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "join",
+        "planner"
+      ],
+      "problemHtml": "<p>The report <code>SELECT u.country, count(*) FROM event e JOIN users u ON u.id = e.user_id GROUP BY u.country</code> uses a Hash Join. To see what the planner would do otherwise, switch hash joins off <b>for this transaction only</b> and print the plan with <code>EXPLAIN (COSTS OFF)</code>. Your last statement is that EXPLAIN.</p>\n<h4>Sample tables (chapters 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SET LOCAL enable_hashjoin = off;</code> — never a plain SET, never ALTER SYSTEM.</li>\n  <li>Then <code>EXPLAIN (COSTS OFF)</code> of the report.</li>\n</ul>",
+      "problemHtmlVi": "<p>Báo cáo <code>SELECT u.country, count(*) FROM event e JOIN users u ON u.id = e.user_id GROUP BY u.country</code> dùng Hash Join. Để xem planner sẽ làm gì nếu không có nó, tắt hash join <b>chỉ cho giao dịch này</b> rồi in kế hoạch bằng <code>EXPLAIN (COSTS OFF)</code>. Câu cuối của bạn là lệnh EXPLAIN đó.</p>\n<h4>Bảng mẫu (chương 9–10)</h4><pre>event (id identity PK, user_id int, status text, amount numeric(10,2), email text, created_at timestamptz, props jsonb)\n      20 000 rows: user_id 1–2000 (10 events each) · status pending 1 %, done ~33 %, active ~66 %\n      email 'user&lt;g&gt;@example.com' (unique) · created_at every 10 minutes from 2024-01-01 · props {\"plan\": \"free\"|\"pro\", \"device\": …}\nusers (id PK, name, country)   2 000 rows\nNo index except the primary keys. Statistics are collected (ANALYZE) so the planner behaves like on a real server.\nHelpers: plan_nodes(q) / plan_text(q) / plan_rows(q) / plan_analyze(q) print the plan of query text q.</pre><p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SET LOCAL enable_hashjoin = off;</code> — không bao giờ SET thường, không bao giờ ALTER SYSTEM.</li>\n  <li>Rồi <code>EXPLAIN (COSTS OFF)</code> của báo cáo.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "QUERY PLAN                  \n----------------------------\nHashAggregate               \n  Group Key: u.country      \n  ->  Nested Loop           \n        ->  Seq Scan on eve…\n        ->  Memoize         \n              Cache Key: e.…\n              Cache Mode: l…\n              ->  Index Sca…\n… (9 rows)",
+          "explanation": "Expected result of check \"The fallback plan: Nested Loop with Memoize\" (row order matters).|||Kết quả mong đợi của kiểm \"Kế hoạch thay thế: Nested Loop với Memoize\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "SET LOCAL lasts until COMMIT/ROLLBACK; the grader rolls back after every check.|||SET LOCAL kéo dài tới COMMIT/ROLLBACK; máy chấm huỷ giao dịch sau mỗi kiểm.",
+        "enable_* settings only make a strategy \"very expensive\" for the planner — they are a diagnostic, not a fix.|||Các thiết lập enable_* chỉ làm chiến lược \"rất đắt\" với planner — chúng là công cụ chẩn đoán, không phải cách sửa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SET LOCAL enable_hashjoin = off;     -- diagnosis only, and only until the end of this transaction\nEXPLAIN (COSTS OFF)\nSELECT u.country, count(*) FROM event e JOIN users u ON u.id = e.user_id GROUP BY u.country;\n-- HashAggregate → Nested Loop → Seq Scan on event + Memoize → Index Scan using users_pkey\n"
+        },
+        {
+          "name": "event.sql",
+          "language": "sql",
+          "code": "-- event.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- event.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With hash joins disabled the planner falls back to a Nested Loop over event with a Memoize cache in front of the users lookup (each user_id repeats ten times). Comparing the two plans with EXPLAIN ANALYZE is how lesson 10.2 confirms the planner's choice.</p>",
+      "solutionExplanationHtmlVi": "<p>Khi tắt hash join, planner lùi về Nested Loop trên event với bộ nhớ đệm Memoize trước lượt tra users (mỗi user_id lặp mười lần). So hai kế hoạch bằng EXPLAIN ANALYZE là cách bài 10.2 xác nhận lựa chọn của planner.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'UTC';\nCREATE TABLE event (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int           NOT NULL,\n  status     text          NOT NULL,   -- 'active' | 'done' | 'pending'\n  amount     numeric(10,2) NOT NULL,\n  email      text          NOT NULL,\n  created_at timestamptz   NOT NULL,\n  props      jsonb         NOT NULL\n);\nINSERT INTO event (user_id, status, amount, email, created_at, props)\nSELECT g % 2000 + 1,\n       CASE WHEN g % 100 = 0 THEN 'pending' WHEN g % 3 = 0 THEN 'done' ELSE 'active' END,\n       (g % 500) + 0.99,\n       'user' || g || '@example.com',\n       timestamptz '2024-01-01 00:00+00' + g * interval '10 minutes',\n       jsonb_build_object('plan', CASE WHEN g % 10 = 0 THEN 'pro' ELSE 'free' END,\n                          'device', (ARRAY['ios', 'android', 'web'])[g % 3 + 1])\nFROM generate_series(1, 20000) g;\nCREATE TABLE users (id int PRIMARY KEY, name text NOT NULL, country text NOT NULL);\nINSERT INTO users SELECT g, 'user ' || g, (ARRAY['VN', 'JP', 'US', 'FR'])[g % 4 + 1] FROM generate_series(1, 2000) g;\nANALYZE event; ANALYZE users;\n-- grader helpers (functions that print plans) — not part of the lesson schema\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The fallback plan: Nested Loop with Memoize|||Kế hoạch thay thế: Nested Loop với Memoize",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "QUERY PLAN"
+              ],
+              "hang": [
+                [
+                  "HashAggregate"
+                ],
+                [
+                  "  Group Key: u.country"
+                ],
+                [
+                  "  ->  Nested Loop"
+                ],
+                [
+                  "        ->  Seq Scan on event e"
+                ],
+                [
+                  "        ->  Memoize"
+                ],
+                [
+                  "              Cache Key: e.user_id"
+                ],
+                [
+                  "              Cache Mode: logical"
+                ],
+                [
+                  "              ->  Index Scan using users_pkey on users u"
+                ],
+                [
+                  "                    Index Cond: (id = e.user_id)"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "SET LOCAL (not SET)|||SET LOCAL (không phải SET)",
+            "khop": "SET\\s+LOCAL\\s+enable_hashjoin",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "EXPLAIN without ANALYZE|||EXPLAIN không ANALYZE",
+            "khop": "^(?![\\s\\S]*\\bANALY[SZ]E\\b)[\\s\\S]*\\bEXPLAIN\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A plain <code>SET</code> in a pooled connection: the next request on that connection inherits the switch.|||<code>SET</code> thường trên kết nối trong pool: yêu cầu kế tiếp trên kết nối đó thừa hưởng công tắc."
+        },
+        {
+          "loi": "Leaving enable_* = off in postgresql.conf \"because it made one query faster\".|||Để enable_* = off trong postgresql.conf \"vì nó làm một truy vấn nhanh hơn\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SET LOCAL",
+          "vi": "đặt tham số cho riêng giao dịch"
+        },
+        {
+          "en": "Memoize",
+          "vi": "nút đệm kết quả tra cứu lặp lại"
+        }
+      ]
+    },
+    {
+      "title": "How a Hash Join runs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 4,
+      "points": 20,
+      "concepts": [
+        "build",
+        "probe"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "join"
+      ],
+      "problemHtml": "<p>Order the phases of a Hash Join of event (20 000 rows) with users (2 000 rows).</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các pha của Hash Join giữa event (20 000 dòng) và users (2 000 dòng).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Build first, probe second.|||Dựng trước, dò sau.",
+        "The hashed side is the one under the \"Hash\" node.|||Phía được băm là phía nằm dưới nút \"Hash\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# How a Hash Join runs\n\nAnswer in the answer panel (no code needed).\n\n1. Hash Join, step by stepHash Join, từng bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# How a Hash Join runs — answer key\n\n1. Hash Join, step by stepHash Join, từng bước\n   Answer: m3) Read the smaller input (users) / đọc đầu vào nhỏ hơn (users)  →  m1) Build an in-memory hash table on users.id / dựng bảng băm trong bộ nhớ trên users.id  →  m2) Stream the bigger input (event) row by row / cho đầu vào lớn hơn (event) chảy từng dòng  →  m4) Probe the hash table with each event.user_id / dò bảng băm bằng từng event.user_id  →  m5) Emit every matching pair to the parent node / phát mọi cặp khớp lên nút cha\n   The planner hashes the smaller side so the table fits in work_mem; if it does not, the join runs in batches on disk.VI: Planner băm phía nhỏ hơn để bảng vừa work_mem; nếu không vừa, phép nối chạy theo đợt trên đĩa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The planner hashes the smaller side so the table fits in work_mem; if it does not, the join runs in batches on disk.</p><p><i>VI: Planner băm phía nhỏ hơn để bảng vừa work_mem; nếu không vừa, phép nối chạy theo đợt trên đĩa.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Hash Join, step by step</p><p style=\"opacity:.75;font-size:.92em\"><i>Hash Join, từng bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Build an in-memory hash table on users.id / dựng bảng băm trong bộ nhớ trên users.id"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Stream the bigger input (event) row by row / cho đầu vào lớn hơn (event) chảy từng dòng"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Read the smaller input (users) / đọc đầu vào nhỏ hơn (users)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Probe the hash table with each event.user_id / dò bảng băm bằng từng event.user_id"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Emit every matching pair to the parent node / phát mọi cặp khớp lên nút cha"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m1",
+              "m2",
+              "m4",
+              "m5"
+            ],
+            "giaiThich": "<p>The planner hashes the smaller side so the table fits in work_mem; if it does not, the join runs in batches on disk.</p><p><i>VI: Planner băm phía nhỏ hơn để bảng vừa work_mem; nếu không vừa, phép nối chạy theo đợt trên đĩa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hashing the bigger table.|||Băm bảng lớn hơn."
+        },
+        {
+          "loi": "Thinking rows are emitted before the build finishes.|||Nghĩ rằng dòng được phát trước khi dựng xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "build / probe",
+          "vi": "dựng / dò"
+        }
+      ]
+    }
+  ]
+}

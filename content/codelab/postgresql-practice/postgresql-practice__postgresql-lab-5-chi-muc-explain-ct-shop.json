@@ -1,0 +1,426 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-lab-5-chi-muc-explain-ct-shop",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-lab-5-chi-muc-explain-ct-shop"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5 — CT Shop: make the busy pages fast",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 100,
+      "concepts": [
+        "composite index for filter + sort",
+        "covering index (INCLUDE)",
+        "partial index",
+        "lower the input, not the column",
+        "stale statistics after a bulk import"
+      ],
+      "prerequisites": [
+        "9.1–10.4 of this track"
+      ],
+      "tags": [
+        "postgresql",
+        "lab",
+        "index",
+        "explain",
+        "ctshop"
+      ],
+      "problemHtml": "<h1>Lab 5 — CT Shop: make the busy pages fast</h1>\n<p class=\"bi-phu\">PostgreSQL course · after Chapter 10 · Suggested time: 80 minutes · 10 marks (5 × 2)</p>\n<h2>1. Overview</h2>\n<p>CT Shop now has thousands of customers and 20 000 orders (the course lab uses a million; the plans are the same). Five pages are slow. For each one, add the right index or rewrite the query — the grader reads the plan PostgreSQL actually chooses (helpers <code>plan_text</code>, <code>plan_rows</code> in the database), not the name you give your index. Production builds indexes <code>CONCURRENTLY</code>; the grader runs everything inside one transaction, so write plain <code>CREATE INDEX</code>.</p>\n<h3>General requirements</h3>\n<ul>\n  <li>Each question is graded on a fresh copy of <code>ctshop-big.sql</code> (no index except the keys).</li>\n  <li>Smallest correct index wins: hidden checks look at index size where it matters.</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_PG_Lab5/\n├── Q1.sql    -- P2 · the order history page (2 marks)\n├── Q2.sql    -- P3 · the status badge, from the index alone (2 marks)\n├── Q3.sql    -- P4 · the admin queue of pending orders (2 marks)\n├── Q4.sql    -- P5 · login: lower the input, not the column (2 marks)\n├── Q5.sql    -- P6 · stale statistics after the flash-sale import (2 marks)</pre>\n<h2>3. Data model</h2>\n<p><b>customer</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>PK (5 000 rows)</td></tr><tr><td><code>email</code></td><td>text</td><td>UNIQUE (customer_email_key), CHECK lower-case</td></tr><tr><td><code>full_name</code></td><td>text</td><td></td></tr><tr><td><code>city</code></td><td>text</td><td></td></tr></tbody></table>\n<p><b>orders</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>PK (20 000 rows)</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>→ customer, NOT indexed (customers 1–500, 40 orders each)</td></tr><tr><td><code>status</code></td><td>text</td><td>pending ≈ 1.6 %</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>one order every 31 minutes</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. P2 · the order history page <span class=\"bi-diem\">2 marks</span></h3>\n<p><code>SELECT id, created_at, status FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20</code> scans all orders and sorts. Create one index that finds customer 42's orders already in created_at DESC order (no Sort).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Composite index, customer_id first.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. P3 · the status badge, from the index alone <span class=\"bi-diem\">2 marks</span></h3>\n<p><code>SELECT status, count(*) FROM orders WHERE customer_id = 42 GROUP BY status</code> must be answered by an <b>Index Only Scan</b> (the check switches bitmap scans off).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Key on customer_id; carry status with INCLUDE (or as a key column).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. P4 · the admin queue of pending orders <span class=\"bi-diem\">2 marks</span></h3>\n<p><code>SELECT id, customer_id, created_at FROM orders WHERE status = 'pending' ORDER BY created_at LIMIT 50</code>: make it read only pending rows, already ordered — with the smallest index.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A partial index on created_at WHERE status = 'pending'.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. P5 · login: lower the input, not the column <span class=\"bi-diem\">2 marks</span></h3>\n<p>A customer typed <code>Kh0042@CtShop.vn</code>. <code>WHERE lower(email) = lower(…)</code> cannot use the UNIQUE index on email. The CHECK already guarantees emails are stored lower-case — write the login query <code>SELECT id, full_name FROM customer WHERE …</code> so it uses <code>customer_email_key</code>, without creating any index.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>WHERE email = lower('Kh0042@CtShop.vn')</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. P6 · stale statistics after the flash-sale import <span class=\"bi-diem\">2 marks</span></h3>\n<p>3 000 pending orders were just imported. The planner still believes about 300 orders are pending and picks plans for that. Fix the estimate.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>One statement that refreshes the statistics of orders.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>P2 · the order history page</td><td>2</td></tr><tr><td>2</td><td>P3 · the status badge, from the index alone</td><td>2</td></tr><tr><td>3</td><td>P4 · the admin queue of pending orders</td><td>2</td></tr><tr><td>4</td><td>P5 · login: lower the input, not the column</td><td>2</td></tr><tr><td>5</td><td>P6 · stale statistics after the flash-sale import</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Several overlapping indexes \"just in case\" — every one slows down every INSERT of the flash sale.</li>\n  <li>Changing the query when the brief asks for an index, or the reverse.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Tabs Q1.sql … Q5.sql (P2, P3, P4, P5, P6). <b>Run</b> = sample checks; <b>Submit</b> = every check and the 10-mark table.</p>",
+      "problemHtmlVi": "<h1>Lab 5 — CT Shop: làm các trang đông khách chạy nhanh</h1>\n<p class=\"bi-phu\">Khoá PostgreSQL · sau Chương 10 · Thời gian gợi ý: 80 phút · 10 điểm (5 × 2)</p>\n<h2>1. Tổng quan</h2>\n<p>CT Shop giờ có hàng nghìn khách và 20 000 đơn (lab của khoá dùng một triệu; kế hoạch vẫn như vậy). Năm trang đang chậm. Với mỗi trang, thêm đúng chỉ mục hoặc viết lại truy vấn — máy chấm đọc kế hoạch PostgreSQL thật sự chọn (các hàm <code>plan_text</code>, <code>plan_rows</code> trong CSDL), không đọc tên bạn đặt cho chỉ mục. Trên production phải tạo chỉ mục <code>CONCURRENTLY</code>; máy chấm chạy mọi thứ trong một giao dịch nên hãy viết <code>CREATE INDEX</code> thường.</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi câu chấm trên một bản <code>ctshop-big.sql</code> sạch (không chỉ mục nào ngoài khoá).</li>\n  <li>Chỉ mục đúng mà nhỏ nhất thì thắng: kiểm ẩn xét kích thước chỉ mục khi cần.</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_PG_Lab5/\n├── Q1.sql    -- P2 · the order history page (2 marks)\n├── Q2.sql    -- P3 · the status badge, from the index alone (2 marks)\n├── Q3.sql    -- P4 · the admin queue of pending orders (2 marks)\n├── Q4.sql    -- P5 · login: lower the input, not the column (2 marks)\n├── Q5.sql    -- P6 · stale statistics after the flash-sale import (2 marks)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>customer</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>PK (5 000 rows)</td></tr><tr><td><code>email</code></td><td>text</td><td>UNIQUE (customer_email_key), CHECK lower-case</td></tr><tr><td><code>full_name</code></td><td>text</td><td></td></tr><tr><td><code>city</code></td><td>text</td><td></td></tr></tbody></table>\n<p><b>orders</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>PK (20 000 rows)</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>→ customer, NOT indexed (customers 1–500, 40 orders each)</td></tr><tr><td><code>status</code></td><td>text</td><td>pending ≈ 1.6 %</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>one order every 31 minutes</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. P2 · trang lịch sử đơn <span class=\"bi-diem\">2 điểm</span></h3>\n<p><code>SELECT id, created_at, status FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20</code> quét mọi đơn rồi sắp. Tạo một chỉ mục tìm đơn của khách 42 đã sắp sẵn theo created_at DESC (không Sort).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chỉ mục tổ hợp, customer_id đứng trước.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. P3 · huy hiệu trạng thái, chỉ từ chỉ mục <span class=\"bi-diem\">2 điểm</span></h3>\n<p><code>SELECT status, count(*) FROM orders WHERE customer_id = 42 GROUP BY status</code> phải được trả lời bằng <b>Index Only Scan</b> (kiểm tắt bitmap scan).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Khoá trên customer_id; mang status bằng INCLUDE (hoặc làm cột khoá).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. P4 · hàng đợi đơn pending của admin <span class=\"bi-diem\">2 điểm</span></h3>\n<p><code>SELECT id, customer_id, created_at FROM orders WHERE status = 'pending' ORDER BY created_at LIMIT 50</code>: làm nó chỉ đọc các dòng pending, đã sắp sẵn — bằng chỉ mục nhỏ nhất.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chỉ mục từng phần trên created_at WHERE status = 'pending'.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. P5 · đăng nhập: hạ chữ ở đầu vào, không phải ở cột <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Khách gõ <code>Kh0042@CtShop.vn</code>. <code>WHERE lower(email) = lower(…)</code> không dùng được chỉ mục UNIQUE trên email. CHECK đã bảo đảm email lưu chữ thường — viết truy vấn đăng nhập <code>SELECT id, full_name FROM customer WHERE …</code> sao cho dùng <code>customer_email_key</code>, không tạo chỉ mục nào.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>WHERE email = lower('Kh0042@CtShop.vn')</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. P6 · thống kê cũ sau đợt nhập flash sale <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Vừa nhập 3 000 đơn pending. Planner vẫn tin chỉ khoảng 300 đơn pending và chọn kế hoạch theo đó. Sửa ước lượng.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Một lệnh làm mới thống kê của orders.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>P2 · trang lịch sử đơn</td><td>2</td></tr><tr><td>2</td><td>P3 · huy hiệu trạng thái, chỉ từ chỉ mục</td><td>2</td></tr><tr><td>3</td><td>P4 · hàng đợi đơn pending của admin</td><td>2</td></tr><tr><td>4</td><td>P5 · đăng nhập: hạ chữ ở đầu vào, không phải ở cột</td><td>2</td></tr><tr><td>5</td><td>P6 · thống kê cũ sau đợt nhập flash sale</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Nhiều chỉ mục chồng chéo \"cho chắc\" — cái nào cũng làm chậm mọi INSERT của đợt flash sale.</li>\n  <li>Đổi truy vấn khi đề yêu cầu chỉ mục, hoặc ngược lại.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Các tab Q1.sql … Q5.sql (P2, P3, P4, P5, P6). <b>Chạy thử</b> = kiểm mẫu; <b>Nộp</b> = mọi kiểm và bảng điểm thang 10.</p>",
+      "inputSpec": "The database built by ctshop-big.sql (schema below; full script in the ctshop-big.sql tab).|||CSDL dựng bởi ctshop-big.sql (lược đồ bên dưới; script đầy đủ ở tab ctshop-big.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently on a fresh database.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập trên một CSDL sạch.",
+      "constraints": "Each question is graded on a fresh copy of <code>ctshop-big.sql</code> (no index except the keys).|||Mỗi câu chấm trên một bản <code>ctshop-big.sql</code> sạch (không chỉ mục nào ngoài khoá).\nSmallest correct index wins: hidden checks look at index size where it matters.|||Chỉ mục đúng mà nhỏ nhất thì thắng: kiểm ẩn xét kích thước chỉ mục khi cần.",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "seeks | no_sort\n------+--------\ntrue  | true   ",
+          "explanation": "Expected result of check \"P2 · seek on customer_id, no Sort\" (row order does not matter).|||Kết quả mong đợi của kiểm \"P2 · tìm theo customer_id, không Sort\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Read the plan first: Seq Scan + Filter + Sort tells you which columns the index needs and in which order.|||Đọc kế hoạch trước: Seq Scan + Filter + Sort cho biết chỉ mục cần cột nào và theo thứ tự nào.",
+        "P3: Index Only Scan needs every column of the query inside the index.|||P3: Index Only Scan cần mọi cột của truy vấn nằm trong chỉ mục.",
+        "P6: estimates come from statistics, not from counting.|||P6: ước lượng đến từ thống kê, không đến từ việc đếm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. P2 · the order history page\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-big.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-big.sql sạch.\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. P3 · the status badge, from the index alone\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-big.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-big.sql sạch.\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. P4 · the admin queue of pending orders\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-big.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-big.sql sạch.\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. P5 · login: lower the input, not the column\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-big.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-big.sql sạch.\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. P6 · stale statistics after the flash-sale import\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-big.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-big.sql sạch.\n"
+        },
+        {
+          "name": "ctshop-big.sql",
+          "language": "sql",
+          "code": "-- ctshop-big.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop-big.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\n-- 5 000 customers (kh0001 … kh5000); only customers 1–500 have orders (40 each)\nINSERT INTO customer (email, full_name, city)\nSELECT format('kh%s@ctshop.vn', lpad(g::text, 4, '0')), 'Khách ' || g,\n       (ARRAY['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'])[g % 5 + 1]\nFROM generate_series(1, 5000) g;\n-- 20 000 orders, one every 31 minutes from 2025-01-01; pending ≈ 1.6 %, cancelled ≈ 7 %\nINSERT INTO orders (customer_id, status, created_at)\nSELECT g % 500 + 1,\n       CASE WHEN g % 64 = 0 THEN 'pending' WHEN g % 13 = 0 THEN 'cancelled' WHEN g % 2 = 0 THEN 'paid' ELSE 'shipped' END,\n       timestamptz '2025-01-01 08:00+07' + g * interval '31 minutes'\nFROM generate_series(1, 20000) g;\nANALYZE customer; ANALYZE orders;\n-- grader helpers (print plans of a query text)\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_orders_customer_created ON orders (customer_id, created_at DESC);\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_orders_customer_cover ON orders (customer_id, created_at DESC) INCLUDE (status);\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "CREATE INDEX idx_orders_pending ON orders (created_at) WHERE status = 'pending';\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "SELECT id, full_name FROM customer WHERE email = lower('Kh0042@CtShop.vn');   -- the column stays bare ⇒ customer_email_key\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "ANALYZE orders;   -- autovacuum would do it eventually; after a bulk load do it yourself\n"
+        },
+        {
+          "name": "ctshop-big.sql",
+          "language": "sql",
+          "code": "-- ctshop-big.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop-big.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\n-- 5 000 customers (kh0001 … kh5000); only customers 1–500 have orders (40 each)\nINSERT INTO customer (email, full_name, city)\nSELECT format('kh%s@ctshop.vn', lpad(g::text, 4, '0')), 'Khách ' || g,\n       (ARRAY['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'])[g % 5 + 1]\nFROM generate_series(1, 5000) g;\n-- 20 000 orders, one every 31 minutes from 2025-01-01; pending ≈ 1.6 %, cancelled ≈ 7 %\nINSERT INTO orders (customer_id, status, created_at)\nSELECT g % 500 + 1,\n       CASE WHEN g % 64 = 0 THEN 'pending' WHEN g % 13 = 0 THEN 'cancelled' WHEN g % 2 = 0 THEN 'paid' ELSE 'shipped' END,\n       timestamptz '2025-01-01 08:00+07' + g * interval '31 minutes'\nFROM generate_series(1, 20000) g;\nANALYZE customer; ANALYZE orders;\n-- grader helpers (print plans of a query text)\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same steps as <code>lab5-solution.sql</code> (P2–P6) at 20 000 orders. On a real server create each index with <code>CREATE INDEX CONCURRENTLY</code> outside a transaction, then drop the indexes the new ones made redundant.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng các bước của <code>lab5-solution.sql</code> (P2–P6) ở quy mô 20 000 đơn. Trên máy chủ thật, tạo từng chỉ mục bằng <code>CREATE INDEX CONCURRENTLY</code> ngoài giao dịch, rồi xoá các chỉ mục cũ đã bị chỉ mục mới thay thế.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\n-- 5 000 customers (kh0001 … kh5000); only customers 1–500 have orders (40 each)\nINSERT INTO customer (email, full_name, city)\nSELECT format('kh%s@ctshop.vn', lpad(g::text, 4, '0')), 'Khách ' || g,\n       (ARRAY['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'])[g % 5 + 1]\nFROM generate_series(1, 5000) g;\n-- 20 000 orders, one every 31 minutes from 2025-01-01; pending ≈ 1.6 %, cancelled ≈ 7 %\nINSERT INTO orders (customer_id, status, created_at)\nSELECT g % 500 + 1,\n       CASE WHEN g % 64 = 0 THEN 'pending' WHEN g % 13 = 0 THEN 'cancelled' WHEN g % 2 = 0 THEN 'paid' ELSE 'shipped' END,\n       timestamptz '2025-01-01 08:00+07' + g * interval '31 minutes'\nFROM generate_series(1, 20000) g;\nANALYZE customer; ANALYZE orders;\n-- grader helpers (print plans of a query text)\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P2 · seek on customer_id, no Sort|||P2 · tìm theo customer_id, không Sort",
+            "kiemTra": "SELECT plan_text('SELECT id, created_at, status FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20') ~ 'Index Cond: \\(customer_id = 42\\)' AS seeks, plan_text('SELECT id, created_at, status FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20') !~ 'Sort' AS no_sort",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "seeks",
+                "no_sort"
+              ],
+              "hang": [
+                [
+                  true,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P2 · the index leads with customer_id, then created_at|||P2 · chỉ mục bắt đầu bằng customer_id, rồi created_at",
+            "kiemTra": "SELECT bool_or(indexdef ~ '\\(customer_id, created_at') AS right_order FROM pg_indexes WHERE tablename = 'orders'",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "right_order"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P2 · the page still returns 20 rows|||P2 · trang vẫn trả 20 dòng",
+            "kiemTra": "SELECT count(*) AS rows FROM (SELECT id, created_at, status FROM orders WHERE customer_id = 42 ORDER BY created_at DESC LIMIT 20) t",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "rows"
+              ],
+              "hang": [
+                [
+                  20
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P3 · Index Only Scan|||P3 · Index Only Scan",
+            "kiemTra": "SET LOCAL enable_bitmapscan = off; SELECT plan_text('SELECT status, count(*) FROM orders WHERE customer_id = 42 GROUP BY status') ~ 'Index Only Scan' AS index_only",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "index_only"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P3 · counts per status for customer 42 (after your index)|||P3 · số đơn theo trạng thái của khách 42 (sau chỉ mục của bạn)",
+            "kiemTra": "SELECT status, count(*) FROM orders WHERE customer_id = 42 GROUP BY status ORDER BY status",
+            "thuTu": true,
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "status",
+                "count"
+              ],
+              "hang": [
+                [
+                  "cancelled",
+                  3
+                ],
+                [
+                  "shipped",
+                  37
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P3 · status is carried by the index|||P3 · status được chỉ mục mang theo",
+            "kiemTra": "SELECT bool_or(indexdef ~ 'status') AS carries_status FROM pg_indexes WHERE tablename = 'orders' AND indexname NOT LIKE '%pkey'",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "carries_status"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P4 · Index Scan, no Sort|||P4 · Index Scan, không Sort",
+            "kiemTra": "SELECT plan_text('SELECT id, customer_id, created_at FROM orders WHERE status = ''pending'' ORDER BY created_at LIMIT 50') ~ 'Index Scan' AS index_scan, plan_text('SELECT id, customer_id, created_at FROM orders WHERE status = ''pending'' ORDER BY created_at LIMIT 50') !~ 'Sort' AS no_sort",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "index_scan",
+                "no_sort"
+              ],
+              "hang": [
+                [
+                  true,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P4 · the index is partial|||P4 · chỉ mục là từng phần",
+            "kiemTra": "SELECT count(*) AS partial FROM pg_index WHERE indrelid = 'orders'::regclass AND indpred IS NOT NULL",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "partial"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P4 · and small|||P4 · và nhỏ",
+            "kiemTra": "SELECT bool_and(pg_relation_size(indexrelid) < 40000) AS small FROM pg_index WHERE indrelid = 'orders'::regclass AND NOT indisprimary",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "small"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "P5 · customer 42 is found|||P5 · tìm ra khách 42",
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "full_name"
+              ],
+              "hang": [
+                [
+                  42,
+                  "Khách 42"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "P5 · the column is not wrapped in lower()|||P5 · cột không bị bọc trong lower()",
+            "khop": "lower\\s*\\(\\s*email\\s*\\)",
+            "tep": "Q4.sql",
+            "phuDinh": true,
+            "nhom": "f4"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P5 · that predicate uses customer_email_key|||P5 · vị từ đó dùng customer_email_key",
+            "kiemTra": "SELECT plan_text('SELECT id FROM customer WHERE email = lower(''Kh0042@CtShop.vn'')') ~ 'customer_email_key' AS uses_unique_index",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "uses_unique_index"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "P6 · the pending estimate is within 5 % of reality|||P6 · ước lượng pending lệch không quá 5 %",
+            "kiemTra": "SELECT abs(plan_rows('SELECT * FROM orders WHERE status = ''pending''') - (SELECT count(*) FROM orders WHERE status = 'pending')) <= 0.05 * (SELECT count(*) FROM orders WHERE status = 'pending') AS accurate",
+            "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\n-- 5 000 customers (kh0001 … kh5000); only customers 1–500 have orders (40 each)\nINSERT INTO customer (email, full_name, city)\nSELECT format('kh%s@ctshop.vn', lpad(g::text, 4, '0')), 'Khách ' || g,\n       (ARRAY['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng'])[g % 5 + 1]\nFROM generate_series(1, 5000) g;\n-- 20 000 orders, one every 31 minutes from 2025-01-01; pending ≈ 1.6 %, cancelled ≈ 7 %\nINSERT INTO orders (customer_id, status, created_at)\nSELECT g % 500 + 1,\n       CASE WHEN g % 64 = 0 THEN 'pending' WHEN g % 13 = 0 THEN 'cancelled' WHEN g % 2 = 0 THEN 'paid' ELSE 'shipped' END,\n       timestamptz '2025-01-01 08:00+07' + g * interval '31 minutes'\nFROM generate_series(1, 20000) g;\nANALYZE customer; ANALYZE orders;\n-- grader helpers (print plans of a query text)\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n-- flash sale 11/11: 3 000 new pending orders imported a minute ago — no ANALYZE has run since\nINSERT INTO orders (customer_id, status, created_at)\nSELECT g % 500 + 1, 'pending', timestamptz '2026-11-11 00:00+07' + g * interval '1 second' FROM generate_series(1, 3000) g;",
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "accurate"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "P6 · ANALYZE|||P6 · ANALYZE",
+            "khop": "\\bANALY[SZ]E\\b",
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. P2 · the order history page",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. P3 · the status badge, from the index alone",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. P4 · the admin queue of pending orders",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. P5 · login: lower the input, not the column",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. P6 · stale statistics after the flash-sale import",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "P2 an index on customer_id alone — a Sort remains for every page view.|||P2 chỉ mục riêng customer_id — mỗi lần xem trang vẫn còn một Sort."
+        },
+        {
+          "loi": "P4 a full (status, created_at) index — 50× bigger than the partial one.|||P4 chỉ mục đầy đủ (status, created_at) — lớn gấp 50 lần chỉ mục từng phần."
+        },
+        {
+          "loi": "P5 typing the email exactly as entered — \"Kh0042@CtShop.vn\" is not found.|||P5 gõ email đúng như khách nhập — không tìm thấy \"Kh0042@CtShop.vn\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index",
+          "vi": "chỉ mục",
+          "giaiThich": "Cấu trúc phụ (thường B-tree) giúp tìm dòng theo cột mà không đọc cả bảng; đổi lại mỗi lần ghi phải cập nhật nó."
+        },
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        },
+        {
+          "en": "covering index",
+          "vi": "chỉ mục bao phủ"
+        },
+        {
+          "en": "partial index",
+          "vi": "chỉ mục từng phần"
+        },
+        {
+          "en": "CONCURRENTLY",
+          "vi": "tạo chỉ mục không khoá ghi"
+        }
+      ]
+    }
+  ]
+}

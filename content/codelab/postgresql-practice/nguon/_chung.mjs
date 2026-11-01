@@ -468,3 +468,26 @@ BEGIN
   SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;
   RETURN out;
 END $f$;`;
+
+/** plan_text(q): EXPLAIN (COSTS OFF) dạng chữ (mỗi dòng một nút/điều kiện) · plan_rows(q): số dòng ƯỚC LƯỢNG của nút gốc ·
+ *  plan_analyze(q): EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) — số dòng thật, Sort Method… (tất định). */
+export const PLAN_MORE = `CREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$
+DECLARE r record; out text := '';
+BEGIN
+  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r."QUERY PLAN" || E'\\n'; END LOOP;
+  RETURN out;
+END $f$;
+CREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$
+DECLARE j json;
+BEGIN
+  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;
+  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;
+END $f$;
+CREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$
+DECLARE r record; out text := '';
+BEGIN
+  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r."QUERY PLAN" || E'\\n'; END LOOP;
+  RETURN out;
+END $f$;`;
+/** Hàm kiểm kế hoạch dùng chung (plan_nodes + plan_text + plan_rows + plan_analyze). */
+export const PLAN_ALL = `${PLAN_FN}\n${PLAN_MORE}`;

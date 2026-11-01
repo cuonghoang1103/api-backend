@@ -1,0 +1,565 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-2-4-chinh-sach",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-2-4-chinh-sach"
+  },
+  "exercises": [
+    {
+      "title": "2.4-1 — Rules, lists and breaches: read the real runs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "password policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson 2.4, real runs (01/11/2026):<pre>top-10k passwords that pass the classic rules: 0 → \ntop-10k passwords with 15+ characters: 1\ntop-1000 \"Capitalised + 1!\": 756 now pass, e.g. Password1!, Qwerty1!, Dragon1!, Baseball1!</pre><pre>SHA-1 7C4A8|D09CA37… → sent \"7C4A8\", got 2100 suffixes (1 padding)\npwnedCount(\"123456\") = 210461208\nSHA-1 32CA9|FC1A0F5… → sent \"32CA9\", got 2202 suffixes (1 padding)\npwnedCount(\"Password1!\") = 584516\nSHA-1 076D3|E6C4B9F… → sent \"076D3\", got 2111 suffixes (1 padding)\npwnedCount(\"P@ssw0rd!\") = 119515\nSHA-1 5361F|CA33CAB… → sent \"5361F\", got 2121 suffixes (1 padding)\npwnedCount(\"iloveyouiloveyou\") = 4707\nSHA-1 B5947|B59F7D5… → sent \"B5947\", got 2094 suffixes (1 padding)\npwnedCount(\"hoa sen nở giữa đầm lầy tháng năm\") = 0</pre><pre>{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"TOO_SHORT\",\"COMMON\"]} 422  ← \"123456\"\n{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"CONTEXT_WORD\"]} 422  ← \"LabFlow2026!!!!!\"\n{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"BREACHED\"]} 422  ← \"iloveyouiloveyou\"\n{\"id\":\"usr_4\"} 201  ← \"hoa sen nở giữa đầm lầy tháng năm\"</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 2.4, chạy thật (01/11/2026):<pre>top-10k passwords that pass the classic rules: 0 → \ntop-10k passwords with 15+ characters: 1\ntop-1000 \"Capitalised + 1!\": 756 now pass, e.g. Password1!, Qwerty1!, Dragon1!, Baseball1!</pre><pre>SHA-1 7C4A8|D09CA37… → sent \"7C4A8\", got 2100 suffixes (1 padding)\npwnedCount(\"123456\") = 210461208\nSHA-1 32CA9|FC1A0F5… → sent \"32CA9\", got 2202 suffixes (1 padding)\npwnedCount(\"Password1!\") = 584516\nSHA-1 076D3|E6C4B9F… → sent \"076D3\", got 2111 suffixes (1 padding)\npwnedCount(\"P@ssw0rd!\") = 119515\nSHA-1 5361F|CA33CAB… → sent \"5361F\", got 2121 suffixes (1 padding)\npwnedCount(\"iloveyouiloveyou\") = 4707\nSHA-1 B5947|B59F7D5… → sent \"B5947\", got 2094 suffixes (1 padding)\npwnedCount(\"hoa sen nở giữa đầm lầy tháng năm\") = 0</pre><pre>{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"TOO_SHORT\",\"COMMON\"]} 422  ← \"123456\"\n{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"CONTEXT_WORD\"]} 422  ← \"LabFlow2026!!!!!\"\n{\"error\":\"WEAK_PASSWORD\",\"problems\":[\"BREACHED\"]} 422  ← \"iloveyouiloveyou\"\n{\"id\":\"usr_4\"} 201  ← \"hoa sen nở giữa đầm lầy tháng năm\"</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which column of numbers changed after “Capital + 1!”?|||Cột số nào thay đổi sau \"viết hoa + 1!\"?",
+        "What leaves the server: count the hex characters.|||Thứ gì rời máy chủ: đếm số ký tự hex."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.4-1 — Rules, lists and breaches: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. 0 of the top 10,001 pass the classic rules, yet NIST forbids those rules. Why?0 trong top 10.001 qua được luật cổ điển, vậy mà NIST cấm các luật đó. Vì sao?\n2. What did the HIBP server learn when LabFlow ID checked 123456?Máy chủ HIBP biết được gì khi LabFlow ID kiểm 123456?\n3. “iloveyouiloveyou” (16 characters) got BREACHED. Which part of the policy caught it?\"iloveyouiloveyou\" (16 ký tự) nhận BREACHED. Phần nào của chính sách bắt được nó?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.4-1 — Rules, lists and breaches: read the real runs — answer key\n\n1. 0 of the top 10,001 pass the classic rules, yet NIST forbids those rules. Why?0 trong top 10.001 qua được luật cổ điển, vậy mà NIST cấm các luật đó. Vì sao?\n   Answer: a) People adapt: “Capital + 1!” makes 756 of the top 1,000 pass, and Password1! is in 584,516 breaches\n   Rules change how a common password is written, not whether it is common. Length (only 1 of 10,001 has 15+ characters) and a blocklist do.VI: Luật đổi cách viết một mật khẩu phổ biến, không đổi việc nó phổ biến. Độ dài (chỉ 1/10.001 dài 15+ ký tự) và danh sách chặn thì có.\n\n2. What did the HIBP server learn when LabFlow ID checked 123456?Máy chủ HIBP biết được gì khi LabFlow ID kiểm 123456?\n   Answer: d) Only the prefix 7C4A8, shared by ~2,100 hashes in its reply\n   k-anonymity: 5 hex characters of the SHA-1 go out, every suffix with that prefix comes back, the match happens locally.VI: k-ẩn danh: 5 ký tự hex của SHA-1 đi ra, mọi phần đuôi cùng tiền tố quay về, so khớp làm tại chỗ.\n\n3. “iloveyouiloveyou” (16 characters) got BREACHED. Which part of the policy caught it?\"iloveyouiloveyou\" (16 ký tự) nhận BREACHED. Phần nào của chính sách bắt được nó?\n   Answer: c) The HIBP range check at sign-up: 4,707 breaches\n   Length passes it and the local list does not contain it; only breach data knows it. That is why sign-up asks HIBP — with a timeout and a logged fail-open.VI: Độ dài cho qua và danh sách cục bộ không có nó; chỉ dữ liệu rò rỉ biết. Vì thế đăng ký hỏi HIBP — có timeout và chọn mở kèm log.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> People adapt: “Capital + 1!” makes 756 of the top 1,000 pass, and Password1! is in 584,516 breaches</p><p>Rules change how a common password is written, not whether it is common. Length (only 1 of 10,001 has 15+ characters) and a blocklist do.</p><p><i>VI: Luật đổi cách viết một mật khẩu phổ biến, không đổi việc nó phổ biến. Độ dài (chỉ 1/10.001 dài 15+ ký tự) và danh sách chặn thì có.</i></p></li><li><p><b>d)</b> Only the prefix 7C4A8, shared by ~2,100 hashes in its reply</p><p>k-anonymity: 5 hex characters of the SHA-1 go out, every suffix with that prefix comes back, the match happens locally.</p><p><i>VI: k-ẩn danh: 5 ký tự hex của SHA-1 đi ra, mọi phần đuôi cùng tiền tố quay về, so khớp làm tại chỗ.</i></p></li><li><p><b>c)</b> The HIBP range check at sign-up: 4,707 breaches</p><p>Length passes it and the local list does not contain it; only breach data knows it. That is why sign-up asks HIBP — with a timeout and a logged fail-open.</p><p><i>VI: Độ dài cho qua và danh sách cục bộ không có nó; chỉ dữ liệu rò rỉ biết. Vì thế đăng ký hỏi HIBP — có timeout và chọn mở kèm log.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>0 of the top 10,001 pass the classic rules, yet NIST forbids those rules. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>0 trong top 10.001 qua được luật cổ điển, vậy mà NIST cấm các luật đó. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "People adapt: “Capital + 1!” makes 756 of the top 1,000 pass, and Password1! is in 584,516 breaches"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because symbols cannot be hashed by argon2id"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because NIST prefers shorter passwords"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the rules reject too many strong passwords like 123456"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rules change how a common password is written, not whether it is common. Length (only 1 of 10,001 has 15+ characters) and a blocklist do.</p><p><i>VI: Luật đổi cách viết một mật khẩu phổ biến, không đổi việc nó phổ biến. Độ dài (chỉ 1/10.001 dài 15+ ký tự) và danh sách chặn thì có.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What did the HIBP server learn when LabFlow ID checked 123456?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chủ HIBP biết được gì khi LabFlow ID kiểm 123456?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing at all — the check runs offline"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The password, protected by TLS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The full SHA-1 of the password"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the prefix 7C4A8, shared by ~2,100 hashes in its reply"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>k-anonymity: 5 hex characters of the SHA-1 go out, every suffix with that prefix comes back, the match happens locally.</p><p><i>VI: k-ẩn danh: 5 ký tự hex của SHA-1 đi ra, mọi phần đuôi cùng tiền tố quay về, so khớp làm tại chỗ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>“iloveyouiloveyou” (16 characters) got BREACHED. Which part of the policy caught it?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"iloveyouiloveyou\" (16 ký tự) nhận BREACHED. Phần nào của chính sách bắt được nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The 15-character minimum length of NIST rev 4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A composition rule on upper-case and symbols"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The HIBP range check at sign-up: 4,707 breaches"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The context-word rule on the email’s local part"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Length passes it and the local list does not contain it; only breach data knows it. That is why sign-up asks HIBP — with a timeout and a logged fail-open.</p><p><i>VI: Độ dài cho qua và danh sách cục bộ không có nó; chỉ dữ liệu rò rỉ biết. Vì thế đăng ký hỏi HIBP — có timeout và chọn mở kèm log.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Symbols make passwords strong”.|||\"Ký hiệu làm mật khẩu mạnh\"."
+        },
+        {
+          "loi": "“A hash is safe to send”.|||\"Giá trị băm thì gửi đi an toàn\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blocklist",
+          "vi": "danh sách chặn"
+        },
+        {
+          "en": "k-anonymity",
+          "vi": "k-ẩn danh"
+        }
+      ]
+    },
+    {
+      "title": "2.4-2 — Write classicVsLength(words): measure the rules yourself",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "password policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Recreate <code>demo2/composition.mjs</code>. The classic rule: length ≥ 8, an upper-case letter, a lower-case letter, a digit, and a character that is not a letter or digit. Return <code>{ classic, afterCapitalOne, fifteenPlus }</code>: how many <code>words</code> pass the rule as they are; how many pass after the change people really make (first character upper-cased, <code>\"1!\"</code> appended); and how many are 15+ code points long. Real run on the SecLists list: 0, 756 of the top 1,000, 1 of 10,001.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại <code>demo2/composition.mjs</code>. Luật cổ điển: dài ≥ 8, có chữ hoa, chữ thường, chữ số, và một ký tự không phải chữ hay số. Trả <code>{ classic, afterCapitalOne, fifteenPlus }</code>: bao nhiêu từ trong <code>words</code> qua luật như nguyên trạng; bao nhiêu qua sau thay đổi người ta thật sự làm (viết hoa ký tự đầu, thêm <code>\"1!\"</code> ở cuối); và bao nhiêu dài từ 15 code point. Chạy thật trên danh sách SecLists: 0, 756 trong top 1.000, 1 trong 10.001.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "classicVsLength([\"password\",\"123456\",\"12345678\",\"1234\",\"qwerty\",\"12345\",\"dragon\",\"pussy\",\"baseball\",\"football\",\"letmein\",\"monkey\",\"696969\",\"abc123\",\"mustang\",\"michael\",\"shadow\",\"master\",\"jennifer\",\"111111\"])",
+          "output": "{\"classic\":0,\"afterCapitalOne\":13,\"fifteenPlus\":0}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write classic(pw) once and reuse it for both counts.|||Viết classic(pw) một lần rồi dùng cho cả hai lần đếm.",
+        "charAt(0).toUpperCase() + slice(1) + \"1!\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { classic, afterCapitalOne, fifteenPlus } */\nfunction classicVsLength(words) {\n  // Write your solution here\n  var classic = function (pw) { return pw.length >= 8 && /[A-Z]/.test(pw) && /\\d/.test(pw); };\n  return { classic: words.filter(classic).length, afterCapitalOne: 0, fifteenPlus: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction classicVsLength(words) {\n  var classic = function (pw) { return pw.length >= 8 && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /\\d/.test(pw) && /[^A-Za-z0-9]/.test(pw); };\n  var forced = words.map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1) + '1!'; });\n  return {\n    classic: words.filter(classic).length,\n    afterCapitalOne: forced.filter(classic).length,\n    fifteenPlus: words.filter(function (w) { return Array.from(w).length >= 15; }).length,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Numbers end the argument with a product owner: a rule that every list word passes after two keystrokes does not keep list words out. Length does.</p>",
+      "solutionExplanationHtmlVi": "<p>Con số kết thúc cuộc tranh luận với chủ sản phẩm: một luật mà từ nào trong danh sách cũng qua sau hai phím bấm thì không giữ được từ trong danh sách ở ngoài. Độ dài thì giữ được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real top 20 of the list",
+              "vi": "Top 20 thật của danh sách"
+            },
+            "goi": "classicVsLength([\"password\",\"123456\",\"12345678\",\"1234\",\"qwerty\",\"12345\",\"dragon\",\"pussy\",\"baseball\",\"football\",\"letmein\",\"monkey\",\"696969\",\"abc123\",\"mustang\",\"michael\",\"shadow\",\"master\",\"jennifer\",\"111111\"])",
+            "mongDoi": {
+              "classic": 0,
+              "afterCapitalOne": 13,
+              "fifteenPlus": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: classicVsLength([\"Password1!\",\"P@ssw0rd!\",\"hoa sen nở giữa đầm lầy tháng năm\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "classicVsLength([\"Password1!\",\"P@ssw0rd!\",\"hoa sen nở giữa đầm lầy tháng năm\"])",
+            "mongDoi": {
+              "classic": 2,
+              "afterCapitalOne": 3,
+              "fifteenPlus": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "classicVsLength([])",
+            "mongDoi": {
+              "classic": 0,
+              "afterCapitalOne": 0,
+              "fifteenPlus": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "classicVsLength([\"correcthorsebatterystaple\",\"a\",\"abcdefg\"])",
+            "mongDoi": {
+              "classic": 0,
+              "afterCapitalOne": 2,
+              "fifteenPlus": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "classicVsLength([\"Zz9!zzzz\",\"zz9!zzzz\"])",
+            "mongDoi": {
+              "classic": 1,
+              "afterCapitalOne": 2,
+              "fifteenPlus": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing /[A-Z]/ on the original word only.|||Chỉ kiểm /[A-Z]/ trên từ gốc."
+        },
+        {
+          "loi": "Counting length with .length — fine for ASCII lists, wrong for Vietnamese or emoji.|||Đếm độ dài bằng .length — ổn với danh sách ASCII, sai với tiếng Việt hay emoji."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composition rules",
+          "vi": "luật pha trộn ký tự"
+        }
+      ]
+    },
+    {
+      "title": "2.4-3 — Write pwnedFromRange(sha1Hex, body): read the range API",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "k-anonymity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>You sent the first 5 characters of a password's SHA-1 to <code>https://api.pwnedpasswords.com/range/{prefix}</code>. The body has one line per hash with that prefix: <code>SUFFIX:COUNT</code> (35 hex characters, upper-case), lines end with <code>\\r\\n</code>, padding lines have count 0. Return the count for <code>sha1Hex</code> (either case), <code>0</code> if its suffix is absent, <code>null</code> if <code>sha1Hex</code> is not 40 hex characters. Real run: <code>123456</code> ⇒ 210,461,208. (The cases use a short body: that real line plus three made-up ones; the real reply had about 2,100 lines.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn đã gửi 5 ký tự đầu SHA-1 của một mật khẩu tới <code>https://api.pwnedpasswords.com/range/{prefix}</code>. Nội dung trả về có mỗi dòng một giá trị băm cùng tiền tố: <code>PHẦN_ĐUÔI:SỐ_LẦN</code> (35 ký tự hex, viết hoa), dòng kết thúc bằng <code>\\r\\n</code>, dòng đệm có số lần 0. Trả số lần của <code>sha1Hex</code> (hoa hay thường đều được), <code>0</code> nếu không có phần đuôi đó, <code>null</code> nếu <code>sha1Hex</code> không phải 40 ký tự hex. Chạy thật: <code>123456</code> ⇒ 210.461.208. (Các ca dùng một nội dung ngắn: dòng thật đó cộng ba dòng bịa; phản hồi thật có khoảng 2.100 dòng.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pwnedFromRange(\"7C4A8D09CA3762AF61E59520943DC26494F8941B\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+          "output": "210461208",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "suffix = SHA-1 without its first 5 characters, upper-cased.|||phần đuôi = SHA-1 bỏ 5 ký tự đầu, viết hoa.",
+        "split(/\\r?\\n/) handles both line endings.|||split(/\\r?\\n/) xử lý cả hai kiểu xuống dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ breach count, 0 when absent, null when sha1Hex is malformed */\nfunction pwnedFromRange(sha1Hex, body) {\n  // Write your solution here\n  var line = body.split('\\n').find(function (l) { return l.indexOf(sha1Hex) === 0; });\n  return line ? Number(line.split(':')[1]) : 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pwnedFromRange(sha1Hex, body) {\n  var h = String(sha1Hex).toUpperCase();\n  if (!/^[0-9A-F]{40}$/.test(h)) return null;\n  var suffix = h.slice(5);\n  var lines = String(body).split(/\\r?\\n/);\n  for (var i = 0; i < lines.length; i++) {\n    var parts = lines[i].trim().split(':');\n    if (parts.length === 2 && parts[0].toUpperCase() === suffix) return Number(parts[1]);   // padding lines have count 0\n  }\n  return 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The server only ever saw the prefix; the decision is made here, on your side. A count of 0 can be a padding line — it still means “not breached”.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chủ chỉ thấy tiền tố; quyết định nằm ở phía bạn. Số lần 0 có thể là dòng đệm — vẫn có nghĩa \"chưa lộ\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "123456 (real count)",
+              "vi": "123456 (số lần thật)"
+            },
+            "goi": "pwnedFromRange(\"7C4A8D09CA3762AF61E59520943DC26494F8941B\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": 210461208
+          },
+          {
+            "moTa": {
+              "en": "Case 2: pwnedFromRange(\"7c4a8d09ca3762af61e59520943dc26494f8941b\", \"0018A45C4D1DEF81644B54AB7F9...",
+              "vi": "Ca 2"
+            },
+            "goi": "pwnedFromRange(\"7c4a8d09ca3762af61e59520943dc26494f8941b\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": 210461208
+          },
+          {
+            "moTa": {
+              "en": "A padding line ⇒ 0",
+              "vi": "Dòng đệm ⇒ 0"
+            },
+            "goi": "pwnedFromRange(\"7C4A800D4F6E8FA6EECAD2A3AA415EEC418D38EC\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pwnedFromRange(\"7C4A8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pwnedFromRange(\"7C4A8D09\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\r\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\r\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\r\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pwnedFromRange(\"7C4A8FFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3\", \"0018A45C4D1DEF81644B54AB7F969B88D65:10\\nD09CA3762AF61E59520943DC26494F8941B:210461208\\n00D4F6E8FA6EECAD2A3AA415EEC418D38EC:0\\nFFFF5BE2E1B3B5ACF3F7C9E29AD87D3E6C3:3\")",
+            "mongDoi": 3,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing the full 40-character hash with 35-character suffixes.|||So nguyên 40 ký tự với phần đuôi 35 ký tự."
+        },
+        {
+          "loi": "Keeping \"\\r\" at the end of the count: Number(\"3\\r\") works, but string compares do not.|||Để sót \"\\r\" ở cuối: Number(\"3\\r\") vẫn ra số, nhưng so chuỗi thì hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "range query",
+          "vi": "truy vấn theo khoảng"
+        },
+        {
+          "en": "padding",
+          "vi": "dòng đệm"
+        }
+      ]
+    },
+    {
+      "title": "2.4-4 — What NIST SP 800-63B-4 says about each rule",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "NIST 800-63B"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For each rule someone may ask you to add, pick what §3.1.1.2 of NIST SP 800-63B-4 says.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi luật ai đó có thể đòi thêm, chọn điều §3.1.1.2 của NIST SP 800-63B-4 nói.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The four “SHALL NOT” items of the lesson.|||Bốn mục \"SHALL NOT\" của bài.",
+        "NFC and the 64-character maximum are SHOULD.|||NFC và độ dài tối đa 64 là SHOULD."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.4-4 — What NIST SP 800-63B-4 says about each rule\n\nAnswer in the answer panel (no code needed).\n\n1. Rule → NISTLuật → NIST\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.4-4 — What NIST SP 800-63B-4 says about each rule — answer key\n\n1. Rule → NISTLuật → NIST\n   - r1.n: SHALL (required)\n   - r2.n: SHALL NOT (forbidden)\n   - r3.n: SHALL NOT (forbidden)\n   - r4.n: SHALL (required)\n   - r5.n: SHOULD (recommended)\n   - r6.n: SHOULD (recommended)\n   - r7.n: SHALL NOT (forbidden)\n   Length and the blocklist are required; NFC and a 64+ maximum are recommended; composition rules, scheduled changes and readable hints are forbidden (a change is forced only on evidence of compromise).VI: Độ dài và danh sách chặn là bắt buộc; NFC và độ dài tối đa 64+ là khuyến nghị; luật pha trộn, đổi theo lịch và gợi ý đọc được là bị cấm (chỉ buộc đổi khi có bằng chứng bị lộ).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Length and the blocklist are required; NFC and a 64+ maximum are recommended; composition rules, scheduled changes and readable hints are forbidden (a change is forced only on evidence of compromise).</p><p><i>VI: Độ dài và danh sách chặn là bắt buộc; NFC và độ dài tối đa 64+ là khuyến nghị; luật pha trộn, đổi theo lịch và gợi ý đọc được là bị cấm (chỉ buộc đổi khi có bằng chứng bị lộ).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Rule → NIST</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật → NIST</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Rule"
+              },
+              {
+                "ma": "n",
+                "ten": "NIST",
+                "luaChon": [
+                  "SHALL (required)",
+                  "SHOULD (recommended)",
+                  "SHALL NOT (forbidden)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "At least 15 characters when the password is the only factor"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "One upper-case letter, one digit, one symbol"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Change the password every 90 days"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Compare the whole password with a blocklist and say why it was rejected"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Normalise Unicode to NFC before hashing"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Allow at least 64 characters"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "A password hint shown on the sign-in page"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "SHALL (required)",
+              "r2.n": "SHALL NOT (forbidden)",
+              "r3.n": "SHALL NOT (forbidden)",
+              "r4.n": "SHALL (required)",
+              "r5.n": "SHOULD (recommended)",
+              "r6.n": "SHOULD (recommended)",
+              "r7.n": "SHALL NOT (forbidden)"
+            },
+            "giaiThich": "<p>Length and the blocklist are required; NFC and a 64+ maximum are recommended; composition rules, scheduled changes and readable hints are forbidden (a change is forced only on evidence of compromise).</p><p><i>VI: Độ dài và danh sách chặn là bắt buộc; NFC và độ dài tối đa 64+ là khuyến nghị; luật pha trộn, đổi theo lịch và gợi ý đọc được là bị cấm (chỉ buộc đổi khi có bằng chứng bị lộ).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating SHALL NOT as “optional”.|||Coi SHALL NOT là \"tuỳ chọn\"."
+        },
+        {
+          "loi": "Remembering the old 8-character minimum.|||Nhớ mức tối thiểu 8 ký tự cũ."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

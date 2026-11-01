@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 2 Module mật khẩu của LabFlow ID (deck auth-lab-2, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-2', 'LabFlow ID’s password module', 'Module mật khẩu của LabFlow ID', [
+  [1, 'LabFlow ID’s password module',
+    `<p>The lab turns the five lessons of Chapter 2 into one module: four functions that store, verify, upgrade and refuse passwords. A script then grades them the way an attacker and a user would see them.</p>`,
+    `<p>Lab biến năm bài của Chương 2 thành một module: bốn hàm lưu, kiểm, nâng cấp và từ chối mật khẩu. Rồi một script chấm chúng theo đúng cách kẻ tấn công và người dùng nhìn thấy.</p>`],
+  [2, 'Mission',
+    `<p>Hash with measured argon2id, verify every old shape and say when to upgrade, refuse passwords the NIST way, and sign in without leaking who exists. No database is needed: the grader passes a small fake store.</p>`,
+    `<p>Băm bằng argon2id với tham số tự đo, kiểm mọi dạng cũ và nói khi nào cần nâng cấp, từ chối mật khẩu theo cách của NIST, và đăng nhập mà không lộ ai tồn tại. Không cần cơ sở dữ liệu: máy chấm đưa một kho giả nhỏ.</p>`],
+  [3, 'Setup',
+    `<p>Start PostgreSQL once, migrate and seed so the server from the lessons runs, copy the starter, and grade the empty starter to see zero out of ten. Work only in the my folder.</p>`,
+    `<p>Bật PostgreSQL một lần, chạy migrate và seed để máy chủ trong các bài chạy được, chép bản khởi đầu, rồi chấm bản khởi đầu rỗng để thấy không trên mười. Chỉ làm trong thư mục my.</p>`],
+  [4, 'Nine checks, and what a failure means for a user',
+    `<p>Each check maps to a lesson and to a real consequence: a dump that cracks, a legacy user who cannot sign in, a clock that lists your users, a symbol rule that still accepts one hundred twenty-three four five six.</p>`,
+    `<p>Mỗi phép chấm gắn với một bài và một hậu quả thật: bản dump bị bẻ, người dùng cũ không đăng nhập được, chiếc đồng hồ liệt kê người dùng của bạn, luật ký hiệu vẫn nhận 123456.</p>`],
+  [5, 'A first attempt that “works”: 3.5 / 10',
+    `<p>The typical first attempt uses the library defaults and passes the hashing checks. Everything around the hash fails: no normalisation, no legacy support, an early return, two messages and the old symbol rules.</p>`,
+    `<p>Lần thử đầu điển hình dùng mặc định của thư viện và qua các phép chấm về băm. Mọi thứ quanh hàm băm đều trượt: không chuẩn hoá, không hỗ trợ dạng cũ, trả về sớm, hai thông báo và luật ký hiệu cũ.</p>`],
+  [6, 'Why each check failed',
+    `<p>The reasons are printed for you. The timing check shows thousands of times difference, because unknown emails skip the hash entirely. Old parameters are never upgraded, and the policy never asks whether a password is common.</p>`,
+    `<p>Lý do được in sẵn cho bạn. Phép chấm thời gian cho thấy chênh hàng nghìn lần, vì email lạ bỏ qua hàm băm hoàn toàn. Tham số cũ không bao giờ được nâng cấp, và chính sách không hề hỏi mật khẩu có phổ biến không.</p>`],
+  [7, 'Reference: LabFlow ID’s src/passwords — 10 / 10',
+    `<p>The reference module scores ten. Read it only after your own attempt; each file maps to one lesson, and the breach check is left out of grading because the grader runs offline.</p>`,
+    `<p>Module tham khảo đạt mười. Chỉ đọc nó sau khi đã tự làm; mỗi tệp ứng với một bài, và phép kiểm rò rỉ không được chấm vì máy chấm chạy ngoại tuyến.</p>`],
+  [8, 'Hints, from light to strong',
+    `<p>Start from the lesson behind the failing check. Then the strong hints: guard types first, dispatch on the prefix, verify against a dummy hash, and count code points after NFC.</p>`,
+    `<p>Bắt đầu từ bài đứng sau phép chấm bị trượt. Rồi tới gợi ý mạnh: chặn kiểu dữ liệu trước, chọn đường theo tiền tố, kiểm với băm giả, và đếm code point sau NFC.</p>`],
+  [9, 'Checklist before you submit',
+    `<p>Two passing runs in a row, tests still green, parameters from your own tuning run, and an explanation of each failure. Then the chapter quiz, and Chapter 3 moves on to sessions and cookies.</p>`,
+    `<p>Hai lần chấm đạt liên tiếp, test vẫn xanh, tham số lấy từ lần chỉnh của chính bạn, và giải thích được từng lần trượt. Rồi làm quiz chương, và Chương 3 chuyển sang phiên và cookie.</p>`],
+]);

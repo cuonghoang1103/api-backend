@@ -1,6 +1,6 @@
 {
   "name": "labflow-id",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "LabFlow ID — the identity service of the LabFlow platform, built step by step in the Authentication course (cuongthai.com/courses/authentication)",
   "type": "module",
@@ -10,11 +10,15 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
+    "migrate": "node scripts/migrate.mjs",
     "seed": "node scripts/seed.mjs",
     "test": "node --test --test-reporter=spec \"test/**/*.test.js\""
   },
   "dependencies": {
+    "argon2": "0.45.1",
+    "bcrypt": "6.0.0",
     "express": "5.3.0",
+    "pg": "8.23.1",
     "pino": "10.4.0"
   },
   "devDependencies": {

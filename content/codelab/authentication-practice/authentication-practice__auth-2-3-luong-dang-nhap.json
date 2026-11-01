@@ -1,0 +1,564 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-2-3-luong-dang-nhap",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-2-3-luong-dang-nhap"
+  },
+  "exercises": [
+    {
+      "title": "2.3-1 — Same message, different clock: read the real runs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "user enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The tutorial sign-in (port 4802, early return when the email is unknown):<pre>port 4802 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median    2.3 ms\nAn, wrong pw   median   86.5 ms\nratio 37.3×\nport 4802 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median    2.2 ms\nAn, wrong pw   median   85.9 ms\nratio 39.0×</pre>LabFlow ID v0.2 (port 4800, dummy hash):<pre>port 4800 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median   86.3 ms\nAn, wrong pw   median   86.8 ms\nratio 1.0×\nport 4800 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median   85.8 ms\nAn, wrong pw   median   87.1 ms\nratio 1.0×</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đăng nhập kiểu bài hướng dẫn (cổng 4802, trả về sớm khi email lạ):<pre>port 4802 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median    2.3 ms\nAn, wrong pw   median   86.5 ms\nratio 37.3×\nport 4802 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median    2.2 ms\nAn, wrong pw   median   85.9 ms\nratio 39.0×</pre>LabFlow ID v0.2 (cổng 4800, băm giả):<pre>port 4800 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median   86.3 ms\nAn, wrong pw   median   86.8 ms\nratio 1.0×\nport 4800 · every response: 401 {\"error\":\"Email or password is incorrect\"}\nno such email  median   85.8 ms\nAn, wrong pw   median   87.1 ms\nratio 1.0×</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare medians, not single requests.|||So trung vị, không so từng request.",
+        "Which path skips argon2?|||Đường nào bỏ qua argon2?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.3-1 — Same message, different clock: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. Every response on 4802 is the same 401 body. What still tells an attacker that an@… has an account?Mọi phản hồi ở 4802 đều cùng nội dung 401. Thứ gì vẫn cho kẻ tấn công biết an@… có tài khoản?\n2. What makes the 4800 ratio 1.0×?Điều gì làm tỉ lệ ở 4800 thành 1,0×?\n3. The Unicode run printed:look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026equal strings: false · bytes 25 vs 27no normalisation → verify the \"tổ hợp\" typing: falseNFC on both sides → verify the \"tổ hợp\" typing: trueWhat does NIST SP 800-63B-4 ask for?Lần chạy Unicode in ra:look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026equal strings: false · bytes 25 vs 27no normalisation → verify the \"tổ hợp\" typing: falseNFC on both sides → verify the \"tổ hợp\" typing: trueNIST SP 800-63B-4 yêu cầu gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.3-1 — Same message, different clock: read the real runs — answer key\n\n1. Every response on 4802 is the same 401 body. What still tells an attacker that an@… has an account?Mọi phản hồi ở 4802 đều cùng nội dung 401. Thứ gì vẫn cho kẻ tấn công biết an@… có tài khoản?\n   Answer: c) The time: ~86 ms with a verify, ~2 ms without\n   A 37–39× gap is visible in a single request; no statistics needed. The fix makes both paths do one argon2id verify.VI: Chênh 37–39× thấy được ngay trong một request; chẳng cần thống kê. Cách sửa là cho cả hai đường làm một lần kiểm argon2id.\n\n2. What makes the 4800 ratio 1.0×?Điều gì làm tỉ lệ ở 4800 thành 1,0×?\n   Answer: c) A dummy hash with today’s PARAMS, verified when no user exists\n   Same work, not added noise: a random sleep can be averaged away; a real verify cannot.VI: Cùng công sức chứ không phải thêm nhiễu: ngủ ngẫu nhiên có thể bị lấy trung bình mà gỡ đi; một lần kiểm thật thì không.\n\n3. The Unicode run printed:look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026equal strings: false · bytes 25 vs 27no normalisation → verify the \"tổ hợp\" typing: falseNFC on both sides → verify the \"tổ hợp\" typing: trueWhat does NIST SP 800-63B-4 ask for?Lần chạy Unicode in ra:look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026equal strings: false · bytes 25 vs 27no normalisation → verify the \"tổ hợp\" typing: falseNFC on both sides → verify the \"tổ hợp\" typing: trueNIST SP 800-63B-4 yêu cầu gì?\n   Answer: c) NFC normalisation before hashing, on both sign-up and sign-in\n   Precomposed (dựng sẵn) and decomposed (tổ hợp) Vietnamese differ in bytes (25 vs 27). NIST says SHOULD apply NFC — not NFKC.VI: Tiếng Việt dựng sẵn và tổ hợp khác nhau về byte (25 vs 27). NIST nói SHOULD áp NFC — không phải NFKC.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The time: ~86 ms with a verify, ~2 ms without</p><p>A 37–39× gap is visible in a single request; no statistics needed. The fix makes both paths do one argon2id verify.</p><p><i>VI: Chênh 37–39× thấy được ngay trong một request; chẳng cần thống kê. Cách sửa là cho cả hai đường làm một lần kiểm argon2id.</i></p></li><li><p><b>c)</b> A dummy hash with today’s PARAMS, verified when no user exists</p><p>Same work, not added noise: a random sleep can be averaged away; a real verify cannot.</p><p><i>VI: Cùng công sức chứ không phải thêm nhiễu: ngủ ngẫu nhiên có thể bị lấy trung bình mà gỡ đi; một lần kiểm thật thì không.</i></p></li><li><p><b>c)</b> NFC normalisation before hashing, on both sign-up and sign-in</p><p>Precomposed (dựng sẵn) and decomposed (tổ hợp) Vietnamese differ in bytes (25 vs 27). NIST says SHOULD apply NFC — not NFKC.</p><p><i>VI: Tiếng Việt dựng sẵn và tổ hợp khác nhau về byte (25 vs 27). NIST nói SHOULD áp NFC — không phải NFKC.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Every response on 4802 is the same 401 body. What still tells an attacker that an@… has an account?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi phản hồi ở 4802 đều cùng nội dung 401. Thứ gì vẫn cho kẻ tấn công biết an@… có tài khoản?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The order of the keys inside the JSON body"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The Content-Length header of the 401 response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The time: ~86 ms with a verify, ~2 ms without"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing at all — the two bodies are identical"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A 37–39× gap is visible in a single request; no statistics needed. The fix makes both paths do one argon2id verify.</p><p><i>VI: Chênh 37–39× thấy được ngay trong một request; chẳng cần thống kê. Cách sửa là cho cả hai đường làm một lần kiểm argon2id.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What makes the 4800 ratio 1.0×?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì làm tỉ lệ ở 4800 thành 1,0×?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Returning 404 instead of 401 for unknown emails"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A random sleep of 50–100 ms added to every failure"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A dummy hash with today’s PARAMS, verified when no user exists"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Caching the results of failed logins in memory"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same work, not added noise: a random sleep can be averaged away; a real verify cannot.</p><p><i>VI: Cùng công sức chứ không phải thêm nhiễu: ngủ ngẫu nhiên có thể bị lấy trung bình mà gỡ đi; một lần kiểm thật thì không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The Unicode run printed:<br><code>look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026<br>equal strings: false · bytes 25 vs 27<br>no normalisation  → verify the \"tổ hợp\" typing: false<br>NFC on both sides → verify the \"tổ hợp\" typing: true</code><br>What does NIST SP 800-63B-4 ask for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần chạy Unicode in ra:<br><code>look the same: Bình-thích-hoa-sen-2026 | Bình-thích-hoa-sen-2026<br>equal strings: false · bytes 25 vs 27<br>no normalisation  → verify the \"tổ hợp\" typing: false<br>NFC on both sides → verify the \"tổ hợp\" typing: true</code><br>NIST SP 800-63B-4 yêu cầu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lower-casing the password"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rejecting every non-ASCII password"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NFC normalisation before hashing, on both sign-up and sign-in"
+              },
+              {
+                "ma": "d",
+                "noiDung": "NFKC normalisation"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Precomposed (dựng sẵn) and decomposed (tổ hợp) Vietnamese differ in bytes (25 vs 27). NIST says SHOULD apply NFC — not NFKC.</p><p><i>VI: Tiếng Việt dựng sẵn và tổ hợp khác nhau về byte (25 vs 27). NIST nói SHOULD áp NFC — không phải NFKC.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Same message ⇒ no enumeration”.|||\"Cùng thông báo ⇒ không dò được\"."
+        },
+        {
+          "loi": "Adding a random sleep instead of equal work.|||Thêm ngủ ngẫu nhiên thay vì công sức bằng nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "account enumeration",
+          "vi": "dò tài khoản"
+        },
+        {
+          "en": "dummy hash",
+          "vi": "băm giả"
+        }
+      ]
+    },
+    {
+      "title": "2.3-2 — Write timingVerdict(a, b): what the grader’s T6 does",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "timing side channel"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>a</code> and <code>b</code> are response times in ms for “no such email” and “wrong password”. Return <code>{ medianA, medianB, ratio, verdict }</code>: the medians (even count ⇒ mean of the two middle values; do not modify the arrays), <code>ratio = max / min</code> rounded to 1 decimal (a minimum of 0 counts as 0.001), and <code>verdict</code> = <code>'SAME'</code> when the unrounded ratio is &lt; 1.5, else <code>'LEAKS'</code>. Lab 2's grader uses exactly this rule.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>a</code> và <code>b</code> là thời gian phản hồi (ms) cho \"email không tồn tại\" và \"sai mật khẩu\". Trả <code>{ medianA, medianB, ratio, verdict }</code>: các trung vị (số phần tử chẵn ⇒ trung bình hai giá trị giữa; không sửa mảng), <code>ratio = lớn / nhỏ</code> làm tròn 1 chữ số (giá trị nhỏ bằng 0 thì tính là 0,001), và <code>verdict</code> = <code>'SAME'</code> khi tỉ lệ chưa làm tròn &lt; 1,5, ngược lại <code>'LEAKS'</code>. Máy chấm Lab 2 dùng đúng luật này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "timingVerdict([2.3,2.1,2.6,2.2,9.8], [86.5,85.9,87,86.1,85.7])",
+          "output": "{\"medianA\":2.3,\"medianB\":86.1,\"ratio\":37.4,\"verdict\":\"LEAKS\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sort a COPY: xs.slice().sort((x, y) => x - y).|||Sắp một BẢN SAO: xs.slice().sort((x, y) => x - y).",
+        "Decide on the unrounded ratio, report the rounded one.|||Quyết định theo tỉ lệ chưa làm tròn, báo cáo tỉ lệ đã làm tròn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** a, b = response times (ms) ⇒ { medianA, medianB, ratio, verdict } */\nfunction timingVerdict(a, b) {\n  // Write your solution here\n  var avg = function (xs) { return xs.reduce(function (s, x) { return s + x; }, 0) / xs.length; };\n  var r = avg(b) / avg(a);\n  return { medianA: avg(a), medianB: avg(b), ratio: Math.round(r * 10) / 10, verdict: r < 1.5 ? 'SAME' : 'LEAKS' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction timingVerdict(a, b) {\n  var med = function (xs) {\n    var s = xs.slice().sort(function (x, y) { return x - y; });\n    var n = s.length;\n    return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;\n  };\n  var ma = med(a), mb = med(b);\n  var ratio = Math.max(ma, mb) / Math.max(Math.min(ma, mb), 0.001);\n  return { medianA: ma, medianB: mb, ratio: Math.round(ratio * 10) / 10, verdict: ratio < 1.5 ? 'SAME' : 'LEAKS' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Medians resist the occasional slow request (garbage collection, a busy core); the ratio is symmetric, so it does not matter which case is slower. 1.5× is generous on purpose: a real leak here is 37× or more.</p>",
+      "solutionExplanationHtmlVi": "<p>Trung vị chịu được request chậm thỉnh thoảng (dọn rác, một nhân bận); tỉ lệ đối xứng nên không quan trọng trường hợp nào chậm hơn. 1,5× là rộng rãi có chủ đích: chỗ rò thật ở đây là 37× trở lên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Like port 4802",
+              "vi": "Như cổng 4802"
+            },
+            "goi": "timingVerdict([2.3,2.1,2.6,2.2,9.8], [86.5,85.9,87,86.1,85.7])",
+            "mongDoi": {
+              "medianA": 2.3,
+              "medianB": 86.1,
+              "ratio": 37.4,
+              "verdict": "LEAKS"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Like port 4800",
+              "vi": "Như cổng 4800"
+            },
+            "goi": "timingVerdict([86.3,85.8,87.2,86], [86.8,87.1,85.9,86.4])",
+            "mongDoi": {
+              "medianA": 86.15,
+              "medianB": 86.6,
+              "ratio": 1,
+              "verdict": "SAME"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Numbers sorted as numbers",
+              "vi": "Số phải sắp như số"
+            },
+            "goi": "timingVerdict([10,9,100], [10,11,9])",
+            "mongDoi": {
+              "medianA": 10,
+              "medianB": 10,
+              "ratio": 1,
+              "verdict": "SAME"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "timingVerdict([0,0,0], [35.2,34.9,36])",
+            "mongDoi": {
+              "medianA": 0,
+              "medianB": 35.2,
+              "ratio": 35200,
+              "verdict": "LEAKS"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A bcrypt-10 dummy: 1.2× — under the 1.5× line, still a small signal",
+              "vi": "Băm giả bcrypt-10: 1,2× — dưới ngưỡng 1,5×, vẫn là tín hiệu nhỏ"
+            },
+            "goi": "timingVerdict([70.8,71.2,69.9,70.1], [83.4,84,82.9,83.8])",
+            "mongDoi": {
+              "medianA": 70.44999999999999,
+              "medianB": 83.6,
+              "ratio": 1.2,
+              "verdict": "SAME"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "timingVerdict([100,140], [100,160])",
+            "mongDoi": {
+              "medianA": 120,
+              "medianB": 130,
+              "ratio": 1.1,
+              "verdict": "SAME"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "sort() without a comparator sorts numbers as text: [10, 9, 100] ⇒ [10, 100, 9].|||sort() không có hàm so sánh sắp số như chữ: [10, 9, 100] ⇒ [10, 100, 9]."
+        },
+        {
+          "loi": "Comparing means: one slow outlier decides the verdict.|||So trung bình cộng: một giá trị chậm bất thường quyết định kết luận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "median",
+          "vi": "trung vị"
+        }
+      ]
+    },
+    {
+      "title": "2.3-3 — Write checkLength(password, min, max): count like NIST",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Unicode normalization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>NIST SP 800-63B-4: normalise to <b>NFC</b>, then each Unicode <b>code point</b> counts as one character. Return <code>'TOO_SHORT'</code>, <code>'TOO_LONG'</code> or <code>'OK'</code>; a non-string ⇒ <code>'NOT_A_STRING'</code>. A Vietnamese letter typed as “Unicode tổ hợp” is 2 code points before NFC and 1 after; an emoji is 1 code point but 2 UTF-16 units (<code>.length</code> = 2).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>NIST SP 800-63B-4: chuẩn hoá về <b>NFC</b>, rồi mỗi <b>code point</b> Unicode tính là một ký tự. Trả <code>'TOO_SHORT'</code>, <code>'TOO_LONG'</code> hoặc <code>'OK'</code>; không phải chuỗi ⇒ <code>'NOT_A_STRING'</code>. Một chữ tiếng Việt gõ kiểu \"Unicode tổ hợp\" là 2 code point trước NFC và 1 sau NFC; một emoji là 1 code point nhưng 2 đơn vị UTF-16 (<code>.length</code> = 2).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkLength(\"an-lab-2026\", 15, 128)",
+          "output": "\"TOO_SHORT\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "password.normalize('NFC') first.|||password.normalize('NFC') trước.",
+        "Array.from(str).length or [...str].length counts code points.|||Array.from(str).length hoặc [...str].length đếm code point."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'TOO_SHORT' | 'TOO_LONG' | 'OK' | 'NOT_A_STRING' */\nfunction checkLength(password, min, max) {\n  // Write your solution here\n  return password.length < min ? 'TOO_SHORT' : password.length > max ? 'TOO_LONG' : 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkLength(password, min, max) {\n  if (typeof password !== 'string') return 'NOT_A_STRING';\n  var n = Array.from(password.normalize('NFC')).length;   // code points after NFC, as NIST counts\n  return n < min ? 'TOO_SHORT' : n > max ? 'TOO_LONG' : 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same visible password must give the same length and the same bytes whatever keyboard typed it — that is why NFC comes before both counting and hashing.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng một mật khẩu nhìn thấy phải cho cùng độ dài và cùng chuỗi byte bất kể bộ gõ nào — vì thế NFC đứng trước cả việc đếm lẫn việc băm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: checkLength(\"an-lab-2026\", 15, 128)",
+              "vi": "Ca 1"
+            },
+            "goi": "checkLength(\"an-lab-2026\", 15, 128)",
+            "mongDoi": "TOO_SHORT"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: checkLength(\"hoa sen nở giữa đầm lầy tháng năm\", 15, 128)",
+              "vi": "Ca 2"
+            },
+            "goi": "checkLength(\"hoa sen nở giữa đầm lầy tháng năm\", 15, 128)",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "15 letters typed “tổ hợp”",
+              "vi": "15 chữ gõ kiểu \"tổ hợp\""
+            },
+            "goi": "checkLength(\"ờờờờờờờờờờờờờờờ\", 15, 15)",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "8 emoji = 8 characters",
+              "vi": "8 emoji = 8 ký tự"
+            },
+            "goi": "checkLength(\"🔒🔒🔒🔒🔒🔒🔒🔒\", 8, 8)",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkLength(\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", 15, 128)",
+            "mongDoi": "TOO_LONG",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "checkLength(undefined, 15, 128)",
+            "mongDoi": "NOT_A_STRING",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "checkLength(\"\", 15, 128)",
+            "mongDoi": "TOO_SHORT",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "password.length counts UTF-16 units: emoji count twice, tổ hợp letters count twice.|||password.length đếm đơn vị UTF-16: emoji tính hai lần, chữ tổ hợp tính hai lần."
+        },
+        {
+          "loi": "Counting before NFC: “ờ” typed decomposed counts as 2.|||Đếm trước NFC: \"ờ\" gõ tổ hợp bị tính 2."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code point",
+          "vi": "điểm mã Unicode"
+        },
+        {
+          "en": "NFC",
+          "vi": "dạng chuẩn ghép"
+        }
+      ]
+    },
+    {
+      "title": "2.3-4 — Put LabFlow ID v0.2’s sign-in in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "user enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The steps of v0.2’s POST /sign-in, scrambled. Put them in the order the server must run them.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các bước của POST /sign-in trong v0.2, đã bị xáo. Sắp theo đúng thứ tự máy chủ phải chạy.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What may depend on the account, and when?|||Điều gì được phụ thuộc vào tài khoản, và khi nào?",
+        "The verify runs on every path.|||Lần kiểm chạy ở mọi đường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.3-4 — Put LabFlow ID v0.2’s sign-in in order\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.3-4 — Put LabFlow ID v0.2’s sign-in in order — answer key\n\n1. First to lastTrước tới sau\n   Answer: m3) Reject a body over 8 kB (413) before parsing JSON  →  m1) Check types and the 128-character cap  →  m5) Trim and lower-case the email, look the user up  →  m4) Verify the NFC password against the user’s hash — or against DUMMY when there is no user  →  m6) No user or wrong password ⇒ the one generic 401  →  m7) Correct and outdated ⇒ store a new hash with today’s PARAMS  →  m2) Flag must_change_password if the password is on the blocklist, then create the session\n   Cheap rejections that depend only on the caller’s own input come first; the single real verify happens on every path; everything account-specific (rehash, flags, session) comes only after the password verified.VI: Các lần từ chối rẻ chỉ phụ thuộc đầu vào của chính người gọi đứng trước; lần kiểm thật duy nhất xảy ra ở mọi đường; mọi thứ riêng của tài khoản (băm lại, cờ, phiên) chỉ đến sau khi mật khẩu khớp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cheap rejections that depend only on the caller’s own input come first; the single real verify happens on every path; everything account-specific (rehash, flags, session) comes only after the password verified.</p><p><i>VI: Các lần từ chối rẻ chỉ phụ thuộc đầu vào của chính người gọi đứng trước; lần kiểm thật duy nhất xảy ra ở mọi đường; mọi thứ riêng của tài khoản (băm lại, cờ, phiên) chỉ đến sau khi mật khẩu khớp.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Check types and the 128-character cap"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Flag must_change_password if the password is on the blocklist, then create the session"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Reject a body over 8 kB (413) before parsing JSON"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Verify the NFC password against the user’s hash — or against DUMMY when there is no user"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Trim and lower-case the email, look the user up"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "No user or wrong password ⇒ the one generic 401"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Correct and outdated ⇒ store a new hash with today’s PARAMS"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m1",
+              "m5",
+              "m4",
+              "m6",
+              "m7",
+              "m2"
+            ],
+            "giaiThich": "<p>Cheap rejections that depend only on the caller’s own input come first; the single real verify happens on every path; everything account-specific (rehash, flags, session) comes only after the password verified.</p><p><i>VI: Các lần từ chối rẻ chỉ phụ thuộc đầu vào của chính người gọi đứng trước; lần kiểm thật duy nhất xảy ra ở mọi đường; mọi thứ riêng của tài khoản (băm lại, cờ, phiên) chỉ đến sau khi mật khẩu khớp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rehashing before checking the password.|||Băm lại trước khi kiểm mật khẩu."
+        },
+        {
+          "loi": "Returning early when the user is missing.|||Trả về sớm khi không có người dùng."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

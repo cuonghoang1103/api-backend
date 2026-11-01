@@ -253,6 +253,11 @@ Retry-After: 180</div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.1: whoever holds it, is you</span><span class="lc-sub">Same: a JWT, an API key and a session are bearer credentials, so a short lifetime (15 minutes here) limits a stolen one. That lesson measures it on LabFlow ID: a copied token works from another machine and browser, a reset token in the URL lands in the access log, and which Referrer-Policy leaks it to a third party in Chromium 156.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-3-luong-dang-nhap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 2.3: the login flow, with every branch equal</span><span class="lc-sub">Same: passwords are hashed, never stored, and one login endpoint answers. Deeper: that lesson measures what the login route itself leaks — the same 401 body for both failures still differs 37–39× in time until a dummy hash closes it (1.0×) — and adds Unicode NFC, input limits (413 before parsing) and an honest look at peppers. It also tunes the hash by measurement (lesson 2.2), where scryptSync at Node’s defaults would not pass.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -481,6 +486,11 @@ Retry-After: 180</div>
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-1-tin-vat-mang-theo" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.1: ai cầm nó, người đó LÀ bạn</span><span class="lc-sub">Giống: JWT, API key và phiên đều là tín vật bearer, nên tuổi thọ ngắn (ở đây 15 phút) giới hạn thiệt hại khi bị cắp. Bài đó đo trên LabFlow ID: token bị chép chạy được từ máy và trình duyệt khác, token đặt lại nằm trong URL rơi vào access log, và Referrer-Policy nào làm nó rò sang bên thứ ba trong Chromium 156.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-3-luong-dang-nhap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 2.3: luồng đăng nhập, với mọi nhánh bằng nhau</span><span class="lc-sub">Giống: mật khẩu chỉ băm, không bao giờ lưu, và một endpoint đăng nhập trả lời. Sâu hơn: bài đó đo chính route đăng nhập rò gì — cùng một nội dung 401 cho cả hai kiểu thất bại mà thời gian vẫn chênh 37–39× cho tới khi băm giả bịt lại (1,0×) — rồi thêm chuẩn hoá Unicode NFC, giới hạn đầu vào (413 trước khi đọc) và cái nhìn thẳng thắn về pepper. Bài 2.2 còn chỉnh hàm băm bằng phép đo, chỗ mà scryptSync với mặc định của Node không qua được.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>

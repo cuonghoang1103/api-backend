@@ -40,11 +40,12 @@ export default {
     'auth-1-7-lab-bo-cong-cu': { yt: 'NuyzuNBFWxQ', credit: 'Fireship — 7 Cryptography Concepts EVERY Developer Should Know' }, // 01/11/2026: băm, muối, HMAC, cặp khoá, chữ ký bằng Node — Lab 1
 
     /* ── Chương 2 — Mật khẩu ── */
-    'auth-2-1-da-co-csdl': { yt: 'ro1WmoP4CZs', credit: 'Coding With Chaim — Bcrypt Tutorial in Nodejs | Understand Hashing, Salt, Rainbow Tables and Bcrypt' },      // Bcrypt Tutorial in Nodejs | Understand Hashing, Salt, Rainbow Tables and Bcrypt
-    'auth-2-2-chon-va-chinh': { yt: 'QfIjU7l7OcE', credit: 'Thapa Technical — Bcrypt vs Argon2 – Which is the Best Password Hashing Algorithm?' },   // Bcrypt vs Argon2 – Which is the Best Password Hashing Algorithm?
-    'auth-2-3-luong-dang-nhap': { yt: 'A6f1zYX2BCk', credit: 'Code Realm — Authentication in Node.js - #6 Password Security' }, // Authentication in Node.js - #6 Password Security
-    'auth-2-4-chinh-sach': { yt: 'dtBNNV6PzPA', credit: 'Jadi — How to Use BCrypt to Store Passwords Securely: A Guide to Hashing Best Practices' },      // How to Use BCrypt to Store Passwords Securely: A Guide to Hashing Best Practices
-    'auth-2-5-chuyen-doi': { yt: 'qliCp4U-NxY', credit: 'Oppkey — 05 Python Password Hashing Explained (bcrypt, Passlib, Argon2)' },      // 05 Python Password Hashing Explained (bcrypt, Passlib, Argon2)
+    'auth-2-1-da-co-csdl': { yt: '7U-RbOKanYs', credit: 'Computerphile — Password Cracking - Computerphile' }, // 01/11/2026: hashcat trên GPU, danh sách RockYou, vì sao MD5/băm nhanh thua — đúng 2.1
+    'auth-2-2-chon-va-chinh': { yt: '0l0ygSCT_q8', credit: 'Eric Roby — The ONLY Password Hash You Should Be Using (but NEVER heard about)' }, // 01/11/2026: argon2id, bộ nhớ + thời gian, so với bcrypt — đúng 2.2
+    'auth-2-3-luong-dang-nhap': { yt: 'Non_U2tGG6o', credit: 'Rana Khalil — Authentication Vulnerabilities - Lab #5 Username enumeration via response timing | Short Version' }, // 01/11/2026: dò tài khoản qua thời gian trả lời — đúng 2.3
+    'auth-2-4-chinh-sach': { yt: 'jE5LI-rLzR4', credit: 'SecureTechIn — NIST SP 800-63-4: New Password Policies 2024 - A Comprehensive Guide' }, // 01/11/2026: NIST rev 4 — độ dài, bỏ luật pha trộn, danh sách chặn — đúng 2.4
+    'auth-2-5-chuyen-doi': { yt: 'Qtq4drXNqRo', credit: 'Last Mile Developer — The Architecture of Password Hashing: MD5 to Argon2 | KaaS-76' }, // 01/11/2026: từ MD5 tới argon2 — bối cảnh chuyển đổi băm của 2.5
+    'auth-2-7-lab-luu-mat-khau': { yt: 'xQa6lmu4QDc', credit: 'Ben Swordfire — Node.js Password Hashing with Argon2 | Beginners Tutorial' }, // 01/11/2026: argon2 trong Node.js — Lab 2
 
     /* ── Chương 3 — Phiên và cookie ── */
     'auth-3-1-bang-phien': { yt: 'FVmxtmzyrSw', credit: 'CoderOne — Stop using JSON Web Tokens. Use Cookies & Server Sessions instead' },        // Stop using JSON Web Tokens. Use Cookies & Server Sessions instead

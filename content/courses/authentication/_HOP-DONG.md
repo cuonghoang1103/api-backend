@@ -98,21 +98,25 @@ Express **5.3.0**, pino **10.4.0**, axios **1.21.0** (dev, bài 1.5), Vite **8.3
 gitleaks **8.30.1**, git 2.51.1. Danh sách mật khẩu: SecLists `Passwords/Common-Credentials/10k-most-common.txt` (10.001 dòng,
 tải về `wordlists/` — KHÔNG đưa vào repo). Cài gói luôn `--save-exact`.
 
-### 3.3 Cây dự án cuối Ch1 (ảnh chụp `_labflow-id/`)
+### 3.3 Cây dự án cuối Ch2 (ảnh chụp `_labflow-id/`, v0.2)
 ```
-package.json            # type module, engines node >=22.12, scripts dev/start/seed/test ("test/**/*.test.js")
-src/server.js           # v0.1  · src/store.js (data/db.json) · src/log.js (pino + allow-list)
+package.json            # type module, engines node >=22.12, scripts dev/start/migrate/seed/test; deps + argon2 0.45.1, bcrypt 6.0.0, pg 8.23.1
+src/server.js           # v0.2 (PostgreSQL) · src/db.js (pg Pool, DATABASE_URL) · src/users.js (kho users cho signIn) · src/log.js
+src/passwords/          # hash.js policy.js pwned.js signin.js index.js  ← Lab 2 (lời giải tham khảo; PARAMS m=64 MiB t=2 p=1)
 src/crypto/             # tokens.js compare.js signed.js redact.js index.js  ← Lab 1 (lời giải tham khảo)
-test/crypto.test.js     # 6 test node:test (npm test)
-scripts/seed.mjs        # tạo An/Bình/Cô Lan qua POST /sign-up · scripts/cham-lab-1.mjs (máy chấm Lab 1)
-lab1/starter/  lab1/yeu/   # khởi đầu (0/10) · lần thử đầu "chạy được" (2/10)
-demo0/  demo1/          # thí nghiệm từng bài (forget, gates, enumerate, guess-session, brute, storage-xss, first-proof,
+src/store.js            # kho JSON của v0/v0.1 — chỉ còn demo0 dùng
+sql/001_users.sql       # users (password_hash tự mô tả, must_change_password) + sessions (digest) — scripts/migrate.mjs áp
+test/crypto.test.js test/passwords.test.js   # 6 + 5 test node:test (npm test, không cần CSDL)
+scripts/seed.mjs        # nhập thẳng An/Bình/Cô Lan bằng hashPassword (Ch1: qua /sign-up) · cham-lab-1.mjs · cham-lab-2.mjs
+lab1/starter/ lab1/yeu/ # 0/10 · 2/10        lab2/starter/ lab2/yeu/   # 0/10 · 3,5/10
+demo0/  demo1/  demo2/  # thí nghiệm từng bài (forget, gates, enumerate, guess-session, brute, storage-xss, first-proof,
                         #   linkedin-replay, bearer, third-party, open-reset, predict-math-random, timing-*, webhook,
                         #   length-extension + sha256, shared-key, encrypt-not-protect, log-demo, axios-error, git/, web/)
 ```
 Dựng lại: `cp -r content/courses/authentication/_labflow-id <SCRATCH>/labflow-id && cd … && npm ci && mkdir -p wordlists &&
 curl -sLo wordlists/10k-most-common.txt https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10k-most-common.txt`.
-Kiểm: `npm test` (6 pass) · `node scripts/cham-lab-1.mjs src/crypto` (10/10) · `… lab1/yeu` (2/10) · `… lab1/starter` (0/10).
+Kiểm: `npm test` (11 pass) · `node scripts/cham-lab-1.mjs src/crypto` (10/10) · `… lab1/yeu` (2/10) · `… lab1/starter` (0/10) ·
+`node scripts/cham-lab-2.mjs src/passwords` (10/10) · `… lab2/yeu` (3,5/10) · `… lab2/starter` (0/10). Máy chủ: PostgreSQL 17 (README) + `npm run migrate && npm run seed`.
 Xong chương ⇒ cập nhật ảnh chụp (rsync bỏ `node_modules data tmp wordlists demo1/web/dist`) và chạy lại ba lệnh trên.
 
 ## 4. Chụp output — môi trường sạch, không lộ bí mật
@@ -151,7 +155,7 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Upload** (chủ ý chạm R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix AUTH/v1 --decks <deck,…>`
   ⇒ `images/academy/AUTH/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy.** Dựng lại deck đã đẩy ⇒ `AUTH/v2`
   + ghi `VER` trong `_slides.mjs`. Hiện (01/11): 11 deck Mục 0 + Ch1 ở v1 — 127 ảnh (00-8 11, 00-9 11, 00-1 12, 00-2 12, 00-3 13,
-  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
+  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
   output là phải render + đẩy lại (lên v2).
 - Không sửa `_render-slides.mjs`, `_pg-chung.mjs`, `_tst-chung.mjs`, `_api-chung.mjs`.
 
@@ -219,6 +223,10 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
   0-9 dựng lúc nạp module để khỏi bị bắt nhầm). Module đọc `s00/_ma.mjs`/`s01/_ma.mjs` khi xuất ⇒ chụp lại output thì XUẤT LẠI track.
   Đề viết hàm khó: `checkCard`, `crackUnsalted`, `parseCookieHeader`/`readBearer`, `getProfile` (ba cổng), `referrerFor`, `unbiasedDigits`,
   `verifyWebhook`, HMAC-SHA256 dựng từ SHA-256 thuần JS, `scanSecrets` (gitleaks thu nhỏ), `signValue`/`verifyValue` (lab).
+- **Chương 2 (01/11):** +6 module, 23 đề (2-1 … 2-5: 4 đề; lab `auth-2-7-lab-luu-mat-khau`: 3 đề) ⇒ track 17 module / 66 đề, lời giải 379/379,
+  `codelab-kiem-noi-dung` 0 lỗi (đáp án đúng không dài hơn nhiễu). Đề viết hàm: `crackSalted` (đếm số lần băm), `timeToTry`, `chooseParams` (hai ngân sách,
+  bảng tune thật), `needsRehash` (đọc theo tên), `timingVerdict`, `checkLength` (NFC + code point), `classicVsLength`, `pwnedFromRange`, `planRow`,
+  `estimateWrap`; lab: `verifyPassword` (chọn đường theo tiền tố, hàm đứng thay argon2/bcrypt dựng từ SHA-256 thuần JS), `signIn` (đếm số lần kiểm), `checkNewPassword`.
 
 ## 11. Kế hoạch toàn khoá (giữ slug; mỗi chương + Lab + quiz 10 câu)
 
@@ -272,3 +280,23 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
 - "Math.random khôi phục từ một nhúm giá trị" — giờ ĐO: 3 số ⇒ 116/128 bit, đoán sai; **4 số ⇒ 128/128 bit, đoán đúng 5/5 số tiếp theo**.
 - Quiz cũ 6–8 câu, đáp án gần như luôn B ⇒ quiz mới 10 câu, đáp án rải.
 - Mục 0 cũ dùng Prisma + PostgreSQL ngay bài 0.3 ⇒ đổi sang Node + Express + tệp JSON (10 phút cài, không Docker); PostgreSQL vào từ Ch2.
+- **Chương 2 (đo lại 01/11/2026, Apple M1 Max 10 nhân, Node 22.23.3, PostgreSQL 17.11):** bản cũ ghi "PostgreSQL 16 trên Ubuntu 24.04", dùng
+  `@node-rs/argon2` + `async-sema` (gõ nhầm `Secode`) + Prisma, ngân sách 250 ms chép tay ⇒ thay bằng `argon2` 0.45.1 (cùng bản khoá nodejs), pg 8.23.1,
+  tham số từ HAI ngân sách đo (100 ms, 256 MiB ÷ 4 luồng) ⇒ m=64 MiB t=2 p=1 (86,5 ms).
+  - Chuẩn hoá Unicode: bản cũ nói NFKC — **sai**, NIST SP 800-63B-4 nói **NFC** (đã WebFetch 01/11). Độ dài tối thiểu: bản cũ 8 — rev 4 là **15**
+    khi mật khẩu là yếu tố duy nhất (8 khi có MFA).
+  - Gói `argon2` ghi `m=…,p=…,t=…` (không phải m,t,p như ví dụ trên mạng) ⇒ đọc tham số theo tên; bẫy thật, đo được ở `demo2/format.mjs`.
+  - "Mật khẩu dài làm sập máy chủ": với argon2id **không đúng** (10 triệu ký tự 121 ms so với 85 ms) — đúng với PBKDF2 (Django CVE-2013-1443);
+    giới hạn thật là thân request (8 kB ⇒ 413) + logger đặt trước bộ đọc.
+  - HIBP: tài liệu nói phần đệm đưa phản hồi về 800–1.000 bản ghi; đo thật 2.094–2.202 phần đuôi + 1 dòng đệm (kho đã lớn hơn cỡ đệm).
+  - Số đo khác khoá nodejs (cùng loại máy, tải khác): argon2 m=19 MiB t=2 26,1 ms (nodejs 8.1: 21,7 ms); rò thời gian đăng nhập 37–39× (nodejs: 27,4×,
+    tham số khác); SHA-256 ~2,0–2,2 triệu/s (nodejs 2.010.039/s) — ghi rõ trong bài.
+
+## 15. Trạng thái (cập nhật cuối mỗi chương)
+
+- **01/11/2026 — Mục 0 + Ch1** (commit 26af2f9e4): đợt mẫu, đã duyệt.
+- **01/11/2026 — Ch2 trọn:** 5 bài + Lab 2 (`auth-2-7-lab-luu-mat-khau`, máy chấm `scripts/cham-lab-2.mjs` 9 phép) + quiz 10 câu (A2 B3 C2 D3);
+  bài 40–45k ký tự (2.1 44,9k · 2.2 44,1k · 2.3 44,8k · 2.4 45,0k · 2.5 40,5k · Lab 39,1k); 6 deck 68 slide AUTH/v1 (đã đẩy); Code Lab +6 module/23 đề;
+  liên kết chéo +3 cặp hai chiều (api-design 6.1 ↔ 2.3, nodejs 8.1 ↔ 2.4, 2.5); video YouTube 2.1–2.5 thay cho đúng chủ đề + Lab 2 mới (67/67 sống);
+  `_labflow-id` = v0.2. Môi trường soạn: container `auth2-pg` (postgres:17, cổng 4832), máy chủ demo 4800/4801/4802/4803 theo PID.
+- Tiếp theo: Ch3 (phiên và cookie) theo §11 — bảng `sessions` mở rộng bằng `sql/002_…`, cookie `__Host-lfid_ses`, Chromium thật (Playwright 1.64.1).

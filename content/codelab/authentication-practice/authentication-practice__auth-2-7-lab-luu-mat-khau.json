@@ -1,0 +1,574 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-2-7-lab-luu-mat-khau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-2-7-lab-luu-mat-khau"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2.1 — verifyPassword(stored, password, want): every shape, one answer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "hash migration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID's table holds four shapes. Return <code>{ ok, rehash }</code>:</p><ul>\n<li><code>$argon2id$v=19$m=…,p=…,t=…$salt$hash</code> — check with <code>argon2Verify(stored, pw)</code>; <code>rehash</code> when any parameter (read <b>by name</b>) is below <code>want</code>;</li>\n<li><code>$2b$10$…</code> (also <code>$2a$</code>, <code>$2y$</code>) — <code>bcryptCompare(pw, stored)</code>; always <code>rehash</code> when ok;</li>\n<li><code>$md5-argon2id$…</code> — the old MD5 wrapped in argon2id (lesson 2.5): check <code>md5Hex(password)</code> against the string with its prefix put back to <code>$argon2id$</code>; always <code>rehash</code> when ok;</li>\n<li>anything else, or a non-string argument ⇒ <code>{ ok: false, rehash: false }</code>. Never throw.</li></ul>\n<p>Normalise the password to <b>NFC</b> before argon2/bcrypt (lesson 2.3), and <code>rehash</code> is only ever true when <code>ok</code>. The stand-in functions are provided (same formats, fast). The project's grader (T3, T4) failed the first attempt here:<pre>✗ T3 verifyPassword: right/wrong, never throws, Unicode NFC                              0/1\n✗ T4 old shapes verify and ask for a rehash (old params, bcrypt, wrapped MD5)            0/1.5</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng của LabFlow ID chứa bốn dạng. Trả <code>{ ok, rehash }</code>:</p><ul>\n<li><code>$argon2id$v=19$m=…,p=…,t=…$salt$hash</code> — kiểm bằng <code>argon2Verify(stored, pw)</code>; <code>rehash</code> khi có tham số (đọc <b>theo tên</b>) thấp hơn <code>want</code>;</li>\n<li><code>$2b$10$…</code> (cả <code>$2a$</code>, <code>$2y$</code>) — <code>bcryptCompare(pw, stored)</code>; khớp thì luôn <code>rehash</code>;</li>\n<li><code>$md5-argon2id$…</code> — MD5 cũ bọc trong argon2id (bài 2.5): kiểm <code>md5Hex(password)</code> với chuỗi đã đổi tiền tố về <code>$argon2id$</code>; khớp thì luôn <code>rehash</code>;</li>\n<li>còn lại, hoặc đối số không phải chuỗi ⇒ <code>{ ok: false, rehash: false }</code>. Không bao giờ ném lỗi.</li></ul>\n<p>Chuẩn hoá mật khẩu về <b>NFC</b> trước argon2/bcrypt (bài 2.3), và <code>rehash</code> chỉ có thể true khi <code>ok</code>. Các hàm đứng thay đã có sẵn (cùng định dạng, chạy nhanh). Máy chấm của dự án (T3, T4) đánh trượt lần thử đầu ở đây:<pre>✗ T3 verifyPassword: right/wrong, never throws, Unicode NFC                              0/1\n✗ T4 old shapes verify and ask for a rehash (old params, bcrypt, wrapped MD5)            0/1.5</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyPassword(argon2Hash('an-lab-2026'.normalize('NFC'), 65536, 2), \"an-lab-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+          "output": "{\"ok\":true,\"rehash\":false}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "typeof guard first; then a regex on the prefix.|||Chặn typeof trước; rồi một regex theo tiền tố.",
+        "rehash = ok && !current — only argon2id at or above want is current.|||rehash = ok && !current — chỉ argon2id bằng hoặc cao hơn want mới là hiện hành."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided stand-ins (same string formats as the real libraries, but FAST — never use them for real passwords) ──\nfunction h32(s) { return hex(sha256(utf8(s))); }\nfunction argon2Hash(pw, m, t) { var salt = h32('salt' + pw + m + t).slice(0, 22); return '$argon2id$v=19$m=' + m + ',p=1,t=' + t + '$' + salt + '$' + h32(salt + pw); }\nfunction argon2Verify(stored, pw) { var p = String(stored).split('$'); return p.length === 6 && p[1] === 'argon2id' && h32(p[4] + pw) === p[5]; }\nfunction bcryptHash(pw, cost) { var salt = h32('b' + pw).slice(0, 22); return '$2b$' + cost + '$' + salt + h32(salt + pw).slice(0, 31); }\nfunction bcryptCompare(pw, stored) { var salt = String(stored).slice(7, 29); return '$2b$' + stored.slice(4, 6) + '$' + salt + h32(salt + pw).slice(0, 31) === stored; }\nfunction md5Hex(pw) { return h32('md5:' + pw).slice(0, 32); } // stands in for md5(pw) of the old system\n\n/** want = { m, t, p } ⇒ { ok, rehash } — never throws */\nfunction verifyPassword(stored, password, want) {\n  // Write your solution here\n  return { ok: argon2Verify(stored, password), rehash: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided stand-ins (same string formats as the real libraries, but FAST — never use them for real passwords) ──\nfunction h32(s) { return hex(sha256(utf8(s))); }\nfunction argon2Hash(pw, m, t) { var salt = h32('salt' + pw + m + t).slice(0, 22); return '$argon2id$v=19$m=' + m + ',p=1,t=' + t + '$' + salt + '$' + h32(salt + pw); }\nfunction argon2Verify(stored, pw) { var p = String(stored).split('$'); return p.length === 6 && p[1] === 'argon2id' && h32(p[4] + pw) === p[5]; }\nfunction bcryptHash(pw, cost) { var salt = h32('b' + pw).slice(0, 22); return '$2b$' + cost + '$' + salt + h32(salt + pw).slice(0, 31); }\nfunction bcryptCompare(pw, stored) { var salt = String(stored).slice(7, 29); return '$2b$' + stored.slice(4, 6) + '$' + salt + h32(salt + pw).slice(0, 31) === stored; }\nfunction md5Hex(pw) { return h32('md5:' + pw).slice(0, 32); } // stands in for md5(pw) of the old system\n\n// Reference solution\nfunction verifyPassword(stored, password, want) {\n  if (typeof stored !== 'string' || typeof password !== 'string') return { ok: false, rehash: false };\n  var pw = password.normalize('NFC');\n  var ok = false, current = false;\n  var m = /^\\$(argon2id|md5-argon2id)\\$v=19\\$([^$]+)\\$/.exec(stored);\n  if (m) {\n    var p = {};\n    m[2].split(',').forEach(function (kv) { var i = kv.indexOf('='); p[kv.slice(0, i)] = Number(kv.slice(i + 1)); });\n    if (m[1] === 'argon2id') {\n      ok = argon2Verify(stored, pw);\n      current = p.m >= want.m && p.t >= want.t && p.p >= want.p;\n    } else {\n      ok = argon2Verify(stored.replace('$md5-argon2id$', '$argon2id$'), md5Hex(password)); // the old system hashed raw input\n    }\n  } else if (/^\\$2[aby]\\$\\d\\d\\$/.test(stored)) {\n    ok = bcryptCompare(pw, stored);\n  }\n  return { ok: ok, rehash: ok && !current };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The prefix is the dispatcher: one function understands every row in the table, so sign-in never needs to know which system created an account. rehash is the only signal the rest of the code needs to upgrade a row — and it can only be true after a correct password.</p>",
+      "solutionExplanationHtmlVi": "<p>Tiền tố là bộ chọn đường: một hàm hiểu mọi dòng trong bảng, nên luồng đăng nhập chẳng cần biết hệ nào đã tạo tài khoản. rehash là tín hiệu duy nhất phần còn lại của mã cần để nâng cấp một dòng — và nó chỉ có thể true sau một mật khẩu đúng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Today’s argon2id, right password",
+              "vi": "argon2id hiện hành, đúng mật khẩu"
+            },
+            "goi": "verifyPassword(argon2Hash('an-lab-2026'.normalize('NFC'), 65536, 2), \"an-lab-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": true,
+              "rehash": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Wrong password",
+              "vi": "Sai mật khẩu"
+            },
+            "goi": "verifyPassword(argon2Hash('an-lab-2026'.normalize('NFC'), 65536, 2), \"an-lab-2027\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": false,
+              "rehash": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "verifyPassword(argon2Hash('lan-lab-2026', 19456, 2), \"lan-lab-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": true,
+              "rehash": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "verifyPassword(bcryptHash('lan-lab-2026', 10), \"lan-lab-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": true,
+              "rehash": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "verifyPassword(bcryptHash('lan-lab-2026', 10), \"wrong-password-1\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": false,
+              "rehash": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "verifyPassword(argon2Hash(md5Hex('lan-lab-2026'), 65536, 2).replace('$argon2id$', '$md5-argon2id$'), \"lan-lab-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": true,
+              "rehash": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "verifyPassword(argon2Hash(md5Hex('lan-lab-2026'), 65536, 2).replace('$argon2id$', '$md5-argon2id$'), \"wrong-password-1\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": false,
+              "rehash": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Typed as “Unicode tổ hợp”",
+              "vi": "Gõ kiểu \"Unicode tổ hợp\""
+            },
+            "goi": "verifyPassword(argon2Hash('Bình-thích-hoa-sen-2026'.normalize('NFC'), 65536, 2), \"Bình-thích-hoa-sen-2026\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": true,
+              "rehash": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "verifyPassword(argon2Hash('an-lab-2026'.normalize('NFC'), 65536, 2), undefined, {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": false,
+              "rehash": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "verifyPassword(\"not-a-hash\", \"x\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": {
+              "ok": false,
+              "rehash": false
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "rehash: true for a WRONG password: the grader’s T5 catches the row being rewritten.|||rehash: true với mật khẩu SAI: phép T5 của máy chấm bắt được dòng bị ghi đè."
+        },
+        {
+          "loi": "Normalising the input of the md5 branch: the old system hashed the raw bytes.|||Chuẩn hoá đầu vào nhánh md5: hệ cũ băm byte gốc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix dispatch",
+          "vi": "chọn đường theo tiền tố"
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.2 — signIn(store, email, password): one verify, one answer",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "user enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The store gives you <code>findByEmail(email)</code> (exact match), <code>verify(stored, password)</code> → <code>{ ok, rehash }</code>, <code>hash(password)</code>, <code>updateHash(id, hash)</code> and <code>DUMMY</code> (a hash made at startup). Write <code>signIn</code> → <code>{ user: { id } }</code> or <code>{ error: 'INVALID_CREDENTIALS' }</code>:</p><ul>\n<li>trim and lower-case the email before looking it up;</li>\n<li>call <code>verify</code> <b>exactly once</b> on every path — against <code>DUMMY</code> when there is no user (lesson 2.3);</li>\n<li>one answer for “no such email” and “wrong password”;</li>\n<li>on success with <code>rehash</code>, <code>updateHash(id, hash(password))</code> — never on failure;</li>\n<li>a non-string email or password ⇒ the error, without throwing.</li></ul><p>The first attempt in Lab 2 failed T5–T7:<pre>✗ T5 signIn upgrades an old hash on success, and only on success                         0/1\n✗ T6 \"no such email\" and \"wrong password\" take the same time (ratio &lt; 1.5×)              0/1.5\n✗ T7 one answer for both failures; email matched trimmed + lower-case                    0/0.5</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kho cho bạn <code>findByEmail(email)</code> (khớp chính xác), <code>verify(stored, password)</code> → <code>{ ok, rehash }</code>, <code>hash(password)</code>, <code>updateHash(id, hash)</code> và <code>DUMMY</code> (giá trị băm làm lúc khởi động). Viết <code>signIn</code> → <code>{ user: { id } }</code> hoặc <code>{ error: 'INVALID_CREDENTIALS' }</code>:</p><ul>\n<li>cắt khoảng trắng và viết thường email trước khi tra;</li>\n<li>gọi <code>verify</code> <b>đúng một lần</b> ở mọi đường — với <code>DUMMY</code> khi không có người dùng (bài 2.3);</li>\n<li>một câu trả lời cho \"email không tồn tại\" và \"sai mật khẩu\";</li>\n<li>thành công mà có <code>rehash</code> thì <code>updateHash(id, hash(password))</code> — không bao giờ khi thất bại;</li>\n<li>email hay mật khẩu không phải chuỗi ⇒ trả lỗi, không ném lỗi.</li></ul><p>Lần thử đầu của Lab 2 trượt T5–T7:<pre>✗ T5 signIn upgrades an old hash on success, and only on success                         0/1\n✗ T6 \"no such email\" and \"wrong password\" take the same time (ratio &lt; 1.5×)              0/1.5\n✗ T7 one answer for both failures; email matched trimmed + lower-case                    0/0.5</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"an@student.labflow.example\", \"an-lab-2026\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+          "output": "{\"result\":{\"user\":{\"id\":\"usr_1\"}},\"verifies\":1,\"updates\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "user ? user.passwordHash : store.DUMMY",
+        "Decide everything after the single verify.|||Mọi quyết định đặt sau lần kiểm duy nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function makeStore(rows) {\n  var log = { verifies: 0, updates: [] };\n  return { log: log, DUMMY: 'dummy-hash',\n    findByEmail: function (e) { return rows.filter(function (r) { return r.email === e; })[0] || null; },\n    verify: function (stored, pw) { log.verifies++; return stored === 'dummy-hash' ? { ok: false, rehash: false } : { ok: stored === 'H(' + pw + ')' || stored === 'OLD(' + pw + ')', rehash: stored === 'OLD(' + pw + ')' }; },\n    hash: function (pw) { return 'H(' + pw + ')'; },\n    updateHash: function (id, h) { log.updates.push([id, h]); } };\n}\n\n/** ⇒ { user: { id } } | { error: 'INVALID_CREDENTIALS' } */\nfunction signIn(store, email, password) {\n  // Write your solution here\n  var user = store.findByEmail(email);\n  if (!user) return { error: 'NO_SUCH_ACCOUNT' };\n  var r = store.verify(user.passwordHash, password);\n  if (!r.ok) return { error: 'WRONG_PASSWORD' };\n  return { user: { id: user.id } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function makeStore(rows) {\n  var log = { verifies: 0, updates: [] };\n  return { log: log, DUMMY: 'dummy-hash',\n    findByEmail: function (e) { return rows.filter(function (r) { return r.email === e; })[0] || null; },\n    verify: function (stored, pw) { log.verifies++; return stored === 'dummy-hash' ? { ok: false, rehash: false } : { ok: stored === 'H(' + pw + ')' || stored === 'OLD(' + pw + ')', rehash: stored === 'OLD(' + pw + ')' }; },\n    hash: function (pw) { return 'H(' + pw + ')'; },\n    updateHash: function (id, h) { log.updates.push([id, h]); } };\n}\n\n// Reference solution\nfunction signIn(store, email, password) {\n  if (typeof email !== 'string' || typeof password !== 'string') return { error: 'INVALID_CREDENTIALS' };\n  var user = store.findByEmail(email.trim().toLowerCase());\n  var r = store.verify(user ? user.passwordHash : store.DUMMY, password);   // one verify on every path\n  if (!user || !r.ok) return { error: 'INVALID_CREDENTIALS' };\n  if (r.rehash) store.updateHash(user.id, store.hash(password));\n  return { user: { id: user.id } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Counting verifies is the in-browser version of the stopwatch: if every path does exactly one, every path costs the same with the real argon2id. The answer is identical, and the account-specific work (the upgrade) happens only after a correct password.</p>",
+      "solutionExplanationHtmlVi": "<p>Đếm số lần kiểm là phiên bản trong trình duyệt của đồng hồ bấm giờ: nếu mọi đường đều làm đúng một lần, mọi đường tốn như nhau với argon2id thật. Câu trả lời giống hệt nhau, và việc riêng của tài khoản (nâng cấp) chỉ xảy ra sau mật khẩu đúng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An, right password",
+              "vi": "An, đúng mật khẩu"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"an@student.labflow.example\", \"an-lab-2026\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "user": {
+                  "id": "usr_1"
+                }
+              },
+              "verifies": 1,
+              "updates": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "No such email: still one verify",
+              "vi": "Email không tồn tại: vẫn một lần kiểm"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"nobody@student.labflow.example\", \"wrong-password-1\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "error": "INVALID_CREDENTIALS"
+              },
+              "verifies": 1,
+              "updates": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"an@student.labflow.example\", \"wrong-password-1\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "error": "INVALID_CREDENTIALS"
+              },
+              "verifies": 1,
+              "updates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \" An@Student.LabFlow.example \", \"an-lab-2026\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "user": {
+                  "id": "usr_1"
+                }
+              },
+              "verifies": 1,
+              "updates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Old hash ⇒ upgraded",
+              "vi": "Giá trị cũ ⇒ được nâng cấp"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"lan@labflow.example\", \"lan-lab-2026\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "user": {
+                  "id": "usr_3"
+                }
+              },
+              "verifies": 1,
+              "updates": [
+                [
+                  "usr_3",
+                  "H(lan-lab-2026)"
+                ]
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Old hash, wrong password ⇒ no update",
+              "vi": "Giá trị cũ, sai mật khẩu ⇒ không cập nhật"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, \"lan@labflow.example\", \"wrong-password-1\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "error": "INVALID_CREDENTIALS"
+              },
+              "verifies": 1,
+              "updates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () { var s = makeStore([{ id: 'usr_1', email: 'an@student.labflow.example', passwordHash: 'H(an-lab-2026)' }, { id: 'usr_3', email: 'lan@labflow.example', passwordHash: 'OLD(lan-lab-2026)' }]); var r = signIn(s, undefined, \"x\"); return { result: r, verifies: s.log.verifies, updates: s.log.updates }; })()",
+            "mongDoi": {
+              "result": {
+                "error": "INVALID_CREDENTIALS"
+              },
+              "verifies": 0,
+              "updates": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "if (!user) return … before verify: 0 verifies on that path — the timing leak of lesson 2.3.|||if (!user) return … trước verify: đường đó 0 lần kiểm — chính chỗ rò thời gian của bài 2.3."
+        },
+        {
+          "loi": "Updating the hash before checking ok.|||Cập nhật giá trị băm trước khi kiểm ok."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dummy hash",
+          "vi": "băm giả"
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.3 — checkNewPassword(password, { email, blocklist }): NIST, not habit",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "password policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the problems of a NEW password, in this order, or <code>[]</code>:</p><ul>\n<li><code>TOO_SHORT</code> — fewer than 15 code points after NFC; <code>TOO_LONG</code> — more than 128;</li>\n<li><code>COMMON</code> — the <b>whole</b> password equals a blocklist entry, ignoring case (not substrings);</li>\n<li><code>CONTEXT_WORD</code> — its letters only (lower-case, Unicode letters) equal <code>labflow</code>, <code>labflowid</code> or the letters of the email's local part (if 3+ letters).</li></ul><p>No composition rules. A non-string ⇒ <code>['NOT_A_STRING']</code>. The first attempt used the classic rules and failed T8:<pre>✗ T8 checkNewPassword follows NIST 800-63B-4 (length, blocklist, context, no composition rules) 0/1</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả các vấn đề của một mật khẩu MỚI, theo thứ tự này, hoặc <code>[]</code>:</p><ul>\n<li><code>TOO_SHORT</code> — ít hơn 15 code point sau NFC; <code>TOO_LONG</code> — nhiều hơn 128;</li>\n<li><code>COMMON</code> — <b>nguyên</b> mật khẩu trùng một mục trong danh sách chặn, không phân biệt hoa thường (không so chuỗi con);</li>\n<li><code>CONTEXT_WORD</code> — chỉ phần chữ cái (viết thường, chữ Unicode) trùng <code>labflow</code>, <code>labflowid</code> hoặc phần chữ cái trước @ của email (nếu có 3+ chữ).</li></ul><p>Không luật pha trộn. Không phải chuỗi ⇒ <code>['NOT_A_STRING']</code>. Lần thử đầu dùng luật cổ điển và trượt T8:<pre>✗ T8 checkNewPassword follows NIST 800-63B-4 (length, blocklist, context, no composition rules) 0/1</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkNewPassword(\"123456\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+          "output": "[\"TOO_SHORT\",\"COMMON\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Array.from(pw.normalize(\"NFC\")).length counts code points.|||Array.from(pw.normalize(\"NFC\")).length đếm code point.",
+        "Letters only: s.toLowerCase().replace(/[^\\p{L}]/gu, \"\").|||Chỉ chữ cái: s.toLowerCase().replace(/[^\\p{L}]/gu, \"\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ [] or ['TOO_SHORT' | 'TOO_LONG' | 'COMMON' | 'CONTEXT_WORD', …] */\nfunction checkNewPassword(password, ctx) {\n  // Write your solution here\n  var problems = [];\n  if (password.length < 8) problems.push('TOO_SHORT');\n  if (!/[A-Z]/.test(password)) problems.push('NEEDS_UPPER');\n  if (!/[^A-Za-z0-9]/.test(password)) problems.push('NEEDS_SYMBOL');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkNewPassword(password, ctx) {\n  if (typeof password !== 'string') return ['NOT_A_STRING'];\n  var email = (ctx && ctx.email) || '';\n  var blocklist = (ctx && ctx.blocklist) || [];\n  var pw = password.normalize('NFC');\n  var n = Array.from(pw).length;\n  var problems = [];\n  if (n < 15) problems.push('TOO_SHORT');\n  if (n > 128) problems.push('TOO_LONG');\n  var lower = pw.toLowerCase();\n  if (blocklist.some(function (w) { return String(w).toLowerCase() === lower; })) problems.push('COMMON');\n  var letters = function (s) { return s.toLowerCase().replace(/[^\\p{L}]/gu, ''); };\n  var context = ['labflow', 'labflowid', letters(email.split('@')[0])].filter(function (w) { return w.length >= 3; });\n  if (context.indexOf(letters(pw)) >= 0) problems.push('CONTEXT_WORD');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Length removes almost the whole list, the blocklist removes the rest, context words remove the obvious personal guesses — and nothing forces people into “Password1!”. Every rejection carries its reason, as NIST requires.</p>",
+      "solutionExplanationHtmlVi": "<p>Độ dài loại gần hết danh sách, danh sách chặn loại phần còn lại, từ ngữ ngữ cảnh loại những đoán cá nhân hiển nhiên — và không gì ép người dùng vào \"Password1!\". Mỗi lần từ chối đều kèm lý do, đúng như NIST yêu cầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Bình’s password",
+              "vi": "Mật khẩu của Bình"
+            },
+            "goi": "checkNewPassword(\"123456\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [
+              "TOO_SHORT",
+              "COMMON"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: checkNewPassword(\"hoa sen nở giữa đầm lầy tháng năm\", { email: \"an@student.labflow.exam...",
+              "vi": "Ca 2"
+            },
+            "goi": "checkNewPassword(\"hoa sen nở giữa đầm lầy tháng năm\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkNewPassword(\"LabFlow2026!!!!!\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [
+              "CONTEXT_WORD"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkNewPassword(\"PasswordPassword\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [
+              "COMMON"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Letters \"anananananan\" are not \"an\"",
+              "vi": "Chữ cái \"anananananan\" không phải \"an\""
+            },
+            "goi": "checkNewPassword(\"an-an-an-an-an-an\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "checkNewPassword(\"binh-2026-binh!!\", { email: \"binh@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "checkNewPassword(\"Binh2026!!!!!!!!\", { email: \"binh@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [
+              "CONTEXT_WORD"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "checkNewPassword(\"tram nam trong coi nguoi ta\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "checkNewPassword(\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [
+              "TOO_LONG"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "checkNewPassword(\"ờờờờờờờờờờờờờờờ\", { email: \"an@student.labflow.example\", blocklist: [\"password\",\"123456\",\"iloveyou\",\"qwerty\",\"passwordpassword\"] })",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "checkNewPassword(42, {})",
+            "mongDoi": [
+              "NOT_A_STRING"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Substring blocklist: “tram nam trong coi nguoi ta” would be refused for containing “ta”.|||Danh sách chặn theo chuỗi con: \"tram nam trong coi nguoi ta\" bị từ chối vì chứa \"ta\"."
+        },
+        {
+          "loi": "Adding “needs a symbol”: NIST SHALL NOT.|||Thêm \"cần ký hiệu\": NIST SHALL NOT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "context word",
+          "vi": "từ ngữ ngữ cảnh"
+        }
+      ]
+    }
+  ]
+}

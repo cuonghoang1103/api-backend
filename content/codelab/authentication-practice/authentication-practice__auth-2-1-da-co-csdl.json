@@ -1,0 +1,569 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-2-1-da-co-csdl",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-2-1-da-co-csdl"
+  },
+  "exercises": [
+    {
+      "title": "2.1-1 — Four storages, one list: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "password storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson 2.1 cracked the same 1,003 accounts stored four ways, with the same list of 10,001 common passwords (Node 22.23.3, 10 threads):<pre>1003 accounts · attacker list: 10001 passwords\nplain        read all 1003 passwords: no work at all\nsha256       10001 hashes    15 ms → cracked 701/1003 (and 271 rows repeat another row's hash)\nsha256+salt  4960404 hashes  2425 ms → cracked 701/1003\nargon2id     Binh: \"123456\" after 2 guesses   166 ms\nargon2id     51.2 guesses/s with 10 threads → whole list × 1003 accounts ≈ 54 h</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 2.1 bẻ cùng 1.003 tài khoản lưu theo bốn cách, với cùng danh sách 10.001 mật khẩu phổ biến (Node 22.23.3, 10 luồng):<pre>1003 accounts · attacker list: 10001 passwords\nplain        read all 1003 passwords: no work at all\nsha256       10001 hashes    15 ms → cracked 701/1003 (and 271 rows repeat another row's hash)\nsha256+salt  4960404 hashes  2425 ms → cracked 701/1003\nargon2id     Binh: \"123456\" after 2 guesses   166 ms\nargon2id     51.2 guesses/s with 10 threads → whole list × 1003 accounts ≈ 54 h</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the “cracked” numbers before comparing the times.|||So các con số \"cracked\" trước khi so thời gian.",
+        "Ask what one guess costs in each row.|||Hỏi một lần đoán tốn bao nhiêu ở mỗi dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.1-1 — Four storages, one list: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. What did the 16-byte salt change?Muối 16 byte đã thay đổi gì?\n2. “271 rows repeat another row’s hash” — what does that tell an attacker before cracking anything?\"271 dòng lặp lại giá trị băm của dòng khác\" — điều đó cho kẻ tấn công biết gì trước cả khi bẻ?\n3. argon2id needs ≈ 54 h for the whole list against everyone. Why was Bình found in 166 ms?argon2id cần ≈ 54 giờ cho cả danh sách với mọi người. Vì sao Bình bị tìm ra trong 166 ms?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.1-1 — Four storages, one list: read the real run — answer key\n\n1. What did the 16-byte salt change?Muối 16 byte đã thay đổi gì?\n   Answer: c) The work: the list was hashed per account (4.96 M hashes) — but the same 701 accounts fell\n   Salt kills shared work and precomputed tables; it does not slow one guess. The cracked count depends on the passwords, not on the salt.VI: Muối diệt việc làm chung và bảng tính sẵn; nó không làm chậm một lần đoán. Số tài khoản bị bẻ phụ thuộc mật khẩu, không phụ thuộc muối.\n\n2. “271 rows repeat another row’s hash” — what does that tell an attacker before cracking anything?\"271 dòng lặp lại giá trị băm của dòng khác\" — điều đó cho kẻ tấn công biết gì trước cả khi bẻ?\n   Answer: c) Which users share a password with each other\n   Unsalted: equal password ⇒ equal row. Crack one, you have them all; and popular rows are obviously popular passwords.VI: Không muối: cùng mật khẩu ⇒ cùng dòng. Bẻ một là có cả nhóm; và dòng phổ biến hiển nhiên là mật khẩu phổ biến.\n\n3. argon2id needs ≈ 54 h for the whole list against everyone. Why was Bình found in 166 ms?argon2id cần ≈ 54 giờ cho cả danh sách với mọi người. Vì sao Bình bị tìm ra trong 166 ms?\n   Answer: a) 123456 is the second word of the list: 2 guesses × ~83 ms\n   A slow hash multiplies the cost per guess, not the number of guesses. Passwords near the top of every list need a blocklist (lesson 2.4).VI: Băm chậm nhân chi phí mỗi lần đoán, không nhân số lần đoán. Mật khẩu gần đầu mọi danh sách cần danh sách chặn (bài 2.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The work: the list was hashed per account (4.96 M hashes) — but the same 701 accounts fell</p><p>Salt kills shared work and precomputed tables; it does not slow one guess. The cracked count depends on the passwords, not on the salt.</p><p><i>VI: Muối diệt việc làm chung và bảng tính sẵn; nó không làm chậm một lần đoán. Số tài khoản bị bẻ phụ thuộc mật khẩu, không phụ thuộc muối.</i></p></li><li><p><b>c)</b> Which users share a password with each other</p><p>Unsalted: equal password ⇒ equal row. Crack one, you have them all; and popular rows are obviously popular passwords.</p><p><i>VI: Không muối: cùng mật khẩu ⇒ cùng dòng. Bẻ một là có cả nhóm; và dòng phổ biến hiển nhiên là mật khẩu phổ biến.</i></p></li><li><p><b>a)</b> 123456 is the second word of the list: 2 guesses × ~83 ms</p><p>A slow hash multiplies the cost per guess, not the number of guesses. Passwords near the top of every list need a blocklist (lesson 2.4).</p><p><i>VI: Băm chậm nhân chi phí mỗi lần đoán, không nhân số lần đoán. Mật khẩu gần đầu mọi danh sách cần danh sách chặn (bài 2.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What did the 16-byte salt change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Muối 16 byte đã thay đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It made each single guess about 1,000× slower"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: the same 10,001 hashes cracked the same accounts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The work: the list was hashed per account (4.96 M hashes) — but the same 701 accounts fell"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It protected every password except Bình’s"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Salt kills shared work and precomputed tables; it does not slow one guess. The cracked count depends on the passwords, not on the salt.</p><p><i>VI: Muối diệt việc làm chung và bảng tính sẵn; nó không làm chậm một lần đoán. Số tài khoản bị bẻ phụ thuộc mật khẩu, không phụ thuộc muối.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>“271 rows repeat another row’s hash” — what does that tell an attacker before cracking anything?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"271 dòng lặp lại giá trị băm của dòng khác\" — điều đó cho kẻ tấn công biết gì trước cả khi bẻ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Which users are LAB_MANAGER"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing — equal hashes are a coincidence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Which users share a password with each other"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Which rows were created by the same script"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Unsalted: equal password ⇒ equal row. Crack one, you have them all; and popular rows are obviously popular passwords.</p><p><i>VI: Không muối: cùng mật khẩu ⇒ cùng dòng. Bẻ một là có cả nhóm; và dòng phổ biến hiển nhiên là mật khẩu phổ biến.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>argon2id needs ≈ 54 h for the whole list against everyone. Why was Bình found in 166 ms?</p><p style=\"opacity:.75;font-size:.92em\"><i>argon2id cần ≈ 54 giờ cho cả danh sách với mọi người. Vì sao Bình bị tìm ra trong 166 ms?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "123456 is the second word of the list: 2 guesses × ~83 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The attacker had her salt in advance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "argon2id has a fast path for short passwords"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Her row used older, cheaper parameters"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A slow hash multiplies the cost per guess, not the number of guesses. Passwords near the top of every list need a blocklist (lesson 2.4).</p><p><i>VI: Băm chậm nhân chi phí mỗi lần đoán, không nhân số lần đoán. Mật khẩu gần đầu mọi danh sách cần danh sách chặn (bài 2.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Salted ⇒ uncrackable”.|||\"Có muối ⇒ không bẻ được\"."
+        },
+        {
+          "loi": "“Slow hash ⇒ even 123456 is safe”.|||\"Băm chậm ⇒ đến 123456 cũng an toàn\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "salt",
+          "vi": "muối"
+        },
+        {
+          "en": "rainbow table",
+          "vi": "bảng cầu vồng"
+        }
+      ]
+    },
+    {
+      "title": "2.1-2 — Write crackSalted(rows, words, hash): what salt really costs",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "salting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A stolen table: <code>rows = [{ id, salt, hash }]</code>, where <code>hash = hash(salt + password)</code> (a fast hash — think SHA-256). Write <code>crackSalted(rows, words, hash)</code> that tries the attacker's list <code>words</code> in order against every row and returns <code>{ cracked: { id: password, … }, hashes: n }</code>, where <code>n</code> counts every call of <code>hash</code>. Stop trying a row at its first hit. Real run of lesson 2.1: unsalted, 10,001 hashes for everyone; salted, 4,960,404 hashes — and the same 701 cracked.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bảng bị trộm: <code>rows = [{ id, salt, hash }]</code>, với <code>hash = hash(salt + password)</code> (một hàm băm nhanh — hình dung SHA-256). Viết <code>crackSalted(rows, words, hash)</code> thử danh sách <code>words</code> của kẻ tấn công theo thứ tự với từng dòng và trả <code>{ cracked: { id: password, … }, hashes: n }</code>, trong đó <code>n</code> đếm mọi lần gọi <code>hash</code>. Dừng thử một dòng ở lần trúng đầu. Lần chạy thật của bài 2.1: không muối, 10.001 lần băm cho tất cả; có muối, 4.960.404 lần băm — và vẫn 701 tài khoản đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return [{ id: 'usr_1', salt: 'a1', hash: h('a1an-lab-2026') }, { id: 'usr_2', salt: 'b2', hash: h('b2123456') }]; })(), [\"password\",\"123456\",\"12345678\",\"qwerty\",\"iloveyou\",\"abc123\",\"dragon\",\"letmein\"], h); })()",
+          "output": "{\"cracked\":{\"usr_2\":\"123456\"},\"hashes\":10}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two loops: rows outside, words inside.|||Hai vòng lặp: dòng ở ngoài, từ ở trong.",
+        "The salt goes BEFORE the guess, exactly as stored.|||Muối đứng TRƯỚC lần đoán, đúng như lúc lưu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { cracked: { id: password }, hashes: number of hash() calls } */\nfunction crackSalted(rows, words, hash) {\n  // Write your solution here\n  var table = {};\n  words.forEach(function (w) { table[hash(w)] = w; });    // works without salt…\n  var cracked = {};\n  rows.forEach(function (r) { if (table[r.hash]) cracked[r.id] = table[r.hash]; });\n  return { cracked: cracked, hashes: words.length };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction crackSalted(rows, words, hash) {\n  var cracked = {}, hashes = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var r = rows[i];\n    for (var j = 0; j < words.length; j++) {\n      hashes++;                                        // every guess is one hash, for THIS row's salt\n      if (hash(r.salt + words[j]) === r.hash) { cracked[r.id] = words[j]; break; }\n    }\n  }\n  return { cracked: cracked, hashes: hashes };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With a salt every row needs its own pass over the list: the work grows with the number of accounts, but each guess is still one fast hash — the same passwords fall. That is why the slow hash (2.2) and the blocklist (2.4) are still needed.</p>",
+      "solutionExplanationHtmlVi": "<p>Có muối thì mỗi dòng cần một lượt riêng qua danh sách: khối lượng tăng theo số tài khoản, nhưng mỗi lần đoán vẫn chỉ là một lần băm nhanh — những mật khẩu đó vẫn sụp. Vì thế vẫn cần băm chậm (2.2) và danh sách chặn (2.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An survives, Bình falls at guess 2",
+              "vi": "An trụ, Bình rơi ở lần đoán 2"
+            },
+            "goi": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return [{ id: 'usr_1', salt: 'a1', hash: h('a1an-lab-2026') }, { id: 'usr_2', salt: 'b2', hash: h('b2123456') }]; })(), [\"password\",\"123456\",\"12345678\",\"qwerty\",\"iloveyou\",\"abc123\",\"dragon\",\"letmein\"], h); })()",
+            "mongDoi": {
+              "cracked": {
+                "usr_2": "123456"
+              },
+              "hashes": 10
+            }
+          },
+          {
+            "moTa": {
+              "en": "Same password, two salts: two separate searches",
+              "vi": "Cùng mật khẩu, hai muối: hai lần tìm riêng"
+            },
+            "goi": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return [{ id: 'usr_4', salt: 'c3', hash: h('c3dragon') }, { id: 'usr_5', salt: 'd4', hash: h('d4dragon') }]; })(), [\"password\",\"123456\",\"12345678\",\"qwerty\",\"iloveyou\",\"abc123\",\"dragon\",\"letmein\"], h); })()",
+            "mongDoi": {
+              "cracked": {
+                "usr_4": "dragon",
+                "usr_5": "dragon"
+              },
+              "hashes": 14
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return []; })(), [\"password\",\"123456\",\"12345678\",\"qwerty\",\"iloveyou\",\"abc123\",\"dragon\",\"letmein\"], h); })()",
+            "mongDoi": {
+              "cracked": {},
+              "hashes": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return [{ id: 'usr_6', salt: 'e5', hash: h('e5letmein') }]; })(), [], h); })()",
+            "mongDoi": {
+              "cracked": {},
+              "hashes": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return crackSalted((function () { var h = function (s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return (\"0000000\" + h.toString(16)).slice(-8); }; return [{ id: 'usr_7', salt: 'f6', hash: h('f6password') }, { id: 'usr_8', salt: 'g7', hash: h('g7zz-not-in-list') }, { id: 'usr_9', salt: 'h8', hash: h('h8abc123') }]; })(), [\"password\",\"123456\",\"12345678\",\"qwerty\",\"iloveyou\",\"abc123\",\"dragon\",\"letmein\"], h); })()",
+            "mongDoi": {
+              "cracked": {
+                "usr_7": "password",
+                "usr_9": "abc123"
+              },
+              "hashes": 15
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hashing the list once and reusing it: that only works without salt.|||Băm danh sách một lần rồi dùng lại: chỉ đúng khi không có muối."
+        },
+        {
+          "loi": "Not stopping at the first hit, so the count is too high.|||Không dừng ở lần trúng đầu, nên đếm dư."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dictionary attack",
+          "vi": "tấn công bằng từ điển"
+        }
+      ]
+    },
+    {
+      "title": "2.1-3 — Write timeToTry(guesses, perSecond): the time-to-crack table",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "brute force"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson 2.1's table (real run, rates measured on an M1 Max or from hashcat on one RTX 4090):<pre>guesses/s                           top-10k        8 a-z          4 words        12 a-zA-Z0-9   \nsha256 · 1 CPU core        2.00e+6  5.0 ms         1.2 days       58 years       5.1e+7 years   \nsha256 · RTX 4090         2.20e+10  0.5 µs         9.5 s          1.9 days       4.7e+3 years   \nbcrypt-12 · RTX 4090          1438  7.0 s          5 years        8.1e+4 years   7.1e+10 years  \nbcrypt-12 · this Mac          18.9  8.8 minutes    349 years      6.1e+6 years   5.4e+12 years  \nargon2id · this Mac           50.7  3.3 minutes    131 years      2.3e+6 years   2.0e+12 years  </pre>Write <code>timeToTry(guesses, perSecond)</code> that formats <code>s = guesses / perSecond</code> the same way: &lt; 1 ms ⇒ <code>\"0.5 µs\"</code>; &lt; 1 s ⇒ <code>\"5.0 ms\"</code>; &lt; 60 s ⇒ <code>\"9.5 s\"</code>; &lt; 1 h ⇒ <code>\"3.3 minutes\"</code>; &lt; 1 day ⇒ <code>\"… hours\"</code>; &lt; 1 year (365.25 days) ⇒ <code>\"1.2 days\"</code>; &lt; 1,000 years ⇒ <code>\"131 years\"</code> (no decimals); otherwise <code>\"4.7e+3 years\"</code> (<code>toExponential(1)</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng của bài 2.1 (chạy thật, tốc độ đo trên M1 Max hoặc từ hashcat trên một RTX 4090):<pre>guesses/s                           top-10k        8 a-z          4 words        12 a-zA-Z0-9   \nsha256 · 1 CPU core        2.00e+6  5.0 ms         1.2 days       58 years       5.1e+7 years   \nsha256 · RTX 4090         2.20e+10  0.5 µs         9.5 s          1.9 days       4.7e+3 years   \nbcrypt-12 · RTX 4090          1438  7.0 s          5 years        8.1e+4 years   7.1e+10 years  \nbcrypt-12 · this Mac          18.9  8.8 minutes    349 years      6.1e+6 years   5.4e+12 years  \nargon2id · this Mac           50.7  3.3 minutes    131 years      2.3e+6 years   2.0e+12 years  </pre>Viết <code>timeToTry(guesses, perSecond)</code> định dạng <code>s = guesses / perSecond</code> theo đúng cách đó: &lt; 1 ms ⇒ <code>\"0.5 µs\"</code>; &lt; 1 s ⇒ <code>\"5.0 ms\"</code>; &lt; 60 s ⇒ <code>\"9.5 s\"</code>; &lt; 1 giờ ⇒ <code>\"3.3 minutes\"</code>; &lt; 1 ngày ⇒ <code>\"… hours\"</code>; &lt; 1 năm (365,25 ngày) ⇒ <code>\"1.2 days\"</code>; &lt; 1.000 năm ⇒ <code>\"131 years\"</code> (không số lẻ); còn lại <code>\"4.7e+3 years\"</code> (<code>toExponential(1)</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "timeToTry(Math.pow(26, 8), 21975.5e6)",
+          "output": "\"9.5 s\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute seconds once, then a ladder of if/return.|||Tính số giây một lần, rồi một bậc thang if/return.",
+        "26 ** 8 / 21975.5e6 should print \"9.5 s\".|||26 ** 8 / 21975.5e6 phải in \"9.5 s\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** guesses ÷ perSecond, formatted like lesson 2.1's table */\nfunction timeToTry(guesses, perSecond) {\n  // Write your solution here\n  return (guesses / perSecond).toFixed(1) + ' s';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction timeToTry(guesses, perSecond) {\n  var s = guesses / perSecond, YEAR = 365.25 * 24 * 3600;\n  if (s < 1e-3) return (s * 1e6).toFixed(1) + ' µs';\n  if (s < 1) return (s * 1e3).toFixed(1) + ' ms';\n  if (s < 60) return s.toFixed(1) + ' s';\n  if (s < 3600) return (s / 60).toFixed(1) + ' minutes';\n  if (s < 86400) return (s / 3600).toFixed(1) + ' hours';\n  if (s < YEAR) return (s / 86400).toFixed(1) + ' days';\n  if (s < 1000 * YEAR) return (s / YEAR).toFixed(0) + ' years';\n  return (s / YEAR).toExponential(1) + ' years';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same space reads “9.5 s” on a GPU with a fast hash and “131 years” with argon2id on a laptop — the whole argument of the lesson in one function. The first column (top-10k) stays in minutes whatever you choose.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng một không gian đọc là \"9,5 s\" trên GPU với băm nhanh và \"131 năm\" với argon2id trên laptop — cả lập luận của bài trong một hàm. Cột đầu (top-10k) vẫn chỉ vài phút dù chọn gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "8 a-z, sha256 on an RTX 4090",
+              "vi": "8 chữ thường, sha256 trên RTX 4090"
+            },
+            "goi": "timeToTry(Math.pow(26, 8), 21975.5e6)",
+            "mongDoi": "9.5 s"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: timeToTry(10001, 21975.5e6)",
+              "vi": "Ca 2"
+            },
+            "goi": "timeToTry(10001, 21975.5e6)",
+            "mongDoi": "0.5 µs"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "timeToTry(10001, 50.7)",
+            "mongDoi": "3.3 minutes",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "timeToTry(Math.pow(26, 8), 50.7)",
+            "mongDoi": "131 years",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "timeToTry(Math.pow(7776, 4), 21975.5e6)",
+            "mongDoi": "1.9 days",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "timeToTry(Math.pow(62, 12), 21975.5e6)",
+            "mongDoi": "4.7e+3 years",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "timeToTry(10001, 2.00e6)",
+            "mongDoi": "5.0 ms",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "timeToTry(36000, 1)",
+            "mongDoi": "10.0 hours",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 365 instead of 365.25 days — the year boundary shifts.|||Dùng 365 thay vì 365,25 ngày — mốc năm bị lệch."
+        },
+        {
+          "loi": "Printing \"131.0 years\": the table has no decimals below 1,000 years.|||In \"131.0 years\": bảng không có số lẻ dưới 1.000 năm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "search space",
+          "vi": "không gian tìm kiếm"
+        }
+      ]
+    },
+    {
+      "title": "2.1-4 — Stored as… verdict",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "password storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For each way of storing LabFlow ID passwords, pick the verdict from lesson 2.1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cách lưu mật khẩu LabFlow ID, chọn kết luận theo bài 2.1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Can it be reversed? How much does one guess cost?|||Có đảo ngược được không? Một lần đoán tốn bao nhiêu?",
+        "The token recipe (lesson 1.3) is not the password recipe.|||Công thức cho token (bài 1.3) không phải công thức cho mật khẩu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.1-4 — Stored as… verdict\n\nAnswer in the answer panel (no code needed).\n\n1. Storage → verdictCách lưu → kết luận\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.1-4 — Stored as… verdict — answer key\n\n1. Storage → verdictCách lưu → kết luận\n   - r1.v: never\n   - r2.v: never — hashed, not encrypted\n   - r3.v: right for random tokens, never for passwords\n   - r4.v: never\n   - r5.v: yes, plus a blocklist\n   Plain and MD5 give passwords away; encryption is reversible and equal passwords look equal; salted SHA-256 is the token recipe, still 2 M guesses/s per core; argon2id with measured parameters, and 2.4’s blocklist for the passwords no hash can save.VI: Chữ thường và MD5 cho không mật khẩu; mã hoá thì đảo ngược được và mật khẩu giống nhau trông giống nhau; SHA-256 có muối là công thức cho token, vẫn 2 triệu lần đoán/giây mỗi nhân; argon2id với tham số tự đo, cộng danh sách chặn của 2.4 cho những mật khẩu không hàm băm nào cứu được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Plain and MD5 give passwords away; encryption is reversible and equal passwords look equal; salted SHA-256 is the token recipe, still 2 M guesses/s per core; argon2id with measured parameters, and 2.4’s blocklist for the passwords no hash can save.</p><p><i>VI: Chữ thường và MD5 cho không mật khẩu; mã hoá thì đảo ngược được và mật khẩu giống nhau trông giống nhau; SHA-256 có muối là công thức cho token, vẫn 2 triệu lần đoán/giây mỗi nhân; argon2id với tham số tự đo, cộng danh sách chặn của 2.4 cho những mật khẩu không hàm băm nào cứu được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Storage → verdict</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách lưu → kết luận</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Stored as"
+              },
+              {
+                "ma": "v",
+                "ten": "Verdict",
+                "luaChon": [
+                  "never",
+                  "never — hashed, not encrypted",
+                  "right for random tokens, never for passwords",
+                  "yes, plus a blocklist"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "plain text in naive_users.password"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "AES-encrypted with a key in .env (the Adobe way)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "sha256(salt + password), 16-byte salt"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "md5(password)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "$argon2id$v=19$m=65536,p=1,t=2$…"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "never",
+              "r2.v": "never — hashed, not encrypted",
+              "r3.v": "right for random tokens, never for passwords",
+              "r4.v": "never",
+              "r5.v": "yes, plus a blocklist"
+            },
+            "giaiThich": "<p>Plain and MD5 give passwords away; encryption is reversible and equal passwords look equal; salted SHA-256 is the token recipe, still 2 M guesses/s per core; argon2id with measured parameters, and 2.4’s blocklist for the passwords no hash can save.</p><p><i>VI: Chữ thường và MD5 cho không mật khẩu; mã hoá thì đảo ngược được và mật khẩu giống nhau trông giống nhau; SHA-256 có muối là công thức cho token, vẫn 2 triệu lần đoán/giây mỗi nhân; argon2id với tham số tự đo, cộng danh sách chặn của 2.4 cho những mật khẩu không hàm băm nào cứu được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Encryption = protection.|||Mã hoá = bảo vệ."
+        },
+        {
+          "loi": "Salt = slow.|||Muối = chậm."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

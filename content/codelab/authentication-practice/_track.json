@@ -7,7 +7,7 @@
   "docsUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Authentication (dự án xuyên khoá LabFlow ID — dịch vụ danh tính của nền tảng LabFlow): mỗi bài học một bộ đề từ dễ đến khó, đề tiếng Anh có bản tiếng Việt, dữ liệu là output CHẠY THẬT của LabFlow ID (Node 22.23.3 + Express 5.3.0, chạy trong môi trường sạch). Trắc nghiệm, điền bảng, sắp thứ tự để đọc đúng output thật (401/403/404, Referer trong Chromium, Math.random bị đoán trước, length extension, log rò bí mật); bài khó là tự viết hàm từ gốc chạy thật trong trình duyệt — đọc header Cookie/Authorization, quyết định ba cổng xác thực, tính entropy và độ dài token, sinh chữ số không lệch, so sánh hằng thời gian, kiểm chữ ký webhook, dựng HMAC-SHA256 từ SHA-256, base64url bằng tay, giá trị có ký kèm hết hạn và xoay khoá, lọc log theo danh sách cho phép, quét bí mật kiểu gitleaks; Lab chương 1 dựng lại bộ công cụ nguyên hàm của LabFlow ID.",
+  "description": "Bộ luyện đi kèm khoá Authentication (dự án xuyên khoá LabFlow ID — dịch vụ danh tính của nền tảng LabFlow): mỗi bài học một bộ đề từ dễ đến khó, đề tiếng Anh có bản tiếng Việt, dữ liệu là output CHẠY THẬT của LabFlow ID (Node 22.23.3 + Express 5.3.0, chạy trong môi trường sạch). Trắc nghiệm, điền bảng, sắp thứ tự để đọc đúng output thật (401/403/404, Referer trong Chromium, Math.random bị đoán trước, length extension, log rò bí mật); bài khó là tự viết hàm từ gốc chạy thật trong trình duyệt — đọc header Cookie/Authorization, quyết định ba cổng xác thực, tính entropy và độ dài token, sinh chữ số không lệch, so sánh hằng thời gian, kiểm chữ ký webhook, dựng HMAC-SHA256 từ SHA-256, base64url bằng tay, giá trị có ký kèm hết hạn và xoay khoá, lọc log theo danh sách cho phép, quét bí mật kiểu gitleaks; Chương 2: bẻ bảng có muối và đếm số lần băm, bảng thời gian vét cạn, chọn tham số argon2id theo hai ngân sách, đọc chuỗi băm theo tên, phán quyết rò thời gian ở màn đăng nhập, đếm độ dài theo NIST, đọc phản hồi range API của HIBP, lập kế hoạch chuyển băm cũ; Lab chương 1 dựng lại bộ công cụ nguyên hàm, Lab chương 2 dựng module mật khẩu (chọn đường theo tiền tố, một lần kiểm ở mọi đường, chính sách NIST) của LabFlow ID.",
   "modules": [
     {
       "slug": "auth-0-8-bat-dau-tai-day",
@@ -74,6 +74,42 @@
       "name": "Lab 1 — LabFlow ID’s toolkit of primitives",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 1.1 — makeToken(prefix, randomBytes): the token format · Lab 1.2 — findSession(sessions, presented, nowMs): look up, never compare · Lab 1.3 — signValue / verifyValue: a value the client holds but cannot change"
+    },
+    {
+      "slug": "auth-2-1-da-co-csdl",
+      "name": "2.1 The attacker already has your database",
+      "level": "BEGINNER",
+      "description": "Luyện: 2.1-1 — Four storages, one list: read the real run · 2.1-2 — Write crackSalted(rows, words, hash): what salt really costs · 2.1-3 — Write timeToTry(guesses, perSecond): the time-to-crack table · 2.1-4 — Stored as… verdict"
+    },
+    {
+      "slug": "auth-2-2-chon-va-chinh",
+      "name": "2.2 Choosing and tuning the hash, by measurement",
+      "level": "BEGINNER",
+      "description": "Luyện: 2.2-1 — Read the tuning run and the 40-login burst · 2.2-2 — Write chooseParams(table, budgetMs, ramMiB, threads) · 2.2-3 — Write needsRehash(stored, want): read the string by name · 2.2-4 — Situation → algorithm"
+    },
+    {
+      "slug": "auth-2-3-luong-dang-nhap",
+      "name": "2.3 The login flow, with every branch equal",
+      "level": "BEGINNER",
+      "description": "Luyện: 2.3-1 — Same message, different clock: read the real runs · 2.3-2 — Write timingVerdict(a, b): what the grader’s T6 does · 2.3-3 — Write checkLength(password, min, max): count like NIST · 2.3-4 — Put LabFlow ID v0.2’s sign-in in order"
+    },
+    {
+      "slug": "auth-2-4-chinh-sach",
+      "name": "2.4 A password policy from NIST, not from habit",
+      "level": "BEGINNER",
+      "description": "Luyện: 2.4-1 — Rules, lists and breaches: read the real runs · 2.4-2 — Write classicVsLength(words): measure the rules yourself · 2.4-3 — Write pwnedFromRange(sha1Hex, body): read the range API · 2.4-4 — What NIST SP 800-63B-4 says about each rule"
+    },
+    {
+      "slug": "auth-2-5-chuyen-doi",
+      "name": "2.5 Moving off an old hash, without a reset",
+      "level": "BEGINNER",
+      "description": "Luyện: 2.5-1 — 1,003 legacy MD5 rows: read the real migration · 2.5-2 — Write planRow(stored, want): which situation is this row in? · 2.5-3 — Write estimateWrap(total, sampleRows, sampleSeconds, batchSize) · 2.5-4 — Put the MD5 → argon2id migration in order"
+    },
+    {
+      "slug": "auth-2-7-lab-luu-mat-khau",
+      "name": "Lab 2 — LabFlow ID’s password module",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 2.1 — verifyPassword(stored, password, want): every shape, one answer · Lab 2.2 — signIn(store, email, password): one verify, one answer · Lab 2.3 — checkNewPassword(password, { email, blocklist }): NIST, not habit"
     }
   ]
 }

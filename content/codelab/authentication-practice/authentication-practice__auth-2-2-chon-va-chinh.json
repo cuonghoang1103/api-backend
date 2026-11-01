@@ -1,0 +1,560 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-2-2-chon-va-chinh",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-2-2-chon-va-chinh"
+  },
+  "exercises": [
+    {
+      "title": "2.2-1 — Read the tuning run and the 40-login burst",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "argon2 tuning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real runs of lesson 2.2 (Apple M1 Max, Node 22.23.3, argon2 0.45.1):<pre>budgets: 100 ms per hash, 256 MiB for 4 hashing threads ⇒ ≤ 64 MiB each\nargon2id p=1 · median of 7 · Node v22.23.3 arm64\nmemory     t=1      t=2      t=3      t=4\n  19 MiB   12.2     26.1     34.8     46.4 \n  46 MiB   28.8     59.0     86.5    117.6*\n  64 MiB   40.1     86.5    127.9*   165.1*\n 128 MiB   85.3#   170.2*   264.3*   348.3*\n* = too slow   # = too much memory for the thread pool\nchoose m=65536 (64 MiB), t=2, p=1 → 86.5 ms</pre><pre>1 logins · p=1 · threads=4 | p50    83 ms | p95    83 ms | last    83 ms | RSS +1 MiB\n40 logins · p=1 · threads=4 | p50   511 ms | p95   850 ms | last   854 ms | RSS +194 MiB\n1 logins · p=1 · threads=10 | p50    80 ms | p95    80 ms | last    80 ms | RSS +1 MiB\n40 logins · p=1 · threads=10 | p50   424 ms | p95   698 ms | last   699 ms | RSS +578 MiB\n1 logins · p=1 · threads=64 | p50    84 ms | p95    84 ms | last    84 ms | RSS +1 MiB\n40 logins · p=1 · threads=64 | p50   537 ms | p95   605 ms | last   612 ms | RSS +2498 MiB\n1 logins · p=4 · threads=4 | p50    27 ms | p95    27 ms | last    27 ms | RSS +1 MiB\n40 logins · p=4 · threads=4 | p50   307 ms | p95   529 ms | last   534 ms | RSS +194 MiB</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các lần chạy thật của bài 2.2 (Apple M1 Max, Node 22.23.3, argon2 0.45.1):<pre>budgets: 100 ms per hash, 256 MiB for 4 hashing threads ⇒ ≤ 64 MiB each\nargon2id p=1 · median of 7 · Node v22.23.3 arm64\nmemory     t=1      t=2      t=3      t=4\n  19 MiB   12.2     26.1     34.8     46.4 \n  46 MiB   28.8     59.0     86.5    117.6*\n  64 MiB   40.1     86.5    127.9*   165.1*\n 128 MiB   85.3#   170.2*   264.3*   348.3*\n* = too slow   # = too much memory for the thread pool\nchoose m=65536 (64 MiB), t=2, p=1 → 86.5 ms</pre><pre>1 logins · p=1 · threads=4 | p50    83 ms | p95    83 ms | last    83 ms | RSS +1 MiB\n40 logins · p=1 · threads=4 | p50   511 ms | p95   850 ms | last   854 ms | RSS +194 MiB\n1 logins · p=1 · threads=10 | p50    80 ms | p95    80 ms | last    80 ms | RSS +1 MiB\n40 logins · p=1 · threads=10 | p50   424 ms | p95   698 ms | last   699 ms | RSS +578 MiB\n1 logins · p=1 · threads=64 | p50    84 ms | p95    84 ms | last    84 ms | RSS +1 MiB\n40 logins · p=1 · threads=64 | p50   537 ms | p95   605 ms | last   612 ms | RSS +2498 MiB\n1 logins · p=4 · threads=4 | p50    27 ms | p95    27 ms | last    27 ms | RSS +1 MiB\n40 logins · p=4 · threads=4 | p50   307 ms | p95   529 ms | last   534 ms | RSS +194 MiB</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Memory per hash × hashes at the same time.|||Bộ nhớ mỗi lần băm × số lần băm cùng lúc.",
+        "Count cores, not threads.|||Đếm nhân, không đếm luồng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.2-1 — Read the tuning run and the 40-login burst\n\nAnswer in the answer panel (no code needed).\n\n1. Why is 128 MiB, t=1 (85.3 ms) marked # and not chosen?Vì sao 128 MiB, t=1 (85,3 ms) bị đánh # và không được chọn?\n2. With 64 threads, 40 logins used +2,498 MiB and the median stayed 537 ms. Best explanation?Với 64 luồng, 40 lượt dùng +2.498 MiB và trung vị vẫn 537 ms. Giải thích đúng nhất?\n3. p=4 made one login take 27 ms instead of ~83 ms. Why does LabFlow ID still keep p=1?p=4 làm một lượt chỉ mất 27 ms thay vì ~83 ms. Vì sao LabFlow ID vẫn giữ p=1?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.2-1 — Read the tuning run and the 40-login burst — answer key\n\n1. Why is 128 MiB, t=1 (85.3 ms) marked # and not chosen?Vì sao 128 MiB, t=1 (85,3 ms) bị đánh # và không được chọn?\n   Answer: b) 4 threads × 128 MiB = 512 MiB, over the RAM budget\n   The memory budget is shared by every thread that may hash at once: 256 ÷ 4 = 64 MiB each.VI: Ngân sách bộ nhớ chia cho mọi luồng có thể băm cùng lúc: 256 ÷ 4 = 64 MiB mỗi luồng.\n\n2. With 64 threads, 40 logins used +2,498 MiB and the median stayed 537 ms. Best explanation?Với 64 luồng, 40 lượt dùng +2.498 MiB và trung vị vẫn 537 ms. Giải thích đúng nhất?\n   Answer: a) RAM = busy threads × 64 MiB, yet only 10 cores do the work\n   More threads than cores buys concurrency of memory, not of CPU. Size the pool to the cores.VI: Nhiều luồng hơn số nhân chỉ mua thêm bộ nhớ đồng thời, không mua CPU. Đặt cỡ pool theo số nhân.\n\n3. p=4 made one login take 27 ms instead of ~83 ms. Why does LabFlow ID still keep p=1?p=4 làm một lượt chỉ mất 27 ms thay vì ~83 ms. Vì sao LabFlow ID vẫn giữ p=1?\n   Answer: b) One login = one core keeps capacity simple; p=4 uses 4 cores\n   p splits the same memory into lanes computed in parallel — faster alone, more cores per login. A valid choice with idle cores; LabFlow ID prefers predictable capacity.VI: p chia cùng vùng nhớ thành các làn tính song song — một mình thì nhanh hơn, mỗi lượt tốn nhiều nhân hơn. Hợp lệ khi nhân còn rảnh; LabFlow ID ưu tiên dung lượng dễ đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 4 threads × 128 MiB = 512 MiB, over the RAM budget</p><p>The memory budget is shared by every thread that may hash at once: 256 ÷ 4 = 64 MiB each.</p><p><i>VI: Ngân sách bộ nhớ chia cho mọi luồng có thể băm cùng lúc: 256 ÷ 4 = 64 MiB mỗi luồng.</i></p></li><li><p><b>a)</b> RAM = busy threads × 64 MiB, yet only 10 cores do the work</p><p>More threads than cores buys concurrency of memory, not of CPU. Size the pool to the cores.</p><p><i>VI: Nhiều luồng hơn số nhân chỉ mua thêm bộ nhớ đồng thời, không mua CPU. Đặt cỡ pool theo số nhân.</i></p></li><li><p><b>b)</b> One login = one core keeps capacity simple; p=4 uses 4 cores</p><p>p splits the same memory into lanes computed in parallel — faster alone, more cores per login. A valid choice with idle cores; LabFlow ID prefers predictable capacity.</p><p><i>VI: p chia cùng vùng nhớ thành các làn tính song song — một mình thì nhanh hơn, mỗi lượt tốn nhiều nhân hơn. Hợp lệ khi nhân còn rảnh; LabFlow ID ưu tiên dung lượng dễ đoán.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is 128 MiB, t=1 (85.3 ms) marked # and not chosen?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao 128 MiB, t=1 (85,3 ms) bị đánh # và không được chọn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "At 85.3 ms it is slower than the 100 ms budget"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4 threads × 128 MiB = 512 MiB, over the RAM budget"
+              },
+              {
+                "ma": "c",
+                "noiDung": "argon2id refuses to allocate more than 64 MiB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "OWASP forbids t=1 for argon2id in all cases"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The memory budget is shared by every thread that may hash at once: 256 ÷ 4 = 64 MiB each.</p><p><i>VI: Ngân sách bộ nhớ chia cho mọi luồng có thể băm cùng lúc: 256 ÷ 4 = 64 MiB mỗi luồng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With 64 threads, 40 logins used +2,498 MiB and the median stayed 537 ms. Best explanation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với 64 luồng, 40 lượt dùng +2.498 MiB và trung vị vẫn 537 ms. Giải thích đúng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "RAM = busy threads × 64 MiB, yet only 10 cores do the work"
+              },
+              {
+                "ma": "b",
+                "noiDung": "libuv silently ignores pool sizes above 10 threads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "argon2 leaks memory whenever more than 4 threads run"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RSS also counts memory freed by earlier logins"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>More threads than cores buys concurrency of memory, not of CPU. Size the pool to the cores.</p><p><i>VI: Nhiều luồng hơn số nhân chỉ mua thêm bộ nhớ đồng thời, không mua CPU. Đặt cỡ pool theo số nhân.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>p=4 made one login take 27 ms instead of ~83 ms. Why does LabFlow ID still keep p=1?</p><p style=\"opacity:.75;font-size:.92em\"><i>p=4 làm một lượt chỉ mất 27 ms thay vì ~83 ms. Vì sao LabFlow ID vẫn giữ p=1?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "OWASP forbids any parallelism above p=1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One login = one core keeps capacity simple; p=4 uses 4 cores"
+              },
+              {
+                "ma": "c",
+                "noiDung": "p=4 needs four times the memory per login"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p=4 halves the security of every stored hash"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>p splits the same memory into lanes computed in parallel — faster alone, more cores per login. A valid choice with idle cores; LabFlow ID prefers predictable capacity.</p><p><i>VI: p chia cùng vùng nhớ thành các làn tính song song — một mình thì nhanh hơn, mỗi lượt tốn nhiều nhân hơn. Hợp lệ khi nhân còn rảnh; LabFlow ID ưu tiên dung lượng dễ đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tuning for one request only.|||Chỉnh tham số theo đúng một request."
+        },
+        {
+          "loi": "Raising UV_THREADPOOL_SIZE to “make it faster”.|||Nâng UV_THREADPOOL_SIZE cho \"nhanh hơn\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thread pool",
+          "vi": "bể luồng"
+        },
+        {
+          "en": "latency budget",
+          "vi": "ngân sách độ trễ"
+        }
+      ]
+    },
+    {
+      "title": "2.2-2 — Write chooseParams(table, budgetMs, ramMiB, threads)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "argon2 tuning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>table</code> is a measured list <code>[{ mKiB, t, ms }]</code> (the cases use the real run of <code>demo2/tune.mjs</code>). Return <code>{ m, t }</code> with the <b>most memory</b>, then the <b>most passes</b>, among rows that fit <b>both</b> budgets: <code>ms ≤ budgetMs</code> and <code>mKiB ≤ ramMiB ÷ threads × 1024</code>. Nothing fits ⇒ <code>null</code>. Real result: budget 100 ms / 256 MiB / 4 threads ⇒ <code>{ m: 65536, t: 2 }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>table</code> là danh sách đã đo <code>[{ mKiB, t, ms }]</code> (các ca dùng lần chạy thật của <code>demo2/tune.mjs</code>). Trả <code>{ m, t }</code> có <b>bộ nhớ lớn nhất</b>, rồi <b>số lượt nhiều nhất</b>, trong các dòng vừa <b>cả hai</b> ngân sách: <code>ms ≤ budgetMs</code> và <code>mKiB ≤ ramMiB ÷ threads × 1024</code>. Không dòng nào vừa ⇒ <code>null</code>. Kết quả thật: ngân sách 100 ms / 256 MiB / 4 luồng ⇒ <code>{ m: 65536, t: 2 }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 100, 256, 4)",
+          "output": "{\"m\":65536,\"t\":2}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Filter by both budgets, then keep the best by (m, t).|||Lọc theo cả hai ngân sách, rồi giữ dòng tốt nhất theo (m, t).",
+        "The memory cap is per thread: ramMiB / threads.|||Trần bộ nhớ tính cho mỗi luồng: ramMiB / threads."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** table = [{ mKiB, t, ms }] ⇒ { m, t } or null */\nfunction chooseParams(table, budgetMs, ramMiB, threads) {\n  // Write your solution here\n  var fast = table.filter(function (r) { return r.ms <= budgetMs; });\n  fast.sort(function (a, b) { return b.mKiB - a.mKiB; });\n  return fast.length ? { m: fast[0].mKiB, t: fast[0].t } : null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction chooseParams(table, budgetMs, ramMiB, threads) {\n  var maxKiB = (ramMiB / threads) * 1024;\n  var best = null;\n  table.forEach(function (row) {\n    if (row.ms > budgetMs || row.mKiB > maxKiB) return;        // over either budget\n    if (!best || row.mKiB > best.m || (row.mKiB === best.m && row.t > best.t)) best = { m: row.mKiB, t: row.t };\n  });\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Time alone picks the most memory that is fast enough (128 MiB, t=1); memory alone ignores the user. Both together give the parameters LabFlow ID ships, and the same function re-run on new hardware gives the next ones.</p>",
+      "solutionExplanationHtmlVi": "<p>Chỉ xét thời gian thì chọn bộ nhớ lớn nhất còn đủ nhanh (128 MiB, t=1); chỉ xét bộ nhớ thì bỏ quên người dùng. Cả hai cùng lúc cho ra tham số LabFlow ID dùng, và chạy lại cùng hàm trên phần cứng mới cho ra tham số kế tiếp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lesson 2.2: 100 ms, 256 MiB, 4 threads",
+              "vi": "Bài 2.2: 100 ms, 256 MiB, 4 luồng"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 100, 256, 4)",
+            "mongDoi": {
+              "m": 65536,
+              "t": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Plenty of RAM: time decides",
+              "vi": "Dư RAM: thời gian quyết định"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 100, 1024, 4)",
+            "mongDoi": {
+              "m": 131072,
+              "t": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 250, 512, 4)",
+            "mongDoi": {
+              "m": 131072,
+              "t": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 50, 256, 10)",
+            "mongDoi": {
+              "m": 19456,
+              "t": 4
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 5, 256, 4)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "chooseParams([{\"mKiB\":19456,\"t\":1,\"ms\":12.2},{\"mKiB\":19456,\"t\":2,\"ms\":26.1},{\"mKiB\":19456,\"t\":3,\"ms\":34.8},{\"mKiB\":19456,\"t\":4,\"ms\":46.4},{\"mKiB\":47104,\"t\":1,\"ms\":28.8},{\"mKiB\":47104,\"t\":2,\"ms\":59},{\"mKiB\":47104,\"t\":3,\"ms\":86.5},{\"mKiB\":47104,\"t\":4,\"ms\":117.6},{\"mKiB\":65536,\"t\":1,\"ms\":40.1},{\"mKiB\":65536,\"t\":2,\"ms\":86.5},{\"mKiB\":65536,\"t\":3,\"ms\":127.9},{\"mKiB\":65536,\"t\":4,\"ms\":165.1},{\"mKiB\":131072,\"t\":1,\"ms\":85.3},{\"mKiB\":131072,\"t\":2,\"ms\":170.2},{\"mKiB\":131072,\"t\":3,\"ms\":264.3},{\"mKiB\":131072,\"t\":4,\"ms\":348.3}], 100, 64, 4)",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring the memory budget ⇒ 128 MiB, t=1.|||Bỏ ngân sách bộ nhớ ⇒ 128 MiB, t=1."
+        },
+        {
+          "loi": "Choosing the fastest row instead of the strongest that fits.|||Chọn dòng nhanh nhất thay vì dòng mạnh nhất còn vừa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memory budget",
+          "vi": "ngân sách bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "2.2-3 — Write needsRehash(stored, want): read the string by name",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "PHC string format"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The argon2 package wrote this in lesson 2.2 (real run):</p><pre>$argon2id$v=19$m=65536,p=1,t=2$CQsmecpkoqaIooD8MMx6hQ$RQHeXgxCipOhjE9sOlKXrTtt+ymiJPhOtCyUjh6XWTM</pre><p>Write <code>needsRehash(stored, want)</code> → <code>true</code> when the row should be re-hashed at the next login: not an <code>$argon2id$v=19$&lt;params&gt;$&lt;salt&gt;$&lt;hash&gt;</code> string, parameters unreadable, or any of <code>m</code>, <code>t</code>, <code>p</code> below <code>want</code>. Read the parameters <b>by name</b> — they may come in any order (<code>m=…,p=…,t=…</code> is what the package writes).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gói argon2 đã ghi dòng này ở bài 2.2 (chạy thật):</p><pre>$argon2id$v=19$m=65536,p=1,t=2$CQsmecpkoqaIooD8MMx6hQ$RQHeXgxCipOhjE9sOlKXrTtt+ymiJPhOtCyUjh6XWTM</pre><p>Viết <code>needsRehash(stored, want)</code> → <code>true</code> khi dòng nên được băm lại ở lần đăng nhập sau: không phải chuỗi <code>$argon2id$v=19$&lt;tham số&gt;$&lt;muối&gt;$&lt;băm&gt;</code>, tham số không đọc được, hoặc <code>m</code>, <code>t</code>, <code>p</code> nào đó thấp hơn <code>want</code>. Đọc tham số <b>theo tên</b> — chúng có thể theo thứ tự bất kỳ (gói ghi <code>m=…,p=…,t=…</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "needsRehash(\"$argon2id$v=19$m=65536,p=1,t=2$CQsmecpkoqaIooD8MMx6hQ$RQHeXgxCipOhjE9sOlKXrTtt+ymiJPhOtCyUjh6XWTM\", {\"m\":65536,\"t\":2,\"p\":1})",
+          "output": "false",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on \"$\", then split the parameters on \",\" and \"=\".|||Tách theo \"$\", rồi tách tham số theo \",\" và \"=\".",
+        "Anything that is not today’s argon2id ⇒ true.|||Mọi thứ không phải argon2id hiện hành ⇒ true."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** want = { m, t, p } ⇒ true when the row should be re-hashed */\nfunction needsRehash(stored, want) {\n  // Write your solution here\n  var m = /m=(\\d+),t=(\\d+),p=(\\d+)/.exec(stored);\n  if (!m) return true;\n  return Number(m[1]) < want.m || Number(m[2]) < want.t || Number(m[3]) < want.p;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction needsRehash(stored, want) {\n  var m = /^\\$argon2id\\$v=19\\$([^$]+)\\$[A-Za-z0-9+/]+\\$[A-Za-z0-9+/]+$/.exec(typeof stored === 'string' ? stored : '');\n  if (!m) return true;                                  // not today's scheme ⇒ upgrade at the next login\n  var p = {};\n  m[1].split(',').forEach(function (kv) { var i = kv.indexOf('='); p[kv.slice(0, i)] = Number(kv.slice(i + 1)); });\n  if (!(p.m > 0 && p.t > 0 && p.p > 0)) return true;\n  return p.m < want.m || p.t < want.t || p.p < want.p;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The stored string is the single source of truth about how a row was hashed. Parsing it by name survives any library order; treating everything else as “outdated” is what upgrades bcrypt and wrapped MD5 rows in lesson 2.5.</p>",
+      "solutionExplanationHtmlVi": "<p>Chuỗi lưu là nguồn sự thật duy nhất về cách một dòng được băm. Đọc theo tên thì sống sót với mọi thứ tự của thư viện; coi mọi thứ khác là \"đã cũ\" chính là cách nâng cấp dòng bcrypt và MD5 đã bọc ở bài 2.5.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real string from lesson 2.2",
+              "vi": "Chuỗi thật từ bài 2.2"
+            },
+            "goi": "needsRehash(\"$argon2id$v=19$m=65536,p=1,t=2$CQsmecpkoqaIooD8MMx6hQ$RQHeXgxCipOhjE9sOlKXrTtt+ymiJPhOtCyUjh6XWTM\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 2: needsRehash(\"$argon2id$v=19$m=19456,p=1,t=2$c2FsdHNhbHRzYWx0$aGFzaGhhc2hoYXNo\", {\"m\":65...",
+              "vi": "Ca 2"
+            },
+            "goi": "needsRehash(\"$argon2id$v=19$m=19456,p=1,t=2$c2FsdHNhbHRzYWx0$aGFzaGhhc2hoYXNo\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Parameters in another order",
+              "vi": "Tham số theo thứ tự khác"
+            },
+            "goi": "needsRehash(\"$argon2id$v=19$t=2,m=65536,p=1$c2FsdHNhbHRzYWx0$aGFzaGhhc2hoYXNo\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "needsRehash(\"$argon2id$v=19$m=131072,p=1,t=3$c2FsdHNhbHRzYWx0$aGFzaGhhc2hoYXNo\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "needsRehash(\"$2b$10$abcdefghijklmnopqrstuuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "needsRehash(\"$argon2i$v=19$m=65536,p=1,t=2$c2FsdA$aGFzaA\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "needsRehash(\"$argon2id$v=19$m=65536,p=1$c2FsdA$aGFzaA\", {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "needsRehash(undefined, {\"m\":65536,\"t\":2,\"p\":1})",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A regex m=(\\d+),t=(\\d+),p=(\\d+): null on real strings ⇒ every login rehashes.|||Regex m=(\\d+),t=(\\d+),p=(\\d+): ra null với chuỗi thật ⇒ lượt nào cũng băm lại."
+        },
+        {
+          "loi": "Returning false for bcrypt: legacy rows never upgrade.|||Trả false cho bcrypt: dòng cũ không bao giờ nâng cấp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "self-describing hash",
+          "vi": "chuỗi băm tự mô tả"
+        }
+      ]
+    },
+    {
+      "title": "2.2-4 — Situation → algorithm",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "argon2 tuning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Pick the password hash for each situation (lesson 2.2).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn hàm băm mật khẩu cho từng tình huống (bài 2.2).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What is forbidden or required in each situation?|||Mỗi tình huống cấm hay bắt buộc điều gì?",
+        "The default needs a reason to change.|||Mặc định chỉ đổi khi có lý do."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.2-4 — Situation → algorithm\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → algorithmTình huống → thuật toán\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 2.2-4 — Situation → algorithm — answer key\n\n1. Situation → algorithmTình huống → thuật toán\n   - r1.a: argon2id\n   - r2.a: scrypt (raise maxmem)\n   - r3.a: keep bcrypt, cost ≥ 10, cap 72 bytes\n   - r4.a: PBKDF2-HMAC-SHA256, 600,000 iterations\n   argon2id by default; scrypt is built into node:crypto but OWASP’s N needs maxmem above 128 MiB; bcrypt is fine to keep with its 72-byte limit handled; PBKDF2 when FIPS is a hard requirement.VI: Mặc định argon2id; scrypt có sẵn trong node:crypto nhưng N của OWASP cần maxmem trên 128 MiB; bcrypt giữ lại được nếu xử lý giới hạn 72 byte; PBKDF2 khi FIPS là yêu cầu bắt buộc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>argon2id by default; scrypt is built into node:crypto but OWASP’s N needs maxmem above 128 MiB; bcrypt is fine to keep with its 72-byte limit handled; PBKDF2 when FIPS is a hard requirement.</p><p><i>VI: Mặc định argon2id; scrypt có sẵn trong node:crypto nhưng N của OWASP cần maxmem trên 128 MiB; bcrypt giữ lại được nếu xử lý giới hạn 72 byte; PBKDF2 khi FIPS là yêu cầu bắt buộc.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → algorithm</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → thuật toán</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Situation"
+              },
+              {
+                "ma": "a",
+                "ten": "Algorithm",
+                "luaChon": [
+                  "argon2id",
+                  "scrypt (raise maxmem)",
+                  "keep bcrypt, cost ≥ 10, cap 72 bytes",
+                  "PBKDF2-HMAC-SHA256, 600,000 iterations"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "A new Node.js service, native modules allowed (LabFlow ID)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "A serverless platform that forbids native modules"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "An existing app with 200,000 bcrypt rows, no time to migrate this term"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "A contract that requires FIPS-140 validated algorithms"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "argon2id",
+              "r2.a": "scrypt (raise maxmem)",
+              "r3.a": "keep bcrypt, cost ≥ 10, cap 72 bytes",
+              "r4.a": "PBKDF2-HMAC-SHA256, 600,000 iterations"
+            },
+            "giaiThich": "<p>argon2id by default; scrypt is built into node:crypto but OWASP’s N needs maxmem above 128 MiB; bcrypt is fine to keep with its 72-byte limit handled; PBKDF2 when FIPS is a hard requirement.</p><p><i>VI: Mặc định argon2id; scrypt có sẵn trong node:crypto nhưng N của OWASP cần maxmem trên 128 MiB; bcrypt giữ lại được nếu xử lý giới hạn 72 byte; PBKDF2 khi FIPS là yêu cầu bắt buộc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "scrypt with default maxmem: ERR_CRYPTO_INVALID_SCRYPT_PARAMS.|||scrypt với maxmem mặc định: ERR_CRYPTO_INVALID_SCRYPT_PARAMS."
+        },
+        {
+          "loi": "Migrating 200,000 bcrypt rows in a panic: bcrypt-10 is still slow.|||Hoảng hốt chuyển 200.000 dòng bcrypt: bcrypt-10 vẫn chậm."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

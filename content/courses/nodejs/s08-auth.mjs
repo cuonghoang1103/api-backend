@@ -227,6 +227,16 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 2.2 — Choosing and tuning the hash, by measurement</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: argon2id first, bcrypt and scrypt as fallbacks, a self-describing stored string, and tuning by measurement. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the cost under load (64 logins at once, RSS capped by the libuv thread pool), hashSync freezing a real Express server (/health answered in 2,784 ms), the 72-byte bcrypt trap with a Vietnamese passphrase, and the login timing leak (27.4× → 1.0×). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-4-chinh-sach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 2.4: a password policy from NIST, not from habit</span><span class="lc-sub">Same: no composition rules, no forced rotation, a breach check through the HIBP k-anonymity API. Deeper: revision 4 of NIST SP 800-63B (2025) raises the minimum to 15 characters when the password is the only factor; each rule is measured on real lists (756 of the top 1,000 pass “Capital + 1!”, Password1! appears 584,516 times) and the API is called for real, including what to do when it hangs. If you have not taken it, this lesson stands on its own.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-5-chuyen-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 2.5: moving off an old hash, without a reset</span><span class="lc-sub">Same: the parameters live in the stored string, so a successful login is the moment to rehash; bcrypt moves to argon2 the same way. Deeper: for broken hashes (unsalted MD5) waiting for logins is not enough — that lesson wraps all 1,003 rows in argon2id at once (17.1 s, no password needed), drops the old column in the same UPDATE, and shows how a leftover MD5 cost Ashley Madison 11 million passwords.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -431,6 +441,16 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 2.2 — Chọn và chỉnh hàm băm, bằng phép đo</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: argon2id trước, bcrypt và scrypt làm phương án dự phòng, chuỗi lưu tự mô tả, và chỉnh tham số bằng phép đo. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: cái giá khi có tải (64 lượt đăng nhập cùng lúc, RSS bị bể luồng libuv giới hạn), hashSync đóng băng một server Express thật (/health trả lời sau 2.784 ms), bẫy 72 byte của bcrypt với câu mật khẩu tiếng Việt, và chỗ rò thời gian ở đăng nhập (27,4× → 1,0×). Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-4-chinh-sach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 2.4: chính sách mật khẩu theo NIST, không theo thói quen</span><span class="lc-sub">Giống: không luật pha trộn, không bắt đổi định kỳ, kiểm rò rỉ qua API k-ẩn danh của HIBP. Sâu hơn: bản sửa đổi 4 của NIST SP 800-63B (2025) nâng mức tối thiểu lên 15 ký tự khi mật khẩu là yếu tố duy nhất; từng luật được đo trên danh sách thật (756 trong top 1.000 qua được "viết hoa + 1!", Password1! xuất hiện 584.516 lần) và API được gọi thật, kể cả khi nó treo. Chưa học khoá đó thì bài này vẫn tự đứng được.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-5-chuyen-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 2.5: chuyển khỏi hàm băm cũ, không bắt đặt lại mật khẩu</span><span class="lc-sub">Giống: tham số nằm trong chuỗi lưu, nên lượt đăng nhập thành công là lúc băm lại; bcrypt chuyển sang argon2 cũng vậy. Sâu hơn: với hàm băm đã hỏng (MD5 không muối) chờ đăng nhập là chưa đủ — bài đó bọc cả 1.003 dòng trong argon2id một lượt (17,1 s, không cần mật khẩu), xoá cột cũ trong cùng câu UPDATE, và cho thấy một MD5 sót lại đã làm Ashley Madison mất 11 triệu mật khẩu.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>

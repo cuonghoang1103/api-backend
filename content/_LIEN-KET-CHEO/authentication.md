@@ -25,3 +25,14 @@ Mọi tệp đích là tệp viết tay (đã kiểm header "FILE SINH TỰ Đ�
 Đã có từ trước, KHÔNG thêm lại: `nodejs-ch8-auth-apidesign.md` (Node 8.x ↔ auth 2.1/2.2/3.4/4.2/5.2/9.5/11.3), `nodejs-ch9-bao-mat.md`
 (Node 9.4 ↔ auth 1.3/11.1; Node 9.2 ↔ auth 4.5), `prj301-nodejs-auth-postgresql.md` (PRJ301/SDN302 ↔ auth 3.2).
 Ứng viên cho chương sau (ghi ở `_HOP-DONG.md` §11): SDN302 5.2 ↔ Ch4, testing 5.2 ↔ Ch4/Ch9, nodejs 8.1 ↔ Ch2 (đã có), api-design 6.1 ↔ Ch4/Ch10.
+
+## Chương 2 (01/11/2026) — 3 cặp hai chiều mới + 2 cặp có sẵn giữ nguyên
+
+| Authentication | Bài kia | Giống | Authentication thêm (đo thật, Node 22.23.3 + PostgreSQL 17.11) |
+|---|---|---|---|
+| `auth-2-3-luong-dang-nhap` | `api-design/api-6-1-xac-thuc` | mật khẩu chỉ băm, một endpoint đăng nhập | đo chính route đăng nhập rò gì: cùng 401 mà 37–39× → băm giả 1,0×; NFC; thân 8 kB ⇒ 413, logger trước bộ đọc; pepper (bài kia dùng scryptSync mặc định của Node) |
+| `auth-2-4-chinh-sach` | `nodejs/nodejs-8-1-mat-khau-va-bam` | không luật pha trộn, không đổi định kỳ, HIBP k-ẩn danh | NIST 800-63B-4 (2025): tối thiểu 15 khi là yếu tố duy nhất (bài kia: 8–12 theo bản trước); 756/1.000 qua "viết hoa + 1!", Password1! 584.516 lần, HIBP gọi thật + treo ⇒ chọn mở |
+| `auth-2-5-chuyen-doi` | `nodejs/nodejs-8-1-mat-khau-va-bam` | tham số trong chuỗi lưu ⇒ băm lại khi đăng nhập; bcrypt → argon2 | bọc 1.003 dòng MD5 ngay (17,1 s, không cần mật khẩu), xoá cột cũ cùng UPDATE, Ashley Madison 2015 (MD5 sót ⇒ 11 triệu) |
+
+Có sẵn từ trước, giữ nguyên thẻ ở cả hai phía (sổ `nodejs-ch8-auth-apidesign.md`): `auth-2-1-da-co-csdl` ↔ `nodejs-8-1-mat-khau-va-bam`,
+`auth-2-2-chon-va-chinh` ↔ `nodejs-8-1-mat-khau-va-bam`. Lab 2 (`auth-2-7-lab-luu-mat-khau`) chưa có cặp — SDN302 5.1 đã có 4 thẻ mỗi ngôn ngữ, không chèn thêm.

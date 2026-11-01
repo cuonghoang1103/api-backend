@@ -1453,6 +1453,146 @@
    "PERF -> 200,000 envelopes: OK, chain 872\n"
   ]
  },
+ "csd201-cs4-common-subarray": {
+  "bam": "7fccba7e38d68427",
+  "ra": [
+   "RUN 5,1,2,8,3,7 1,2,3,7,8 -> 2\nRUN 1,2,3,2,1 3,2,1,4,7 -> 3\nRUN - 1,2 -> 0\nRUN 4,4,4 4,4 -> 2\nRUN 1,2,3 4,5,6 -> 0\n",
+   "RANDOM -> 3000 random pairs (empty too): all 3000 agree with the brute force\n",
+   "PERF -> 3000 x 3000 with long common blocks: OK, longest 999\n"
+  ]
+ },
+ "csd201-cs4-distinct-subseq": {
+  "bam": "7ca3a8e35a60e17e",
+  "ra": [
+   "RUN banana ban -> 3\nRUN banana ana -> 4\nRUN banana - -> 1\nRUN - a -> 0\nRUN aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -> 737009364\n",
+   "RANDOM -> 2000 random pairs over {a,b}: all 2000 agree with the brute force\n",
+   "PERF -> |s| = 20,000, |t| = 300: OK, count mod p = 321557149\n"
+  ]
+ },
+ "csd201-cs4-dungeon": {
+  "bam": "f14c3ff136b09bf3",
+  "ra": [
+   "RUN -2,-4,3 -6,8,-1 9,-12,5 -> 7\nRUN 5 -> 1\nRUN -5 -> 6\nRUN 0 -> 1\nRUN 1,-3,3 0,-2,0 -3,-3,-3 -> 3\n",
+   "RANDOM -> 2000 random grids vs every path: all 2000 agree with the brute force\n",
+   "PERF -> 1000 x 1000 grid: OK, start 23\n"
+  ]
+ },
+ "csd201-cs4-interleave": {
+  "bam": "16d821a1656bcb04",
+  "ra": [
+   "RUN abc xab axbabc -> true\nRUN abc xab abxcab -> true\nRUN abc xab abcxba -> false\nRUN ab ac acab -> true\nRUN - - - -> true\nRUN a - ab -> false\n",
+   "RANDOM -> 3000 random triples (half real merges): all 3000 agree with the brute force\n",
+   "PERF -> a = b = 2000 a's: OK, answers true and false\n"
+  ]
+ },
+ "csd201-cs4-min-cuts": {
+  "bam": "74e5eb00a31ef455",
+  "ra": [
+   "RUN abaccd -> 2\nRUN aab -> 1\nRUN racecar -> 0\nRUN abcd -> 3\nRUN abaab -> 1\nRUN - -> 0\n",
+   "RANDOM -> 2000 random strings (empty too): all 2000 agree with the brute force\n",
+   "PERF -> n = 2000: OK, cuts 171\n"
+  ]
+ },
+ "csd201-cs4-target-sum": {
+  "bam": "fff87f51847364b5",
+  "ra": [
+   "RUN 2,1,3,1,1 2 -> 5\nRUN 0,0,1 1 -> 4\nRUN 5 -5 -> 1\nRUN 1,2 2 -> 0\nRUN - 0 -> 1\nRUN 3 7 -> 0\n",
+   "RANDOM -> 3000 random cases vs every sign pattern: all 3000 agree with the brute force\n",
+   "PERF -> 200 numbers: OK, answers 183747591 and 344623134\n"
+  ]
+ },
+ "csd201-cs5-arrows": {
+  "bam": "8e0de2318f1d111b",
+  "ra": [
+   "RUN 10,16 2,8 1,6 7,12 -> 2\nRUN -2147483646,-2147483645 2147483646,2147483647 -> 2\nRUN -> 0\nRUN 3,3 -> 1\nRUN 1,2 2,3 -> 1\nRUN 1,2 3,4 5,6 7,8 -> 4\n",
+   "RANDOM -> 3000 random sets (a third near the int limits): all 3000 agree with the brute force\n",
+   "PERF -> 200,000 balloons: OK, arrows 107247\n"
+  ]
+ },
+ "csd201-cs5-candy": {
+  "bam": "e80406d731227cac",
+  "ra": [
+   "RUN 1,0,2 -> 5\nRUN 1,2,2 -> 4\nRUN 1,3,4,5,2 -> 11\nRUN - -> 0\nRUN 5,4,3,2,1 -> 15\nRUN 2,2,2 -> 3\n",
+   "RANDOM -> 600 random ratings (ties, negatives) vs every assignment: all 600 agree with the brute force\n",
+   "PERF -> 1,000,000 children (a descending run of 500,000): OK, candies 125002249999\n"
+  ]
+ },
+ "csd201-cs5-kth-largest": {
+  "bam": "796866ec6c010b9d",
+  "ra": [
+   "RUN 3,2,1,5,6,4 2 -> 5\nRUN 3,2,3,1,2,4,5,5,6 4 -> 4\nRUN 7 1 -> 7\nRUN 5,5,5,5 3 -> 5\nRUN -1,-7,3 3 -> -7\n",
+   "RANDOM -> 5000 random arrays (duplicates, negatives) vs sorting: all 5000 agree with the brute force\n",
+   "PERF -> 300 queries on 300,000 elements + 300,000 equal values: OK, sum -1937896376\n"
+  ]
+ },
+ "csd201-cs5-largest-number": {
+  "bam": "cce84dba27293c86",
+  "ra": [
+   "RUN 3,30,34,5,9 -> 9534330\nRUN 10,2 -> 210\nRUN 121,12 -> 12121\nRUN 0,0 -> 0\nRUN 0 -> 0\nRUN 8,89,898 -> 898988\n",
+   "RANDOM -> 2000 random arrays (zeros, prefixes) vs every order: all 2000 agree with the brute force\n",
+   "PERF -> 100,000 numbers: OK, length 588945, starts 99997999953999950999, hash 2128944330\n"
+  ]
+ },
+ "csd201-cs5-non-overlap": {
+  "bam": "4f4de16ad8b9eb3f",
+  "ra": [
+   "RUN 1,2 2,3 3,4 1,3 -> 1\nRUN 1,2 1,2 1,2 -> 2\nRUN 1,2 2,3 -> 0\nRUN -> 0\nRUN 1,10 2,3 4,5 6,7 -> 1\n",
+   "RANDOM -> 3000 random interval sets: all 3000 agree with the brute force\n",
+   "PERF -> 200,000 intervals: OK, removed 121013\n"
+  ]
+ },
+ "csd201-cs5-reverse-pairs": {
+  "bam": "f36cc875dc9b75ba",
+  "ra": [
+   "RUN 1,3,2,3,1 -> 2\nRUN 2,4,3,5,1 -> 3\nRUN - -> 0\nRUN 2147483647,2147483647,-2147483648 -> 2\nRUN -5,1073741824 -> 0\n",
+   "RANDOM -> 3000 random arrays (negatives, MIN/MAX): all 3000 agree with the brute force\n",
+   "PERF -> 1,000,000 elements: OK, pairs 249918498325\n"
+  ]
+ },
+ "csd201-cs6-beautiful-arrangement": {
+  "bam": "de011d25f4d7b57b",
+  "ra": [
+   "RUN 1 -> 1\nRUN 2 -> 2\nRUN 3 -> 3\nRUN 4 -> 8\nRUN 6 -> 36\n",
+   "RANDOM -> n = 1..9: all 9 agree with the brute force\n",
+   "PERF -> n = 15: OK, count 24679\n"
+  ]
+ },
+ "csd201-cs6-combination-sum-3": {
+  "bam": "6df322ad6bab967f",
+  "ra": [
+   "RUN 3 9 -> 3 [[1, 2, 6], [1, 3, 5], [2, 3, 4]]\nRUN 3 7 -> 1 [[1, 2, 4]]\nRUN 4 1 -> 0 []\nRUN 9 45 -> 1 [[1, 2, 3, 4, 5, 6, 7, 8, 9]]\nRUN 2 18 -> 0 []\nRUN 1 9 -> 1 [[9]]\n",
+   "RANDOM -> every k = 1..9, n = 1..50: all 450 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs6-partition-k": {
+  "bam": "c91c3ce155c38571",
+  "ra": [
+   "RUN 4,3,2,3,5,2,1 4 -> true\nRUN 4,3,2,3,5,2,1 3 -> false\nRUN 7 1 -> true\nRUN 2,2,2,2,3,3 3 -> false\nRUN 1,1,1,1,2,2,2,2 4 -> true\nRUN 10,1,1,1,1 2 -> false\n",
+   "RANDOM -> 2000 random cases: all 2000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs6-restore-ip": {
+  "bam": "a59809ef18c8959d",
+  "ra": [
+   "RUN 25525511135 -> 2 [255.255.11.135, 255.255.111.35]\nRUN 0000 -> 1 [0.0.0.0]\nRUN 101023 -> 5 [1.0.10.23, 1.0.102.3, 10.1.0.23, 10.10.2.3, 101.0.2.3]\nRUN 1111 -> 1 [1.1.1.1]\nRUN 256256256256 -> 0 []\nRUN 123 -> 0 []\n",
+   "RANDOM -> 3000 random digit strings (lengths 1..14): all 3000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs6-subsets-dup": {
+  "bam": "cefce456d05f7f7c",
+  "ra": [
+   "RUN 1,2,2 -> 6 [[1, 2, 2], [1, 2], [1], [2, 2], [2], []]\nRUN - -> 1 [[]]\nRUN 0 -> 2 [[0], []]\nRUN 2,1,2,1 -> 9 [[1, 1, 2, 2], [1, 1, 2], [1, 1], [1, 2, 2], [1, 2], [1], [2, 2], [2], []]\nRUN 4,4,4 -> 4 [[4, 4, 4], [4, 4], [4], []]\n",
+   "RANDOM -> 2000 random arrays with duplicates: all 2000 agree with the brute force\n",
+   "PERF -> 30 numbers: OK, distinct subsets 16807\n"
+  ]
+ },
+ "csd201-cs6-unique-paths-3": {
+  "bam": "17a26a41fe6b1793",
+  "ra": [
+   "RUN 1,0,0,0 0,0,0,0 0,0,2,-1 -> 2\nRUN 1,0,0,0 0,0,0,0 0,0,0,2 -> 4\nRUN 0,1 2,0 -> 0\nRUN 1,2 -> 1\nRUN 1,-1,2 -> 0\n",
+   "RANDOM -> 1500 random grids: all 1500 agree with the brute force\n"
+  ]
+ },
  "csd201-pe-sp26-b5p4-q1-mylist": {
   "bam": "2182e62fb9c36da9",
   "ra": [

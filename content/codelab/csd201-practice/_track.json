@@ -358,6 +358,24 @@
       "description": "Luyện: Fewest perfect squares that sum to n — coin change with coins 1, 4, 9, 16 … · Cheapest travel passes (1, 7 and 30 days) — DP over calendar days · Count ordered sequences that sum to a target — the loop order decides the answer · Maximum product subarray — keep the largest AND the smallest product · How many longest increasing subsequences? — length and count side by side · Russian doll envelopes — sort cleverly, then LIS in O(n log n)"
     },
     {
+      "slug": "csd201-cs4-on",
+      "name": "10.4 ⭐ CS.4 Dynamic programming II — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Target sum: + or − before every number — turn it into counting subsets · Longest common subarray (contiguous!) — not the LCS · Is c an interleaving of a and b? — a 2-D boolean table (greedy fails) · In how many ways can t be picked out of s? — distinct subsequences · Dungeon: the smallest starting health — fill the table BACKWARDS · Fewest cuts so that every piece is a palindrome — two DP tables"
+    },
+    {
+      "slug": "csd201-cs5-on",
+      "name": "10.5 ⭐ CS.5 Greedy and divide and conquer — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Remove the fewest intervals so that the rest do not overlap — greedy by END · Fewest arrows to burst all balloons — and the subtraction-comparator trap · Arrange numbers to form the largest number — the comparator a + b vs b + a · Candy: two greedy passes (left rule, then right rule) · The k-th largest element — quickselect with a 3-way partition · Count pairs i < j with a[i] > 2·a[j] — merge sort counting (and the 2L trap)"
+    },
+    {
+      "slug": "csd201-cs6-on",
+      "name": "10.6 ⭐ CS.6 Backtracking — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Restore IP addresses — cut a digit string into 4 valid octets · All DISTINCT subsets when the input has duplicates — skip equal values at the same depth · Choose exactly k different digits 1–9 that sum to n — prune on the running sum · Beautiful arrangements — prune at the current position, not at the end · Walk over every empty cell exactly once — count Hamiltonian paths on a grid · Split into k subsets with equal sums — fill one bucket at a time"
+    },
+    {
       "slug": "csd201-on-pe",
       "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
       "level": "ADVANCED",

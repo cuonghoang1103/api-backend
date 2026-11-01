@@ -14,6 +14,7 @@ import { fetchAllPages, languageApi } from '@/lib/language-api';
 import type { GrammarPoint } from '@/types/language';
 import { usePro } from '@/hooks/usePro';
 import { AiExplainButton, AiExplainModal } from '@/components/language/AiExplainModal';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import {
   SectionShell,
   SpeakerButton,
@@ -228,7 +229,7 @@ function GrammarRow({
               {point.explanation && (
                 <div
                   className="note-prose lang-prose max-w-full break-words text-sm leading-relaxed text-text-secondary"
-                  dangerouslySetInnerHTML={{ __html: point.explanation }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(point.explanation) }}
                 />
               )}
 

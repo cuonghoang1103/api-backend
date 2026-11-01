@@ -40,6 +40,7 @@ import { Chip,
   usePrefersReducedMotion,
 } from '@/components/language/primitives';
 import { usePro } from '@/hooks/usePro';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 
 // ─── HTML → plain-text paragraphs (client-only) ───────────────────
 function htmlToParagraphs(html: string): string[] {
@@ -794,7 +795,7 @@ function TextReader({
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neon-cyan">Bản dịch</p>
               <div
                 className="prose-language lang-prose max-w-full break-words leading-relaxed text-text-secondary"
-                dangerouslySetInnerHTML={{ __html: article.translation }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.translation) }}
               />
             </div>
           </motion.div>

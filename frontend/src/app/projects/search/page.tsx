@@ -16,6 +16,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { projectsApi } from '@/lib/api';
 import type { ProjectSearchResponse } from '@/types';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 
 const CATEGORY_OPTIONS = ['', 'Web App', 'API', 'DevOps', 'Mobile', 'CLI'];
 const DIFFICULTY_OPTIONS = ['', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
@@ -277,7 +278,7 @@ export default function SearchPage() {
  {hit.snippet && (
  <p
  className="mb-3 text-sm leading-relaxed text-gray-300 [&_mark]:rounded-sm [&_mark]:bg-violet-500/30 [&_mark]:px-1 [&_mark]:text-violet-100"
- dangerouslySetInnerHTML={{ __html: hit.snippet }}
+ dangerouslySetInnerHTML={{ __html: sanitizeHtml(hit.snippet) }}
  />
  )}
 

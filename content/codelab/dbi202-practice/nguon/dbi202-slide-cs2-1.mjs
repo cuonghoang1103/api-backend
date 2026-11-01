@@ -1,0 +1,68 @@
+/**
+ * DBI202 · ⭐ CS.2 phần 1 — kiến trúc DBMS, trang 8 KB, extent/heap, địa chỉ dòng, slotted page, kích thước dòng, trần 8060 byte,
+ * ROW_OVERFLOW/LOB và TOAST (slide 1–14). Số dòng/trang trong đề đã đo thật trên SQL Server (sys.dm_db_index_physical_stats).
+ */
+import { mod, cs, q, ord, bang1, tn } from './_chung.mjs';
+
+export default mod('dbi202-slide-cs2-1', '⭐ CS.2 Inside a DBMS (1): architecture, pages, rows', [
+  cs({
+    t: 'The path of one SELECT through the engine', k: 'EASY', p: 5, loai: 'order',
+    kn: ['DBMS architecture', 'parser', 'optimizer', 'executor', 'storage engine'], tag: ['advanced', 'internals'],
+    en: '<p>Slides 1–3 follow one statement from the client to the disk and back. Put the stages in order.</p>',
+    vi: '<p>Slide 1–3 theo một câu lệnh từ client xuống đĩa rồi quay lại. Sắp các chặng theo thứ tự.</p>',
+    cau: [ord('o1', ['First → last', 'Đầu → cuối'], ['The client sends the SQL text over the network', 'The parser checks the syntax and builds a tree', 'The binder resolves names and types from the catalog', 'The optimizer picks the cheapest plan', 'The executor runs the plan operator by operator', 'The storage engine fetches the pages through the buffer pool'],
+      ['Parse → bind (SQL Server: algebrizer; PostgreSQL: analyzer) → optimize → execute → storage. A misspelt column fails at the binder, before any plan exists.', 'Phân tích cú pháp → gắn tên (SQL Server: algebrizer; PostgreSQL: analyzer) → tối ưu → thực thi → lưu trữ. Gõ sai tên cột thì hỏng ở bước gắn tên, trước khi có kế hoạch.'])],
+    gy: [['Syntax before names, names before plans.', 'Cú pháp trước tên, tên trước kế hoạch.'], ['Only the storage engine touches pages.', 'Chỉ storage engine chạm vào trang.']],
+    lhg: [['Putting the optimizer before name binding — it needs to know the tables first.', 'Đặt bộ tối ưu trước bước gắn tên — nó cần biết bảng trước.'], ['Thinking the executor reads the disk directly instead of through the buffer pool.', 'Tưởng bộ thực thi đọc đĩa trực tiếp thay vì qua buffer pool.']],
+    tn: [tn('query optimizer', 'bộ tối ưu truy vấn'), tn('storage engine', 'bộ máy lưu trữ'), tn('buffer pool', 'vùng đệm trang')],
+  }),
+  cs({
+    t: 'Same idea, two names: SQL Server ↔ PostgreSQL', k: 'MEDIUM', p: 6, loai: 'table',
+    kn: ['naming map', 'page', 'physical row address', 'TOAST'], tag: ['advanced', 'internals', 'postgresql'],
+    en: '<p>Slide 4 maps the vocabulary of the two engines. Give the PostgreSQL name for each SQL Server term.</p>',
+    vi: '<p>Slide 4 đối chiếu từ vựng hai hệ. Cho tên PostgreSQL của từng thuật ngữ SQL Server.</p>',
+    bang: [bang1('b1', ['SQL Server → PostgreSQL', 'SQL Server → PostgreSQL'],
+      [{ ma: 'ss', ten: 'SQL Server' }, { ma: 'pg', ten: 'PostgreSQL', luaChon: ['shared_buffers', 'WAL (write-ahead log)', 'ctid', 'TOAST', 'block (also 8 KB)', 'heap file of the table'] }],
+      [{ o: { ss: 'buffer pool' }, a: { pg: 'shared_buffers' } },
+        { o: { ss: 'transaction log (.ldf)' }, a: { pg: 'WAL (write-ahead log)' } },
+        { o: { ss: '%%physloc%% (file:page:slot)' }, a: { pg: 'ctid' } },
+        { o: { ss: 'ROW_OVERFLOW / LOB pages' }, a: { pg: 'TOAST' } },
+        { o: { ss: 'data page (8 KB)' }, a: { pg: 'block (also 8 KB)' } },
+        { o: { ss: 'table without a clustered index (heap)' }, a: { pg: 'heap file of the table' } }],
+      ['Both engines count cost in 8 KB pages. A PostgreSQL table is ALWAYS a heap; its indexes are separate files that point into it.', 'Cả hai hệ tính chi phí theo trang 8 KB. Bảng PostgreSQL LUÔN là heap; chỉ mục là tệp riêng trỏ vào nó.'])],
+    gy: [['ctid = (block, line pointer), the PostgreSQL twin of file:page:slot.', 'ctid = (khối, con trỏ dòng), anh em của file:page:slot.'], ['TOAST = The Oversized-Attribute Storage Technique.', 'TOAST = kỹ thuật lưu thuộc tính quá cỡ.']],
+    lhg: [['Thinking PostgreSQL pages are 4 KB.', 'Tưởng trang PostgreSQL là 4 KB.'], ['Mapping the transaction log to PostgreSQL\'s "log" (that is the text server log).', 'Ghép nhật ký giao dịch với "log" của PostgreSQL (đó là log chữ của server).']],
+    tn: [tn('page', 'trang'), tn('physical row locator', 'địa chỉ vật lý của dòng')],
+  }),
+  cs({
+    t: 'Count it yourself: bytes per row, rows per page, pages', k: 'HARD', p: 12, loai: 'table',
+    kn: ['row size', 'slot array', '8096 usable bytes'], tag: ['advanced', 'internals', 'storage'],
+    en: '<p>SQL Server heaps, every column NOT NULL and fixed-length, at most 8 columns. Slides 10–12: a row = <b>data + 7 bytes</b> of overhead (4-byte header, 2-byte column count, 1-byte NULL bitmap); each row also costs a <b>2-byte slot</b>; a page has <b>8096</b> usable bytes. Fill in the three numbers for each table (whole numbers). Every answer was measured with <code>sys.dm_db_index_physical_stats</code>.</p>',
+    vi: '<p>Heap SQL Server, mọi cột NOT NULL và độ dài cố định, tối đa 8 cột. Slide 10–12: một dòng = <b>dữ liệu + 7 byte</b> phụ phí (4 byte đầu dòng, 2 byte số cột, 1 byte bitmap NULL); mỗi dòng tốn thêm <b>2 byte slot</b>; một trang có <b>8096</b> byte dùng được. Điền ba số cho từng bảng (số nguyên). Mọi đáp án đã đo bằng <code>sys.dm_db_index_physical_stats</code>.</p>',
+    bang: [bang1('b1', ['Bytes per row · rows per page · pages', 'Byte mỗi dòng · dòng mỗi trang · số trang'],
+      [{ ma: 'bang', ten: 'Table / Bảng' }, { ma: 'b', ten: 'bytes/row' }, { ma: 'd', ten: 'rows/page' }, { ma: 'p', ten: 'pages' }],
+      [{ o: { bang: '(INT, CHAR(100), INT) · 1,000 rows' }, a: { b: '115', d: '69', p: '15' } },
+        { o: { bang: '(INT, CHAR(200)) · 5,000 rows' }, a: { b: '211', d: '38', p: '132' } },
+        { o: { bang: '(BIGINT, INT, CHAR(20)) · 10,000 rows' }, a: { b: '39', d: '197', p: '51' } },
+        { o: { bang: '(INT, DATE, CHAR(500)) · 2,000 rows' }, a: { b: '514', d: '15', p: '134' } }],
+      ['Row = sum of column sizes + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Rows/page = floor(8096 / (row + 2)). Pages = ceiling(rows / rows-per-page). E.g. 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15.7 → 15; 2000 / 15 = 133.3 → 134.', 'Dòng = tổng kích thước cột + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Dòng/trang = làm tròn xuống 8096 / (dòng + 2). Trang = làm tròn lên số dòng / dòng-mỗi-trang. Ví dụ 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15,7 → 15; 2000 / 15 = 133,3 → 134.'])],
+    gy: [['Do not forget the 7-byte row overhead AND the 2-byte slot.', 'Đừng quên 7 byte phụ phí dòng VÀ 2 byte slot.'], ['Rows per page rounds DOWN, pages round UP.', 'Dòng mỗi trang làm tròn XUỐNG, số trang làm tròn LÊN.']],
+    lhg: [['8096 / 108 = 74 rows per page for the first table — overhead forgotten.', '8096 / 108 = 74 dòng mỗi trang cho bảng đầu — quên phụ phí.'], ['Using 8192 instead of 8096 — the 96-byte page header is not usable.', 'Dùng 8192 thay vì 8096 — 96 byte đầu trang không dùng được.']],
+    tn: [tn('slot array', 'mảng vị trí dòng'), tn('row overhead', 'phụ phí dòng')],
+  }),
+  cs({
+    t: 'Long values, physical addresses, and why cost is counted in pages', k: 'MEDIUM', p: 7,
+    kn: ['8060-byte limit', 'ROW_OVERFLOW', 'TOAST', 'ctid'], tag: ['advanced', 'internals'],
+    en: '<p>Five questions on slides 5–14.</p>', vi: '<p>Năm câu về slide 5–14.</p>',
+    cau: [
+      q('c1', ['Why do DBMS cost models count pages, not rows?', 'Vì sao mô hình chi phí của DBMS đếm trang chứ không đếm dòng?'], ['the disk and the buffer pool move whole 8 KB pages, never single rows', 'rows have no fixed size, so they cannot be counted', 'counting rows would need a full table scan', 'every page always holds exactly one hundred rows'], ['Reading one row means reading the page that holds it.', 'Đọc một dòng nghĩa là đọc trang chứa nó.']),
+      q('c2', ['On SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…', 'Trên SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…'], ['fails: 8000 + 100 + 7 bytes exceed the 8060-byte row limit', 'works: NCHAR(4000) takes 4000 bytes, well under the limit', 'works, the overflow goes to ROW_OVERFLOW_DATA pages', 'works, but the table is stored as a LOB'], ['NCHAR uses 2 bytes per character. Only variable-length columns may overflow.', 'NCHAR tốn 2 byte mỗi ký tự. Chỉ cột độ dài thay đổi mới được tràn trang.']),
+      q('c3', ['A NVARCHAR(4000) + NVARCHAR(4000) table on SQL Server…', 'Bảng NVARCHAR(4000) + NVARCHAR(4000) trên SQL Server…'], ['is created; long values move to ROW_OVERFLOW_DATA pages', 'is refused at CREATE time like the NCHAR case', 'is created, but inserts over 8060 bytes always fail', 'is created and silently truncates long values'], ['Variable-length columns are allowed to exceed 8060 in total; the overflow is stored off-row with a 24-byte pointer.', 'Cột độ dài thay đổi được phép vượt 8060 tổng cộng; phần tràn lưu ngoài dòng với con trỏ 24 byte.']),
+      q('c4', ['On PostgreSQL a 1 MB text value…', 'Trên PostgreSQL một giá trị text 1 MB…'], ['is compressed and moved to the TOAST table automatically', 'is refused because a block is only 8 KB', 'must be declared as a LOB column first', 'is split across several rows of the same table'], ['TOAST kicks in when a row exceeds about 2 KB; you never declare it.', 'TOAST tự bật khi dòng vượt khoảng 2 KB; không cần khai báo.']),
+      q('c5', ['After UPDATE on PostgreSQL, the ctid of the row usually…', 'Sau UPDATE trên PostgreSQL, ctid của dòng thường…'], ['changes, because a new row version is written', 'stays the same, like a primary key', 'becomes NULL until VACUUM runs', 'is copied into the transaction log only'], ['MVCC writes a new tuple; ctid is a physical address, never an identifier to store in your app.', 'MVCC ghi một tuple mới; ctid là địa chỉ vật lý, không bao giờ là định danh để lưu trong app.']),
+    ],
+    gy: [['N types = 2 bytes per character.', 'Kiểu N = 2 byte mỗi ký tự.'], ['Fixed-length columns must fit in the row; variable-length may overflow.', 'Cột cố định phải vừa dòng; cột thay đổi được phép tràn.']],
+    lhg: [['Reading NCHAR(4000) as 4000 bytes.', 'Đọc NCHAR(4000) là 4000 byte.'], ['Using ctid or %%physloc%% as a row id in application code.', 'Dùng ctid hay %%physloc%% làm id dòng trong mã ứng dụng.']],
+    tn: [tn('row overflow', 'tràn dòng'), tn('large object (LOB)', 'đối tượng lớn')],
+  }),
+]);

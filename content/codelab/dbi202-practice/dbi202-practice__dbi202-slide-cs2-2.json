@@ -1,0 +1,462 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs2-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs2-2"
+  },
+  "exercises": [
+    {
+      "title": "Logical, physical, read-ahead: read the I/O numbers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "buffer pool",
+        "logical reads",
+        "physical reads",
+        "SET STATISTICS IO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "performance"
+      ],
+      "problemHtml": "<p>Slides 15–18. The same query runs twice right after the server starts.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 15–18. Cùng một truy vấn chạy hai lần ngay sau khi server khởi động.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Logical = RAM touches; physical = disk.|||Logical = chạm RAM; physical = đĩa.",
+        "Tune on logical reads, not on a single timing.|||Tinh chỉnh theo logical reads, không theo một lần đo thời gian."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logical, physical, read-ahead: read the I/O numbers\n\nAnswer in the answer panel (no code needed).\n\n1. First run: logical reads 147, physical reads 2, read-ahead reads 145. Second run?Lần 1: logical reads 147, physical reads 2, read-ahead reads 145. Lần 2?\n2. Which number should you compare when tuning a query?Nên so số nào khi tinh chỉnh truy vấn?\n3. In PostgreSQL EXPLAIN (ANALYZE, BUFFERS), \"shared hit=173\" means…Trong EXPLAIN (ANALYZE, BUFFERS) của PostgreSQL, \"shared hit=173\" nghĩa là…\n4. A query returns ONE row but shows 147 logical reads. Most likely…Truy vấn trả MỘT dòng nhưng 147 logical reads. Nhiều khả năng…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logical, physical, read-ahead: read the I/O numbers — answer key\n\n1. First run: logical reads 147, physical reads 2, read-ahead reads 145. Second run?Lần 1: logical reads 147, physical reads 2, read-ahead reads 145. Lần 2?\n   Answer: c) logical reads 147, physical 0, read-ahead 0\n   Logical reads count pages touched in RAM — the same every run. The disk reads disappear because the pages are cached.VI: Logical reads đếm trang chạm trong RAM — mọi lần như nhau. Đọc đĩa biến mất vì trang đã nằm trong bộ đệm.\n\n2. Which number should you compare when tuning a query?Nên so số nào khi tinh chỉnh truy vấn?\n   Answer: d) logical reads: they do not depend on what happens to be cached\n   Logical reads are stable and proportional to work done; timings and physical reads depend on the cache state.VI: Logical reads ổn định và tỉ lệ với khối lượng việc; thời gian và đọc vật lý phụ thuộc trạng thái bộ đệm.\n\n3. In PostgreSQL EXPLAIN (ANALYZE, BUFFERS), \"shared hit=173\" means…Trong EXPLAIN (ANALYZE, BUFFERS) của PostgreSQL, \"shared hit=173\" nghĩa là…\n   Answer: a) 173 pages were found in shared_buffers\n   hit = already in RAM; read = had to come from the OS/disk.VI: hit = đã có trong RAM; read = phải lấy từ OS/đĩa.\n\n4. A query returns ONE row but shows 147 logical reads. Most likely…Truy vấn trả MỘT dòng nhưng 147 logical reads. Nhiều khả năng…\n   Answer: c) no index on the filtered column: the whole table was scanned\n   Cost is the pages read to FIND the row, not the rows returned.VI: Chi phí là số trang đọc để TÌM dòng, không phải số dòng trả về.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> logical reads 147, physical 0, read-ahead 0</p><p>Logical reads count pages touched in RAM — the same every run. The disk reads disappear because the pages are cached.</p><p><i>VI: Logical reads đếm trang chạm trong RAM — mọi lần như nhau. Đọc đĩa biến mất vì trang đã nằm trong bộ đệm.</i></p></li><li><p><b>d)</b> logical reads: they do not depend on what happens to be cached</p><p>Logical reads are stable and proportional to work done; timings and physical reads depend on the cache state.</p><p><i>VI: Logical reads ổn định và tỉ lệ với khối lượng việc; thời gian và đọc vật lý phụ thuộc trạng thái bộ đệm.</i></p></li><li><p><b>a)</b> 173 pages were found in shared_buffers</p><p>hit = already in RAM; read = had to come from the OS/disk.</p><p><i>VI: hit = đã có trong RAM; read = phải lấy từ OS/đĩa.</i></p></li><li><p><b>c)</b> no index on the filtered column: the whole table was scanned</p><p>Cost is the pages read to FIND the row, not the rows returned.</p><p><i>VI: Chi phí là số trang đọc để TÌM dòng, không phải số dòng trả về.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>First run: logical reads 147, physical reads 2, read-ahead reads 145. Second run?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần 1: logical reads 147, physical reads 2, read-ahead reads 145. Lần 2?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "logical reads 147, physical 2, read-ahead 145"
+              },
+              {
+                "ma": "b",
+                "noiDung": "logical reads 0, physical 0, read-ahead 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "logical reads 147, physical 0, read-ahead 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "logical reads 2, physical 0, read-ahead 145"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Logical reads count pages touched in RAM — the same every run. The disk reads disappear because the pages are cached.</p><p><i>VI: Logical reads đếm trang chạm trong RAM — mọi lần như nhau. Đọc đĩa biến mất vì trang đã nằm trong bộ đệm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which number should you compare when tuning a query?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nên so số nào khi tinh chỉnh truy vấn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "elapsed time of a single run on your laptop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "physical reads: they are the only real cost"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of rows the query returns"
+              },
+              {
+                "ma": "d",
+                "noiDung": "logical reads: they do not depend on what happens to be cached"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Logical reads are stable and proportional to work done; timings and physical reads depend on the cache state.</p><p><i>VI: Logical reads ổn định và tỉ lệ với khối lượng việc; thời gian và đọc vật lý phụ thuộc trạng thái bộ đệm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In PostgreSQL EXPLAIN (ANALYZE, BUFFERS), \"shared hit=173\" means…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong EXPLAIN (ANALYZE, BUFFERS) của PostgreSQL, \"shared hit=173\" nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "173 pages were found in shared_buffers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "173 rows matched the filter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "173 ms were spent waiting for locks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "173 pages were read from the disk"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>hit = already in RAM; read = had to come from the OS/disk.</p><p><i>VI: hit = đã có trong RAM; read = phải lấy từ OS/đĩa.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A query returns ONE row but shows 147 logical reads. Most likely…</p><p style=\"opacity:.75;font-size:.92em\"><i>Truy vấn trả MỘT dòng nhưng 147 logical reads. Nhiều khả năng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the row is very wide and spans 147 pages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "statistics are being rebuilt during the query"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no index on the filtered column: the whole table was scanned"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the buffer pool is too small for the table"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Cost is the pages read to FIND the row, not the rows returned.</p><p><i>VI: Chi phí là số trang đọc để TÌM dòng, không phải số dòng trả về.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Second run is faster, so the query got better\" — only the cache changed.|||\"Lần hai nhanh hơn nên truy vấn tốt hơn\" — chỉ bộ đệm thay đổi."
+        },
+        {
+          "loi": "Judging a query by the rows it returns.|||Đánh giá truy vấn theo số dòng trả về."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "logical read",
+          "vi": "đọc logic"
+        },
+        {
+          "en": "physical read",
+          "vi": "đọc vật lý"
+        },
+        {
+          "en": "read-ahead",
+          "vi": "đọc trước"
+        }
+      ]
+    },
+    {
+      "title": "Write-ahead logging: from UPDATE to a safe COMMIT",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "WAL rule",
+        "COMMIT",
+        "checkpoint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "transaction"
+      ],
+      "problemHtml": "<p>Slides 19–21. Order what happens for one UPDATE inside a transaction until the data page finally reaches the disk.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 19–21. Sắp thứ tự những gì xảy ra với một UPDATE trong giao dịch cho tới khi trang dữ liệu cuối cùng xuống đĩa.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "COMMIT waits for the LOG, not for the data page.|||COMMIT chờ NHẬT KÝ, không chờ trang dữ liệu.",
+        "Checkpoints come later and in bulk.|||Checkpoint đến sau và theo lô."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Write-ahead logging: from UPDATE to a safe COMMIT\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Write-ahead logging: from UPDATE to a safe COMMIT — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m1) The data page is read into the buffer pool  →  m2) The page is changed in RAM and marked dirty  →  m3) A log record describing the change is added to the log buffer  →  m4) COMMIT forces the log records to disk (flush)  →  m6) The client is told the transaction committed  →  m5) A later checkpoint writes the dirty data page to disk\n   The WAL rule: the log reaches the disk before COMMIT returns; data pages can follow much later. After a crash, recovery replays (redo) committed log records and rolls back (undo) the rest.VI: Luật WAL: nhật ký xuống đĩa trước khi COMMIT trả về; trang dữ liệu có thể xuống muộn hơn nhiều. Sau sập máy, phục hồi chạy lại (redo) bản ghi đã commit và hoàn tác (undo) phần còn lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The WAL rule: the log reaches the disk before COMMIT returns; data pages can follow much later. After a crash, recovery replays (redo) committed log records and rolls back (undo) the rest.</p><p><i>VI: Luật WAL: nhật ký xuống đĩa trước khi COMMIT trả về; trang dữ liệu có thể xuống muộn hơn nhiều. Sau sập máy, phục hồi chạy lại (redo) bản ghi đã commit và hoàn tác (undo) phần còn lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The data page is read into the buffer pool"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The page is changed in RAM and marked dirty"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "A log record describing the change is added to the log buffer"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "COMMIT forces the log records to disk (flush)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "A later checkpoint writes the dirty data page to disk"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The client is told the transaction committed"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m6",
+              "m5"
+            ],
+            "giaiThich": "<p>The WAL rule: the log reaches the disk before COMMIT returns; data pages can follow much later. After a crash, recovery replays (redo) committed log records and rolls back (undo) the rest.</p><p><i>VI: Luật WAL: nhật ký xuống đĩa trước khi COMMIT trả về; trang dữ liệu có thể xuống muộn hơn nhiều. Sau sập máy, phục hồi chạy lại (redo) bản ghi đã commit và hoàn tác (undo) phần còn lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the data page before COMMIT returns — that is what makes COMMIT slow, and WAL avoids it.|||Ghi trang dữ liệu trước khi COMMIT trả về — đó là điều làm COMMIT chậm, và WAL tránh nó."
+        },
+        {
+          "loi": "Telling the client \"committed\" before the log is flushed.|||Báo client \"đã commit\" trước khi nhật ký được ghi xuống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "write-ahead logging (WAL)",
+          "vi": "ghi nhật ký trước"
+        },
+        {
+          "en": "dirty page",
+          "vi": "trang bẩn"
+        },
+        {
+          "en": "checkpoint",
+          "vi": "điểm kiểm tra"
+        }
+      ]
+    },
+    {
+      "title": "Symptom → cause: diagnose with what slides 15–24 taught",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "statistics",
+        "plan cache",
+        "parameterization",
+        "transaction log"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "performance"
+      ],
+      "problemHtml": "<p>Each line is a real-world symptom. Choose the internal mechanism that explains it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một triệu chứng thực tế. Chọn cơ chế bên trong giải thích nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare estimated and actual rows in the plan.|||So số dòng ước lượng và thực tế trong kế hoạch.",
+        "Many single-use plans ⇒ look at how the app builds its SQL.|||Nhiều kế hoạch dùng một lần ⇒ xem app dựng SQL thế nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Symptom → cause: diagnose with what slides 15–24 taught\n\nAnswer in the answer panel (no code needed).\n\n1. Symptom → causeTriệu chứng → nguyên nhân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Symptom → cause: diagnose with what slides 15–24 taught — answer key\n\n1. Symptom → causeTriệu chứng → nguyên nhân\n   - r1.ng: stale statistics after a bulk load\n   - r2.ng: literal values glued into ad hoc SQL text\n   - r3.ng: one log record per deleted row\n   - r4.ng: cold buffer pool after a restart\n   - r5.ng: a covering index removed the key lookups\n   Estimated vs actual off by 10× ⇒ suspect statistics first (UPDATE STATISTICS / ANALYZE). Parameterize (sp_executesql, prepared statements) to reuse one plan. TRUNCATE logs page deallocations, not rows.VI: Ước lượng lệch thực tế 10× ⇒ nghi thống kê trước (UPDATE STATISTICS / ANALYZE). Tham số hoá (sp_executesql, prepared statement) để dùng lại một kế hoạch. TRUNCATE ghi nhật ký giải phóng trang, không ghi từng dòng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Estimated vs actual off by 10× ⇒ suspect statistics first (UPDATE STATISTICS / ANALYZE). Parameterize (sp_executesql, prepared statements) to reuse one plan. TRUNCATE logs page deallocations, not rows.</p><p><i>VI: Ước lượng lệch thực tế 10× ⇒ nghi thống kê trước (UPDATE STATISTICS / ANALYZE). Tham số hoá (sp_executesql, prepared statement) để dùng lại một kế hoạch. TRUNCATE ghi nhật ký giải phóng trang, không ghi từng dòng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Symptom → cause</p><p style=\"opacity:.75;font-size:.92em\"><i>Triệu chứng → nguyên nhân</i></p>",
+            "cot": [
+              {
+                "ma": "tc",
+                "ten": "Symptom / Triệu chứng"
+              },
+              {
+                "ma": "ng",
+                "ten": "Cause / Nguyên nhân",
+                "luaChon": [
+                  "stale statistics after a bulk load",
+                  "literal values glued into ad hoc SQL text",
+                  "one log record per deleted row",
+                  "cold buffer pool after a restart",
+                  "a covering index removed the key lookups"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tc": "The plan shows \"estimated 77 rows, actual 5,000\" and uses Nested Loops with 5,000 lookups."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tc": "The plan cache holds thousands of plans, each used exactly once, for the same query shape."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tc": "DELETE FROM BigLog (no WHERE) filled the log disk; TRUNCATE TABLE would not have."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tc": "Every report is slow for ten minutes each Monday morning after maintenance, then fast again."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tc": "After adding INCLUDE (total) to an index, logical reads dropped from 2,000 to 12 for the same query."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ng": "stale statistics after a bulk load",
+              "r2.ng": "literal values glued into ad hoc SQL text",
+              "r3.ng": "one log record per deleted row",
+              "r4.ng": "cold buffer pool after a restart",
+              "r5.ng": "a covering index removed the key lookups"
+            },
+            "giaiThich": "<p>Estimated vs actual off by 10× ⇒ suspect statistics first (UPDATE STATISTICS / ANALYZE). Parameterize (sp_executesql, prepared statements) to reuse one plan. TRUNCATE logs page deallocations, not rows.</p><p><i>VI: Ước lượng lệch thực tế 10× ⇒ nghi thống kê trước (UPDATE STATISTICS / ANALYZE). Tham số hoá (sp_executesql, prepared statement) để dùng lại một kế hoạch. TRUNCATE ghi nhật ký giải phóng trang, không ghi từng dòng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming the hardware for a stale-statistics plan.|||Đổ cho phần cứng khi kế hoạch sai do thống kê cũ."
+        },
+        {
+          "loi": "Thinking DELETE and TRUNCATE log the same amount.|||Tưởng DELETE và TRUNCATE ghi nhật ký như nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "statistics (histogram)",
+          "vi": "thống kê (biểu đồ phân bố)"
+        },
+        {
+          "en": "plan cache",
+          "vi": "bộ nhớ đệm kế hoạch"
+        },
+        {
+          "en": "parameterized query",
+          "vi": "truy vấn tham số hoá"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,638 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs3-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs3-1"
+  },
+  "exercises": [
+    {
+      "title": "Walk a B+tree: find one key, then a range",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "B+tree",
+        "point search",
+        "range search"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>Slides 4–6. Order the steps of <code>WHERE ma BETWEEN 5000 AND 5100</code> on a clustered B+tree index.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 4–6. Sắp các bước của <code>WHERE ma BETWEEN 5000 AND 5100</code> trên chỉ mục cụm B+tree.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Down the tree once, then sideways.|||Xuống cây một lần, rồi đi ngang.",
+        "Only leaves hold all keys (B+tree).|||Chỉ lá chứa đủ mọi khoá (B+tree)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Walk a B+tree: find one key, then a range\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Walk a B+tree: find one key, then a range — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m6) Read the root page  →  m5) Pick the child whose key range contains 5000  →  m4) Repeat down the internal levels  →  m3) Reach the leaf page that holds 5000  →  m1) Follow the leaf-to-leaf link to the next pages  →  m2) Stop at the first key greater than 5100\n   Seek once to the start of the range, then read the leaves sideways — the leaf level is a linked list in key order.VI: Seek một lần tới đầu khoảng, rồi đọc ngang các lá — tầng lá là danh sách liên kết theo thứ tự khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Seek once to the start of the range, then read the leaves sideways — the leaf level is a linked list in key order.</p><p><i>VI: Seek một lần tới đầu khoảng, rồi đọc ngang các lá — tầng lá là danh sách liên kết theo thứ tự khoá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Follow the leaf-to-leaf link to the next pages"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Stop at the first key greater than 5100"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Reach the leaf page that holds 5000"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Repeat down the internal levels"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Pick the child whose key range contains 5000"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Read the root page"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m5",
+              "m4",
+              "m3",
+              "m1",
+              "m2"
+            ],
+            "giaiThich": "<p>Seek once to the start of the range, then read the leaves sideways — the leaf level is a linked list in key order.</p><p><i>VI: Seek một lần tới đầu khoảng, rồi đọc ngang các lá — tầng lá là danh sách liên kết theo thứ tự khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Going back to the root for every key of the range.|||Quay về gốc cho từng khoá của khoảng."
+        },
+        {
+          "loi": "Thinking the scan stops at the last row returned instead of the first key past 5100.|||Tưởng việc quét dừng ở dòng cuối trả về thay vì khoá đầu tiên vượt 5100."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "B+tree",
+          "vi": "cây B+"
+        },
+        {
+          "en": "leaf level",
+          "vi": "tầng lá"
+        }
+      ]
+    },
+    {
+      "title": "Tree height: why 3–4 reads find one row among millions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "fan-out",
+        "tree height",
+        "key width"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>Slides 7–8, with numbers measured on SQL Server (two 200,000-row tables).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 7–8, số đo thật trên SQL Server (hai bảng 200.000 dòng).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Levels = how many pages a seek reads.|||Số tầng = số trang một lần seek đọc.",
+        "Narrow keys ⇒ high fan-out ⇒ short tree.|||Khoá hẹp ⇒ rẽ nhánh lớn ⇒ cây thấp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree height: why 3–4 reads find one row among millions\n\nAnswer in the answer panel (no code needed).\n\n1. An INT primary key on 200,000 rows has 322 leaf pages and 1 root. How many levels?Khoá chính INT trên 200.000 dòng có 322 trang lá và 1 gốc. Bao nhiêu tầng?\n2. The same 200,000 numbers stored as a CHAR(200) key: 5,264 leaf pages. Measured depth?Cùng 200.000 số lưu thành khoá CHAR(200): 5.264 trang lá. Độ sâu đo được?\n3. Why is a B+tree so shallow compared with a binary tree?Vì sao B+tree nông hơn nhiều so với cây nhị phân?\n4. Inserting a key into a full leaf page causes…Chèn một khoá vào trang lá đã đầy gây ra…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree height: why 3–4 reads find one row among millions — answer key\n\n1. An INT primary key on 200,000 rows has 322 leaf pages and 1 root. How many levels?Khoá chính INT trên 200.000 dòng có 322 trang lá và 1 gốc. Bao nhiêu tầng?\n   Answer: a) 2\n   Root + leaves = 2 levels: one root page can point to hundreds of leaves.VI: Gốc + lá = 2 tầng: một trang gốc trỏ được hàng trăm lá.\n\n2. The same 200,000 numbers stored as a CHAR(200) key: 5,264 leaf pages. Measured depth?Cùng 200.000 số lưu thành khoá CHAR(200): 5.264 trang lá. Độ sâu đo được?\n   Answer: b) 4: wide keys mean few children per internal page\n   5,264 → 277 → 14 → 1. Each internal entry is ~200 bytes, so fan-out is tens, not hundreds.VI: 5.264 → 277 → 14 → 1. Mỗi mục trong là ~200 byte nên độ rẽ nhánh là hàng chục, không phải hàng trăm.\n\n3. Why is a B+tree so shallow compared with a binary tree?Vì sao B+tree nông hơn nhiều so với cây nhị phân?\n   Answer: b) each node is a whole page with hundreds of children\n   Fan-out ≈ 8 KB ÷ entry size. A million INT keys fit in 3 levels.VI: Độ rẽ nhánh ≈ 8 KB ÷ kích thước mục. Một triệu khoá INT vừa 3 tầng.\n\n4. Inserting a key into a full leaf page causes…Chèn một khoá vào trang lá đã đầy gây ra…\n   Answer: b) a page split: half the rows move to a new page\n   Splits leave half-empty pages (fragmentation) — one reason random keys such as GUIDs cost more.VI: Tách trang để lại trang nửa trống (phân mảnh) — một lý do khoá ngẫu nhiên như GUID tốn hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 2</p><p>Root + leaves = 2 levels: one root page can point to hundreds of leaves.</p><p><i>VI: Gốc + lá = 2 tầng: một trang gốc trỏ được hàng trăm lá.</i></p></li><li><p><b>b)</b> 4: wide keys mean few children per internal page</p><p>5,264 → 277 → 14 → 1. Each internal entry is ~200 bytes, so fan-out is tens, not hundreds.</p><p><i>VI: 5.264 → 277 → 14 → 1. Mỗi mục trong là ~200 byte nên độ rẽ nhánh là hàng chục, không phải hàng trăm.</i></p></li><li><p><b>b)</b> each node is a whole page with hundreds of children</p><p>Fan-out ≈ 8 KB ÷ entry size. A million INT keys fit in 3 levels.</p><p><i>VI: Độ rẽ nhánh ≈ 8 KB ÷ kích thước mục. Một triệu khoá INT vừa 3 tầng.</i></p></li><li><p><b>b)</b> a page split: half the rows move to a new page</p><p>Splits leave half-empty pages (fragmentation) — one reason random keys such as GUIDs cost more.</p><p><i>VI: Tách trang để lại trang nửa trống (phân mảnh) — một lý do khoá ngẫu nhiên như GUID tốn hơn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An INT primary key on 200,000 rows has 322 leaf pages and 1 root. How many levels?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá chính INT trên 200.000 dòng có 322 trang lá và 1 gốc. Bao nhiêu tầng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Root + leaves = 2 levels: one root page can point to hundreds of leaves.</p><p><i>VI: Gốc + lá = 2 tầng: một trang gốc trỏ được hàng trăm lá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same 200,000 numbers stored as a CHAR(200) key: 5,264 leaf pages. Measured depth?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng 200.000 số lưu thành khoá CHAR(200): 5.264 trang lá. Độ sâu đo được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "18, about log₂ of 200,000"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4: wide keys mean few children per internal page"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3, depth only depends on the row count"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2, the same as the INT key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>5,264 → 277 → 14 → 1. Each internal entry is ~200 bytes, so fan-out is tens, not hundreds.</p><p><i>VI: 5.264 → 277 → 14 → 1. Mỗi mục trong là ~200 byte nên độ rẽ nhánh là hàng chục, không phải hàng trăm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a B+tree so shallow compared with a binary tree?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao B+tree nông hơn nhiều so với cây nhị phân?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it stores only the first column of each row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "each node is a whole page with hundreds of children"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it keeps the whole tree in RAM at all times"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is rebuilt every night to stay balanced"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Fan-out ≈ 8 KB ÷ entry size. A million INT keys fit in 3 levels.</p><p><i>VI: Độ rẽ nhánh ≈ 8 KB ÷ kích thước mục. Một triệu khoá INT vừa 3 tầng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Inserting a key into a full leaf page causes…</p><p style=\"opacity:.75;font-size:.92em\"><i>Chèn một khoá vào trang lá đã đầy gây ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the key to go to an overflow heap"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a page split: half the rows move to a new page"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the whole index to be rebuilt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the insert to fail until a rebuild"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Splits leave half-empty pages (fragmentation) — one reason random keys such as GUIDs cost more.</p><p><i>VI: Tách trang để lại trang nửa trống (phân mảnh) — một lý do khoá ngẫu nhiên như GUID tốn hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using log₂(n) — that is a binary tree, not a B+tree.|||Dùng log₂(n) — đó là cây nhị phân, không phải B+tree."
+        },
+        {
+          "loi": "Thinking depth depends only on the number of rows.|||Tưởng độ sâu chỉ phụ thuộc số dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fan-out",
+          "vi": "độ rẽ nhánh"
+        },
+        {
+          "en": "page split",
+          "vi": "tách trang"
+        }
+      ]
+    },
+    {
+      "title": "Where do the rows live? Heap, clustered, nonclustered, PostgreSQL",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "heap",
+        "clustered index",
+        "nonclustered index",
+        "RID",
+        "ctid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "postgresql"
+      ],
+      "problemHtml": "<p>Slides 9–10. For each structure, say where the full rows are stored and what an index entry points to.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9–10. Với mỗi cấu trúc, nói dòng đầy đủ nằm ở đâu và mục chỉ mục trỏ tới gì.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Clustered = the table IS the tree.|||Clustered = bảng CHÍNH LÀ cây.",
+        "Heap ⇒ physical address (RID / ctid).|||Heap ⇒ địa chỉ vật lý (RID / ctid)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where do the rows live? Heap, clustered, nonclustered, PostgreSQL\n\nAnswer in the answer panel (no code needed).\n\n1. Structure → rows → pointerCấu trúc → dòng → con trỏ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Where do the rows live? Heap, clustered, nonclustered, PostgreSQL — answer key\n\n1. Structure → rows → pointerCấu trúc → dòng → con trỏ\n   - r1.dong: the leaf level of the index itself\n   - r1.tro: nothing: the leaf is the row\n   - r2.dong: the leaf level of the index itself\n   - r2.tro: the clustered key\n   - r3.dong: an unordered heap\n   - r3.tro: a RID (file:page:slot)\n   - r4.dong: an unordered heap\n   - r4.tro: a ctid (block, item)\n   On a clustered table the rows live in the clustered index leaves, so a nonclustered entry carries the clustered key (Key Lookup). PostgreSQL tables are always heaps; CLUSTER orders them only once.VI: Trên bảng có chỉ mục cụm, dòng nằm ở lá chỉ mục cụm nên mục nonclustered mang khoá cụm (Key Lookup). Bảng PostgreSQL luôn là heap; CLUSTER chỉ sắp một lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On a clustered table the rows live in the clustered index leaves, so a nonclustered entry carries the clustered key (Key Lookup). PostgreSQL tables are always heaps; CLUSTER orders them only once.</p><p><i>VI: Trên bảng có chỉ mục cụm, dòng nằm ở lá chỉ mục cụm nên mục nonclustered mang khoá cụm (Key Lookup). Bảng PostgreSQL luôn là heap; CLUSTER chỉ sắp một lần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Structure → rows → pointer</p><p style=\"opacity:.75;font-size:.92em\"><i>Cấu trúc → dòng → con trỏ</i></p>",
+            "cot": [
+              {
+                "ma": "ct",
+                "ten": "Structure / Cấu trúc"
+              },
+              {
+                "ma": "dong",
+                "ten": "Full rows live in…",
+                "luaChon": [
+                  "the leaf level of the index itself",
+                  "an unordered heap"
+                ]
+              },
+              {
+                "ma": "tro",
+                "ten": "Index entries point to…",
+                "luaChon": [
+                  "the clustered key",
+                  "a RID (file:page:slot)",
+                  "a ctid (block, item)",
+                  "nothing: the leaf is the row"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "ct": "SQL Server clustered index"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "ct": "SQL Server nonclustered index on a clustered table"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "ct": "SQL Server nonclustered index on a heap"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "ct": "Any PostgreSQL index"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dong": "the leaf level of the index itself",
+              "r1.tro": "nothing: the leaf is the row",
+              "r2.dong": "the leaf level of the index itself",
+              "r2.tro": "the clustered key",
+              "r3.dong": "an unordered heap",
+              "r3.tro": "a RID (file:page:slot)",
+              "r4.dong": "an unordered heap",
+              "r4.tro": "a ctid (block, item)"
+            },
+            "giaiThich": "<p>On a clustered table the rows live in the clustered index leaves, so a nonclustered entry carries the clustered key (Key Lookup). PostgreSQL tables are always heaps; CLUSTER orders them only once.</p><p><i>VI: Trên bảng có chỉ mục cụm, dòng nằm ở lá chỉ mục cụm nên mục nonclustered mang khoá cụm (Key Lookup). Bảng PostgreSQL luôn là heap; CLUSTER chỉ sắp một lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a nonclustered entry on a clustered table stores a RID.|||Tưởng mục nonclustered trên bảng có cụm lưu RID."
+        },
+        {
+          "loi": "Thinking PostgreSQL has clustered indexes maintained like SQL Server.|||Tưởng PostgreSQL có chỉ mục cụm được duy trì như SQL Server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clustered index",
+          "vi": "chỉ mục cụm"
+        },
+        {
+          "en": "RID lookup",
+          "vi": "tra theo RID"
+        }
+      ]
+    },
+    {
+      "title": "Key Lookup, selectivity and the tipping point",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 7,
+      "points": 30,
+      "concepts": [
+        "Key Lookup",
+        "selectivity",
+        "tipping point"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "performance"
+      ],
+      "problemHtml": "<p>Slides 11–12. A nonclustered index exists on <code>DonHang(khachHangId)</code>; queries select every column.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 11–12. Có chỉ mục nonclustered trên <code>DonHang(khachHangId)</code>; truy vấn lấy mọi cột.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lookups scale with the number of rows; scans with the number of pages.|||Lần tra tăng theo số dòng; quét tăng theo số trang.",
+        "Covering indexes remove lookups.|||Chỉ mục phủ loại bỏ lần tra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Key Lookup, selectivity and the tipping point\n\nAnswer in the answer panel (no code needed).\n\n1. For WHERE khachHangId = 42 (10 rows of 50,000), the plan is…Với WHERE khachHangId = 42 (10 dòng trên 50.000), kế hoạch là…\n2. Each Key Lookup costs about…Mỗi Key Lookup tốn khoảng…\n3. The tipping point is…Điểm bùng phát là…\n4. How do you keep the seek for a query that returns 2,000 rows?Làm sao giữ seek cho truy vấn trả 2.000 dòng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Key Lookup, selectivity and the tipping point — answer key\n\n1. For WHERE khachHangId = 42 (10 rows of 50,000), the plan is…Với WHERE khachHangId = 42 (10 dòng trên 50.000), kế hoạch là…\n   Answer: c) Index Seek + 10 Key Lookups (Nested Loops)\n   Few rows: a seek plus one lookup per row is cheap.VI: Ít dòng: seek cộng một lần tra mỗi dòng là rẻ.\n\n2. Each Key Lookup costs about…Mỗi Key Lookup tốn khoảng…\n   Answer: a) one seek into the clustered index: 2–3 page reads\n   That is why 5,000 lookups can cost more than scanning a few hundred pages.VI: Vì thế 5.000 lần tra có thể tốn hơn quét vài trăm trang.\n\n3. The tipping point is…Điểm bùng phát là…\n   Answer: d) the row count past which a scan becomes cheaper than seek + lookups\n   It is often well under 1% of the table, far lower than intuition says.VI: Nó thường dưới 1% bảng, thấp hơn nhiều so với trực giác.\n\n4. How do you keep the seek for a query that returns 2,000 rows?Làm sao giữ seek cho truy vấn trả 2.000 dòng?\n   Answer: c) make the index covering (INCLUDE the selected columns)\n   No lookups ⇒ the seek stays cheap at any row count.VI: Không còn lần tra ⇒ seek vẫn rẻ với số dòng bất kỳ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Index Seek + 10 Key Lookups (Nested Loops)</p><p>Few rows: a seek plus one lookup per row is cheap.</p><p><i>VI: Ít dòng: seek cộng một lần tra mỗi dòng là rẻ.</i></p></li><li><p><b>a)</b> one seek into the clustered index: 2–3 page reads</p><p>That is why 5,000 lookups can cost more than scanning a few hundred pages.</p><p><i>VI: Vì thế 5.000 lần tra có thể tốn hơn quét vài trăm trang.</i></p></li><li><p><b>d)</b> the row count past which a scan becomes cheaper than seek + lookups</p><p>It is often well under 1% of the table, far lower than intuition says.</p><p><i>VI: Nó thường dưới 1% bảng, thấp hơn nhiều so với trực giác.</i></p></li><li><p><b>c)</b> make the index covering (INCLUDE the selected columns)</p><p>No lookups ⇒ the seek stays cheap at any row count.</p><p><i>VI: Không còn lần tra ⇒ seek vẫn rẻ với số dòng bất kỳ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>For WHERE khachHangId = 42 (10 rows of 50,000), the plan is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với WHERE khachHangId = 42 (10 dòng trên 50.000), kế hoạch là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Table Scan followed by a Sort"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Index Scan of the nonclustered index"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Index Seek + 10 Key Lookups (Nested Loops)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Clustered Index Scan of the whole table"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Few rows: a seek plus one lookup per row is cheap.</p><p><i>VI: Ít dòng: seek cộng một lần tra mỗi dòng là rẻ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Each Key Lookup costs about…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi Key Lookup tốn khoảng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one seek into the clustered index: 2–3 page reads"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing: the columns come from the index"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a full scan of the clustered index"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one page read in total for all rows"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is why 5,000 lookups can cost more than scanning a few hundred pages.</p><p><i>VI: Vì thế 5.000 lần tra có thể tốn hơn quét vài trăm trang.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The tipping point is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Điểm bùng phát là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the moment a page split happens"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the depth at which a B+tree adds a level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the size at which statistics are refreshed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the row count past which a scan becomes cheaper than seek + lookups"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It is often well under 1% of the table, far lower than intuition says.</p><p><i>VI: Nó thường dưới 1% bảng, thấp hơn nhiều so với trực giác.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How do you keep the seek for a query that returns 2,000 rows?</p><p style=\"opacity:.75;font-size:.92em\"><i>Làm sao giữ seek cho truy vấn trả 2.000 dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "add a query hint to force the old plan"
+              },
+              {
+                "ma": "b",
+                "noiDung": "update statistics with FULLSCAN every hour"
+              },
+              {
+                "ma": "c",
+                "noiDung": "make the index covering (INCLUDE the selected columns)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rebuild the index with a higher fill factor"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>No lookups ⇒ the seek stays cheap at any row count.</p><p><i>VI: Không còn lần tra ⇒ seek vẫn rẻ với số dòng bất kỳ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"An index always helps.\"|||\"Có chỉ mục là luôn nhanh hơn.\""
+        },
+        {
+          "loi": "Forcing a seek with a hint instead of fixing the index.|||Ép seek bằng hint thay vì sửa chỉ mục."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "selectivity",
+          "vi": "độ chọn lọc"
+        },
+        {
+          "en": "tipping point",
+          "vi": "điểm bùng phát"
+        },
+        {
+          "en": "Key Lookup",
+          "vi": "tra ngược theo khoá"
+        }
+      ]
+    }
+  ]
+}

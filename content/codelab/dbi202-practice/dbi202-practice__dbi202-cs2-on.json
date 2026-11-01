@@ -1,0 +1,569 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs2-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs2-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "rows per page",
+        "set-based INSERT",
+        "sys.dm_db_index_physical_stats"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "internals",
+        "storage"
+      ],
+      "problemHtml": "<p>Predict first, on paper: table <code>SanPham(ma INT, ten CHAR(100), gia INT)</code>, all NOT NULL, a heap, 1,000 rows. Bytes per row? Rows per page? Pages? (Slides 10–12: data + 7 bytes per row, + 2-byte slot, 8096 usable bytes.)</p>\n<p>Then prove it on your SQL Server:</p>\n<ol><li>Create <code>dbo.SanPham</code> as a heap (no key, no index).</li>\n<li>Insert exactly 1,000 rows, <code>ma</code> = 1…1000, <code>ten</code> = 'SP' + ma, <code>gia</code> = 1000 × ma, with <b>one set-based INSERT</b> (no loop).</li>\n<li>Create the view <code>dbo.vPageStats(byte_moi_dong, so_trang)</code> that reads <code>sys.dm_db_index_physical_stats</code> for that table.</li></ol>\n<p>check.sql verifies the rows and that your view reports exactly what the formula predicts.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The browser grader is PostgreSQL in WASM: it has no SQL Server pages, no sys.all_columns and no sys.dm_db_index_physical_stats, so the page count can only be measured on a real SQL Server. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A numbers CTE: SELECT TOP (1000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) FROM sys.all_columns a CROSS JOIN sys.all_columns b.</li>\n  <li>Use the 'DETAILED' mode of the DMV so that avg_record_size_in_bytes is filled.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đoán trước, trên giấy: bảng <code>SanPham(ma INT, ten CHAR(100), gia INT)</code>, mọi cột NOT NULL, là heap, 1.000 dòng. Byte mỗi dòng? Dòng mỗi trang? Số trang? (Slide 10–12: dữ liệu + 7 byte mỗi dòng, + 2 byte slot, 8096 byte dùng được.)</p>\n<p>Rồi chứng minh trên SQL Server của bạn:</p>\n<ol><li>Tạo <code>dbo.SanPham</code> dạng heap (không khoá, không chỉ mục).</li>\n<li>Chèn đúng 1.000 dòng, <code>ma</code> = 1…1000, <code>ten</code> = 'SP' + ma, <code>gia</code> = 1000 × ma, bằng <b>một câu INSERT theo tập</b> (không vòng lặp).</li>\n<li>Tạo view <code>dbo.vPageStats(byte_moi_dong, so_trang)</code> đọc <code>sys.dm_db_index_physical_stats</code> cho bảng đó.</li></ol>\n<p>check.sql kiểm các dòng và việc view báo đúng số mà công thức dự đoán.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Máy chấm trình duyệt là PostgreSQL trong WASM: không có trang SQL Server, không có sys.all_columns hay sys.dm_db_index_physical_stats, nên số trang chỉ đo được trên SQL Server thật. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CTE sinh số: SELECT TOP (1000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) FROM sys.all_columns a CROSS JOIN sys.all_columns b.</li>\n  <li>Dùng chế độ 'DETAILED' của DMV để avg_record_size_in_bytes có giá trị.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. 1,000 rows, ma = 1…1000, gia = 1000 × ma\nPASS 2. The table is a heap with the three NOT NULL columns of the task\nPASS 3. vPageStats reports 115 bytes per row\nPASS 4. vPageStats reports 15 pages = ceiling(1000 / 69)\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "4 + 100 + 4 + 7 = 115; 8096 / 117 = 69; 1000 / 69 → 15.",
+        "TOP (n) + ROW_NUMBER() over a cross join of a system view is the classic loop-free number generator.|||TOP (n) + ROW_NUMBER() trên phép nối chéo một view hệ thống là cách sinh số kinh điển không cần vòng lặp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- 1) CREATE TABLE dbo.SanPham (...)   -- a heap\n-- 2) one set-based INSERT of 1000 rows\n-- 3) CREATE OR ALTER VIEW dbo.vPageStats AS ...\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- Nothing to prepare: you create dbo.SanPham yourself in solution.sql.\nSELECT 1 AS ready;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: 1,000 rows, ma = 1…1000, gia = 1000 × ma\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.SanPham) = 1000 AND (SELECT COUNT(DISTINCT ma) FROM dbo.SanPham) = 1000 AND (SELECT MIN(ma) FROM dbo.SanPham) = 1 AND (SELECT MAX(ma) FROM dbo.SanPham) = 1000 AND NOT EXISTS (SELECT 1 FROM dbo.SanPham WHERE gia <> 1000 * ma OR RTRIM(ten) <> CONCAT(''SP'', ma)), 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM dbo.SanPham));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. 1,000 rows, ma = 1…1000, gia = 1000 × ma | 1.000 dòng, ma = 1…1000, gia = 1000 × ma'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. 1,000 rows, ma = 1…1000, gia = 1000 × ma | 1.000 dòng, ma = 1…1000, gia = 1000 × ma', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: The table is a heap with the three NOT NULL columns of the task\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.SanPham'') AND index_id = 0) AND (SELECT COUNT(*) FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.SanPham'')) = 1\n  AND (SELECT COUNT(*) FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.SanPham'') AND c.is_nullable = 0 AND ((c.name = ''ma'' AND t.name = ''int'') OR (c.name = ''ten'' AND t.name = ''char'' AND c.max_length = 100) OR (c.name = ''gia'' AND t.name = ''int''))) = 3\n  AND (SELECT COUNT(*) FROM sys.columns WHERE object_id = OBJECT_ID(N''dbo.SanPham'')) = 3, 1, 0);\nSET @info = N''expected a heap (ma INT, ten CHAR(100), gia INT), all NOT NULL'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. The table is a heap with the three NOT NULL columns of the task | Bảng là heap với ba cột NOT NULL như đề'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. The table is a heap with the three NOT NULL columns of the task | Bảng là heap với ba cột NOT NULL như đề', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: vPageStats reports 115 bytes per row\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT byte_moi_dong FROM dbo.vPageStats) = 115, 1, 0);\nSET @info = CONCAT(N''byte_moi_dong = '', (SELECT TOP (1) byte_moi_dong FROM dbo.vPageStats), N'' (4 + 100 + 4 + 7)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. vPageStats reports 115 bytes per row | vPageStats báo 115 byte mỗi dòng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. vPageStats reports 115 bytes per row | vPageStats báo 115 byte mỗi dòng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: vPageStats reports 15 pages = ceiling(1000 / 69)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_trang FROM dbo.vPageStats) = 15, 1, 0);\nSET @info = CONCAT(N''so_trang = '', (SELECT TOP (1) so_trang FROM dbo.vPageStats));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. vPageStats reports 15 pages = ceiling(1000 / 69) | vPageStats báo 15 trang = làm tròn lên 1000 / 69'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. vPageStats reports 15 pages = ceiling(1000 / 69) | vPageStats báo 15 trang = làm tròn lên 1000 / 69', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.SanPham (            -- a heap: no PRIMARY KEY, no index\n    ma  INT       NOT NULL,\n    ten CHAR(100) NOT NULL,\n    gia INT       NOT NULL\n);\nGO\n-- 1000 rows in ONE set-based INSERT (no WHILE loop): a numbers CTE over a system view\nWITH n AS (\n    SELECT TOP (1000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn\n    FROM sys.all_columns a CROSS JOIN sys.all_columns b\n)\nINSERT INTO dbo.SanPham (ma, ten, gia)\nSELECT rn, CONCAT('SP', rn), 1000 * rn FROM n;\nGO\nCREATE OR ALTER VIEW dbo.vPageStats AS\nSELECT CAST(avg_record_size_in_bytes AS INT) AS byte_moi_dong,\n       page_count                            AS so_trang\nFROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID(N'dbo.SanPham'), NULL, NULL, 'DETAILED');\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- Nothing to prepare: you create dbo.SanPham yourself in solution.sql.\nSELECT 1 AS ready;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — 1,000 rows, predicted pages, then proved with a DMV\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: 1,000 rows, ma = 1…1000, gia = 1000 × ma\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.SanPham) = 1000 AND (SELECT COUNT(DISTINCT ma) FROM dbo.SanPham) = 1000 AND (SELECT MIN(ma) FROM dbo.SanPham) = 1 AND (SELECT MAX(ma) FROM dbo.SanPham) = 1000 AND NOT EXISTS (SELECT 1 FROM dbo.SanPham WHERE gia <> 1000 * ma OR RTRIM(ten) <> CONCAT(''SP'', ma)), 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM dbo.SanPham));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. 1,000 rows, ma = 1…1000, gia = 1000 × ma | 1.000 dòng, ma = 1…1000, gia = 1000 × ma'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. 1,000 rows, ma = 1…1000, gia = 1000 × ma | 1.000 dòng, ma = 1…1000, gia = 1000 × ma', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: The table is a heap with the three NOT NULL columns of the task\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.SanPham'') AND index_id = 0) AND (SELECT COUNT(*) FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.SanPham'')) = 1\n  AND (SELECT COUNT(*) FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.SanPham'') AND c.is_nullable = 0 AND ((c.name = ''ma'' AND t.name = ''int'') OR (c.name = ''ten'' AND t.name = ''char'' AND c.max_length = 100) OR (c.name = ''gia'' AND t.name = ''int''))) = 3\n  AND (SELECT COUNT(*) FROM sys.columns WHERE object_id = OBJECT_ID(N''dbo.SanPham'')) = 3, 1, 0);\nSET @info = N''expected a heap (ma INT, ten CHAR(100), gia INT), all NOT NULL'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. The table is a heap with the three NOT NULL columns of the task | Bảng là heap với ba cột NOT NULL như đề'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. The table is a heap with the three NOT NULL columns of the task | Bảng là heap với ba cột NOT NULL như đề', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: vPageStats reports 115 bytes per row\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT byte_moi_dong FROM dbo.vPageStats) = 115, 1, 0);\nSET @info = CONCAT(N''byte_moi_dong = '', (SELECT TOP (1) byte_moi_dong FROM dbo.vPageStats), N'' (4 + 100 + 4 + 7)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. vPageStats reports 115 bytes per row | vPageStats báo 115 byte mỗi dòng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. vPageStats reports 115 bytes per row | vPageStats báo 115 byte mỗi dòng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: vPageStats reports 15 pages = ceiling(1000 / 69)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_trang FROM dbo.vPageStats) = 15, 1, 0);\nSET @info = CONCAT(N''so_trang = '', (SELECT TOP (1) so_trang FROM dbo.vPageStats));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. vPageStats reports 15 pages = ceiling(1000 / 69) | vPageStats báo 15 trang = làm tròn lên 1000 / 69'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. vPageStats reports 15 pages = ceiling(1000 / 69) | vPageStats báo 15 trang = làm tròn lên 1000 / 69', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The prediction and the DMV agree to the byte. On PostgreSQL the same table takes 18 pages: a 24-byte tuple header, 1 byte of length for char(100), 3 bytes of alignment padding and a 4-byte line pointer per row.</p>",
+      "solutionExplanationHtmlVi": "<p>Dự đoán và DMV khớp tới từng byte. Trên PostgreSQL cùng bảng tốn 18 trang: đầu tuple 24 byte, 1 byte độ dài cho char(100), 3 byte đệm căn lề và con trỏ dòng 4 byte mỗi dòng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The browser grader is PostgreSQL in WASM: it has no SQL Server pages, no sys.all_columns and no sys.dm_db_index_physical_stats, so the page count can only be measured on a real SQL Server.|||Máy chấm trình duyệt là PostgreSQL trong WASM: không có trang SQL Server, không có sys.all_columns hay sys.dm_db_index_physical_stats, nên số trang chỉ đo được trên SQL Server thật.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. 1,000 rows, ma = 1…1000, gia = 1000 × ma",
+            "2. The table is a heap with the three NOT NULL columns of the task",
+            "3. vPageStats reports 115 bytes per row",
+            "4. vPageStats reports 15 pages = ceiling(1000 / 69)"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "VARCHAR(100) holding \"SP1\"… — rows become tiny and the page count drops: the formula is for fixed-length columns.|||VARCHAR(100) chứa \"SP1\"… — dòng rất nhỏ và số trang giảm: công thức dành cho cột cố định."
+        },
+        {
+          "loi": "A WHILE loop of 1,000 single INSERTs — works, but it is 1,000 statements and 1,000 log flushes.|||Vòng WHILE 1.000 câu INSERT lẻ — chạy được, nhưng là 1.000 câu lệnh và 1.000 lần ghi nhật ký."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "heap",
+          "vi": "bảng heap (không chỉ mục cụm)"
+        },
+        {
+          "en": "set-based",
+          "vi": "xử lý theo tập"
+        },
+        {
+          "en": "DMV (dynamic management view)",
+          "vi": "view quản trị động"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — seek by key vs scan: predict the pages read",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "index seek",
+        "clustered index scan",
+        "logical reads"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "performance"
+      ],
+      "problemHtml": "<p><code>SanPham(ma INT PRIMARY KEY, ten CHAR(100), gia INT)</code> now has 10,000 rows (69 rows per page ⇒ 145 leaf pages + 1 root, a 2-level clustered index). Predict what <code>SET STATISTICS IO</code> printed.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>SanPham(ma INT PRIMARY KEY, ten CHAR(100), gia INT)</code> giờ có 10.000 dòng (69 dòng mỗi trang ⇒ 145 trang lá + 1 gốc, chỉ mục cụm 2 tầng). Đoán <code>SET STATISTICS IO</code> đã in gì.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A 2-level tree means a seek reads 2 pages.|||Cây 2 tầng nghĩa là seek đọc 2 trang.",
+        "No usable index ⇒ read every leaf page.|||Không có chỉ mục dùng được ⇒ đọc mọi trang lá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — seek by key vs scan: predict the pages read\n\nAnswer in the answer panel (no code needed).\n\n1. Query → plan → logical readsTruy vấn → kế hoạch → logical reads\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — seek by key vs scan: predict the pages read — answer key\n\n1. Query → plan → logical readsTruy vấn → kế hoạch → logical reads\n   - r1.kh: Clustered Index Seek\n   - r1.lr: 2\n   - r2.kh: Clustered Index Scan\n   - r2.lr: 147\n   Seek = root + one leaf = 2 pages. No index on ten ⇒ every leaf page (145) plus 2 more pages touched on the way = 147. Same single row returned, 73× more pages.VI: Seek = gốc + một lá = 2 trang. Không có chỉ mục trên ten ⇒ mọi trang lá (145) cộng 2 trang chạm trên đường đi = 147. Cùng một dòng trả về, nhiều gấp 73 lần trang.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Seek = root + one leaf = 2 pages. No index on ten ⇒ every leaf page (145) plus 2 more pages touched on the way = 147. Same single row returned, 73× more pages.</p><p><i>VI: Seek = gốc + một lá = 2 trang. Không có chỉ mục trên ten ⇒ mọi trang lá (145) cộng 2 trang chạm trên đường đi = 147. Cùng một dòng trả về, nhiều gấp 73 lần trang.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Query → plan → logical reads</p><p style=\"opacity:.75;font-size:.92em\"><i>Truy vấn → kế hoạch → logical reads</i></p>",
+            "cot": [
+              {
+                "ma": "tv",
+                "ten": "Query / Truy vấn"
+              },
+              {
+                "ma": "kh",
+                "ten": "Plan",
+                "luaChon": [
+                  "Clustered Index Seek",
+                  "Clustered Index Scan"
+                ]
+              },
+              {
+                "ma": "lr",
+                "ten": "Logical reads",
+                "luaChon": [
+                  "2",
+                  "147",
+                  "10000",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tv": "SELECT gia FROM SanPham WHERE ma = 5000"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tv": "SELECT gia FROM SanPham WHERE ten = 'SP5000'"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kh": "Clustered Index Seek",
+              "r1.lr": "2",
+              "r2.kh": "Clustered Index Scan",
+              "r2.lr": "147"
+            },
+            "giaiThich": "<p>Seek = root + one leaf = 2 pages. No index on ten ⇒ every leaf page (145) plus 2 more pages touched on the way = 147. Same single row returned, 73× more pages.</p><p><i>VI: Seek = gốc + một lá = 2 trang. Không có chỉ mục trên ten ⇒ mọi trang lá (145) cộng 2 trang chạm trên đường đi = 147. Cùng một dòng trả về, nhiều gấp 73 lần trang.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 10,000 — reads are counted in pages, not rows.|||Trả lời 10.000 — số đọc tính theo trang, không theo dòng."
+        },
+        {
+          "loi": "\"It returns one row, so it is cheap.\"|||\"Nó trả một dòng nên rẻ.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index seek",
+          "vi": "tìm theo chỉ mục"
+        },
+        {
+          "en": "index scan",
+          "vi": "quét chỉ mục"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — which CREATE TABLE breaks the 8060-byte rule?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "8060-byte row limit",
+        "NCHAR",
+        "ROW_OVERFLOW_DATA",
+        "TOAST"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "storage"
+      ],
+      "problemHtml": "<p>Three designs, all columns NOT NULL. What happens on SQL Server, and on PostgreSQL (with the equivalent types)?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba thiết kế, mọi cột NOT NULL. Chuyện gì xảy ra trên SQL Server, và trên PostgreSQL (với kiểu tương đương)?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Add 7 bytes of overhead to fixed-length totals.|||Cộng 7 byte phụ phí vào tổng cột cố định.",
+        "N = 2 bytes per character.|||N = 2 byte mỗi ký tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — which CREATE TABLE breaks the 8060-byte rule?\n\nAnswer in the answer panel (no code needed).\n\n1. Design → SQL Server → PostgreSQLThiết kế → SQL Server → PostgreSQL\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — which CREATE TABLE breaks the 8060-byte rule? — answer key\n\n1. Design → SQL Server → PostgreSQLThiết kế → SQL Server → PostgreSQL\n   - r1.ss: created, the row fits (8007 bytes)\n   - r1.pg: created (long values go to TOAST)\n   - r2.ss: Msg 1701: minimum row size 8107 > 8060\n   - r2.pg: created (long values go to TOAST)\n   - r3.ss: created; long values overflow off-row\n   - r3.pg: created (long values go to TOAST)\n   NCHAR is 2 bytes per character: 8000 + 100 + 7 = 8107. Variable-length columns may total more than 8060 (ROW_OVERFLOW_DATA). PostgreSQL has no fixed in-row limit at CREATE time.VI: NCHAR tốn 2 byte mỗi ký tự: 8000 + 100 + 7 = 8107. Cột độ dài thay đổi được phép tổng vượt 8060 (ROW_OVERFLOW_DATA). PostgreSQL không có trần trong dòng cố định lúc CREATE.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NCHAR is 2 bytes per character: 8000 + 100 + 7 = 8107. Variable-length columns may total more than 8060 (ROW_OVERFLOW_DATA). PostgreSQL has no fixed in-row limit at CREATE time.</p><p><i>VI: NCHAR tốn 2 byte mỗi ký tự: 8000 + 100 + 7 = 8107. Cột độ dài thay đổi được phép tổng vượt 8060 (ROW_OVERFLOW_DATA). PostgreSQL không có trần trong dòng cố định lúc CREATE.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Design → SQL Server → PostgreSQL</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết kế → SQL Server → PostgreSQL</i></p>",
+            "cot": [
+              {
+                "ma": "tk",
+                "ten": "Design / Thiết kế"
+              },
+              {
+                "ma": "ss",
+                "ten": "SQL Server",
+                "luaChon": [
+                  "created, the row fits (8007 bytes)",
+                  "Msg 1701: minimum row size 8107 > 8060",
+                  "created; long values overflow off-row"
+                ]
+              },
+              {
+                "ma": "pg",
+                "ten": "PostgreSQL",
+                "luaChon": [
+                  "created (long values go to TOAST)",
+                  "refused at CREATE time"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tk": "x CHAR(4000), y CHAR(4000)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tk": "x NCHAR(4000), y CHAR(100)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tk": "x NVARCHAR(4000), y NVARCHAR(4000)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ss": "created, the row fits (8007 bytes)",
+              "r1.pg": "created (long values go to TOAST)",
+              "r2.ss": "Msg 1701: minimum row size 8107 > 8060",
+              "r2.pg": "created (long values go to TOAST)",
+              "r3.ss": "created; long values overflow off-row",
+              "r3.pg": "created (long values go to TOAST)"
+            },
+            "giaiThich": "<p>NCHAR is 2 bytes per character: 8000 + 100 + 7 = 8107. Variable-length columns may total more than 8060 (ROW_OVERFLOW_DATA). PostgreSQL has no fixed in-row limit at CREATE time.</p><p><i>VI: NCHAR tốn 2 byte mỗi ký tự: 8000 + 100 + 7 = 8107. Cột độ dài thay đổi được phép tổng vượt 8060 (ROW_OVERFLOW_DATA). PostgreSQL không có trần trong dòng cố định lúc CREATE.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking CHAR(4000) + CHAR(4000) fails — 8007 still fits.|||Tưởng CHAR(4000) + CHAR(4000) lỗi — 8007 vẫn vừa."
+        },
+        {
+          "loi": "Thinking NVARCHAR(4000) × 2 fails — variable-length columns may overflow.|||Tưởng NVARCHAR(4000) × 2 lỗi — cột thay đổi được tràn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row size limit",
+          "vi": "giới hạn kích thước dòng"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — the log, the statistics and the plan cache: predict, then explain",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 9,
+      "points": 30,
+      "concepts": [
+        "transaction log",
+        "ROLLBACK",
+        "MVCC",
+        "statistics",
+        "plan cache"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals"
+      ],
+      "problemHtml": "<p>Three experiments from the lesson, each run for real. Predict the outcome.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba thí nghiệm của bài, đều đã chạy thật. Đoán kết quả.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SQL Server undoes from the log; PostgreSQL just ignores aborted versions.|||SQL Server hoàn tác từ nhật ký; PostgreSQL chỉ bỏ qua phiên bản bị huỷ.",
+        "Estimated vs actual rows off by 10× ⇒ statistics.|||Ước lượng lệch thực tế 10× ⇒ thống kê."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — the log, the statistics and the plan cache: predict, then explain\n\nAnswer in the answer panel (no code needed).\n\n1. SQL Server: BEGIN TRAN; DELETE the 3 students with id <= 3 (of 4). Log records of this transaction before ROLLBACK?SQL Server: BEGIN TRAN; DELETE 3 sinh viên có id <= 3 (trên 4). Bản ghi nhật ký của giao dịch trước ROLLBACK?\n2. PostgreSQL: the same DELETE, then ROLLBACK. What does PostgreSQL have to undo?PostgreSQL: cùng câu DELETE rồi ROLLBACK. PostgreSQL phải hoàn tác gì?\n3. Statistics saw 1,000 rows of status A; then 5,000 rows of B arrive (auto-update off). WHERE status = 'B' is planned as…Thống kê thấy 1.000 dòng trạng thái A; rồi 5.000 dòng B đến (tắt tự cập nhật). WHERE status = 'B' được lập kế hoạch là…\n4. The same query runs 3× with literals (4000, 6000, 9000) and 3× via sp_executesql with @g. Plans in the cache?Cùng truy vấn chạy 3 lần với hằng (4000, 6000, 9000) và 3 lần qua sp_executesql với @g. Số kế hoạch trong cache?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — the log, the statistics and the plan cache: predict, then explain — answer key\n\n1. SQL Server: BEGIN TRAN; DELETE the 3 students with id <= 3 (of 4). Log records of this transaction before ROLLBACK?SQL Server: BEGIN TRAN; DELETE 3 sinh viên có id <= 3 (trên 4). Bản ghi nhật ký của giao dịch trước ROLLBACK?\n   Answer: b) 1 LOP_BEGIN_XACT + 3 LOP_DELETE_ROWS\n   One log record per deleted row, each with enough of the row to put it back. ROLLBACK reads them backwards ⇒ 4 rows again.VI: Mỗi dòng xoá một bản ghi nhật ký, đủ để đặt dòng lại. ROLLBACK đọc ngược chúng ⇒ lại 4 dòng.\n\n2. PostgreSQL: the same DELETE, then ROLLBACK. What does PostgreSQL have to undo?PostgreSQL: cùng câu DELETE rồi ROLLBACK. PostgreSQL phải hoàn tác gì?\n   Answer: c) nothing: the rows only got xmax stamped, and the aborted xid is ignored\n   MVCC keeps old versions in place; an aborted transaction's stamps are simply ignored.VI: MVCC giữ phiên bản cũ tại chỗ; dấu của giao dịch bị huỷ đơn giản là bị bỏ qua.\n\n3. Statistics saw 1,000 rows of status A; then 5,000 rows of B arrive (auto-update off). WHERE status = 'B' is planned as…Thống kê thấy 1.000 dòng trạng thái A; rồi 5.000 dòng B đến (tắt tự cập nhật). WHERE status = 'B' được lập kế hoạch là…\n   Answer: a) index seek + 5,000 key lookups: the estimate was only 77 rows\n   After UPDATE STATISTICS … WITH FULLSCAN the estimate becomes 5000 and the plan switches to a scan.VI: Sau UPDATE STATISTICS … WITH FULLSCAN ước lượng thành 5000 và kế hoạch chuyển sang quét.\n\n4. The same query runs 3× with literals (4000, 6000, 9000) and 3× via sp_executesql with @g. Plans in the cache?Cùng truy vấn chạy 3 lần với hằng (4000, 6000, 9000) và 3 lần qua sp_executesql với @g. Số kế hoạch trong cache?\n   Answer: c) 3 ad hoc plans used once each + 1 prepared plan used 3 times\n   Different text = different plan. A parameterized statement compiles once and is reused.VI: Văn bản khác = kế hoạch khác. Câu tham số hoá biên dịch một lần và được dùng lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 1 LOP_BEGIN_XACT + 3 LOP_DELETE_ROWS</p><p>One log record per deleted row, each with enough of the row to put it back. ROLLBACK reads them backwards ⇒ 4 rows again.</p><p><i>VI: Mỗi dòng xoá một bản ghi nhật ký, đủ để đặt dòng lại. ROLLBACK đọc ngược chúng ⇒ lại 4 dòng.</i></p></li><li><p><b>c)</b> nothing: the rows only got xmax stamped, and the aborted xid is ignored</p><p>MVCC keeps old versions in place; an aborted transaction's stamps are simply ignored.</p><p><i>VI: MVCC giữ phiên bản cũ tại chỗ; dấu của giao dịch bị huỷ đơn giản là bị bỏ qua.</i></p></li><li><p><b>a)</b> index seek + 5,000 key lookups: the estimate was only 77 rows</p><p>After UPDATE STATISTICS … WITH FULLSCAN the estimate becomes 5000 and the plan switches to a scan.</p><p><i>VI: Sau UPDATE STATISTICS … WITH FULLSCAN ước lượng thành 5000 và kế hoạch chuyển sang quét.</i></p></li><li><p><b>c)</b> 3 ad hoc plans used once each + 1 prepared plan used 3 times</p><p>Different text = different plan. A parameterized statement compiles once and is reused.</p><p><i>VI: Văn bản khác = kế hoạch khác. Câu tham số hoá biên dịch một lần và được dùng lại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>SQL Server: BEGIN TRAN; DELETE the 3 students with id <= 3 (of 4). Log records of this transaction before ROLLBACK?</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL Server: BEGIN TRAN; DELETE 3 sinh viên có id <= 3 (trên 4). Bản ghi nhật ký của giao dịch trước ROLLBACK?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 LOP_BEGIN_XACT + 1 LOP_DELETE_ROWS for the batch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 LOP_BEGIN_XACT + 3 LOP_DELETE_ROWS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "none until COMMIT is reached"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 LOP_DELETE_ROWS + 1 LOP_COMMIT_XACT"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One log record per deleted row, each with enough of the row to put it back. ROLLBACK reads them backwards ⇒ 4 rows again.</p><p><i>VI: Mỗi dòng xoá một bản ghi nhật ký, đủ để đặt dòng lại. ROLLBACK đọc ngược chúng ⇒ lại 4 dòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>PostgreSQL: the same DELETE, then ROLLBACK. What does PostgreSQL have to undo?</p><p style=\"opacity:.75;font-size:.92em\"><i>PostgreSQL: cùng câu DELETE rồi ROLLBACK. PostgreSQL phải hoàn tác gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it restores the page from the last checkpoint"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it re-inserts the 3 rows from the WAL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing: the rows only got xmax stamped, and the aborted xid is ignored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it must run VACUUM FULL before readers continue"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>MVCC keeps old versions in place; an aborted transaction's stamps are simply ignored.</p><p><i>VI: MVCC giữ phiên bản cũ tại chỗ; dấu của giao dịch bị huỷ đơn giản là bị bỏ qua.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Statistics saw 1,000 rows of status A; then 5,000 rows of B arrive (auto-update off). WHERE status = 'B' is planned as…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thống kê thấy 1.000 dòng trạng thái A; rồi 5.000 dòng B đến (tắt tự cập nhật). WHERE status = 'B' được lập kế hoạch là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "index seek + 5,000 key lookups: the estimate was only 77 rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a parallel scan, since the table just grew"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a hash join between the index and the table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "clustered index scan, the right plan for 5 rows out of 6"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>After UPDATE STATISTICS … WITH FULLSCAN the estimate becomes 5000 and the plan switches to a scan.</p><p><i>VI: Sau UPDATE STATISTICS … WITH FULLSCAN ước lượng thành 5000 và kế hoạch chuyển sang quét.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The same query runs 3× with literals (4000, 6000, 9000) and 3× via sp_executesql with @g. Plans in the cache?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng truy vấn chạy 3 lần với hằng (4000, 6000, 9000) và 3 lần qua sp_executesql với @g. Số kế hoạch trong cache?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6 plans, one per execution, each used once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 shared plan reused by all six executions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3 ad hoc plans used once each + 1 prepared plan used 3 times"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2 plans, one ad hoc and one prepared, 3 uses each"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Different text = different plan. A parameterized statement compiles once and is reused.</p><p><i>VI: Văn bản khác = kế hoạch khác. Câu tham số hoá biên dịch một lần và được dùng lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking log records are written only at COMMIT.|||Tưởng bản ghi nhật ký chỉ được ghi lúc COMMIT."
+        },
+        {
+          "loi": "Thinking SQL Server auto-parameterizes every literal query.|||Tưởng SQL Server tự tham số hoá mọi truy vấn có hằng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rollback",
+          "vi": "hoàn tác"
+        },
+        {
+          "en": "ad hoc query",
+          "vi": "truy vấn tuỳ biến"
+        }
+      ]
+    }
+  ]
+}

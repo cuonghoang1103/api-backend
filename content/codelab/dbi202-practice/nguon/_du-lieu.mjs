@@ -113,3 +113,52 @@ export const LUOC_DO_MOV = {
   en: `<details class="cl-luoc-do" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style="text-decoration:underline">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style="text-decoration:underline"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style="text-decoration:underline">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style="text-decoration:underline">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style="text-decoration:underline">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>`,
   vi: `<details class="cl-luoc-do" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style="text-decoration:underline">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style="text-decoration:underline"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style="text-decoration:underline">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style="text-decoration:underline">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style="text-decoration:underline">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>`,
 };
+
+/** DonHang (+ ChiTietDon) của deck ⭐ CS.3 — bản nhỏ 20 dòng cho máy chấm trình duyệt, có sẵn các ca biên:
+ *  ngày 2024-03-15 / đầu-cuối năm, mã bắt đầu DH4242 / DH42, tongTien quanh 4.950.000 và 2.900.000. */
+export const DH = String.raw`
+CREATE TABLE DonHang (
+  id          INT           NOT NULL,
+  maDon       VARCHAR(12)   NOT NULL,
+  khachHangId INT           NOT NULL,
+  ngayDat     DATE          NOT NULL,
+  trangThai   VARCHAR(10)   NOT NULL,
+  tongTien    DECIMAL(12,0) NOT NULL,
+  CONSTRAINT pk_donhang PRIMARY KEY (id)
+);
+CREATE TABLE ChiTietDon (
+  id        INT          NOT NULL,
+  donHangId INT          NOT NULL,
+  sanPham   VARCHAR(20)  NOT NULL,
+  soLuong   INT          NOT NULL,
+  CONSTRAINT pk_chitietdon PRIMARY KEY (id),
+  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)
+);
+INSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES
+  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),
+  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),
+  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),
+  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),
+  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),
+  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),
+  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),
+  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),
+  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),
+  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),
+  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),
+  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),
+  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),
+  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),
+  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),
+  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),
+  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),
+  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),
+  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),
+  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);
+INSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES
+  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);
+`;
+export const LUOC_DO_DH = {
+  en: '<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 orders (a small copy of the lesson\'s 50,000-row table, with the edge cases kept); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>',
+  vi: '<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 đơn (bản nhỏ của bảng 50.000 dòng trong bài, giữ đủ ca biên); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>',
+};

@@ -1,0 +1,760 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs1-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs1-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — which data model is this?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "hierarchical",
+        "network",
+        "relational"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "history"
+      ],
+      "problemHtml": "<p>Three short system descriptions. Name the data model and the clue that gives it away.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba mô tả hệ thống ngắn. Gọi tên mô hình dữ liệu và dấu hiệu tố cáo nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Exactly one\" ⇒ tree; \"pointer the program follows\" ⇒ network.|||\"Đúng một\" ⇒ cây; \"con trỏ chương trình đi theo\" ⇒ mạng.",
+        "A SELECT that never says how ⇒ relational.|||Một câu SELECT không nói cách làm ⇒ quan hệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — which data model is this?\n\nAnswer in the answer panel (no code needed).\n\n1. Description → model → clueMô tả → mô hình → dấu hiệu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — which data model is this? — answer key\n\n1. Description → model → clueMô tả → mô hình → dấu hiệu\n   - r1.mh: hierarchical\n   - r1.dh: each child has exactly one parent\n   - r2.mh: network\n   - r2.dh: several parents, reached by pointers\n   - r3.mh: relational\n   - r3.dh: the query never says how to find rows\n   Tree (IMS) → graph with pointers (CODASYL) → declarative tables (Codd).VI: Cây (IMS) → đồ thị con trỏ (CODASYL) → bảng khai báo (Codd).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tree (IMS) → graph with pointers (CODASYL) → declarative tables (Codd).</p><p><i>VI: Cây (IMS) → đồ thị con trỏ (CODASYL) → bảng khai báo (Codd).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Description → model → clue</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả → mô hình → dấu hiệu</i></p>",
+            "cot": [
+              {
+                "ma": "mt",
+                "ten": "Description / Mô tả"
+              },
+              {
+                "ma": "mh",
+                "ten": "Model / Mô hình",
+                "luaChon": [
+                  "hierarchical",
+                  "network",
+                  "relational"
+                ]
+              },
+              {
+                "ma": "dh",
+                "ten": "Clue / Dấu hiệu",
+                "luaChon": [
+                  "each child has exactly one parent",
+                  "several parents, reached by pointers",
+                  "the query never says how to find rows"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "mt": "Every employee record belongs to exactly one department record; an employee never has two departments."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "mt": "A course record is linked from several student records, and the program follows a direct pointer to read the next record."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "mt": "I write SELECT * FROM Enrollment WHERE studentId = 12 and never say how the DBMS finds the rows."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.mh": "hierarchical",
+              "r1.dh": "each child has exactly one parent",
+              "r2.mh": "network",
+              "r2.dh": "several parents, reached by pointers",
+              "r3.mh": "relational",
+              "r3.dh": "the query never says how to find rows"
+            },
+            "giaiThich": "<p>Tree (IMS) → graph with pointers (CODASYL) → declarative tables (Codd).</p><p><i>VI: Cây (IMS) → đồ thị con trỏ (CODASYL) → bảng khai báo (Codd).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling any \"belongs to\" relationship relational — the clue is the access style.|||Gọi mọi quan hệ \"thuộc về\" là mô hình quan hệ — dấu hiệu nằm ở cách truy cập."
+        },
+        {
+          "loi": "Calling the many-parent case hierarchical.|||Gọi trường hợp nhiều cha là phân cấp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "declarative query",
+          "vi": "truy vấn khai báo"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — put the timeline in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "timeline"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "history"
+      ],
+      "problemHtml": "<p>Eight shuffled milestones. Put them in chronological order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tám mốc bị xáo. Sắp theo thứ tự thời gian.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two pre-relational models first, then Codd.|||Hai mô hình trước quan hệ đi trước, rồi tới Codd.",
+        "The three engines you know arrive in the order SQL Server, MySQL, PostgreSQL.|||Ba hệ quen thuộc đến theo thứ tự SQL Server, MySQL, PostgreSQL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — put the timeline in order\n\nAnswer in the answer panel (no code needed).\n\n1. Oldest → newestCũ nhất → mới nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — put the timeline in order — answer key\n\n1. Oldest → newestCũ nhất → mới nhất\n   Answer: m4) IBM IMS goes live  →  m1) CODASYL DBTG report  →  m8) Codd's relational-model paper  →  m6) System R starts at IBM  →  m5) Oracle v2 ships  →  m7) SQL Server 1.0  →  m3) MySQL released  →  m2) PostgreSQL renamed from Postgres95\n   1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R came first as research; Oracle shipped first as a product.VI: 1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R đi trước dưới dạng nghiên cứu; Oracle bán trước dưới dạng sản phẩm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R came first as research; Oracle shipped first as a product.</p><p><i>VI: 1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R đi trước dưới dạng nghiên cứu; Oracle bán trước dưới dạng sản phẩm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Oldest → newest</p><p style=\"opacity:.75;font-size:.92em\"><i>Cũ nhất → mới nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "CODASYL DBTG report"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "PostgreSQL renamed from Postgres95"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "MySQL released"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "IBM IMS goes live"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Oracle v2 ships"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "System R starts at IBM"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "SQL Server 1.0"
+              },
+              {
+                "ma": "m8",
+                "noiDung": "Codd's relational-model paper"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m8",
+              "m6",
+              "m5",
+              "m7",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R came first as research; Oracle shipped first as a product.</p><p><i>VI: 1968 · 1969 · 1970 · 1974 · 1979 · 1989 · 1995 · 1996. System R đi trước dưới dạng nghiên cứu; Oracle bán trước dưới dạng sản phẩm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting Oracle before System R.|||Đặt Oracle trước System R."
+        },
+        {
+          "loi": "Putting PostgreSQL before MySQL because Postgres started earlier.|||Đặt PostgreSQL trước MySQL vì Postgres khởi đầu sớm hơn."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Exercise 3 — pick the right DBMS, and the right job title",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "choosing a DBMS",
+        "database careers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "ecosystem"
+      ],
+      "problemHtml": "<p>Two small tables: choose an engine for each scenario, then match each job-ad snippet to a role.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai bảng nhỏ: chọn hệ cho từng tình huống, rồi ghép mỗi đoạn tin tuyển dụng với một vai trò.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "An existing engine with decades of data is a strong reason by itself.|||Một hệ đang chạy với hàng chục năm dữ liệu tự nó đã là lý do mạnh.",
+        "A DBA runs one engine; a data engineer moves data between systems.|||DBA vận hành một hệ; kỹ sư dữ liệu chuyển dữ liệu giữa các hệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — pick the right DBMS, and the right job title\n\nAnswer in the answer panel (no code needed).\n\n1. Scenario → DBMSTình huống → DBMS\n2. Job ad → roleTin tuyển dụng → vai trò\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — pick the right DBMS, and the right job title — answer key\n\n1. Scenario → DBMSTình huống → DBMS\n   - r1.hqt: PostgreSQL\n   - r2.hqt: Oracle\n   - r3.hqt: MySQL\n   - r4.hqt: SQL Server\n   Free and Prisma-friendly; match the existing engine; WordPress is built on MySQL; stay inside the Microsoft stack.VI: Miễn phí và hợp Prisma; theo hệ đang chạy; WordPress xây trên MySQL; ở lại hệ sinh thái Microsoft.\n\n2. Job ad → roleTin tuyển dụng → vai trò\n   - r1.vt: DBA\n   - r2.vt: backend developer\n   - r3.vt: data engineer\n   Operations of one engine ⇒ DBA; feature code ⇒ backend; moving data between systems ⇒ data engineer.VI: Vận hành một hệ ⇒ DBA; viết tính năng ⇒ backend; chuyển dữ liệu giữa các hệ ⇒ kỹ sư dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Free and Prisma-friendly; match the existing engine; WordPress is built on MySQL; stay inside the Microsoft stack.</p><p><i>VI: Miễn phí và hợp Prisma; theo hệ đang chạy; WordPress xây trên MySQL; ở lại hệ sinh thái Microsoft.</i></p><p>Operations of one engine ⇒ DBA; feature code ⇒ backend; moving data between systems ⇒ data engineer.</p><p><i>VI: Vận hành một hệ ⇒ DBA; viết tính năng ⇒ backend; chuyển dữ liệu giữa các hệ ⇒ kỹ sư dữ liệu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Scenario → DBMS</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → DBMS</i></p>",
+            "cot": [
+              {
+                "ma": "th",
+                "ten": "Scenario / Tình huống"
+              },
+              {
+                "ma": "hqt",
+                "ten": "DBMS",
+                "luaChon": [
+                  "PostgreSQL",
+                  "Oracle",
+                  "MySQL",
+                  "SQL Server"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "th": "A student note-taking app with Prisma on a $5/month VPS"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "th": "A new module for a bank ledger that has run on Oracle for 30 years"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "th": "A large WordPress news site: millions of reads, few writes"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "th": "An HR system for a company on Windows Server, .NET, Active Directory and SSRS reports"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.hqt": "PostgreSQL",
+              "r2.hqt": "Oracle",
+              "r3.hqt": "MySQL",
+              "r4.hqt": "SQL Server"
+            },
+            "giaiThich": "<p>Free and Prisma-friendly; match the existing engine; WordPress is built on MySQL; stay inside the Microsoft stack.</p><p><i>VI: Miễn phí và hợp Prisma; theo hệ đang chạy; WordPress xây trên MySQL; ở lại hệ sinh thái Microsoft.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Job ad → role</p><p style=\"opacity:.75;font-size:.92em\"><i>Tin tuyển dụng → vai trò</i></p>",
+            "cot": [
+              {
+                "ma": "tin",
+                "ten": "Job ad / Tin"
+              },
+              {
+                "ma": "vt",
+                "ten": "Role / Vai trò",
+                "luaChon": [
+                  "DBA",
+                  "backend developer",
+                  "data engineer"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tin": "Own backup/restore schedules, tune slow queries, manage permissions on our SQL Server fleet, on-call 24/7."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tin": "Design the Prisma schema for a new feature, write the REST endpoints and the SQL behind them."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tin": "Build nightly pipelines moving data from production PostgreSQL into the analytics warehouse."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.vt": "DBA",
+              "r2.vt": "backend developer",
+              "r3.vt": "data engineer"
+            },
+            "giaiThich": "<p>Operations of one engine ⇒ DBA; feature code ⇒ backend; moving data between systems ⇒ data engineer.</p><p><i>VI: Vận hành một hệ ⇒ DBA; viết tính năng ⇒ backend; chuyển dữ liệu giữa các hệ ⇒ kỹ sư dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing by \"which is best\" instead of by the scenario's constraints.|||Chọn theo \"cái nào tốt nhất\" thay vì theo ràng buộc của tình huống."
+        },
+        {
+          "loi": "Calling the pipeline job a DBA role.|||Gọi việc làm đường ống dữ liệu là vai trò DBA."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data warehouse",
+          "vi": "kho dữ liệu phân tích"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — CAP in a global chat app, and the GitLab lesson",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "CAP",
+        "eventual consistency",
+        "restore test"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "nosql"
+      ],
+      "problemHtml": "<p>A global chat app must stay writable when its US and EU data centres lose their link, and a message may reach the EU a second later than the US.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một app chat toàn cầu phải ghi được khi trung tâm dữ liệu Mỹ và châu Âu mất kết nối, và tin nhắn có thể tới châu Âu chậm hơn Mỹ một giây.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the requirement: \"stay writable\" = availability.|||Đọc yêu cầu: \"vẫn ghi được\" = sẵn sàng.",
+        "\"A second later\" = eventual consistency is accepted.|||\"Chậm một giây\" = chấp nhận nhất quán cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — CAP in a global chat app, and the GitLab lesson\n\nAnswer in the answer panel (no code needed).\n\n1. Which store fits the message history, in CAP terms?Kho nào hợp cho lịch sử tin nhắn, theo CAP?\n2. A strict RDBMS transaction spanning both data centres would, during the partition,…Một giao dịch RDBMS chặt trải hai trung tâm, trong lúc chia cắt, sẽ…\n3. GitLab 2017 had five backup mechanisms and still lost six hours. The lesson is…GitLab 2017 có năm cơ chế sao lưu mà vẫn mất sáu giờ. Bài học là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — CAP in a global chat app, and the GitLab lesson — answer key\n\n1. Which store fits the message history, in CAP terms?Kho nào hợp cho lịch sử tin nhắn, theo CAP?\n   Answer: d) an eventually consistent store: it chooses A + P\n   \"Must stay writable during a partition\" picks availability; \"a second later\" accepts eventual consistency.VI: \"Phải ghi được khi chia cắt\" là chọn sẵn sàng; \"chậm một giây\" là chấp nhận nhất quán cuối cùng.\n\n2. A strict RDBMS transaction spanning both data centres would, during the partition,…Một giao dịch RDBMS chặt trải hai trung tâm, trong lúc chia cắt, sẽ…\n   Answer: d) block or refuse the writes\n   Keeping consistency means waiting for the other side — exactly what the requirement forbids.VI: Giữ nhất quán nghĩa là chờ phía bên kia — đúng điều yêu cầu cấm.\n\n3. GitLab 2017 had five backup mechanisms and still lost six hours. The lesson is…GitLab 2017 có năm cơ chế sao lưu mà vẫn mất sáu giờ. Bài học là…\n   Answer: c) a backup counts only once a restore is tested\n   All five were silently broken; nobody owned restore testing.VI: Cả năm cơ chế đều hỏng âm thầm; không ai phụ trách thử khôi phục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> an eventually consistent store: it chooses A + P</p><p>\"Must stay writable during a partition\" picks availability; \"a second later\" accepts eventual consistency.</p><p><i>VI: \"Phải ghi được khi chia cắt\" là chọn sẵn sàng; \"chậm một giây\" là chấp nhận nhất quán cuối cùng.</i></p></li><li><p><b>d)</b> block or refuse the writes</p><p>Keeping consistency means waiting for the other side — exactly what the requirement forbids.</p><p><i>VI: Giữ nhất quán nghĩa là chờ phía bên kia — đúng điều yêu cầu cấm.</i></p></li><li><p><b>c)</b> a backup counts only once a restore is tested</p><p>All five were silently broken; nobody owned restore testing.</p><p><i>VI: Cả năm cơ chế đều hỏng âm thầm; không ai phụ trách thử khôi phục.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which store fits the message history, in CAP terms?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kho nào hợp cho lịch sử tin nhắn, theo CAP?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "any store, CAP does not apply across continents"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a single server, which removes the partition"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a strict RDBMS spanning both sites: it chooses C + P"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an eventually consistent store: it chooses A + P"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>\"Must stay writable during a partition\" picks availability; \"a second later\" accepts eventual consistency.</p><p><i>VI: \"Phải ghi được khi chia cắt\" là chọn sẵn sàng; \"chậm một giây\" là chấp nhận nhất quán cuối cùng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A strict RDBMS transaction spanning both data centres would, during the partition,…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một giao dịch RDBMS chặt trải hai trung tâm, trong lúc chia cắt, sẽ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "silently drop half the messages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "turn into two independent databases"
+              },
+              {
+                "ma": "c",
+                "noiDung": "accept writes and merge them later"
+              },
+              {
+                "ma": "d",
+                "noiDung": "block or refuse the writes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Keeping consistency means waiting for the other side — exactly what the requirement forbids.</p><p><i>VI: Giữ nhất quán nghĩa là chờ phía bên kia — đúng điều yêu cầu cấm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>GitLab 2017 had five backup mechanisms and still lost six hours. The lesson is…</p><p style=\"opacity:.75;font-size:.92em\"><i>GitLab 2017 có năm cơ chế sao lưu mà vẫn mất sáu giờ. Bài học là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "five mechanisms is too many to maintain well"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL needs a commercial backup tool"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a backup counts only once a restore is tested"
+              },
+              {
+                "ma": "d",
+                "noiDung": "deleting a directory is always unrecoverable"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>All five were silently broken; nobody owned restore testing.</p><p><i>VI: Cả năm cơ chế đều hỏng âm thầm; không ai phụ trách thử khôi phục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"NoSQL good, RDBMS bad\" — CAP is only about distributed systems.|||\"NoSQL tốt, RDBMS dở\" — CAP chỉ nói về hệ phân tán."
+        },
+        {
+          "loi": "Blaming GitLab's outage only on the mistyped command.|||Đổ sự cố GitLab chỉ cho lệnh gõ nhầm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "eventual consistency",
+          "vi": "nhất quán cuối cùng"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 5 — rewrite a T-SQL query so it runs on SQL Server AND PostgreSQL",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "portable SQL",
+        "COALESCE",
+        "CONCAT",
+        "OFFSET … FETCH"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "dialect",
+        "select"
+      ],
+      "problemHtml": "<p>This query only runs on SQL Server:</p><pre>SELECT TOP 3 name, ISNULL(gpa, 0) AS gpa, N'Student: ' + name AS label\nFROM Student\nORDER BY gpa DESC;</pre><p>Rewrite it so the <b>same text</b> runs on both engines and returns the 3 best students: <code>name</code>, <code>gpa</code> (0 when missing), <code>label</code> = <code>Student: </code> + name, best GPA first. A student without a GPA counts as 0 — on both engines, whatever their default NULL ordering.</p>\n<p><code>Student(id, name, gpa NULL)</code> — 4 rows, Binh has no GPA yet.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>No TOP, ISNULL or + on strings: use COALESCE, CONCAT and OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY.</li>\n  <li>Order by COALESCE(gpa, 0) DESC so NULL handling is the same everywhere.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu này chỉ chạy trên SQL Server:</p><pre>SELECT TOP 3 name, ISNULL(gpa, 0) AS gpa, N'Student: ' + name AS label\nFROM Student\nORDER BY gpa DESC;</pre><p>Viết lại để <b>cùng một đoạn chữ</b> chạy được trên cả hai hệ và trả 3 sinh viên điểm cao nhất: <code>name</code>, <code>gpa</code> (0 khi thiếu), <code>label</code> = <code>Student: </code> + tên, điểm cao trước. Sinh viên chưa có điểm tính là 0 — trên cả hai hệ, bất kể thứ tự NULL mặc định của chúng.</p>\n<p><code>Student(id, name, gpa NULL)</code> — 4 dòng, Binh chưa có điểm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không TOP, ISNULL hay + trên chuỗi: dùng COALESCE, CONCAT và OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY.</li>\n  <li>Sắp theo COALESCE(gpa, 0) DESC để xử lý NULL giống nhau ở mọi nơi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name | gpa | label        \n-----+-----+--------------\nChi  | 9.2 | Student: Chi \nAn   | 8.5 | Student: An  \nDung | 7   | Student: Dung",
+          "explanation": "Expected result of check \"The three best students, best first\" (row order matters).|||Kết quả mong đợi của kiểm \"Ba sinh viên điểm cao nhất, cao trước\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "COALESCE, CONCAT and OFFSET … FETCH are standard and exist on both engines.|||COALESCE, CONCAT và OFFSET … FETCH là chuẩn và có trên cả hai hệ.",
+        "OFFSET … FETCH needs an ORDER BY.|||OFFSET … FETCH cần ORDER BY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Student.sql",
+          "language": "sql",
+          "code": "-- Student.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Student.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (\n  id   INT NOT NULL PRIMARY KEY,\n  name NVARCHAR(50) NOT NULL,\n  gpa  DECIMAL(3,1) NULL\n);\nINSERT INTO Student (id, name, gpa) VALUES (1, N'An', 8.5), (2, N'Binh', NULL), (3, N'Chi', 9.2), (4, N'Dung', 7.0);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT name,\n       COALESCE(gpa, 0)            AS gpa,     -- ISNULL → COALESCE (standard, both engines)\n       CONCAT('Student: ', name)   AS label    -- + → CONCAT (both engines)\nFROM Student\nORDER BY COALESCE(gpa, 0) DESC                 -- same NULL treatment on both engines\nOFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;          -- TOP 3 → standard OFFSET … FETCH\n"
+        },
+        {
+          "name": "Student.sql",
+          "language": "sql",
+          "code": "-- Student.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Student.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (\n  id   INT NOT NULL PRIMARY KEY,\n  name NVARCHAR(50) NOT NULL,\n  gpa  DECIMAL(3,1) NULL\n);\nINSERT INTO Student (id, name, gpa) VALUES (1, N'An', 8.5), (2, N'Binh', NULL), (3, N'Chi', 9.2), (4, N'Dung', 7.0);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four changes: TOP → OFFSET/FETCH (or LIMIT on PostgreSQL only), ISNULL → COALESCE, + → CONCAT (or || on PostgreSQL), and an explicit NULL rule in ORDER BY. The PE asks for SQL Server, but at work portable SQL saves a rewrite.</p>",
+      "solutionExplanationHtmlVi": "<p>Bốn chỗ đổi: TOP → OFFSET/FETCH (hoặc LIMIT chỉ PostgreSQL), ISNULL → COALESCE, + → CONCAT (hoặc || trên PostgreSQL), và luật NULL tường minh trong ORDER BY. PE hỏi SQL Server, nhưng đi làm thì SQL chạy được hai hệ đỡ một lần viết lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Student (\n  id   INT NOT NULL PRIMARY KEY,\n  name NVARCHAR(50) NOT NULL,\n  gpa  DECIMAL(3,1) NULL\n);\nINSERT INTO Student (id, name, gpa) VALUES (1, N'An', 8.5), (2, N'Binh', NULL), (3, N'Chi', 9.2), (4, N'Dung', 7.0);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The three best students, best first|||Ba sinh viên điểm cao nhất, cao trước",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "gpa",
+                "label"
+              ],
+              "hang": [
+                [
+                  "Chi",
+                  9.2,
+                  "Student: Chi"
+                ],
+                [
+                  "An",
+                  8.5,
+                  "Student: An"
+                ],
+                [
+                  "Dung",
+                  7,
+                  "Student: Dung"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new top student and a second one without GPA|||Thêm người điểm cao nhất và một người nữa chưa có điểm",
+            "an": true,
+            "themCsdl": "INSERT INTO Student VALUES (5, N'Em', 9.6), (6, N'Giang', NULL)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "gpa",
+                "label"
+              ],
+              "hang": [
+                [
+                  "Em",
+                  9.6,
+                  "Student: Em"
+                ],
+                [
+                  "Chi",
+                  9.2,
+                  "Student: Chi"
+                ],
+                [
+                  "An",
+                  8.5,
+                  "Student: An"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Only two students have a GPA|||Chỉ hai sinh viên có điểm",
+            "an": true,
+            "themCsdl": "DELETE FROM Student WHERE id IN (1, 4)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "gpa",
+                "label"
+              ],
+              "hang": [
+                [
+                  "Chi",
+                  9.2,
+                  "Student: Chi"
+                ],
+                [
+                  "Binh",
+                  0,
+                  "Student: Binh"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses OFFSET … FETCH instead of TOP|||Dùng OFFSET … FETCH thay cho TOP",
+            "khop": "\\bFETCH\\s+(NEXT|FIRST)\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "ORDER BY gpa DESC: PostgreSQL puts NULL first on DESC, SQL Server last — the top 3 differ.|||ORDER BY gpa DESC: PostgreSQL xếp NULL đầu khi DESC, SQL Server xếp cuối — top 3 khác nhau."
+        },
+        {
+          "loi": "Leaving gpa unwrapped in the SELECT — a missing GPA prints NULL, not 0.|||Để gpa trần trong SELECT — thiếu điểm in NULL chứ không phải 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "portable SQL",
+          "vi": "SQL chạy được nhiều hệ"
+        },
+        {
+          "en": "NULL ordering",
+          "vi": "thứ tự của NULL"
+        }
+      ]
+    }
+  ]
+}

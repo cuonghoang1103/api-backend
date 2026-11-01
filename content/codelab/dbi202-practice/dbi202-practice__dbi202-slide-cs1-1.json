@@ -1,0 +1,468 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs1-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs1-1"
+  },
+  "exercises": [
+    {
+      "title": "Before and after Codd: what each generation could not do",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "file processing",
+        "hierarchical model",
+        "network model",
+        "relational model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "history"
+      ],
+      "problemHtml": "<p>For each generation of data management (slides 2–7), choose the weakness that pushed the industry to the next one.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi thế hệ quản lý dữ liệu (slide 2–7), chọn điểm yếu đã đẩy ngành sang thế hệ kế tiếp.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tree = one parent; graph = several parents, still pointers.|||Cây = một cha; đồ thị = nhiều cha, vẫn con trỏ.",
+        "The relational answer is declarative access.|||Câu trả lời của mô hình quan hệ là truy cập khai báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Before and after Codd: what each generation could not do\n\nAnswer in the answer panel (no code needed).\n\n1. Generation → weaknessThế hệ → điểm yếu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Before and after Codd: what each generation could not do — answer key\n\n1. Generation → weaknessThế hệ → điểm yếu\n   - r1.dy: every program owns its own file: duplicates, no shared control\n   - r2.dy: a record has exactly one parent: many-to-many is awkward\n   - r3.dy: programs follow pointers by hand: a new question needs new code\n   - r4.dy: none of these: queries say what, the DBMS decides how\n   The network model fixed the one-parent limit of the tree but kept navigational access; Codd removed navigation altogether.VI: Mô hình mạng sửa giới hạn một cha của cây nhưng vẫn truy cập kiểu dò đường; Codd bỏ hẳn việc dò đường.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The network model fixed the one-parent limit of the tree but kept navigational access; Codd removed navigation altogether.</p><p><i>VI: Mô hình mạng sửa giới hạn một cha của cây nhưng vẫn truy cập kiểu dò đường; Codd bỏ hẳn việc dò đường.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Generation → weakness</p><p style=\"opacity:.75;font-size:.92em\"><i>Thế hệ → điểm yếu</i></p>",
+            "cot": [
+              {
+                "ma": "th",
+                "ten": "Generation / Thế hệ"
+              },
+              {
+                "ma": "dy",
+                "ten": "Weakness / Điểm yếu",
+                "luaChon": [
+                  "every program owns its own file: duplicates, no shared control",
+                  "a record has exactly one parent: many-to-many is awkward",
+                  "programs follow pointers by hand: a new question needs new code",
+                  "none of these: queries say what, the DBMS decides how"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "th": "File processing (before 1970)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "th": "Hierarchical model (IBM IMS, 1968)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "th": "Network model (CODASYL DBTG, 1969)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "th": "Relational model (Codd, 1970)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dy": "every program owns its own file: duplicates, no shared control",
+              "r2.dy": "a record has exactly one parent: many-to-many is awkward",
+              "r3.dy": "programs follow pointers by hand: a new question needs new code",
+              "r4.dy": "none of these: queries say what, the DBMS decides how"
+            },
+            "giaiThich": "<p>The network model fixed the one-parent limit of the tree but kept navigational access; Codd removed navigation altogether.</p><p><i>VI: Mô hình mạng sửa giới hạn một cha của cây nhưng vẫn truy cập kiểu dò đường; Codd bỏ hẳn việc dò đường.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the network model was declarative — programmers still walked the pointers.|||Tưởng mô hình mạng là khai báo — lập trình viên vẫn tự đi theo con trỏ."
+        },
+        {
+          "loi": "Mixing up the hierarchical and network limits.|||Nhầm giới hạn của mô hình phân cấp và mạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hierarchical model",
+          "vi": "mô hình phân cấp"
+        },
+        {
+          "en": "network model",
+          "vi": "mô hình mạng"
+        },
+        {
+          "en": "navigational access",
+          "vi": "truy cập kiểu dò đường"
+        }
+      ]
+    },
+    {
+      "title": "Codd, System R, Oracle, Ingres: who did what first",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "Codd 1970",
+        "System R",
+        "SQL origin",
+        "Ingres → Postgres"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "history"
+      ],
+      "problemHtml": "<p>Five questions on the people and projects of slides 6–13.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về con người và dự án ở slide 6–13.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Model (Codd) ≠ language (System R) ≠ first product (Oracle).|||Mô hình (Codd) ≠ ngôn ngữ (System R) ≠ sản phẩm đầu tiên (Oracle).",
+        "Berkeley line: Ingres → Postgres → PostgreSQL.|||Dòng Berkeley: Ingres → Postgres → PostgreSQL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Codd, System R, Oracle, Ingres: who did what first\n\nAnswer in the answer panel (no code needed).\n\n1. Codd's 1970 paper \"A Relational Model of Data for Large Shared Data Banks\" proposed…Bài báo 1970 của Codd \"A Relational Model of Data for Large Shared Data Banks\" đề xuất…\n2. SQL (first called SEQUEL) was born in…SQL (ban đầu tên SEQUEL) ra đời ở…\n3. The first commercially sold SQL RDBMS was…RDBMS SQL đầu tiên được bán thương mại là…\n4. PostgreSQL's family tree is…Cây gia phả của PostgreSQL là…\n5. SQL Server's code base descends from…Mã nguồn SQL Server bắt nguồn từ…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Codd, System R, Oracle, Ingres: who did what first — answer key\n\n1. Codd's 1970 paper \"A Relational Model of Data for Large Shared Data Banks\" proposed…Bài báo 1970 của Codd \"A Relational Model of Data for Large Shared Data Banks\" đề xuất…\n   Answer: c) data as relations, queried without saying how to find rows\n   Codd gave the model; SQL came later from IBM's System R team.VI: Codd đưa ra mô hình; SQL ra đời sau ở nhóm System R của IBM.\n\n2. SQL (first called SEQUEL) was born in…SQL (ban đầu tên SEQUEL) ra đời ở…\n   Answer: b) IBM's System R research project\n   System R (from 1974) produced SEQUEL; Ingres used its own language, QUEL.VI: System R (từ 1974) sinh ra SEQUEL; Ingres dùng ngôn ngữ riêng QUEL.\n\n3. The first commercially sold SQL RDBMS was…RDBMS SQL đầu tiên được bán thương mại là…\n   Answer: a) Oracle v2 (1979), ahead of IBM itself\n   IBM published System R's design; Relational Software (later Oracle) shipped first.VI: IBM công bố thiết kế System R; Relational Software (sau là Oracle) bán trước.\n\n4. PostgreSQL's family tree is…Cây gia phả của PostgreSQL là…\n   Answer: a) Ingres → Postgres (1986) → Postgres95 → PostgreSQL (1996)\n   Michael Stonebraker led Ingres and then Postgres at Berkeley; Postgres95 added SQL, and the 1996 rename reflects that.VI: Michael Stonebraker dẫn Ingres rồi Postgres ở Berkeley; Postgres95 thêm SQL, đổi tên 1996 phản ánh điều đó.\n\n5. SQL Server's code base descends from…Mã nguồn SQL Server bắt nguồn từ…\n   Answer: d) Sybase SQL Server, via a 1989 partnership\n   Microsoft, Sybase and Ashton-Tate shipped SQL Server 1.0 for OS/2 in 1989; the code bases split fully around version 7.0 (1998).VI: Microsoft, Sybase và Ashton-Tate phát hành SQL Server 1.0 cho OS/2 năm 1989; hai mã nguồn tách hẳn quanh bản 7.0 (1998).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> data as relations, queried without saying how to find rows</p><p>Codd gave the model; SQL came later from IBM's System R team.</p><p><i>VI: Codd đưa ra mô hình; SQL ra đời sau ở nhóm System R của IBM.</i></p></li><li><p><b>b)</b> IBM's System R research project</p><p>System R (from 1974) produced SEQUEL; Ingres used its own language, QUEL.</p><p><i>VI: System R (từ 1974) sinh ra SEQUEL; Ingres dùng ngôn ngữ riêng QUEL.</i></p></li><li><p><b>a)</b> Oracle v2 (1979), ahead of IBM itself</p><p>IBM published System R's design; Relational Software (later Oracle) shipped first.</p><p><i>VI: IBM công bố thiết kế System R; Relational Software (sau là Oracle) bán trước.</i></p></li><li><p><b>a)</b> Ingres → Postgres (1986) → Postgres95 → PostgreSQL (1996)</p><p>Michael Stonebraker led Ingres and then Postgres at Berkeley; Postgres95 added SQL, and the 1996 rename reflects that.</p><p><i>VI: Michael Stonebraker dẫn Ingres rồi Postgres ở Berkeley; Postgres95 thêm SQL, đổi tên 1996 phản ánh điều đó.</i></p></li><li><p><b>d)</b> Sybase SQL Server, via a 1989 partnership</p><p>Microsoft, Sybase and Ashton-Tate shipped SQL Server 1.0 for OS/2 in 1989; the code bases split fully around version 7.0 (1998).</p><p><i>VI: Microsoft, Sybase và Ashton-Tate phát hành SQL Server 1.0 cho OS/2 năm 1989; hai mã nguồn tách hẳn quanh bản 7.0 (1998).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Codd's 1970 paper \"A Relational Model of Data for Large Shared Data Banks\" proposed…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài báo 1970 của Codd \"A Relational Model of Data for Large Shared Data Banks\" đề xuất…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "storing every table in its own file on disk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the first version of the SQL language"
+              },
+              {
+                "ma": "c",
+                "noiDung": "data as relations, queried without saying how to find rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a faster pointer format for the network model"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Codd gave the model; SQL came later from IBM's System R team.</p><p><i>VI: Codd đưa ra mô hình; SQL ra đời sau ở nhóm System R của IBM.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>SQL (first called SEQUEL) was born in…</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL (ban đầu tên SEQUEL) ra đời ở…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the CODASYL committee"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IBM's System R research project"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UC Berkeley's Ingres project"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Oracle's first commercial release"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>System R (from 1974) produced SEQUEL; Ingres used its own language, QUEL.</p><p><i>VI: System R (từ 1974) sinh ra SEQUEL; Ingres dùng ngôn ngữ riêng QUEL.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The first commercially sold SQL RDBMS was…</p><p style=\"opacity:.75;font-size:.92em\"><i>RDBMS SQL đầu tiên được bán thương mại là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Oracle v2 (1979), ahead of IBM itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SQL Server 1.0 (1989)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Postgres, the successor of Ingres"
+              },
+              {
+                "ma": "d",
+                "noiDung": "IBM DB2, the direct heir of System R"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>IBM published System R's design; Relational Software (later Oracle) shipped first.</p><p><i>VI: IBM công bố thiết kế System R; Relational Software (sau là Oracle) bán trước.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>PostgreSQL's family tree is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây gia phả của PostgreSQL là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ingres → Postgres (1986) → Postgres95 → PostgreSQL (1996)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "System R → DB2 → PostgreSQL (1996)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sybase → SQL Server → PostgreSQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "MySQL → MariaDB → PostgreSQL (1996)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Michael Stonebraker led Ingres and then Postgres at Berkeley; Postgres95 added SQL, and the 1996 rename reflects that.</p><p><i>VI: Michael Stonebraker dẫn Ingres rồi Postgres ở Berkeley; Postgres95 thêm SQL, đổi tên 1996 phản ánh điều đó.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>SQL Server's code base descends from…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã nguồn SQL Server bắt nguồn từ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "IBM System R, licensed by Microsoft"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ingres, through the Berkeley licence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Oracle v2, bought in 1985"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Sybase SQL Server, via a 1989 partnership"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Microsoft, Sybase and Ashton-Tate shipped SQL Server 1.0 for OS/2 in 1989; the code bases split fully around version 7.0 (1998).</p><p><i>VI: Microsoft, Sybase và Ashton-Tate phát hành SQL Server 1.0 cho OS/2 năm 1989; hai mã nguồn tách hẳn quanh bản 7.0 (1998).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Crediting Codd with SQL.|||Gán SQL cho Codd."
+        },
+        {
+          "loi": "Thinking IBM sold the first SQL product.|||Tưởng IBM bán sản phẩm SQL đầu tiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "relational model",
+          "vi": "mô hình quan hệ"
+        },
+        {
+          "en": "research prototype",
+          "vi": "nguyên mẫu nghiên cứu"
+        }
+      ]
+    },
+    {
+      "title": "From paper files to PostgreSQL, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "timeline 1960s–1996"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "history"
+      ],
+      "problemHtml": "<p>Order the milestones of slides 1–13 from the oldest to the newest.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các mốc của slide 1–13 từ cũ nhất tới mới nhất.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two decades: the 1970s are research (Codd, Ingres, System R), the 1980s products.|||Hai thập kỷ: những năm 1970 là nghiên cứu (Codd, Ingres, System R), những năm 1980 là sản phẩm.",
+        "Postgres95 comes one year before the rename.|||Postgres95 đến trước việc đổi tên một năm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# From paper files to PostgreSQL, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Oldest → newestCũ nhất → mới nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# From paper files to PostgreSQL, in order — answer key\n\n1. Oldest → newestCũ nhất → mới nhất\n   Answer: m4) IBM IMS runs the Apollo parts list (hierarchical)  →  m3) Codd publishes the relational model  →  m6) Ingres starts at UC Berkeley  →  m1) Oracle v2 ships  →  m5) Postgres project starts at Berkeley  →  m7) SQL Server 1.0 for OS/2  →  m8) Postgres95 adds an SQL interpreter  →  m2) PostgreSQL gets its final name\n   1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.VI: 1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.</p><p><i>VI: 1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Oldest → newest</p><p style=\"opacity:.75;font-size:.92em\"><i>Cũ nhất → mới nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Oracle v2 ships"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "PostgreSQL gets its final name"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Codd publishes the relational model"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "IBM IMS runs the Apollo parts list (hierarchical)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Postgres project starts at Berkeley"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Ingres starts at UC Berkeley"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "SQL Server 1.0 for OS/2"
+              },
+              {
+                "ma": "m8",
+                "noiDung": "Postgres95 adds an SQL interpreter"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m3",
+              "m6",
+              "m1",
+              "m5",
+              "m7",
+              "m8",
+              "m2"
+            ],
+            "giaiThich": "<p>1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.</p><p><i>VI: 1968 · 1970 · 1973–74 · 1979 · 1986 · 1989 · 1995 · 1996.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting SQL Server before Postgres — Postgres started in 1986.|||Đặt SQL Server trước Postgres — Postgres bắt đầu năm 1986."
+        },
+        {
+          "loi": "Putting Oracle before Codd.|||Đặt Oracle trước Codd."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,629 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs2-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs2-1"
+  },
+  "exercises": [
+    {
+      "title": "The path of one SELECT through the engine",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "DBMS architecture",
+        "parser",
+        "optimizer",
+        "executor",
+        "storage engine"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals"
+      ],
+      "problemHtml": "<p>Slides 1–3 follow one statement from the client to the disk and back. Put the stages in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 1–3 theo một câu lệnh từ client xuống đĩa rồi quay lại. Sắp các chặng theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Syntax before names, names before plans.|||Cú pháp trước tên, tên trước kế hoạch.",
+        "Only the storage engine touches pages.|||Chỉ storage engine chạm vào trang."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The path of one SELECT through the engine\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The path of one SELECT through the engine — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m1) The client sends the SQL text over the network  →  m5) The parser checks the syntax and builds a tree  →  m3) The binder resolves names and types from the catalog  →  m2) The optimizer picks the cheapest plan  →  m6) The executor runs the plan operator by operator  →  m4) The storage engine fetches the pages through the buffer pool\n   Parse → bind (SQL Server: algebrizer; PostgreSQL: analyzer) → optimize → execute → storage. A misspelt column fails at the binder, before any plan exists.VI: Phân tích cú pháp → gắn tên (SQL Server: algebrizer; PostgreSQL: analyzer) → tối ưu → thực thi → lưu trữ. Gõ sai tên cột thì hỏng ở bước gắn tên, trước khi có kế hoạch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Parse → bind (SQL Server: algebrizer; PostgreSQL: analyzer) → optimize → execute → storage. A misspelt column fails at the binder, before any plan exists.</p><p><i>VI: Phân tích cú pháp → gắn tên (SQL Server: algebrizer; PostgreSQL: analyzer) → tối ưu → thực thi → lưu trữ. Gõ sai tên cột thì hỏng ở bước gắn tên, trước khi có kế hoạch.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The client sends the SQL text over the network"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The optimizer picks the cheapest plan"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The binder resolves names and types from the catalog"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The storage engine fetches the pages through the buffer pool"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The parser checks the syntax and builds a tree"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The executor runs the plan operator by operator"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m5",
+              "m3",
+              "m2",
+              "m6",
+              "m4"
+            ],
+            "giaiThich": "<p>Parse → bind (SQL Server: algebrizer; PostgreSQL: analyzer) → optimize → execute → storage. A misspelt column fails at the binder, before any plan exists.</p><p><i>VI: Phân tích cú pháp → gắn tên (SQL Server: algebrizer; PostgreSQL: analyzer) → tối ưu → thực thi → lưu trữ. Gõ sai tên cột thì hỏng ở bước gắn tên, trước khi có kế hoạch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the optimizer before name binding — it needs to know the tables first.|||Đặt bộ tối ưu trước bước gắn tên — nó cần biết bảng trước."
+        },
+        {
+          "loi": "Thinking the executor reads the disk directly instead of through the buffer pool.|||Tưởng bộ thực thi đọc đĩa trực tiếp thay vì qua buffer pool."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "query optimizer",
+          "vi": "bộ tối ưu truy vấn"
+        },
+        {
+          "en": "storage engine",
+          "vi": "bộ máy lưu trữ"
+        },
+        {
+          "en": "buffer pool",
+          "vi": "vùng đệm trang"
+        }
+      ]
+    },
+    {
+      "title": "Same idea, two names: SQL Server ↔ PostgreSQL",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "naming map",
+        "page",
+        "physical row address",
+        "TOAST"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "postgresql"
+      ],
+      "problemHtml": "<p>Slide 4 maps the vocabulary of the two engines. Give the PostgreSQL name for each SQL Server term.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 4 đối chiếu từ vựng hai hệ. Cho tên PostgreSQL của từng thuật ngữ SQL Server.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ctid = (block, line pointer), the PostgreSQL twin of file:page:slot.|||ctid = (khối, con trỏ dòng), anh em của file:page:slot.",
+        "TOAST = The Oversized-Attribute Storage Technique.|||TOAST = kỹ thuật lưu thuộc tính quá cỡ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Same idea, two names: SQL Server ↔ PostgreSQL\n\nAnswer in the answer panel (no code needed).\n\n1. SQL Server → PostgreSQLSQL Server → PostgreSQL\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Same idea, two names: SQL Server ↔ PostgreSQL — answer key\n\n1. SQL Server → PostgreSQLSQL Server → PostgreSQL\n   - r1.pg: shared_buffers\n   - r2.pg: WAL (write-ahead log)\n   - r3.pg: ctid\n   - r4.pg: TOAST\n   - r5.pg: block (also 8 KB)\n   - r6.pg: heap file of the table\n   Both engines count cost in 8 KB pages. A PostgreSQL table is ALWAYS a heap; its indexes are separate files that point into it.VI: Cả hai hệ tính chi phí theo trang 8 KB. Bảng PostgreSQL LUÔN là heap; chỉ mục là tệp riêng trỏ vào nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both engines count cost in 8 KB pages. A PostgreSQL table is ALWAYS a heap; its indexes are separate files that point into it.</p><p><i>VI: Cả hai hệ tính chi phí theo trang 8 KB. Bảng PostgreSQL LUÔN là heap; chỉ mục là tệp riêng trỏ vào nó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>SQL Server → PostgreSQL</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL Server → PostgreSQL</i></p>",
+            "cot": [
+              {
+                "ma": "ss",
+                "ten": "SQL Server"
+              },
+              {
+                "ma": "pg",
+                "ten": "PostgreSQL",
+                "luaChon": [
+                  "shared_buffers",
+                  "WAL (write-ahead log)",
+                  "ctid",
+                  "TOAST",
+                  "block (also 8 KB)",
+                  "heap file of the table"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "ss": "buffer pool"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "ss": "transaction log (.ldf)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "ss": "%%physloc%% (file:page:slot)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "ss": "ROW_OVERFLOW / LOB pages"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "ss": "data page (8 KB)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "ss": "table without a clustered index (heap)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.pg": "shared_buffers",
+              "r2.pg": "WAL (write-ahead log)",
+              "r3.pg": "ctid",
+              "r4.pg": "TOAST",
+              "r5.pg": "block (also 8 KB)",
+              "r6.pg": "heap file of the table"
+            },
+            "giaiThich": "<p>Both engines count cost in 8 KB pages. A PostgreSQL table is ALWAYS a heap; its indexes are separate files that point into it.</p><p><i>VI: Cả hai hệ tính chi phí theo trang 8 KB. Bảng PostgreSQL LUÔN là heap; chỉ mục là tệp riêng trỏ vào nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking PostgreSQL pages are 4 KB.|||Tưởng trang PostgreSQL là 4 KB."
+        },
+        {
+          "loi": "Mapping the transaction log to PostgreSQL's \"log\" (that is the text server log).|||Ghép nhật ký giao dịch với \"log\" của PostgreSQL (đó là log chữ của server)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page",
+          "vi": "trang"
+        },
+        {
+          "en": "physical row locator",
+          "vi": "địa chỉ vật lý của dòng"
+        }
+      ]
+    },
+    {
+      "title": "Count it yourself: bytes per row, rows per page, pages",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "row size",
+        "slot array",
+        "8096 usable bytes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals",
+        "storage"
+      ],
+      "problemHtml": "<p>SQL Server heaps, every column NOT NULL and fixed-length, at most 8 columns. Slides 10–12: a row = <b>data + 7 bytes</b> of overhead (4-byte header, 2-byte column count, 1-byte NULL bitmap); each row also costs a <b>2-byte slot</b>; a page has <b>8096</b> usable bytes. Fill in the three numbers for each table (whole numbers). Every answer was measured with <code>sys.dm_db_index_physical_stats</code>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Heap SQL Server, mọi cột NOT NULL và độ dài cố định, tối đa 8 cột. Slide 10–12: một dòng = <b>dữ liệu + 7 byte</b> phụ phí (4 byte đầu dòng, 2 byte số cột, 1 byte bitmap NULL); mỗi dòng tốn thêm <b>2 byte slot</b>; một trang có <b>8096</b> byte dùng được. Điền ba số cho từng bảng (số nguyên). Mọi đáp án đã đo bằng <code>sys.dm_db_index_physical_stats</code>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Do not forget the 7-byte row overhead AND the 2-byte slot.|||Đừng quên 7 byte phụ phí dòng VÀ 2 byte slot.",
+        "Rows per page rounds DOWN, pages round UP.|||Dòng mỗi trang làm tròn XUỐNG, số trang làm tròn LÊN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Count it yourself: bytes per row, rows per page, pages\n\nAnswer in the answer panel (no code needed).\n\n1. Bytes per row · rows per page · pagesByte mỗi dòng · dòng mỗi trang · số trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Count it yourself: bytes per row, rows per page, pages — answer key\n\n1. Bytes per row · rows per page · pagesByte mỗi dòng · dòng mỗi trang · số trang\n   - r1.b: 115\n   - r1.d: 69\n   - r1.p: 15\n   - r2.b: 211\n   - r2.d: 38\n   - r2.p: 132\n   - r3.b: 39\n   - r3.d: 197\n   - r3.p: 51\n   - r4.b: 514\n   - r4.d: 15\n   - r4.p: 134\n   Row = sum of column sizes + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Rows/page = floor(8096 / (row + 2)). Pages = ceiling(rows / rows-per-page). E.g. 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15.7 → 15; 2000 / 15 = 133.3 → 134.VI: Dòng = tổng kích thước cột + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Dòng/trang = làm tròn xuống 8096 / (dòng + 2). Trang = làm tròn lên số dòng / dòng-mỗi-trang. Ví dụ 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15,7 → 15; 2000 / 15 = 133,3 → 134.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Row = sum of column sizes + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Rows/page = floor(8096 / (row + 2)). Pages = ceiling(rows / rows-per-page). E.g. 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15.7 → 15; 2000 / 15 = 133.3 → 134.</p><p><i>VI: Dòng = tổng kích thước cột + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Dòng/trang = làm tròn xuống 8096 / (dòng + 2). Trang = làm tròn lên số dòng / dòng-mỗi-trang. Ví dụ 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15,7 → 15; 2000 / 15 = 133,3 → 134.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bytes per row · rows per page · pages</p><p style=\"opacity:.75;font-size:.92em\"><i>Byte mỗi dòng · dòng mỗi trang · số trang</i></p>",
+            "cot": [
+              {
+                "ma": "bang",
+                "ten": "Table / Bảng"
+              },
+              {
+                "ma": "b",
+                "ten": "bytes/row"
+              },
+              {
+                "ma": "d",
+                "ten": "rows/page"
+              },
+              {
+                "ma": "p",
+                "ten": "pages"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "bang": "(INT, CHAR(100), INT) · 1,000 rows"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "bang": "(INT, CHAR(200)) · 5,000 rows"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "bang": "(BIGINT, INT, CHAR(20)) · 10,000 rows"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "bang": "(INT, DATE, CHAR(500)) · 2,000 rows"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "115",
+              "r1.d": "69",
+              "r1.p": "15",
+              "r2.b": "211",
+              "r2.d": "38",
+              "r2.p": "132",
+              "r3.b": "39",
+              "r3.d": "197",
+              "r3.p": "51",
+              "r4.b": "514",
+              "r4.d": "15",
+              "r4.p": "134"
+            },
+            "giaiThich": "<p>Row = sum of column sizes + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Rows/page = floor(8096 / (row + 2)). Pages = ceiling(rows / rows-per-page). E.g. 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15.7 → 15; 2000 / 15 = 133.3 → 134.</p><p><i>VI: Dòng = tổng kích thước cột + 7 (INT 4, BIGINT 8, DATE 3, CHAR(n) n). Dòng/trang = làm tròn xuống 8096 / (dòng + 2). Trang = làm tròn lên số dòng / dòng-mỗi-trang. Ví dụ 4 + 3 + 500 + 7 = 514; 8096 / 516 = 15,7 → 15; 2000 / 15 = 133,3 → 134.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "8096 / 108 = 74 rows per page for the first table — overhead forgotten.|||8096 / 108 = 74 dòng mỗi trang cho bảng đầu — quên phụ phí."
+        },
+        {
+          "loi": "Using 8192 instead of 8096 — the 96-byte page header is not usable.|||Dùng 8192 thay vì 8096 — 96 byte đầu trang không dùng được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "slot array",
+          "vi": "mảng vị trí dòng"
+        },
+        {
+          "en": "row overhead",
+          "vi": "phụ phí dòng"
+        }
+      ]
+    },
+    {
+      "title": "Long values, physical addresses, and why cost is counted in pages",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "8060-byte limit",
+        "ROW_OVERFLOW",
+        "TOAST",
+        "ctid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "internals"
+      ],
+      "problemHtml": "<p>Five questions on slides 5–14.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 5–14.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "N types = 2 bytes per character.|||Kiểu N = 2 byte mỗi ký tự.",
+        "Fixed-length columns must fit in the row; variable-length may overflow.|||Cột cố định phải vừa dòng; cột thay đổi được phép tràn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Long values, physical addresses, and why cost is counted in pages\n\nAnswer in the answer panel (no code needed).\n\n1. Why do DBMS cost models count pages, not rows?Vì sao mô hình chi phí của DBMS đếm trang chứ không đếm dòng?\n2. On SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…Trên SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…\n3. A NVARCHAR(4000) + NVARCHAR(4000) table on SQL Server…Bảng NVARCHAR(4000) + NVARCHAR(4000) trên SQL Server…\n4. On PostgreSQL a 1 MB text value…Trên PostgreSQL một giá trị text 1 MB…\n5. After UPDATE on PostgreSQL, the ctid of the row usually…Sau UPDATE trên PostgreSQL, ctid của dòng thường…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Long values, physical addresses, and why cost is counted in pages — answer key\n\n1. Why do DBMS cost models count pages, not rows?Vì sao mô hình chi phí của DBMS đếm trang chứ không đếm dòng?\n   Answer: d) the disk and the buffer pool move whole 8 KB pages, never single rows\n   Reading one row means reading the page that holds it.VI: Đọc một dòng nghĩa là đọc trang chứa nó.\n\n2. On SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…Trên SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…\n   Answer: a) fails: 8000 + 100 + 7 bytes exceed the 8060-byte row limit\n   NCHAR uses 2 bytes per character. Only variable-length columns may overflow.VI: NCHAR tốn 2 byte mỗi ký tự. Chỉ cột độ dài thay đổi mới được tràn trang.\n\n3. A NVARCHAR(4000) + NVARCHAR(4000) table on SQL Server…Bảng NVARCHAR(4000) + NVARCHAR(4000) trên SQL Server…\n   Answer: a) is created; long values move to ROW_OVERFLOW_DATA pages\n   Variable-length columns are allowed to exceed 8060 in total; the overflow is stored off-row with a 24-byte pointer.VI: Cột độ dài thay đổi được phép vượt 8060 tổng cộng; phần tràn lưu ngoài dòng với con trỏ 24 byte.\n\n4. On PostgreSQL a 1 MB text value…Trên PostgreSQL một giá trị text 1 MB…\n   Answer: b) is compressed and moved to the TOAST table automatically\n   TOAST kicks in when a row exceeds about 2 KB; you never declare it.VI: TOAST tự bật khi dòng vượt khoảng 2 KB; không cần khai báo.\n\n5. After UPDATE on PostgreSQL, the ctid of the row usually…Sau UPDATE trên PostgreSQL, ctid của dòng thường…\n   Answer: a) changes, because a new row version is written\n   MVCC writes a new tuple; ctid is a physical address, never an identifier to store in your app.VI: MVCC ghi một tuple mới; ctid là địa chỉ vật lý, không bao giờ là định danh để lưu trong app.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> the disk and the buffer pool move whole 8 KB pages, never single rows</p><p>Reading one row means reading the page that holds it.</p><p><i>VI: Đọc một dòng nghĩa là đọc trang chứa nó.</i></p></li><li><p><b>a)</b> fails: 8000 + 100 + 7 bytes exceed the 8060-byte row limit</p><p>NCHAR uses 2 bytes per character. Only variable-length columns may overflow.</p><p><i>VI: NCHAR tốn 2 byte mỗi ký tự. Chỉ cột độ dài thay đổi mới được tràn trang.</i></p></li><li><p><b>a)</b> is created; long values move to ROW_OVERFLOW_DATA pages</p><p>Variable-length columns are allowed to exceed 8060 in total; the overflow is stored off-row with a 24-byte pointer.</p><p><i>VI: Cột độ dài thay đổi được phép vượt 8060 tổng cộng; phần tràn lưu ngoài dòng với con trỏ 24 byte.</i></p></li><li><p><b>b)</b> is compressed and moved to the TOAST table automatically</p><p>TOAST kicks in when a row exceeds about 2 KB; you never declare it.</p><p><i>VI: TOAST tự bật khi dòng vượt khoảng 2 KB; không cần khai báo.</i></p></li><li><p><b>a)</b> changes, because a new row version is written</p><p>MVCC writes a new tuple; ctid is a physical address, never an identifier to store in your app.</p><p><i>VI: MVCC ghi một tuple mới; ctid là địa chỉ vật lý, không bao giờ là định danh để lưu trong app.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why do DBMS cost models count pages, not rows?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao mô hình chi phí của DBMS đếm trang chứ không đếm dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every page always holds exactly one hundred rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "rows have no fixed size, so they cannot be counted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "counting rows would need a full table scan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the disk and the buffer pool move whole 8 KB pages, never single rows"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Reading one row means reading the page that holds it.</p><p><i>VI: Đọc một dòng nghĩa là đọc trang chứa nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>On SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên SQL Server, CREATE TABLE T (x NCHAR(4000) NOT NULL, y CHAR(100) NOT NULL)…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fails: 8000 + 100 + 7 bytes exceed the 8060-byte row limit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "works: NCHAR(4000) takes 4000 bytes, well under the limit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "works, the overflow goes to ROW_OVERFLOW_DATA pages"
+              },
+              {
+                "ma": "d",
+                "noiDung": "works, but the table is stored as a LOB"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>NCHAR uses 2 bytes per character. Only variable-length columns may overflow.</p><p><i>VI: NCHAR tốn 2 byte mỗi ký tự. Chỉ cột độ dài thay đổi mới được tràn trang.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A NVARCHAR(4000) + NVARCHAR(4000) table on SQL Server…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng NVARCHAR(4000) + NVARCHAR(4000) trên SQL Server…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is created; long values move to ROW_OVERFLOW_DATA pages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is refused at CREATE time like the NCHAR case"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is created and silently truncates long values"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is created, but inserts over 8060 bytes always fail"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Variable-length columns are allowed to exceed 8060 in total; the overflow is stored off-row with a 24-byte pointer.</p><p><i>VI: Cột độ dài thay đổi được phép vượt 8060 tổng cộng; phần tràn lưu ngoài dòng với con trỏ 24 byte.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>On PostgreSQL a 1 MB text value…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên PostgreSQL một giá trị text 1 MB…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is refused because a block is only 8 KB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is compressed and moved to the TOAST table automatically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "must be declared as a LOB column first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is split across several rows of the same table"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>TOAST kicks in when a row exceeds about 2 KB; you never declare it.</p><p><i>VI: TOAST tự bật khi dòng vượt khoảng 2 KB; không cần khai báo.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>After UPDATE on PostgreSQL, the ctid of the row usually…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau UPDATE trên PostgreSQL, ctid của dòng thường…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "changes, because a new row version is written"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is copied into the transaction log only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "becomes NULL until VACUUM runs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "stays the same, like a primary key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>MVCC writes a new tuple; ctid is a physical address, never an identifier to store in your app.</p><p><i>VI: MVCC ghi một tuple mới; ctid là địa chỉ vật lý, không bao giờ là định danh để lưu trong app.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading NCHAR(4000) as 4000 bytes.|||Đọc NCHAR(4000) là 4000 byte."
+        },
+        {
+          "loi": "Using ctid or %%physloc%% as a row id in application code.|||Dùng ctid hay %%physloc%% làm id dòng trong mã ứng dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row overflow",
+          "vi": "tràn dòng"
+        },
+        {
+          "en": "large object (LOB)",
+          "vi": "đối tượng lớn"
+        }
+      ]
+    }
+  ]
+}

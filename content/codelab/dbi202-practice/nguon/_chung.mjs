@@ -380,3 +380,14 @@ DECLARE @a INT = (SELECT COUNT(*) FROM (${thucTe}) AS a_), @b INT = (SELECT COUN
 SET @ok = IIF(@a = @b AND NOT EXISTS (${thucTe} EXCEPT ${mongDoi}) AND NOT EXISTS (${mongDoi} EXCEPT ${thucTe}), 1, 0);
 SET @info = CONCAT(N'your result: ', @a, N' rows; expected: ', @b, N' rows', IIF(@a = @b, N' (same count, different values)', N''));
 IF @@TRANCOUNT > 0 ROLLBACK;`;
+
+/** Truy vấn hình dạng chỉ mục (dùng trong `sau`, chỉ máy chấm PostgreSQL): cột khoá theo thứ tự, cột INCLUDE (sắp chữ cái),
+ *  có UNIQUE không, điều kiện lọc — để INCLUDE (b, a) và INCLUDE (a, b) cùng được chấp nhận. */
+export const hinhChiMuc = (ten) => `SELECT lower(i.relname) AS chi_muc, lower(t.relname) AS bang, x.indisunique AS duy_nhat,
+  (SELECT string_agg(lower(a.attname), ', ' ORDER BY k.n) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)
+     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n <= x.indnkeyatts) AS cot_khoa,
+  (SELECT string_agg(lower(a.attname), ', ' ORDER BY lower(a.attname)) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)
+     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n > x.indnkeyatts) AS cot_include,
+  lower(replace(pg_get_expr(x.indpred, x.indrelid), ' ', '')) AS dieu_kien
+FROM pg_index x JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid
+WHERE lower(i.relname) = '${String(ten).toLowerCase()}'`;

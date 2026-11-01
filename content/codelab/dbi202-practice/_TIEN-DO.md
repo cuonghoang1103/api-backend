@@ -37,7 +37,10 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | Ch6 | slide-dbi7-3/7-5/7-6, on-ch6 (+ 6 module + Lab 6 có sẵn) | 36 → 58 (+ Lab 6) | ✅ (1 đề tay: TOP 1 WITH TIES trong view) |
 | Ch7 | slide-dbi9-1..3, plsql, proc-function, trigger-cursor, on-ch7 + Lab 7 thư viện (+ view có sẵn) | 4 → 34 | ✅ (22 đề tay T-SQL: biến/IF/WHILE/TRY, procedure OUTPUT + RETURN, giao dịch trong procedure, hàm vô hướng/TVF, trigger hiện dòng/luật nhiều dòng/kiểm toán/đếm/INSTEAD OF, cursor; 3 đề trình duyệt: view, UPDATE thay cursor) |
 | Ch8 | slide-dbi8-1/8-2, chi-muc, execution-plan, transaction-acid, on-ch8 + Lab 8 CT Shop | 0 → 26 | ✅ (8 đề tay: chuyển khoản XACT_ABORT + TRY/CATCH + THROW, chỉ mục phủ INCLUDE, chỉ mục ghép/clustered, đặt ghế nguyên tử, chuyển thưởng, Lab 8 5 câu; trình duyệt: CREATE INDEX/UNIQUE INDEX qua pg_indexes, UPDATE ghế nguyên tử, view WITH CHECK OPTION; 2 sql-pg: chỉ mục một phần, materialized view) |
-| ⭐ CS.1–CS.8 + cầu nối | 3 bài/chủ đề + cau-noi-di-lam | 0 → … | ⏳ |
+| ⭐ CS.1 | slide-cs1-1/1-2, cs1-on | 0 → 12 | ✅ (tĩnh: lịch sử, NoSQL, CAP, T-SQL ↔ PostgreSQL; 1 SQL trình duyệt: viết lại câu T-SQL thành SQL chạy cả hai hệ) |
+| ⭐ CS.2 | slide-cs2-1/2-2, cs2-on | 0 → 11 | ✅ (1 đề tay: 1.000 dòng → 115 byte/15 trang đo bằng DMV; còn lại tĩnh, số liệu đo thật trên SQL Server) |
+| ⭐ CS.3 | slide-cs3-1/3-2, cs3-on | 0 → 13 | ✅ (2 đề tay: độ sâu cây INT 2 / CHAR(200) 4 tầng, chẩn đoán 6 bước đo logical reads qua sys.dm_exec_procedure_stats; 5 đề trình duyệt: SARGable ×2, chỉ mục ghép + INCLUDE, chỉ mục lọc + khoá ngoại — hình chỉ mục soi bằng hinhChiMuc()) |
+| ⭐ CS.4–CS.8 + cầu nối | 3 bài/chủ đề + cau-noi-di-lam | 0 → … | ⏳ |
 | Ôn thi | on-pe, ngan-hang-cau-hoi, PE 1–3 chữa đề, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
 
 Bài KHÔNG có đề (định hướng, không có gì để luyện): dbi202-bat-dau-tai-day, dbi202-slide-dbi1-1, dbi202-gioi-thieu,

@@ -1,0 +1,658 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs3-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs3-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tree height",
+        "key width",
+        "INDEXPROPERTY IndexDepth"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>Estimate first: two tables of 200,000 rows each. <code>KhoaHep(ma INT PRIMARY KEY)</code> and <code>KhoaRong(ma CHAR(200) PRIMARY KEY)</code> holding the same numbers as text. How many levels does each clustered index have?</p>\n<p>Then build both tables (one set-based INSERT each), and the view <code>dbo.vTreeDepth(bang, so_tang)</code> that reads the depth of each clustered index with <code>INDEXPROPERTY(object_id, index_name, 'IndexDepth')</code>.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> Tree depth is a property of SQL Server's own B+tree pages (INDEXPROPERTY … 'IndexDepth'); the browser grader has neither these pages nor this function. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 3 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (3 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 3 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Both tables have exactly 200,000 rows, ma = 1…200000.</li>\n  <li>vTreeDepth: one row per table, the depth of index_id = 1.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ước lượng trước: hai bảng mỗi bảng 200.000 dòng. <code>KhoaHep(ma INT PRIMARY KEY)</code> và <code>KhoaRong(ma CHAR(200) PRIMARY KEY)</code> chứa cùng các số dưới dạng chữ. Mỗi chỉ mục cụm có bao nhiêu tầng?</p>\n<p>Rồi dựng hai bảng (mỗi bảng một câu INSERT theo tập) và view <code>dbo.vTreeDepth(bang, so_tang)</code> đọc độ sâu của từng chỉ mục cụm bằng <code>INDEXPROPERTY(object_id, tên_chỉ_mục, 'IndexDepth')</code>.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Độ sâu cây là thuộc tính của trang B+tree của chính SQL Server (INDEXPROPERTY … 'IndexDepth'); máy chấm trình duyệt không có các trang này lẫn hàm này. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 3 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (3 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 3 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cả hai bảng có đúng 200.000 dòng, ma = 1…200000.</li>\n  <li>vTreeDepth: mỗi bảng một dòng, độ sâu của index_id = 1.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. Both tables hold 200,000 rows with the right key types\nPASS 2. vTreeDepth: the INT key is 2 levels deep\nPASS 3. vTreeDepth: the CHAR(200) key is 4 levels deep\nALL 3 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "INT rows ≈ 11 bytes ⇒ ~600 per page ⇒ ~330 leaves ⇒ one root above them.|||Dòng INT ≈ 11 byte ⇒ ~600 mỗi trang ⇒ ~330 lá ⇒ một gốc ở trên.",
+        "CHAR(200) entries ≈ 207 bytes ⇒ ~38 per page at every level ⇒ 5,264 → 277 → 14 → 1 (measured).|||Mục CHAR(200) ≈ 207 byte ⇒ ~38 mỗi trang ở mọi tầng ⇒ 5.264 → 277 → 14 → 1 (đo thật)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE TABLE dbo.KhoaHep (...), dbo.KhoaRong (...)\n-- INSERT 200000 rows into each\n-- CREATE OR ALTER VIEW dbo.vTreeDepth AS ...\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- Nothing to prepare: you build both tables in solution.sql (about 10 seconds).\nSELECT 1 AS ready;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: Both tables hold 200,000 rows with the right key types\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.KhoaHep) = 200000 AND (SELECT COUNT(*) FROM dbo.KhoaRong) = 200000\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.KhoaHep'') AND c.name = ''ma'' AND t.name = ''int'')\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.KhoaRong'') AND c.name = ''ma'' AND t.name = ''char'' AND c.max_length = 200)\n  AND EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.KhoaRong'') AND index_id = 1), 1, 0);\nSET @info = CONCAT(N''KhoaHep '', (SELECT COUNT(*) FROM dbo.KhoaHep), N'' rows, KhoaRong '', (SELECT COUNT(*) FROM dbo.KhoaRong), N'' rows'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Both tables hold 200,000 rows with the right key types | Hai bảng có 200.000 dòng với đúng kiểu khoá'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Both tables hold 200,000 rows with the right key types | Hai bảng có 200.000 dòng với đúng kiểu khoá', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: vTreeDepth: the INT key is 2 levels deep\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaHep'') = 2, 1, 0);\nSET @info = CONCAT(N''KhoaHep depth = '', (SELECT TOP (1) so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaHep''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. vTreeDepth: the INT key is 2 levels deep | vTreeDepth: khoá INT sâu 2 tầng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. vTreeDepth: the INT key is 2 levels deep | vTreeDepth: khoá INT sâu 2 tầng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: vTreeDepth: the CHAR(200) key is 4 levels deep\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaRong'') = 4, 1, 0);\nSET @info = CONCAT(N''KhoaRong depth = '', (SELECT TOP (1) so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaRong''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. vTreeDepth: the CHAR(200) key is 4 levels deep | vTreeDepth: khoá CHAR(200) sâu 4 tầng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. vTreeDepth: the CHAR(200) key is 4 levels deep | vTreeDepth: khoá CHAR(200) sâu 4 tầng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.KhoaHep  (ma INT       NOT NULL PRIMARY KEY);   -- 4-byte key\nCREATE TABLE dbo.KhoaRong (ma CHAR(200) NOT NULL PRIMARY KEY);   -- 200-byte key, same numbers as text\nGO\nWITH n AS (\n    SELECT TOP (200000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn\n    FROM sys.all_columns a CROSS JOIN sys.all_columns b\n)\nINSERT INTO dbo.KhoaHep (ma) SELECT rn FROM n;\nINSERT INTO dbo.KhoaRong (ma) SELECT CAST(ma AS CHAR(200)) FROM dbo.KhoaHep;\nGO\nCREATE OR ALTER VIEW dbo.vTreeDepth AS\nSELECT OBJECT_NAME(i.object_id)                            AS bang,\n       INDEXPROPERTY(i.object_id, i.name, 'IndexDepth')    AS so_tang\nFROM sys.indexes i\nWHERE i.object_id IN (OBJECT_ID(N'dbo.KhoaHep'), OBJECT_ID(N'dbo.KhoaRong')) AND i.index_id = 1;\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- Nothing to prepare: you build both tables in solution.sql (about 10 seconds).\nSELECT 1 AS ready;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: Both tables hold 200,000 rows with the right key types\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.KhoaHep) = 200000 AND (SELECT COUNT(*) FROM dbo.KhoaRong) = 200000\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.KhoaHep'') AND c.name = ''ma'' AND t.name = ''int'')\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.KhoaRong'') AND c.name = ''ma'' AND t.name = ''char'' AND c.max_length = 200)\n  AND EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.KhoaRong'') AND index_id = 1), 1, 0);\nSET @info = CONCAT(N''KhoaHep '', (SELECT COUNT(*) FROM dbo.KhoaHep), N'' rows, KhoaRong '', (SELECT COUNT(*) FROM dbo.KhoaRong), N'' rows'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Both tables hold 200,000 rows with the right key types | Hai bảng có 200.000 dòng với đúng kiểu khoá'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Both tables hold 200,000 rows with the right key types | Hai bảng có 200.000 dòng với đúng kiểu khoá', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: vTreeDepth: the INT key is 2 levels deep\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaHep'') = 2, 1, 0);\nSET @info = CONCAT(N''KhoaHep depth = '', (SELECT TOP (1) so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaHep''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. vTreeDepth: the INT key is 2 levels deep | vTreeDepth: khoá INT sâu 2 tầng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. vTreeDepth: the INT key is 2 levels deep | vTreeDepth: khoá INT sâu 2 tầng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: vTreeDepth: the CHAR(200) key is 4 levels deep\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaRong'') = 4, 1, 0);\nSET @info = CONCAT(N''KhoaRong depth = '', (SELECT TOP (1) so_tang FROM dbo.vTreeDepth WHERE bang = N''KhoaRong''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. vTreeDepth: the CHAR(200) key is 4 levels deep | vTreeDepth: khoá CHAR(200) sâu 4 tầng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. vTreeDepth: the CHAR(200) key is 4 levels deep | vTreeDepth: khoá CHAR(200) sâu 4 tầng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same rows, twice the reads per seek (4 vs 2) — and every nonclustered index on KhoaRong would also carry the 200-byte key. That is the practical reason behind \"keep the clustered key narrow\".</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng số dòng, mỗi lần seek đọc gấp đôi (4 so với 2) — và mọi chỉ mục nonclustered trên KhoaRong còn mang theo khoá 200 byte. Đó là lý do thực tế của lời khuyên \"giữ khoá cụm hẹp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "Tree depth is a property of SQL Server's own B+tree pages (INDEXPROPERTY … 'IndexDepth'); the browser grader has neither these pages nor this function.|||Độ sâu cây là thuộc tính của trang B+tree của chính SQL Server (INDEXPROPERTY … 'IndexDepth'); máy chấm trình duyệt không có các trang này lẫn hàm này.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. Both tables hold 200,000 rows with the right key types",
+            "2. vTreeDepth: the INT key is 2 levels deep",
+            "3. vTreeDepth: the CHAR(200) key is 4 levels deep"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "VARCHAR(200) holding \"1\", \"2\"… — the keys are short, so the tree is short too: width is what is stored, not what is declared.|||VARCHAR(200) chứa \"1\", \"2\"… — khoá ngắn nên cây cũng thấp: độ rộng là thứ được lưu, không phải thứ được khai."
+        },
+        {
+          "loi": "Expecting depth to grow like log₂(rows).|||Tưởng độ sâu tăng như log₂(số dòng)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "index depth",
+          "vi": "độ sâu chỉ mục"
+        },
+        {
+          "en": "narrow key",
+          "vi": "khoá hẹp"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — one index for three queries",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "composite index",
+        "leftmost prefix",
+        "INCLUDE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>The \"customer orders\" screen sends three queries, always for one customer, all selecting <code>ngayDat, tongTien</code>:</p>\n<ul><li><code>WHERE khachHangId = @kh AND trangThai = 'XONG'</code></li><li><code>WHERE khachHangId = @kh ORDER BY ngayDat DESC</code></li><li><code>WHERE khachHangId = @kh AND ngayDat &gt;= '2025-01-01'</code></li></ul>\n<p>Create ONE index <code>ix_dh_kh_ngay</code> that makes all three an Index Seek with no Key Lookup and no Sort.</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 orders (a small copy of the lesson's 50,000-row table, with the edge cases kept); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>CREATE INDEX ix_dh_kh_ngay ON DonHang (…) INCLUDE (…);</li>\n  <li>Key columns in the right order; columns that are only filtered loosely or selected go to INCLUDE.</li>\n</ul>",
+      "problemHtmlVi": "<p>Màn hình \"đơn của khách\" gửi ba truy vấn, luôn cho một khách, đều lấy <code>ngayDat, tongTien</code>:</p>\n<ul><li><code>WHERE khachHangId = @kh AND trangThai = 'XONG'</code></li><li><code>WHERE khachHangId = @kh ORDER BY ngayDat DESC</code></li><li><code>WHERE khachHangId = @kh AND ngayDat &gt;= '2025-01-01'</code></li></ul>\n<p>Tạo MỘT chỉ mục <code>ix_dh_kh_ngay</code> để cả ba đều là Index Seek, không Key Lookup, không Sort.</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 đơn (bản nhỏ của bảng 50.000 dòng trong bài, giữ đủ ca biên); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CREATE INDEX ix_dh_kh_ngay ON DonHang (…) INCLUDE (…);</li>\n  <li>Cột khoá đúng thứ tự; cột chỉ lọc thô hoặc chỉ được chọn thì vào INCLUDE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "chi_muc       | bang    | duy_nhat | cot_khoa             | cot_include         | dieu_kien\n--------------+---------+----------+----------------------+---------------------+----------\nix_dh_kh_ngay | donhang | false    | khachhangid, ngaydat | tongtien, trangthai | NULL     ",
+          "explanation": "Expected result of check \"Keys (khachHangId, ngayDat), INCLUDE (tongTien, trangThai)\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Khoá (khachHangId, ngayDat), INCLUDE (tongTien, trangThai)\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "khachHangId is the only column all three compare with = ⇒ first.|||khachHangId là cột duy nhất cả ba so bằng ⇒ đứng đầu.",
+        "ngayDat is sorted/ranged ⇒ second; trangThai (3 values) and tongTien ⇒ INCLUDE.|||ngayDat được sắp/lọc khoảng ⇒ thứ hai; trangThai (3 giá trị) và tongTien ⇒ INCLUDE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX ix_dh_kh_ngay ON DonHang (khachHangId, ngayDat)   -- = column first, then the range/sort column\nINCLUDE (trangThai, tongTien);                                   -- filtered loosely / only selected: leaf only\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One well-ordered composite index often beats three single-column ones: fewer indexes to maintain on every write, and each query gets a seek + ordered output.</p>",
+      "solutionExplanationHtmlVi": "<p>Một chỉ mục ghép đúng thứ tự thường hơn ba chỉ mục một cột: ít chỉ mục phải duy trì mỗi lần ghi, và mỗi truy vấn được seek + kết quả có thứ tự.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Keys (khachHangId, ngayDat), INCLUDE (tongTien, trangThai)|||Khoá (khachHangId, ngayDat), INCLUDE (tongTien, trangThai)",
+            "kiemTra": "SELECT lower(i.relname) AS chi_muc, lower(t.relname) AS bang, x.indisunique AS duy_nhat,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY k.n) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n <= x.indnkeyatts) AS cot_khoa,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY lower(a.attname)) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n > x.indnkeyatts) AS cot_include,\n  lower(replace(pg_get_expr(x.indpred, x.indrelid), ' ', '')) AS dieu_kien\nFROM pg_index x JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid\nWHERE lower(i.relname) = 'ix_dh_kh_ngay'",
+            "mongDoi": {
+              "cot": [
+                "chi_muc",
+                "bang",
+                "duy_nhat",
+                "cot_khoa",
+                "cot_include",
+                "dieu_kien"
+              ],
+              "hang": [
+                [
+                  "ix_dh_kh_ngay",
+                  "donhang",
+                  false,
+                  "khachhangid, ngaydat",
+                  "tongtien, trangthai",
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A single CREATE INDEX|||Một câu CREATE INDEX",
+            "khop": "\\bCREATE\\s+INDEX\\b",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The three screen queries still run, and new orders can be written|||Ba truy vấn của màn hình vẫn chạy, và vẫn ghi được đơn mới",
+            "thu": "SELECT ngayDat, tongTien FROM DonHang WHERE khachHangId = 42 AND trangThai = 'XONG'; SELECT ngayDat, tongTien FROM DonHang WHERE khachHangId = 42 ORDER BY ngayDat DESC; SELECT ngayDat, tongTien FROM DonHang WHERE khachHangId = 42 AND ngayDat >= '2025-01-01'; INSERT INTO DonHang VALUES (30, 'DH3000', 42, '2026-02-01', 'CHO', 100000)"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "(khachHangId, trangThai, ngayDat): query 2 then needs a Sort across the three statuses.|||(khachHangId, trangThai, ngayDat): truy vấn 2 khi đó phải Sort qua ba trạng thái."
+        },
+        {
+          "loi": "Forgetting trangThai in INCLUDE: query 1 needs a Key Lookup per row to check it.|||Quên trangThai trong INCLUDE: truy vấn 1 cần Key Lookup mỗi dòng để kiểm nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composite index",
+          "vi": "chỉ mục ghép"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — make three conditions SARGable (and prove nothing changed)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "SARGable",
+        "CONVERT",
+        "LEFT",
+        "arithmetic on a column"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "sargable"
+      ],
+      "problemHtml": "<p>Indexes exist on <code>ngayDat</code>, <code>maDon</code> and <code>tongTien</code>, yet these counts all scan:</p>\n<pre>SELECT (SELECT COUNT(*) FROM DonHang WHERE CONVERT(VARCHAR(10), ngayDat, 23) = '2024-03-15') AS ngay_15_3,\n       (SELECT COUNT(*) FROM DonHang WHERE LEFT(maDon, 6) = 'DH4242')                      AS ma_4242,\n       (SELECT COUNT(*) FROM DonHang WHERE tongTien * 1.1 &gt; 5445000)                       AS sau_thue_lon;</pre>\n<p>Rewrite each condition with the bare column, same three counts. (<code>ngayDat</code> is a DATE.)</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 orders (a small copy of the lesson's 50,000-row table, with the edge cases kept); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns ngay_15_3, ma_4242, sau_thue_lon.</li>\n  <li>No CONVERT, LEFT or arithmetic on the column.</li>\n</ul>",
+      "problemHtmlVi": "<p>Có chỉ mục trên <code>ngayDat</code>, <code>maDon</code> và <code>tongTien</code>, nhưng các phép đếm này đều quét:</p>\n<pre>SELECT (SELECT COUNT(*) FROM DonHang WHERE CONVERT(VARCHAR(10), ngayDat, 23) = '2024-03-15') AS ngay_15_3,\n       (SELECT COUNT(*) FROM DonHang WHERE LEFT(maDon, 6) = 'DH4242')                      AS ma_4242,\n       (SELECT COUNT(*) FROM DonHang WHERE tongTien * 1.1 &gt; 5445000)                       AS sau_thue_lon;</pre>\n<p>Viết lại từng điều kiện với cột trần, cùng ba con số. (<code>ngayDat</code> kiểu DATE.)</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 đơn (bản nhỏ của bảng 50.000 dòng trong bài, giữ đủ ca biên); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Các cột ngay_15_3, ma_4242, sau_thue_lon.</li>\n  <li>Không CONVERT, LEFT hay phép tính trên cột.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "ngay_15_3 | ma_4242 | sau_thue_lon\n----------+---------+-------------\n3         | 3       | 6           ",
+          "explanation": "Expected result of check \"The three counts\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Ba con số\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Divide the constant, not the column: 5445000 / 1.1 = 4950000, keep the strict >.|||Chia hằng, không chia cột: 5445000 / 1.1 = 4950000, giữ dấu > chặt.",
+        "LEFT(s, 6) = 'DH4242' ⇔ s LIKE 'DH4242%'."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT\n  (SELECT COUNT(*) FROM DonHang WHERE ngayDat = '2024-03-15')    AS ngay_15_3,      -- a DATE needs no conversion\n  (SELECT COUNT(*) FROM DonHang WHERE maDon LIKE 'DH4242%')      AS ma_4242,        -- prefix LIKE\n  (SELECT COUNT(*) FROM DonHang WHERE tongTien > 4950000)        AS sau_thue_lon;   -- 5445000 / 1.1 = 4950000\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On a DATETIME column the first rewrite would be a half-open range (>= '2024-03-15' AND < '2024-03-16'). Each rewrite is an exact equivalence — the hidden check adds rows exactly on every boundary to prove it.</p>",
+      "solutionExplanationHtmlVi": "<p>Với cột DATETIME, cách viết lại đầu sẽ là khoảng nửa mở (>= '2024-03-15' AND < '2024-03-16'). Mỗi cách viết lại là tương đương chính xác — kiểm ẩn thêm dòng đúng trên từng ngưỡng để chứng minh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The three counts|||Ba con số",
+            "mongDoi": {
+              "cot": [
+                "ngay_15_3",
+                "ma_4242",
+                "sau_thue_lon"
+              ],
+              "hang": [
+                [
+                  3,
+                  3,
+                  6
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Edge cases around each boundary|||Ca biên quanh từng ngưỡng",
+            "an": true,
+            "themCsdl": "INSERT INTO DonHang VALUES (21, 'DH4242Z', 7, '2024-03-15', 'XONG', 4950001), (22, 'ZDH4242', 7, '2024-03-16', 'XONG', 4950000), (23, 'DH424', 7, '2024-03-14', 'CHO', 4949999)",
+            "mongDoi": {
+              "cot": [
+                "ngay_15_3",
+                "ma_4242",
+                "sau_thue_lon"
+              ],
+              "hang": [
+                [
+                  4,
+                  4,
+                  7
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No CONVERT() on the column|||Không CONVERT() trên cột",
+            "khop": "\\b(CONVERT|CAST|FORMAT)\\s*\\(",
+            "tep": "query.sql",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No LEFT()/SUBSTRING()|||Không LEFT()/SUBSTRING()",
+            "khop": "\\b(LEFT|SUBSTRING)\\s*\\(",
+            "tep": "query.sql",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No arithmetic on tongTien|||Không phép tính trên tongTien",
+            "khop": "tongTien\\s*[-+*/]",
+            "tep": "query.sql",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": ">= instead of > — an order of exactly 4,950,000 becomes 5,445,000 after tax, which is NOT greater.|||>= thay vì > — đơn đúng 4.950.000 sau thuế là 5.445.000, KHÔNG lớn hơn."
+        },
+        {
+          "loi": "maDon = 'DH4242' — loses DH42420, DH42421…|||maDon = 'DH4242' — mất DH42420, DH42421…"
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SARGable",
+          "vi": "dùng được cho tìm kiếm theo chỉ mục"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — a filtered index for \"pending orders\" and the missing foreign-key index",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "filtered index",
+        "partial index",
+        "foreign-key index"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>Two small indexes, two real complaints:</p>\n<ol><li>The admin screen runs <code>SELECT id, ngayDat FROM DonHang WHERE trangThai = 'CHO' ORDER BY ngayDat DESC</code> (newest 20). Only 1% of orders are pending. Create the smallest index <code>ix_dh_cho</code> that removes both the scan and the sort.</li>\n<li>Deleting a customer's orders is slow because <code>ChiTietDon.donHangId</code> (a foreign key) has no index. Create <code>ix_ctd_donhang</code>.</li></ol>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 orders (a small copy of the lesson's 50,000-row table, with the edge cases kept); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Two CREATE INDEX statements.</li>\n  <li>The first one indexes ONLY the pending rows (CREATE INDEX … WHERE …).</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai chỉ mục nhỏ, hai lời phàn nàn thật:</p>\n<ol><li>Màn hình admin chạy <code>SELECT id, ngayDat FROM DonHang WHERE trangThai = 'CHO' ORDER BY ngayDat DESC</code> (20 đơn mới nhất). Chỉ 1% đơn đang chờ. Tạo chỉ mục nhỏ nhất <code>ix_dh_cho</code> bỏ được cả quét lẫn sắp.</li>\n<li>Xoá đơn của một khách chậm vì <code>ChiTietDon.donHangId</code> (khoá ngoại) không có chỉ mục. Tạo <code>ix_ctd_donhang</code>.</li></ol>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 đơn (bản nhỏ của bảng 50.000 dòng trong bài, giữ đủ ca biên); <code>ChiTietDon(id PK, donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai câu CREATE INDEX.</li>\n  <li>Câu đầu chỉ đánh chỉ mục các dòng đang chờ (CREATE INDEX … WHERE …).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "chi_muc   | bang    | duy_nhat | cot_khoa | cot_include | dieu_kien                   \n----------+---------+----------+----------+-------------+-----------------------------\nix_dh_cho | donhang | false    | ngaydat  | NULL        | ((trangthai)::text='cho'::t…",
+          "explanation": "Expected result of check \"ix_dh_cho: key ngayDat, only the CHO rows\" (row order does not matter).|||Kết quả mong đợi của kiểm \"ix_dh_cho: khoá ngayDat, chỉ dòng CHO\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The filter goes after the column list: CREATE INDEX … ON t (c) WHERE …|||Điều kiện lọc đứng sau danh sách cột: CREATE INDEX … ON t (c) WHERE …",
+        "Index the child column of every foreign key you join or delete through.|||Đánh chỉ mục cột con của mọi khoá ngoại bạn nối hoặc xoá qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE INDEX ix_dh_cho ON DonHang (ngayDat DESC) WHERE trangThai = 'CHO';   -- filtered (SQL Server) = partial (PostgreSQL)\nCREATE INDEX ix_ctd_donhang ON ChiTietDon (donHangId);                      -- FKs are never indexed for you\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured in the lesson: the filtered index serves the screen in a couple of pages; the FK index took deleting customer 42 from 4,680 pages to 20. Remember the trap: the query must use the literal 'CHO', not a parameter, for the filtered index to be chosen.</p>",
+      "solutionExplanationHtmlVi": "<p>Đo trong bài: chỉ mục lọc phục vụ màn hình với vài trang; chỉ mục khoá ngoại đưa việc xoá khách 42 từ 4.680 trang xuống 20. Nhớ bẫy: truy vấn phải dùng hằng 'CHO', không phải tham số, thì chỉ mục lọc mới được chọn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  id        INT          NOT NULL,\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (id),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (id, donHangId, sanPham, soLuong) VALUES\n  (1, 1, 'BUT', 2), (2, 1, 'VO', 5), (3, 2, 'THUOC', 1), (4, 6, 'BUT', 3), (5, 7, 'VO', 10), (6, 13, 'BUT', 1);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "ix_dh_cho: key ngayDat, only the CHO rows|||ix_dh_cho: khoá ngayDat, chỉ dòng CHO",
+            "kiemTra": "SELECT lower(i.relname) AS chi_muc, lower(t.relname) AS bang, x.indisunique AS duy_nhat,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY k.n) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n <= x.indnkeyatts) AS cot_khoa,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY lower(a.attname)) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n > x.indnkeyatts) AS cot_include,\n  lower(replace(pg_get_expr(x.indpred, x.indrelid), ' ', '')) AS dieu_kien\nFROM pg_index x JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid\nWHERE lower(i.relname) = 'ix_dh_cho'",
+            "mongDoi": {
+              "cot": [
+                "chi_muc",
+                "bang",
+                "duy_nhat",
+                "cot_khoa",
+                "cot_include",
+                "dieu_kien"
+              ],
+              "hang": [
+                [
+                  "ix_dh_cho",
+                  "donhang",
+                  false,
+                  "ngaydat",
+                  null,
+                  "((trangthai)::text='cho'::text)"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "ix_ctd_donhang on ChiTietDon(donHangId)|||ix_ctd_donhang trên ChiTietDon(donHangId)",
+            "kiemTra": "SELECT lower(i.relname) AS chi_muc, lower(t.relname) AS bang, x.indisunique AS duy_nhat,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY k.n) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n <= x.indnkeyatts) AS cot_khoa,\n  (SELECT string_agg(lower(a.attname), ', ' ORDER BY lower(a.attname)) FROM unnest(x.indkey::int2[]) WITH ORDINALITY AS k(attnum, n)\n     JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum WHERE k.n > x.indnkeyatts) AS cot_include,\n  lower(replace(pg_get_expr(x.indpred, x.indrelid), ' ', '')) AS dieu_kien\nFROM pg_index x JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid\nWHERE lower(i.relname) = 'ix_ctd_donhang'",
+            "mongDoi": {
+              "cot": [
+                "chi_muc",
+                "bang",
+                "duy_nhat",
+                "cot_khoa",
+                "cot_include",
+                "dieu_kien"
+              ],
+              "hang": [
+                [
+                  "ix_ctd_donhang",
+                  "chitietdon",
+                  false,
+                  "donhangid",
+                  null,
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "The pending-orders index has a WHERE filter|||Chỉ mục đơn chờ có điều kiện WHERE",
+            "khop": "\\bCREATE\\s+INDEX\\s+ix_dh_cho\\b[^;]*\\bWHERE\\b",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Orders and order lines can still be written|||Vẫn ghi được đơn và dòng đơn",
+            "thu": "INSERT INTO DonHang VALUES (30, 'DH3000', 42, '2026-02-01', 'CHO', 100000); INSERT INTO ChiTietDon VALUES (7, 30, 'BUT', 1)"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "(trangThai, ngayDat) for all rows — works, but 100× bigger than needed.|||(trangThai, ngayDat) cho mọi dòng — chạy được nhưng to gấp 100 lần cần thiết."
+        },
+        {
+          "loi": "Believing the FOREIGN KEY constraint already created an index.|||Tin rằng ràng buộc FOREIGN KEY đã tạo sẵn chỉ mục."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partial index",
+          "vi": "chỉ mục một phần"
+        },
+        {
+          "en": "foreign-key index",
+          "vi": "chỉ mục khoá ngoại"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 5 — diagnose a slow query in six steps (50,000 orders)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "6-step diagnosis",
+        "SARGable",
+        "composite + INCLUDE",
+        "sys.dm_exec_procedure_stats"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "index",
+        "performance"
+      ],
+      "problemHtml": "<p>\"Your orders this year\" is slow. The app sends <code>SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 42 AND YEAR(ngayDat) = 2025 ORDER BY ngayDat DESC</code> on 50,000 orders that have only a primary key (661 logical reads, Sort + Clustered Index Scan).</p>\n<ol><li>Create <code>ix_kh_ngay</code> so that this query becomes one Index Seek with no lookup and no sort.</li>\n<li>Create <code>dbo.prDonHangTrongNam @kh INT, @nam INT</code> returning the same rows, newest first, with a SARGable year condition.</li></ol>\n<p>check.sql compares your procedure with the original query for three customers and reads its logical reads from <code>sys.dm_exec_procedure_stats</code>: it must read at most 30 pages (the original reads 661).</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The point is the page count on a 50,000-row table: only a real SQL Server can show that the plan changed (here measured with sys.dm_exec_procedure_stats.last_logical_reads). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 5 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (5 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 5 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Index: equality column, then range/sort column, INCLUDE what the SELECT needs.</li>\n  <li>Procedure: no YEAR()/DATEPART()/CONVERT() on ngayDat — use DATEFROMPARTS(@nam, 1, 1) and DATEFROMPARTS(@nam + 1, 1, 1).</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang \"đơn của bạn năm nay\" chậm. App gửi <code>SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 42 AND YEAR(ngayDat) = 2025 ORDER BY ngayDat DESC</code> trên 50.000 đơn chỉ có khoá chính (661 logical reads, Sort + Clustered Index Scan).</p>\n<ol><li>Tạo <code>ix_kh_ngay</code> để truy vấn này thành một Index Seek, không tra ngược, không sắp.</li>\n<li>Tạo <code>dbo.prDonHangTrongNam @kh INT, @nam INT</code> trả đúng các dòng đó, mới nhất trước, với điều kiện năm SARGable.</li></ol>\n<p>check.sql so procedure của bạn với truy vấn gốc cho ba khách và đọc logical reads của nó từ <code>sys.dm_exec_procedure_stats</code>: tối đa 30 trang (câu gốc đọc 661).</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Điểm mấu chốt là số trang trên bảng 50.000 dòng: chỉ SQL Server thật mới cho thấy kế hoạch đã đổi (ở đây đo bằng sys.dm_exec_procedure_stats.last_logical_reads). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 5 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (5 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 5 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ mục: cột so bằng, rồi cột khoảng/sắp, INCLUDE thứ SELECT cần.</li>\n  <li>Procedure: không YEAR()/DATEPART()/CONVERT() trên ngayDat — dùng DATEFROMPARTS(@nam, 1, 1) và DATEFROMPARTS(@nam + 1, 1, 1).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien\nPASS 2. Customer 42, year 2025: same rows as the original, newest first\nPASS 3. Customer 7, year 2024 and customer 4999, year 2023: same rows\nPASS 4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure)\nPASS 5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats)\nALL 5 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Steps: measure → read the plan → make conditions SARGable → design the index → measure again → weigh the cost.|||Các bước: đo → đọc kế hoạch → làm điều kiện SARGable → thiết kế chỉ mục → đo lại → cân chi phí.",
+        "id is the clustered key: every nonclustered index carries it for free, no need to INCLUDE it.|||id là khoá cụm: mọi chỉ mục nonclustered mang nó miễn phí, không cần INCLUDE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- Step 4: CREATE INDEX ix_kh_ngay ON dbo.DonHang (...) INCLUDE (...);\nGO\n-- Step 3: CREATE OR ALTER PROCEDURE dbo.prDonHangTrongNam @kh INT, @nam INT AS ...\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.DonHang (\n    id          INT           NOT NULL CONSTRAINT pk_donhang PRIMARY KEY,\n    maDon       VARCHAR(12)   NOT NULL,\n    khachHangId INT           NOT NULL,\n    ngayDat     DATE          NOT NULL,\n    trangThai   VARCHAR(10)   NOT NULL,\n    tongTien    DECIMAL(12,0) NOT NULL,\n    ghiChu      CHAR(60)      NOT NULL\n);\nGO\n-- the lesson's 50,000 orders: every customer (1…5000) has 10 orders spread over 2023–2025\nWITH n AS (\n    SELECT TOP (50000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS g\n    FROM sys.all_columns a CROSS JOIN sys.all_columns b\n)\nINSERT INTO dbo.DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien, ghiChu)\nSELECT g, CONCAT('DH', g), 1 + (g * 7919) % 5000, DATEADD(DAY, g % 1096, '2023-01-01'),\n       CASE WHEN g % 100 = 0 THEN 'CHO' WHEN g % 10 = 0 THEN 'HUY' ELSE 'XONG' END,\n       10000 * (1 + g % 500), ''\nFROM n;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @k NVARCHAR(200) = (SELECT STRING_AGG(c.name, N'','') WITHIN GROUP (ORDER BY ic.key_ordinal) FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.DonHang'') AND i.name = N''ix_kh_ngay'' AND ic.is_included_column = 0);\nDECLARE @inc NVARCHAR(200) = (SELECT STRING_AGG(c.name, N'','') WITHIN GROUP (ORDER BY c.name) FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.DonHang'') AND i.name = N''ix_kh_ngay'' AND ic.is_included_column = 1);\nSET @ok = IIF(@k = N''khachHangId,ngayDat'' AND @inc LIKE N''%maDon%'' AND @inc LIKE N''%tongTien%'', 1, 0);\nSET @info = CONCAT(N''keys = '', COALESCE(@k, N''(no index)''), N'' · include = '', COALESCE(@inc, N''(none)''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien | ix_kh_ngay: khoá (khachHangId, ngayDat), INCLUDE maDon và tongTien'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien | ix_kh_ngay: khoá (khachHangId, ngayDat), INCLUDE maDon và tongTien', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Customer 42, year 2025: same rows as the original, newest first\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (n INT IDENTITY(1,1), id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 42, 2025;\nDECLARE @ref TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 42 AND YEAR(ngayDat) = 2025;\nSET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND NOT EXISTS (SELECT * FROM @ref EXCEPT SELECT id, maDon, ngayDat, tongTien FROM @t)\n  AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref)\n  AND NOT EXISTS (SELECT 1 FROM @t a JOIN @t b ON b.n = a.n + 1 WHERE b.ngayDat > a.ngayDat), 1, 0);\nSET @info = CONCAT(N''returned '', (SELECT COUNT(*) FROM @t), N'' rows, expected '', (SELECT COUNT(*) FROM @ref), N'', newest first'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Customer 42, year 2025: same rows as the original, newest first | Khách 42, năm 2025: cùng các dòng như câu gốc, mới nhất trước'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Customer 42, year 2025: same rows as the original, newest first | Khách 42, năm 2025: cùng các dòng như câu gốc, mới nhất trước', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Customer 7, year 2024 and customer 4999, year 2023: same rows\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (n INT IDENTITY(1,1), id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 7, 2024;\nDECLARE @ref TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 7 AND YEAR(ngayDat) = 2024;\nSET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND NOT EXISTS (SELECT * FROM @ref EXCEPT SELECT id, maDon, ngayDat, tongTien FROM @t)\n  AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref)\n  AND NOT EXISTS (SELECT 1 FROM @t a JOIN @t b ON b.n = a.n + 1 WHERE b.ngayDat > a.ngayDat), 1, 0);\nIF @ok = 1 BEGIN DELETE FROM @t; DELETE FROM @ref; INSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 4999, 2023; INSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 4999 AND YEAR(ngayDat) = 2023; SET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref), 1, 0); END;\nSET @info = CONCAT(N''returned '', (SELECT COUNT(*) FROM @t), N'' rows, expected '', (SELECT COUNT(*) FROM @ref), N'', newest first'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Customer 7, year 2024 and customer 4999, year 2023: same rows | Khách 7 năm 2024 và khách 4999 năm 2023: cùng các dòng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Customer 7, year 2024 and customer 4999, year 2023: same rows | Khách 7 năm 2024 và khách 4999 năm 2023: cùng các dòng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.prDonHangTrongNam''));\nSET @ok = IIF(@d IS NOT NULL AND @d NOT LIKE N''%YEAR(%'' AND @d NOT LIKE N''%YEAR (%'' AND @d NOT LIKE N''%DATEPART%'' AND @d NOT LIKE N''%CONVERT(%'' AND @d NOT LIKE N''%FORMAT(%'', 1, 0);\nSET @info = IIF(@d IS NULL, N''procedure not found'', N''a function still wraps the column'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure) | Điều kiện năm SARGable (không YEAR/DATEPART/CONVERT trong procedure)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure) | Điều kiện năm SARGable (không YEAR/DATEPART/CONVERT trong procedure)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @x TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @x EXEC dbo.prDonHangTrongNam 42, 2025;   -- first call may include compilation work\nINSERT INTO @x EXEC dbo.prDonHangTrongNam 42, 2025;   -- measure this one\nDECLARE @r BIGINT = (SELECT TOP (1) last_logical_reads FROM sys.dm_exec_procedure_stats WHERE database_id = DB_ID() AND object_id = OBJECT_ID(N''dbo.prDonHangTrongNam'') ORDER BY last_execution_time DESC);\nSET @ok = IIF(@r IS NOT NULL AND @r <= 30, 1, 0);\nSET @info = CONCAT(N''last_logical_reads = '', COALESCE(CAST(@r AS NVARCHAR(20)), N''(no stats: procedure missing?)''), N'' (the original query reads 661)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats) | Đo thật: một lần gọi đọc tối đa 30 trang (sys.dm_exec_procedure_stats)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats) | Đo thật: một lần gọi đọc tối đa 30 trang (sys.dm_exec_procedure_stats)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- Step 4: equality column, then range/sort column, then INCLUDE what the SELECT needs (id = clustered key, carried for free)\nCREATE INDEX ix_kh_ngay ON dbo.DonHang (khachHangId, ngayDat) INCLUDE (maDon, tongTien);\nGO\n-- Step 3: the year as a half-open range, so ngayDat stays bare (SARGable)\nCREATE OR ALTER PROCEDURE dbo.prDonHangTrongNam @kh INT, @nam INT\nAS\nBEGIN\n    SET NOCOUNT ON;\n    SELECT id, maDon, ngayDat, tongTien\n    FROM dbo.DonHang\n    WHERE khachHangId = @kh\n      AND ngayDat >= DATEFROMPARTS(@nam, 1, 1)\n      AND ngayDat <  DATEFROMPARTS(@nam + 1, 1, 1)\n    ORDER BY ngayDat DESC;\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.DonHang (\n    id          INT           NOT NULL CONSTRAINT pk_donhang PRIMARY KEY,\n    maDon       VARCHAR(12)   NOT NULL,\n    khachHangId INT           NOT NULL,\n    ngayDat     DATE          NOT NULL,\n    trangThai   VARCHAR(10)   NOT NULL,\n    tongTien    DECIMAL(12,0) NOT NULL,\n    ghiChu      CHAR(60)      NOT NULL\n);\nGO\n-- the lesson's 50,000 orders: every customer (1…5000) has 10 orders spread over 2023–2025\nWITH n AS (\n    SELECT TOP (50000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS g\n    FROM sys.all_columns a CROSS JOIN sys.all_columns b\n)\nINSERT INTO dbo.DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien, ghiChu)\nSELECT g, CONCAT('DH', g), 1 + (g * 7919) % 5000, DATEADD(DAY, g % 1096, '2023-01-01'),\n       CASE WHEN g % 100 = 0 THEN 'CHO' WHEN g % 10 = 0 THEN 'HUY' ELSE 'XONG' END,\n       10000 * (1 + g % 500), ''\nFROM n;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 5 — diagnose a slow query in six steps (50,000 orders)\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @k NVARCHAR(200) = (SELECT STRING_AGG(c.name, N'','') WITHIN GROUP (ORDER BY ic.key_ordinal) FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.DonHang'') AND i.name = N''ix_kh_ngay'' AND ic.is_included_column = 0);\nDECLARE @inc NVARCHAR(200) = (SELECT STRING_AGG(c.name, N'','') WITHIN GROUP (ORDER BY c.name) FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.DonHang'') AND i.name = N''ix_kh_ngay'' AND ic.is_included_column = 1);\nSET @ok = IIF(@k = N''khachHangId,ngayDat'' AND @inc LIKE N''%maDon%'' AND @inc LIKE N''%tongTien%'', 1, 0);\nSET @info = CONCAT(N''keys = '', COALESCE(@k, N''(no index)''), N'' · include = '', COALESCE(@inc, N''(none)''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien | ix_kh_ngay: khoá (khachHangId, ngayDat), INCLUDE maDon và tongTien'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien | ix_kh_ngay: khoá (khachHangId, ngayDat), INCLUDE maDon và tongTien', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Customer 42, year 2025: same rows as the original, newest first\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (n INT IDENTITY(1,1), id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 42, 2025;\nDECLARE @ref TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 42 AND YEAR(ngayDat) = 2025;\nSET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND NOT EXISTS (SELECT * FROM @ref EXCEPT SELECT id, maDon, ngayDat, tongTien FROM @t)\n  AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref)\n  AND NOT EXISTS (SELECT 1 FROM @t a JOIN @t b ON b.n = a.n + 1 WHERE b.ngayDat > a.ngayDat), 1, 0);\nSET @info = CONCAT(N''returned '', (SELECT COUNT(*) FROM @t), N'' rows, expected '', (SELECT COUNT(*) FROM @ref), N'', newest first'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Customer 42, year 2025: same rows as the original, newest first | Khách 42, năm 2025: cùng các dòng như câu gốc, mới nhất trước'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Customer 42, year 2025: same rows as the original, newest first | Khách 42, năm 2025: cùng các dòng như câu gốc, mới nhất trước', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Customer 7, year 2024 and customer 4999, year 2023: same rows\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (n INT IDENTITY(1,1), id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 7, 2024;\nDECLARE @ref TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 7 AND YEAR(ngayDat) = 2024;\nSET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND NOT EXISTS (SELECT * FROM @ref EXCEPT SELECT id, maDon, ngayDat, tongTien FROM @t)\n  AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref)\n  AND NOT EXISTS (SELECT 1 FROM @t a JOIN @t b ON b.n = a.n + 1 WHERE b.ngayDat > a.ngayDat), 1, 0);\nIF @ok = 1 BEGIN DELETE FROM @t; DELETE FROM @ref; INSERT INTO @t (id, maDon, ngayDat, tongTien) EXEC dbo.prDonHangTrongNam 4999, 2023; INSERT INTO @ref SELECT id, maDon, ngayDat, tongTien FROM dbo.DonHang WHERE khachHangId = 4999 AND YEAR(ngayDat) = 2023; SET @ok = IIF(NOT EXISTS (SELECT id, maDon, ngayDat, tongTien FROM @t EXCEPT SELECT * FROM @ref) AND (SELECT COUNT(*) FROM @t) = (SELECT COUNT(*) FROM @ref), 1, 0); END;\nSET @info = CONCAT(N''returned '', (SELECT COUNT(*) FROM @t), N'' rows, expected '', (SELECT COUNT(*) FROM @ref), N'', newest first'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Customer 7, year 2024 and customer 4999, year 2023: same rows | Khách 7 năm 2024 và khách 4999 năm 2023: cùng các dòng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Customer 7, year 2024 and customer 4999, year 2023: same rows | Khách 7 năm 2024 và khách 4999 năm 2023: cùng các dòng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.prDonHangTrongNam''));\nSET @ok = IIF(@d IS NOT NULL AND @d NOT LIKE N''%YEAR(%'' AND @d NOT LIKE N''%YEAR (%'' AND @d NOT LIKE N''%DATEPART%'' AND @d NOT LIKE N''%CONVERT(%'' AND @d NOT LIKE N''%FORMAT(%'', 1, 0);\nSET @info = IIF(@d IS NULL, N''procedure not found'', N''a function still wraps the column'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure) | Điều kiện năm SARGable (không YEAR/DATEPART/CONVERT trong procedure)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure) | Điều kiện năm SARGable (không YEAR/DATEPART/CONVERT trong procedure)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @x TABLE (id INT, maDon VARCHAR(12), ngayDat DATE, tongTien DECIMAL(12,0));\nINSERT INTO @x EXEC dbo.prDonHangTrongNam 42, 2025;   -- first call may include compilation work\nINSERT INTO @x EXEC dbo.prDonHangTrongNam 42, 2025;   -- measure this one\nDECLARE @r BIGINT = (SELECT TOP (1) last_logical_reads FROM sys.dm_exec_procedure_stats WHERE database_id = DB_ID() AND object_id = OBJECT_ID(N''dbo.prDonHangTrongNam'') ORDER BY last_execution_time DESC);\nSET @ok = IIF(@r IS NOT NULL AND @r <= 30, 1, 0);\nSET @info = CONCAT(N''last_logical_reads = '', COALESCE(CAST(@r AS NVARCHAR(20)), N''(no stats: procedure missing?)''), N'' (the original query reads 661)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats) | Đo thật: một lần gọi đọc tối đa 30 trang (sys.dm_exec_procedure_stats)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats) | Đo thật: một lần gọi đọc tối đa 30 trang (sys.dm_exec_procedure_stats)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Before: 661 logical reads, Sort + Clustered Index Scan. After: one Index Seek, ORDERED BACKWARD — measured through the procedure: 12 logical reads instead of 661. If an index on khachHangId alone existed, it is now redundant (this one's leftmost prefix does its job) — drop it in step 6.</p>",
+      "solutionExplanationHtmlVi": "<p>Trước: 661 logical reads, Sort + Clustered Index Scan. Sau: một Index Seek, ORDERED BACKWARD — đo qua procedure: 12 logical reads thay vì 661. Nếu đã có chỉ mục chỉ trên khachHangId thì giờ nó thừa (tiền tố trái của chỉ mục này làm thay) — bỏ nó ở bước 6.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The point is the page count on a 50,000-row table: only a real SQL Server can show that the plan changed (here measured with sys.dm_exec_procedure_stats.last_logical_reads).|||Điểm mấu chốt là số trang trên bảng 50.000 dòng: chỉ SQL Server thật mới cho thấy kế hoạch đã đổi (ở đây đo bằng sys.dm_exec_procedure_stats.last_logical_reads).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. ix_kh_ngay: keys (khachHangId, ngayDat), INCLUDE maDon and tongTien",
+            "2. Customer 42, year 2025: same rows as the original, newest first",
+            "3. Customer 7, year 2024 and customer 4999, year 2023: same rows",
+            "4. The year condition is SARGable (no YEAR/DATEPART/CONVERT in the procedure)",
+            "5. Measured: one call reads at most 30 pages (sys.dm_exec_procedure_stats)"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the index but keeping YEAR(): it still seeks on the customer (only 10 orders each here) — and breaks the day a customer has 10,000 orders.|||Thêm chỉ mục nhưng giữ YEAR(): vẫn seek theo khách (ở đây mỗi khách 10 đơn) — và hỏng vào ngày một khách có 10.000 đơn."
+        },
+        {
+          "loi": "Ending the range at 12-30 or with <= 12-31 on a DATETIME — the half-open range has no such edge cases.|||Kết thúc khoảng ở 12-30 hoặc <= 12-31 trên DATETIME — khoảng nửa mở không có các ca biên đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "logical reads",
+          "vi": "số trang đọc logic"
+        },
+        {
+          "en": "ORDERED BACKWARD",
+          "vi": "đọc ngược thứ tự chỉ mục"
+        }
+      ]
+    }
+  ]
+}

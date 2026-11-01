@@ -1,0 +1,655 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs3-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs3-2"
+  },
+  "exercises": [
+    {
+      "title": "Make three conditions SARGable — same answers, index-friendly",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "SARGable",
+        "half-open date range",
+        "prefix LIKE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "sargable"
+      ],
+      "problemHtml": "<p>Slides 17–18. Indexes exist on <code>ngayDat</code>, <code>tongTien</code> and <code>maDon</code>, yet these three counts scan because each wraps the column in a function or an expression:</p>\n<pre>SELECT (SELECT COUNT(*) FROM DonHang WHERE YEAR(ngayDat) = 2025)              AS don_2025,\n       (SELECT COUNT(*) FROM DonHang WHERE tongTien + 100000 &gt; 3000000)         AS don_lon,\n       (SELECT COUNT(*) FROM DonHang WHERE SUBSTRING(maDon, 1, 4) = 'DH42')     AS ma_dh42;</pre>\n<p>Rewrite the three conditions so the <b>bare column</b> stands alone on one side, returning exactly the same three counts.</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 orders (a small copy of the lesson's 50,000-row table, with the edge cases kept); <code>ChiTietDon(donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One SELECT with the columns don_2025, don_lon, ma_dh42.</li>\n  <li>No YEAR(), SUBSTRING() or arithmetic on the column: a half-open date range, a moved constant, a prefix LIKE.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 17–18. Có chỉ mục trên <code>ngayDat</code>, <code>tongTien</code> và <code>maDon</code>, nhưng ba phép đếm này vẫn quét vì mỗi câu bọc cột trong hàm hoặc biểu thức:</p>\n<pre>SELECT (SELECT COUNT(*) FROM DonHang WHERE YEAR(ngayDat) = 2025)              AS don_2025,\n       (SELECT COUNT(*) FROM DonHang WHERE tongTien + 100000 &gt; 3000000)         AS don_lon,\n       (SELECT COUNT(*) FROM DonHang WHERE SUBSTRING(maDon, 1, 4) = 'DH42')     AS ma_dh42;</pre>\n<p>Viết lại ba điều kiện để <b>cột trần</b> đứng một mình một vế, trả đúng ba con số như cũ.</p>\n<p><code>DonHang(id PK, maDon, khachHangId, ngayDat DATE, trangThai XONG/HUY/CHO, tongTien)</code> — 20 đơn (bản nhỏ của bảng 50.000 dòng trong bài, giữ đủ ca biên); <code>ChiTietDon(donHangId FK → DonHang, sanPham, soLuong)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu SELECT với các cột don_2025, don_lon, ma_dh42.</li>\n  <li>Không YEAR(), SUBSTRING() hay phép tính trên cột: khoảng ngày nửa mở, chuyển hằng sang vế kia, LIKE tiền tố.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "don_2025 | don_lon | ma_dh42\n---------+---------+--------\n9        | 14      | 6      ",
+          "explanation": "Expected result of check \"The three counts\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Ba con số\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "YEAR(d) = 2025 ⇔ d >= '2025-01-01' AND d < '2026-01-01' — works for DATE and DATETIME alike.|||YEAR(d) = 2025 ⇔ d >= '2025-01-01' AND d < '2026-01-01' — đúng cho cả DATE lẫn DATETIME.",
+        "x + 100000 > 3000000 ⇔ x > 2900000; SUBSTRING(s, 1, 4) = 'DH42' ⇔ s LIKE 'DH42%'."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (donHangId, sanPham),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (donHangId, sanPham, soLuong) VALUES\n  (1, 'BUT', 2), (1, 'VO', 5), (2, 'THUOC', 1), (6, 'BUT', 3), (7, 'VO', 10), (13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT\n  (SELECT COUNT(*) FROM DonHang WHERE ngayDat >= '2025-01-01' AND ngayDat < '2026-01-01') AS don_2025,  -- half-open range\n  (SELECT COUNT(*) FROM DonHang WHERE tongTien > 2900000)                                AS don_lon,   -- move the constant\n  (SELECT COUNT(*) FROM DonHang WHERE maDon LIKE 'DH42%')                                AS ma_dh42;   -- prefix LIKE\n"
+        },
+        {
+          "name": "DonHang.sql",
+          "language": "sql",
+          "code": "-- DonHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DonHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (donHangId, sanPham),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (donHangId, sanPham, soLuong) VALUES\n  (1, 'BUT', 2), (1, 'VO', 5), (2, 'THUOC', 1), (6, 'BUT', 3), (7, 'VO', 10), (13, 'BUT', 1);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SARGable = Search ARGument-able: the optimizer can seek only when the indexed column appears bare. Every rewrite here is an exact equivalence, so the counts cannot change — always prove that with the same data before swapping a query in production.</p>",
+      "solutionExplanationHtmlVi": "<p>SARGable = dùng được làm đối số tìm kiếm: bộ tối ưu chỉ seek được khi cột có chỉ mục đứng trần. Mỗi cách viết lại ở đây là tương đương chính xác nên con số không đổi — luôn chứng minh điều đó trên cùng dữ liệu trước khi thay truy vấn trên production.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE DonHang (\n  id          INT           NOT NULL,\n  maDon       VARCHAR(12)   NOT NULL,\n  khachHangId INT           NOT NULL,\n  ngayDat     DATE          NOT NULL,\n  trangThai   VARCHAR(10)   NOT NULL,\n  tongTien    DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_donhang PRIMARY KEY (id)\n);\nCREATE TABLE ChiTietDon (\n  donHangId INT          NOT NULL,\n  sanPham   VARCHAR(20)  NOT NULL,\n  soLuong   INT          NOT NULL,\n  CONSTRAINT pk_chitietdon PRIMARY KEY (donHangId, sanPham),\n  CONSTRAINT fk_chitietdon_donhang FOREIGN KEY (donHangId) REFERENCES DonHang(id)\n);\nINSERT INTO DonHang (id, maDon, khachHangId, ngayDat, trangThai, tongTien) VALUES\n  (1, 'DH1001', 42, '2024-03-15', 'XONG', 4950000),\n  (2, 'DH4242', 42, '2024-03-15', 'XONG', 4960000),\n  (3, 'DH42420', 7, '2024-03-14', 'CHO', 1200000),\n  (4, 'DH42421', 7, '2024-03-16', 'XONG', 3000000),\n  (5, 'DH4241', 99, '2024-12-31', 'HUY', 2900000),\n  (6, 'DH4200', 42, '2025-01-01', 'XONG', 2901000),\n  (7, 'DH424', 42, '2025-06-30', 'CHO', 5000000),\n  (8, 'DH1042', 7, '2025-12-31', 'XONG', 750000),\n  (9, 'DH2001', 42, '2026-01-01', 'XONG', 3100000),\n  (10, 'DH2002', 99, '2024-03-15', 'HUY', 8000000),\n  (11, 'DH2003', 42, '2025-03-15', 'XONG', 4949000),\n  (12, 'DH2004', 7, '2025-09-26', 'CHO', 3400000),\n  (13, 'DH2005', 42, '2025-12-07', 'XONG', 3400000),\n  (14, 'DH2006', 99, '2023-12-31', 'XONG', 2900000),\n  (15, 'DH2007', 42, '2024-01-01', 'HUY', 100000),\n  (16, 'DH2008', 7, '2025-05-13', 'XONG', 5445000),\n  (17, 'DH2009', 99, '2025-02-28', 'CHO', 2999000),\n  (18, 'DH2010', 42, '2023-03-15', 'XONG', 6000000),\n  (19, 'DH2011', 7, '2024-07-04', 'XONG', 4951000),\n  (20, 'DH2012', 42, '2025-08-08', 'HUY', 1500000);\nINSERT INTO ChiTietDon (donHangId, sanPham, soLuong) VALUES\n  (1, 'BUT', 2), (1, 'VO', 5), (2, 'THUOC', 1), (6, 'BUT', 3), (7, 'VO', 10), (13, 'BUT', 1);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The three counts|||Ba con số",
+            "mongDoi": {
+              "cot": [
+                "don_2025",
+                "don_lon",
+                "ma_dh42"
+              ],
+              "hang": [
+                [
+                  9,
+                  14,
+                  6
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Edge cases: last day of 2025, first day of 2026, amount just above 2,900,000, DH42 in the middle of a code|||Ca biên: ngày cuối 2025, ngày đầu 2026, tiền vừa trên 2.900.000, DH42 nằm giữa mã",
+            "an": true,
+            "themCsdl": "INSERT INTO DonHang VALUES (21, 'DH42X', 7, '2025-12-31', 'XONG', 2900000), (22, 'XDH42', 7, '2026-01-01', 'XONG', 2900001), (23, 'DH4', 7, '2024-12-31', 'CHO', 2899999)",
+            "mongDoi": {
+              "cot": [
+                "don_2025",
+                "don_lon",
+                "ma_dh42"
+              ],
+              "hang": [
+                [
+                  10,
+                  15,
+                  7
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No YEAR() on the column|||Không YEAR() trên cột",
+            "khop": "\\bYEAR\\s*\\(",
+            "tep": "query.sql",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No SUBSTRING()/LEFT() on the column|||Không SUBSTRING()/LEFT() trên cột",
+            "khop": "\\b(SUBSTRING|LEFT)\\s*\\(",
+            "tep": "query.sql",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No arithmetic on tongTien|||Không phép tính trên tongTien",
+            "khop": "tongTien\\s*[-+*/]",
+            "tep": "query.sql",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "BETWEEN '2025-01-01' AND '2026-01-01' — includes New Year's Day of 2026.|||BETWEEN '2025-01-01' AND '2026-01-01' — tính cả ngày đầu năm 2026."
+        },
+        {
+          "loi": "LIKE '%DH42%' — a leading % is not SARGable and also matches DH42 in the middle.|||LIKE '%DH42%' — % ở đầu không SARGable và còn khớp DH42 ở giữa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SARGable",
+          "vi": "dùng được cho tìm kiếm theo chỉ mục"
+        },
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở"
+        }
+      ]
+    },
+    {
+      "title": "PostgreSQL index types: pick the right one",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "B-tree",
+        "Hash",
+        "GIN",
+        "GiST",
+        "BRIN"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "postgresql"
+      ],
+      "problemHtml": "<p>Slide 21. For each workload, choose the PostgreSQL index type that fits best.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 21. Với mỗi kiểu tải, chọn loại chỉ mục PostgreSQL hợp nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Many values inside one column ⇒ GIN.|||Nhiều giá trị trong một cột ⇒ GIN.",
+        "Huge, naturally ordered, append-only ⇒ BRIN.|||Rất lớn, tự có thứ tự, chỉ ghi thêm ⇒ BRIN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# PostgreSQL index types: pick the right one\n\nAnswer in the answer panel (no code needed).\n\n1. Workload → index typeTải → loại chỉ mục\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# PostgreSQL index types: pick the right one — answer key\n\n1. Workload → index typeTải → loại chỉ mục\n   - r1.lo: B-tree\n   - r2.lo: GIN\n   - r3.lo: GiST\n   - r4.lo: BRIN\n   - r5.lo: Hash\n   B-tree is the default and the answer 90% of the time. GIN indexes the elements inside a value, GiST handles overlap/distance, BRIN stores one summary per block range of a naturally ordered table.VI: B-tree là mặc định và là câu trả lời 90% trường hợp. GIN đánh chỉ mục phần tử bên trong một giá trị, GiST xử lý chồng lấn/khoảng cách, BRIN lưu một tóm tắt cho mỗi dải khối của bảng vốn đã có thứ tự.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>B-tree is the default and the answer 90% of the time. GIN indexes the elements inside a value, GiST handles overlap/distance, BRIN stores one summary per block range of a naturally ordered table.</p><p><i>VI: B-tree là mặc định và là câu trả lời 90% trường hợp. GIN đánh chỉ mục phần tử bên trong một giá trị, GiST xử lý chồng lấn/khoảng cách, BRIN lưu một tóm tắt cho mỗi dải khối của bảng vốn đã có thứ tự.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Workload → index type</p><p style=\"opacity:.75;font-size:.92em\"><i>Tải → loại chỉ mục</i></p>",
+            "cot": [
+              {
+                "ma": "vc",
+                "ten": "Workload / Tải"
+              },
+              {
+                "ma": "lo",
+                "ten": "Index",
+                "luaChon": [
+                  "B-tree",
+                  "GIN",
+                  "GiST",
+                  "BRIN",
+                  "Hash"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "vc": "WHERE email = $1 and ORDER BY created_at (the everyday case)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "vc": "tags text[] @> ARRAY['sql'], jsonb containment, full-text search"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "vc": "booking periods that must not overlap (tstzrange &&), nearest point on a map"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "vc": "a 2-billion-row append-only log filtered by time, where the index must stay tiny"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "vc": "only \"=\" on a long key, never ranges or sorting"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.lo": "B-tree",
+              "r2.lo": "GIN",
+              "r3.lo": "GiST",
+              "r4.lo": "BRIN",
+              "r5.lo": "Hash"
+            },
+            "giaiThich": "<p>B-tree is the default and the answer 90% of the time. GIN indexes the elements inside a value, GiST handles overlap/distance, BRIN stores one summary per block range of a naturally ordered table.</p><p><i>VI: B-tree là mặc định và là câu trả lời 90% trường hợp. GIN đánh chỉ mục phần tử bên trong một giá trị, GiST xử lý chồng lấn/khoảng cách, BRIN lưu một tóm tắt cho mỗi dải khối của bảng vốn đã có thứ tự.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using BRIN on randomly ordered data — its block summaries then cover everything.|||Dùng BRIN trên dữ liệu thứ tự ngẫu nhiên — tóm tắt khối khi đó phủ mọi giá trị."
+        },
+        {
+          "loi": "Choosing Hash for ranges or ORDER BY.|||Chọn Hash cho khoảng hoặc ORDER BY."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GIN (generalized inverted index)",
+          "vi": "chỉ mục đảo tổng quát"
+        },
+        {
+          "en": "BRIN (block range index)",
+          "vi": "chỉ mục dải khối"
+        }
+      ]
+    },
+    {
+      "title": "Read the plan: what each operator tells you",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "execution plan operators"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index",
+        "plan"
+      ],
+      "problemHtml": "<p>Slides 22–23. Match each plan operator (SQL Server or PostgreSQL) to its meaning.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 22–23. Ghép mỗi toán tử kế hoạch (SQL Server hoặc PostgreSQL) với ý nghĩa.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Seek = tree navigation; scan = read everything.|||Seek = đi theo cây; scan = đọc hết.",
+        "A Sort after a seek means the index order did not match ORDER BY.|||Sort sau seek nghĩa là thứ tự chỉ mục không khớp ORDER BY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the plan: what each operator tells you\n\nAnswer in the answer panel (no code needed).\n\n1. Operator → meaningToán tử → ý nghĩa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the plan: what each operator tells you — answer key\n\n1. Operator → meaningToán tử → ý nghĩa\n   - r1.yn: navigates the tree to the matching keys\n   - r2.yn: reads every page of the table\n   - r3.yn: goes back to the table for missing columns, row by row\n   - r4.yn: orders rows that the index did not deliver sorted\n   - r5.yn: answers from the index alone, never touching the table\n   - r6.yn: collects matching row addresses first, then reads those pages in order\n   The 6-step diagnosis starts here: measure pages, read the plan, then look for scans with a residual WHERE, lookups and sorts.VI: Chẩn đoán 6 bước bắt đầu ở đây: đo số trang, đọc kế hoạch, rồi tìm quét có WHERE phụ, lần tra và phép sắp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The 6-step diagnosis starts here: measure pages, read the plan, then look for scans with a residual WHERE, lookups and sorts.</p><p><i>VI: Chẩn đoán 6 bước bắt đầu ở đây: đo số trang, đọc kế hoạch, rồi tìm quét có WHERE phụ, lần tra và phép sắp.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Operator → meaning</p><p style=\"opacity:.75;font-size:.92em\"><i>Toán tử → ý nghĩa</i></p>",
+            "cot": [
+              {
+                "ma": "tt",
+                "ten": "Operator / Toán tử"
+              },
+              {
+                "ma": "yn",
+                "ten": "Meaning / Ý nghĩa",
+                "luaChon": [
+                  "navigates the tree to the matching keys",
+                  "reads every page of the table",
+                  "goes back to the table for missing columns, row by row",
+                  "orders rows that the index did not deliver sorted",
+                  "answers from the index alone, never touching the table",
+                  "collects matching row addresses first, then reads those pages in order"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tt": "Index Seek / Index Scan … Index Cond"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tt": "Clustered Index Scan / Seq Scan"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tt": "Key Lookup / RID Lookup"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tt": "Sort"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tt": "Index Only Scan (PostgreSQL)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "tt": "Bitmap Heap Scan (PostgreSQL)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.yn": "navigates the tree to the matching keys",
+              "r2.yn": "reads every page of the table",
+              "r3.yn": "goes back to the table for missing columns, row by row",
+              "r4.yn": "orders rows that the index did not deliver sorted",
+              "r5.yn": "answers from the index alone, never touching the table",
+              "r6.yn": "collects matching row addresses first, then reads those pages in order"
+            },
+            "giaiThich": "<p>The 6-step diagnosis starts here: measure pages, read the plan, then look for scans with a residual WHERE, lookups and sorts.</p><p><i>VI: Chẩn đoán 6 bước bắt đầu ở đây: đo số trang, đọc kế hoạch, rồi tìm quét có WHERE phụ, lần tra và phép sắp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking \"Index Scan\" in SQL Server is as good as a seek — it reads the whole index.|||Tưởng \"Index Scan\" của SQL Server tốt như seek — nó đọc cả chỉ mục."
+        },
+        {
+          "loi": "Ignoring the lookup count under a Nested Loops.|||Bỏ qua số lần tra dưới Nested Loops."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "execution plan",
+          "vi": "kế hoạch thực thi"
+        },
+        {
+          "en": "index-only scan",
+          "vi": "quét chỉ trên chỉ mục"
+        }
+      ]
+    },
+    {
+      "title": "Composite, INCLUDE, filtered, foreign keys and the price of an index",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "leftmost prefix",
+        "INCLUDE",
+        "filtered index",
+        "FK index",
+        "write cost"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "index"
+      ],
+      "problemHtml": "<p>Five questions on slides 13–20.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 13–20.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Equality → range/sort → INCLUDE.|||So bằng → khoảng/sắp → INCLUDE.",
+        "Filtered indexes need the literal in the query.|||Chỉ mục lọc cần hằng trong truy vấn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Composite, INCLUDE, filtered, foreign keys and the price of an index\n\nAnswer in the answer panel (no code needed).\n\n1. Query: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Best key order?Truy vấn: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Thứ tự khoá tốt nhất?\n2. INCLUDE (tongTien) puts the column…INCLUDE (tongTien) đặt cột…\n3. A filtered index WHERE trangThai = 'CHO' is NOT used by WHERE trangThai = @tt because…Chỉ mục lọc WHERE trangThai = 'CHO' KHÔNG được dùng cho WHERE trangThai = @tt vì…\n4. Why index a foreign-key column such as ChiTietDon.donHangId?Vì sao đánh chỉ mục cột khoá ngoại như ChiTietDon.donHangId?\n5. The main price of every extra index is…Cái giá chính của mỗi chỉ mục thêm là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Composite, INCLUDE, filtered, foreign keys and the price of an index — answer key\n\n1. Query: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Best key order?Truy vấn: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Thứ tự khoá tốt nhất?\n   Answer: d) (khachHangId, ngayDat): equality first, then range/sort\n   Equality columns pin one slice; inside it the next column is sorted, so the range and the ORDER BY are both served.VI: Cột so bằng chốt một lát; trong lát đó cột kế đã được sắp, nên khoảng và ORDER BY đều được phục vụ.\n\n2. INCLUDE (tongTien) puts the column…INCLUDE (tongTien) đặt cột…\n   Answer: a) only in the leaf level, so it cannot be sought but avoids lookups\n   INCLUDE columns make the index covering without widening the internal levels.VI: Cột INCLUDE làm chỉ mục phủ mà không làm rộng các tầng trong.\n\n3. A filtered index WHERE trangThai = 'CHO' is NOT used by WHERE trangThai = @tt because…Chỉ mục lọc WHERE trangThai = 'CHO' KHÔNG được dùng cho WHERE trangThai = @tt vì…\n   Answer: b) the plan must be valid for any @tt, not only 'CHO'\n   Write the literal (or OPTION (RECOMPILE)) so the optimizer can prove the filter holds.VI: Viết hằng (hoặc OPTION (RECOMPILE)) để bộ tối ưu chứng minh được điều kiện lọc.\n\n4. Why index a foreign-key column such as ChiTietDon.donHangId?Vì sao đánh chỉ mục cột khoá ngoại như ChiTietDon.donHangId?\n   Answer: d) joins and parent deletes must find child rows; without it they scan the child table\n   Neither engine creates it for you. Measured: deleting a customer went from 4,680 to 20 pages.VI: Không hệ nào tự tạo nó. Đo thật: xoá một khách hàng từ 4.680 xuống 20 trang.\n\n5. The main price of every extra index is…Cái giá chính của mỗi chỉ mục thêm là…\n   Answer: b) every INSERT/UPDATE/DELETE must also maintain it, plus space and fragmentation\n   Unused indexes are pure cost: find them with sys.dm_db_index_usage_stats / pg_stat_user_indexes.VI: Chỉ mục không dùng là chi phí thuần: tìm bằng sys.dm_db_index_usage_stats / pg_stat_user_indexes.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> (khachHangId, ngayDat): equality first, then range/sort</p><p>Equality columns pin one slice; inside it the next column is sorted, so the range and the ORDER BY are both served.</p><p><i>VI: Cột so bằng chốt một lát; trong lát đó cột kế đã được sắp, nên khoảng và ORDER BY đều được phục vụ.</i></p></li><li><p><b>a)</b> only in the leaf level, so it cannot be sought but avoids lookups</p><p>INCLUDE columns make the index covering without widening the internal levels.</p><p><i>VI: Cột INCLUDE làm chỉ mục phủ mà không làm rộng các tầng trong.</i></p></li><li><p><b>b)</b> the plan must be valid for any @tt, not only 'CHO'</p><p>Write the literal (or OPTION (RECOMPILE)) so the optimizer can prove the filter holds.</p><p><i>VI: Viết hằng (hoặc OPTION (RECOMPILE)) để bộ tối ưu chứng minh được điều kiện lọc.</i></p></li><li><p><b>d)</b> joins and parent deletes must find child rows; without it they scan the child table</p><p>Neither engine creates it for you. Measured: deleting a customer went from 4,680 to 20 pages.</p><p><i>VI: Không hệ nào tự tạo nó. Đo thật: xoá một khách hàng từ 4.680 xuống 20 trang.</i></p></li><li><p><b>b)</b> every INSERT/UPDATE/DELETE must also maintain it, plus space and fragmentation</p><p>Unused indexes are pure cost: find them with sys.dm_db_index_usage_stats / pg_stat_user_indexes.</p><p><i>VI: Chỉ mục không dùng là chi phí thuần: tìm bằng sys.dm_db_index_usage_stats / pg_stat_user_indexes.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Query: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Best key order?</p><p style=\"opacity:.75;font-size:.92em\"><i>Truy vấn: WHERE khachHangId = @k AND ngayDat >= @d ORDER BY ngayDat. Thứ tự khoá tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(khachHangId) alone with ngayDat in INCLUDE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "(ngayDat, khachHangId): the range column first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(ngayDat) alone, filtering the customer later"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(khachHangId, ngayDat): equality first, then range/sort"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Equality columns pin one slice; inside it the next column is sorted, so the range and the ORDER BY are both served.</p><p><i>VI: Cột so bằng chốt một lát; trong lát đó cột kế đã được sắp, nên khoảng và ORDER BY đều được phục vụ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>INCLUDE (tongTien) puts the column…</p><p style=\"opacity:.75;font-size:.92em\"><i>INCLUDE (tongTien) đặt cột…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only in the leaf level, so it cannot be sought but avoids lookups"
+              },
+              {
+                "ma": "b",
+                "noiDung": "in the statistics only, not in the index pages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "in every level of the tree as an extra key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "in a separate small table linked to the index"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>INCLUDE columns make the index covering without widening the internal levels.</p><p><i>VI: Cột INCLUDE làm chỉ mục phủ mà không làm rộng các tầng trong.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A filtered index WHERE trangThai = 'CHO' is NOT used by WHERE trangThai = @tt because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉ mục lọc WHERE trangThai = 'CHO' KHÔNG được dùng cho WHERE trangThai = @tt vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the filter must be repeated in INCLUDE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the plan must be valid for any @tt, not only 'CHO'"
+              },
+              {
+                "ma": "c",
+                "noiDung": "parameters always force a full scan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "filtered indexes only work on numeric columns"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Write the literal (or OPTION (RECOMPILE)) so the optimizer can prove the filter holds.</p><p><i>VI: Viết hằng (hoặc OPTION (RECOMPILE)) để bộ tối ưu chứng minh được điều kiện lọc.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why index a foreign-key column such as ChiTietDon.donHangId?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đánh chỉ mục cột khoá ngoại như ChiTietDon.donHangId?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SQL Server refuses a FOREIGN KEY without an index"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it stops orphan rows from being inserted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it makes the referenced primary key unique"
+              },
+              {
+                "ma": "d",
+                "noiDung": "joins and parent deletes must find child rows; without it they scan the child table"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Neither engine creates it for you. Measured: deleting a customer went from 4,680 to 20 pages.</p><p><i>VI: Không hệ nào tự tạo nó. Đo thật: xoá một khách hàng từ 4.680 xuống 20 trang.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The main price of every extra index is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái giá chính của mỗi chỉ mục thêm là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SELECT statements become slower on that table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every INSERT/UPDATE/DELETE must also maintain it, plus space and fragmentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the table can no longer have a primary key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "statistics stop being updated automatically"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Unused indexes are pure cost: find them with sys.dm_db_index_usage_stats / pg_stat_user_indexes.</p><p><i>VI: Chỉ mục không dùng là chi phí thuần: tìm bằng sys.dm_db_index_usage_stats / pg_stat_user_indexes.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the range column first.|||Đặt cột khoảng lên đầu."
+        },
+        {
+          "loi": "Assuming a FOREIGN KEY creates an index automatically.|||Tưởng FOREIGN KEY tự tạo chỉ mục."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "covering index",
+          "vi": "chỉ mục phủ"
+        },
+        {
+          "en": "filtered index",
+          "vi": "chỉ mục lọc"
+        }
+      ]
+    }
+  ]
+}

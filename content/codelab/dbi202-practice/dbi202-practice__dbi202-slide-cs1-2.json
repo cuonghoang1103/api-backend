@@ -1,0 +1,679 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs1-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs1-2"
+  },
+  "exercises": [
+    {
+      "title": "Four NoSQL families: what they store and when to use them",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "key-value",
+        "document",
+        "wide-column",
+        "graph"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "nosql"
+      ],
+      "problemHtml": "<p>Slide 17 names one product per NoSQL family. Fill the family and a fitting job for each.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 17 nêu một sản phẩm cho mỗi họ NoSQL. Điền họ và một việc phù hợp cho từng sản phẩm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look-up by one key ⇒ key-value; nested JSON ⇒ document.|||Tra theo một khoá ⇒ key-value; JSON lồng ⇒ document.",
+        "Relationships are the data ⇒ graph.|||Quan hệ chính là dữ liệu ⇒ graph."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Four NoSQL families: what they store and when to use them\n\nAnswer in the answer panel (no code needed).\n\n1. Product → family → typical jobSản phẩm → họ → việc điển hình\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Four NoSQL families: what they store and when to use them — answer key\n\n1. Product → family → typical jobSản phẩm → họ → việc điển hình\n   - r1.ho: key-value\n   - r1.viec: session cache and counters\n   - r2.ho: document\n   - r2.viec: product catalogue with varied fields\n   - r3.ho: wide-column\n   - r3.viec: huge write-heavy time series\n   - r4.ho: graph\n   - r4.viec: friend-of-friend recommendations\n   Each family drops part of the relational model (joins, a fixed schema, strict consistency) to win one kind of workload.VI: Mỗi họ bỏ một phần của mô hình quan hệ (phép nối, lược đồ cố định, nhất quán chặt) để thắng một kiểu tải.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each family drops part of the relational model (joins, a fixed schema, strict consistency) to win one kind of workload.</p><p><i>VI: Mỗi họ bỏ một phần của mô hình quan hệ (phép nối, lược đồ cố định, nhất quán chặt) để thắng một kiểu tải.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Product → family → typical job</p><p style=\"opacity:.75;font-size:.92em\"><i>Sản phẩm → họ → việc điển hình</i></p>",
+            "cot": [
+              {
+                "ma": "sp",
+                "ten": "Product / Sản phẩm"
+              },
+              {
+                "ma": "ho",
+                "ten": "Family / Họ",
+                "luaChon": [
+                  "key-value",
+                  "document",
+                  "wide-column",
+                  "graph"
+                ]
+              },
+              {
+                "ma": "viec",
+                "ten": "Typical job / Việc điển hình",
+                "luaChon": [
+                  "session cache and counters",
+                  "product catalogue with varied fields",
+                  "huge write-heavy time series",
+                  "friend-of-friend recommendations"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "sp": "Redis"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "sp": "MongoDB"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "sp": "Cassandra"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "sp": "Neo4j"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ho": "key-value",
+              "r1.viec": "session cache and counters",
+              "r2.ho": "document",
+              "r2.viec": "product catalogue with varied fields",
+              "r3.ho": "wide-column",
+              "r3.viec": "huge write-heavy time series",
+              "r4.ho": "graph",
+              "r4.viec": "friend-of-friend recommendations"
+            },
+            "giaiThich": "<p>Each family drops part of the relational model (joins, a fixed schema, strict consistency) to win one kind of workload.</p><p><i>VI: Mỗi họ bỏ một phần của mô hình quan hệ (phép nối, lược đồ cố định, nhất quán chặt) để thắng một kiểu tải.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling MongoDB \"key-value\" — it stores and queries whole documents.|||Gọi MongoDB là \"key-value\" — nó lưu và truy vấn cả tài liệu."
+        },
+        {
+          "loi": "Using a graph database for a write-heavy log.|||Dùng CSDL đồ thị cho nhật ký ghi nhiều."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key-value store",
+          "vi": "kho khoá–giá trị"
+        },
+        {
+          "en": "document store",
+          "vi": "kho tài liệu"
+        },
+        {
+          "en": "wide-column store",
+          "vi": "kho cột rộng"
+        }
+      ]
+    },
+    {
+      "title": "SQL standards, CAP and NewSQL",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "SQL standard",
+        "CAP theorem",
+        "NewSQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "nosql"
+      ],
+      "problemHtml": "<p>Five questions on slides 14–19.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 14–19.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "1999 recursion · 2003 windows · 2016 JSON · 2023 graphs.|||1999 đệ quy · 2003 cửa sổ · 2016 JSON · 2023 đồ thị.",
+        "CAP: P is a fact of life, the choice is C or A.|||CAP: P là thực tế, lựa chọn là C hay A."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL standards, CAP and NewSQL\n\nAnswer in the answer panel (no code needed).\n\n1. Window functions (ROW_NUMBER() OVER …) entered the SQL standard in…Hàm cửa sổ (ROW_NUMBER() OVER …) vào chuẩn SQL ở…\n2. The CAP theorem says that during a network partition a distributed store must…Định lý CAP nói khi mạng bị chia cắt, một kho phân tán phải…\n3. NewSQL systems (CockroachDB, Google Spanner) aim to…Hệ NewSQL (CockroachDB, Google Spanner) nhắm tới…\n4. Why do most business systems still start on a relational DBMS?Vì sao đa số hệ thống doanh nghiệp vẫn bắt đầu bằng DBMS quan hệ?\n5. A single PostgreSQL server behind one web app is…Một máy PostgreSQL duy nhất sau một web app là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL standards, CAP and NewSQL — answer key\n\n1. Window functions (ROW_NUMBER() OVER …) entered the SQL standard in…Hàm cửa sổ (ROW_NUMBER() OVER …) vào chuẩn SQL ở…\n   Answer: d) SQL:2003\n   SQL:1999 brought recursive CTEs, SQL:2003 window functions, SQL:2016 JSON, SQL:2023 property-graph queries.VI: SQL:1999 thêm CTE đệ quy, SQL:2003 hàm cửa sổ, SQL:2016 JSON, SQL:2023 truy vấn đồ thị thuộc tính.\n\n2. The CAP theorem says that during a network partition a distributed store must…Định lý CAP nói khi mạng bị chia cắt, một kho phân tán phải…\n   Answer: b) choose between consistency and availability\n   P is not optional in a real network; the choice is C or A while the partition lasts.VI: P không tuỳ chọn trong mạng thật; phải chọn C hoặc A khi còn chia cắt.\n\n3. NewSQL systems (CockroachDB, Google Spanner) aim to…Hệ NewSQL (CockroachDB, Google Spanner) nhắm tới…\n   Answer: b) keep SQL and ACID while scaling out\n   They scale horizontally like NoSQL but keep relational guarantees.VI: Chúng mở rộng ngang như NoSQL nhưng giữ đảm bảo quan hệ.\n\n4. Why do most business systems still start on a relational DBMS?Vì sao đa số hệ thống doanh nghiệp vẫn bắt đầu bằng DBMS quan hệ?\n   Answer: c) ACID, a query optimizer and decades of tooling\n   Correctness and flexible querying matter more than raw scale for most systems.VI: Tính đúng và truy vấn linh hoạt quan trọng hơn quy mô thô với đa số hệ thống.\n\n5. A single PostgreSQL server behind one web app is…Một máy PostgreSQL duy nhất sau một web app là…\n   Answer: b) not a CAP problem at all: nothing is distributed\n   CAP only applies to data spread over an unreliable network.VI: CAP chỉ áp dụng cho dữ liệu trải trên mạng không tin cậy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> SQL:2003</p><p>SQL:1999 brought recursive CTEs, SQL:2003 window functions, SQL:2016 JSON, SQL:2023 property-graph queries.</p><p><i>VI: SQL:1999 thêm CTE đệ quy, SQL:2003 hàm cửa sổ, SQL:2016 JSON, SQL:2023 truy vấn đồ thị thuộc tính.</i></p></li><li><p><b>b)</b> choose between consistency and availability</p><p>P is not optional in a real network; the choice is C or A while the partition lasts.</p><p><i>VI: P không tuỳ chọn trong mạng thật; phải chọn C hoặc A khi còn chia cắt.</i></p></li><li><p><b>b)</b> keep SQL and ACID while scaling out</p><p>They scale horizontally like NoSQL but keep relational guarantees.</p><p><i>VI: Chúng mở rộng ngang như NoSQL nhưng giữ đảm bảo quan hệ.</i></p></li><li><p><b>c)</b> ACID, a query optimizer and decades of tooling</p><p>Correctness and flexible querying matter more than raw scale for most systems.</p><p><i>VI: Tính đúng và truy vấn linh hoạt quan trọng hơn quy mô thô với đa số hệ thống.</i></p></li><li><p><b>b)</b> not a CAP problem at all: nothing is distributed</p><p>CAP only applies to data spread over an unreliable network.</p><p><i>VI: CAP chỉ áp dụng cho dữ liệu trải trên mạng không tin cậy.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Window functions (ROW_NUMBER() OVER …) entered the SQL standard in…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm cửa sổ (ROW_NUMBER() OVER …) vào chuẩn SQL ở…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SQL-86"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SQL:2023"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SQL-92"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SQL:2003"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SQL:1999 brought recursive CTEs, SQL:2003 window functions, SQL:2016 JSON, SQL:2023 property-graph queries.</p><p><i>VI: SQL:1999 thêm CTE đệ quy, SQL:2003 hàm cửa sổ, SQL:2016 JSON, SQL:2023 truy vấn đồ thị thuộc tính.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The CAP theorem says that during a network partition a distributed store must…</p><p style=\"opacity:.75;font-size:.92em\"><i>Định lý CAP nói khi mạng bị chia cắt, một kho phân tán phải…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lose every write made since the split"
+              },
+              {
+                "ma": "b",
+                "noiDung": "choose between consistency and availability"
+              },
+              {
+                "ma": "c",
+                "noiDung": "give up partition tolerance for good"
+              },
+              {
+                "ma": "d",
+                "noiDung": "switch to a relational model"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>P is not optional in a real network; the choice is C or A while the partition lasts.</p><p><i>VI: P không tuỳ chọn trong mạng thật; phải chọn C hoặc A khi còn chia cắt.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>NewSQL systems (CockroachDB, Google Spanner) aim to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ NewSQL (CockroachDB, Google Spanner) nhắm tới…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "replace transactions with eventual consistency"
+              },
+              {
+                "ma": "b",
+                "noiDung": "keep SQL and ACID while scaling out"
+              },
+              {
+                "ma": "c",
+                "noiDung": "store every row as a key-value pair"
+              },
+              {
+                "ma": "d",
+                "noiDung": "drop SQL in favour of JSON APIs"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They scale horizontally like NoSQL but keep relational guarantees.</p><p><i>VI: Chúng mở rộng ngang như NoSQL nhưng giữ đảm bảo quan hệ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why do most business systems still start on a relational DBMS?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đa số hệ thống doanh nghiệp vẫn bắt đầu bằng DBMS quan hệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "relational data never needs a backup"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it is always faster than any NoSQL store"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ACID, a query optimizer and decades of tooling"
+              },
+              {
+                "ma": "d",
+                "noiDung": "NoSQL stores cannot run on Linux servers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Correctness and flexible querying matter more than raw scale for most systems.</p><p><i>VI: Tính đúng và truy vấn linh hoạt quan trọng hơn quy mô thô với đa số hệ thống.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A single PostgreSQL server behind one web app is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một máy PostgreSQL duy nhất sau một web app là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an AP system with eventual consistency"
+              },
+              {
+                "ma": "b",
+                "noiDung": "not a CAP problem at all: nothing is distributed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "unable to guarantee ACID transactions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a CP system that must reject writes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>CAP only applies to data spread over an unreliable network.</p><p><i>VI: CAP chỉ áp dụng cho dữ liệu trải trên mạng không tin cậy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking CAP lets you \"pick any two\" freely.|||Tưởng CAP cho \"chọn hai bất kỳ\" thoải mái."
+        },
+        {
+          "loi": "Applying CAP to a single server.|||Áp CAP cho một máy chủ đơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CAP theorem",
+          "vi": "định lý CAP"
+        },
+        {
+          "en": "network partition",
+          "vi": "chia cắt mạng"
+        },
+        {
+          "en": "horizontal scaling",
+          "vi": "mở rộng ngang"
+        }
+      ]
+    },
+    {
+      "title": "T-SQL ↔ PostgreSQL: translate each piece",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "dialects",
+        "portability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "dialect",
+        "postgresql"
+      ],
+      "problemHtml": "<p>Slide 23 lists the differences you meet first when moving a query between the two engines. Give the PostgreSQL counterpart of each T-SQL piece.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 23 liệt kê các khác biệt gặp đầu tiên khi chuyển truy vấn giữa hai hệ. Cho phần tương ứng PostgreSQL của từng mảnh T-SQL.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "PostgreSQL strings are UTF-8 already: no N prefix needed.|||Chuỗi PostgreSQL vốn là UTF-8: không cần tiền tố N.",
+        "TOP moves to the end as LIMIT (or FETCH FIRST).|||TOP chuyển xuống cuối thành LIMIT (hoặc FETCH FIRST)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# T-SQL ↔ PostgreSQL: translate each piece\n\nAnswer in the answer panel (no code needed).\n\n1. T-SQL → PostgreSQLT-SQL → PostgreSQL\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# T-SQL ↔ PostgreSQL: translate each piece — answer key\n\n1. T-SQL → PostgreSQLT-SQL → PostgreSQL\n   - r1.p: … LIMIT 3 at the end\n   - r2.p: COALESCE(x, 0)\n   - r3.p: 'a' || b\n   - r4.p: now()\n   - r5.p: GENERATED ALWAYS AS IDENTITY\n   - r6.p: SELECT version()\n   - r7.p: VARCHAR / TEXT (UTF-8)\n   COALESCE and OFFSET … FETCH NEXT … ROWS ONLY run on BOTH engines — prefer them when a query must be portable.VI: COALESCE và OFFSET … FETCH NEXT … ROWS ONLY chạy được trên CẢ HAI hệ — ưu tiên chúng khi truy vấn cần chạy ở cả hai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>COALESCE and OFFSET … FETCH NEXT … ROWS ONLY run on BOTH engines — prefer them when a query must be portable.</p><p><i>VI: COALESCE và OFFSET … FETCH NEXT … ROWS ONLY chạy được trên CẢ HAI hệ — ưu tiên chúng khi truy vấn cần chạy ở cả hai.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>T-SQL → PostgreSQL</p><p style=\"opacity:.75;font-size:.92em\"><i>T-SQL → PostgreSQL</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "T-SQL"
+              },
+              {
+                "ma": "p",
+                "ten": "PostgreSQL",
+                "luaChon": [
+                  "… LIMIT 3 at the end",
+                  "COALESCE(x, 0)",
+                  "'a' || b",
+                  "now()",
+                  "GENERATED ALWAYS AS IDENTITY",
+                  "SELECT version()",
+                  "VARCHAR / TEXT (UTF-8)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "SELECT TOP 3 …"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "ISNULL(x, 0)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "N'a' + b"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "GETDATE()"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "t": "INT IDENTITY(1,1)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "t": "SELECT @@VERSION"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "t": "NVARCHAR(50)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "… LIMIT 3 at the end",
+              "r2.p": "COALESCE(x, 0)",
+              "r3.p": "'a' || b",
+              "r4.p": "now()",
+              "r5.p": "GENERATED ALWAYS AS IDENTITY",
+              "r6.p": "SELECT version()",
+              "r7.p": "VARCHAR / TEXT (UTF-8)"
+            },
+            "giaiThich": "<p>COALESCE and OFFSET … FETCH NEXT … ROWS ONLY run on BOTH engines — prefer them when a query must be portable.</p><p><i>VI: COALESCE và OFFSET … FETCH NEXT … ROWS ONLY chạy được trên CẢ HAI hệ — ưu tiên chúng khi truy vấn cần chạy ở cả hai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using + to join strings in PostgreSQL — it is numeric addition there.|||Dùng + nối chuỗi trong PostgreSQL — ở đó nó là phép cộng số."
+        },
+        {
+          "loi": "Forgetting that PostgreSQL sorts NULL first on DESC.|||Quên PostgreSQL xếp NULL lên đầu khi DESC."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dialect",
+          "vi": "phương ngữ SQL"
+        },
+        {
+          "en": "portable SQL",
+          "vi": "SQL chạy được nhiều hệ"
+        }
+      ]
+    },
+    {
+      "title": "GitLab, 31 January 2017: why five backups were not enough",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "backup",
+        "restore test",
+        "3-2-1 rule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "operations"
+      ],
+      "problemHtml": "<p>Slide 22 retells the GitLab outage: a production database directory was deleted by mistake, and six hours of data were lost although five backup/replication methods existed.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 22 kể lại sự cố GitLab: thư mục CSDL production bị xoá nhầm và mất sáu giờ dữ liệu dù có năm cách sao lưu/nhân bản.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask \"when did we last restore it?\", not \"do we back it up?\".|||Hỏi \"lần cuối khôi phục thử là khi nào?\", không hỏi \"có sao lưu không?\".",
+        "Replication ≠ backup.|||Nhân bản ≠ sao lưu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# GitLab, 31 January 2017: why five backups were not enough\n\nAnswer in the answer panel (no code needed).\n\n1. The real root cause of the unrecoverable loss was…Nguyên nhân gốc của việc mất không khôi phục được là…\n2. The 3-2-1 rule means…Quy tắc 3-2-1 nghĩa là…\n3. A replica that copies every change instantly protects you from…Một bản sao chép mọi thay đổi tức thì bảo vệ bạn khỏi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# GitLab, 31 January 2017: why five backups were not enough — answer key\n\n1. The real root cause of the unrecoverable loss was…Nguyên nhân gốc của việc mất không khôi phục được là…\n   Answer: b) no one had tested that a restore actually worked\n   A backup is an action; a tested restore is a guarantee.VI: Sao lưu là một hành động; khôi phục đã thử là một đảm bảo.\n\n2. The 3-2-1 rule means…Quy tắc 3-2-1 nghĩa là…\n   Answer: c) 3 copies, on 2 kinds of media, 1 kept off-site\n   Three copies of the data, two different storage types, one copy in another location.VI: Ba bản dữ liệu, hai loại lưu trữ, một bản ở nơi khác.\n\n3. A replica that copies every change instantly protects you from…Một bản sao chép mọi thay đổi tức thì bảo vệ bạn khỏi…\n   Answer: d) a dead server, but not from a mistaken DELETE\n   Replication copies the mistake too; only a point-in-time backup can go back before it.VI: Nhân bản chép luôn cả sai lầm; chỉ sao lưu theo thời điểm mới quay lại trước nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> no one had tested that a restore actually worked</p><p>A backup is an action; a tested restore is a guarantee.</p><p><i>VI: Sao lưu là một hành động; khôi phục đã thử là một đảm bảo.</i></p></li><li><p><b>c)</b> 3 copies, on 2 kinds of media, 1 kept off-site</p><p>Three copies of the data, two different storage types, one copy in another location.</p><p><i>VI: Ba bản dữ liệu, hai loại lưu trữ, một bản ở nơi khác.</i></p></li><li><p><b>d)</b> a dead server, but not from a mistaken DELETE</p><p>Replication copies the mistake too; only a point-in-time backup can go back before it.</p><p><i>VI: Nhân bản chép luôn cả sai lầm; chỉ sao lưu theo thời điểm mới quay lại trước nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The real root cause of the unrecoverable loss was…</p><p style=\"opacity:.75;font-size:.92em\"><i>Nguyên nhân gốc của việc mất không khôi phục được là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the engineer typed the command too quickly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no one had tested that a restore actually worked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the team used only one backup method"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL cannot be backed up while running"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A backup is an action; a tested restore is a guarantee.</p><p><i>VI: Sao lưu là một hành động; khôi phục đã thử là một đảm bảo.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The 3-2-1 rule means…</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy tắc 3-2-1 nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3 servers, 2 replicas, 1 primary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3 backups a day, kept 2 weeks, 1 restore"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3 copies, on 2 kinds of media, 1 kept off-site"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 DBAs, 2 approvals, 1 production key"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Three copies of the data, two different storage types, one copy in another location.</p><p><i>VI: Ba bản dữ liệu, hai loại lưu trữ, một bản ở nơi khác.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A replica that copies every change instantly protects you from…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bản sao chép mọi thay đổi tức thì bảo vệ bạn khỏi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "both a dead server and a mistaken DELETE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "neither a dead server nor a mistaken DELETE"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a mistaken DELETE, but not from a dead server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a dead server, but not from a mistaken DELETE"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Replication copies the mistake too; only a point-in-time backup can go back before it.</p><p><i>VI: Nhân bản chép luôn cả sai lầm; chỉ sao lưu theo thời điểm mới quay lại trước nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming only the human error.|||Chỉ đổ lỗi cho sai sót của người."
+        },
+        {
+          "loi": "Counting a replica as a backup.|||Tính bản sao nhân bản là một bản sao lưu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "point-in-time recovery",
+          "vi": "khôi phục về một thời điểm"
+        },
+        {
+          "en": "replication",
+          "vi": "nhân bản"
+        }
+      ]
+    }
+  ]
+}

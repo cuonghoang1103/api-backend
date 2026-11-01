@@ -486,5 +486,193 @@
    "1 -> n = 1: OK, count 1, first [0]\n4 -> n = 4: OK, count 2, first [1, 3, 0, 2]\n5 -> n = 5: OK, count 10, first [0, 2, 4, 1, 3]\n8 -> n = 8: OK, count 92, first [0, 4, 7, 5, 2, 6, 1, 3]\n",
    "2 -> n = 2: OK, count 0, first null\n3 -> n = 3: OK, count 0, first null\n10 -> n = 10: OK, count 724, first [0, 2, 5, 7, 9, 4, 8, 1, 3, 6]\n12 -> n = 12: OK, count 14200, first [0, 2, 4, 7, 9, 11, 5, 10, 1, 6, 8, 3]\n"
   ]
+ },
+ "csd201-4-1-folder-sizes": {
+  "bam": "9c714a3639770029",
+  "ra": [
+   "ROOT / 5 -> ok\n/ docs 5 -> ok\ndocs a.txt 30 -> ok\ndocs b.txt 50 -> ok\n/ x.jpg 200 -> ok\nDU -> total 290\n    a.txt 30\n    b.txt 50\n  docs 85\n  x.jpg 200\n/ 290\n",
+   "ROOT courses 1 -> ok\ncourses cs016 2 -> ok\ncs016 grades 8 -> ok\ncs016 homeworks 1 -> ok\nhomeworks hw1 3 -> ok\nhomeworks hw2 2 -> ok\nhomeworks hw3 4 -> ok\ncs016 programs 1 -> ok\nprograms pr1 57 -> ok\nprograms pr2 97 -> ok\nprograms pr3 74 -> ok\ncourses cs252 1 -> ok\ncs252 projects 1 -> ok\nprojects papers 1 -> ok\npapers buylow 26 -> ok\npapers sellhigh 55 -> ok\nprojects demos 1 -> ok\ndemos market 4786 -> ok\ncs252 grades2 3 -> ok\nDU -> total 5124\n    grades 8\n      hw1 3\n      hw2 2\n      hw3 4\n    homeworks 10\n      pr1 57\n      pr2 97\n      pr3 74\n    programs 229\n  cs016 249\n        buylow 26\n        sellhigh 55\n      papers 82\n        market 4786\n      demos 4787\n    projects 4870\n    grades2 3\n  cs252 4874\ncourses 5124\n"
+  ]
+ },
+ "csd201-4-1-level-order": {
+  "bam": "c6426da2675d0ed5",
+  "ra": [
+   "ROOT A -> ok\nA B -> ok\nA C -> ok\nA D -> ok\nB E -> ok\nB F -> ok\nD G -> ok\nD H -> ok\nD I -> ok\nLEVELS -> [A, B C D, E F G H I] widest=5\n",
+   "ROOT r -> ok\nr a -> ok\na b -> ok\nb c -> ok\nr x -> ok\nr y -> ok\nr z -> ok\nLEVELS -> [r, a x y z, b, c] widest=4\n"
+  ]
+ },
+ "csd201-4-1-tree-measures": {
+  "bam": "e3e998480ba6fd9f",
+  "ra": [
+   "ROOT Electronics -> ok\nElectronics R&D -> ok\nElectronics Sales -> ok\nElectronics Purchasing -> ok\nElectronics Manufacturing -> ok\nSales Domestic -> ok\nSales International -> ok\nInternational Canada -> ok\nInternational S.America -> ok\nInternational Overseas -> ok\nOverseas Africa -> ok\nOverseas Europe -> ok\nOverseas Asia -> ok\nOverseas Australia -> ok\nManufacturing TV -> ok\nManufacturing CD -> ok\nManufacturing Tuner -> ok\nQ Electronics -> size=17 height=4 leaves=12 depth=0\nQ Sales -> size=10 height=3 leaves=7 depth=1\nQ Overseas -> size=5 height=1 leaves=4 depth=3\nQ Tuner -> size=1 height=0 leaves=1 depth=2\nDEPTH Asia -> 4\nDEPTH Nobody -> -1\n",
+   "ROOT a -> ok\nQ a -> size=1 height=0 leaves=1 depth=0\na b -> ok\nb c -> ok\nc d -> ok\nQ a -> size=4 height=3 leaves=1 depth=0\nQ c -> size=2 height=1 leaves=1 depth=2\nDEPTH d -> 3\n"
+  ]
+ },
+ "csd201-4-2-array-tree": {
+  "bam": "40c8a25c4f00db46",
+  "ra": [
+   "TREE 8 3 10 1 6 14 4 7 13 -> ok\nINFO 0 -> parent=-1 depth=0\nINFO 4 -> parent=1 depth=2\nINFO 8 -> parent=3 depth=3\nPATH 7 -> 8 3 1 7\nPATH 6 -> 8 10 4\nCOMPLETE -> true\nTREE 1 2 3 - 5 -> ok\nCOMPLETE -> false\n",
+   "TREE 1 2 3 4 5 6 - - - -> ok\nCOMPLETE -> true\nTREE 1 - 3 - - 6 -> ok\nCOMPLETE -> false\nTREE 1 2 3 4 -> ok\nCOMPLETE -> true\nPATH 3 -> 1 2 4\nINFO 3 -> parent=1 depth=2\nTREE 5 -> ok\nCOMPLETE -> true\n"
+  ]
+ },
+ "csd201-4-2-binary-properties": {
+  "bam": "5b31eda3d65574d5",
+  "ra": [
+   "1 2 3 4 5 6 7 -> size=7 height=2 leaves=4 proper=true perfect=true\n1 2 3 4 5 -> size=5 height=2 leaves=3 proper=true perfect=false\n1 2 3 4 -> size=4 height=2 leaves=2 proper=false perfect=false\n5 -> size=1 height=0 leaves=1 proper=true perfect=true\n",
+   "- -> size=0 height=-1 leaves=0 proper=true perfect=true\n1 2 - 3 - 4 -> size=4 height=3 leaves=1 proper=false perfect=false\n1 - 2 -> size=2 height=1 leaves=1 proper=false perfect=false\n1 2 3 - - 4 5 -> size=5 height=2 leaves=3 proper=true perfect=false\n"
+  ]
+ },
+ "csd201-4-2-build-pre-in": {
+  "bam": "cdcabc3207d0b004",
+  "ra": [
+   "3 9 20 15 7 | 9 3 15 20 7 -> 3(9,20(15,7))\n1 2 4 5 3 6 | 4 2 5 1 3 6 -> 1(2(4,5),3(-,6))\n1 | 1 -> 1\n| -> -\n",
+   "1 2 3 4 | 4 3 2 1 -> 1(2(3(4,-),-),-)\n1 2 3 4 | 1 2 3 4 -> 1(-,2(-,3(-,4)))\n5 3 2 4 8 7 9 | 2 3 4 5 7 8 9 -> 5(3(2,4),8(7,9))\n",
+   "PERF -> n = 300,000 (balanced): OK, root 149999, height 18\n"
+  ]
+ },
+ "csd201-4-3-expression-tree": {
+  "bam": "0ffab7712fa4280f",
+  "ra": [
+   "3 4 + 2 * -> *(+(3,4),2) | ((3+4)*2) = 14\n2 3 4 * + -> +(2,*(3,4)) | (2+(3*4)) = 14\n5 1 2 + 4 * + 3 - -> -(+(5,*(+(1,2),4)),3) | ((5+((1+2)*4))-3) = 14\n7 -> 7 | 7 = 7\n",
+   "10 3 - -> -(10,3) | (10-3) = 7\n10 3 / -> /(10,3) | (10/3) = 3\n-6 2 / 4 - -> -(/(-6,2),4) | ((-6/2)-4) = -7\n1 2 - 3 - 4 5 * * -> *(-(-(1,2),3),*(4,5)) | (((1-2)-3)*(4*5)) = -80\n"
+  ]
+ },
+ "csd201-4-3-four-traversals": {
+  "bam": "ba8be1c7f7eb315f",
+  "ra": [
+   "1 2 3 4 5 6 7 -> \n  pre   1 2 4 5 3 6 7\n  in    4 2 5 1 6 3 7\n  post  4 5 2 6 7 3 1\n  level 1 2 3 4 5 6 7\n8 3 10 1 6 - 14 - - 4 7 13 -> \n  pre   8 3 1 6 4 7 10 14 13\n  in    1 3 4 6 7 8 10 13 14\n  post  1 4 7 6 3 13 14 10 8\n  level 8 3 10 1 6 14 4 7 13\n",
+   "- -> \n  pre   \n  in    \n  post  \n  level \n5 -> \n  pre   5\n  in    5\n  post  5\n  level 5\n1 2 - 3 - 4 -> \n  pre   1 2 3 4\n  in    4 3 2 1\n  post  4 3 2 1\n  level 1 2 3 4\n1 - 2 - 3 -> \n  pre   1 2 3\n  in    1 2 3\n  post  3 2 1\n  level 1 2 3\n"
+  ]
+ },
+ "csd201-4-3-inorder-iterative": {
+  "bam": "7985886f6663e9d3",
+  "ra": [
+   "4 2 6 1 3 5 7 -> 1 2 3 4 5 6 7 | sum 28\n8 3 10 1 6 - 14 - - 4 7 13 -> 1 3 4 6 7 8 10 13 14 | sum 66\n- ->  | sum 0\n",
+   "1 - 2 - 3 - 4 -> 1 2 3 4 | sum 10\n4 3 - 2 - 1 -> 1 2 3 4 | sum 10\n",
+   "PERF -> left chain of 1,000,000 nodes: OK, sum 500000500000\n"
+  ]
+ },
+ "csd201-4-4-bst-insert-search": {
+  "bam": "09c24b2b14004892",
+  "ra": [
+   "INS 8 -> true | 8 size=1\nINS 3 -> true | 8(3,-) size=2\nINS 10 -> true | 8(3,10) size=3\nINS 1 -> true | 8(3(1,-),10) size=4\nINS 6 -> true | 8(3(1,6),10) size=5\nINS 14 -> true | 8(3(1,6),10(-,14)) size=6\nINS 4 -> true | 8(3(1,6(4,-)),10(-,14)) size=7\nINS 7 -> true | 8(3(1,6(4,7)),10(-,14)) size=8\nINS 13 -> true | 8(3(1,6(4,7)),10(-,14(13,-))) size=9\nINS 6 -> false | 8(3(1,6(4,7)),10(-,14(13,-))) size=9\nHAS 7 -> true | 8(3(1,6(4,7)),10(-,14(13,-))) size=9\nHAS 5 -> false | 8(3(1,6(4,7)),10(-,14(13,-))) size=9\nHAS 13 -> true | 8(3(1,6(4,7)),10(-,14(13,-))) size=9\n",
+   "HAS 1 -> false | - size=0\nINS 1 -> true | 1 size=1\nINS 2 -> true | 1(-,2) size=2\nINS 3 -> true | 1(-,2(-,3)) size=3\nINS 4 -> true | 1(-,2(-,3(-,4))) size=4\nINS 2 -> false | 1(-,2(-,3(-,4))) size=4\nHAS 4 -> true | 1(-,2(-,3(-,4))) size=4\n",
+   "PERF -> 1,000,000 inserts + 1,000,000 searches: OK, size 999705, found 500251, height 48 | - size=0\n"
+  ]
+ },
+ "csd201-4-4-floor-ceiling-range": {
+  "bam": "b18ca9a1232eface",
+  "ra": [
+   "INS 8 3 10 1 6 14 4 7 13 -> ok\nFLOOR 5 -> 4\nFLOOR 8 -> 8\nFLOOR 0 -> null\nCEIL 11 -> 13\nCEIL 15 -> null\nRANGE 4 10 -> 5 [4 6 7 8 10]\nRANGE 9 9 -> 0 []\nRANGE 15 20 -> 0 []\n",
+   "FLOOR 1 -> null\nRANGE 0 100 -> 0 []\nINS 50 30 70 20 40 60 80 -> ok\nCEIL 80 -> 80\nFLOOR 19 -> null\nRANGE 30 70 -> 5 [30 40 50 60 70]\nRANGE 70 30 -> 0 []\n",
+   "PERF -> 200,000 queries of width 10,000: OK, total 2052227\n"
+  ]
+ },
+ "csd201-4-4-is-bst": {
+  "bam": "f3e7ef0441edffd6",
+  "ra": [
+   "8 3 10 1 6 - 14 -> 8(3(1,6),10(-,14)) -> true\n8 3 10 1 9 -> 8(3(1,9),10) -> false\n5 5 -> 5(5,-) -> false\n2 1 3 -> 2(1,3) -> true\n",
+   "- -> - -> true\n7 -> 7 -> true\n-2147483648 - 2147483647 -> -2147483648(-,2147483647) -> true\n10 5 15 - - 6 20 -> 10(5,15(6,20)) -> false\n20 10 30 5 15 25 35 - - 12 21 -> 20(10(5,15(12,21)),30(25,35)) -> false\n"
+  ]
+ },
+ "csd201-4-5-delete-by-copying": {
+  "bam": "7cae64eb53f854b4",
+  "ra": [
+   "INS 8 3 10 1 6 14 4 7 13 -> ok | 8(3(1,6(4,7)),10(-,14(13,-)))\nDEL 4 -> true | 8(3(1,6(-,7)),10(-,14(13,-)))\nDEL 10 -> true | 8(3(1,6(-,7)),14(13,-))\nDEL 3 -> true | 8(1(-,6(-,7)),14(13,-))\nDEL 8 -> true | 7(1(-,6),14(13,-))\nDEL 99 -> false | 7(1(-,6),14(13,-))\n",
+   "INS 50 30 70 20 60 80 -> ok | 50(30(20,-),70(60,80))\nDEL 30 -> true | 50(20,70(60,80))\nDEL 50 -> true | 20(-,70(60,80))\nDEL 20 -> true | 70(60,80)\nDEL 60 -> true | 70(-,80)\nDEL 70 -> true | 80\nDEL 80 -> true | -\nDEL 80 -> false | -\n",
+   "INS 5 2 8 1 3 7 9 -> ok | 5(2(1,3),8(7,9))\nDEL 5 -> true | 3(2(1,-),8(7,9))\nDEL 3 -> true | 2(1,8(7,9))\nDEL 2 -> true | 1(-,8(7,9))\nDEL 1 -> true | 8(7,9)\nDEL 9 -> true | 8(7,-)\nDEL 8 -> true | 7\nDEL 7 -> true | -\nINS 4 -> ok | 4\n"
+  ]
+ },
+ "csd201-4-5-delete-by-merging": {
+  "bam": "78a7e02cc8b48f79",
+  "ra": [
+   "INS 8 3 10 1 6 14 4 7 13 -> ok | 8(3(1,6(4,7)),10(-,14(13,-)))\nDEL 4 -> true | 8(3(1,6(-,7)),10(-,14(13,-)))\nDEL 10 -> true | 8(3(1,6(-,7)),14(13,-))\nDEL 3 -> true | 8(1(-,6(-,7)),14(13,-))\nDEL 8 -> true | 1(-,6(-,7(-,14(13,-))))\nDEL 99 -> false | 1(-,6(-,7(-,14(13,-))))\n",
+   "INS 50 30 70 20 40 60 80 -> ok | 50(30(20,40),70(60,80))\nDEL 50 -> true | 30(20,40(-,70(60,80)))\nDEL 30 -> true | 20(-,40(-,70(60,80)))\nDEL 40 -> true | 20(-,70(60,80))\nDEL 20 -> true | 70(60,80)\nDEL 70 -> true | 60(-,80)\nDEL 60 -> true | 80\nDEL 80 -> true | -\n"
+  ]
+ },
+ "csd201-4-5-trim-bst": {
+  "bam": "584a14f66f010b9b",
+  "ra": [
+   "1 2 : 1 0 2 -> 1(0,2) => 1(-,2)\n1 3 : 3 0 4 2 1 -> 3(0(-,2(1,-)),4) => 3(2(1,-),-)\n4 10 : 8 3 10 1 6 14 4 7 13 -> 8(3(1,6(4,7)),10(-,14(13,-))) => 8(6(4,7),10)\n",
+   "20 30 : 8 3 10 -> 8(3,10) => -\n0 100 : 8 3 10 -> 8(3,10) => 8(3,10)\n9 20 : 8 3 10 9 11 -> 8(3,10(9,11)) => 10(9,11)\n5 5 : 8 3 10 1 6 5 7 -> 8(3(1,6(5,7)),10) => 5\n"
+  ]
+ },
+ "csd201-4-6-avl-insert": {
+  "bam": "b5e113791e8b1ddb",
+  "ra": [
+   "INS 3 2 1 -> \n  +3: 3 h=1\n  +2: 3(2,-) h=2\n  +1: 2(1,3) h=2\nINS 4 5 -> \n  +4: 2(1,3(-,4)) h=3\n  +5: 2(1,4(3,5)) h=3\nINS 7 6 -> \n  +7: 4(2(1,3),5(-,7)) h=3\n  +6: 4(2(1,3),6(5,7)) h=3\nINS 0 -1 -> \n  +0: 4(2(1(0,-),3),6(5,7)) h=4\n  +-1: 4(2(0(-1,1),3),6(5,7)) h=4\n",
+   "INS 50 25 10 5 7 3 30 20 8 15 -> \n  +50: 50 h=1\n  +25: 50(25,-) h=2\n  +10: 25(10,50) h=2\n  +5: 25(10(5,-),50) h=3\n  +7: 25(7(5,10),50) h=3\n  +3: 7(5(3,-),25(10,50)) h=3\n  +30: 7(5(3,-),25(10,50(30,-))) h=4\n  +20: 7(5(3,-),25(10(-,20),50(30,-))) h=4\n  +8: 7(5(3,-),25(10(8,20),50(30,-))) h=4\n  +15: 10(7(5(3,-),8),25(20(15,-),50(30,-))) h=4\nINS 7 50 -> \n  +7: 10(7(5(3,-),8),25(20(15,-),50(30,-))) h=4\n  +50: 10(7(5(3,-),8),25(20(15,-),50(30,-))) h=4\n",
+   "PERF -> insert 1..1,000,000: OK, height 20\n"
+  ]
+ },
+ "csd201-4-6-balance-factors": {
+  "bam": "14469cf6d70a689c",
+  "ra": [
+   "8 3 10 1 6 14 4 7 13 -> 1:0 3:-1 4:0 6:0 7:0 8:0 10:-2 13:0 14:1 | AVL=false\n2 1 3 -> 1:0 2:0 3:0 | AVL=true\n1 2 3 -> 1:-2 2:-1 3:0 | AVL=false\n5 3 8 2 4 7 9 1 -> 1:0 2:1 3:1 4:0 5:1 7:0 8:0 9:0 | AVL=true\n",
+   "7 -> 7:0 | AVL=true\n3 1 2 -> 1:-1 2:0 3:2 | AVL=false\n50 30 70 20 40 60 80 10 5 -> 5:0 10:1 20:2 30:2 40:0 50:2 60:0 70:0 80:0 | AVL=false\n",
+   "PERF -> isAVL x 20 on 1,048,575 nodes: OK, true\n"
+  ]
+ },
+ "csd201-4-6-rotations": {
+  "bam": "dc730acfc0ded4ea",
+  "ra": [
+   "INS 8 3 10 1 6 14 4 7 13 -> ok | 8(3(1,6(4,7)),10(-,14(13,-)))\nR 8 -> true | 3(1,8(6(4,7),10(-,14(13,-))))\nL 3 -> true | 8(3(1,6(4,7)),10(-,14(13,-)))\nR 6 -> true | 8(3(1,4(-,6(-,7))),10(-,14(13,-)))\nL 10 -> true | 8(3(1,4(-,6(-,7))),14(10(-,13),-))\nL 99 -> false | 8(3(1,4(-,6(-,7))),14(10(-,13),-))\nR 1 -> false | 8(3(1,4(-,6(-,7))),14(10(-,13),-))\n",
+   "INS 1 2 3 4 5 6 7 -> ok | 1(-,2(-,3(-,4(-,5(-,6(-,7))))))\nL 1 -> true | 2(1,3(-,4(-,5(-,6(-,7)))))\nL 3 -> true | 2(1,4(3,5(-,6(-,7))))\nL 2 -> true | 4(2(1,3),5(-,6(-,7)))\nL 5 -> true | 4(2(1,3),6(5,7))\nR 4 -> true | 2(1,4(3,6(5,7)))\n"
+  ]
+ },
+ "csd201-4-7-build-heap-two-ways": {
+  "bam": "5b59bf6679ab81be",
+  "ra": [
+   "2 8 6 1 10 15 3 12 11 -> topDown [15, 12, 10, 11, 2, 6, 3, 1, 8] (8 swaps) | bottomUp [15, 12, 6, 11, 10, 2, 3, 1, 8] (6 swaps)\n1 2 3 4 5 6 7 -> topDown [7, 4, 6, 1, 3, 2, 5] (10 swaps) | bottomUp [7, 5, 6, 4, 2, 1, 3] (4 swaps)\n",
+   "9 7 8 1 2 3 -> topDown [9, 7, 8, 1, 2, 3] (0 swaps) | bottomUp [9, 7, 8, 1, 2, 3] (0 swaps)\n5 5 5 5 -> topDown [5, 5, 5, 5] (0 swaps) | bottomUp [5, 5, 5, 5] (0 swaps)\n4 -> topDown [4] (0 swaps) | bottomUp [4] (0 swaps)\n1 2 -> topDown [2, 1] (1 swaps) | bottomUp [2, 1] (1 swaps)\n",
+   "PERF -> bottomUp on 2,000,000 increasing values: OK, root 1999999, swaps 1999987\n"
+  ]
+ },
+ "csd201-4-7-heap-sort": {
+  "bam": "a5e3942260082b8d",
+  "ra": [
+   "2 8 6 1 10 15 3 12 11 -> [1, 2, 3, 6, 8, 10, 11, 12, 15]\n5 4 3 2 1 -> [1, 2, 3, 4, 5]\n7 -> [7]\n",
+   "3 -1 3 0 -1 2 -> [-1, -1, 0, 2, 3, 3]\n9 9 9 -> [9, 9, 9]\n-5 10 -5 10 -> [-5, -5, 10, 10]\n",
+   "PERF -> heapSort of 2,000,000 values: OK, sorted true\n"
+  ]
+ },
+ "csd201-4-7-merge-k-sorted": {
+  "bam": "10c9781a62d1a584",
+  "ra": [
+   "1 4 7 | 2 5 8 | 3 6 9 -> [1, 2, 3, 4, 5, 6, 7, 8, 9]\n1 3 | | 2 -> [1, 2, 3]\n5 -> [5]\n",
+   "1 1 2 | 1 3 | -4 1 -> [-4, 1, 1, 1, 1, 2, 3]\n| | -> []\n10 20 | 5 | 15 25 35 -> [5, 10, 15, 20, 25, 35]\n",
+   "PERF -> k = 1,000 arrays of 2,000: OK, length 2000000, last 1999999\n"
+  ]
+ },
+ "csd201-4-8-bst-stats": {
+  "bam": "2e84266bb9cb6df9",
+  "ra": [
+   "4 10 : 8 3 10 1 6 14 4 7 13 -> leaves=4 oneChild=2 height=4 between=5 max=14\n0 100 : 5 -> leaves=1 oneChild=0 height=1 between=1 max=5\n",
+   "2 3 : 1 2 3 4 -> leaves=1 oneChild=3 height=4 between=2 max=4\n10 20 : 4 3 2 1 -> leaves=1 oneChild=3 height=4 between=0 max=4\n50 60 : 30 20 40 -> leaves=2 oneChild=0 height=2 between=0 max=40\n"
+  ]
+ },
+ "csd201-4-8-kth-lca": {
+  "bam": "23a49704ebea19c7",
+  "ra": [
+   "INS 8 3 10 1 6 14 4 7 13 -> ok\nK 1 -> 1\nK 4 -> 6\nK 9 -> 14\nK 10 -> null\nLCA 4 7 -> 6\nLCA 4 13 -> 8\nLCA 6 7 -> 6\nLCA 1 1 -> 1\nLCA 5 7 -> null\n",
+   "K 1 -> null\nLCA 1 2 -> null\nINS 1 2 3 4 5 -> ok\nK 5 -> 5\nLCA 2 5 -> 2\nLCA 5 4 -> 4\n"
+  ]
+ },
+ "csd201-4-8-pe-bstree-car": {
+  "bam": "8fc20a956a81cfb7",
+  "ra": [
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  (A,7) (C,3) (D,9) (F,2) (E,6) (G,8) \n  (F,2) (C,3) (E,6) (A,7) (G,8) (D,9) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (C,6) (D,3) (F,2) (G,5) (I,4) (E,8) (H,9) \n  (C,6) (G,5) (E,8) (H,9) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (C,10) (D,5) (F,3) (G,7) (H,6) (I,8) (E,15) \n  (C,10) (D,5) (F,3) (H,6) (I,8) (E,15) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (J,20) (K,10) (M,5) (N,15) (O,12) (P,18) (L,30) \n  (J,20) (K,10) (M,5) (O,12) (N,15) (P,18) (L,30) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  (A,4) (D,2) (E,6) \n  (D,2) (A,4) (E,6) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (X,1) (Y,2) (Z,3) \n  \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (P,50) (Q,40) (R,30) (S,45) (T,60) \n  (P,50) (Q,40) (R,30) (T,60) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (P,50) (Q,40) (R,30) (S,45) \n  (P,50) (Q,40) (R,30) (S,45) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  (Z,5) \n  (Z,5) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (M,9) (N,7) (P,6) (Q,5) (O,8) \n  (M,9) (N,7) (P,6) (Q,5) (O,8) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (A,2) (C,1) (D,3) \n  (A,2) (C,1) (D,3) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (A,8) (C,4) (E,2) (F,6) (G,5) (D,12) \n  (A,8) (C,4) (E,2) (G,5) (F,6) (D,12) \n\n"
+  ]
  }
 }

@@ -122,6 +122,54 @@
       "name": "3.5 🧪 Practice — list recursion, backtracking, N queens, memoized grid paths",
       "level": "INTERMEDIATE",
       "description": "Luyện: PE style: count, sum, max and print backwards on a linked list — recursively · Backtracking: subsets with a given sum, and permutations in order · N queens: count every placement and print the first one · Grid paths with obstacles: recursion + memo instead of 10¹⁶ calls"
+    },
+    {
+      "slug": "csd201-cay-duyet",
+      "name": "4.1 Trees & traversals",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A general tree: size, height and the depth of a node · Disk usage of a folder tree: a postorder traversal · Print a general tree level by level (breadth-first)"
+    },
+    {
+      "slug": "csd201-cay-nhi-phan",
+      "name": "4.2 Binary trees: properties & two implementations",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Properties of a linked binary tree: size, height, leaves, full and perfect · A binary tree in an array: parent, children, depth, and \"is it complete?\" · Rebuild a binary tree from its preorder and inorder traversals"
+    },
+    {
+      "slug": "csd201-duyet-cay",
+      "name": "4.3 The four traversals & expression trees",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The four traversals of a binary tree: preorder, inorder, postorder, level order · Inorder without recursion — on a degenerate tree of a million nodes · Expression trees: build from postfix, print infix, evaluate"
+    },
+    {
+      "slug": "csd201-bst",
+      "name": "4.4 Binary Search Trees",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: BST insert (no duplicates) and search — iteratively · Floor, ceiling and counting keys in a range — with pruning · Is this binary tree a BST? Check every node against its bounds"
+    },
+    {
+      "slug": "csd201-bst-chen-xoa",
+      "name": "4.5 BST insertion & the three deletion cases",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Delete by copying: the predecessor takes the place · Delete by merging: hang the right subtree under the predecessor · Trim a BST to [lo, hi] — a recursion that returns the new subtree"
+    },
+    {
+      "slug": "csd201-avl",
+      "name": "4.6 AVL trees: the four rotations",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Rotate a node right or left — and keep its parent linked · AVL insertion: the four cases LL, RR, LR, RL · Balance factors: is it an AVL tree, and which node breaks it?"
+    },
+    {
+      "slug": "csd201-heap-cai-dat",
+      "name": "4.7 Building a heap: sift-up, sift-down, Floyd",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Build a max-heap two ways: top-down (insertions) and bottom-up (Floyd) · Heap sort in place, O(n log n) guaranteed · Merge k sorted arrays with a heap of k cursors"
+    },
+    {
+      "slug": "csd201-on-ch4",
+      "name": "4.8 🧪 Practice — BST statistics, k-th smallest & LCA, and a 🎯 PE-format BSTree paper",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE style: leaves, one-child nodes, height, a price range and the maximum of a BST · k-th smallest key and the lowest common ancestor in a BST · 🎯 PE format — BSTree of Cars: f1 insert + breadth/inorder, f2 filtered preorder, f3 delete by copying, f4 rotate right"
     }
   ]
 }

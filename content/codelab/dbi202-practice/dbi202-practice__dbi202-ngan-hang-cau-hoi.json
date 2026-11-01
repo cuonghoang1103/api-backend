@@ -1,0 +1,505 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-ngan-hang-cau-hoi",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-ngan-hang-cau-hoi"
+  },
+  "exercises": [
+    {
+      "title": "Which CLO does each oral question test?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "course learning outcomes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "exam-prep",
+        "oral"
+      ],
+      "problemHtml": "<p>Match each syllabus question to its learning outcome group.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi câu hỏi của syllabus với nhóm chuẩn đầu ra của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for the key noun: anomaly ⇒ normalization, isolation ⇒ transactions.|||Tìm danh từ then chốt: anomaly ⇒ chuẩn hoá, isolation ⇒ giao dịch.",
+        "Algebra and constraints belong to CLO2.|||Đại số và ràng buộc thuộc CLO2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which CLO does each oral question test?\n\nAnswer in the answer panel (no code needed).\n\n1. Question → CLOCâu hỏi → CLO\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which CLO does each oral question test? — answer key\n\n1. Question → CLOCâu hỏi → CLO\n   - r1.clo: CLO1 database concepts\n   - r2.clo: CLO2 relational model & algebra\n   - r3.clo: CLO3–4 FDs & normalization\n   - r4.clo: CLO4 ER modelling\n   - r5.clo: CLO5 SQL\n   - r6.clo: CLO6–7 programmability, indexes, transactions\n   The seven CLOs follow the chapters: concepts → relational model → FDs/normalization → ER → SQL → programmability, indexes, transactions.VI: Bảy CLO đi theo các chương: khái niệm → mô hình quan hệ → FD/chuẩn hoá → ER → SQL → lập trình, chỉ mục, giao dịch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The seven CLOs follow the chapters: concepts → relational model → FDs/normalization → ER → SQL → programmability, indexes, transactions.</p><p><i>VI: Bảy CLO đi theo các chương: khái niệm → mô hình quan hệ → FD/chuẩn hoá → ER → SQL → lập trình, chỉ mục, giao dịch.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Question → CLO</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu hỏi → CLO</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Question / Câu hỏi"
+              },
+              {
+                "ma": "clo",
+                "ten": "CLO",
+                "luaChon": [
+                  "CLO1 database concepts",
+                  "CLO2 relational model & algebra",
+                  "CLO3–4 FDs & normalization",
+                  "CLO4 ER modelling",
+                  "CLO5 SQL",
+                  "CLO6–7 programmability, indexes, transactions"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "What is the three-level architecture?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "Why do we need an algebraic query language?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "What are anomalies and how do we solve them?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "Why do conceptual design at all?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cau": "Correlated versus non-correlated subquery?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cau": "Name the isolation levels and what each prevents."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.clo": "CLO1 database concepts",
+              "r2.clo": "CLO2 relational model & algebra",
+              "r3.clo": "CLO3–4 FDs & normalization",
+              "r4.clo": "CLO4 ER modelling",
+              "r5.clo": "CLO5 SQL",
+              "r6.clo": "CLO6–7 programmability, indexes, transactions"
+            },
+            "giaiThich": "<p>The seven CLOs follow the chapters: concepts → relational model → FDs/normalization → ER → SQL → programmability, indexes, transactions.</p><p><i>VI: Bảy CLO đi theo các chương: khái niệm → mô hình quan hệ → FD/chuẩn hoá → ER → SQL → lập trình, chỉ mục, giao dịch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting \"conceptual design\" under SQL.|||Xếp \"thiết kế khái niệm\" vào SQL."
+        },
+        {
+          "loi": "Confusing the three-level architecture with the three design levels (conceptual/logical/physical).|||Nhầm kiến trúc ba mức với ba mức thiết kế (khái niệm/logic/vật lý)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "learning outcome (CLO)",
+          "vi": "chuẩn đầu ra học phần"
+        }
+      ]
+    },
+    {
+      "title": "Question → the key idea the marker listens for",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "oral answers",
+        "vocabulary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "exam-prep",
+        "oral"
+      ],
+      "problemHtml": "<p>For each question, pick the phrase that must appear in a good answer.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi câu hỏi, chọn cụm ý phải xuất hiện trong câu trả lời tốt.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Definition first, then one example, then a limit or trade-off.|||Định nghĩa trước, rồi một ví dụ, rồi một giới hạn hoặc đánh đổi.",
+        "Name the mechanism, not just the property.|||Gọi tên cơ chế, không chỉ tính chất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Question → the key idea the marker listens for\n\nAnswer in the answer panel (no code needed).\n\n1. Question → key ideaCâu hỏi → ý then chốt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Question → the key idea the marker listens for — answer key\n\n1. Question → key ideaCâu hỏi → ý then chốt\n   - r1.y: data independence\n   - r2.y: two rows agreeing on X agree on Y\n   - r3.y: every determinant is a superkey\n   - r4.y: WHERE filters rows, HAVING filters groups\n   - r5.y: a view stores a query, not data\n   - r6.y: a B-tree seek instead of a scan; costs space and writes\n   - r7.y: one mechanism per letter: log, constraints, locks/versions, WAL\n   \"The vocabulary is the assessed skill\": say update anomaly, transitive dependency, 3NF — not \"the data would be duplicated\".VI: \"Từ vựng chính là kỹ năng được chấm\": nói update anomaly, transitive dependency, 3NF — không nói \"dữ liệu sẽ bị lặp\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"The vocabulary is the assessed skill\": say update anomaly, transitive dependency, 3NF — not \"the data would be duplicated\".</p><p><i>VI: \"Từ vựng chính là kỹ năng được chấm\": nói update anomaly, transitive dependency, 3NF — không nói \"dữ liệu sẽ bị lặp\".</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Question → key idea</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu hỏi → ý then chốt</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Question / Câu hỏi"
+              },
+              {
+                "ma": "y",
+                "ten": "Key idea",
+                "luaChon": [
+                  "data independence",
+                  "two rows agreeing on X agree on Y",
+                  "every determinant is a superkey",
+                  "WHERE filters rows, HAVING filters groups",
+                  "a view stores a query, not data",
+                  "a B-tree seek instead of a scan; costs space and writes",
+                  "one mechanism per letter: log, constraints, locks/versions, WAL"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "What does the three-level architecture buy us?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "What is a functional dependency X → Y?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "BCNF in one line?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "Difference between WHERE and HAVING?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cau": "View versus table?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cau": "How does an index speed up a query, and what does it cost?"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "cau": "What are the ACID properties?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.y": "data independence",
+              "r2.y": "two rows agreeing on X agree on Y",
+              "r3.y": "every determinant is a superkey",
+              "r4.y": "WHERE filters rows, HAVING filters groups",
+              "r5.y": "a view stores a query, not data",
+              "r6.y": "a B-tree seek instead of a scan; costs space and writes",
+              "r7.y": "one mechanism per letter: log, constraints, locks/versions, WAL"
+            },
+            "giaiThich": "<p>\"The vocabulary is the assessed skill\": say update anomaly, transitive dependency, 3NF — not \"the data would be duplicated\".</p><p><i>VI: \"Từ vựng chính là kỹ năng được chấm\": nói update anomaly, transitive dependency, 3NF — không nói \"dữ liệu sẽ bị lặp\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Describing an FD as \"an observation about the current data\" — it is a business rule.|||Mô tả FD là \"quan sát trên dữ liệu hiện tại\" — nó là luật nghiệp vụ."
+        },
+        {
+          "loi": "Answering ACID with four words and no mechanism.|||Trả lời ACID bằng bốn từ mà không có cơ chế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional dependency",
+          "vi": "phụ thuộc hàm"
+        },
+        {
+          "en": "determinant",
+          "vi": "vế trái (định thuộc)"
+        }
+      ]
+    },
+    {
+      "title": "Pick the answer that earns the marks",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "oral exam",
+        "precise terminology"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "exam-prep",
+        "oral"
+      ],
+      "problemHtml": "<p>Five syllabus questions; choose the strongest answer.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu hỏi của syllabus; chọn câu trả lời mạnh nhất.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Answer with the term the marker is listening for.|||Trả lời bằng thuật ngữ người chấm đang chờ nghe.",
+        "Always add the limit or trade-off.|||Luôn thêm giới hạn hoặc đánh đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the answer that earns the marks\n\nAnswer in the answer panel (no code needed).\n\n1. Why a database rather than files?Vì sao dùng CSDL thay cho tệp?\n2. Schema versus instance?Lược đồ và thể hiện khác nhau thế nào?\n3. The good, the bad and the ugly of decomposition?Cái tốt, cái xấu và cái tệ của phân rã?\n4. Procedure versus function?Procedure và function khác nhau?\n5. \"And when would you break this rule?\" — about 3NF, the best answer is…\"Khi nào bạn phá luật này?\" — về 3NF, câu trả lời tốt nhất là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the answer that earns the marks — answer key\n\n1. Why a database rather than files?Vì sao dùng CSDL thay cho tệp?\n   Answer: b) files duplicate data, no rules, no concurrency, no recovery\n   Name the concrete problems: redundancy, integrity, concurrent access, crash recovery.VI: Gọi tên vấn đề cụ thể: dư thừa, toàn vẹn, truy cập đồng thời, phục hồi sau sự cố.\n\n2. Schema versus instance?Lược đồ và thể hiện khác nhau thế nào?\n   Answer: b) the schema is the definition and rarely changes; the instance is the rows stored now\n   Definition + how often each changes.VI: Định nghĩa + mức độ thay đổi của từng cái.\n\n3. The good, the bad and the ugly of decomposition?Cái tốt, cái xấu và cái tệ của phân rã?\n   Answer: d) removes redundancy · more joins · a lossy or dependency-losing split\n   Lesson 4.3: lossless join and dependency preservation are the two tests.VI: Bài 4.3: nối không mất mát và bảo toàn phụ thuộc là hai phép thử.\n\n4. Procedure versus function?Procedure và function khác nhau?\n   Answer: c) procedure: EXEC, may change data; function: used in a query\n   Add the side-effect rule: functions are side-effect free.VI: Thêm luật về tác dụng phụ: function không có tác dụng phụ.\n\n5. \"And when would you break this rule?\" — about 3NF, the best answer is…\"Khi nào bạn phá luật này?\" — về 3NF, câu trả lời tốt nhất là…\n   Answer: a) denormalise a reporting table for read speed, keeping one place that updates it\n   Knowing the limits of a rule is what separates a strong answer.VI: Biết giới hạn của luật là điều làm câu trả lời nổi bật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> files duplicate data, no rules, no concurrency, no recovery</p><p>Name the concrete problems: redundancy, integrity, concurrent access, crash recovery.</p><p><i>VI: Gọi tên vấn đề cụ thể: dư thừa, toàn vẹn, truy cập đồng thời, phục hồi sau sự cố.</i></p></li><li><p><b>b)</b> the schema is the definition and rarely changes; the instance is the rows stored now</p><p>Definition + how often each changes.</p><p><i>VI: Định nghĩa + mức độ thay đổi của từng cái.</i></p></li><li><p><b>d)</b> removes redundancy · more joins · a lossy or dependency-losing split</p><p>Lesson 4.3: lossless join and dependency preservation are the two tests.</p><p><i>VI: Bài 4.3: nối không mất mát và bảo toàn phụ thuộc là hai phép thử.</i></p></li><li><p><b>c)</b> procedure: EXEC, may change data; function: used in a query</p><p>Add the side-effect rule: functions are side-effect free.</p><p><i>VI: Thêm luật về tác dụng phụ: function không có tác dụng phụ.</i></p></li><li><p><b>a)</b> denormalise a reporting table for read speed, keeping one place that updates it</p><p>Knowing the limits of a rule is what separates a strong answer.</p><p><i>VI: Biết giới hạn của luật là điều làm câu trả lời nổi bật.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why a database rather than files?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dùng CSDL thay cho tệp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "databases are always faster than reading plain files"
+              },
+              {
+                "ma": "b",
+                "noiDung": "files duplicate data, no rules, no concurrency, no recovery"
+              },
+              {
+                "ma": "c",
+                "noiDung": "files cannot store numbers, dates or Vietnamese text"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a database never needs a backup, files always do"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Name the concrete problems: redundancy, integrity, concurrent access, crash recovery.</p><p><i>VI: Gọi tên vấn đề cụ thể: dư thừa, toàn vẹn, truy cập đồng thời, phục hồi sau sự cố.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Schema versus instance?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lược đồ và thể hiện khác nhau thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "they are two names for the same table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the schema is the definition and rarely changes; the instance is the rows stored now"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the schema is the data, the instance is the program"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the instance is the backup of the schema"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Definition + how often each changes.</p><p><i>VI: Định nghĩa + mức độ thay đổi của từng cái.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The good, the bad and the ugly of decomposition?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái tốt, cái xấu và cái tệ của phân rã?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "smaller backups · larger backups · lost backups"
+              },
+              {
+                "ma": "b",
+                "noiDung": "more tables · fewer tables · no tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "faster writes · slower writes · no change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "removes redundancy · more joins · a lossy or dependency-losing split"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Lesson 4.3: lossless join and dependency preservation are the two tests.</p><p><i>VI: Bài 4.3: nối không mất mát và bảo toàn phụ thuộc là hai phép thử.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Procedure versus function?</p><p style=\"opacity:.75;font-size:.92em\"><i>Procedure và function khác nhau?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a procedure must always return a table to its caller"
+              },
+              {
+                "ma": "b",
+                "noiDung": "they are identical in SQL Server, only the name differs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "procedure: EXEC, may change data; function: used in a query"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a function can change data, a procedure never can"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Add the side-effect rule: functions are side-effect free.</p><p><i>VI: Thêm luật về tác dụng phụ: function không có tác dụng phụ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"And when would you break this rule?\" — about 3NF, the best answer is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khi nào bạn phá luật này?\" — về 3NF, câu trả lời tốt nhất là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "denormalise a reporting table for read speed, keeping one place that updates it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "whenever the team does not like joins"
+              },
+              {
+                "ma": "c",
+                "noiDung": "when the database has more than 100 tables"
+              },
+              {
+                "ma": "d",
+                "noiDung": "never: normalization must always be complete"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Knowing the limits of a rule is what separates a strong answer.</p><p><i>VI: Biết giới hạn của luật là điều làm câu trả lời nổi bật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Vague answers (\"it is better\", \"it is faster\").|||Trả lời mơ hồ (\"nó tốt hơn\", \"nó nhanh hơn\")."
+        },
+        {
+          "loi": "Absolute rules with no exception.|||Luật tuyệt đối không có ngoại lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lossless decomposition",
+          "vi": "phân rã không mất mát"
+        }
+      ]
+    }
+  ]
+}

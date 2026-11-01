@@ -32,7 +32,7 @@
       "examplesJson": [
         {
           "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
-          "output": "tbl      | col      | type             \n---------+----------+------------------\nlecturer | personid | integer          \nlecturer | salary   | numeric          \nperson   | personid | integer          \nperson   | fullname | character varying\nperson   | email    | character varying\nstudent  | personid | integer          \nstudent  | gpa      | numeric          ",
+          "output": "tbl      | col      | type             \n---------+----------+------------------\nperson   | personid | integer          \nperson   | fullname | character varying\nperson   | email    | character varying\nstudent  | personid | integer          \nstudent  | gpa      | numeric          \nlecturer | personid | integer          \nlecturer | salary   | numeric          ",
           "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
         }
       ],
@@ -76,16 +76,6 @@
               ],
               "hang": [
                 [
-                  "lecturer",
-                  "personid",
-                  "integer"
-                ],
-                [
-                  "lecturer",
-                  "salary",
-                  "numeric"
-                ],
-                [
                   "person",
                   "personid",
                   "integer"
@@ -108,6 +98,16 @@
                 [
                   "student",
                   "gpa",
+                  "numeric"
+                ],
+                [
+                  "lecturer",
+                  "personid",
+                  "integer"
+                ],
+                [
+                  "lecturer",
+                  "salary",
                   "numeric"
                 ]
               ]

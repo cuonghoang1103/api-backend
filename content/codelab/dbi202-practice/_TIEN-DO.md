@@ -46,7 +46,11 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | ⭐ CS.7 | slide-cs7-1/7-2, cs7-on | 0 → 11 | ✅ (4 đề tay SQL Server: vá SQL injection, role quyền tối thiểu thử bằng EXECUTE AS (lỗi 229), Row-Level Security theo SESSION_CONTEXT (lỗi 33504), phân vùng theo tháng + TRUNCATE … WITH (PARTITIONS); còn lại tĩnh) |
 | ⭐ CS.8 + cầu nối | slide-cs8-1/8-2, cs8-on, cau-noi-di-lam | 0 → 21 | ✅ (14 SQL trình duyệt: lương cao thứ hai khi hoà, đếm cả phòng 0 người, NOT IN gặp NULL, chia nguyên (kiểm 100.0 trong mã vì PG trả numeric cho SUM(bigint)), đổi M/F, tìm/xoá trùng, hơn sếp, fan-out, phép chia, đặt phòng chồng lấn, trạng thái mới nhất, tỉ lệ huỷ chuyến; 3 sql-pg: lịch generate_series, RETURNING, ON CONFLICT; còn lại tĩnh. 33 bài của deck: phần trùng CS.5 không làm lại) |
 | Chữa đề PE thật | pe1/pe2/pe3-sp26-chua-tron-de | 0 → 6 | ✅ (mỗi đề 2 bài: trình duyệt Q2–Q7 + Q10 trên đúng DBscript.sql của đề (nguon/_pe-sp26.mjs, làm gọn bằng scratch sach.mjs) + kiểm ẩn đổi dữ liệu; SQL Server của người học: Q1 (ERD nvarchar), Q8 (procedure / TVF), Q9 (trigger) — lời giải = sampleSolution của content/exams/DBI202-PE1..3; Q4 nhạc không chấm thứ tự vì NULL xếp khác nhau giữa hai hệ) |
-| Ôn thi | on-pe, ngan-hang-cau-hoi, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
+| Ôn thi + chữa đề FE | on-pe, ngan-hang-cau-hoi, fe31/fe32/fe3-chua-tron-de (+ PE 1 CT Rent có sẵn, gắn on-pe) | 1 → 23 | ✅ (on-pe 4 + ngân hàng vấn đáp 3: tĩnh; FE: 3 × 5 bộ × 10 câu dựng THẲNG từ content/exams/DBI202-D31/D32/D3 qua nguon/_fe.mjs — không sửa câu đề thật, chỉ bỏ nhãn "(b)" trong giải thích vì phương án bị xáo; 2 cảnh báo độ dài phương án còn lại là của đề thật) |
+
+**Tổng 01/11/2026: 102 module · 414 đề** (trước đợt: 12 module · 53 đề). Trình duyệt 365 đề / 1747 kiểm đạt (sql 189, sql-pg 7, choice 87,
+table 64, order 18); 49 đề T-SQL chạy trên SQL Server của người học — `_kiem-tay.mjs` 49/49; đối chiếu SQL Server 650 kiểm, 0 lệch.
+Bài không có module riêng: định hướng (dưới), các QUIZ, và dbi202-final-exam-pe / -fe (trỏ sang Phòng thi; luyện PE/FE nằm ở các bài chữa đề).
 
 Bài KHÔNG có đề (định hướng, không có gì để luyện): dbi202-bat-dau-tai-day, dbi202-slide-dbi1-1, dbi202-gioi-thieu,
 dbi202-dieu-kien-qua-mon, dbi202-cai-dat (trùng nội dung cai-dat-ket-noi — đề cài đặt nằm ở đó), các bài QUIZ (đã là bài kiểm tra).
@@ -54,7 +58,7 @@ dbi202-dieu-kien-qua-mon, dbi202-cai-dat (trùng nội dung cai-dat-ket-noi — 
 ## Đối chiếu SQL Server thật
 
 `nguon/_kiem-sqlserver.mjs` chạy LỜI GIẢI của mọi đề `sql` trên SQL Server (Azure SQL Edge) với đúng `csdl` T-SQL của đề và so bảng
-kết quả với `mongDoi` của PGlite (bi-chan phải lỗi, chay-duoc phải chạy). 01/11: 489 kiểm, lệch 5 ⇒ đã sửa (đề phân rã dùng VARCHAR mà
+kết quả với `mongDoi` của PGlite (bi-chan phải lỗi, chay-duoc phải chạy; DATETIME nửa đêm ≡ ngày). 01/11 cuối đợt: 650 kiểm, 0 lệch. Lần đầu: 489 kiểm, lệch 5 ⇒ đã sửa (đề phân rã dùng VARCHAR mà
 dữ liệu có dấu tiếng Việt ⇒ SQL Server lưu thành "?": đổi dữ liệu mẫu các bảng phẳng sang không dấu). Chạy lại sau mỗi đợt.
 
 ## Ghi chú soạn đề (đo thật)

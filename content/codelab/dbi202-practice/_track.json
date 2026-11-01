@@ -568,10 +568,22 @@
       "description": "Luyện: SQL Server habits that change on PostgreSQL · Register a customer and get the new id back — only if the e-mail is new (PostgreSQL) · Add an incoming batch to stock with one upsert (PostgreSQL ON CONFLICT) · What you use at work, and how to write it on a CV"
     },
     {
+      "slug": "dbi202-on-pe",
+      "name": "9.1 The 85-minute Practical Exam: an SQL playbook",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Would this answer file score — or get a zero? · Spend the 85 minutes in the right order · Which of the ten patterns does the question need? · PE details that cost marks after the SQL is already right"
+    },
+    {
       "slug": "dbi202-9-pe-1-ct-rent",
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",
       "description": "Luyện PE số 1 — CT Rent (cho thuê xe): 10 câu × 1 điểm theo dạng đề SP26 (ERD→bảng, LIKE, JOIN, outer join, COUNT DISTINCT, lớn nhất theo nhóm, max kép, VIEW, UPDATE, INSERT…SELECT)."
+    },
+    {
+      "slug": "dbi202-ngan-hang-cau-hoi",
+      "name": "9.2 Oral question bank by CLO",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Which CLO does each oral question test? · Question → the key idea the marker listens for · Pick the answer that earns the marks"
     },
     {
       "slug": "dbi202-pe1-sp26-chua-tron-de",
@@ -590,6 +602,24 @@
       "name": "PE review · Exam 3 (SP26 · Paper 8 · music DB) — all 10 questions",
       "level": "ADVANCED",
       "description": "Luyện: PE SP26 Paper 8 (music database) — Q2–Q7 and Q10, graded in the browser · PE SP26 Paper 8 — Q1, Q8, Q9: ERD → tables, table-valued function returnTopArtistByYear, INSTEAD OF INSERT trigger"
+    },
+    {
+      "slug": "dbi202-fe31-sp26-chua-tron-de",
+      "name": "FE review · Exam 31 (SP26 FE) — all 50 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: FE review · Exam 31 (SP26 FE) — questions 1–10 · FE review · Exam 31 (SP26 FE) — questions 11–20 · FE review · Exam 31 (SP26 FE) — questions 21–30 · FE review · Exam 31 (SP26 FE) — questions 31–40 · FE review · Exam 31 (SP26 FE) — questions 41–50"
+    },
+    {
+      "slug": "dbi202-fe32-sp26-chua-tron-de",
+      "name": "FE review · Exam 32 (SP26 RE) — all 50 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: FE review · Exam 32 (SP26 RE) — questions 1–10 · FE review · Exam 32 (SP26 RE) — questions 11–20 · FE review · Exam 32 (SP26 RE) — questions 21–30 · FE review · Exam 32 (SP26 RE) — questions 31–40 · FE review · Exam 32 (SP26 RE) — questions 41–50"
+    },
+    {
+      "slug": "dbi202-fe3-fa25-chua-tron-de",
+      "name": "FE review · Exam 3 (FA25 Final) — all 50 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: FE review · Exam 3 (FA25 Final) — questions 1–10 · FE review · Exam 3 (FA25 Final) — questions 11–20 · FE review · Exam 3 (FA25 Final) — questions 21–30 · FE review · Exam 3 (FA25 Final) — questions 31–40 · FE review · Exam 3 (FA25 Final) — questions 41–50"
     }
   ]
 }

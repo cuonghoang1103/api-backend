@@ -36,6 +36,7 @@ import { XuongRemixPage } from './features/xuong-remix/XuongRemixPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
+import { PhongLabWebPage } from './features/phong-lab/PhongLabWebPage';
 import { HocVienPage } from './features/academy/HocVienPage';
 import { TuVanNganhPage } from './features/academy/TuVanNganhPage';
 import { KhoaHocPage } from './features/academy/KhoaHocPage';
@@ -136,6 +137,10 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/saved', DaLuuPage],
   ['/profile', TrangCaNhanPage],
   ['/tech-trends', TechTrendsWebPage],
+  /* Phòng lab mô phỏng (01/11/2026) — cây web, `/cpu-lab/3d` là trang con. */
+  ['/cpu-lab', PhongLabWebPage],
+  ['/os-lab', PhongLabWebPage],
+  ['/net-lab', PhongLabWebPage],
   /* ⚠️ `/academy` KHỚP CHÍNH XÁC ở `NATIVE_PAGES` nên nó vẫn ra `HocVienPage`
      (bản có đọc ngoại tuyến). Mục này chỉ bắt các trang CON — `tu-van-nganh`,
      `so-do-mon-hoc` — vốn app chưa từng có. Thứ tự trong `nativePageFor` bảo

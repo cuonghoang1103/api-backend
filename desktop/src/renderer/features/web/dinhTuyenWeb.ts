@@ -362,6 +362,8 @@ export const GOC_WEB: readonly string[] = [
   '/maker-lab', '/creator', '/projects', '/exp-hub',
   '/finance', '/forum', '/saved', '/profile', '/ho-so',
   '/tech-trends',
+  /* Phòng lab mô phỏng (01/11/2026): `/cpu-lab` (+ `/cpu-lab/3d`), `/os-lab`, `/net-lab`. */
+  '/cpu-lab', '/os-lab', '/net-lab',
   /* ⚠️ `/academy` CHÍNH NÓ vẫn là màn native (`HocVienPage`, có đọc ngoại
      tuyến) — `nativePageFor` khớp chính xác TRƯỚC khi hỏi tới cây web, nên
      mục này chỉ mở đường cho các trang CON: `tu-van-nganh`, `so-do-mon-hoc`. */

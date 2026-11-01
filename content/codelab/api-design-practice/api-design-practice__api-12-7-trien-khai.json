@@ -1,0 +1,463 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-7-trien-khai",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-7-trien-khai"
+  },
+  "exercises": [
+    {
+      "title": "Deploy 1 — The checklist, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "operations",
+        "observability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.7: the database stopped under a running instance, SIGTERM under load, logs, metrics and backups.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.7: tắt CSDL dưới một instance đang chạy, SIGTERM khi có tải, log, metrics và sao lưu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Alive and ready are different questions.|||Còn sống và sẵn sàng là hai câu hỏi khác nhau.",
+        "Think about who reads the metric and how many values a label can take.|||Nghĩ xem ai đọc metric và một nhãn có bao nhiêu giá trị."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploy 1 — The checklist, measured\n\nAnswer in the answer panel (no code needed).\n\n1. PostgreSQL is stopped. What did /health and /ready answer?PostgreSQL bị tắt. /health và /ready trả gì?\n2. SIGTERM to instance A while 20 clients loop through the proxy. Abrupt exit versus a 1.5 s drain?SIGTERM tới instance A khi 20 client gọi liên tục qua proxy. Thoát ngay so với xả 1,5 s?\n3. The first proxy marked an instance dead after one /ready slower than 400 ms. What happened under load?Proxy đầu tiên coi instance là chết sau một lần /ready chậm hơn 400 ms. Chuyện gì xảy ra khi có tải?\n4. Which label is right for the request-count metric of GET /v2/devices/dev_1/issues?Nhãn nào đúng cho metric đếm request của GET /v2/devices/dev_1/issues?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploy 1 — The checklist, measured — answer key\n\n1. PostgreSQL is stopped. What did /health and /ready answer?PostgreSQL bị tắt. /health và /ready trả gì?\n   Answer: a) /health 200 (alive, do not restart) and /ready 503 (do not send traffic)\n   Restarting would not help a database outage; writes got 503 + Retry-After 5, cached reads 200.VI: Khởi động lại không giúp gì với sự cố CSDL; ghi nhận 503 + Retry-After 5, đọc có cache nhận 200.\n\n2. SIGTERM to instance A while 20 clients loop through the proxy. Abrupt exit versus a 1.5 s drain?SIGTERM tới instance A khi 20 client gọi liên tục qua proxy. Thoát ngay so với xả 1,5 s?\n   Answer: a) 622 × 502 and 2 broken sockets, versus zero errors\n   Readiness 503 ⇒ proxy removes A ⇒ A finishes in-flight work ⇒ exit 0 after 1,501 ms.VI: Readiness 503 ⇒ proxy gỡ A ⇒ A làm nốt việc dở ⇒ thoát 0 sau 1.501 ms.\n\n3. The first proxy marked an instance dead after one /ready slower than 400 ms. What happened under load?Proxy đầu tiên coi instance là chết sau một lần /ready chậm hơn 400 ms. Chuyện gì xảy ra khi có tải?\n   Answer: c) B was removed in 0.5 s, A was then killed, and the proxy answered 503 to everything: 64,926 times\n   Use seconds-long timeouts and several consecutive failures (nginx max_fails, HAProxy fall).VI: Dùng thời hạn tính bằng giây và nhiều lần trượt liên tiếp (nginx max_fails, HAProxy fall).\n\n4. Which label is right for the request-count metric of GET /v2/devices/dev_1/issues?Nhãn nào đúng cho metric đếm request của GET /v2/devices/dev_1/issues?\n   Answer: a) route=\"/v2/devices/:id/issues\" — the template, so the number of series stays bounded\n   Prometheus: every label combination is a new time series; no user ids, no unbounded values.VI: Prometheus: mỗi tổ hợp nhãn là một chuỗi thời gian mới; không id người dùng, không giá trị không giới hạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> /health 200 (alive, do not restart) and /ready 503 (do not send traffic)</p><p>Restarting would not help a database outage; writes got 503 + Retry-After 5, cached reads 200.</p><p><i>VI: Khởi động lại không giúp gì với sự cố CSDL; ghi nhận 503 + Retry-After 5, đọc có cache nhận 200.</i></p></li><li><p><b>a)</b> 622 × 502 and 2 broken sockets, versus zero errors</p><p>Readiness 503 ⇒ proxy removes A ⇒ A finishes in-flight work ⇒ exit 0 after 1,501 ms.</p><p><i>VI: Readiness 503 ⇒ proxy gỡ A ⇒ A làm nốt việc dở ⇒ thoát 0 sau 1.501 ms.</i></p></li><li><p><b>c)</b> B was removed in 0.5 s, A was then killed, and the proxy answered 503 to everything: 64,926 times</p><p>Use seconds-long timeouts and several consecutive failures (nginx max_fails, HAProxy fall).</p><p><i>VI: Dùng thời hạn tính bằng giây và nhiều lần trượt liên tiếp (nginx max_fails, HAProxy fall).</i></p></li><li><p><b>a)</b> route=\"/v2/devices/:id/issues\" — the template, so the number of series stays bounded</p><p>Prometheus: every label combination is a new time series; no user ids, no unbounded values.</p><p><i>VI: Prometheus: mỗi tổ hợp nhãn là một chuỗi thời gian mới; không id người dùng, không giá trị không giới hạn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>PostgreSQL is stopped. What did /health and /ready answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>PostgreSQL bị tắt. /health và /ready trả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/health 200 (alive, do not restart) and /ready 503 (do not send traffic)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/health 503 and /ready 503, so the orchestrator restarts the process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/health 200 and /ready 200, because the labs list was still cached"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/health 500 with the database error, /ready not reachable at all"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Restarting would not help a database outage; writes got 503 + Retry-After 5, cached reads 200.</p><p><i>VI: Khởi động lại không giúp gì với sự cố CSDL; ghi nhận 503 + Retry-After 5, đọc có cache nhận 200.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>SIGTERM to instance A while 20 clients loop through the proxy. Abrupt exit versus a 1.5 s drain?</p><p style=\"opacity:.75;font-size:.92em\"><i>SIGTERM tới instance A khi 20 client gọi liên tục qua proxy. Thoát ngay so với xả 1,5 s?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "622 × 502 and 2 broken sockets, versus zero errors"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Zero errors abrupt, 622 × 503 graceful, because /ready said draining"
+              },
+              {
+                "ma": "c",
+                "noiDung": "622 × 502 both times, because the proxy checks health only every 500 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Zero errors both times, because the proxy retries every request"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Readiness 503 ⇒ proxy removes A ⇒ A finishes in-flight work ⇒ exit 0 after 1,501 ms.</p><p><i>VI: Readiness 503 ⇒ proxy gỡ A ⇒ A làm nốt việc dở ⇒ thoát 0 sau 1.501 ms.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The first proxy marked an instance dead after one /ready slower than 400 ms. What happened under load?</p><p style=\"opacity:.75;font-size:.92em\"><i>Proxy đầu tiên coi instance là chết sau một lần /ready chậm hơn 400 ms. Chuyện gì xảy ra khi có tải?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "B restarted itself three times because the proxy sent SIGTERM"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The proxy kept sending traffic to A and B alternately, ignoring the checks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "B was removed in 0.5 s, A was then killed, and the proxy answered 503 to everything: 64,926 times"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — a 400 ms timeout is the common default of real load balancers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Use seconds-long timeouts and several consecutive failures (nginx max_fails, HAProxy fall).</p><p><i>VI: Dùng thời hạn tính bằng giây và nhiều lần trượt liên tiếp (nginx max_fails, HAProxy fall).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which label is right for the request-count metric of GET /v2/devices/dev_1/issues?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhãn nào đúng cho metric đếm request của GET /v2/devices/dev_1/issues?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "route=\"/v2/devices/:id/issues\" — the template, so the number of series stays bounded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "route=\"/v2/devices/dev_1/issues\" — the real URL, so you can find the device"
+              },
+              {
+                "ma": "c",
+                "noiDung": "user=\"usr_3\" — the caller, so you can bill per user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "path and query string together, so nothing is lost"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prometheus: every label combination is a new time series; no user ids, no unbounded values.</p><p><i>VI: Prometheus: mỗi tổ hợp nhãn là một chuỗi thời gian mới; không id người dùng, không giá trị không giới hạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A /health that pings the database (restarts on every outage).|||/health ping CSDL (khởi động lại mỗi lần sự cố)."
+        },
+        {
+          "loi": "Health checks that fail on one slow probe.|||Kiểm sức khoẻ trượt chỉ vì một lần chậm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "readiness",
+          "vi": "sẵn sàng"
+        },
+        {
+          "en": "draining",
+          "vi": "xả"
+        },
+        {
+          "en": "cardinality",
+          "vi": "số giá trị nhãn"
+        }
+      ]
+    },
+    {
+      "title": "Deploy 2 — Order the deploy day",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Put the steps of a LabFlow deploy in the order lesson 12.7 measured as safe.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước triển khai LabFlow theo thứ tự bài 12.7 đã đo là an toàn.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What must exist before the next step can work?|||Cái gì phải có trước để bước sau chạy được?",
+        "The load balancer needs time to notice.|||Load balancer cần thời gian để nhận ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploy 2 — Order the deploy day\n\nAnswer in the answer panel (no code needed).\n\n1. Deploy-day orderThứ tự ngày triển khai\n2. Inside src/server.js on SIGTERMBên trong src/server.js khi nhận SIGTERM\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deploy 2 — Order the deploy day — answer key\n\n1. Deploy-day orderThứ tự ngày triển khai\n   Answer: m3) pg_dump backup, restored into a scratch database to prove it  →  m5) npm run db:migrate (one runner holds the advisory lock)  →  m1) start the new instances; they fail fast on bad config  →  m2) node ops/smoke.mjs against the public URL  →  m4) SIGTERM the old instances: /ready 503, drain, finish, exit 0\n   Backup before the schema changes; migrations before the code that needs them; smoke before the old instances leave.VI: Sao lưu trước khi đổi lược đồ; migration trước mã cần nó; smoke test trước khi instance cũ rời đi.\n\n2. Inside src/server.js on SIGTERMBên trong src/server.js khi nhận SIGTERM\n   Answer: m3) lifecycle.draining = true, so /ready answers 503  →  m5) wait SHUTDOWN_DRAIN_MS while still serving  →  m1) end SSE streams and close WebSockets with 1012  →  m2) server.close(): finish in-flight requests, accept nothing new  →  m4) close the PostgreSQL pool, then exit 0\n   Closing the pool first would fail every in-flight request that still needs the database.VI: Đóng pool trước sẽ làm hỏng mọi request đang dở còn cần CSDL.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Backup before the schema changes; migrations before the code that needs them; smoke before the old instances leave.</p><p><i>VI: Sao lưu trước khi đổi lược đồ; migration trước mã cần nó; smoke test trước khi instance cũ rời đi.</i></p><p>Closing the pool first would fail every in-flight request that still needs the database.</p><p><i>VI: Đóng pool trước sẽ làm hỏng mọi request đang dở còn cần CSDL.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Deploy-day order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự ngày triển khai</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "start the new instances; they fail fast on bad config"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "node ops/smoke.mjs against the public URL"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "pg_dump backup, restored into a scratch database to prove it"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "SIGTERM the old instances: /ready 503, drain, finish, exit 0"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "npm run db:migrate (one runner holds the advisory lock)"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m5",
+              "m1",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>Backup before the schema changes; migrations before the code that needs them; smoke before the old instances leave.</p><p><i>VI: Sao lưu trước khi đổi lược đồ; migration trước mã cần nó; smoke test trước khi instance cũ rời đi.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>Inside src/server.js on SIGTERM</p><p style=\"opacity:.75;font-size:.92em\"><i>Bên trong src/server.js khi nhận SIGTERM</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "end SSE streams and close WebSockets with 1012"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "server.close(): finish in-flight requests, accept nothing new"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "lifecycle.draining = true, so /ready answers 503"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "close the PostgreSQL pool, then exit 0"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "wait SHUTDOWN_DRAIN_MS while still serving"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m5",
+              "m1",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>Closing the pool first would fail every in-flight request that still needs the database.</p><p><i>VI: Đóng pool trước sẽ làm hỏng mọi request đang dở còn cần CSDL.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Migrating after the new code is already serving.|||Migrate sau khi mã mới đã phục vụ."
+        },
+        {
+          "loi": "Closing the pool before in-flight requests finish.|||Đóng pool trước khi request dở xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rolling deploy",
+          "vi": "triển khai cuốn chiếu"
+        },
+        {
+          "en": "smoke test",
+          "vi": "kiểm khói"
+        }
+      ]
+    },
+    {
+      "title": "Deploy 3 — Write checkConfig(env): fail fast, list everything",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "configuration",
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Only when <code>NODE_ENV === 'production'</code>, return every problem in this order: <code>'LABFLOW_JWT_SECRET'</code> if missing, or <code>'LABFLOW_JWT_SECRET too short'</code> if under 32 characters; <code>'DATABASE_URL'</code> if missing; <code>'LABFLOW_REDIS'</code> if missing; then <code>'&lt;NAME&gt; not allowed'</code> for each of <code>LABFLOW_VULN</code>, <code>LABFLOW_CHAOS</code>, <code>LABFLOW_NOW</code> that is set. Outside production return <code>[]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỉ khi <code>NODE_ENV === 'production'</code>, trả mọi vấn đề theo thứ tự: <code>'LABFLOW_JWT_SECRET'</code> nếu thiếu, hoặc <code>'LABFLOW_JWT_SECRET too short'</code> nếu ngắn hơn 32 ký tự; <code>'DATABASE_URL'</code> nếu thiếu; <code>'LABFLOW_REDIS'</code> nếu thiếu; rồi <code>'&lt;TÊN&gt; not allowed'</code> cho mỗi biến <code>LABFLOW_VULN</code>, <code>LABFLOW_CHAOS</code>, <code>LABFLOW_NOW</code> đang được đặt. Ngoài production trả <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "env — object of strings|||env — object các chuỗi",
+      "outputSpec": "string[]|||mảng chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkConfig({\"NODE_ENV\":\"production\"})",
+          "output": "[\"LABFLOW_JWT_SECRET\",\"DATABASE_URL\",\"LABFLOW_REDIS\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Collect all problems, do not stop at the first.|||Gom mọi vấn đề, đừng dừng ở cái đầu tiên.",
+        "An empty string counts as missing.|||Chuỗi rỗng coi như thiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** problems with the production environment */\nfunction checkConfig(env) {\n  // Write your solution here\n  if (!env.LABFLOW_JWT_SECRET) return ['LABFLOW_JWT_SECRET'];\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkConfig(env) {\n  const out = [];\n  const prod = env.NODE_ENV === 'production';\n  if (prod) {\n    if (!env.LABFLOW_JWT_SECRET) out.push('LABFLOW_JWT_SECRET');\n    else if (env.LABFLOW_JWT_SECRET.length < 32) out.push('LABFLOW_JWT_SECRET too short');\n    if (!env.DATABASE_URL) out.push('DATABASE_URL');\n    if (!env.LABFLOW_REDIS) out.push('LABFLOW_REDIS');\n    for (const v of ['LABFLOW_VULN', 'LABFLOW_CHAOS', 'LABFLOW_NOW']) if (env[v]) out.push(`${v} not allowed`);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>12.7: NODE_ENV=production with nothing set printed three problems and exit 1; with LABFLOW_CHAOS=1 it refused to start. Exiting before the port opens never hurts a user.</p>",
+      "solutionExplanationHtmlVi": "<p>12.7: NODE_ENV=production không đặt gì in ba vấn đề và thoát 1; có LABFLOW_CHAOS=1 thì từ chối khởi động. Thoát trước khi mở cổng không hại ai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Nothing set",
+              "vi": "Không đặt gì"
+            },
+            "goi": "checkConfig({\"NODE_ENV\":\"production\"})",
+            "mongDoi": [
+              "LABFLOW_JWT_SECRET",
+              "DATABASE_URL",
+              "LABFLOW_REDIS"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Development",
+              "vi": "Môi trường dev"
+            },
+            "goi": "checkConfig({\"NODE_ENV\":\"development\"})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkConfig({\"NODE_ENV\":\"production\",\"LABFLOW_JWT_SECRET\":\"short\",\"DATABASE_URL\":\"postgres://db/labflow\",\"LABFLOW_REDIS\":\"redis://r:6379\"})",
+            "mongDoi": [
+              "LABFLOW_JWT_SECRET too short"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkConfig({\"NODE_ENV\":\"production\",\"LABFLOW_JWT_SECRET\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"DATABASE_URL\":\"postgres://db/labflow\",\"LABFLOW_REDIS\":\"redis://r:6379\",\"LABFLOW_CHAOS\":\"1\"})",
+            "mongDoi": [
+              "LABFLOW_CHAOS not allowed"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkConfig({\"NODE_ENV\":\"production\",\"LABFLOW_JWT_SECRET\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\"DATABASE_URL\":\"postgres://db/labflow\",\"LABFLOW_REDIS\":\"redis://r:6379\"})",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Throwing on the first missing variable (three failed deploys in a row).|||Ném lỗi ở biến thiếu đầu tiên (ba lần triển khai hỏng liên tiếp)."
+        },
+        {
+          "loi": "Checking learning switches outside production too.|||Kiểm công tắc chỉ-để-học cả ngoài production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fail fast",
+          "vi": "hỏng sớm"
+        },
+        {
+          "en": "twelve-factor config",
+          "vi": "cấu hình kiểu twelve-factor"
+        }
+      ]
+    }
+  ]
+}

@@ -31,7 +31,8 @@ async function check(method, path, { token, body, headers = {} } = {}) {
   const type = (res.headers.get('content-type') ?? '').split(';')[0];
   const media = doc.content?.[type];
   if (doc.content && !media) return console.log(`✗ ${where}: tài liệu không khai kiểu ${type}`);
-  const data = await res.json().catch(() => undefined);
+  // Chương 12: kết quả việc xuất là text/csv — body không phải JSON thì kiểm như chuỗi (trước đây thành undefined ⇒ báo sai)
+  const data = /json/.test(type) ? await res.json().catch(() => undefined) : await res.text();
   if (!media) return console.log(`✓ ${where}`);
   const validate = ajv.compile(rebase(media.schema));
   if (validate(data)) return console.log(`✓ ${where}`);

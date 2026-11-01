@@ -1,27 +1,21 @@
 import { Router } from 'express';
-import { bookings, labs, users, nextId } from '../db.js';
+import { store } from '../store/index.js';
 import { HttpError, onlyAllow } from '../http.js';
 import { requireAuth } from '../auth.js';
 import { validate } from '../validate.js';
 import { BookingCreate, BookingCreateV2, BookingsQuery, BookingsQueryV2 } from '../schemas.js';
-import { orderBy, encodeCursor, decodeCursor, fingerprint } from '../paging.js';
-import { fold } from '../text.js';
-import { viewsOf, v1Status } from '../views.js';
+import { encodeCursor, decodeCursor, fingerprint } from '../paging.js';
+import { viewsOf } from '../views.js';
 import { idempotent } from '../idempotency.js';
 import { bookingLimit } from '../rateLimit.js';
 import { authorize } from '../policy.js';
 import { now } from '../deprecation.js';
 import { requireDependency } from '../resilience.js';
-import { notModifiedEarly, bump } from '../httpCache.js';
-import { publish } from '../events.js';
+import { notModifiedEarly } from '../httpCache.js';
+import { notifySync } from '../notify.js';
 
-// Chương 10 — mỗi thay đổi của lượt đặt thành MỘT sự kiện (realtime 10.4, webhook 10.5).
-// data KHÔNG có userId/tên/email: ai cũng nhận được sự kiện này (10.3 — sự kiện "dày" nhưng không chở dữ liệu cá nhân).
-// version tăng mỗi lần đổi ⇒ bên nhận biết sự kiện nào mới hơn khi chúng tới sai thứ tự (10.6).
-const bookingEvent = (b) => ({ id: b.id, labId: b.labId, period: { start: b.startAt, end: b.endAt }, status: b.status, version: b.version ?? 1 });
-// ⚠ GHI KÉP (dual write, bài 10.3): lượt đặt đã lưu, rồi MỚI phát sự kiện — phát hỏng thì sự kiện mất.
-// LabFlow giữ dữ liệu trong RAM tới Chương 12, nên outbox (10.3) chờ tới khi có PostgreSQL.
-const emit = (type, b) => publish(`labflow.booking.${type}.v1`, b.id, bookingEvent(b)).catch((e) => console.error('publish', e.message));
+// Chương 12: dữ liệu đi qua `store` (RAM hoặc PostgreSQL — LABFLOW_STORE). Sự kiện lượt đặt (Chương 10) do store phát:
+// kho RAM vẫn ghi kép như Chương 10, kho PostgreSQL ghi vào outbox CÙNG transaction (bài 12.5).
 
 // Bài 6.3 (OWASP API6 — luồng nghiệp vụ nhạy cảm): một sinh viên giữ tối đa 3 lượt đặt còn hiệu lực
 export const MAX_ACTIVE = 3;
@@ -29,8 +23,8 @@ export const MAX_ACTIVE = 3;
 export const bookingsRouter = Router();
 bookingsRouter.use(requireAuth);   // mọi thao tác đặt chỗ đều cần đăng nhập
 
-function findOwnBooking(req) {
-  const b = bookings.find((x) => x.id === req.params.id);
+async function findOwnBooking(req) {
+  const b = await store.getBooking(req.params.id);
   if (!b) throw new HttpError(404, 'BOOKING_NOT_FOUND', { id: req.params.id });
   if (b.userId !== req.user.id && req.user.role !== 'LAB_MANAGER')
     throw new HttpError(403, 'FORBIDDEN');
@@ -42,35 +36,22 @@ function findOwnBooking(req) {
 const bookingsCacheControl = () => (process.env.LABFLOW_CACHE_BUG ? 'public, max-age=60' : 'private, no-cache');
 
 bookingsRouter.route('/')
-  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), notModifiedEarly('bookings', bookingsCacheControl), (req, res) => {
+  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), notModifiedEarly('bookings', bookingsCacheControl), async (req, res) => {
     const { limit, cursor, fields, include, ...query } = req.valid.query;   // query = bộ lọc + sort
-    const { labId, status, from, to, q, sort } = query;
-    // bài 8.1: phần "db" — ở Chương 12 là một câu SQL; giờ là lọc + sắp mảng trong RAM
-    let rows = req.timing.time('db', () => {
-    const mine = req.user.role === 'LAB_MANAGER' ? bookings : bookings.filter((b) => b.userId === req.user.id);
-    return mine.filter((b) =>
-      (!labId || b.labId === labId)
-      && (!status || status.includes(req.apiVersion === 1 ? v1Status(b.status) : b.status))   // lọc theo đúng cái client THẤY
-      && (!from || Date.parse(b.endAt) > Date.parse(from))      // chồng lên [from, to): kết thúc sau from…
-      && (!to || Date.parse(b.startAt) < Date.parse(to))        // …và bắt đầu trước to
-      && (!q || fold(b.purpose ?? '').includes(fold(q))));
-    });
-    const { key, cmp } = orderBy(sort);
-    req.timing.time('sort', () => rows.sort(cmp));
     const f = fingerprint(query);
-    if (cursor) {
-      const after = decodeCursor(cursor, key, f);
-      rows = rows.filter((b) => cmp(after, b) < 0);           // chỉ lấy những gì đứng SAU vị trí con trỏ
-    }
+    const after = cursor ? decodeCursor(cursor, query.sort.replace('-', ''), f) : null;
+    // bài 8.1: phần "db" — kho RAM lọc + sắp mảng; kho PostgreSQL là MỘT câu SQL dùng index (user_id, created_at, seq)
+    const rows = await req.timing.timeAsync('db', () => store.listBookings({ ...query, after, limit,
+      userId: req.user.role === 'LAB_MANAGER' ? null : req.user.id, v1: req.apiVersion === 1 }));
     const page = rows.slice(0, limit);
-    const next = rows.length > limit ? encodeCursor(page[page.length - 1], key, f) : null;
+    const next = rows.length > limit ? encodeCursor(page[page.length - 1], query.sort.replace('-', ''), f) : null;
     if (next) {
       const qs = new URLSearchParams(req.query);   // giữ nguyên bộ lọc, chỉ thay con trỏ
       qs.set('cursor', next);
       res.links({ next: `${req.baseUrl}?${qs}` });   // /bookings, /v1/bookings hay /v2/bookings
     }
-    // include=lab: tra phòng bằng MỘT Map dựng sẵn — không tìm lại trong mảng cho từng dòng (N+1)
-    const labById = include === 'lab' ? new Map(labs.map((l) => [l.id, l])) : null;
+    // include=lab: tra phòng bằng MỘT lần đọc cho cả trang — không đọc lại cho từng dòng (N+1)
+    const labById = include === 'lab' ? new Map((await store.allLabs()).map((l) => [l.id, l])) : null;
     const view = viewsOf(req);
     const data = page.map((b) => {
       let v = view.booking(b);
@@ -80,79 +61,57 @@ bookingsRouter.route('/')
     });
     res.json({ data, page: { limit, next } });
   })
-  .post(requireDependency, idempotent(), bookingLimit, validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), (req, res) => {   // 5.1 trước 5.3: lần phát lại không tốn lượt
+  .post(requireDependency, idempotent(), bookingLimit, validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), async (req, res) => {   // 5.1 trước 5.3: lần phát lại không tốn lượt
     const body = req.valid.body;                                  // 1) hình dạng đã được validate kiểm ⇒ 400
-    const { labId, purpose } = body;
-    const startAt = body.period?.start ?? body.startAt;           // v2 ⇒ dạng nội bộ (một chỗ duy nhất)
-    const endAt = body.period?.end ?? body.endAt;
-    // 2) Đúng hình dạng nhưng vô nghĩa về nghiệp vụ ⇒ 422
-    const start = new Date(startAt), end = new Date(endAt);
-    if (end <= start) throw new HttpError(422, 'INVALID_TIME_RANGE');
-    const lab = labs.find((l) => l.id === labId && !l.retiredAt);
-    if (!lab) throw new HttpError(422, 'UNKNOWN_LAB', { id: labId });
-    // 3) Hợp lệ nhưng đụng trạng thái hiện tại ⇒ 409
-    if (req.user.role === 'STUDENT') {
-      const active = bookings.filter((b) => b.userId === req.user.id && b.status !== 'CANCELLED' && Date.parse(b.endAt) > now()).length;
-      if (active >= MAX_ACTIVE) throw new HttpError(422, 'TOO_MANY_ACTIVE_BOOKINGS', { max: MAX_ACTIVE });
-    }
-    const clash = bookings.find((b) => b.labId === labId && b.status !== 'CANCELLED'
-      && start < new Date(b.endAt) && new Date(b.startAt) < end);
-    if (clash) throw new HttpError(409, 'BOOKING_CONFLICT', { other: clash.id }, { conflictWith: clash.id });
-    const booking = {
-      id: nextId('bk'), labId, userId: req.user.id,
-      startAt: start.toISOString(), endAt: end.toISOString(),
-      purpose: purpose ?? null, status: 'PENDING', createdAt: new Date().toISOString(),
-    };
-    bookings.push(booking);
-    bump('bookings');
-    emit('created', booking);
+    const startAt = new Date(body.period?.start ?? body.startAt); // v2 ⇒ dạng nội bộ (một chỗ duy nhất)
+    const endAt = new Date(body.period?.end ?? body.endAt);
+    // 2) Đúng hình dạng nhưng vô nghĩa về nghiệp vụ ⇒ 422 (phòng không có, quá 3 lượt: store kiểm, vì cần dữ liệu)
+    if (endAt <= startAt) throw new HttpError(422, 'INVALID_TIME_RANGE');
+    // 3) Hợp lệ nhưng đụng trạng thái hiện tại ⇒ 409 (kho PostgreSQL: ràng buộc EXCLUDE bookings_no_overlap)
+    const booking = await req.timing.timeAsync('db', () => store.createBooking({ labId: body.labId, userId: req.user.id, role: req.user.role,
+      startAt: startAt.toISOString(), endAt: endAt.toISOString(), purpose: body.purpose, now: now(), maxActive: MAX_ACTIVE }));
+    await notifySync(req, 'created', booking);                    // bài 12.5: CHỈ để so — gửi mail ngay trong request (LABFLOW_NOTIFY=sync)
     res.status(201).location(`${req.baseUrl}/${booking.id}`).json(viewsOf(req).booking(booking));
   })
   .all(onlyAllow('GET', 'HEAD', 'POST'));
 
 // Bài 6.2 — biên nhận có tên và email sinh viên: dữ liệu của MỘT người ⇒ kiểm quyền theo BẢN GHI
 bookingsRouter.route('/:id/receipt')
-  .get((req, res) => {
+  .get(async (req, res) => {
     const notFound = new HttpError(404, 'BOOKING_NOT_FOUND', { id: req.params.id });
-    const b = bookings.find((x) => x.id === req.params.id);
+    const b = await store.getBooking(req.params.id);
     if (!b) throw notFound;
     authorize(req, 'booking:read', b, notFound);                   // không có quyền ⇒ cũng 404: không lộ là bản ghi tồn tại
-    const lab = labs.find((l) => l.id === b.labId);
-    const student = users.find((u) => u.id === b.userId);
+    const [lab, student] = await Promise.all([store.getLab(b.labId), store.getUser(b.userId)]);
     res.json({ bookingId: b.id, lab: { code: lab.code, name: lab.name }, student: { name: student.name, email: student.email },
       period: { start: b.startAt, end: b.endAt }, status: b.status });
   })
   .all(onlyAllow('GET', 'HEAD'));
 
 bookingsRouter.route('/:id')
-  .get((req, res) => res.json(viewsOf(req).booking(findOwnBooking(req))))
+  .get(async (req, res) => res.json(viewsOf(req).booking(await findOwnBooking(req))))
   .all(onlyAllow('GET', 'HEAD'));
 
 // Bài 4.4 — check-in: CHỈ có ở v2 (v1 không biết trạng thái CHECKED_IN); ở v1 đường này không tồn tại ⇒ 404
 const v2Only = (req, res, next) => (req.apiVersion === 2 ? next() : next('router'));
 bookingsRouter.route('/:id/check-in')
-  .post(v2Only, (req, res) => {
-    const b = findOwnBooking(req);
+  .post(v2Only, requireDependency, async (req, res) => {
+    const b = await findOwnBooking(req);
     if (b.status !== 'PENDING') throw new HttpError(409, 'NOT_PENDING', { id: b.id, status: b.status });
-    b.status = 'CHECKED_IN';
-    bump('bookings');
-    b.checkedInAt = new Date().toISOString();
-    b.version = (b.version ?? 1) + 1;
-    emit('checked_in', b);
-    res.json(viewsOf(req).booking(b));
+    const done = await store.checkInBooking(b.id);                 // UPDATE … WHERE status = 'PENDING'
+    if (!done) throw new HttpError(409, 'NOT_PENDING', { id: b.id, status: (await store.getBooking(b.id)).status });   // ai đó đổi trước
+    res.json(viewsOf(req).booking(done));
   })
   .all(v2Only, onlyAllow('POST'));
 
 // Hành động nghiệp vụ có luật riêng ⇒ một "tài nguyên hành động" dùng POST
 bookingsRouter.route('/:id/cancel')
-  .post((req, res) => {
-    const b = findOwnBooking(req);
+  .post(requireDependency, async (req, res) => {
+    const b = await findOwnBooking(req);
     if (b.status === 'CANCELLED') throw new HttpError(409, 'ALREADY_CANCELLED', { id: b.id });
-    b.status = 'CANCELLED';
-    bump('bookings');
-    b.cancelledAt = new Date().toISOString();
-    b.version = (b.version ?? 1) + 1;
-    emit('cancelled', b);
-    res.json(viewsOf(req).booking(b));
+    const done = await store.cancelBooking(b.id);                  // UPDATE … WHERE status <> 'CANCELLED': hai người cùng huỷ ⇒ một 200, một 409
+    if (!done) throw new HttpError(409, 'ALREADY_CANCELLED', { id: b.id });
+    await notifySync(req, 'cancelled', done);
+    res.json(viewsOf(req).booking(done));
   })
   .all(onlyAllow('POST'));

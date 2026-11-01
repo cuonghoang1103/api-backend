@@ -1,6 +1,6 @@
 // perf/report-mixed.mjs — Lab 8: CONC lượt xem báo cáo cùng lúc (cô Lan + các trưởng bộ môn) trong khi sinh viên xem danh sách phòng
 import autocannon from 'autocannon';
-const BASE = 'http://localhost:4000';
+const BASE = process.env.BASE ?? 'http://localhost:4000';   // Chương 12: đo cùng script trên cổng khác
 const SECONDS = Number(process.env.SECONDS ?? 10);
 const TOKEN = process.env.TOKEN;
 const pct = (a, p) => { const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * p))]; };

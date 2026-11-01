@@ -416,6 +416,66 @@
       "name": "Lab 11 — Mock interview: club event sign-up and check-in",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 11 · 1 — The starter, the YAML trap and the reference · Lab 11 · 2 — Write checkPaths(paths): check 4 of the grader · Lab 11 · 3 — Write register(event, regs, userId): a seat or the waitlist"
+    },
+    {
+      "slug": "api-12-1-thiet-ke",
+      "name": "12.1 The capstone plan: RAM inventory and a schema that keeps the rules",
+      "level": "BEGINNER",
+      "description": "Luyện: Capstone 1 — What still lives in RAM, measured · Capstone 2 — Write truncateToMs(ts): what the cursor really carries · Capstone 3 — Write nextPage(rows, cursor, limit): keyset on (createdAt, seq)"
+    },
+    {
+      "slug": "api-12-11-migration",
+      "name": "12.2 Migrations, constraints and seed data",
+      "level": "BEGINNER",
+      "description": "Luyện: Migrations 1 — What the runner refuses, measured · Migrations 2 — Write planMigrations(files, applied): what will run · Migrations 3 — Write ddlRisk(sql): will this lock production?"
+    },
+    {
+      "slug": "api-12-2-xay-dung",
+      "name": "12.3 Building on PostgreSQL: one pool, transactions, constraints",
+      "level": "BEGINNER",
+      "description": "Luyện: Build 1 — Pool, transaction, race: what was measured · Build 2 — Write asHttp(err): one place that knows SQLSTATE · Build 3 — Write poolBudget(...): will the pools fit?"
+    },
+    {
+      "slug": "api-12-5-chia-se",
+      "name": "12.4 Two instances, one truth: shared limits, keys, ETags",
+      "level": "BEGINNER",
+      "description": "Luyện: Shared state 1 — Two instances, measured · Shared state 2 — Write takeToken(bucket, nowS, cap, rate): the Lua script in JS · Shared state 3 — Write conditionalUpdate(rows, id, expected, patch)"
+    },
+    {
+      "slug": "api-12-3-mo-rong",
+      "name": "12.5 Making it scale: cache, outbox, notification queue",
+      "level": "BEGINNER",
+      "description": "Luyện: Scale 1 — Cache, outbox and email, measured · Scale 2 — Write claimBatch(outbox, locked, limit): FOR UPDATE SKIP LOCKED · Scale 3 — Write mailJobs(events): one email per booking version"
+    },
+    {
+      "slug": "api-12-6-do-tai",
+      "name": "12.6 Re-measuring the load, and the final contract",
+      "level": "BEGINNER",
+      "description": "Luyện: Load 1 — Reading the re-measured table · Load 2 — Write speedupRange(before, after): honest ratios · Load 3 — Write changeKind(change): is 2.4.0 safe?"
+    },
+    {
+      "slug": "api-12-7-trien-khai",
+      "name": "12.7 The deployment checklist",
+      "level": "BEGINNER",
+      "description": "Luyện: Deploy 1 — The checklist, measured · Deploy 2 — Order the deploy day · Deploy 3 — Write checkConfig(env): fail fast, list everything"
+    },
+    {
+      "slug": "api-12-9-lab",
+      "name": "Lab 12 — Move device issues to PostgreSQL",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 12 · 1 — Why the starter scored 0/10 · Lab 12 · 2 — Write foldTitle(s): the key of the unique index · Lab 12 · 3 — Write resolve(issues, id, resolution, expectedVersion)"
+    },
+    {
+      "slug": "api-12-4-tong-ket",
+      "name": "12.8 Review, documentation and your interview story",
+      "level": "BEGINNER",
+      "description": "Luyện: Story 1 — Evidence, STAR and CV lines · Story 2 — Order a five-minute demo · Story 3 — Write evidenceRow(claim, before, after, unit)"
+    },
+    {
+      "slug": "api-12-8-hoc-tiep",
+      "name": "12.9 Where to go next",
+      "level": "BEGINNER",
+      "description": "Luyện: Next 1 — Where each part goes deeper · Next 2 — Where each extension’s rule lives · Next 3 — Write weeklyPlan(start, items): a plan with dates"
     }
   ]
 }

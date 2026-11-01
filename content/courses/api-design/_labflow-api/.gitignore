@@ -15,3 +15,5 @@ lan.json
 # bản build sinh lại được
 client/labflow.d.ts.bak
 test-results/
+# dev-stack/worker của Chương 12: log, PID, mail giả
+tmp/

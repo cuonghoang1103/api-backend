@@ -113,6 +113,11 @@ app.post('/register', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Queues, events and asynchronous architecture in Node.js</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.5: a transactional outbox and a notification queue</span><span class="lc-sub">The same move on a two-instance API: email inside the booking request p50 311 ms and 5 × 500 while the provider is down; through an outbox + BullMQ p50 3.6 ms and the email retried later; a relay crash duplicated one event and still sent exactly 20 emails.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -203,6 +208,11 @@ app.post('/register', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-617"><span class="lc-t">Code Lab · Message Queues and Event-Driven Architecture</span><span class="lc-d">Hàng đợi, sự kiện và kiến trúc bất đồng bộ trong Node.js</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.5: transactional outbox và hàng đợi thông báo</span><span class="lc-sub">Cùng bước đó trên một API hai instance: gửi email trong request đặt chỗ p50 311 ms và 5 × 500 khi nhà cung cấp sập; qua outbox + BullMQ p50 3,6 ms và email được gửi lại sau; relay sập làm trùng một sự kiện mà vẫn đúng 20 email.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

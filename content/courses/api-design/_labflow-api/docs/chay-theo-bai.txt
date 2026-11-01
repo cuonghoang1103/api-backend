@@ -1,9 +1,9 @@
-LabFlow API — cuối Chương 11 khoá API Design (cuongthai.com/courses/api-design)
+LabFlow API — BẢN CUỐI KHOÁ (cuối Chương 12) khoá API Design (cuongthai.com/courses/api-design)
 Chỉ để HỌC. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026.
 
   npm install
   npm start                      # không cần PostgreSQL/Redis (việc nền chạy trong RAM: LABFLOW_JOBS=memory)
-  npm test                       # 13 test
+  npm test                       # 18 test (17 đạt + 1 bỏ qua: outbox chỉ có ở kho pg)
 
 Cần cho Chương 9–10: PostgreSQL 18 ở PGURL (mặc định postgres://labflow@localhost:55432/labflow, có bảng bookings
 1 triệu dòng của Chương 3) và Redis 8.2 ở LABFLOW_REDIS (mặc định redis://localhost:6390).
@@ -37,3 +37,30 @@ Chương 11 (phỏng vấn thiết kế API — mã ở interview/, không đổ
           node lab/grade-lab11.mjs <design-doc.md> <openapi.yaml>   (10 điểm phần máy chấm; phần nói chấm bằng thang 6 tiêu chí bài 11.1)
 
 Hợp đồng: openapi/openapi.yaml 2.3.0 (+ mốc openapi-v2.2.0.yaml, npm run api:diff) · asyncapi/asyncapi.yaml (AsyncAPI 3.1) · docs/slo.md
+
+Chương 12 (dự án cuối khoá — LabFlow lên PostgreSQL + Redis, hai instance, worker, proxy kiểm sức khoẻ):
+  Chuẩn bị (một lần): PostgreSQL 18 (CSDL trống, vd. labflow_app) + Redis 8.2
+        export DATABASE_URL=postgres://labflow@localhost:55432/labflow_app LABFLOW_REDIS=redis://localhost:6390
+        npm run db:migrate ; npm run db:status ; SEED_BOOKINGS=10000 npm run db:seed
+        bash ops/dev-stack.sh start      # A :4200, B :4201, worker, proxy :8180 (log tmp/*.log) — bash ops/dev-stack.sh stop
+        (kho RAM như Chương 1–11: không đặt LABFLOW_STORE, hoặc LABFLOW_STORE=memory)
+  12.1  node perf/precision.mjs                         (timestamptz vs timestamptz(3); schema riêng prec — bị XOÁ và dựng lại)
+  12.2  npm run db:migrate / db:status ; node perf/migration-locks.mjs   (1 triệu dòng, schema riêng mig — bị XOÁ và dựng lại)
+  12.3  MAX=2 WAIT=0 node perf/pool.mjs ; MAX=2 WAIT=500 … ; MAX=10 WAIT=500 …
+        node perf/race-api.mjs slot 50 | quota 10 | etag | etag-n 20      (BASE=http://localhost:8180)
+        DATABASE_URL=postgres://…/labflow_test npm run test:pg   (CHỈ CSDL tên kết thúc _test — bị xoá và dựng lại; không dùng Redis)
+  12.4  N=20 node perf/idem-replay.mjs ; node perf/race-api.mjs etag-n 20   (LABFLOW_NAIVE_UPDATE=1 để thấy mất cập nhật)
+        redis-cli -p 6390 shutdown nosave  rồi đặt chỗ / GET /v2/labs / POST /v2/realtime/tickets — xem bảng "khi Redis chết"
+  12.5  N=20 node perf/event-lag.mjs ; N=20 node perf/notify-cost.mjs     (LABFLOW_NOTIFY=sync để so; MAIL_DOWN_FILE=… để giả nhà cung cấp email sập)
+        RELAY_CRASH=0.2 node src/worker.js   (xác suất relay "chết" sau XADD — CHỈ để học; chạy lại tới khi hết outbox, đếm sự kiện / email)
+  12.6  LABFLOW_BOOKING_LIMIT=1000000/60 LABFLOW_IP_LIMIT=1000000/60 (CHỈ để đo) ; BASE=http://localhost:4200 node perf/mixed.mjs ;
+        SECONDS=10 CONN=10 node perf/write-load.mjs ; npm run api:diff (0 thay đổi phá vỡ so với 2.3.0) ; npm run api:drift
+  12.7  NODE_ENV=production node src/server.js   (thiếu cấu hình ⇒ liệt kê hết, exit 1)
+        pg_ctl stop dưới một instance đang chạy ⇒ /health 200, /ready 503, đặt chỗ 503 + Retry-After
+        KILL_PID=<pid của A> AT=2000 SECONDS=6 node perf/shutdown.mjs     (LABFLOW_SHUTDOWN=abrupt để so)
+        METRICS_PORT=9464 khi chạy instance ⇒ curl http://127.0.0.1:9464/metrics ; bash ops/backup.sh ; node ops/smoke.mjs http://localhost:8180
+  Lab 12  cp src/store/issues-pg.js ../issues-pg.solution.js && cp migrations/004_issues.sql ../004_issues.solution.sql
+          cp lab/lab12/issues-pg-starter.js src/store/issues-pg.js && rm migrations/004_issues.sql   (gói chứa LỜI GIẢI — sao lưu trước)
+          LABFLOW_REPORT_LIMIT=1000/60 bash ops/dev-stack.sh start ; node lab/grade-lab12.mjs   (10 điểm, chấm trên A và B)
+
+Hợp đồng cuối khoá: openapi/openapi.yaml 2.4.0 (+ mốc openapi-v2.3.0.yaml, npm run api:diff) · asyncapi/asyncapi.yaml · docs/slo.md

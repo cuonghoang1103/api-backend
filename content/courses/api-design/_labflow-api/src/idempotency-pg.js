@@ -1,17 +1,19 @@
 // idempotency-pg.js — bài 8.3: CÙNG luật của bài 5.1, nhưng bảng khoá nằm trong PostgreSQL dùng CHUNG cho mọi instance.
 // Một câu INSERT … ON CONFLICT DO NOTHING là "cái khoá" nguyên tử: hai instance nhận cùng khoá thì chỉ MỘT thắng.
 import { createHash } from 'node:crypto';
-import pg from 'pg';
 import { HttpError } from './http.js';
+import { pool } from './pg.js';
+import { config } from './config.js';
 
-const pool = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 5 });
-await pool.query(`CREATE TABLE IF NOT EXISTS idempotency_keys (
+// Chương 12: bảng do migration 003_shared_state.sql tạo; kho RAM + LABFLOW_IDEMPOTENCY=pg (bài 8.3) vẫn tự tạo như cũ
+if (config.store !== 'pg') await pool.query(`CREATE TABLE IF NOT EXISTS idempotency_keys (
   scope text NOT NULL, key text NOT NULL, fp text NOT NULL,
   state text NOT NULL CHECK (state IN ('running', 'done')),
   status int, body jsonb, location text,
   created_at timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY (scope, key))`);
 
+const LATE = process.env.LABFLOW_IDEM_LATE === '1';             // CHỈ để học: hành vi cũ của bài 8.3 để so
 const parseKey = (raw) => /^"?([\x21\x23-\x7e]{1,255}?)"?$/.exec(raw)?.[1];
 
 export const idempotent = ({ required = false } = {}) => async (req, res, next) => {
@@ -35,15 +37,24 @@ export const idempotent = ({ required = false } = {}) => async (req, res, next) 
     if (e.location) res.location(e.location);
     return res.status(e.status).json(e.body);
   }
-  let result;
+  let result, saved = false;
   const json = res.json.bind(res);
-  res.json = (body) => { result = { status: res.statusCode, body, location: res.get('Location') }; return json(body); };
-  res.once('close', () => {
-    const done = result && result.status < 300
-      ? pool.query(`UPDATE idempotency_keys SET state = 'done', status = $3, body = $4, location = $5 WHERE scope = $1 AND key = $2`,
-        [scope, key, result.status, JSON.stringify(result.body), result.location ?? null])
-      : pool.query('DELETE FROM idempotency_keys WHERE scope = $1 AND key = $2', [scope, key]);
-    done.catch((e) => console.error('idempotency-pg', e.message));
-  });
+  const save = (r) => (r && r.status < 300
+    ? pool.query(`UPDATE idempotency_keys SET state = 'done', status = $3, body = $4, location = $5 WHERE scope = $1 AND key = $2`,
+      [scope, key, r.status, JSON.stringify(r.body), r.location ?? null])
+    : pool.query('DELETE FROM idempotency_keys WHERE scope = $1 AND key = $2', [scope, key])).catch((e) => console.error('idempotency-pg', e.message));
+  if (LATE) {
+    // Cách của bài 8.3: ghi kết quả SAU khi câu trả lời đã đi ⇒ client gửi lại NGAY (instance khác) vẫn thấy 'running' ⇒ 409
+    res.json = (body) => { result = { status: res.statusCode, body, location: res.get('Location') }; return json(body); };
+    res.once('close', () => save(result));
+    return next();
+  }
+  // Bài 12.4: ghi "done" TRƯỚC khi câu trả lời rời server — client đã cầm 201 thì lần gửi lại chắc chắn được phát lại
+  res.json = (body) => {
+    saved = true;
+    save({ status: res.statusCode, body, location: res.get('Location') }).finally(() => json(body));
+    return res;
+  };
+  res.once('close', () => { if (!saved) save(null); });            // handler chết trước khi trả lời ⇒ nhả khoá cho lần thử sau
   next();
 };

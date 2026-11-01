@@ -1,0 +1,1035 @@
+openapi: 3.1.0
+info:
+  title: LabFlow API
+  version: 2.3.0
+  summary: Book university labs, report broken devices.
+  description: |
+    LabFlow v2. Every error is `application/problem+json` (RFC 9457).
+    Times are RFC 3339 with an offset; the server answers in UTC.
+  contact:
+    name: LabFlow team
+    email: api@labflow.example
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://api.labflow.example/v2
+    description: Production
+  - url: http://localhost:4000/v2
+    description: Local development
+tags:
+  - name: Auth
+    description: Logging in and the current user
+  - name: Labs
+    description: Rooms that can be booked
+  - name: Bookings
+    description: Reserving a lab for a period
+  - name: Issues
+    description: Reporting and resolving broken devices
+  - name: Waitlist
+    description: Queueing for a slot that is already booked
+  - name: Reports
+    description: Usage figures for lab managers
+  - name: Jobs
+    description: Long-running work — POST answers 202 and a job you poll (Chapter 10.1)
+  - name: Events
+    description: The same booking events by polling, Server-Sent Events or WebSocket (Chapter 10.4)
+  - name: Webhooks
+    description: LabFlow calls your HTTPS endpoint, signed (Chapters 10.5–10.6)
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: login
+      summary: Log in with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+            example: { email: an@student.labflow.example, password: an-lab-2026 }
+      responses:
+        '200':
+          description: A 15-minute access token
+          headers:
+            Cache-Control: { schema: { type: string, const: no-store } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenResponse' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '503': { $ref: '#/components/responses/Unavailable' }
+  /me:
+    get:
+      tags: [Auth]
+      operationId: getMe
+      summary: The user behind the token
+      responses:
+        '200':
+          description: The current user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Me' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /labs:
+    get:
+      tags: [Labs]
+      operationId: listLabs
+      summary: List labs
+      security: []
+      parameters:
+        - { name: building, in: query, schema: { type: string, minLength: 1, maxLength: 50 } }
+        - { name: q, in: query, description: 'Search in the name, accent-insensitive', schema: { type: string, minLength: 1, maxLength: 50 } }
+        - { name: minCapacity, in: query, schema: { type: integer, minimum: 1 } }
+      responses:
+        '200':
+          description: All labs that match. During a database incident this may be the last good copy, marked by LabFlow-Degraded and Age.
+          headers:
+            Age: { $ref: '#/components/headers/Age' }
+            LabFlow-Degraded: { $ref: '#/components/headers/LabFlow-Degraded' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                additionalProperties: false
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/Lab' } }
+        '400': { $ref: '#/components/responses/InvalidQuery' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '503': { $ref: '#/components/responses/Unavailable' }
+  /labs/{labId}:
+    get:
+      tags: [Labs]
+      operationId: getLab
+      summary: One lab
+      security: []
+      parameters:
+        - { name: labId, in: path, required: true, schema: { $ref: '#/components/schemas/LabId' } }
+      responses:
+        '200':
+          description: The lab
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Lab' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /labs/{labId}/waitlist:
+    post:
+      tags: [Waitlist]
+      operationId: joinWaitlist
+      summary: Wait for a slot that is already booked
+      parameters:
+        - { name: labId, in: path, required: true, schema: { $ref: '#/components/schemas/LabId' } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WaitlistCreate' }
+            example: { period: { start: '2027-03-02T08:00:00+07:00', end: '2027-03-02T10:00:00+07:00' } }
+      responses:
+        '201':
+          description: You are on the waitlist
+          headers:
+            Location: { description: URL of the entry, schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WaitlistEntry' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: The slot is free (book it directly) or you are already waiting (`SLOT_AVAILABLE`, `ALREADY_WAITING`)
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+  /me/waitlist:
+    get:
+      tags: [Waitlist]
+      operationId: listMyWaitlist
+      summary: My entries that are still waiting
+      responses:
+        '200':
+          description: Entries with their current position
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                additionalProperties: false
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/WaitlistEntry' } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /reports/usage:
+    get:
+      tags: [Reports]
+      operationId: getUsageReport
+      summary: Bookings and booked hours per lab per day (lab managers only)
+      description: |
+        Cancelled bookings are not counted; days are UTC dates. The result may be up to 60 seconds old
+        (see Age). At most 2 reports are computed at once per instance; more ⇒ 503 OVERLOADED.
+      parameters:
+        - { name: from, in: query, required: true, schema: { type: string, format: date }, example: '2026-11-02' }
+        - { name: days, in: query, schema: { type: integer, minimum: 1, maximum: 92, default: 30 } }
+      responses:
+        '200':
+          description: One row per (day, lab), ordered by day then lab
+          headers:
+            Cache-Control: { schema: { type: string, const: 'private, max-age=60' } }
+            Age: { $ref: '#/components/headers/Age' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [from, days, rows]
+                properties:
+                  from: { type: string, format: date }
+                  days: { type: integer }
+                  rows:
+                    type: array
+                    items:
+                      type: object
+                      required: [day, labId, bookings, hours]
+                      properties:
+                        day: { type: string, format: date }
+                        labId: { $ref: '#/components/schemas/LabId' }
+                        bookings: { type: integer, minimum: 0 }
+                        hours: { type: number, minimum: 0 }
+        '400': { $ref: '#/components/responses/InvalidQuery' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '503': { $ref: '#/components/responses/Unavailable' }
+  /waitlist/{id}:
+    delete:
+      tags: [Waitlist]
+      operationId: leaveWaitlist
+      summary: Leave the waitlist
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, pattern: '^wl_\d+$' } }
+      responses:
+        '204': { description: Removed }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /bookings:
+    get:
+      tags: [Bookings]
+      operationId: listBookings
+      summary: List my bookings (all bookings for a lab manager)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - { name: labId, in: query, schema: { $ref: '#/components/schemas/LabId' } }
+        - name: status
+          in: query
+          description: Comma-separated, e.g. `PENDING,CHECKED_IN`
+          schema: { type: string, pattern: '^(PENDING|CHECKED_IN|CANCELLED)(,(PENDING|CHECKED_IN|CANCELLED))*$' }
+        - { name: from, in: query, description: 'Bookings that overlap [from, to)', schema: { type: string, format: date-time } }
+        - { name: to, in: query, schema: { type: string, format: date-time } }
+        - name: sort
+          in: query
+          schema: { type: string, enum: ['-createdAt', createdAt, start, '-start'], default: '-createdAt' }
+      responses:
+        '200':
+          description: One page of bookings
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BookingPage' }
+        '400': { $ref: '#/components/responses/InvalidQuery' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+    post:
+      tags: [Bookings]
+      operationId: createBooking
+      summary: Book a lab
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookingCreate' }
+            example:
+              labId: lab_1
+              period: { start: '2027-03-02T08:00:00+07:00', end: '2027-03-02T10:00:00+07:00' }
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location: { description: URL of the new booking, schema: { type: string } }
+            RateLimit: { $ref: '#/components/headers/RateLimit' }
+            RateLimit-Policy: { $ref: '#/components/headers/RateLimitPolicy' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Booking' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+        '503': { $ref: '#/components/responses/Unavailable' }
+  /bookings/{id}:
+    get:
+      tags: [Bookings]
+      operationId: getBooking
+      summary: One of my bookings
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: The booking
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Booking' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /bookings/{id}/cancel:
+    post:
+      tags: [Bookings]
+      operationId: cancelBooking
+      summary: Cancel a booking
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: The cancelled booking
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Booking' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /bookings/{id}/check-in:
+    post:
+      tags: [Bookings]
+      operationId: checkInBooking
+      summary: Check in to a pending booking (v2 only)
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: The booking, now CHECKED_IN
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Booking' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /bookings/{id}/receipt:
+    get:
+      tags: [Bookings]
+      operationId: getReceipt
+      summary: Receipt of a booking (owner or lab manager only)
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: The receipt
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Receipt' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /devices/{deviceId}/issues:
+    post:
+      tags: [Issues]
+      operationId: reportIssue
+      summary: Report a broken device
+      parameters:
+        - { name: deviceId, in: path, required: true, schema: { type: string, pattern: '^dev_\d+$' } }
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IssueCreate' }
+            example: { title: Port 3 is dead, severity: HIGH }
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Issue' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /issues/{id}/resolve:
+    post:
+      tags: [Issues]
+      operationId: resolveIssue
+      summary: Mark an issue as resolved (lab manager)
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string, pattern: '^iss_\d+$' } }
+        - name: If-Match
+          in: header
+          description: Optional. The ETag you read; a stale one gives 412.
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/IssueResolve' }
+      responses:
+        '200':
+          description: The resolved issue
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Issue' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '412': { $ref: '#/components/responses/PreconditionFailed' }
+        '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+  /exports:
+    post:
+      tags: [Jobs]
+      operationId: startBookingsExport
+      summary: Export bookings as CSV — in the background (lab managers only)
+      description: |
+        Answers at once with 202 and a job. A whole-campus semester (~214,000 rows) takes about two minutes:
+        too long to hold a request open behind a proxy that gives up after 100 s. Poll the job, or subscribe
+        to `labflow.export.completed.v1` (webhook).
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ExportRequest' }
+      responses:
+        '202': { $ref: '#/components/responses/JobAccepted' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/usage/exports:
+    post:
+      tags: [Jobs, Reports]
+      operationId: startUsageReport
+      summary: Whole-campus usage report — in the background (Lab 10)
+      description: The result is the usage report as JSON; when it is ready, `labflow.report.ready.v1` is sent to the creator's webhooks.
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [from]
+              properties:
+                from: { type: string, format: date }
+                days: { type: integer, minimum: 1, maximum: 92, default: 30 }
+      responses:
+        '202': { $ref: '#/components/responses/JobAccepted' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /jobs/{id}:
+    get:
+      tags: [Jobs]
+      operationId: getJob
+      summary: Status and progress of one of your jobs
+      description: Jobs of other people answer 404. Job records are kept 7 days; results 1 hour (`result.expiresAt`).
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '200':
+          description: The job. `Retry-After` is present while it is queued or running.
+          headers:
+            Retry-After: { $ref: '#/components/headers/Retry-After' }
+            Cache-Control: { schema: { type: string, const: no-store } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /jobs/{id}/cancel:
+    post:
+      tags: [Jobs]
+      operationId: cancelJob
+      summary: Ask a queued or running job to stop
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '202':
+          description: Cancellation requested; the worker stops before its next batch (`cancelRequested` is true)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /jobs/{id}/result:
+    get:
+      tags: [Jobs]
+      operationId: getJobResult
+      summary: Download the result of a succeeded job
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '200':
+          description: The result (CSV for exports, JSON for reports)
+          content:
+            text/csv: { schema: { type: string } }
+            application/json: { schema: { type: object } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '410': { $ref: '#/components/responses/Gone' }
+  /events:
+    get:
+      tags: [Events]
+      operationId: pollEvents
+      summary: Booking events after a position (polling and long polling)
+      description: |
+        Without `after` ⇒ `{ data: [], next: <latest id> }` ("start from now"). With `wait` > 0 the request is held
+        until an event arrives or `wait` seconds pass (long polling). An `after` older than the retained window ⇒ 410.
+      parameters:
+        - { name: after, in: query, schema: { type: string, pattern: '^\d+(-\d+)?$' } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 100 } }
+        - { name: wait, in: query, schema: { type: integer, minimum: 0, maximum: 25, default: 0 } }
+      responses:
+        '200':
+          description: Events in order; continue with `next`
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next]
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/Event' } }
+                  next: { type: string }
+        '400': { $ref: '#/components/responses/InvalidQuery' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '410': { $ref: '#/components/responses/Gone' }
+  /events/stream:
+    get:
+      tags: [Events]
+      operationId: streamEvents
+      summary: Booking events as Server-Sent Events
+      description: |
+        Each event: `id:` (resume position), `event:` (the type), `data:` (the Event as JSON). `: ping` every 15 s.
+        Reconnect with `Last-Event-ID` to receive what you missed; too old ⇒ one `event: reset` (reload state).
+        Browsers cannot send Authorization with EventSource: use `?ticket=` from POST /realtime/tickets.
+      parameters:
+        - { name: Last-Event-ID, in: header, schema: { type: string } }
+        - { name: ticket, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: An open stream
+          content:
+            text/event-stream: { schema: { type: string } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /realtime/tickets:
+    post:
+      tags: [Events]
+      operationId: createRealtimeTicket
+      summary: A one-time ticket (30 s) for EventSource or WebSocket (`ws://…/v2/ws?ticket=`)
+      responses:
+        '201':
+          description: The ticket
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ticket, expiresIn]
+                properties:
+                  ticket: { type: string }
+                  expiresIn: { type: integer, const: 30 }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /webhooks:
+    post:
+      tags: [Webhooks]
+      operationId: createWebhook
+      summary: Subscribe an HTTPS endpoint to events (lab managers only)
+      description: The `secret` (whsec_…) is shown ONCE. Private and non-HTTPS addresses ⇒ 422 URL_NOT_ALLOWED.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [url, events]
+              properties:
+                url: { type: string, format: uri, maxLength: 500 }
+                events: { type: array, minItems: 1, items: { $ref: '#/components/schemas/EventType' } }
+      responses:
+        '201':
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/WebhookSubscription' }
+                  - type: object
+                    required: [secret]
+                    properties: { secret: { type: string, pattern: '^whsec_' } }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+    get:
+      tags: [Webhooks]
+      operationId: listWebhooks
+      summary: Your subscriptions (without secrets)
+      responses:
+        '200':
+          description: The list
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties: { data: { type: array, items: { $ref: '#/components/schemas/WebhookSubscription' } } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /webhooks/{id}:
+    delete:
+      tags: [Webhooks]
+      operationId: deleteWebhook
+      summary: Unsubscribe
+      parameters: [{ $ref: '#/components/parameters/WebhookId' }]
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /webhooks/{id}/deliveries:
+    get:
+      tags: [Webhooks]
+      operationId: listWebhookDeliveries
+      summary: The last 50 delivery attempts — status, error, duration
+      parameters: [{ $ref: '#/components/parameters/WebhookId' }]
+      responses:
+        '200':
+          description: Newest first
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [messageId, type, attempt, at]
+                      properties:
+                        messageId: { type: string }
+                        type: { $ref: '#/components/schemas/EventType' }
+                        attempt: { type: integer, minimum: 1 }
+                        status: { type: [integer, 'null'] }
+                        error: { type: [string, 'null'] }
+                        durationMs: { type: integer }
+                        at: { $ref: '#/components/schemas/Instant' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+webhooks:
+  bookingEvent:
+    post:
+      tags: [Webhooks]
+      operationId: receiveBookingEvent
+      summary: What LabFlow POSTs to your endpoint (booking.created / cancelled / checked_in, export.completed, report.ready)
+      description: |
+        Signed per Standard Webhooks: verify `webhook-signature` = `v1,` + base64(HMAC-SHA256(secret, id + "." + timestamp + "." + raw body))
+        over the RAW body, reject timestamps more than 5 minutes away, deduplicate by `webhook-id`.
+        Answer 2xx within 5 s (do the work later). Non-2xx or timeout ⇒ retried 8 times with exponential backoff
+        and jitter (30 s, 1 min, 2 min …); 410 ⇒ the subscription is disabled.
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string, pattern: '^msg_' } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string, pattern: '^\d+$' } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string, pattern: '^v1,' } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Event' }
+      responses:
+        '200': { description: Received }
+        '202': { description: 'Received; will be processed later (recommended)' }
+        '204': { description: Received }
+        '410': { description: Stop sending — LabFlow disables the subscription }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: A token from POST /auth/login, or an API key (`lf_live_…`) in the same header.
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Cursor:
+      name: cursor
+      in: query
+      description: Opaque; copy `page.next` from the previous page.
+      schema: { type: string, minLength: 1, maxLength: 200 }
+    BookingId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^bk_\d+$' }
+    JobId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^job_\d+$' }
+    WebhookId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^wh_[a-z0-9]+$' }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: Optional. Same key + same body within 24 h ⇒ the first answer is replayed.
+      schema: { type: string, minLength: 1, maxLength: 255 }
+  headers:
+    Retry-After:
+      description: Seconds to wait before retrying (503 overload or dependency down, 429 quota)
+      schema: { type: integer, minimum: 1 }
+    Age:
+      description: Seconds since this copy was fresh (RFC 9111); sent with LabFlow-Degraded
+      schema: { type: integer, minimum: 0 }
+    LabFlow-Degraded:
+      description: Present when the body is a stale copy served during an incident; see Age
+      schema: { type: string, enum: [stale-data] }
+    RateLimit:
+      description: 'Remaining quota, e.g. `"booking";r=4;t=12` (draft-ietf-httpapi-ratelimit-headers)'
+      schema: { type: string }
+    RateLimitPolicy:
+      description: 'The policy, e.g. `"booking";q=5;w=60`'
+      schema: { type: string }
+  schemas:
+    ExportRequest:
+      type: object
+      additionalProperties: false
+      required: [from, to]
+      properties:
+        labId: { $ref: '#/components/schemas/LabId' }
+        from: { type: string, format: date }
+        to: { type: string, format: date }
+    Job:
+      type: object
+      required: [id, kind, status, progress, createdAt, startedAt, finishedAt, cancelRequested, result, error, links]
+      properties:
+        id: { type: string, examples: [job_7] }
+        kind: { type: string, enum: [bookings-export, usage-report] }
+        status: { type: string, enum: [queued, running, succeeded, failed, cancelled] }
+        progress:
+          type: object
+          required: [done, total, percent]
+          properties:
+            done: { type: integer, minimum: 0 }
+            total: { type: [integer, 'null'] }
+            percent: { type: integer, minimum: 0, maximum: 100 }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+        startedAt: { oneOf: [{ $ref: '#/components/schemas/Instant' }, { type: 'null' }] }
+        finishedAt: { oneOf: [{ $ref: '#/components/schemas/Instant' }, { type: 'null' }] }
+        cancelRequested: { type: boolean }
+        result:
+          description: Only when succeeded. The result itself is kept until expiresAt, then 410.
+          oneOf:
+            - type: 'null'
+            - type: object
+              required: [href, contentType, bytes, expiresAt]
+              properties:
+                href: { type: string }
+                contentType: { type: string }
+                bytes: { type: integer }
+                expiresAt: { $ref: '#/components/schemas/Instant' }
+        error:
+          oneOf:
+            - type: 'null'
+            - type: object
+              required: [code, detail]
+              properties: { code: { type: string }, detail: { type: string } }
+        links:
+          type: object
+          required: [self]
+          properties:
+            self: { type: string }
+            cancel: { type: string, description: Absent once the job has finished }
+    EventType:
+      type: string
+      enum: [labflow.booking.created.v1, labflow.booking.cancelled.v1, labflow.booking.checked_in.v1, labflow.export.completed.v1, labflow.report.ready.v1]
+    Event:
+      description: CloudEvents 1.0 (JSON). Delivered at least once — deduplicate by `id`; use `data.version` to drop older news.
+      type: object
+      required: [id, specversion, type, source, time, data]
+      properties:
+        id: { type: string }
+        specversion: { type: string, const: '1.0' }
+        type: { $ref: '#/components/schemas/EventType' }
+        source: { type: string }
+        subject: { type: string }
+        time: { $ref: '#/components/schemas/Instant' }
+        datacontenttype: { type: string, const: application/json }
+        data: { type: object }
+    WebhookSubscription:
+      type: object
+      required: [id, url, events, status, createdAt]
+      properties:
+        id: { type: string, examples: [wh_mvx53e0v] }
+        url: { type: string, format: uri }
+        events: { type: array, items: { $ref: '#/components/schemas/EventType' } }
+        status: { type: string, enum: [active, disabled] }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+    LabId: { type: string, pattern: '^lab_\d+$', examples: [lab_1] }
+    Instant:
+      type: string
+      format: date-time
+      description: RFC 3339 with an offset (Z or ±hh:mm)
+    Period:
+      type: object
+      required: [start, end]
+      additionalProperties: false
+      properties:
+        start: { $ref: '#/components/schemas/Instant' }
+        end: { $ref: '#/components/schemas/Instant' }
+    Lab:
+      type: object
+      required: [id, code, name, building, capacity]
+      additionalProperties: false
+      properties:
+        id: { $ref: '#/components/schemas/LabId' }
+        code: { type: string, examples: [AL-201] }
+        name: { type: string, examples: [Phòng Lab Mạng máy tính] }
+        building: { type: string, examples: [Alpha] }
+        capacity: { type: integer, minimum: 1, examples: [30] }
+    BookingCreate:
+      type: object
+      required: [labId, period]
+      additionalProperties: false
+      properties:
+        labId: { $ref: '#/components/schemas/LabId' }
+        period: { $ref: '#/components/schemas/Period' }
+        purpose: { type: string, minLength: 1, maxLength: 200 }
+    Booking:
+      type: object
+      required: [id, labId, userId, period, purpose, status, createdAt, cancelledAt, checkedInAt]
+      additionalProperties: false
+      properties:
+        id: { type: string, pattern: '^bk_\d+$' }
+        labId: { $ref: '#/components/schemas/LabId' }
+        userId: { type: string, pattern: '^usr_\d+$' }
+        period: { $ref: '#/components/schemas/Period' }
+        purpose: { type: [string, 'null'] }
+        status: { type: string, enum: [PENDING, CHECKED_IN, CANCELLED] }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+        cancelledAt: { type: [string, 'null'], format: date-time }
+        checkedInAt: { type: [string, 'null'], format: date-time }
+    BookingPage:
+      type: object
+      required: [data, page]
+      additionalProperties: false
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Booking' } }
+        page:
+          type: object
+          required: [limit, next]
+          additionalProperties: false
+          properties:
+            limit: { type: integer }
+            next: { type: [string, 'null'], description: Cursor of the next page; null on the last page }
+    WaitlistCreate:
+      type: object
+      required: [period]
+      additionalProperties: false
+      properties:
+        period: { $ref: '#/components/schemas/Period' }
+        purpose: { type: string, minLength: 1, maxLength: 200 }
+    WaitlistEntry:
+      type: object
+      required: [id, labId, userId, period, purpose, status, position, createdAt]
+      additionalProperties: false
+      properties:
+        id: { type: string, pattern: '^wl_\d+$', examples: [wl_1] }
+        labId: { $ref: '#/components/schemas/LabId' }
+        userId: { type: string, pattern: '^usr_\d+$', examples: [usr_2] }
+        period: { $ref: '#/components/schemas/Period' }
+        purpose: { type: [string, 'null'] }
+        status: { type: string, enum: [WAITING, CANCELLED] }
+        position: { type: [integer, 'null'], minimum: 1, examples: [1], description: 1 = next in line; null when not waiting }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+    Receipt:
+      type: object
+      required: [bookingId, lab, student, period, status]
+      additionalProperties: false
+      properties:
+        bookingId: { type: string }
+        lab:
+          type: object
+          required: [code, name]
+          properties: { code: { type: string }, name: { type: string } }
+        student:
+          type: object
+          required: [name, email]
+          properties: { name: { type: string }, email: { type: string, format: email } }
+        period: { $ref: '#/components/schemas/Period' }
+        status: { type: string, enum: [PENDING, CHECKED_IN, CANCELLED] }
+    IssueCreate:
+      type: object
+      required: [title, severity]
+      additionalProperties: false
+      properties:
+        title: { type: string, minLength: 3, maxLength: 120 }
+        severity: { $ref: '#/components/schemas/Severity' }
+        description: { type: string, minLength: 1, maxLength: 1000 }
+    IssueResolve:
+      type: object
+      additionalProperties: false
+      properties:
+        resolution: { type: string, minLength: 1, maxLength: 500 }
+    Severity: { type: string, enum: [LOW, MEDIUM, HIGH] }
+    Issue:
+      type: object
+      required: [id, deviceId, reportedBy, title, severity, description, status, createdAt, resolvedAt, resolution]
+      additionalProperties: false
+      properties:
+        id: { type: string, pattern: '^iss_\d+$' }
+        deviceId: { type: string }
+        reportedBy: { type: string }
+        title: { type: string }
+        severity: { $ref: '#/components/schemas/Severity' }
+        description: { type: [string, 'null'] }
+        status: { type: string, enum: [OPEN, RESOLVED] }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+        resolvedAt: { type: [string, 'null'], format: date-time }
+        resolution: { type: [string, 'null'] }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      additionalProperties: false
+      properties:
+        email: { type: string, maxLength: 200 }
+        password: { type: string, minLength: 1, maxLength: 200, format: password }
+    TokenResponse:
+      type: object
+      required: [accessToken, tokenType, expiresIn]
+      additionalProperties: false
+      properties:
+        accessToken: { type: string }
+        tokenType: { type: string, const: Bearer }
+        expiresIn: { type: integer, examples: [900] }
+    Me:
+      type: object
+      required: [id, name, role, email]
+      additionalProperties: false
+      properties:
+        id: { type: string }
+        name: { type: string }
+        role: { type: string, enum: [STUDENT, LAB_MANAGER] }
+        email: { type: string, format: email }
+    Problem:
+      type: object
+      description: RFC 9457 Problem Details, plus LabFlow's machine-readable `code`
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+        code: { type: string, examples: [BOOKING_CONFLICT] }
+        errors:
+          type: array
+          items:
+            type: object
+            required: [detail]
+            properties:
+              pointer: { type: string, description: JSON Pointer into the body }
+              parameter: { type: string, description: Name of the query parameter }
+              detail: { type: string }
+  responses:
+    JobAccepted:
+      description: Accepted — not done yet. Follow Location; wait Retry-After seconds between polls.
+      headers:
+        Location: { description: 'The job, e.g. /v2/jobs/job_7', schema: { type: string } }
+        Retry-After: { $ref: '#/components/headers/Retry-After' }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Job' }
+    Gone:
+      description: Existed, but is no longer kept (job result expired, or an event position too old)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    ValidationFailed:
+      description: The body does not match the schema
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    InvalidQuery:
+      description: A query parameter is unknown or invalid
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Unauthenticated:
+      description: Missing, invalid or expired token
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Forbidden:
+      description: Logged in, but not allowed
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    NotFound:
+      description: No such resource (or hidden from you)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Conflict:
+      description: The current state does not allow this (e.g. already cancelled, slot taken)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+          example:
+            type: https://labflow.example/problems/booking-conflict
+            title: Slot already taken
+            status: 409
+            detail: Lab lab_1 already has booking bk_3 in this period
+            instance: /v2/bookings
+            code: BOOKING_CONFLICT
+    Unprocessable:
+      description: Valid JSON, but a business rule says no (e.g. too many active bookings)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    PreconditionFailed:
+      description: If-Match did not match the current ETag
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    UnsupportedMediaType:
+      description: A body was sent, but not as JSON
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    TooManyRequests:
+      description: Rate limit reached; wait Retry-After seconds
+      headers:
+        Retry-After: { schema: { type: integer } }
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Unavailable:
+      description: Overloaded (`OVERLOADED`) or a dependency is down (`DEPENDENCY_DOWN`). Safe to retry after Retry-After.
+      headers:
+        Retry-After: { $ref: '#/components/headers/Retry-After' }
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }

@@ -1,0 +1,423 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-9-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-9-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 12 · 1 — Why the starter scored 0/10",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "databases",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lab 12: issues still lived in each instance’s RAM while devices were already in PostgreSQL; graded on two instances.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 12: báo hỏng vẫn nằm trong RAM của từng instance trong khi thiết bị đã ở PostgreSQL; chấm trên hai instance.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what each instance can see.|||Hỏi: mỗi instance thấy được gì.",
+        "Indexes need immutable expressions.|||Index cần biểu thức bất biến."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 12 · 1 — Why the starter scored 0/10\n\nAnswer in the answer panel (no code needed).\n\n1. Six reports with the same title were sent at once to A and B. The starter answered 201, 201, 409 × 4. Why two 201s?Sáu báo hỏng cùng tiêu đề gửi cùng lúc vào A và B. Bản khởi đầu trả 201, 201, 409 × 4. Vì sao có hai 201?\n2. Why is title_key computed by the app with fold() instead of an index on lower(unaccent(title))?Vì sao title_key do ứng dụng tính bằng fold() thay vì index trên lower(unaccent(title))?\n3. A HIGH report must put the device in MAINTENANCE. Where does that belong in the solution?Báo hỏng HIGH phải đặt thiết bị về MAINTENANCE. Trong lời giải, việc đó nằm ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 12 · 1 — Why the starter scored 0/10 — answer key\n\n1. Six reports with the same title were sent at once to A and B. The starter answered 201, 201, 409 × 4. Why two 201s?Sáu báo hỏng cùng tiêu đề gửi cùng lúc vào A và B. Bản khởi đầu trả 201, 201, 409 × 4. Vì sao có hai 201?\n   Answer: b) Each instance checked duplicates only in its own array, so each accepted one\n   The fix is a UNIQUE (device_id, title_key) WHERE status = ’OPEN’ index that every instance hits.VI: Cách sửa là index UNIQUE (device_id, title_key) WHERE status = ’OPEN’ mà instance nào cũng phải qua.\n\n2. Why is title_key computed by the app with fold() instead of an index on lower(unaccent(title))?Vì sao title_key do ứng dụng tính bằng fold() thay vì index trên lower(unaccent(title))?\n   Answer: b) unaccent() is not IMMUTABLE, and PostgreSQL only accepts immutable functions in an index\n   Same reason as 11.6’s expired holds: index predicates and expressions must not depend on anything that can change.VI: Cùng lý do với chỗ giữ hết hạn ở 11.6: biểu thức và điều kiện của index không được phụ thuộc thứ có thể đổi.\n\n3. A HIGH report must put the device in MAINTENANCE. Where does that belong in the solution?Báo hỏng HIGH phải đặt thiết bị về MAINTENANCE. Trong lời giải, việc đó nằm ở đâu?\n   Answer: c) In the same transaction as the INSERT, with version = version + 1 on the device\n   Both rows change together or not at all; bumping the version keeps the device’s ETag honest.VI: Hai dòng cùng đổi hoặc cùng không; tăng version giữ ETag của thiết bị trung thực.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Each instance checked duplicates only in its own array, so each accepted one</p><p>The fix is a UNIQUE (device_id, title_key) WHERE status = ’OPEN’ index that every instance hits.</p><p><i>VI: Cách sửa là index UNIQUE (device_id, title_key) WHERE status = ’OPEN’ mà instance nào cũng phải qua.</i></p></li><li><p><b>b)</b> unaccent() is not IMMUTABLE, and PostgreSQL only accepts immutable functions in an index</p><p>Same reason as 11.6’s expired holds: index predicates and expressions must not depend on anything that can change.</p><p><i>VI: Cùng lý do với chỗ giữ hết hạn ở 11.6: biểu thức và điều kiện của index không được phụ thuộc thứ có thể đổi.</i></p></li><li><p><b>c)</b> In the same transaction as the INSERT, with version = version + 1 on the device</p><p>Both rows change together or not at all; bumping the version keeps the device’s ETag honest.</p><p><i>VI: Hai dòng cùng đổi hoặc cùng không; tăng version giữ ETag của thiết bị trung thực.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Six reports with the same title were sent at once to A and B. The starter answered 201, 201, 409 × 4. Why two 201s?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sáu báo hỏng cùng tiêu đề gửi cùng lúc vào A và B. Bản khởi đầu trả 201, 201, 409 × 4. Vì sao có hai 201?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PostgreSQL allowed one duplicate because the index was not unique"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each instance checked duplicates only in its own array, so each accepted one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The duplicate check compares titles case-sensitively in the starter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The rate limit let two through before 409 started"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The fix is a UNIQUE (device_id, title_key) WHERE status = ’OPEN’ index that every instance hits.</p><p><i>VI: Cách sửa là index UNIQUE (device_id, title_key) WHERE status = ’OPEN’ mà instance nào cũng phải qua.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is title_key computed by the app with fold() instead of an index on lower(unaccent(title))?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao title_key do ứng dụng tính bằng fold() thay vì index trên lower(unaccent(title))?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lower() is too slow to run on every insert into the issues table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unaccent() is not IMMUTABLE, and PostgreSQL only accepts immutable functions in an index"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Generated columns cannot use text functions in PostgreSQL 18"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The API must store the title exactly as the user typed it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Same reason as 11.6’s expired holds: index predicates and expressions must not depend on anything that can change.</p><p><i>VI: Cùng lý do với chỗ giữ hết hạn ở 11.6: biểu thức và điều kiện của index không được phụ thuộc thứ có thể đổi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A HIGH report must put the device in MAINTENANCE. Where does that belong in the solution?</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo hỏng HIGH phải đặt thiết bị về MAINTENANCE. Trong lời giải, việc đó nằm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the route after the response, so the report is not slowed down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In a nightly job that scans HIGH issues and updates devices"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In the same transaction as the INSERT, with version = version + 1 on the device"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the worker, triggered by the issue event from the outbox"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Both rows change together or not at all; bumping the version keeps the device’s ETag honest.</p><p><i>VI: Hai dòng cùng đổi hoặc cùng không; tăng version giữ ETag của thiết bị trung thực.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Checking duplicates in JavaScript only.|||Chỉ kiểm trùng bằng JavaScript."
+        },
+        {
+          "loi": "Updating the device outside the transaction.|||Cập nhật thiết bị ngoài transaction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partial unique index",
+          "vi": "index duy nhất có điều kiện"
+        },
+        {
+          "en": "IMMUTABLE",
+          "vi": "bất biến"
+        }
+      ]
+    },
+    {
+      "title": "Lab 12 · 2 — Write foldTitle(s): the key of the unique index",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "text",
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Compute <code>title_key</code> “the way a reader compares”: Unicode NFD, remove combining marks (U+0300–U+036F), turn <code>đ/Đ</code> into <code>d/D</code>, lower-case, trim, and collapse runs of spaces to one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính <code>title_key</code> “như người đọc so”: Unicode NFD, bỏ dấu kết hợp (U+0300–U+036F), đổi <code>đ/Đ</code> thành <code>d/D</code>, chữ thường, cắt khoảng trắng hai đầu, gộp nhiều dấu cách liền nhau thành một.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "s — string|||s — chuỗi",
+      "outputSpec": "string|||chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "foldTitle(\"Quạt kêu to\")",
+          "output": "\"quat keu to\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "NFD splits “ò” into “o” + a combining mark.|||NFD tách “ò” thành “o” + một dấu kết hợp.",
+        "đ is a separate letter, not o + mark: replace it by hand.|||đ là chữ riêng, không phải chữ + dấu: thay tay."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** title as a reader compares it */\nfunction foldTitle(s) {\n  // Write your solution here\n  return s.toLowerCase();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction foldTitle(s) {\n  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().trim().replace(/\\s+/g, ' ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>src/text.js fold() is the same rule since Lab 1; in Lab 12 its result goes into title_key so the partial unique index sees “Quạt kêu to” and “quat keu to” as one title.</p>",
+      "solutionExplanationHtmlVi": "<p>fold() trong src/text.js là cùng luật từ Lab 1; ở Lab 12 kết quả của nó vào title_key để index duy nhất có điều kiện coi “Quạt kêu to” và “quat keu to” là một tiêu đề.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Vietnamese marks",
+              "vi": "Dấu tiếng Việt"
+            },
+            "goi": "foldTitle(\"Quạt kêu to\")",
+            "mongDoi": "quat keu to"
+          },
+          {
+            "moTa": {
+              "en": "đ and spaces",
+              "vi": "đ và dấu cách"
+            },
+            "goi": "foldTitle(\"  Đèn   báo hỏng \")",
+            "mongDoi": "den bao hong"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "foldTitle(\"CỔNG 24 CHẬP CHỜN\")",
+            "mongDoi": "cong 24 chap chon",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "foldTitle(\"Mất nguồn ngẫu nhiên\")",
+            "mongDoi": "mat nguon ngau nhien",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting đ, so “Đèn” and “den” stay different.|||Quên đ nên “Đèn” và “den” vẫn khác nhau."
+        },
+        {
+          "loi": "Comparing before normalising, so NFC and NFD forms differ.|||So trước khi chuẩn hoá nên dạng NFC và NFD khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NFD",
+          "vi": "dạng tách dấu"
+        },
+        {
+          "en": "combining mark",
+          "vi": "dấu kết hợp"
+        }
+      ]
+    },
+    {
+      "title": "Lab 12 · 3 — Write resolve(issues, id, resolution, expectedVersion)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "concurrency",
+        "http"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The answer of <code>POST /v2/issues/{id}/resolve</code> after the conditional UPDATE, in this order: unknown id ⇒ <code>{ status: 404, code: 'ISSUE_NOT_FOUND' }</code>; <code>expectedVersion</code> given and different ⇒ <code>{ status: 412, code: 'PRECONDITION_FAILED', currentETag: '\"iss_61-v2\"' }</code>; already RESOLVED ⇒ <code>{ status: 409, code: 'ALREADY_RESOLVED' }</code>; else <code>{ status: 200, issue }</code> with status RESOLVED, <code>resolution</code> (the new one, or the old one, or <code>null</code>) and version + 1. Do not mutate.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu trả lời của <code>POST /v2/issues/{id}/resolve</code> sau câu UPDATE có điều kiện, theo thứ tự: id lạ ⇒ <code>{ status: 404, code: 'ISSUE_NOT_FOUND' }</code>; có <code>expectedVersion</code> mà khác ⇒ <code>{ status: 412, code: 'PRECONDITION_FAILED', currentETag: '\"iss_61-v2\"' }</code>; đã RESOLVED ⇒ <code>{ status: 409, code: 'ALREADY_RESOLVED' }</code>; còn lại <code>{ status: 200, issue }</code> với status RESOLVED, <code>resolution</code> (cái mới, hoặc cái cũ, hoặc <code>null</code>) và version + 1. Không sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "issues — {id, status, resolution, version}[]; id; resolution — string | undefined; expectedVersion — number | undefined|||issues — {id, status, resolution, version}[]; id; resolution — chuỗi | undefined; expectedVersion — số | undefined",
+      "outputSpec": "{ status, code?, currentETag?, issue? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "resolve([{\"id\":\"iss_61\",\"status\":\"OPEN\",\"resolution\":null,\"version\":1},{\"id\":\"iss_4\",\"status\":\"RESOLVED\",\"resolution\":\"Đã xử lý\",\"version\":2}], \"iss_61\", \"Thay quạt\", 1)",
+          "output": "{\"status\":200,\"issue\":{\"id\":\"iss_61\",\"status\":\"RESOLVED\",\"resolution\":\"Thay quạt\",\"version\":2}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "412 is checked before 409, like the route.|||412 kiểm trước 409, như route.",
+        "?? keeps the old resolution when no new one is given.|||?? giữ resolution cũ khi không có cái mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** resolve with If-Match */\nfunction resolve(issues, id, resolution, expectedVersion) {\n  // Write your solution here\n  const i = issues.find((x) => x.id === id);\n  if (i.status === 'RESOLVED') return { status: 409, code: 'ALREADY_RESOLVED' };\n  return { status: 200, issue: { ...i, status: 'RESOLVED', resolution } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction resolve(issues, id, resolution, expectedVersion) {\n  const i = issues.find((x) => x.id === id);\n  if (!i) return { status: 404, code: 'ISSUE_NOT_FOUND' };\n  if (expectedVersion !== undefined && i.version !== expectedVersion) return { status: 412, code: 'PRECONDITION_FAILED', currentETag: `\"${id}-v${i.version}\"` };\n  if (i.status === 'RESOLVED') return { status: 409, code: 'ALREADY_RESOLVED' };\n  return { status: 200, issue: { ...i, status: 'RESOLVED', resolution: resolution ?? i.resolution ?? null, version: i.version + 1 } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The grader sent the same If-Match from A and B at once: 200, 412 — iss_61 RESOLVED, version 2 (Lab 12 solution, 10/10).</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ chấm gửi cùng If-Match từ A và B cùng lúc: 200, 412 — iss_61 RESOLVED, version 2 (lời giải Lab 12, 10/10).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First manager",
+              "vi": "Quản lý thứ nhất"
+            },
+            "goi": "resolve([{\"id\":\"iss_61\",\"status\":\"OPEN\",\"resolution\":null,\"version\":1},{\"id\":\"iss_4\",\"status\":\"RESOLVED\",\"resolution\":\"Đã xử lý\",\"version\":2}], \"iss_61\", \"Thay quạt\", 1)",
+            "mongDoi": {
+              "status": 200,
+              "issue": {
+                "id": "iss_61",
+                "status": "RESOLVED",
+                "resolution": "Thay quạt",
+                "version": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Second manager, stale ETag",
+              "vi": "Quản lý thứ hai, ETag cũ"
+            },
+            "goi": "resolve([{\"id\":\"iss_61\",\"status\":\"RESOLVED\",\"resolution\":\"Thay quạt\",\"version\":2}], \"iss_61\", \"Tra dầu\", 1)",
+            "mongDoi": {
+              "status": 412,
+              "code": "PRECONDITION_FAILED",
+              "currentETag": "\"iss_61-v2\""
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "resolve([{\"id\":\"iss_61\",\"status\":\"OPEN\",\"resolution\":null,\"version\":1},{\"id\":\"iss_4\",\"status\":\"RESOLVED\",\"resolution\":\"Đã xử lý\",\"version\":2}], \"iss_4\", undefined, undefined)",
+            "mongDoi": {
+              "status": 409,
+              "code": "ALREADY_RESOLVED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "resolve([{\"id\":\"iss_61\",\"status\":\"OPEN\",\"resolution\":null,\"version\":1},{\"id\":\"iss_4\",\"status\":\"RESOLVED\",\"resolution\":\"Đã xử lý\",\"version\":2}], \"iss_99\", \"x\", 1)",
+            "mongDoi": {
+              "status": 404,
+              "code": "ISSUE_NOT_FOUND"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "resolve([{\"id\":\"iss_61\",\"status\":\"OPEN\",\"resolution\":null,\"version\":1},{\"id\":\"iss_4\",\"status\":\"RESOLVED\",\"resolution\":\"Đã xử lý\",\"version\":2}], \"iss_61\", undefined, undefined)",
+            "mongDoi": {
+              "status": 200,
+              "issue": {
+                "id": "iss_61",
+                "status": "RESOLVED",
+                "resolution": null,
+                "version": 2
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Answering 409 to a manager holding a stale ETag.|||Trả 409 cho quản lý đang giữ ETag cũ."
+        },
+        {
+          "loi": "Forgetting to bump the version.|||Quên tăng version."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "precondition failed",
+          "vi": "điều kiện trước không thoả"
+        },
+        {
+          "en": "conditional UPDATE",
+          "vi": "UPDATE có điều kiện"
+        }
+      ]
+    }
+  ]
+}

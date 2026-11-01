@@ -621,6 +621,16 @@ const L72 = {
       ['fowler', 'Ch. 9 Use case diagrams; Ch. 7 Package diagrams', 'Chương 9 Use case diagrams; Chương 7 Package diagrams'],
       ['gomaa', 'Ch. 6 Use case modeling; Ch. 7 Static modeling (entities)', 'Chương 6 Use case modeling; Chương 7 Static modeling (entity)'],
     ]),
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-4-tong-ket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 12.8: Review, documentation and your interview story</span><span class="lc-sub">The same skill for a job interview: an evidence sheet where every claim is a measured number, three STAR stories, CV lines weak vs strong, and a five-minute demo built only from scripts (twelve green smoke steps, fifty clicks and one booking).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
+      `<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-4-tong-ket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 12.8: Rà soát, tài liệu và câu chuyện kể khi phỏng vấn</span><span class="lc-sub">Cùng kỹ năng đó cho buổi phỏng vấn xin việc: bảng bằng chứng mà khẳng định nào cũng là số đo, ba câu chuyện STAR, dòng CV yếu và mạnh, và buổi demo năm phút chỉ gồm script (mười hai bước smoke xanh, năm mươi lượt bấm và một lượt đặt).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

@@ -1,0 +1,441 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-11-migration",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-11-migration"
+  },
+  "exercises": [
+    {
+      "title": "Migrations 1 — What the runner refuses, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "databases",
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.2: LabFlow’s 60-line migration runner and the lock test on 1,000,000 rows.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.2: bộ chạy migration 60 dòng của LabFlow và phép thử khoá trên 1.000.000 dòng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of the history table as an append-only log.|||Coi bảng lịch sử là nhật ký chỉ ghi thêm.",
+        "Ask whether the statement must touch every row.|||Hỏi: câu lệnh có phải đụng vào mọi dòng không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Migrations 1 — What the runner refuses, measured\n\nAnswer in the answer panel (no code needed).\n\n1. Someone adds a comment line to 002_outbox.sql after it was applied. What does npm run db:migrate do?Ai đó thêm một dòng chú thích vào 002_outbox.sql sau khi nó đã áp. npm run db:migrate làm gì?\n2. Two instances start at the same moment and both run the migrations. What happened in the measured run?Hai instance khởi động cùng lúc và cả hai chạy migration. Lần đo cho kết quả gì?\n3. On 1,000,000 rows, which statement kept an ordinary INSERT waiting for over 3 seconds?Trên 1.000.000 dòng, câu lệnh nào giữ một INSERT bình thường chờ hơn 3 giây?\n4. You need to rename a column used by every instance. What is the safe plan during a rolling deploy?Bạn cần đổi tên một cột mọi instance đang dùng. Kế hoạch an toàn khi triển khai cuốn chiếu là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Migrations 1 — What the runner refuses, measured — answer key\n\n1. Someone adds a comment line to 002_outbox.sql after it was applied. What does npm run db:migrate do?Ai đó thêm một dòng chú thích vào 002_outbox.sql sau khi nó đã áp. npm run db:migrate làm gì?\n   Answer: c) Stops with “checksum b0c90a7db3f1 ⇒ 302e7ffe0ea0” and exit code 1\n   Applied history is immutable: revert the edit and write 005_…sql.VI: Lịch sử đã áp là bất biến: hoàn tác chỗ sửa và viết 005_…sql.\n\n2. Two instances start at the same moment and both run the migrations. What happened in the measured run?Hai instance khởi động cùng lúc và cả hai chạy migration. Lần đo cho kết quả gì?\n   Answer: d) A applied all four files; B waited 62 ms on the advisory lock, then found nothing to do\n   pg_advisory_lock serialises runners across machines; the history table makes the second run a no-op.VI: pg_advisory_lock xếp hàng các bộ chạy kể cả khác máy; bảng lịch sử biến lần chạy thứ hai thành không làm gì.\n\n3. On 1,000,000 rows, which statement kept an ordinary INSERT waiting for over 3 seconds?Trên 1.000.000 dòng, câu lệnh nào giữ một INSERT bình thường chờ hơn 3 giây?\n   Answer: b) ADD COLUMN token text DEFAULT md5(random()::text) — a volatile default rewrites the table\n   Constant default: 1 ms (catalogue only). Volatile default and plain CREATE INDEX: ~3 s of blocked writes. CONCURRENTLY: 1 ms.VI: Mặc định hằng số: 1 ms (chỉ catalogue). Mặc định thay đổi và CREATE INDEX thường: ~3 s chặn ghi. CONCURRENTLY: 1 ms.\n\n4. You need to rename a column used by every instance. What is the safe plan during a rolling deploy?Bạn cần đổi tên một cột mọi instance đang dùng. Kế hoạch an toàn khi triển khai cuốn chiếu là gì?\n   Answer: b) Add the new column, write both, backfill, read the new one, drop the old one in a later release\n   Old and new code run together during a deploy — expand, then contract.VI: Mã cũ và mới chạy cùng lúc khi triển khai — mở rộng trước, thu gọn sau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Stops with “checksum b0c90a7db3f1 ⇒ 302e7ffe0ea0” and exit code 1</p><p>Applied history is immutable: revert the edit and write 005_…sql.</p><p><i>VI: Lịch sử đã áp là bất biến: hoàn tác chỗ sửa và viết 005_…sql.</i></p></li><li><p><b>d)</b> A applied all four files; B waited 62 ms on the advisory lock, then found nothing to do</p><p>pg_advisory_lock serialises runners across machines; the history table makes the second run a no-op.</p><p><i>VI: pg_advisory_lock xếp hàng các bộ chạy kể cả khác máy; bảng lịch sử biến lần chạy thứ hai thành không làm gì.</i></p></li><li><p><b>b)</b> ADD COLUMN token text DEFAULT md5(random()::text) — a volatile default rewrites the table</p><p>Constant default: 1 ms (catalogue only). Volatile default and plain CREATE INDEX: ~3 s of blocked writes. CONCURRENTLY: 1 ms.</p><p><i>VI: Mặc định hằng số: 1 ms (chỉ catalogue). Mặc định thay đổi và CREATE INDEX thường: ~3 s chặn ghi. CONCURRENTLY: 1 ms.</i></p></li><li><p><b>b)</b> Add the new column, write both, backfill, read the new one, drop the old one in a later release</p><p>Old and new code run together during a deploy — expand, then contract.</p><p><i>VI: Mã cũ và mới chạy cùng lúc khi triển khai — mở rộng trước, thu gọn sau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Someone adds a comment line to 002_outbox.sql after it was applied. What does npm run db:migrate do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai đó thêm một dòng chú thích vào 002_outbox.sql sau khi nó đã áp. npm run db:migrate làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Re-applies 002 inside a transaction, since a comment cannot change the schema"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ignores the edit, because only new files are ever read by the runner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Stops with “checksum b0c90a7db3f1 ⇒ 302e7ffe0ea0” and exit code 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rolls back 002 and 003 automatically, then applies the edited version"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Applied history is immutable: revert the edit and write 005_…sql.</p><p><i>VI: Lịch sử đã áp là bất biến: hoàn tác chỗ sửa và viết 005_…sql.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Two instances start at the same moment and both run the migrations. What happened in the measured run?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai instance khởi động cùng lúc và cả hai chạy migration. Lần đo cho kết quả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both applied 001 at once and the second failed with “relation already exists”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B applied the files A had not reached yet, splitting the work between them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL rejected the second connection because of max_connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A applied all four files; B waited 62 ms on the advisory lock, then found nothing to do"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>pg_advisory_lock serialises runners across machines; the history table makes the second run a no-op.</p><p><i>VI: pg_advisory_lock xếp hàng các bộ chạy kể cả khác máy; bảng lịch sử biến lần chạy thứ hai thành không làm gì.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On 1,000,000 rows, which statement kept an ordinary INSERT waiting for over 3 seconds?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên 1.000.000 dòng, câu lệnh nào giữ một INSERT bình thường chờ hơn 3 giây?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CREATE INDEX CONCURRENTLY on (user_id, start_at) — it locks the whole table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ADD COLUMN token text DEFAULT md5(random()::text) — a volatile default rewrites the table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ADD COLUMN seats int NOT NULL DEFAULT 1 — every row has to be updated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ADD CONSTRAINT … NOT VALID — the constraint is checked on every existing row"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Constant default: 1 ms (catalogue only). Volatile default and plain CREATE INDEX: ~3 s of blocked writes. CONCURRENTLY: 1 ms.</p><p><i>VI: Mặc định hằng số: 1 ms (chỉ catalogue). Mặc định thay đổi và CREATE INDEX thường: ~3 s chặn ghi. CONCURRENTLY: 1 ms.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You need to rename a column used by every instance. What is the safe plan during a rolling deploy?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn cần đổi tên một cột mọi instance đang dùng. Kế hoạch an toàn khi triển khai cuốn chiếu là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ALTER TABLE … RENAME COLUMN in the same migration as the new code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Add the new column, write both, backfill, read the new one, drop the old one in a later release"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Stop all instances, rename, then start the new version as fast as possible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rename the column and add a view with the old name for one release"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Old and new code run together during a deploy — expand, then contract.</p><p><i>VI: Mã cũ và mới chạy cùng lúc khi triển khai — mở rộng trước, thu gọn sau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Editing an applied migration and forcing it through.|||Sửa migration đã áp rồi ép chạy."
+        },
+        {
+          "loi": "Testing DDL only on an empty laptop database.|||Chỉ thử DDL trên CSDL rỗng ở máy mình."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "checksum",
+          "vi": "mã kiểm"
+        },
+        {
+          "en": "advisory lock",
+          "vi": "khoá tư vấn"
+        },
+        {
+          "en": "expand/contract",
+          "vi": "mở rộng/thu gọn"
+        }
+      ]
+    },
+    {
+      "title": "Migrations 2 — Write planMigrations(files, applied): what will run",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Model the runner’s plan. <code>files</code> are <code>{ name, sum }</code> found in <code>migrations/</code>; only names like <code>001_core.sql</code> (three digits, underscore, lowercase letters/digits/underscores, <code>.sql</code>) count. <code>applied</code> are <code>{ version, checksum }</code> rows of <code>schema_migrations</code>. If any applied file’s sum differs, return <code>{ error: 'EDITED: a.sql, b.sql', toApply: [] }</code> (names in order). Otherwise <code>{ error: null, toApply: [names not yet applied, in order] }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng kế hoạch của bộ chạy. <code>files</code> là <code>{ name, sum }</code> trong <code>migrations/</code>; chỉ tính tên dạng <code>001_core.sql</code> (ba chữ số, gạch dưới, chữ thường/số/gạch dưới, <code>.sql</code>). <code>applied</code> là các dòng <code>{ version, checksum }</code> của <code>schema_migrations</code>. Tệp đã áp nào có sum khác ⇒ trả <code>{ error: 'EDITED: a.sql, b.sql', toApply: [] }</code> (tên theo thứ tự). Ngược lại <code>{ error: null, toApply: [tên chưa áp, theo thứ tự] }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "files — {name, sum}[]; applied — {version, checksum}[]",
+      "outputSpec": "{ error, toApply }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "planMigrations([{\"name\":\"002_outbox.sql\",\"sum\":\"b0c9\"},{\"name\":\"001_core.sql\",\"sum\":\"ed7a\"},{\"name\":\"003_shared_state.sql\",\"sum\":\"c47e\"},{\"name\":\"notes.txt\",\"sum\":\"0000\"}], [])",
+          "output": "{\"error\":null,\"toApply\":[\"001_core.sql\",\"002_outbox.sql\",\"003_shared_state.sql\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sort by name: zero-padded numbers sort correctly as strings.|||Sắp theo tên: số có đệm 0 sắp đúng như chuỗi.",
+        "Check edits before planning anything.|||Kiểm chỗ sửa trước khi lập kế hoạch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which migrations will run? */\nfunction planMigrations(files, applied) {\n  // Write your solution here\n  const done = applied.map((a) => a.version);\n  return { error: null, toApply: files.map((f) => f.name).filter((n) => !done.includes(n)) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction planMigrations(files, applied) {\n  const done = new Map(applied.map((a) => [a.version, a.checksum]));\n  const ok = files.filter((f) => /^\\d{3}_[a-z0-9_]+\\.sql$/.test(f.name)).sort((a, b) => (a.name < b.name ? -1 : 1));\n  const edited = ok.filter((f) => done.has(f.name) && done.get(f.name) !== f.sum).map((f) => f.name);\n  if (edited.length) return { error: `EDITED: ${edited.join(', ')}`, toApply: [] };\n  return { error: null, toApply: ok.filter((f) => !done.has(f.name)).map((f) => f.name) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same rules as src/migrate.js (and Flyway): an edited history stops everything, otherwise only the missing files run, in order — so running twice does nothing.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng luật với src/migrate.js (và Flyway): lịch sử bị sửa thì dừng tất cả, ngược lại chỉ chạy các tệp còn thiếu, theo thứ tự — nên chạy hai lần không làm gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Fresh database",
+              "vi": "CSDL mới"
+            },
+            "goi": "planMigrations([{\"name\":\"002_outbox.sql\",\"sum\":\"b0c9\"},{\"name\":\"001_core.sql\",\"sum\":\"ed7a\"},{\"name\":\"003_shared_state.sql\",\"sum\":\"c47e\"},{\"name\":\"notes.txt\",\"sum\":\"0000\"}], [])",
+            "mongDoi": {
+              "error": null,
+              "toApply": [
+                "001_core.sql",
+                "002_outbox.sql",
+                "003_shared_state.sql"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "One already applied",
+              "vi": "Đã áp một tệp"
+            },
+            "goi": "planMigrations([{\"name\":\"002_outbox.sql\",\"sum\":\"b0c9\"},{\"name\":\"001_core.sql\",\"sum\":\"ed7a\"},{\"name\":\"003_shared_state.sql\",\"sum\":\"c47e\"},{\"name\":\"notes.txt\",\"sum\":\"0000\"}], [{\"version\":\"001_core.sql\",\"checksum\":\"ed7a\"}])",
+            "mongDoi": {
+              "error": null,
+              "toApply": [
+                "002_outbox.sql",
+                "003_shared_state.sql"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "planMigrations([{\"name\":\"002_outbox.sql\",\"sum\":\"b0c9\"},{\"name\":\"001_core.sql\",\"sum\":\"ed7a\"},{\"name\":\"003_shared_state.sql\",\"sum\":\"c47e\"},{\"name\":\"notes.txt\",\"sum\":\"0000\"}], [{\"version\":\"001_core.sql\",\"checksum\":\"ed7a\"},{\"version\":\"002_outbox.sql\",\"checksum\":\"302e\"}])",
+            "mongDoi": {
+              "error": "EDITED: 002_outbox.sql",
+              "toApply": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "planMigrations([{\"name\":\"002_outbox.sql\",\"sum\":\"b0c9\"},{\"name\":\"001_core.sql\",\"sum\":\"ed7a\"},{\"name\":\"003_shared_state.sql\",\"sum\":\"c47e\"},{\"name\":\"notes.txt\",\"sum\":\"0000\"}], [{\"version\":\"001_core.sql\",\"checksum\":\"ed7a\"},{\"version\":\"002_outbox.sql\",\"checksum\":\"b0c9\"},{\"version\":\"003_shared_state.sql\",\"checksum\":\"c47e\"}])",
+            "mongDoi": {
+              "error": null,
+              "toApply": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running files in directory order instead of name order.|||Chạy theo thứ tự thư mục thay vì thứ tự tên."
+        },
+        {
+          "loi": "Applying new files although an old one was edited.|||Vẫn áp tệp mới dù một tệp cũ đã bị sửa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "schema_migrations",
+          "vi": "bảng lịch sử migration"
+        }
+      ]
+    },
+    {
+      "title": "Migrations 3 — Write ddlRisk(sql): will this lock production?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "databases",
+        "deployment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A tiny reviewer for migration lines (case-insensitive, extra spaces allowed). Return <code>'no-transaction'</code> for <code>CREATE [UNIQUE] INDEX CONCURRENTLY</code>; <code>'blocks-writes'</code> for any other <code>CREATE [UNIQUE] INDEX</code>; for <code>ALTER TABLE … ADD COLUMN … DEFAULT x</code> return <code>'rewrite'</code> when the default contains a function call (a <code>(</code>), else <code>'safe'</code>; anything else <code>'review'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một người duyệt nhỏ cho từng dòng migration (không phân biệt hoa thường, cho phép thừa dấu cách). Trả <code>'no-transaction'</code> cho <code>CREATE [UNIQUE] INDEX CONCURRENTLY</code>; <code>'blocks-writes'</code> cho mọi <code>CREATE [UNIQUE] INDEX</code> khác; với <code>ALTER TABLE … ADD COLUMN … DEFAULT x</code> trả <code>'rewrite'</code> khi mặc định có lời gọi hàm (có <code>(</code>), ngược lại <code>'safe'</code>; còn lại <code>'review'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "sql — string|||sql — chuỗi",
+      "outputSpec": "string|||chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ddlRisk(\"ALTER TABLE bookings ADD COLUMN seats int NOT NULL DEFAULT 1\")",
+          "output": "\"safe\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise case and spaces first.|||Chuẩn hoá hoa thường và dấu cách trước.",
+        "Check CONCURRENTLY before the generic CREATE INDEX.|||Kiểm CONCURRENTLY trước CREATE INDEX chung."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** risk of one DDL line */\nfunction ddlRisk(sql) {\n  // Write your solution here\n  if (/CREATE INDEX/i.test(sql)) return 'blocks-writes';\n  return 'safe';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ddlRisk(sql) {\n  const s = sql.trim().replace(/\\s+/g, ' ').toUpperCase();\n  if (/^CREATE (UNIQUE )?INDEX CONCURRENTLY/.test(s)) return 'no-transaction';\n  if (/^CREATE (UNIQUE )?INDEX/.test(s)) return 'blocks-writes';\n  const m = /^ALTER TABLE \\S+ ADD COLUMN .* DEFAULT (.+)$/.exec(s);\n  if (m) return /\\(/.test(m[1]) ? 'rewrite' : 'safe';\n  return 'review';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured in 12.2 on 1,000,000 rows: DEFAULT 1 took 1 ms; DEFAULT md5(random()::text) and a plain CREATE INDEX each held an INSERT for over 3 s; CONCURRENTLY kept it at 1 ms but cannot run inside the runner’s transaction (-- migrate:no-transaction).</p>",
+      "solutionExplanationHtmlVi": "<p>Đo ở 12.2 trên 1.000.000 dòng: DEFAULT 1 mất 1 ms; DEFAULT md5(random()::text) và CREATE INDEX thường mỗi cái giữ một INSERT hơn 3 s; CONCURRENTLY giữ ở 1 ms nhưng không chạy được trong transaction của bộ chạy (-- migrate:no-transaction).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Constant default",
+              "vi": "Mặc định hằng số"
+            },
+            "goi": "ddlRisk(\"ALTER TABLE bookings ADD COLUMN seats int NOT NULL DEFAULT 1\")",
+            "mongDoi": "safe"
+          },
+          {
+            "moTa": {
+              "en": "Lower case, concurrently",
+              "vi": "Chữ thường, concurrently"
+            },
+            "goi": "ddlRisk(\"create index concurrently bk_user on bookings (user_id, start_at)\")",
+            "mongDoi": "no-transaction"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "ddlRisk(\"ALTER TABLE bookings ADD COLUMN token text DEFAULT md5(random()::text)\")",
+            "mongDoi": "rewrite",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ddlRisk(\"CREATE UNIQUE INDEX  bk_x ON bookings (lab_id, start_at)\")",
+            "mongDoi": "blocks-writes",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ddlRisk(\"ALTER TABLE bookings DROP COLUMN purpose\")",
+            "mongDoi": "review",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every ADD COLUMN with a default a rewrite.|||Coi mọi ADD COLUMN có mặc định là viết lại bảng."
+        },
+        {
+          "loi": "Matching CREATE INDEX first, so CONCURRENTLY is never seen.|||Bắt CREATE INDEX trước nên không bao giờ thấy CONCURRENTLY."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "table rewrite",
+          "vi": "viết lại bảng"
+        },
+        {
+          "en": "CONCURRENTLY",
+          "vi": "không chặn ghi"
+        }
+      ]
+    }
+  ]
+}

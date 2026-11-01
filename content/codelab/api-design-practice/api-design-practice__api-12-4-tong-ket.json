@@ -1,0 +1,379 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-4-tong-ket",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-4-tong-ket"
+  },
+  "exercises": [
+    {
+      "title": "Story 1 — Evidence, STAR and CV lines",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "career",
+        "interview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson 12.8: turning the chapter’s measurements into a README, three STAR stories and CV lines.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.8: biến số đo của chương thành README, ba câu chuyện STAR và dòng CV.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Numbers beat adjectives.|||Con số thắng tính từ.",
+        "Say what you did not test.|||Nói ra cái bạn chưa thử."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Story 1 — Evidence, STAR and CV lines\n\nAnswer in the answer panel (no code needed).\n\n1. MIT’s career office suggests how to split a STAR answer. Where should most of the time go?Phòng hướng nghiệp MIT gợi ý chia câu trả lời STAR. Phần lớn thời gian nên dành cho đâu?\n2. Which CV line follows lesson 12.8?Dòng CV nào theo đúng bài 12.8?\n3. “What would break first at 10× load?” — the measured answer from Chapter 12?“Tải gấp 10 thì cái gì hỏng trước?” — câu trả lời có số đo từ Chương 12?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Story 1 — Evidence, STAR and CV lines — answer key\n\n1. MIT’s career office suggests how to split a STAR answer. Where should most of the time go?Phòng hướng nghiệp MIT gợi ý chia câu trả lời STAR. Phần lớn thời gian nên dành cho đâu?\n   Answer: c) Action, about 60% — what you personally did\n   ~20% situation, ~10% task, ~60% action, ~10% result with numbers; prepare 3–5 stories.VI: ~20% bối cảnh, ~10% nhiệm vụ, ~60% hành động, ~10% kết quả có số; chuẩn bị 3–5 câu chuyện.\n\n2. Which CV line follows lesson 12.8?Dòng CV nào theo đúng bài 12.8?\n   Answer: b) Moved email out of the request path with an outbox and BullMQ: booking p50 311 ms → 3.6 ms\n   Stack, guarantee, a number you can reproduce. The 10,000-users line cannot survive “how did you measure it?”.VI: Công nghệ, điều được bảo đảm, một con số tái tạo được. Dòng 10.000 người dùng không qua nổi câu “em đo thế nào?”.\n\n3. “What would break first at 10× load?” — the measured answer from Chapter 12?“Tải gấp 10 thì cái gì hỏng trước?” — câu trả lời có số đo từ Chương 12?\n   Answer: c) Logins: scrypt is CPU-bound at ~100–125/s per instance, then database connections\n   You know where to look because you measured: mixed.mjs logins in 12.6, pool limits in 12.3.VI: Bạn biết nhìn vào đâu vì đã đo: đăng nhập của mixed.mjs ở 12.6, giới hạn pool ở 12.3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Action, about 60% — what you personally did</p><p>~20% situation, ~10% task, ~60% action, ~10% result with numbers; prepare 3–5 stories.</p><p><i>VI: ~20% bối cảnh, ~10% nhiệm vụ, ~60% hành động, ~10% kết quả có số; chuẩn bị 3–5 câu chuyện.</i></p></li><li><p><b>b)</b> Moved email out of the request path with an outbox and BullMQ: booking p50 311 ms → 3.6 ms</p><p>Stack, guarantee, a number you can reproduce. The 10,000-users line cannot survive “how did you measure it?”.</p><p><i>VI: Công nghệ, điều được bảo đảm, một con số tái tạo được. Dòng 10.000 người dùng không qua nổi câu “em đo thế nào?”.</i></p></li><li><p><b>c)</b> Logins: scrypt is CPU-bound at ~100–125/s per instance, then database connections</p><p>You know where to look because you measured: mixed.mjs logins in 12.6, pool limits in 12.3.</p><p><i>VI: Bạn biết nhìn vào đâu vì đã đo: đăng nhập của mixed.mjs ở 12.6, giới hạn pool ở 12.3.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>MIT’s career office suggests how to split a STAR answer. Where should most of the time go?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phòng hướng nghiệp MIT gợi ý chia câu trả lời STAR. Phần lớn thời gian nên dành cho đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Situation, about 60% — so the interviewer understands the project"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Result, about 60% — the numbers are what they remember"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Action, about 60% — what you personally did"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Task, about 60% — the responsibility you were given"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>~20% situation, ~10% task, ~60% action, ~10% result with numbers; prepare 3–5 stories.</p><p><i>VI: ~20% bối cảnh, ~10% nhiệm vụ, ~60% hành động, ~10% kết quả có số; chuẩn bị 3–5 câu chuyện.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which CV line follows lesson 12.8?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng CV nào theo đúng bài 12.8?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Handled 10,000 concurrent users with 99.99% uptime on a laptop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Moved email out of the request path with an outbox and BullMQ: booking p50 311 ms → 3.6 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Used Node.js, PostgreSQL, Redis, BullMQ, Docker and Prometheus"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Built a scalable, high-performance, enterprise-grade booking platform"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Stack, guarantee, a number you can reproduce. The 10,000-users line cannot survive “how did you measure it?”.</p><p><i>VI: Công nghệ, điều được bảo đảm, một con số tái tạo được. Dòng 10.000 người dùng không qua nổi câu “em đo thế nào?”.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>“What would break first at 10× load?” — the measured answer from Chapter 12?</p><p style=\"opacity:.75;font-size:.92em\"><i>“Tải gấp 10 thì cái gì hỏng trước?” — câu trả lời có số đo từ Chương 12?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redis, because the rate limiter runs a Lua script per request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The outbox relay, because it polls the table every second"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Logins: scrypt is CPU-bound at ~100–125/s per instance, then database connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The labs list, because it is the slowest endpoint on PostgreSQL"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>You know where to look because you measured: mixed.mjs logins in 12.6, pool limits in 12.3.</p><p><i>VI: Bạn biết nhìn vào đâu vì đã đo: đăng nhập của mixed.mjs ở 12.6, giới hạn pool ở 12.3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A CV number you cannot reproduce.|||Con số trên CV mà bạn không tái tạo được."
+        },
+        {
+          "loi": "A STAR answer that is mostly situation.|||Câu trả lời STAR toàn bối cảnh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "STAR",
+          "vi": "Bối cảnh · Nhiệm vụ · Hành động · Kết quả"
+        },
+        {
+          "en": "evidence sheet",
+          "vi": "bảng bằng chứng"
+        }
+      ]
+    },
+    {
+      "title": "Story 2 — Order a five-minute demo",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "career"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Put the five-minute LabFlow demo of lesson 12.8 in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp buổi demo năm phút của bài 12.8 theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start with why it exists.|||Bắt đầu bằng lý do nó tồn tại.",
+        "End before they ask about limits.|||Kết thúc trước khi bị hỏi về giới hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Story 2 — Order a five-minute demo\n\nAnswer in the answer panel (no code needed).\n\n1. The demoBuổi demo\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Story 2 — Order a five-minute demo — answer key\n\n1. The demoBuổi demo\n   Answer: m6) one sentence of problem and the architecture diagram  →  m1) node ops/smoke.mjs: twelve green lines  →  m5) node perf/race-api.mjs slot 50: fifty clicks, one booking  →  m4) stop Redis, keep booking; start it, watch the outbox drain  →  m3) the OpenAPI page and the breaking-change diff  →  m2) honest limits: one PostgreSQL, no PITR, a fake mail provider\n   Problem first, proof in the middle, limits last — every step a script, nothing typed live.VI: Vấn đề trước, bằng chứng ở giữa, giới hạn cuối cùng — bước nào cũng là script, không gõ trực tiếp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Problem first, proof in the middle, limits last — every step a script, nothing typed live.</p><p><i>VI: Vấn đề trước, bằng chứng ở giữa, giới hạn cuối cùng — bước nào cũng là script, không gõ trực tiếp.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>The demo</p><p style=\"opacity:.75;font-size:.92em\"><i>Buổi demo</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "node ops/smoke.mjs: twelve green lines"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "honest limits: one PostgreSQL, no PITR, a fake mail provider"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "the OpenAPI page and the breaking-change diff"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "stop Redis, keep booking; start it, watch the outbox drain"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "node perf/race-api.mjs slot 50: fifty clicks, one booking"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "one sentence of problem and the architecture diagram"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m1",
+              "m5",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Problem first, proof in the middle, limits last — every step a script, nothing typed live.</p><p><i>VI: Vấn đề trước, bằng chứng ở giữa, giới hạn cuối cùng — bước nào cũng là script, không gõ trực tiếp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening with the code.|||Mở đầu bằng mã nguồn."
+        },
+        {
+          "loi": "Typing long commands live.|||Gõ lệnh dài trực tiếp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "demo script",
+          "vi": "kịch bản demo"
+        }
+      ]
+    },
+    {
+      "title": "Story 3 — Write evidenceRow(claim, before, after, unit)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "career",
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>One line of the evidence sheet: <code>'&lt;claim&gt;: &lt;before&gt; &lt;unit&gt; ⇒ &lt;after&gt; &lt;unit&gt; (&lt;k&gt;×)'</code>. Integers get thousands separators (<code>1,318</code>), other numbers stay as written. <code>k</code> = the larger over the smaller; if <code>k ≥ 10</code> round to an integer, else to one decimal.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một dòng của bảng bằng chứng: <code>'&lt;claim&gt;: &lt;before&gt; &lt;unit&gt; ⇒ &lt;after&gt; &lt;unit&gt; (&lt;k&gt;×)'</code>. Số nguyên có dấu phẩy hàng nghìn (<code>1,318</code>), số khác giữ nguyên. <code>k</code> = số lớn chia số nhỏ; nếu <code>k ≥ 10</code> làm tròn thành số nguyên, không thì một chữ số lẻ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "claim — string; before, after — numbers; unit — string|||claim — chuỗi; before, after — số; unit — chuỗi",
+      "outputSpec": "string|||chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "evidenceRow(\"Booking with email\", 311, 3.6, \"ms\")",
+          "output": "\"Booking with email: 311 ms ⇒ 3.6 ms (86×)\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "toLocaleString('en-US') adds the commas.|||toLocaleString('en-US') thêm dấu phẩy.",
+        "Faster and slower both use larger ÷ smaller.|||Nhanh hơn hay chậm hơn đều dùng lớn ÷ nhỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** one evidence row */\nfunction evidenceRow(claim, before, after, unit) {\n  // Write your solution here\n  return claim + ': ' + before + ' ' + unit + ' ⇒ ' + after + ' ' + unit + ' (' + (after / before).toFixed(1) + '×)';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction evidenceRow(claim, before, after, unit) {\n  const f = (x) => (Number.isInteger(x) ? x.toLocaleString('en-US') : String(x));\n  const r = before > after ? before / after : after / before;\n  const k = r >= 10 ? Math.round(r) : Math.round(r * 10) / 10;\n  return `${claim}: ${f(before)} ${unit} ⇒ ${f(after)} ${unit} (${k}×)`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each row of the 12.8 sheet comes from a script you can rerun: 311 ms ⇒ 3.6 ms is 86×; 1,318 ⇒ 2,865 req/s is 2.2×.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi dòng của bảng 12.8 đến từ một script chạy lại được: 311 ms ⇒ 3.6 ms là 86 lần; 1.318 ⇒ 2.865 req/s là 2,2 lần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Sync vs queue",
+              "vi": "Đồng bộ và hàng đợi"
+            },
+            "goi": "evidenceRow(\"Booking with email\", 311, 3.6, \"ms\")",
+            "mongDoi": "Booking with email: 311 ms ⇒ 3.6 ms (86×)"
+          },
+          {
+            "moTa": {
+              "en": "RAM vs PostgreSQL",
+              "vi": "RAM và PostgreSQL"
+            },
+            "goi": "evidenceRow(\"Bookings list\", 1318, 2865, \"req/s\")",
+            "mongDoi": "Bookings list: 1,318 req/s ⇒ 2,865 req/s (2.2×)"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "evidenceRow(\"Lost edits\", 11, 1, \"of 20\")",
+            "mongDoi": "Lost edits: 11 of 20 ⇒ 1 of 20 (11×)",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "evidenceRow(\"Labs list\", 7851, 5549, \"req/s\")",
+            "mongDoi": "Labs list: 7,851 req/s ⇒ 5,549 req/s (1.4×)",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing in the wrong direction and printing 0.0×.|||Chia ngược chiều rồi in 0.0×."
+        },
+        {
+          "loi": "Formatting 3.6 as 4.|||Làm tròn 3.6 thành 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quantified result",
+          "vi": "kết quả định lượng"
+        }
+      ]
+    }
+  ]
+}

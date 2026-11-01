@@ -22,9 +22,22 @@ import { exportsRouter } from './routes/exports.js';
 import { jobsRouter } from './routes/jobs.js';
 import { realtimeRouter } from './routes/realtime.js';
 import { reportExportsRouter } from './routes/reportExports.js';
+import { config } from './config.js';
+import { store } from './store/index.js';
+import { shared as sharedRedis } from './redis.js';
+import { lifecycle } from './lifecycle.js';
+import { requestLog, log } from './log.js';
+import { metricsMiddleware } from './metrics.js';
 
 export const app = express();
+// Kho pg mà KHÔNG có Redis (dev, npm run test:pg): chuyển outbox ⇒ bus sự kiện trong RAM ngay trong tiến trình này
+if (config.store === 'pg' && config.events === 'memory' && process.env.LABFLOW_RELAY !== '0') {
+  const [{ startRelay }, { publish }] = await Promise.all([import('./relay.js'), import('./events.js')]);
+  await startRelay((r) => publish(r.type, r.subject, r.data), (...a) => console.error(...a), { unref: true });
+}
 app.disable('x-powered-by');
+app.use(requestLog);                                            // bài 12.7: X-Request-Id + một dòng log JSON mỗi request
+app.use(metricsMiddleware);                                     // bài 12.7: đếm request + độ trễ cho /metrics (cổng riêng)
 app.use(serverTiming);                                          // bài 8.1: Server-Timing cho mọi request
 // Bài 8.3 — chạy nhiều instance: mỗi câu trả lời nói nó đến từ instance nào (chỉ để HỌC, production không cần)
 if (process.env.LABFLOW_INSTANCE) app.use((req, res, next) => { res.set('LabFlow-Instance', process.env.LABFLOW_INSTANCE); next(); });
@@ -51,9 +64,17 @@ app.use(chaos);                                                 // Chương 5: g
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));          // sống (liveness): tiến trình còn trả lời
 // Bài 8.4 — sẵn sàng (readiness): phụ thuộc còn dùng được không? Load balancer dựa vào đây để bớt gửi request tới instance này
-app.get('/ready', (req, res) => (dependency.down
-  ? res.status(503).set('Retry-After', '30').json({ status: 'degraded', database: 'down', since: dependency.since })
-  : res.json({ status: 'ready', database: 'up' })));
+// Chương 12: hỏi THẬT — PostgreSQL trả lời SELECT 1 trong 1 s không, Redis dùng chung còn nối không, instance có đang tắt không
+const within = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
+app.get('/ready', async (req, res) => {
+  const database = dependency.down ? 'down' : await within(store.ping(), 1000).then(() => 'up', () => 'down');
+  const redis = sharedRedis ? (sharedRedis.isReady ? 'up' : 'down') : undefined;
+  const body = { status: 'ready', store: config.store, database, ...(redis && { redis }) };
+  if (lifecycle.draining) return res.status(503).set('Retry-After', '5').json({ ...body, status: 'draining' });
+  // Redis hỏng KHÔNG làm instance "không sẵn sàng": rate limit tự mở, cache tự bỏ qua (bài 12.5) — chỉ CSDL là bắt buộc
+  if (database === 'down') return res.status(503).set('Retry-After', '30').json({ ...body, status: 'degraded', ...(dependency.since && { since: dependency.since }) });
+  res.json(body);
+});
 if (process.env.LABFLOW_CHAOS) app.use('/chaos', chaosDbRouter);   // CHỈ để học: POST /chaos/db
 // Bài 7.3 — tài liệu là một phần của API: công bố hợp đồng ở một URL cố định
 const SPEC = readFileSync(new URL('../openapi/openapi.yaml', import.meta.url));
@@ -70,8 +91,9 @@ app.use(appVersionGuard);
 const api = Router();
 // Chương 9 — các route dùng PostgreSQL (+ replica, Redis) chỉ bật khi có LABFLOW_PG=1; thiếu thì LabFlow vẫn chạy như cũ
 const pgRoutes = process.env.LABFLOW_PG
-  ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')), ...(await import('./routes/webhooks.js')) } : null;
-if (pgRoutes) api.use('/labs/:labId/notes', pgRoutes.labNotesRouter);   // bài 9.3 — đặt TRƯỚC /labs
+  ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')), ...(await import('./routes/webhooks.js')) }
+  : config.store === 'pg' ? { ...(await import('./routes/webhooks.js')) } : null;   // Chương 12: webhook là một phần của API cuối khoá
+if (pgRoutes?.labNotesRouter) api.use('/labs/:labId/notes', pgRoutes.labNotesRouter);   // bài 9.3 — đặt TRƯỚC /labs
 api.use('/labs', labsRouter);
 api.use('/devices/:id/issues', deviceIssuesRouter);   // đặt TRƯỚC /devices
 api.use('/devices', devicesRouter);
@@ -81,8 +103,8 @@ api.use('/me', meRouter);
 api.use('/waitlist', waitlistRouter);                         // Lab 7
 api.use('/reports/usage/exports', reportExportsRouter);        // Lab 10 — đặt TRƯỚC /reports
 api.use('/reports', reportsRouter);                            // Lab 8
-if (pgRoutes) api.use('/stats', pgRoutes.statsRouter);          // bài 9.2
-if (pgRoutes) api.use('/notes', pgRoutes.notesRouter);          // bài 9.3
+if (pgRoutes?.statsRouter) api.use('/stats', pgRoutes.statsRouter);          // bài 9.2
+if (pgRoutes?.notesRouter) api.use('/notes', pgRoutes.notesRouter);          // bài 9.3
 if (pgRoutes) api.use('/webhooks', pgRoutes.webhooksRouter);    // bài 10.5
 api.use('/exports', exportsRouter);                            // bài 10.1: đồng bộ (chờ) và bất đồng bộ (202)
 api.use('/jobs', jobsRouter);                                  // bài 10.1: tài nguyên công việc
@@ -118,6 +140,8 @@ app.use((req, res) => {
 
 // Một chỗ duy nhất biến MỌI lỗi thành application/problem+json
 app.use((err, req, res, next) => {
+  if (err.retryAfter) res.set('Retry-After', String(err.retryAfter));   // Chương 12: 503 do mất CSDL mang Retry-After
+  if (err.cause && err.status === 503) log('warn', 'dependency', { reqId: req.id, code: err.cause.code, error: err.cause.message || err.cause.errors?.[0]?.message });
   if (err instanceof HttpError) {
     const more = Array.isArray(err.more)
       ? { errors: err.more }   // lỗi từng trường: { pointer | parameter, detail }
@@ -130,6 +154,7 @@ app.use((err, req, res, next) => {
   if (err.type === 'entity.too.large') {      // body vượt giới hạn của express.json
     return sendProblem(req, res, { status: 413, code: 'PAYLOAD_TOO_LARGE', params: { limit: err.limit, length: err.length } });
   }
-  console.error(err);                         // chi tiết thật chỉ nằm trong log của server
+  if (config.production || process.env.LABFLOW_LOG_FORMAT === 'json') log('error', err.message, { reqId: req.id, stack: err.stack });
+  else console.error(err);                    // chi tiết thật chỉ nằm trong log của server (kèm reqId để tìm)
   sendProblem(req, res, { status: 500, code: 'INTERNAL' });
 });

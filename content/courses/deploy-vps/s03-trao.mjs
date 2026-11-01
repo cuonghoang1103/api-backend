@@ -533,6 +533,11 @@ ${slide('dv-03', 12, 'Ai gửi tín hiệu, bạn được bao lâu')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">signal(7)</span><span class="lc-sub">man7.org/linux/man-pages/man7/signal.7.html — the table showing which signals can be caught, and the sentence saying SIGKILL cannot.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.service(5) — TimeoutStopSec, KillSignal</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.service.html — how long your process actually gets, and how to change it.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — PID 1, signal forwarding and stop_grace_period</span><span class="lc-sub">/courses/docker/learn${REF} — why a container can appear to ignore SIGTERM entirely, and the two ways to fix it.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.7: the deployment checklist</span><span class="lc-sub">Graceful shutdown under load with two instances behind a health-checking proxy: abrupt stop 622 × 502, graceful 0 errors in 1.5 s — plus the trap of a health check that is too strict (64,926 × 503).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -694,6 +699,11 @@ ${slide('dv-03', 12, 'Ai gửi tín hiệu, bạn được bao lâu')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">signal(7)</span><span class="lc-sub">man7.org/linux/man-pages/man7/signal.7.html — cái bảng liệt kê tín hiệu nào bắt được, và câu nói rằng SIGKILL thì không.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.service(5) — TimeoutStopSec, KillSignal</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.service.html — tiến trình của bạn THẬT SỰ được bao lâu, và đổi nó thế nào.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — PID 1, chuyển tiếp tín hiệu và stop_grace_period</span><span class="lc-sub">/courses/docker/learn${REF} — vì sao một container trông như đang phớt lờ hoàn toàn SIGTERM, và hai cách sửa.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: checklist triển khai</span><span class="lc-sub">Tắt êm khi đang chịu tải, hai instance sau một proxy có kiểm sức khoẻ: tắt đột ngột 622 × 502, tắt êm 0 lỗi trong 1,5 s — kèm bẫy kiểm sức khoẻ quá gắt (64.926 × 503).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

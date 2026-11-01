@@ -4,8 +4,9 @@
 // Phong bì theo CloudEvents 1.0 (bài 10.3): id, source, type có số phiên bản, time, subject, data.
 import { EventEmitter } from 'node:events';
 import { createClient } from 'redis';
+import { config } from './config.js';
 
-const MODE = process.env.LABFLOW_EVENTS ?? 'memory';
+const MODE = config.events;                                       // Chương 12: kho pg + Redis ⇒ mặc định redis
 const KEEP = Number(process.env.EVENTS_KEEP ?? 1000);             // giữ bao nhiêu sự kiện để client nối lại lấy bù
 export const STREAM = 'labflow:events';
 const bus = new EventEmitter().setMaxListeners(0);

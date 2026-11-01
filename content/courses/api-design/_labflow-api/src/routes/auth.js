@@ -1,7 +1,7 @@
 // routes/auth.js — bài 6.1: đăng nhập bằng email + mật khẩu ⇒ JWT 15 phút
 import { Router } from 'express';
 import { z } from 'zod';
-import { users } from '../db.js';
+import { store } from '../store/index.js';
 import { HttpError, onlyAllow } from '../http.js';
 import { validate } from '../validate.js';
 import { signJwt, ACCESS_TTL_SEC } from '../auth.js';
@@ -24,7 +24,7 @@ export const authRouter = Router();
 authRouter.route('/login')
   .post(...shed, ...(VULN ? [] : [loginLimit]), validate('body', Login), async (req, res) => {   // bài 8.2: async — Express 5 tự chuyển lỗi
     const { email, password } = req.valid.body;
-    const user = users.find((u) => u.email === email);
+    const user = await store.getUserByEmail(email);
     const t0 = performance.now();
     const ok = (await verifyPassword(password, user?.passwordHash ?? DUMMY)) && user;
     req.timing.add('scrypt', performance.now() - t0);                 // thời gian CHỜ, event loop vẫn rảnh

@@ -46,6 +46,7 @@ export default {
     "typescript-4-2-interface-vs-type": { yt: "IXAT3If0pGI", credit: "basarat — TypeScript TYPES vs INTERFACES (Key Differences)" },
     "typescript-4-3-extends-intersection": { yt: "ozUaIWSFGX0", credit: "Train To Code — Advanced TypeScript | Union and Intersection Types" },
     "typescript-4-4-index-record": { yt: "2eAqXLi8q70", credit: "Dave Gray — Typescript Index Signatures, keyof Assertions & the Record Utility Type" },
+    "typescript-4-6-lab-mo-hinh-du-lieu": { yt: "_1c2B3uJ-w4", credit: "Web Coding With Ankur — Mastering TypeScript: Interfaces, Readonly Properties & Extends Explained!" },
     /* ── Chương 5 ── */
     "typescript-5-1-union-narrowing": { yt: "HUZhBJL0Dv4", credit: "Tech With Piotr — TypeScript Crash Course Part 2 – Union Types & Type Narrowing" },
     "typescript-5-2-literal-union": { yt: "2HJHRqThWRQ", credit: "Eulier Gonzalez — Typescript Essentials : Union and Narrowing Types examples with string, literals and maps" },

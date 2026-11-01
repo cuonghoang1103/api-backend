@@ -104,6 +104,66 @@
       "name": "2.6 Lab 2 — Strict null on the lab schedule",
       "level": "ADVANCED",
       "description": "1 đề: Lab 2 — Strict null on the lab schedule"
+    },
+    {
+      "slug": "typescript-3-1-tham-so",
+      "name": "3.1 — Typing parameters: required, optional, default, rest",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: An optional end time · A default that survives null · Any number of ranges: a rest parameter · Two flags become an options object"
+    },
+    {
+      "slug": "typescript-3-2-callback",
+      "name": "3.2 — Functions as values: function types & callbacks",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Name the shape of a rule with a function type · Type a rule factory and validate · Fix the .map(parseInt) bug that tsc cannot see · Replace Function with real function types"
+    },
+    {
+      "slug": "typescript-3-3-overload-void",
+      "name": "3.3 — Overloads & the void-return subtlety",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Give toMinutes two overloads · Type the onProblem callback as void · Stop forEach from dropping async e-mails · Make an overload tell the truth"
+    },
+    {
+      "slug": "typescript-3-4-this",
+      "name": "3.4 — this: the parameter you did not know you had",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Make tsc refuse a validator method called without its object · A validator that works however it is called — no this · Write the handler type so methods that need their object are refused"
+    },
+    {
+      "slug": "typescript-3-6-lab-luat-dat-phong",
+      "name": "3.6 Lab 3 — Booking rules as an array of functions",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 3 — Booking rules as an array of functions"
+    },
+    {
+      "slug": "typescript-4-1-dang-object",
+      "name": "4.1 — Object shapes: optional & readonly properties",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Write the Lab shape: required, optional, readonly · The typo that went through a variable · Two labs, one shared array: readonly all the way down · Name the nested shape: Place"
+    },
+    {
+      "slug": "typescript-4-2-interface-vs-type",
+      "name": "4.2 — interface vs type alias",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Two interfaces, one name: split the merged Booking · A union an interface cannot extend · Add a field to a library’s interface (augmentation)"
+    },
+    {
+      "slug": "typescript-4-3-extends-intersection",
+      "name": "4.3 — Composing types: extends & intersection",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Write id and createdAt once: an Entity base · Derive BookingView with & and spread · Find the hidden never"
+    },
+    {
+      "slug": "typescript-4-4-index-record",
+      "name": "4.4 — Index signatures & Record",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Close the LAB_INFO table with Record · Count per lab without losing the zeros · A user index that admits a miss"
+    },
+    {
+      "slug": "typescript-4-6-lab-mo-hinh-du-lieu",
+      "name": "4.6 Lab 4 — LabFlow’s data model",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 4 — LabFlow’s data model"
     }
   ]
 }

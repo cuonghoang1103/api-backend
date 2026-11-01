@@ -1,0 +1,270 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-3-6-lab-luat-dat-phong",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-3-6-lab-luat-dat-phong"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 — Booking rules as an array of functions",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-6-lab-luat-dat-phong"
+      ],
+      "problemHtml": "<p><code>src/validate.ts</code> types every function as <code>Function</code>. Give each one a real type — <code>type Rule = (input: BookingInput) =&gt; Problem | null</code>, <code>maxSeats(limit): Rule</code>, a rest parameter, an optional <code>void</code> callback, overloads for <code>toMinutes</code> and a <code>this</code> parameter for <code>run</code> — and fix the two logic bugs the tests show. No <code>any</code>, <code>Function</code>, <code>as</code> (except <code>as const</code>), <code>!</code> or <code>@ts-</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, test/ and kiem/phai-dung.ts, all 8 lines of kiem/sai.ts get their error, node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/validate.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/validate.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322, TS2322, TS2769, TS2345, TS2345, TS2554, TS2684); its other lines still compile.</li>\n  <li><code>node --test test/validate.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>\\bFunction\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$]+!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/validate.ts</code> gõ mọi hàm bằng kiểu <code>Function</code>. Đặt cho từng hàm một kiểu thật — <code>type Rule = (input: BookingInput) =&gt; Problem | null</code>, <code>maxSeats(limit): Rule</code>, tham số rest, callback <code>void</code> tuỳ chọn, overload cho <code>toMinutes</code> và tham số <code>this</code> cho <code>run</code> — và sửa hai bug logic mà test chỉ ra. Không <code>any</code>, <code>Function</code>, <code>as</code> (trừ <code>as const</code>), <code>!</code> hay <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test/ và kiem/phai-dung.ts, cả 8 dòng của kiem/sai.ts có đúng lỗi, node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/validate.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/validate.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322, TS2322, TS2769, TS2345, TS2345, TS2554, TS2684); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/validate.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>\\bFunction\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$]+!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/validate.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/validate.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 8: validate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request|||kiem/sai.ts, dòng 8: validate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · /\\bFunction\\b/ · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · /\\bFunction\\b/ · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "// LabFlow — check a booking request with a list of rules.\n// A teammate's first version: it runs, but the function types are guesses. Lab 3: type it properly.\nimport { parseTime } from './time.ts';\nimport { OPEN, CLOSE, STEP, MAX_MINUTES } from './booking.ts';\nimport type { BookingInput } from './booking.ts';\n\nexport type Problem = { code: string; message: string };\nexport type Rule = Function;\n\n// One \"HH:MM\" -> minutes, or a list of them -> a list of minutes.\nexport function toMinutes(value: string | string[]): number | number[] {\n  return typeof value === 'string' ? parseTime(value) : value.map((t) => parseTime(t));\n}\n\nexport const onGrid = ({ start, end }: BookingInput) =>\n  parseTime(start) % STEP !== 0 || parseTime(end) % STEP !== 0\n    ? { code: 'OFF_GRID', message: 'Start and end must be on the 30-minute grid' }\n    : null;\n\nexport const endAfterStart = ({ start, end }: BookingInput) =>\n  parseTime(end) <= parseTime(start) ? { code: 'END_BEFORE_START', message: 'End must be after start' } : null;\n\nexport const withinHours = ({ start, end }: BookingInput) =>\n  parseTime(start) < OPEN || parseTime(end) > CLOSE\n    ? { code: 'OUTSIDE_HOURS', message: 'Labs are open 07:00–21:00' }\n    : null;\n\nexport const notTooLong = ({ start, end }: BookingInput) =>\n  parseTime(end) - parseTime(start) > MAX_MINUTES ? { code: 'TOO_LONG', message: 'At most 4 hours' } : null;\n\nexport function maxSeats(limit) {\n  return ({ seats }: BookingInput) => (seats >= limit ? { code: 'TOO_MANY_SEATS', message: 'At most ' + limit + ' seats' } : null);\n}\n\nexport const RULES: Rule[] = [onGrid, endAfterStart, withinHours, notTooLong, maxSeats(40)];\n\nexport function validate(input: BookingInput, rules: Rule[], onProblem?: Function): Problem[] {\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) {\n      if (onProblem) onProblem(problem);\n      return [problem];\n    }\n  }\n  return [];\n}\n\nexport function totalMinutes(...ranges) {\n  let total = 0;\n  for (const [start, end] of ranges) total += end - start;\n  return total;\n}\n\nexport function createValidator(rules: Rule[]) {\n  return {\n    rules,\n    run(input: BookingInput) {\n      return validate(input, this.rules);\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — behaviour of the rule list. Run: node --test --test-reporter=spec lab3/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toMinutes, validate, maxSeats, onGrid, endAfterStart, withinHours, notTooLong, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst ok: BookingInput = { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' };\nconst codes = (input: BookingInput) => validate(input, RULES).map((p) => p.code);\n\ntest('toMinutes: one time', () => assert.equal(toMinutes('08:30'), 510));\ntest('toMinutes: a list of times', () => assert.deepEqual(toMinutes(['07:00', '21:00']), [420, 1260]));\ntest('a good request has no problems', () => assert.deepEqual(validate(ok, RULES), []));\ntest('each rule alone', () => {\n  assert.equal(onGrid({ ...ok, start: '08:15' })?.code, 'OFF_GRID');\n  assert.equal(endAfterStart({ ...ok, end: '07:30' })?.code, 'END_BEFORE_START');\n  assert.equal(withinHours({ ...ok, start: '06:00' })?.code, 'OUTSIDE_HOURS');\n  assert.equal(notTooLong({ ...ok, end: '12:30' })?.code, 'TOO_LONG');\n});\ntest('validate collects EVERY problem, in rule order', () =>\n  assert.deepEqual(codes({ ...ok, start: '06:15', end: '06:00' }), ['OFF_GRID', 'END_BEFORE_START', 'OUTSIDE_HOURS']));\ntest('maxSeats(40): exactly 40 seats is allowed', () => assert.equal(maxSeats(40)({ ...ok, seats: 40 }), null));\ntest('maxSeats(40): 41 seats is a problem', () => assert.equal(maxSeats(40)({ ...ok, seats: 41 })?.code, 'TOO_MANY_SEATS'));\ntest('onProblem hears each problem once', () => {\n  const heard: string[] = [];\n  validate({ ...ok, start: '08:15', seats: 99 }, RULES, (p) => heard.push(p.code));\n  assert.deepEqual(heard, ['OFF_GRID', 'TOO_MANY_SEATS']);\n});\ntest('totalMinutes: none, one, two ranges', () => {\n  assert.equal(totalMinutes(), 0);\n  assert.equal(totalMinutes([480, 600]), 120);\n  assert.equal(totalMinutes([480, 600], [660, 720]), 180);\n});\ntest('createValidator: run uses the validator’s own rules', () => {\n  const v = createValidator([maxSeats(10)]);\n  assert.deepEqual(v.run(ok).map((p) => p.code), ['TOO_MANY_SEATS']);\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — CORRECT uses. They must keep compiling with your types (part B).\nimport { toMinutes, validate, maxSeats, onGrid, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { Problem, Rule } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\n\nconst start: number = toMinutes('08:00');                    // one time in, one number out\nconst all: number[] = toMinutes(['08:00', '10:00']);          // a list in, a list out\nconst problems: Problem[] = validate(input, RULES);\n\nconst log: Problem[] = [];\nvalidate(input, [onGrid, maxSeats(30)], (p) => log.push(p)); // the callback's result (push returns a number) is ignored\n\nconst studentLimit: Rule = (b) =>\n  b.role === 'STUDENT' && b.seats > 35 ? { code: 'TOO_MANY_SEATS', message: 'Students: at most 35 seats' } : null;\nvalidate(input, [...RULES, studentLimit]);\n\nconst none: number = totalMinutes();                          // no range at all is fine: 0\nconst two: number = totalMinutes([480, 600], [600, 720]);\n\nconst v = createValidator(RULES);\nconst fromValidator: Problem[] = v.run(input);                // called ON the validator\nconsole.log(start, all, problems, log, none, two, fromValidator);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { toMinutes, validate, maxSeats, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\ndeclare const input: BookingInput;\n\nvalidate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request // expect TS2322\nvalidate(input, [() => 'TOO_LONG']);                         // S2 a rule returns a Problem or null // expect TS2322\nconst one: number = toMinutes(['08:00']);                    // S3 a list in, a list out // expect TS2322\ntoMinutes(480);                                              // S4 minutes are not \"HH:MM\" // expect TS2769\nmaxSeats('30');                                              // S5 the limit is a number // expect TS2345\ntotalMinutes([480, 600], 720);                               // S6 every argument is a [start, end] range // expect TS2345\nvalidate(input);                                             // S7 which rules? // expect TS2554\nconst run = createValidator(RULES).run; run(input);          // S8 run must be called on its validator // expect TS2684\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "// LabFlow — check a booking request with a LIST OF RULES (Chapter 3, = Lab 3 reference solution).\nimport { parseTime } from './time.ts';\nimport { OPEN, CLOSE, STEP, MAX_MINUTES } from './booking.ts';\nimport type { BookingInput } from './booking.ts';\nimport type { TimeRange } from './schedule.ts';\n\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// A rule looks at one request and returns a problem, or null when the request is fine.\nexport type Rule = (input: BookingInput) => Problem | null;\n\n// Overloads: one time in, one number out — a list in, a list out.\nexport function toMinutes(text: string): number;\nexport function toMinutes(texts: readonly string[]): number[];\nexport function toMinutes(value: string | readonly string[]): number | number[] {\n  return typeof value === 'string' ? parseTime(value) : value.map((t) => parseTime(t));\n}\n\nexport const onGrid: Rule = ({ start, end }) =>\n  toMinutes(start) % STEP !== 0 || toMinutes(end) % STEP !== 0\n    ? { code: 'OFF_GRID', message: 'Start and end must be on the 30-minute grid' }\n    : null;\n\nexport const endAfterStart: Rule = ({ start, end }) =>\n  toMinutes(end) <= toMinutes(start) ? { code: 'END_BEFORE_START', message: 'End must be after start' } : null;\n\nexport const withinHours: Rule = ({ start, end }) =>\n  toMinutes(start) < OPEN || toMinutes(end) > CLOSE\n    ? { code: 'OUTSIDE_HOURS', message: 'Labs are open 07:00–21:00' }\n    : null;\n\nexport const notTooLong: Rule = ({ start, end }) =>\n  toMinutes(end) - toMinutes(start) > MAX_MINUTES ? { code: 'TOO_LONG', message: 'At most 4 hours' } : null;\n\n// A function that RETURNS a rule: the limit is remembered by the closure.\nexport function maxSeats(limit: number): Rule {\n  return ({ seats }) => (seats > limit ? { code: 'TOO_MANY_SEATS', message: 'At most ' + limit + ' seats' } : null);\n}\n\nexport const RULES: readonly Rule[] = [onGrid, endAfterStart, withinHours, notTooLong, maxSeats(40)];\n\n// Runs EVERY rule and collects every problem. onProblem (optional) hears about each one; its result is ignored.\nexport function validate(input: BookingInput, rules: readonly Rule[], onProblem?: (problem: Problem) => void): Problem[] {\n  const problems: Problem[] = [];\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) {\n      problems.push(problem);\n      onProblem?.(problem);\n    }\n  }\n  return problems;\n}\n\n// Any number of ranges, each [start, end]: total booked minutes.\nexport function totalMinutes(...ranges: TimeRange[]): number {\n  let total = 0;\n  for (const [start, end] of ranges) total += end - start;\n  return total;\n}\n\n// A validator remembers its rules; run must be called ON the validator (this).\nexport type Validator = { rules: readonly Rule[]; run(this: Validator, input: BookingInput): Problem[] };\n\nexport function createValidator(rules: readonly Rule[]): Validator {\n  return {\n    rules,\n    run(input) {\n      return validate(input, this.rules);\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — behaviour of the rule list. Run: node --test --test-reporter=spec lab3/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toMinutes, validate, maxSeats, onGrid, endAfterStart, withinHours, notTooLong, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst ok: BookingInput = { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' };\nconst codes = (input: BookingInput) => validate(input, RULES).map((p) => p.code);\n\ntest('toMinutes: one time', () => assert.equal(toMinutes('08:30'), 510));\ntest('toMinutes: a list of times', () => assert.deepEqual(toMinutes(['07:00', '21:00']), [420, 1260]));\ntest('a good request has no problems', () => assert.deepEqual(validate(ok, RULES), []));\ntest('each rule alone', () => {\n  assert.equal(onGrid({ ...ok, start: '08:15' })?.code, 'OFF_GRID');\n  assert.equal(endAfterStart({ ...ok, end: '07:30' })?.code, 'END_BEFORE_START');\n  assert.equal(withinHours({ ...ok, start: '06:00' })?.code, 'OUTSIDE_HOURS');\n  assert.equal(notTooLong({ ...ok, end: '12:30' })?.code, 'TOO_LONG');\n});\ntest('validate collects EVERY problem, in rule order', () =>\n  assert.deepEqual(codes({ ...ok, start: '06:15', end: '06:00' }), ['OFF_GRID', 'END_BEFORE_START', 'OUTSIDE_HOURS']));\ntest('maxSeats(40): exactly 40 seats is allowed', () => assert.equal(maxSeats(40)({ ...ok, seats: 40 }), null));\ntest('maxSeats(40): 41 seats is a problem', () => assert.equal(maxSeats(40)({ ...ok, seats: 41 })?.code, 'TOO_MANY_SEATS'));\ntest('onProblem hears each problem once', () => {\n  const heard: string[] = [];\n  validate({ ...ok, start: '08:15', seats: 99 }, RULES, (p) => heard.push(p.code));\n  assert.deepEqual(heard, ['OFF_GRID', 'TOO_MANY_SEATS']);\n});\ntest('totalMinutes: none, one, two ranges', () => {\n  assert.equal(totalMinutes(), 0);\n  assert.equal(totalMinutes([480, 600]), 120);\n  assert.equal(totalMinutes([480, 600], [660, 720]), 180);\n});\ntest('createValidator: run uses the validator’s own rules', () => {\n  const v = createValidator([maxSeats(10)]);\n  assert.deepEqual(v.run(ok).map((p) => p.code), ['TOO_MANY_SEATS']);\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — CORRECT uses. They must keep compiling with your types (part B).\nimport { toMinutes, validate, maxSeats, onGrid, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { Problem, Rule } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\n\nconst start: number = toMinutes('08:00');                    // one time in, one number out\nconst all: number[] = toMinutes(['08:00', '10:00']);          // a list in, a list out\nconst problems: Problem[] = validate(input, RULES);\n\nconst log: Problem[] = [];\nvalidate(input, [onGrid, maxSeats(30)], (p) => log.push(p)); // the callback's result (push returns a number) is ignored\n\nconst studentLimit: Rule = (b) =>\n  b.role === 'STUDENT' && b.seats > 35 ? { code: 'TOO_MANY_SEATS', message: 'Students: at most 35 seats' } : null;\nvalidate(input, [...RULES, studentLimit]);\n\nconst none: number = totalMinutes();                          // no range at all is fine: 0\nconst two: number = totalMinutes([480, 600], [600, 720]);\n\nconst v = createValidator(RULES);\nconst fromValidator: Problem[] = v.run(input);                // called ON the validator\nconsole.log(start, all, problems, log, none, two, fromValidator);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 3 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { toMinutes, validate, maxSeats, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\ndeclare const input: BookingInput;\n\nvalidate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request // expect TS2322\nvalidate(input, [() => 'TOO_LONG']);                         // S2 a rule returns a Problem or null // expect TS2322\nconst one: number = toMinutes(['08:00']);                    // S3 a list in, a list out // expect TS2322\ntoMinutes(480);                                              // S4 minutes are not \"HH:MM\" // expect TS2769\nmaxSeats('30');                                              // S5 the limit is a number // expect TS2345\ntotalMinutes([480, 600], 720);                               // S6 every argument is a [start, end] range // expect TS2345\nvalidate(input);                                             // S7 which rules? // expect TS2554\nconst run = createValidator(RULES).run; run(input);          // S8 run must be called on its validator // expect TS2684\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — logic fixed, every function type is (...args: any[]) =&gt; any; real Rule type but toMinutes returns a union and run has no this parameter — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — logic fixed, every function type is (...args: any[]) =&gt; any; real Rule type but toMinutes returns a union and run has no this parameter — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "src/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n",
+          "src/schedule.ts": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n",
+          "test/validate.test.ts": "// Lab 3 — behaviour of the rule list. Run: node --test --test-reporter=spec lab3/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toMinutes, validate, maxSeats, onGrid, endAfterStart, withinHours, notTooLong, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst ok: BookingInput = { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' };\nconst codes = (input: BookingInput) => validate(input, RULES).map((p) => p.code);\n\ntest('toMinutes: one time', () => assert.equal(toMinutes('08:30'), 510));\ntest('toMinutes: a list of times', () => assert.deepEqual(toMinutes(['07:00', '21:00']), [420, 1260]));\ntest('a good request has no problems', () => assert.deepEqual(validate(ok, RULES), []));\ntest('each rule alone', () => {\n  assert.equal(onGrid({ ...ok, start: '08:15' })?.code, 'OFF_GRID');\n  assert.equal(endAfterStart({ ...ok, end: '07:30' })?.code, 'END_BEFORE_START');\n  assert.equal(withinHours({ ...ok, start: '06:00' })?.code, 'OUTSIDE_HOURS');\n  assert.equal(notTooLong({ ...ok, end: '12:30' })?.code, 'TOO_LONG');\n});\ntest('validate collects EVERY problem, in rule order', () =>\n  assert.deepEqual(codes({ ...ok, start: '06:15', end: '06:00' }), ['OFF_GRID', 'END_BEFORE_START', 'OUTSIDE_HOURS']));\ntest('maxSeats(40): exactly 40 seats is allowed', () => assert.equal(maxSeats(40)({ ...ok, seats: 40 }), null));\ntest('maxSeats(40): 41 seats is a problem', () => assert.equal(maxSeats(40)({ ...ok, seats: 41 })?.code, 'TOO_MANY_SEATS'));\ntest('onProblem hears each problem once', () => {\n  const heard: string[] = [];\n  validate({ ...ok, start: '08:15', seats: 99 }, RULES, (p) => heard.push(p.code));\n  assert.deepEqual(heard, ['OFF_GRID', 'TOO_MANY_SEATS']);\n});\ntest('totalMinutes: none, one, two ranges', () => {\n  assert.equal(totalMinutes(), 0);\n  assert.equal(totalMinutes([480, 600]), 120);\n  assert.equal(totalMinutes([480, 600], [660, 720]), 180);\n});\ntest('createValidator: run uses the validator’s own rules', () => {\n  const v = createValidator([maxSeats(10)]);\n  assert.deepEqual(v.run(ok).map((p) => p.code), ['TOO_MANY_SEATS']);\n});\n",
+          "kiem/phai-dung.ts": "// Lab 3 — CORRECT uses. They must keep compiling with your types (part B).\nimport { toMinutes, validate, maxSeats, onGrid, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { Problem, Rule } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\n\nconst start: number = toMinutes('08:00');                    // one time in, one number out\nconst all: number[] = toMinutes(['08:00', '10:00']);          // a list in, a list out\nconst problems: Problem[] = validate(input, RULES);\n\nconst log: Problem[] = [];\nvalidate(input, [onGrid, maxSeats(30)], (p) => log.push(p)); // the callback's result (push returns a number) is ignored\n\nconst studentLimit: Rule = (b) =>\n  b.role === 'STUDENT' && b.seats > 35 ? { code: 'TOO_MANY_SEATS', message: 'Students: at most 35 seats' } : null;\nvalidate(input, [...RULES, studentLimit]);\n\nconst none: number = totalMinutes();                          // no range at all is fine: 0\nconst two: number = totalMinutes([480, 600], [600, 720]);\n\nconst v = createValidator(RULES);\nconst fromValidator: Problem[] = v.run(input);                // called ON the validator\nconsole.log(start, all, problems, log, none, two, fromValidator);\n",
+          "kiem/sai.ts": "// Lab 3 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { toMinutes, validate, maxSeats, totalMinutes, createValidator, RULES } from '../src/validate.ts';\nimport type { BookingInput } from '../src/booking.ts';\n\ndeclare const input: BookingInput;\n\nvalidate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request // expect TS2322\nvalidate(input, [() => 'TOO_LONG']);                         // S2 a rule returns a Problem or null // expect TS2322\nconst one: number = toMinutes(['08:00']);                    // S3 a list in, a list out // expect TS2322\ntoMinutes(480);                                              // S4 minutes are not \"HH:MM\" // expect TS2769\nmaxSeats('30');                                              // S5 the limit is a number // expect TS2345\ntotalMinutes([480, 600], 720);                               // S6 every argument is a [start, end] range // expect TS2345\nvalidate(input);                                             // S7 which rules? // expect TS2554\nconst run = createValidator(RULES).run; run(input);          // S8 run must be called on its validator // expect TS2684\n"
+        },
+        "tepHoc": [
+          "src/validate.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/validate.test.ts",
+              "kiem/phai-dung.ts"
+            ],
+            "moTa": "tsc (strict): src/validate.ts + test/validate.test.ts, kiem/phai-dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 8,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:8 is refused with TS2322 — validate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 9,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:9 is refused with TS2322 — validate(input, [() => 'TOO_LONG']);                         // S2 a rule returns a Problem or null · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 10,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:10 is refused with TS2322 — const one: number = toMinutes(['08:00']);                    // S3 a list in, a list out · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 11,
+            "ma": [
+              "TS2769"
+            ],
+            "moTa": "kiem/sai.ts:11 is refused with TS2769 — toMinutes(480);                                              // S4 minutes are not \"HH:MM\" · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 12,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:12 is refused with TS2345 — maxSeats('30');                                              // S5 the limit is a number · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 13,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:13 is refused with TS2345 — totalMinutes([480, 600], 720);                               // S6 every argument is a [start, end] range · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 14,
+            "ma": [
+              "TS2554"
+            ],
+            "moTa": "kiem/sai.ts:14 is refused with TS2554 — validate(input);                                             // S7 which rules? · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 15,
+            "ma": [
+              "TS2684"
+            ],
+            "moTa": "kiem/sai.ts:15 is refused with TS2684 — const run = createValidator(RULES).run; run(input);          // S8 run must be called on its validator · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/validate.test.ts",
+            "moTa": "node --test test/validate.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "\\bFunction\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)\\w+",
+              "[\\w$]+!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, /\\bFunction\\b/, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "logic fixed, every function type is (...args: any[]) => any — caught by: tsc (strict): src/validate.ts + test/validate.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:8 is refused with TS2322 — validate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request (+4)|||logic fixed, every function type is (...args: any[]) => any — máy chấm bắt ở: tsc (strict): src/validate.ts + test/validate.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:8 is refused with TS2322 — validate(input, [(seats: number) => null]);                  // S1 a rule receives the whole request (+4)"
+        },
+        {
+          "loi": "real Rule type but toMinutes returns a union and run has no this parameter — caught by: tsc (strict): src/validate.ts + test/validate.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:11 is refused with TS2769 — toMinutes(480);                                              // S4 minutes are not \"HH:MM\" (+1)|||real Rule type but toMinutes returns a union and run has no this parameter — máy chấm bắt ở: tsc (strict): src/validate.ts + test/validate.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:11 is refused with TS2769 — toMinutes(480);                                              // S4 minutes are not \"HH:MM\" (+1)"
+        }
+      ]
+    }
+  ]
+}

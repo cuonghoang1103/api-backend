@@ -1,0 +1,497 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-3-4-this",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-3-4-this"
+  },
+  "exercises": [
+    {
+      "title": "Make tsc refuse a validator method called without its object",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-4-this"
+      ],
+      "problemHtml": "<p>src/validator.ts has a <code>run</code> method that reads <code>this.rules</code>. Taken off its object (<code>const run = validator.run; run(input)</code>) it crashes with “Cannot read properties of undefined”, and tsc says nothing. Change only the <code>Validator</code> type so that (1) the correct calls in kiem/dung.ts compile, (2) the extracted call in kiem/sai.ts is refused with TS2684, (3) the test passes. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; kiem/sai.ts gets TS2684 on the marked line; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/validator.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/validator.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2684); its other lines still compile.</li>\n  <li><code>node --test test/validator.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/validator.ts có method <code>run</code> đọc <code>this.rules</code>. Tách khỏi object (<code>const run = validator.run; run(input)</code>) thì nó sập với “Cannot read properties of undefined”, còn tsc không nói gì. Chỉ sửa kiểu <code>Validator</code> để (1) các lời gọi đúng trong kiem/dung.ts biên dịch được, (2) lời gọi bị tách trong kiem/sai.ts bị từ chối với TS2684, (3) test qua. Không dùng any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; kiem/sai.ts có TS2684 ở dòng đánh dấu; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/validator.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/validator.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2684); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/validator.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/validator.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/validator.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 6: run(input);|||kiem/sai.ts, dòng 6: run(input);",
+          "output": "error TS2684",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import { seatRule, gridRule } from './rules.ts';\nimport type { Input, Problem, Rule } from './rules.ts';\n\n// run() reads this.rules — it only works when called ON a validator.\nexport type Validator = {\n  name: string;\n  rules: readonly Rule[];\n  run(input: Input): Problem[];\n};\n\nexport const validator: Validator = {\n  name: 'booking-form',\n  rules: [seatRule, gridRule],\n  run(input) {\n    const found: Problem[] = [];\n    for (const rule of this.rules) {\n      const p = rule(input);\n      if (p !== null) found.push(p);\n    }\n    return found;\n  },\n};\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nvalidator.run(input);\nvalidator.run.call(validator, input);\nconst bound = validator.run.bind(validator);\nbound(input);\n[input].map((i) => validator.run(i));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nconst run = validator.run;\nrun(input); // expect TS2684\n"
+        },
+        {
+          "name": "test/validator.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validator } from '../src/validator.ts';\n\ntest('run finds both problems of a 45-seat booking at 08:15', () => {\n  const codes = validator.run({ lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import { seatRule, gridRule } from './rules.ts';\nimport type { Input, Problem, Rule } from './rules.ts';\n\n// run() reads this.rules — it only works when called ON a validator.\nexport type Validator = {\n  name: string;\n  rules: readonly Rule[];\n  // this parameter: run must be called ON a Validator (erased by Node, checked by tsc)\n  run(this: Validator, input: Input): Problem[];\n};\n\nexport const validator: Validator = {\n  name: 'booking-form',\n  rules: [seatRule, gridRule],\n  run(input) {\n    const found: Problem[] = [];\n    for (const rule of this.rules) {\n      const p = rule(input);\n      if (p !== null) found.push(p);\n    }\n    return found;\n  },\n};\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nvalidator.run(input);\nvalidator.run.call(validator, input);\nconst bound = validator.run.bind(validator);\nbound(input);\n[input].map((i) => validator.run(i));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nconst run = validator.run;\nrun(input); // expect TS2684\n"
+        },
+        {
+          "name": "test/validator.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validator } from '../src/validator.ts';\n\ntest('run finds both problems of a 45-seat booking at 08:15', () => {\n  const codes = validator.run({ lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — this: object — tsc then refuses this.rules inside run; this: void — the opposite promise; the body no longer compiles — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — this: object — tsc then refuses this.rules inside run; this: void — the opposite promise; the body no longer compiles — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/rules.ts": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n",
+          "kiem/dung.ts": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nvalidator.run(input);\nvalidator.run.call(validator, input);\nconst bound = validator.run.bind(validator);\nbound(input);\n[input].map((i) => validator.run(i));\n",
+          "kiem/sai.ts": "import { validator } from '../src/validator.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\nconst run = validator.run;\nrun(input); // expect TS2684\n",
+          "test/validator.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validator } from '../src/validator.ts';\n\ntest('run finds both problems of a 45-seat booking at 08:15', () => {\n  const codes = validator.run({ lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\n"
+        },
+        "tepHoc": [
+          "src/validator.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/validator.test.ts"
+            ],
+            "moTa": "tsc (strict): src/validator.ts + kiem/dung.ts, test/validator.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2684"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2684 — run(input); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/validator.test.ts",
+            "moTa": "node --test test/validator.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "this: object — tsc then refuses this.rules inside run — caught by: tsc (strict): src/validator.ts + kiem/dung.ts, test/validator.test.ts compile with 0 errors|||this: object — tsc then refuses this.rules inside run — máy chấm bắt ở: tsc (strict): src/validator.ts + kiem/dung.ts, test/validator.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "this: void — the opposite promise; the body no longer compiles — caught by: tsc (strict): src/validator.ts + kiem/dung.ts, test/validator.test.ts compile with 0 errors; kiem/sai.ts:6 is refused with TS2684 — run(input);|||this: void — the opposite promise; the body no longer compiles — máy chấm bắt ở: tsc (strict): src/validator.ts + kiem/dung.ts, test/validator.test.ts compile with 0 errors; kiem/sai.ts:6 is refused with TS2684 — run(input);"
+        }
+      ]
+    },
+    {
+      "title": "A validator that works however it is called — no this",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-4-this"
+      ],
+      "problemHtml": "<p><code>createValidator</code> in src/validator.ts returns an object whose <code>run</code> reads <code>this.rules</code>. It does not even compile (the object has a property the type does not know), and once it does, passing <code>v.run</code> as a callback crashes. Rewrite it so that <code>run</code> keeps the rules in a <strong>closure</strong> and never uses <code>this</code>: (1) tsc is clean, (2) the tests — which call <code>run</code> extracted, inside <code>map</code> and inside <code>setTimeout</code> — pass. The word <code>this</code> is not allowed in your file.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; node --test is green; src/validator.ts contains no <code>this</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/validator.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/validator.test.ts</code>.</li>\n  <li><code>node --test test/validator.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bthis\\b</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>createValidator</code> trong src/validator.ts trả về object có <code>run</code> đọc <code>this.rules</code>. Nó còn không biên dịch được (object có thuộc tính mà kiểu không biết), và khi biên dịch được thì truyền <code>v.run</code> làm callback sẽ sập. Viết lại để <code>run</code> giữ danh sách luật trong <strong>closure</strong> và không bao giờ dùng <code>this</code>: (1) tsc sạch, (2) các test — gọi <code>run</code> sau khi tách, trong <code>map</code> và trong <code>setTimeout</code> — đều qua. Không được dùng chữ <code>this</code> trong tệp của bạn.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; node --test xanh; src/validator.ts không có <code>this</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/validator.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/validator.test.ts</code>.</li>\n  <li><code>node --test test/validator.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bthis\\b</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/validator.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/validator.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/validator.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bthis\\b/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bthis\\b/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import type { Input, Problem, Rule } from './rules.ts';\n\nexport type Validator = { name: string; run: (input: Input) => Problem[] };\n\n// Build a validator for a list of rules. Today run() reads this.rules,\n// so \"const run = v.run\" or \"[input].map(v.run)\" crash at runtime.\nexport function createValidator(name: string, rules: readonly Rule[]): Validator {\n  return {\n    name,\n    rules,\n    run(input: Input): Problem[] {\n      const found: Problem[] = [];\n      for (const rule of this.rules) {\n        const p = rule(input);\n        if (p !== null) found.push(p);\n      }\n      return found;\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "test/validator.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createValidator } from '../src/validator.ts';\nimport { seatRule, gridRule } from '../src/rules.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst v = createValidator('booking-form', [seatRule, gridRule]);\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\n\ntest('run as a method', () => assert.equal(v.run(input).length, 2));\ntest('run taken off the object', () => {\n  const run = v.run;\n  assert.deepEqual(run(input).map((p) => p.code), ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\ntest('run passed to map', () => assert.deepEqual([input].map(v.run).map((ps) => ps.length), [2]));\ntest('run passed to setTimeout', async () => {\n  const later = await new Promise<number>((done) => setTimeout((i: Input) => done(v.run(i).length), 0, input));\n  assert.equal(later, 2);\n});\ntest('a valid booking has no problems', () => assert.deepEqual(v.run({ lab: 'BE-201', seats: 30, start: '08:00', end: '10:00' }), []));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import type { Input, Problem, Rule } from './rules.ts';\n\nexport type Validator = { name: string; run: (input: Input) => Problem[] };\n\n// Build a validator for a list of rules. run() reads no object at all:\n// the rules come from the closure, so run works however it is called.\nexport function createValidator(name: string, rules: readonly Rule[]): Validator {\n  return {\n    name,\n    run: (input) => {\n      const found: Problem[] = [];\n      for (const rule of rules) {\n        const p = rule(input);\n        if (p !== null) found.push(p);\n      }\n      return found;\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "test/validator.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createValidator } from '../src/validator.ts';\nimport { seatRule, gridRule } from '../src/rules.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst v = createValidator('booking-form', [seatRule, gridRule]);\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\n\ntest('run as a method', () => assert.equal(v.run(input).length, 2));\ntest('run taken off the object', () => {\n  const run = v.run;\n  assert.deepEqual(run(input).map((p) => p.code), ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\ntest('run passed to map', () => assert.deepEqual([input].map(v.run).map((ps) => ps.length), [2]));\ntest('run passed to setTimeout', async () => {\n  const later = await new Promise<number>((done) => setTimeout((i: Input) => done(v.run(i).length), 0, input));\n  assert.equal(later, 2);\n});\ntest('a valid booking has no problems', () => assert.deepEqual(v.run({ lab: 'BE-201', seats: 30, start: '08:00', end: '10:00' }), []));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — rules added to the Validator type, run still reads this.rules — compiles, crashes when extracted; run made an arrow that still says this.rules — the arrow takes this from createValidator, not from the object — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — rules added to the Validator type, run still reads this.rules — compiles, crashes when extracted; run made an arrow that still says this.rules — the arrow takes this from createValidator, not from the object — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/rules.ts": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n",
+          "test/validator.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createValidator } from '../src/validator.ts';\nimport { seatRule, gridRule } from '../src/rules.ts';\nimport type { Input } from '../src/rules.ts';\n\nconst v = createValidator('booking-form', [seatRule, gridRule]);\nconst input: Input = { lab: 'BE-201', seats: 45, start: '08:15', end: '10:00' };\n\ntest('run as a method', () => assert.equal(v.run(input).length, 2));\ntest('run taken off the object', () => {\n  const run = v.run;\n  assert.deepEqual(run(input).map((p) => p.code), ['TOO_MANY_SEATS', 'OFF_GRID']);\n});\ntest('run passed to map', () => assert.deepEqual([input].map(v.run).map((ps) => ps.length), [2]));\ntest('run passed to setTimeout', async () => {\n  const later = await new Promise<number>((done) => setTimeout((i: Input) => done(v.run(i).length), 0, input));\n  assert.equal(later, 2);\n});\ntest('a valid booking has no problems', () => assert.deepEqual(v.run({ lab: 'BE-201', seats: 30, start: '08:00', end: '10:00' }), []));\n"
+        },
+        "tepHoc": [
+          "src/validator.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/validator.test.ts"
+            ],
+            "moTa": "tsc (strict): src/validator.ts + test/validator.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/validator.test.ts",
+            "moTa": "node --test test/validator.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bthis\\b"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "rules added to the Validator type, run still reads this.rules — compiles, crashes when extracted — caught by: node --test test/validator.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||rules added to the Validator type, run still reads this.rules — compiles, crashes when extracted — máy chấm bắt ở: node --test test/validator.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "run made an arrow that still says this.rules — the arrow takes this from createValidator, not from the object — caught by: tsc (strict): src/validator.ts + test/validator.test.ts compile with 0 errors; node --test test/validator.test.ts exits 0 (+1)|||run made an arrow that still says this.rules — the arrow takes this from createValidator, not from the object — máy chấm bắt ở: tsc (strict): src/validator.ts + test/validator.test.ts compile with 0 errors; node --test test/validator.test.ts exits 0 (+1)"
+        }
+      ]
+    },
+    {
+      "title": "Write the handler type so methods that need their object are refused",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-4-this"
+      ],
+      "problemHtml": "<p>src/form.ts is a small Express-style API: <code>onSubmit(handler)</code> stores a function, <code>submit(input)</code> calls each one as a plain function. Registering <code>validator.run</code> (a method declared with <code>this: Validator</code>) compiles today and crashes on submit. Change only the <code>Handler</code> type so that it <em>says</em> how it will be called: (1) kiem/dung.ts (an arrow wrapper, a standalone function) compiles, (2) <code>onSubmit(validator.run)</code> in kiem/sai.ts is refused with TS2345, (3) the test passes. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; kiem/sai.ts gets TS2345; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/form.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/form.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345); its other lines still compile.</li>\n  <li><code>node --test test/form.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/form.ts là một API nhỏ kiểu Express: <code>onSubmit(handler)</code> cất một hàm, <code>submit(input)</code> gọi từng hàm như hàm thường. Đăng ký <code>validator.run</code> (method khai báo <code>this: Validator</code>) hôm nay vẫn biên dịch được và sập khi submit. Chỉ sửa kiểu <code>Handler</code> để nó <em>nói ra</em> nó sẽ được gọi thế nào: (1) kiem/dung.ts (một arrow bọc, một hàm độc lập) biên dịch được, (2) <code>onSubmit(validator.run)</code> trong kiem/sai.ts bị từ chối với TS2345, (3) test qua. Không dùng any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; kiem/sai.ts có TS2345; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/form.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/form.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/form.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/form.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/form.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: onSubmit(validator.run);|||kiem/sai.ts, dòng 4: onSubmit(validator.run);",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/form.ts",
+          "language": "typescript",
+          "code": "import type { Input, Problem } from './rules.ts';\n\n// A tiny form API, Express-style: register handlers, run them all on submit.\nexport type Handler = (input: Input) => Problem[];\n\nconst handlers: Handler[] = [];\n\nexport function onSubmit(handler: Handler): void {\n  handlers.push(handler);\n}\n\nexport function submit(input: Input): Problem[] {\n  const all: Problem[] = [];\n  for (const handler of handlers) all.push(...handler(input));\n  return all;\n}\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import { seatRule, gridRule } from './rules.ts';\nimport type { Input, Problem, Rule } from './rules.ts';\n\nexport type Validator = { rules: readonly Rule[]; run(this: Validator, input: Input): Problem[] };\n\nexport const validator: Validator = {\n  rules: [seatRule, gridRule],\n  run(input) {\n    const found: Problem[] = [];\n    for (const rule of this.rules) {\n      const p = rule(input);\n      if (p !== null) found.push(p);\n    }\n    return found;\n  },\n};\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\nimport type { Input, Problem } from '../src/rules.ts';\n\nonSubmit((input) => validator.run(input));\nfunction noWeekendLabs(input: Input): Problem[] {\n  return input.lab === 'WEEKEND' ? [{ code: 'CLOSED', message: 'Closed' }] : [];\n}\nonSubmit(noWeekendLabs);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\nonSubmit(validator.run); // expect TS2345\n"
+        },
+        {
+          "name": "test/form.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { onSubmit, submit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\ntest('submit runs every handler and joins their problems', () => {\n  onSubmit((input) => validator.run(input));\n  onSubmit((input) => (input.lab === 'BE-201' ? [] : [{ code: 'UNKNOWN_LAB', message: 'No such lab' }]));\n  const codes = submit({ lab: 'XX-1', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID', 'UNKNOWN_LAB']);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/form.ts",
+          "language": "typescript",
+          "code": "import type { Input, Problem } from './rules.ts';\n\n// A tiny form API, Express-style: register handlers, run them all on submit.\n// this: void = \"I will call you as a plain function, with no object in front\".\n// A method that needs this: Validator is then refused at onSubmit (TS2345).\nexport type Handler = (this: void, input: Input) => Problem[];\n\nconst handlers: Handler[] = [];\n\nexport function onSubmit(handler: Handler): void {\n  handlers.push(handler);\n}\n\nexport function submit(input: Input): Problem[] {\n  const all: Problem[] = [];\n  for (const handler of handlers) all.push(...handler(input));\n  return all;\n}\n"
+        },
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n"
+        },
+        {
+          "name": "src/validator.ts",
+          "language": "typescript",
+          "code": "import { seatRule, gridRule } from './rules.ts';\nimport type { Input, Problem, Rule } from './rules.ts';\n\nexport type Validator = { rules: readonly Rule[]; run(this: Validator, input: Input): Problem[] };\n\nexport const validator: Validator = {\n  rules: [seatRule, gridRule],\n  run(input) {\n    const found: Problem[] = [];\n    for (const rule of this.rules) {\n      const p = rule(input);\n      if (p !== null) found.push(p);\n    }\n    return found;\n  },\n};\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\nimport type { Input, Problem } from '../src/rules.ts';\n\nonSubmit((input) => validator.run(input));\nfunction noWeekendLabs(input: Input): Problem[] {\n  return input.lab === 'WEEKEND' ? [{ code: 'CLOSED', message: 'Closed' }] : [];\n}\nonSubmit(noWeekendLabs);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\nonSubmit(validator.run); // expect TS2345\n"
+        },
+        {
+          "name": "test/form.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { onSubmit, submit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\ntest('submit runs every handler and joins their problems', () => {\n  onSubmit((input) => validator.run(input));\n  onSubmit((input) => (input.lab === 'BE-201' ? [] : [{ code: 'UNKNOWN_LAB', message: 'No such lab' }]));\n  const codes = submit({ lab: 'XX-1', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID', 'UNKNOWN_LAB']);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — this: Validator on the handler — now submit itself cannot call it as a plain function; handler typed as the generic Function — anything is accepted — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — this: Validator on the handler — now submit itself cannot call it as a plain function; handler typed as the generic Function — anything is accepted — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/rules.ts": "// LabFlow booking rules (lesson 3.4). A rule looks at a booking input and returns a problem, or null.\nexport type Input = { lab: string; seats: number; start: string; end: string };\nexport type Problem = { code: string; message: string };\nexport type Rule = (input: Input) => Problem | null;\n\nexport const seatRule: Rule = ({ seats }) => (seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nexport const gridRule: Rule = ({ start }) => (start.endsWith(':00') || start.endsWith(':30') ? null : { code: 'OFF_GRID', message: start + ' is off the grid' });\n",
+          "src/validator.ts": "import { seatRule, gridRule } from './rules.ts';\nimport type { Input, Problem, Rule } from './rules.ts';\n\nexport type Validator = { rules: readonly Rule[]; run(this: Validator, input: Input): Problem[] };\n\nexport const validator: Validator = {\n  rules: [seatRule, gridRule],\n  run(input) {\n    const found: Problem[] = [];\n    for (const rule of this.rules) {\n      const p = rule(input);\n      if (p !== null) found.push(p);\n    }\n    return found;\n  },\n};\n",
+          "kiem/dung.ts": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\nimport type { Input, Problem } from '../src/rules.ts';\n\nonSubmit((input) => validator.run(input));\nfunction noWeekendLabs(input: Input): Problem[] {\n  return input.lab === 'WEEKEND' ? [{ code: 'CLOSED', message: 'Closed' }] : [];\n}\nonSubmit(noWeekendLabs);\n",
+          "kiem/sai.ts": "import { onSubmit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\nonSubmit(validator.run); // expect TS2345\n",
+          "test/form.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { onSubmit, submit } from '../src/form.ts';\nimport { validator } from '../src/validator.ts';\n\ntest('submit runs every handler and joins their problems', () => {\n  onSubmit((input) => validator.run(input));\n  onSubmit((input) => (input.lab === 'BE-201' ? [] : [{ code: 'UNKNOWN_LAB', message: 'No such lab' }]));\n  const codes = submit({ lab: 'XX-1', seats: 45, start: '08:15', end: '10:00' }).map((p) => p.code);\n  assert.deepEqual(codes, ['TOO_MANY_SEATS', 'OFF_GRID', 'UNKNOWN_LAB']);\n});\n"
+        },
+        "tepHoc": [
+          "src/form.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/form.test.ts"
+            ],
+            "moTa": "tsc (strict): src/form.ts + kiem/dung.ts, test/form.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2345 — onSubmit(validator.run); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/form.test.ts",
+            "moTa": "node --test test/form.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "this: Validator on the handler — now submit itself cannot call it as a plain function — caught by: tsc (strict): src/form.ts + kiem/dung.ts, test/form.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — onSubmit(validator.run);|||this: Validator on the handler — now submit itself cannot call it as a plain function — máy chấm bắt ở: tsc (strict): src/form.ts + kiem/dung.ts, test/form.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — onSubmit(validator.run);"
+        },
+        {
+          "loi": "handler typed as the generic Function — anything is accepted — caught by: tsc (strict): src/form.ts + kiem/dung.ts, test/form.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — onSubmit(validator.run);|||handler typed as the generic Function — anything is accepted — máy chấm bắt ở: tsc (strict): src/form.ts + kiem/dung.ts, test/form.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — onSubmit(validator.run);"
+        }
+      ]
+    }
+  ]
+}

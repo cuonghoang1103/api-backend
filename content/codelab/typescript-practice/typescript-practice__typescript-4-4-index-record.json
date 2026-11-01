@@ -1,0 +1,546 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-4-4-index-record",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-4-4-index-record"
+  },
+  "exercises": [
+    {
+      "title": "Close the LAB_INFO table with Record",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-4-index-record"
+      ],
+      "problemHtml": "<p>src/labs.ts types the lab table as an open dictionary, so a ghost lab is accepted and every read needs a fallback (<code>?? 0</code> — a lab that does not exist “has 0 seats”). Change <code>LabTable</code> so the key set is exactly <code>LabCode</code>, and remove the fallback, so that kiem/dung.ts compiles (it reads <code>LAB_INFO[code].capacity</code> with no check), the wrong uses in kiem/sai.ts are refused, and the test passes.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/labs.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/labs.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS7053, TS2741, TS7053); its other lines still compile.</li>\n  <li><code>node --test test/labs.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\?\\?</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/labs.ts gõ kiểu bảng phòng là một từ điển mở, nên phòng ma vẫn được nhận và phép đọc nào cũng cần giá trị dự phòng (<code>?? 0</code> — phòng không tồn tại “có 0 chỗ”). Đổi <code>LabTable</code> để tập khoá đúng là <code>LabCode</code>, và bỏ giá trị dự phòng, để kiem/dung.ts biên dịch được (nó đọc <code>LAB_INFO[code].capacity</code> không kiểm), các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/labs.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/labs.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS7053, TS2741, TS7053); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/labs.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\?\\?</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/labs.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/labs.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: const ghost = LAB_INFO['BE-999'];|||kiem/sai.ts, dòng 4: const ghost = LAB_INFO['BE-999'];",
+          "output": "error TS7053",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\?\\?/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\?\\?/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/labs.ts",
+          "language": "typescript",
+          "code": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\nexport type LabTable = { [code: string]: Lab };\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code]?.capacity ?? 0;\n}\n"
+        },
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LAB_INFO } from '../src/labs.ts';\nimport { LABS } from '../src/codes.ts';\n\nfor (const code of LABS) {\n  const seats: number = LAB_INFO[code].capacity;\n  console.log(code, seats);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { LAB_INFO } from '../src/labs.ts';\nimport type { LabTable } from '../src/labs.ts';\n\nconst ghost = LAB_INFO['BE-999']; // expect TS7053\nconst two: LabTable = { 'BE-201': { name: 'Backend Lab 1', capacity: 40 }, 'BE-202': { name: 'Backend Lab 2', capacity: 40 } }; // expect TS2741\ndeclare const fromUrl: string;\nconst raw = LAB_INFO[fromUrl]; // expect TS7053\nexport { ghost, two, raw };\n"
+        },
+        {
+          "name": "test/labs.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf } from '../src/labs.ts';\n\ntest('capacity', () => assert.deepEqual([capacityOf('BE-201'), capacityOf('AL-301')], [40, 30]));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/labs.ts",
+          "language": "typescript",
+          "code": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\n// Closed: exactly one entry per LabCode.\nexport type LabTable = Record<LabCode, Lab>;\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code].capacity; // every LabCode is a key: nothing to check\n}\n"
+        },
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LAB_INFO } from '../src/labs.ts';\nimport { LABS } from '../src/codes.ts';\n\nfor (const code of LABS) {\n  const seats: number = LAB_INFO[code].capacity;\n  console.log(code, seats);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { LAB_INFO } from '../src/labs.ts';\nimport type { LabTable } from '../src/labs.ts';\n\nconst ghost = LAB_INFO['BE-999']; // expect TS7053\nconst two: LabTable = { 'BE-201': { name: 'Backend Lab 1', capacity: 40 }, 'BE-202': { name: 'Backend Lab 2', capacity: 40 } }; // expect TS2741\ndeclare const fromUrl: string;\nconst raw = LAB_INFO[fromUrl]; // expect TS7053\nexport { ghost, two, raw };\n"
+        },
+        {
+          "name": "test/labs.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf } from '../src/labs.ts';\n\ntest('capacity', () => assert.deepEqual([capacityOf('BE-201'), capacityOf('AL-301')], [40, 30]));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — Record&lt;string, Lab&gt; — the same open dictionary, spelled shorter; Record&lt;LabCode, Lab&gt;, but the ?? 0 fallback kept — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — Record&lt;string, Lab&gt; — the same open dictionary, spelled shorter; Record&lt;LabCode, Lab&gt;, but the ?? 0 fallback kept — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n",
+          "kiem/dung.ts": "import { LAB_INFO } from '../src/labs.ts';\nimport { LABS } from '../src/codes.ts';\n\nfor (const code of LABS) {\n  const seats: number = LAB_INFO[code].capacity;\n  console.log(code, seats);\n}\n",
+          "kiem/sai.ts": "import { LAB_INFO } from '../src/labs.ts';\nimport type { LabTable } from '../src/labs.ts';\n\nconst ghost = LAB_INFO['BE-999']; // expect TS7053\nconst two: LabTable = { 'BE-201': { name: 'Backend Lab 1', capacity: 40 }, 'BE-202': { name: 'Backend Lab 2', capacity: 40 } }; // expect TS2741\ndeclare const fromUrl: string;\nconst raw = LAB_INFO[fromUrl]; // expect TS7053\nexport { ghost, two, raw };\n",
+          "test/labs.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf } from '../src/labs.ts';\n\ntest('capacity', () => assert.deepEqual([capacityOf('BE-201'), capacityOf('AL-301')], [40, 30]));\n"
+        },
+        "tepHoc": [
+          "src/labs.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/labs.test.ts"
+            ],
+            "moTa": "tsc (strict): src/labs.ts + kiem/dung.ts, test/labs.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS7053"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS7053 — const ghost = LAB_INFO['BE-999']; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2741 — const two: LabTable = { 'BE-201': { name: 'Backend Lab 1', capacity: 40 }, 'BE-202': { name: 'Backend Lab 2', capacity: 40 } }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 7,
+            "ma": [
+              "TS7053"
+            ],
+            "moTa": "kiem/sai.ts:7 is refused with TS7053 — const raw = LAB_INFO[fromUrl]; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/labs.test.ts",
+            "moTa": "node --test test/labs.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\?\\?"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Record<string, Lab> — the same open dictionary, spelled shorter — caught by: tsc (strict): src/labs.ts + kiem/dung.ts, test/labs.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = LAB_INFO['BE-999']; (+3)|||Record<string, Lab> — the same open dictionary, spelled shorter — máy chấm bắt ở: tsc (strict): src/labs.ts + kiem/dung.ts, test/labs.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = LAB_INFO['BE-999']; (+3)"
+        },
+        {
+          "loi": "Record<LabCode, Lab>, but the ?? 0 fallback kept — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||Record<LabCode, Lab>, but the ?? 0 fallback kept — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        }
+      ]
+    },
+    {
+      "title": "Count per lab without losing the zeros",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-4-index-record"
+      ],
+      "problemHtml": "<p><code>seatsByLab</code> in src/count.ts returns an open dictionary that starts empty: a lab with no booking is simply missing, and the dashboard shows <code>NaN</code> for it. Give it the return type <code>Record&lt;LabCode, number&gt;</code> and fix the body so that kiem/dung.ts compiles (it reads <code>result['BE-202']</code> as a <code>number</code>), the wrong uses in kiem/sai.ts are refused, and the tests pass. No any, no casts.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/count.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/count.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS7053, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/count.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>seatsByLab</code> trong src/count.ts trả về một từ điển mở bắt đầu rỗng: phòng chưa có lượt đặt thì đơn giản là không có, và bảng điều khiển hiện <code>NaN</code> cho nó. Cho hàm kiểu trả về <code>Record&lt;LabCode, number&gt;</code> và sửa thân hàm để kiem/dung.ts biên dịch được (nó đọc <code>result['BE-202']</code> như một <code>number</code>), các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Không any, không ép kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/count.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/count.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS7053, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/count.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/count.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/count.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: const ghost = result['BE-999'];|||kiem/sai.ts, dòng 4: const ghost = result['BE-999'];",
+          "output": "error TS7053",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/count.ts",
+          "language": "typescript",
+          "code": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Seats booked per lab today (cancelled rows do not count).\nexport function seatsByLab(rows: readonly Row[]): { [lab: string]: number } {\n  const total: { [lab: string]: number } = {};\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] = (total[r.lab] ?? 0) + r.seats;\n  }\n  return total;\n}\n"
+        },
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }]);\nconst be202: number = result['BE-202'];\nconst percent: number = Math.round((be202 / 40) * 100);\nconsole.log(percent);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([]);\nconst ghost = result['BE-999']; // expect TS7053\nconst text: string = result['BE-201']; // expect TS2322\nexport { ghost, text };\n"
+        },
+        {
+          "name": "test/count.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsByLab } from '../src/count.ts';\n\ntest('every lab, zeros included', () => assert.deepEqual(\n  seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }, { lab: 'AL-301', seats: 25, cancelled: false }, { lab: 'BE-201', seats: 6, cancelled: false }]),\n  { 'BE-201': 36, 'BE-202': 0, 'AL-301': 25 },\n));\ntest('cancelled rows do not count', () => assert.deepEqual(seatsByLab([{ lab: 'AL-301', seats: 25, cancelled: true }]), { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 }));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/count.ts",
+          "language": "typescript",
+          "code": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Every lab appears, even with 0. Add a lab to LABS and tsc points at the zeros below.\nexport function seatsByLab(rows: readonly Row[]): Record<LabCode, number> {\n  const total: Record<LabCode, number> = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] += r.seats;\n  }\n  return total;\n}\n"
+        },
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }]);\nconst be202: number = result['BE-202'];\nconst percent: number = Math.round((be202 / 40) * 100);\nconsole.log(percent);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([]);\nconst ghost = result['BE-999']; // expect TS7053\nconst text: string = result['BE-201']; // expect TS2322\nexport { ghost, text };\n"
+        },
+        {
+          "name": "test/count.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsByLab } from '../src/count.ts';\n\ntest('every lab, zeros included', () => assert.deepEqual(\n  seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }, { lab: 'AL-301', seats: 25, cancelled: false }, { lab: 'BE-201', seats: 6, cancelled: false }]),\n  { 'BE-201': 36, 'BE-202': 0, 'AL-301': 25 },\n));\ntest('cancelled rows do not count', () => assert.deepEqual(seatsByLab([{ lab: 'AL-301', seats: 25, cancelled: true }]), { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 }));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — Record&lt;string, number&gt; starting from {} — still loses BE-202; zeros added, but the return type is still an open dictionary — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — Record&lt;string, number&gt; starting from {} — still loses BE-202; zeros added, but the return type is still an open dictionary — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n",
+          "kiem/dung.ts": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }]);\nconst be202: number = result['BE-202'];\nconst percent: number = Math.round((be202 / 40) * 100);\nconsole.log(percent);\n",
+          "kiem/sai.ts": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([]);\nconst ghost = result['BE-999']; // expect TS7053\nconst text: string = result['BE-201']; // expect TS2322\nexport { ghost, text };\n",
+          "test/count.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsByLab } from '../src/count.ts';\n\ntest('every lab, zeros included', () => assert.deepEqual(\n  seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }, { lab: 'AL-301', seats: 25, cancelled: false }, { lab: 'BE-201', seats: 6, cancelled: false }]),\n  { 'BE-201': 36, 'BE-202': 0, 'AL-301': 25 },\n));\ntest('cancelled rows do not count', () => assert.deepEqual(seatsByLab([{ lab: 'AL-301', seats: 25, cancelled: true }]), { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 }));\n"
+        },
+        "tepHoc": [
+          "src/count.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/count.test.ts"
+            ],
+            "moTa": "tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS7053"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS7053 — const ghost = result['BE-999']; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2322 — const text: string = result['BE-201']; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/count.test.ts",
+            "moTa": "node --test test/count.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)\\w+"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Record<string, number> starting from {} — still loses BE-202 — caught by: tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = result['BE-999']; (+1)|||Record<string, number> starting from {} — still loses BE-202 — máy chấm bắt ở: tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = result['BE-999']; (+1)"
+        },
+        {
+          "loi": "zeros added, but the return type is still an open dictionary — caught by: tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = result['BE-999'];|||zeros added, but the return type is still an open dictionary — máy chấm bắt ở: tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS7053 — const ghost = result['BE-999'];"
+        }
+      ]
+    },
+    {
+      "title": "A user index that admits a miss",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-4-index-record"
+      ],
+      "problemHtml": "<p>In src/users.ts, <code>findUser</code> promises it always returns a <code>User</code> — with a cast. A booking whose user was deleted crashes <code>nameOf</code> (“Cannot read properties of undefined”). Remove the cast, make the return type honest, and make <code>nameOf</code> return <code>'(deleted user)'</code> for a missing id, so that kiem/dung.ts compiles, the wrong use in kiem/sai.ts is refused, and the tests pass. No <code>as</code>, no <code>!</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; the marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/users.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/users.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2532); its other lines still compile.</li>\n  <li><code>node --test test/users.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong src/users.ts, <code>findUser</code> hứa luôn trả về một <code>User</code> — bằng một phép ép kiểu. Lượt đặt có người dùng đã bị xoá làm <code>nameOf</code> sập (“Cannot read properties of undefined”). Bỏ phép ép, cho kiểu trả về trung thực, và cho <code>nameOf</code> trả <code>'(deleted user)'</code> khi id không có, để kiem/dung.ts biên dịch được, cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Không <code>as</code>, không <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/users.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/users.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2532); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/users.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/users.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/users.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: const name: string = findUser(byId, 2).name;|||kiem/sai.ts, dòng 4: const name: string = findUser(byId, 2).name;",
+          "output": "error TS2532",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/users.ts",
+          "language": "typescript",
+          "code": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// \"Always finds the user\" — a promise the data cannot keep.\nexport function findUser(byId: Record<number, User>, id: number): User {\n  return byId[id] as User;\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  return findUser(byId, id).name;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { indexById, findUser } from '../src/users.ts';\nimport type { User } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst maybe: User | undefined = findUser(byId, 2);\nconsole.log(maybe?.name ?? 'nobody');\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { indexById, findUser } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst name: string = findUser(byId, 2).name; // expect TS2532\nexport { name };\n"
+        },
+        {
+          "name": "test/users.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { indexById, findUser, nameOf } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'Nguyen Van An' }, { id: 2, name: 'Tran Thi Binh' }]);\ntest('found', () => assert.equal(nameOf(byId, 2), 'Tran Thi Binh'));\ntest('a deleted user does not crash', () => assert.equal(nameOf(byId, 99), '(deleted user)'));\ntest('findUser misses with undefined', () => assert.equal(findUser(byId, 99), undefined));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/users.ts",
+          "language": "typescript",
+          "code": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// Ids arrive at runtime: a lookup may miss, and the type says so.\nexport function findUser(byId: Record<number, User>, id: number): User | undefined {\n  return byId[id];\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  return findUser(byId, id)?.name ?? '(deleted user)';\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { indexById, findUser } from '../src/users.ts';\nimport type { User } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst maybe: User | undefined = findUser(byId, 2);\nconsole.log(maybe?.name ?? 'nobody');\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { indexById, findUser } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst name: string = findUser(byId, 2).name; // expect TS2532\nexport { name };\n"
+        },
+        {
+          "name": "test/users.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { indexById, findUser, nameOf } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'Nguyen Van An' }, { id: 2, name: 'Tran Thi Binh' }]);\ntest('found', () => assert.equal(nameOf(byId, 2), 'Tran Thi Binh'));\ntest('a deleted user does not crash', () => assert.equal(nameOf(byId, 99), '(deleted user)'));\ntest('findUser misses with undefined', () => assert.equal(findUser(byId, 99), undefined));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — cast swapped for a non-null assertion: byId[id]!; return type honest, nameOf still crashes on a missing id — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — cast swapped for a non-null assertion: byId[id]!; return type honest, nameOf still crashes on a missing id — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { indexById, findUser } from '../src/users.ts';\nimport type { User } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst maybe: User | undefined = findUser(byId, 2);\nconsole.log(maybe?.name ?? 'nobody');\n",
+          "kiem/sai.ts": "import { indexById, findUser } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst name: string = findUser(byId, 2).name; // expect TS2532\nexport { name };\n",
+          "test/users.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { indexById, findUser, nameOf } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'Nguyen Van An' }, { id: 2, name: 'Tran Thi Binh' }]);\ntest('found', () => assert.equal(nameOf(byId, 2), 'Tran Thi Binh'));\ntest('a deleted user does not crash', () => assert.equal(nameOf(byId, 99), '(deleted user)'));\ntest('findUser misses with undefined', () => assert.equal(findUser(byId, 99), undefined));\n"
+        },
+        "tepHoc": [
+          "src/users.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/users.test.ts"
+            ],
+            "moTa": "tsc (strict): src/users.ts + kiem/dung.ts, test/users.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2532"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2532 — const name: string = findUser(byId, 2).name; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/users.test.ts",
+            "moTa": "node --test test/users.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)\\w+",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "cast swapped for a non-null assertion: byId[id]! — caught by: kiem/sai.ts:4 is refused with TS2532 — const name: string = findUser(byId, 2).name;; node --test test/users.test.ts exits 0 (+1)|||cast swapped for a non-null assertion: byId[id]! — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2532 — const name: string = findUser(byId, 2).name;; node --test test/users.test.ts exits 0 (+1)"
+        },
+        {
+          "loi": "return type honest, nameOf still crashes on a missing id — caught by: node --test test/users.test.ts exits 0|||return type honest, nameOf still crashes on a missing id — máy chấm bắt ở: node --test test/users.test.ts exits 0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-4-3-extends-intersection",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-4-3-extends-intersection"
+  },
+  "exercises": [
+    {
+      "title": "Write id and createdAt once: an Entity base",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-3-extends-intersection"
+      ],
+      "problemHtml": "<p>src/model.ts copies <code>id</code> and <code>createdAt</code> into both <code>User</code> and <code>Lab</code> — and the <code>Lab</code> copy drifted (a string id, nothing read-only). Export an <code>Entity</code> interface (read-only numeric <code>id</code>, read-only <code>createdAt</code>), make both models <code>extends</code> it, and let <code>age</code> take an <code>Entity</code>, so that kiem/dung.ts compiles, the wrong uses in kiem/sai.ts are refused, and the test passes.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/model.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/model.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2741, TS2540, TS2540); its other lines still compile.</li>\n  <li><code>node --test test/model.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/model.ts chép <code>id</code> và <code>createdAt</code> vào cả <code>User</code> lẫn <code>Lab</code> — và bản chép trong <code>Lab</code> đã lệch (id kiểu chuỗi, không gì chỉ đọc). Export một interface <code>Entity</code> (<code>id</code> kiểu số chỉ đọc, <code>createdAt</code> chỉ đọc), cho cả hai model <code>extends</code> nó, và cho <code>age</code> nhận <code>Entity</code>, để kiem/dung.ts biên dịch được, các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/model.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/model.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2741, TS2540, TS2540); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/model.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/model.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/model.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 5: const ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 };|||kiem/sai.ts, dòng 5: const ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 };",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// Two models, each with its own copy of id + createdAt. One copy already drifted.\nexport interface User {\n  readonly id: number;\n  readonly createdAt: string;\n  email: string;\n  role: Role;\n}\n\nexport interface Lab {\n  id: string;\n  createdAt: string;\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: { createdAt: string }, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { age } from '../src/model.ts';\nimport type { Entity, User, Lab } from '../src/model.ts';\n\nconst u: User = { id: 1, createdAt: '2026-11-01T00:00:00Z', email: 'an.nv@fpt.edu.vn', role: 'STUDENT' };\nconst lab: Lab = { id: 7, createdAt: '2026-10-01T00:00:00Z', code: 'AL-301', capacity: 30 };\nconst all: Entity[] = [u, lab];\nconsole.log(all.map((e) => age(e, '2026-11-02T00:00:00Z')));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { User, Lab } from '../src/model.ts';\n\ndeclare const u: User;\ndeclare const lab: Lab;\nconst ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; // expect TS2322\nconst noDate: User = { id: 2, email: 'b@fpt.edu.vn', role: 'LECTURER' }; // expect TS2741\nlab.id = 8; // expect TS2540\nu.createdAt = 'now'; // expect TS2540\nexport { ghost, noDate };\n"
+        },
+        {
+          "name": "test/model.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { age } from '../src/model.ts';\n\ntest('age in days', () => assert.equal(age({ id: 1, createdAt: '2026-11-01T00:00:00Z' }, '2026-11-03T00:00:00Z'), 2));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// What every stored record has — written once.\nexport interface Entity {\n  readonly id: number;\n  readonly createdAt: string;\n}\n\nexport interface User extends Entity {\n  email: string;\n  role: Role;\n}\n\nexport interface Lab extends Entity {\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: Entity, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { age } from '../src/model.ts';\nimport type { Entity, User, Lab } from '../src/model.ts';\n\nconst u: User = { id: 1, createdAt: '2026-11-01T00:00:00Z', email: 'an.nv@fpt.edu.vn', role: 'STUDENT' };\nconst lab: Lab = { id: 7, createdAt: '2026-10-01T00:00:00Z', code: 'AL-301', capacity: 30 };\nconst all: Entity[] = [u, lab];\nconsole.log(all.map((e) => age(e, '2026-11-02T00:00:00Z')));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { User, Lab } from '../src/model.ts';\n\ndeclare const u: User;\ndeclare const lab: Lab;\nconst ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; // expect TS2322\nconst noDate: User = { id: 2, email: 'b@fpt.edu.vn', role: 'LECTURER' }; // expect TS2741\nlab.id = 8; // expect TS2540\nu.createdAt = 'now'; // expect TS2540\nexport { ghost, noDate };\n"
+        },
+        {
+          "name": "test/model.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { age } from '../src/model.ts';\n\ntest('age in days', () => assert.equal(age({ id: 1, createdAt: '2026-11-01T00:00:00Z' }, '2026-11-03T00:00:00Z'), 2));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — Entity without readonly; Entity added, but Lab still redeclares id: string — refused with TS2430 — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — Entity without readonly; Entity added, but Lab still redeclares id: string — refused with TS2430 — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { age } from '../src/model.ts';\nimport type { Entity, User, Lab } from '../src/model.ts';\n\nconst u: User = { id: 1, createdAt: '2026-11-01T00:00:00Z', email: 'an.nv@fpt.edu.vn', role: 'STUDENT' };\nconst lab: Lab = { id: 7, createdAt: '2026-10-01T00:00:00Z', code: 'AL-301', capacity: 30 };\nconst all: Entity[] = [u, lab];\nconsole.log(all.map((e) => age(e, '2026-11-02T00:00:00Z')));\n",
+          "kiem/sai.ts": "import type { User, Lab } from '../src/model.ts';\n\ndeclare const u: User;\ndeclare const lab: Lab;\nconst ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; // expect TS2322\nconst noDate: User = { id: 2, email: 'b@fpt.edu.vn', role: 'LECTURER' }; // expect TS2741\nlab.id = 8; // expect TS2540\nu.createdAt = 'now'; // expect TS2540\nexport { ghost, noDate };\n",
+          "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { age } from '../src/model.ts';\n\ntest('age in days', () => assert.equal(age({ id: 1, createdAt: '2026-11-01T00:00:00Z' }, '2026-11-03T00:00:00Z'), 2));\n"
+        },
+        "tepHoc": [
+          "src/model.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/model.test.ts"
+            ],
+            "moTa": "tsc (strict): src/model.ts + kiem/dung.ts, test/model.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2322 — const ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2741 — const noDate: User = { id: 2, email: 'b@fpt.edu.vn', role: 'LECTURER' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 7,
+            "ma": [
+              "TS2540"
+            ],
+            "moTa": "kiem/sai.ts:7 is refused with TS2540 — lab.id = 8; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 8,
+            "ma": [
+              "TS2540"
+            ],
+            "moTa": "kiem/sai.ts:8 is refused with TS2540 — u.createdAt = 'now'; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/model.test.ts",
+            "moTa": "node --test test/model.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Entity without readonly — caught by: kiem/sai.ts:7 is refused with TS2540 — lab.id = 8;; kiem/sai.ts:8 is refused with TS2540 — u.createdAt = 'now';|||Entity without readonly — máy chấm bắt ở: kiem/sai.ts:7 is refused with TS2540 — lab.id = 8;; kiem/sai.ts:8 is refused with TS2540 — u.createdAt = 'now';"
+        },
+        {
+          "loi": "Entity added, but Lab still redeclares id: string — refused with TS2430 — caught by: tsc (strict): src/model.ts + kiem/dung.ts, test/model.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; (+1)|||Entity added, but Lab still redeclares id: string — refused with TS2430 — máy chấm bắt ở: tsc (strict): src/model.ts + kiem/dung.ts, test/model.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; (+1)"
+        }
+      ]
+    },
+    {
+      "title": "Derive BookingView with & and spread",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-3-extends-intersection"
+      ],
+      "problemHtml": "<p>src/view.ts has a hand-written <code>BookingView</code> that already fell behind <code>BookingRecord</code> (no <code>userId</code>, no <code>seats</code>). Replace it with a type <strong>derived</strong> from the record with <code>&amp;</code>, and build the view with spread, so that kiem/dung.ts compiles (it reads <code>view.seats</code>), the wrong views in kiem/sai.ts are refused, and the tests pass.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/view.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/view.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/view.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/view.ts có <code>BookingView</code> viết tay đã tụt lại so với <code>BookingRecord</code> (thiếu <code>userId</code>, thiếu <code>seats</code>). Thay nó bằng một kiểu <strong>suy ra</strong> từ bản ghi bằng <code>&amp;</code>, và dựng góc nhìn bằng spread, để kiem/dung.ts biên dịch được (nó đọc <code>view.seats</code>), các góc nhìn sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/view.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/view.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/view.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/view.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/view.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' };|||kiem/sai.ts, dòng 3: const noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' };",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/view.ts",
+          "language": "typescript",
+          "code": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// What the admin list shows. Written by hand — and already behind: BookingRecord has userId and seats now.\nexport interface BookingView {\n  id: number;\n  lab: string;\n  labName: string;\n  userName: string;\n}\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    id: b.id,\n    lab: b.lab,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+        },
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "// Given — do not edit.\nexport interface BookingRecord {\n  readonly id: number;\n  readonly lab: string;\n  readonly userId: number;\n  readonly seats: number;\n}\nexport interface User {\n  readonly id: number;\n  name: string;\n}\nexport const LAB_NAMES: { [code: string]: string } = { 'BE-201': 'Backend Lab 1', 'AL-301': 'AI Lab' };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { toView } from '../src/view.ts';\nimport type { BookingView } from '../src/view.ts';\n\nconst view: BookingView = toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]);\nconst seats: number = view.seats;\nconsole.log(view.labName, seats);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { BookingView } from '../src/view.ts';\n\nconst noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' }; // expect TS2322\nconst noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' }; // expect TS2322\nexport { noName, noSeats };\n"
+        },
+        {
+          "name": "test/view.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toView } from '../src/view.ts';\n\ntest('every record field plus two names', () => assert.deepEqual(\n  toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]),\n  { id: 11, lab: 'AL-301', userId: 2, seats: 25, labName: 'AI Lab', userName: 'Tran Thi Binh' },\n));\ntest('a deleted user', () => assert.equal(toView({ id: 12, lab: 'BE-201', userId: 9, seats: 5 }, []).userName, '(deleted user)'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/view.ts",
+          "language": "typescript",
+          "code": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// Derived from the record: every field it has, plus two names. It cannot fall behind.\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    ...b,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+        },
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "// Given — do not edit.\nexport interface BookingRecord {\n  readonly id: number;\n  readonly lab: string;\n  readonly userId: number;\n  readonly seats: number;\n}\nexport interface User {\n  readonly id: number;\n  name: string;\n}\nexport const LAB_NAMES: { [code: string]: string } = { 'BE-201': 'Backend Lab 1', 'AL-301': 'AI Lab' };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { toView } from '../src/view.ts';\nimport type { BookingView } from '../src/view.ts';\n\nconst view: BookingView = toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]);\nconst seats: number = view.seats;\nconsole.log(view.labName, seats);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { BookingView } from '../src/view.ts';\n\nconst noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' }; // expect TS2322\nconst noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' }; // expect TS2322\nexport { noName, noSeats };\n"
+        },
+        {
+          "name": "test/view.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toView } from '../src/view.ts';\n\ntest('every record field plus two names', () => assert.deepEqual(\n  toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]),\n  { id: 11, lab: 'AL-301', userId: 2, seats: 25, labName: 'AI Lab', userName: 'Tran Thi Binh' },\n));\ntest('a deleted user', () => assert.equal(toView({ id: 12, lab: 'BE-201', userId: 9, seats: 5 }, []).userName, '(deleted user)'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — type derived, but the object is still built field by field (seats lost at runtime) — refused by tsc; hand-written interface extended with the two missing fields — the test passes, but userName became optional — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — type derived, but the object is still built field by field (seats lost at runtime) — refused by tsc; hand-written interface extended with the two missing fields — the test passes, but userName became optional — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/model.ts": "// Given — do not edit.\nexport interface BookingRecord {\n  readonly id: number;\n  readonly lab: string;\n  readonly userId: number;\n  readonly seats: number;\n}\nexport interface User {\n  readonly id: number;\n  name: string;\n}\nexport const LAB_NAMES: { [code: string]: string } = { 'BE-201': 'Backend Lab 1', 'AL-301': 'AI Lab' };\n",
+          "kiem/dung.ts": "import { toView } from '../src/view.ts';\nimport type { BookingView } from '../src/view.ts';\n\nconst view: BookingView = toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]);\nconst seats: number = view.seats;\nconsole.log(view.labName, seats);\n",
+          "kiem/sai.ts": "import type { BookingView } from '../src/view.ts';\n\nconst noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' }; // expect TS2322\nconst noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' }; // expect TS2322\nexport { noName, noSeats };\n",
+          "test/view.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toView } from '../src/view.ts';\n\ntest('every record field plus two names', () => assert.deepEqual(\n  toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]),\n  { id: 11, lab: 'AL-301', userId: 2, seats: 25, labName: 'AI Lab', userName: 'Tran Thi Binh' },\n));\ntest('a deleted user', () => assert.equal(toView({ id: 12, lab: 'BE-201', userId: 9, seats: 5 }, []).userName, '(deleted user)'));\n"
+        },
+        "tepHoc": [
+          "src/view.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/view.test.ts"
+            ],
+            "moTa": "tsc (strict): src/view.ts + kiem/dung.ts, test/view.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2322 — const noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/view.test.ts",
+            "moTa": "node --test test/view.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "type derived, but the object is still built field by field (seats lost at runtime) — refused by tsc — caught by: tsc (strict): src/view.ts + kiem/dung.ts, test/view.test.ts compile with 0 errors; node --test test/view.test.ts exits 0|||type derived, but the object is still built field by field (seats lost at runtime) — refused by tsc — máy chấm bắt ở: tsc (strict): src/view.ts + kiem/dung.ts, test/view.test.ts compile with 0 errors; node --test test/view.test.ts exits 0"
+        },
+        {
+          "loi": "hand-written interface extended with the two missing fields — the test passes, but userName became optional — caught by: kiem/sai.ts:3 is refused with TS2322 — const noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' };; kiem/sai.ts:4 is refused with TS2322 — const noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' };|||hand-written interface extended with the two missing fields — the test passes, but userName became optional — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' };; kiem/sai.ts:4 is refused with TS2322 — const noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' };"
+        }
+      ]
+    },
+    {
+      "title": "Find the hidden never",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-3-extends-intersection"
+      ],
+      "problemHtml": "<p>src/model.ts compiles its types, then the seed fails: “Type 'string' is not assignable to type 'never'” on a line that looks right. Find where <code>never</code> comes from, rewrite the model so a conflict like this is reported <strong>at the declaration</strong> (interfaces with <code>extends</code>), and fix it: every entity keeps a numeric <code>id</code>, and the supplier’s code <code>\"EQ-0042\"</code> is stored as <code>supplierCode</code>. kiem/sai.ts must be refused, the tests must pass.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/model.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/model.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2741); its other lines still compile.</li>\n  <li><code>node --test test/model.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>&amp;</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/model.ts biên dịch được phần kiểu, rồi seed hỏng: “Type 'string' is not assignable to type 'never'” ở một dòng trông đúng. Tìm xem <code>never</code> từ đâu ra, viết lại mô hình để xung đột kiểu này được báo <strong>ngay ở khai báo</strong> (interface với <code>extends</code>), và sửa: mọi thực thể giữ <code>id</code> kiểu số, mã nhà cung cấp <code>\"EQ-0042\"</code> lưu ở <code>supplierCode</code>. kiem/sai.ts phải bị từ chối, test phải qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/model.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/model.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2741); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/model.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>&amp;</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/model.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/model.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };|||kiem/sai.ts, dòng 3: const textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /&/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /&/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "// The model, composed with &. The seed below fails on a line that looks correct.\nexport type Entity = { readonly id: number; readonly createdAt: string };\nexport type Lab = Entity & { code: string; capacity: number };\nexport type Equipment = Entity & { id: string; labCode: string; name: string }; // ids from the supplier: \"EQ-0042\"\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Equipment } from '../src/model.ts';\n\nconst textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2322\nconst noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2741\nexport { textId, noCode };\n"
+        },
+        {
+          "name": "test/model.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LAB, GPU } from '../src/model.ts';\n\ntest('every entity has a numeric id', () => assert.ok([LAB, GPU].every((e) => typeof e.id === 'number')));\ntest('the supplier code is kept', () => assert.equal(GPU.supplierCode, 'EQ-0042'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/model.ts",
+          "language": "typescript",
+          "code": "// Interfaces with extends report a conflict at the declaration (TS2430) instead of hiding a never.\nexport interface Entity { readonly id: number; readonly createdAt: string }\nexport interface Lab extends Entity { code: string; capacity: number }\n// The supplier's code is a different fact, so it has its own name; equipment keeps a numeric id.\nexport interface Equipment extends Entity { supplierCode: string; labCode: string; name: string }\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 42, supplierCode: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Equipment } from '../src/model.ts';\n\nconst textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2322\nconst noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2741\nexport { textId, noCode };\n"
+        },
+        {
+          "name": "test/model.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LAB, GPU } from '../src/model.ts';\n\ntest('every entity has a numeric id', () => assert.ok([LAB, GPU].every((e) => typeof e.id === 'number')));\ntest('the supplier code is kept', () => assert.equal(GPU.supplierCode, 'EQ-0042'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — Entity id widened to number | string — the never disappears, the text id stays; still composed with &amp; (supplierCode added, id fixed) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — Entity id widened to number | string — the never disappears, the text id stays; still composed with &amp; (supplierCode added, id fixed) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/sai.ts": "import type { Equipment } from '../src/model.ts';\n\nconst textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2322\nconst noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2741\nexport { textId, noCode };\n",
+          "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LAB, GPU } from '../src/model.ts';\n\ntest('every entity has a numeric id', () => assert.ok([LAB, GPU].every((e) => typeof e.id === 'number')));\ntest('the supplier code is kept', () => assert.equal(GPU.supplierCode, 'EQ-0042'));\n"
+        },
+        "tepHoc": [
+          "src/model.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/model.test.ts"
+            ],
+            "moTa": "tsc (strict): src/model.ts + test/model.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2741 — const noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/model.test.ts",
+            "moTa": "node --test test/model.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "&"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Entity id widened to number | string — the never disappears, the text id stays — caught by: kiem/sai.ts:3 is refused with TS2322 — const textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };; kiem/sai.ts:4 is refused with TS2741 — const noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; (+2)|||Entity id widened to number | string — the never disappears, the text id stays — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };; kiem/sai.ts:4 is refused with TS2741 — const noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; (+2)"
+        },
+        {
+          "loi": "still composed with & (supplierCode added, id fixed) — caught by: kiem/sai.ts:4 is refused with TS2741 — const noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||still composed with & (supplierCode added, id fixed) — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2741 — const noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' };; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        }
+      ]
+    }
+  ]
+}

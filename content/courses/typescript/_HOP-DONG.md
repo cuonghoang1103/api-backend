@@ -102,6 +102,23 @@ _labflow-ts/
   `vua/` "Rule thật, toMinutes trả union, không this" **8/10** (S4 ra TS2345 thay vì TS2769, S8 lọt) · tham khảo **10/10**. Mã: S1–S3 TS2322,
   S4 TS2769, S5–S6 TS2345, S7 TS2554 ("Expected 2-3 arguments"), S8 TS2684.
 
+### 3.1d Chương 4 thêm gì (01/11/2026)
+- `src/rules/model.ts` + `model.test.ts` (10 test; `npm test` = 43 test) = lời giải Lab 4: `interface Entity { readonly id; readonly createdAt }`,
+  `interface Lab` (`readonly code: LabCode`, `capacity`, `equipment?: readonly string[]`), `User extends Entity` (`role: Role`, `studentCode?`),
+  `type BookingStatus`, `BookingRecord extends Entity` (mọi trường readonly, `range: TimeRange`, `note: string | null`),
+  `type BookingView = BookingRecord & { labName; userName }`, `LAB_INFO: Record<LabCode, Lab>` (BE-202 KHÔNG có `equipment`), `labName`, `freeSeats`,
+  `seatsByLab(): Record<LabCode, number>` (ba số 0), `indexById(): Record<number, User>` (mở), `withStatus` (spread), `toView`.
+- `lab4/` (khởi đầu `type` lỏng: `code/role/status: string`, `capacity?`, `equipment: string[]` bắt buộc, `LabTable` index signature; 3 lỗi hành vi —
+  BE-202 `equipment: []`, `seatsByLab` từ `{}`, `withStatus` sửa tại chỗ), `scripts/cham-lab-4.mjs` (`npm run lab4`; phần C như Lab 2: any/as/!/@ts-), `demo4/<deck>/`.
+- Số đo Lab 4: khởi đầu **0 lỗi tsc** trong `lab4/src` mà chỉ **4.5/10** (B 0, D 6/10, E 3/8 — S1 bị từ chối vì THIẾU `equipment`, lý do sai) ·
+  `yeu/` "index signature any + LAB_INFO: any" **6.5/10** (S2 ra TS2741 thay vì TS2561) · `vua/` "interface + union, không readonly, bảng mở" **7.5/10**
+  (S4, S5, S7 lọt, B trượt) · tham khảo **10/10**. Mã: S1 TS2741, S2 TS2561, S3 TS2322, S4 TS2540, S5 TS2339, S6 TS18048, S7 TS7053, S8 TS2739.
+- Số đo đáng nhớ của chương: typo qua biến ⇒ TS2741 (không "Did you mean"), thêm `capacity?` + `?? 0` ⇒ 0 lỗi, "free seats: -12"; `readonly string[]`-thiếu ⇒
+  hai phòng cùng nhận GPU; interface trùng tên gộp (TS2741 ở dòng tạo object, Node exit 0) vs type TS2300; interface extends union ⇒ TS2312;
+  `User & { id: string }` ⇒ TS2322 "not assignable to type 'never'" còn extends ⇒ TS2430; tắt `noUncheckedIndexedAccess` ⇒ 0 lỗi + TypeError
+  (strict của tsc 7 KHÔNG bật cờ này — đo bằng `--ignoreConfig`); `Object.keys(Record)` ⇒ TS7053; `Object.keys(byId)` ra `['1', '2']`;
+  backend cuongthai.com @88ec543b0: 896 tệp, 1.460 interface, 890 type alias (123 `= {`, 224 union chuỗi).
+
 ### 3.2 Số đo nền của Lab 1 (01/11/2026, chạy thật)
 | Bài nộp | A tsc src (2) | B gọi đúng (1) | C không any (1) | D 15 test (2) | E 8 lời gọi sai bị từ chối (4) | Tổng |
 |---|---|---|---|---|---|---|
@@ -261,9 +278,19 @@ typescript: 'typescript-practice',
   4 cặp liên kết chéo (api-design 3.1, nodejs 1.2, nodejs 1.4, react 2.2). Brief: `$S/ts/BRIEF-CH3.md` (cùng cách làm Ch2).
   ⚠️ Bẫy khi fork song song: một tác tử chạy tsc với `extends` sai ⇒ không `noEmit` ⇒ đẻ `.js`/`.d.ts` vào `src/rules/` và `demo*/` của dự án chung —
   luôn `find . -name "*.d.ts" -o -name "*.js"` (trừ `js/`, demo cố ý) trước khi rsync ảnh chụp.
-- **Việc tiếp theo: Chương 4** (Object, interface & type alias — §9: mô hình miền Lab/User/Booking readonly/optional + `Record<LabCode, Lab>`, Lab 4).
+- ~~Việc tiếp theo: Chương 4~~ (ĐÃ XONG 01/11, xem dòng dưới) (Object, interface & type alias — §9: mô hình miền Lab/User/Booking readonly/optional + `Record<LabCode, Lab>`, Lab 4).
   Làm y Ch2/Ch3: viết `$S/ts/BRIEF-CH4.md` (chép BRIEF-CH3, đổi bảng bài), fork 4 bài, phiên chính làm Lab 4 + quiz + tệp chương + liên kết ngược +
   upload + ảnh chụp `_labflow-ts` (cuối Ch3: 33 test, lab1/2/3 tham khảo 10/10).
+- 01/11/2026 — **Chương 4 trọn**: 4 bài (slug giữ; nguồn bài + giảng 30–41k) + Lab 4 (MỚI `typescript-4-6-lab-mo-hinh-du-lieu`) + quiz 10 câu;
+  5 deck / 56 slide đẩy `TS/v1` (ts-04-1 12, ts-04-2 12, ts-04-3 11, ts-04-4 11, ts-lab-4 10; 0 lỗi kiem-slide); 14 đề Code Lab `ts` mới (ts-cl-4-1 a–d,
+  4-2 a–c, 4-3 a–c, 4-4 a–c, ts-cl-lab-4; 29 sai mẫu) — kiem-de-ts 78/78; track `typescript-practice` thêm 10 module (Ch3 + Ch4 ⇒ 26 module / 78 đề),
+  `codelab-xuat-de` sạch, `codelab-ts-doi-chieu` 1813/1813 kiểm khớp tsc 7.0.2, Chromium web + app 78/78; 4 cặp liên kết chéo (react rx-1-2-props,
+  prisma-orm pr-1-2, prisma-orm pr-8-2, api-design 3.4); video YT cho Lab 4. Làm MỘT phiên, KHÔNG fork (luật mới: tối đa 3 tác tử chạy cùng lúc).
+- **⏸ TẠM DỪNG sau Chương 4 (01/11/2026, chủ kênh đổi ưu tiên). Việc tiếp theo: Chương 5** (Union, literal & thu hẹp — §9: `SlotResult`, máy trạng thái
+  Booking là union có nhãn + `never`, Lab 5 máy chấm thêm trạng thái mới ⇒ phải đỏ). Chú ý khi soạn: 2.3 đã dạy switch vét cạn với `never` (LAB_CLOSED),
+  2.4 đã dạy guard `isLab` — Ch5 đi sâu hơn (typeof/in/instanceof/equality, control-flow, type predicate, assertion function, union có nhãn,
+  `assertNever`, bẫy default bắt-hết), dựng `BookingState` trên `BookingRecord` của Ch4. Ảnh chụp `_labflow-ts` cuối Ch4: 43 test, lab1–4 tham khảo 10/10.
+  Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

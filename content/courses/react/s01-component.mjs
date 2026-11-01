@@ -1113,6 +1113,11 @@ ${SD.sortEn}
   <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 5.1: Components &amp; props</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: read-only props and passing data from parent to child. Different: Academy validates props with PropTypes; Courses checks them with TypeScript types at compile time. In this lesson we add: interfaces and defaults, children, the 0 that shows up on screen, .sort() reordering the parent's array. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN FER202 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The same rules for a data model — TypeScript 4.1: Object shapes</span><span class="lc-sub">Same: an object described by a shape with required, optional (?) and read-only properties; tsc catches a missing or misspelled property before anything runs. Different: there the shape is LabFlow’s data model — the typo check only works on a fresh literal (through a variable it became TS2741, and “optional to silence it” gave 0 errors and −12 free seats), and readonly does not stop push on a shared array.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -1368,6 +1373,11 @@ ${SD.sortVi}
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 5.1: Component &amp; props</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: props chỉ đọc và truyền dữ liệu từ cha xuống con. Khác: Academy kiểm props bằng PropTypes; Courses kiểm bằng kiểu TypeScript ngay lúc biên dịch. Ở bài này mình học thêm: interface và giá trị mặc định, children, số 0 hiện lên màn hình, .sort() đảo luôn mảng của cha. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng luật cho mô hình dữ liệu — TypeScript 4.1: Dáng object</span><span class="lc-sub">Giống: object được mô tả bằng một dáng có thuộc tính bắt buộc, optional (?) và chỉ đọc; tsc bắt thuộc tính thiếu hay gõ sai trước khi chạy. Khác: ở đó dáng là mô hình dữ liệu LabFlow — bộ bắt lỗi gõ chỉ chạy với literal tươi (qua một biến thì thành TS2741, và “cho optional để hết lỗi” ra 0 lỗi cùng −12 chỗ trống), và readonly không chặn push vào mảng dùng chung.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

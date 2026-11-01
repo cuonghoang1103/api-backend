@@ -491,6 +491,11 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 <a class="link-card" href="https://github.com/prisma/prisma/tree/main/packages/client" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">prisma/prisma — the client package source</span><span class="lc-sub">github.com · The generator that writes everything above; <code>src/generation/</code> is the part to read</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">CuongThai course — TypeScript</span><span class="lc-sub">Conditional and mapped types, which is the machinery <code>GetPayload</code> is built from</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Find, in the generated file, the exact type a given query returns — then prove it with a deliberate error</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hand-written shapes: interface or type? — TypeScript 4.2</span><span class="lc-sub">Same: a model is a named TypeScript type every query result is checked against. Different: Prisma generates computed type aliases like the User above; there you write the shapes yourself — interface for named shapes, type for unions — and meet the trap of two same-named interfaces merging silently (TS2741 at the creation line, Node still runs) versus TS2300 for type aliases.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -637,6 +642,11 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 <a class="link-card" href="https://github.com/prisma/prisma/tree/main/packages/client" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">prisma/prisma — mã nguồn gói client</span><span class="lc-sub">github.com · Bộ sinh viết ra mọi thứ ở trên; phần đáng đọc là <code>src/generation/</code></span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — TypeScript</span><span class="lc-sub">Kiểu điều kiện và kiểu ánh xạ, tức bộ máy mà <code>GetPayload</code> được dựng từ đó</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Tìm trong tệp sinh ra chính xác kiểu mà một câu truy vấn cho trước trả về, rồi chứng minh bằng một lỗi cố ý</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Dáng viết tay: interface hay type? — TypeScript 4.2</span><span class="lc-sub">Giống: model là một kiểu TypeScript có tên, mọi kết quả truy vấn được kiểm theo nó. Khác: Prisma sinh type alias tính toán như User ở trên; ở đó bạn tự viết dáng — interface cho dáng có tên, type cho union — và gặp cái bẫy hai interface trùng tên âm thầm gộp (TS2741 ở dòng tạo object, Node vẫn chạy) so với TS2300 của type alias.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

@@ -1,0 +1,707 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-3-2-callback",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-3-2-callback"
+  },
+  "exercises": [
+    {
+      "title": "Name the shape of a rule with a function type",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-2-callback"
+      ],
+      "problemHtml": "<p>In src/rules.ts write the function type <code>Rule</code> — \"takes one <code>BookingInput</code>, returns a <code>Problem</code> or <code>null</code>\" — and give both rules that type, so their parameter needs no annotation. Then (1) src/ and kiem/dung.ts compile, (2) the two wrong rules in kiem/sai.ts are refused, (3) the tests pass. No any, no Function.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets TS2322; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/rules.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/rules.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/rules.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bFunction\\b</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong src/rules.ts hãy viết kiểu hàm <code>Rule</code> — \"nhận một <code>BookingInput</code>, trả về một <code>Problem</code> hoặc <code>null</code>\" — và gán kiểu đó cho cả hai luật, để tham số của chúng không cần chú thích. Khi đó (1) src/ và kiem/dung.ts biên dịch được, (2) hai luật sai trong kiem/sai.ts bị từ chối, (3) test qua. Không any, không Function.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có TS2322; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/rules.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/rules.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/rules.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bFunction\\b</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/rules.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/rules.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const seatsOnly: Rule = (seats: number) => null;|||kiem/sai.ts, dòng 3: const seatsOnly: Rule = (seats: number) => null;",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bFunction\\b/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bFunction\\b/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "import { minutes } from './types.ts';\nimport type { BookingInput, Problem } from './types.ts';\n\n// A rule looks at one booking request and returns a Problem, or null when it is fine.\n// TODO: describe that with a function type, and use it for both rules.\nexport type Rule = unknown;\n\nexport const endAfterStart = (input) =>\n  minutes(input.end) <= minutes(input.start) ? { code: 'END_BEFORE_START', message: 'The end must be after the start' } : null;\n\nexport const notTooLong = (input) =>\n  minutes(input.end) - minutes(input.start) > 240 ? { code: 'TOO_LONG', message: 'At most 4 hours' } : null;\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { endAfterStart, notTooLong } from '../src/rules.ts';\nimport type { Rule } from '../src/rules.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst fewer: Rule = () => null;                   // ignoring the input is allowed\nconst RULES: Rule[] = [endAfterStart, notTooLong, fewer];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst first: Problem | null = RULES[0]?.(input) ?? null;\nexport { first };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Rule } from '../src/rules.ts';\n\nconst seatsOnly: Rule = (seats: number) => null; // expect TS2322\nconst text: Rule = () => 'TOO_LONG'; // expect TS2322\nexport { seatsOnly, text };\n"
+        },
+        {
+          "name": "test/rules.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { endAfterStart, notTooLong } from '../src/rules.ts';\n\nconst base = { lab: 'BE-201', seats: 10, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('08:00-10:00 passes both rules', () => {\n  assert.equal(endAfterStart(base), null);\n  assert.equal(notTooLong(base), null);\n});\ntest('10:00-08:00 ends before it starts', () => assert.equal(endAfterStart({ ...base, start: '10:00', end: '08:00' })?.code, 'END_BEFORE_START'));\ntest('08:00-13:00 is too long', () => assert.equal(notTooLong({ ...base, end: '13:00' })?.code, 'TOO_LONG'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/rules.ts",
+          "language": "typescript",
+          "code": "import { minutes } from './types.ts';\nimport type { BookingInput, Problem } from './types.ts';\n\n// A rule looks at one booking request and returns a Problem, or null when it is fine.\nexport type Rule = (input: BookingInput) => Problem | null;\n\nexport const endAfterStart: Rule = (input) =>\n  minutes(input.end) <= minutes(input.start) ? { code: 'END_BEFORE_START', message: 'The end must be after the start' } : null;\n\nexport const notTooLong: Rule = (input) =>\n  minutes(input.end) - minutes(input.start) > 240 ? { code: 'TOO_LONG', message: 'At most 4 hours' } : null;\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { endAfterStart, notTooLong } from '../src/rules.ts';\nimport type { Rule } from '../src/rules.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst fewer: Rule = () => null;                   // ignoring the input is allowed\nconst RULES: Rule[] = [endAfterStart, notTooLong, fewer];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst first: Problem | null = RULES[0]?.(input) ?? null;\nexport { first };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Rule } from '../src/rules.ts';\n\nconst seatsOnly: Rule = (seats: number) => null; // expect TS2322\nconst text: Rule = () => 'TOO_LONG'; // expect TS2322\nexport { seatsOnly, text };\n"
+        },
+        {
+          "name": "test/rules.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { endAfterStart, notTooLong } from '../src/rules.ts';\n\nconst base = { lab: 'BE-201', seats: 10, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('08:00-10:00 passes both rules', () => {\n  assert.equal(endAfterStart(base), null);\n  assert.equal(notTooLong(base), null);\n});\ntest('10:00-08:00 ends before it starts', () => assert.equal(endAfterStart({ ...base, start: '10:00', end: '08:00' })?.code, 'END_BEFORE_START'));\ntest('08:00-13:00 is too long', () => assert.equal(notTooLong({ ...base, end: '13:00' })?.code, 'TOO_LONG'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — type Rule = Function — every wrong rule fits; returns unknown — a rule returning a string is no longer refused — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — type Rule = Function — every wrong rule fits; returns unknown — a rule returning a string is no longer refused — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/types.ts": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n",
+          "kiem/dung.ts": "import { endAfterStart, notTooLong } from '../src/rules.ts';\nimport type { Rule } from '../src/rules.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst fewer: Rule = () => null;                   // ignoring the input is allowed\nconst RULES: Rule[] = [endAfterStart, notTooLong, fewer];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst first: Problem | null = RULES[0]?.(input) ?? null;\nexport { first };\n",
+          "kiem/sai.ts": "import type { Rule } from '../src/rules.ts';\n\nconst seatsOnly: Rule = (seats: number) => null; // expect TS2322\nconst text: Rule = () => 'TOO_LONG'; // expect TS2322\nexport { seatsOnly, text };\n",
+          "test/rules.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { endAfterStart, notTooLong } from '../src/rules.ts';\n\nconst base = { lab: 'BE-201', seats: 10, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('08:00-10:00 passes both rules', () => {\n  assert.equal(endAfterStart(base), null);\n  assert.equal(notTooLong(base), null);\n});\ntest('10:00-08:00 ends before it starts', () => assert.equal(endAfterStart({ ...base, start: '10:00', end: '08:00' })?.code, 'END_BEFORE_START'));\ntest('08:00-13:00 is too long', () => assert.equal(notTooLong({ ...base, end: '13:00' })?.code, 'TOO_LONG'));\n"
+        },
+        "tepHoc": [
+          "src/rules.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/rules.test.ts"
+            ],
+            "moTa": "tsc (strict): src/rules.ts + kiem/dung.ts, test/rules.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const seatsOnly: Rule = (seats: number) => null; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2322 — const text: Rule = () => 'TOO_LONG'; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/rules.test.ts",
+            "moTa": "node --test test/rules.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bFunction\\b"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "type Rule = Function — every wrong rule fits — caught by: tsc (strict): src/rules.ts + kiem/dung.ts, test/rules.test.ts compile with 0 errors; kiem/sai.ts:3 is refused with TS2322 — const seatsOnly: Rule = (seats: number) => null; (+2)|||type Rule = Function — every wrong rule fits — máy chấm bắt ở: tsc (strict): src/rules.ts + kiem/dung.ts, test/rules.test.ts compile with 0 errors; kiem/sai.ts:3 is refused with TS2322 — const seatsOnly: Rule = (seats: number) => null; (+2)"
+        },
+        {
+          "loi": "returns unknown — a rule returning a string is no longer refused — caught by: tsc (strict): src/rules.ts + kiem/dung.ts, test/rules.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2322 — const text: Rule = () => 'TOO_LONG';|||returns unknown — a rule returning a string is no longer refused — máy chấm bắt ở: tsc (strict): src/rules.ts + kiem/dung.ts, test/rules.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2322 — const text: Rule = () => 'TOO_LONG';"
+        }
+      ]
+    },
+    {
+      "title": "Type a rule factory and validate",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-2-callback"
+      ],
+      "problemHtml": "<p>src/validate.ts has a factory <code>maxSeats(limit)</code> that returns a rule, and <code>validate(input, rules)</code>. Type them so that (1) the correct uses in kiem/dung.ts compile — including a <strong>read-only</strong> list of rules, (2) the four wrong uses in kiem/sai.ts are refused, (3) the tests pass. Hint: give the factory a return type, and the inner arrow is typed for free. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its expected code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/validate.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/validate.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345, TS2322, TS2345, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/validate.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/validate.ts có factory <code>maxSeats(limit)</code> trả về một luật, và <code>validate(input, rules)</code>. Gõ kiểu sao cho (1) các cách dùng đúng trong kiem/dung.ts biên dịch được — kể cả danh sách luật <strong>chỉ đọc</strong>, (2) bốn cách dùng sai trong kiem/sai.ts bị từ chối, (3) test qua. Gợi ý: cho factory một kiểu trả về, arrow bên trong tự có kiểu. Không any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã lỗi; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/validate.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/validate.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345, TS2322, TS2345, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/validate.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/validate.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/validate.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 5: maxSeats('30');|||kiem/sai.ts, dòng 5: maxSeats('30');",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput, Problem } from './types.ts';\n\nexport type Rule = (input: BookingInput) => Problem | null;\n\n// maxSeats(40) builds a rule \"at most 40 seats\"; maxSeats(60) is the lecture-hall version.\nexport function maxSeats(limit) {\n  return (input) => (input.seats > limit ? { code: 'TOO_MANY_SEATS', message: 'At most ' + limit + ' seats' } : null);\n}\n\n// Runs every rule and keeps the problems.\nexport function validate(input, rules) {\n  const problems = [];\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) problems.push(problem);\n  }\n  return problems;\n}\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst RULES: readonly Rule[] = [maxSeats(40)];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst problems: Problem[] = validate(input, RULES);\nconst hall: Problem[] = validate(input, [maxSeats(60)]);\nexport { problems, hall };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nmaxSeats('30'); // expect TS2345\nvalidate(input, [maxSeats]); // expect TS2322\nvalidate(input, maxSeats(40)); // expect TS2345\nconst count: number = validate(input, []); // expect TS2322\nexport { count };\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { maxSeats, validate } from '../src/validate.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('45 seats break the 40-seat rule', () => assert.deepEqual(validate(input, [maxSeats(40)]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('the lecture hall allows 60', () => assert.deepEqual(validate(input, [maxSeats(60)]), []));\ntest('the message names the limit', () => assert.equal(validate(input, [maxSeats(40)])[0]?.message, 'At most 40 seats'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput, Problem } from './types.ts';\n\nexport type Rule = (input: BookingInput) => Problem | null;\n\n// maxSeats(40) builds a rule \"at most 40 seats\"; maxSeats(60) is the lecture-hall version.\n// The return type Rule also types the inner arrow's parameter.\nexport function maxSeats(limit: number): Rule {\n  return (input) => (input.seats > limit ? { code: 'TOO_MANY_SEATS', message: 'At most ' + limit + ' seats' } : null);\n}\n\n// Runs every rule and keeps the problems. A read-only list: validate never changes it.\nexport function validate(input: BookingInput, rules: readonly Rule[]): Problem[] {\n  const problems: Problem[] = [];\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) problems.push(problem);\n  }\n  return problems;\n}\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst RULES: readonly Rule[] = [maxSeats(40)];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst problems: Problem[] = validate(input, RULES);\nconst hall: Problem[] = validate(input, [maxSeats(60)]);\nexport { problems, hall };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nmaxSeats('30'); // expect TS2345\nvalidate(input, [maxSeats]); // expect TS2322\nvalidate(input, maxSeats(40)); // expect TS2345\nconst count: number = validate(input, []); // expect TS2322\nexport { count };\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { maxSeats, validate } from '../src/validate.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('45 seats break the 40-seat rule', () => assert.deepEqual(validate(input, [maxSeats(40)]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('the lecture hall allows 60', () => assert.deepEqual(validate(input, [maxSeats(60)]), []));\ntest('the message names the limit', () => assert.equal(validate(input, [maxSeats(40)])[0]?.message, 'At most 40 seats'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — rules: Rule[] (not readonly) — a read-only list of rules is refused; limit: number | string — maxSeats(\"30\") is accepted — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — rules: Rule[] (not readonly) — a read-only list of rules is refused; limit: number | string — maxSeats(\"30\") is accepted — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/types.ts": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n",
+          "kiem/dung.ts": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst RULES: readonly Rule[] = [maxSeats(40)];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nconst problems: Problem[] = validate(input, RULES);\nconst hall: Problem[] = validate(input, [maxSeats(60)]);\nexport { problems, hall };\n",
+          "kiem/sai.ts": "import { maxSeats, validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nmaxSeats('30'); // expect TS2345\nvalidate(input, [maxSeats]); // expect TS2322\nvalidate(input, maxSeats(40)); // expect TS2345\nconst count: number = validate(input, []); // expect TS2322\nexport { count };\n",
+          "test/validate.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { maxSeats, validate } from '../src/validate.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\ntest('45 seats break the 40-seat rule', () => assert.deepEqual(validate(input, [maxSeats(40)]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('the lecture hall allows 60', () => assert.deepEqual(validate(input, [maxSeats(60)]), []));\ntest('the message names the limit', () => assert.equal(validate(input, [maxSeats(40)])[0]?.message, 'At most 40 seats'));\n"
+        },
+        "tepHoc": [
+          "src/validate.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/validate.test.ts"
+            ],
+            "moTa": "tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2345 — maxSeats('30'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2322 — validate(input, [maxSeats]); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 7,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:7 is refused with TS2345 — validate(input, maxSeats(40)); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 8,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:8 is refused with TS2322 — const count: number = validate(input, []); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/validate.test.ts",
+            "moTa": "node --test test/validate.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "rules: Rule[] (not readonly) — a read-only list of rules is refused — caught by: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors|||rules: Rule[] (not readonly) — a read-only list of rules is refused — máy chấm bắt ở: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "limit: number | string — maxSeats(\"30\") is accepted — caught by: kiem/sai.ts:5 is refused with TS2345 — maxSeats('30');|||limit: number | string — maxSeats(\"30\") is accepted — máy chấm bắt ở: kiem/sai.ts:5 is refused with TS2345 — maxSeats('30');"
+        }
+      ]
+    },
+    {
+      "title": "Fix the .map(parseInt) bug that tsc cannot see",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-2-callback"
+      ],
+      "problemHtml": "<p>src/hours.ts compiles with zero errors, but <code>parseHours(\"07,08,09,10\")</code> returns <code>[7, NaN, 0, 3]</code>. Find out why (what does <code>map</code> pass to its callback?) and fix it so the tests pass. Passing <code>parseInt</code> or <code>Number.parseInt</code> directly to <code>map</code> is not allowed.</p><p><strong>Done when:</strong> tsc is clean, node --test is green, and your callback passes the radix 10 itself.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/hours.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/hours.test.ts</code>.</li>\n  <li><code>node --test test/hours.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>map\\(\\s*(Number\\.)?parseInt\\s*\\)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/hours.ts biên dịch với không lỗi nào, nhưng <code>parseHours(\"07,08,09,10\")</code> trả về <code>[7, NaN, 0, 3]</code>. Tìm ra vì sao (<code>map</code> truyền gì cho callback?) và sửa cho test qua. Không được truyền thẳng <code>parseInt</code> hay <code>Number.parseInt</code> vào <code>map</code>.</p><p><strong>Đạt khi:</strong> tsc sạch, node --test xanh, và callback của bạn tự truyền cơ số 10.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/hours.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/hours.test.ts</code>.</li>\n  <li><code>node --test test/hours.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>map\\(\\s*(Number\\.)?parseInt\\s*\\)</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/hours.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/hours.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/hours.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /map\\(\\s*(Number\\.)?parseInt\\s*\\)/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /map\\(\\s*(Number\\.)?parseInt\\s*\\)/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/hours.ts",
+          "language": "typescript",
+          "code": "// \"07,08,09,10\" -> [7, 8, 9, 10]: the hours a lecturer wants to block, typed as text.\nexport function parseHours(text: string): number[] {\n  return text.split(',').map(parseInt);\n}\n"
+        },
+        {
+          "name": "test/hours.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseHours } from '../src/hours.ts';\n\ntest('07,08,09,10 are four morning hours', () => assert.deepEqual(parseHours('07,08,09,10'), [7, 8, 9, 10]));\ntest('12,13 are two afternoon hours', () => assert.deepEqual(parseHours('12,13'), [12, 13]));\ntest('a single hour', () => assert.deepEqual(parseHours('20'), [20]));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/hours.ts",
+          "language": "typescript",
+          "code": "// \"07,08,09,10\" -> [7, 8, 9, 10]: the hours a lecturer wants to block, typed as text.\n// map passes (value, index, array); parseInt would read the index as its radix. Pass exactly what we mean.\nexport function parseHours(text: string): number[] {\n  return text.split(',').map((h) => Number.parseInt(h, 10));\n}\n"
+        },
+        {
+          "name": "test/hours.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseHours } from '../src/hours.ts';\n\ntest('07,08,09,10 are four morning hours', () => assert.deepEqual(parseHours('07,08,09,10'), [7, 8, 9, 10]));\ntest('12,13 are two afternoon hours', () => assert.deepEqual(parseHours('12,13'), [12, 13]));\ntest('a single hour', () => assert.deepEqual(parseHours('20'), [20]));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — map(Number.parseInt) — the same function under another name; passes the index on purpose: (h, i) =&gt; parseInt(h, i) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — map(Number.parseInt) — the same function under another name; passes the index on purpose: (h, i) =&gt; parseInt(h, i) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/hours.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseHours } from '../src/hours.ts';\n\ntest('07,08,09,10 are four morning hours', () => assert.deepEqual(parseHours('07,08,09,10'), [7, 8, 9, 10]));\ntest('12,13 are two afternoon hours', () => assert.deepEqual(parseHours('12,13'), [12, 13]));\ntest('a single hour', () => assert.deepEqual(parseHours('20'), [20]));\n"
+        },
+        "tepHoc": [
+          "src/hours.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/hours.test.ts"
+            ],
+            "moTa": "tsc (strict): src/hours.ts + test/hours.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/hours.test.ts",
+            "moTa": "node --test test/hours.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "map\\(\\s*(Number\\.)?parseInt\\s*\\)"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "map(Number.parseInt) — the same function under another name — caught by: node --test test/hours.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||map(Number.parseInt) — the same function under another name — máy chấm bắt ở: node --test test/hours.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "passes the index on purpose: (h, i) => parseInt(h, i) — caught by: node --test test/hours.test.ts exits 0|||passes the index on purpose: (h, i) => parseInt(h, i) — máy chấm bắt ở: node --test test/hours.test.ts exits 0"
+        }
+      ]
+    },
+    {
+      "title": "Replace Function with real function types",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-3-2-callback"
+      ],
+      "problemHtml": "<p>src/validate.ts compiles, but it types the rules and the callback as <code>Function</code>: any callable value fits and every call returns <code>any</code>. Replace both with real function types (export the rule type as <code>Rule</code>) so that (1) the correct uses in kiem/dung.ts compile — a read-only rule list and a logging callback whose result is ignored, (2) the three wrong uses in kiem/sai.ts are refused, (3) the tests pass. No any, no Function.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its expected code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/validate.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/validate.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322, TS2345); its other lines still compile.</li>\n  <li><code>node --test test/validate.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bFunction\\b</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/validate.ts biên dịch được, nhưng nó gõ kiểu các luật và callback là <code>Function</code>: giá trị gọi được nào cũng khớp và mọi lời gọi trả về <code>any</code>. Thay cả hai bằng kiểu hàm thật (export kiểu luật với tên <code>Rule</code>) sao cho (1) các cách dùng đúng trong kiem/dung.ts biên dịch được — danh sách luật chỉ đọc và một callback ghi log mà kết quả bị bỏ qua, (2) ba cách dùng sai trong kiem/sai.ts bị từ chối, (3) test qua. Không any, không Function.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã lỗi; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/validate.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/validate.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322, TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/validate.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bFunction\\b</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/validate.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/validate.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 5: validate(input, [(seats: number) => null]);|||kiem/sai.ts, dòng 5: validate(input, [(seats: number) => null]);",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bFunction\\b/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /\\bFunction\\b/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput, Problem } from './types.ts';\n\n// Every rule takes one booking input and returns a Problem or null.\n// onProblem (optional) is told about each problem as soon as it is found, e.g. to log it.\nexport function validate(input: BookingInput, rules: Function[], onProblem?: Function): Problem[] {\n  const problems: Problem[] = [];\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) {\n      problems.push(problem);\n      if (onProblem) onProblem(problem);\n    }\n  }\n  return problems;\n}\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst tooMany: Rule = (b) => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nconst RULES: readonly Rule[] = [tooMany];\nconst log: Problem[] = [];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, RULES, (p) => log.push(p));   // push returns a number; a void callback may ignore it\nconst problems: Problem[] = validate(input, RULES);\nexport { problems };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, [(seats: number) => null]); // expect TS2322\nvalidate(input, [() => 'TOO_LONG']); // expect TS2322\nvalidate(input, [], (p: string) => p.length); // expect TS2345\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validate } from '../src/validate.ts';\nimport type { Problem } from '../src/types.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\nconst tooMany = (b: { seats: number }): Problem | null => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\ntest('collects the problems of every rule', () => assert.deepEqual(validate(input, [tooMany, () => null]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('tells onProblem about each problem', () => {\n  const seen: string[] = [];\n  validate(input, [tooMany, tooMany], (p) => { seen.push(p.code); });\n  assert.deepEqual(seen, ['TOO_MANY_SEATS', 'TOO_MANY_SEATS']);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/validate.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput, Problem } from './types.ts';\n\n// Every rule takes one booking input and returns a Problem or null.\nexport type Rule = (input: BookingInput) => Problem | null;\n\n// onProblem (optional) is told about each problem as soon as it is found, e.g. to log it.\n// void: validate ignores whatever the callback returns.\nexport function validate(input: BookingInput, rules: readonly Rule[], onProblem?: (p: Problem) => void): Problem[] {\n  const problems: Problem[] = [];\n  for (const rule of rules) {\n    const problem = rule(input);\n    if (problem !== null) {\n      problems.push(problem);\n      if (onProblem) onProblem(problem);\n    }\n  }\n  return problems;\n}\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst tooMany: Rule = (b) => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nconst RULES: readonly Rule[] = [tooMany];\nconst log: Problem[] = [];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, RULES, (p) => log.push(p));   // push returns a number; a void callback may ignore it\nconst problems: Problem[] = validate(input, RULES);\nexport { problems };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, [(seats: number) => null]); // expect TS2322\nvalidate(input, [() => 'TOO_LONG']); // expect TS2322\nvalidate(input, [], (p: string) => p.length); // expect TS2345\n"
+        },
+        {
+          "name": "test/validate.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validate } from '../src/validate.ts';\nimport type { Problem } from '../src/types.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\nconst tooMany = (b: { seats: number }): Problem | null => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\ntest('collects the problems of every rule', () => assert.deepEqual(validate(input, [tooMany, () => null]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('tells onProblem about each problem', () => {\n  const seen: string[] = [];\n  validate(input, [tooMany, tooMany], (p) => { seen.push(p.code); });\n  assert.deepEqual(seen, ['TOO_MANY_SEATS', 'TOO_MANY_SEATS']);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — rules typed, onProblem still Function; rules: Rule[] (not readonly) — the read-only RULES list is refused; callback must return a number — a void-returning logger no longer fits — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — rules typed, onProblem still Function; rules: Rule[] (not readonly) — the read-only RULES list is refused; callback must return a number — a void-returning logger no longer fits — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/types.ts": "// LabFlow types for this exercise (given — do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type ProblemCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'TOO_MANY_SEATS';\nexport type Problem = { code: ProblemCode; message: string };\n\n// \"08:30\" -> 510\nexport function minutes(text: string): number {\n  const [h, m] = text.split(':');\n  return Number(h) * 60 + Number(m);\n}\n",
+          "kiem/dung.ts": "import { validate } from '../src/validate.ts';\nimport type { Rule } from '../src/validate.ts';\nimport type { BookingInput, Problem } from '../src/types.ts';\n\nconst tooMany: Rule = (b) => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\nconst RULES: readonly Rule[] = [tooMany];\nconst log: Problem[] = [];\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, RULES, (p) => log.push(p));   // push returns a number; a void callback may ignore it\nconst problems: Problem[] = validate(input, RULES);\nexport { problems };\n",
+          "kiem/sai.ts": "import { validate } from '../src/validate.ts';\nimport type { BookingInput } from '../src/types.ts';\n\nconst input: BookingInput = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '13:00' };\nvalidate(input, [(seats: number) => null]); // expect TS2322\nvalidate(input, [() => 'TOO_LONG']); // expect TS2322\nvalidate(input, [], (p: string) => p.length); // expect TS2345\n",
+          "test/validate.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { validate } from '../src/validate.ts';\nimport type { Problem } from '../src/types.ts';\n\nconst input = { lab: 'BE-201', seats: 45, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\nconst tooMany = (b: { seats: number }): Problem | null => (b.seats > 40 ? { code: 'TOO_MANY_SEATS', message: 'At most 40 seats' } : null);\ntest('collects the problems of every rule', () => assert.deepEqual(validate(input, [tooMany, () => null]).map((p) => p.code), ['TOO_MANY_SEATS']));\ntest('tells onProblem about each problem', () => {\n  const seen: string[] = [];\n  validate(input, [tooMany, tooMany], (p) => { seen.push(p.code); });\n  assert.deepEqual(seen, ['TOO_MANY_SEATS', 'TOO_MANY_SEATS']);\n});\n"
+        },
+        "tepHoc": [
+          "src/validate.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/validate.test.ts"
+            ],
+            "moTa": "tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2322 — validate(input, [(seats: number) => null]); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2322 — validate(input, [() => 'TOO_LONG']); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 7,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:7 is refused with TS2345 — validate(input, [], (p: string) => p.length); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/validate.test.ts",
+            "moTa": "node --test test/validate.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bFunction\\b"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "rules typed, onProblem still Function — caught by: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors; kiem/sai.ts:7 is refused with TS2345 — validate(input, [], (p: string) => p.length); (+1)|||rules typed, onProblem still Function — máy chấm bắt ở: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors; kiem/sai.ts:7 is refused with TS2345 — validate(input, [], (p: string) => p.length); (+1)"
+        },
+        {
+          "loi": "rules: Rule[] (not readonly) — the read-only RULES list is refused — caught by: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors|||rules: Rule[] (not readonly) — the read-only RULES list is refused — máy chấm bắt ở: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "callback must return a number — a void-returning logger no longer fits — caught by: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors|||callback must return a number — a void-returning logger no longer fits — máy chấm bắt ở: tsc (strict): src/validate.ts + kiem/dung.ts, test/validate.test.ts compile with 0 errors"
+        }
+      ]
+    }
+  ]
+}

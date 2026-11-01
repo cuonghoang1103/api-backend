@@ -264,6 +264,7 @@ tests: {
   `frontend/public/vendor/typescript-6.0.3/` (dựng/kiểm: `node scripts/codelab-ts-vendor.mjs [--kiem]`, ghim băm sha512 từng gói).
   nginx `location ^~ /vendor/`: cache 1 năm (đường có số phiên bản) + CORS `*` (app desktop tải bằng fetch rồi đưa vào worker hộp cát).
 - TS 6 ↔ TS 7: 47/48 đề cùng kết quả; `ts-cl-1-2-d` kiem/sai.ts:6 (7: TS2739, 6: TS2345) ⇒ `MA_THEM_TS6` trong `_chung.mjs` nhận cả hai.
+  01/11/2026 (thêm Chương 3–4, 26 module / 78 đề): `codelab-ts-doi-chieu.mjs` 1813/1813 kiểm khớp tsc 7.0.2 + Node 22; Chromium web + app 78/78 (437/437 kiểm lời giải).
   Đối chiếu TỪNG KIỂM với tsc 7.0.2 + Node 22 thật trên lời giải, khởi đầu và mọi sai mẫu: `node scripts/codelab-ts-doi-chieu.mjs <labflow-ts đã npm ci>`.
 - Bộ xuất (`codelab-xuat-de.mjs`) chạy máy chấm trong Node (`scripts/codelab-ts-node.mjs`, cùng mã + cùng tệp vendor): lời giải đạt hết,
   khởi đầu trượt ≥ 1, MỖI `saiMau` trượt ≥ 1 — "Lỗi hay gặp" viết từ chính sai mẫu + các kiểm đã bắt nó. Test: `npx tsx --test frontend/src/components/code-lab/cham/ts.test.ts`.

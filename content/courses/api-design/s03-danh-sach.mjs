@@ -1568,6 +1568,11 @@ Time: 0.250 ms</div>
   <li>Avoid N+1: one query or one lookup map per page — 2.16 ms vs 0.25 ms measured on localhost.</li>
   <li>Publish only sort orders and includes you can serve fast.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-4-index-record" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">A closed list as a type — TypeScript 4.4: Index signatures &amp; Record</span><span class="lc-sub">Same: a name that arrives from the URL must be checked against a closed list before it indexes anything. Different: there the list is a type, Record&lt;LabCode, Lab&gt; — an unknown key is TS7053, a missing entry TS2741 — and an open index signature with noUncheckedIndexedAccess off compiled with 0 errors and crashed on BE-999.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1789,6 +1794,11 @@ Time: 0.250 ms</div>
   <li>Tránh N+1: mỗi trang một truy vấn hoặc một bảng tra — 2,16 ms so với 0,25 ms đo trên localhost.</li>
   <li>Chỉ công bố những cách sắp và include bạn phục vụ nhanh được.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-4-index-record" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Danh sách đóng thành một kiểu — TypeScript 4.4: Index signature &amp; Record</span><span class="lc-sub">Giống: một cái tên tới từ URL phải được đối chiếu với danh sách đóng trước khi dùng để tra bất cứ thứ gì. Khác: ở đó danh sách là một kiểu, Record&lt;LabCode, Lab&gt; — khoá lạ là TS7053, thiếu mục là TS2741 — còn index signature mở khi tắt noUncheckedIndexedAccess thì biên dịch 0 lỗi rồi sập với BE-999.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

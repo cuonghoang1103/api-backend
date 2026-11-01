@@ -2993,5 +2993,697 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-4-1-a",
+    "bai": "typescript-4-1-dang-object",
+    "tieuDe": "Write the Lab shape: required, optional, readonly|||Viết dáng Lab: bắt buộc, optional, readonly",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>src/lab.ts has a loose <code>Lab</code> type: any code, an optional capacity, a required equipment list. Rewrite the type (and the one line that depended on the optional capacity) so that (1) the labs in kiem/dung.ts compile — one of them has no equipment recorded, (2) the five wrong labs in kiem/sai.ts are refused with the expected codes, (3) the test passes. No any, no <code>!</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; every marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/lab.ts có kiểu <code>Lab</code> lỏng lẻo: mã nào cũng được, sức chứa optional, danh sách thiết bị bắt buộc. Viết lại kiểu (và một dòng phụ thuộc vào sức chứa optional) để (1) các phòng trong kiem/dung.ts biên dịch được — một phòng chưa ghi thiết bị, (2) năm phòng sai trong kiem/sai.ts bị từ chối đúng mã, (3) test qua. Không any, không <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/lab.ts": "import type { LabCode } from './codes.ts';\n\n// A teammate's Lab type. It compiles — and lets wrong labs in.\nexport type Lab = {\n  code: string;\n  name: string;\n  capacity?: number;\n  equipment: string[];\n};\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, (lab.capacity ?? 0) - booked);\n}\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n",
+      "kiem/dung.ts": "import type { Lab } from '../src/lab.ts';\n\nconst be201: Lab = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: ['projector'] };\nconst be202: Lab = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 }; // not recorded yet\nconst count: number = be201.equipment?.length ?? 0;\nexport { be201, be202, count };\n",
+      "kiem/sai.ts": "import type { Lab } from '../src/lab.ts';\n\ndeclare const lab: Lab;\nconst ai: Lab = { code: 'AL-301', name: 'AI Lab' }; // expect TS2741\nconst ghost: Lab = { code: 'BE-999', name: 'Ghost', capacity: 10 }; // expect TS2322\nconst typo: Lab = { code: 'BE-201', name: 'Backend Lab 1', capasity: 40 }; // expect TS2561\nlab.code = 'BE-202'; // expect TS2540\nconst n: number = lab.equipment.length; // expect TS18048\nexport { ai, ghost, typo, n };\n",
+      "test/lab.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { freeSeats } from '../src/lab.ts';\n\ntest('free seats', () => assert.equal(freeSeats({ code: 'BE-201', name: 'Backend Lab 1', capacity: 40 }, 12), 28));\ntest('never below 0', () => assert.equal(freeSeats({ code: 'AL-301', name: 'AI Lab', capacity: 30 }, 35), 0));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/lab.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/lab.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "import type { LabCode } from './codes.ts';\n\n// Every lab has a code, a name and a capacity. equipment may not be recorded yet.\nexport type Lab = {\n  readonly code: LabCode;\n  name: string;\n  capacity: number;\n  equipment?: readonly string[];\n};\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "capacity still optional — a lab without a capacity slips through",
+        "tep": {
+          "src/lab.ts": "import type { LabCode } from './codes.ts';\n\n// Every lab has a code, a name and a capacity. equipment may not be recorded yet.\nexport type Lab = {\n  readonly code: LabCode;\n  name: string;\n  capacity?: number;\n  equipment?: readonly string[];\n};\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, (lab.capacity ?? 0) - booked);\n}\n"
+        }
+      },
+      {
+        "nhan": "code: string — BE-999 is accepted",
+        "tep": {
+          "src/lab.ts": "import type { LabCode } from './codes.ts';\n\n// Every lab has a code, a name and a capacity. equipment may not be recorded yet.\nexport type Lab = {\n  readonly code: string;\n  name: string;\n  capacity: number;\n  equipment?: readonly string[];\n};\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n"
+        }
+      },
+      {
+        "nhan": "no readonly on code",
+        "tep": {
+          "src/lab.ts": "import type { LabCode } from './codes.ts';\n\n// Every lab has a code, a name and a capacity. equipment may not be recorded yet.\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  capacity: number;\n  equipment?: readonly string[];\n};\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-1-b",
+    "bai": "typescript-4-1-dang-object",
+    "tieuDe": "The typo that went through a variable|||Lỗi gõ đi qua một biến",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>src/seed.ts builds three labs first and puts them in <code>SEED</code> at the end. tsc refuses the file with TS2741 “capacity is missing” — but no “Did you mean”, because the objects are not fresh literals any more. Fix the seed <strong>without editing src/types.ts</strong> and without casts: type each lab where it is created (so a typo would get TS2561 on its own line), fix the real problem, and make the test pass.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; node --test is green; no <code>as</code> anywhere in your file.</p>|||<p>src/seed.ts dựng ba phòng trước rồi cuối cùng mới gom vào <code>SEED</code>. tsc từ chối tệp với TS2741 “capacity is missing” — nhưng không có “Did you mean”, vì các object không còn là literal tươi. Sửa seed <strong>không sửa src/types.ts</strong> và không ép kiểu: gõ kiểu cho từng phòng ngay chỗ tạo (để lỗi gõ được TS2561 ngay dòng của nó), sửa đúng vấn đề, và cho test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; node --test xanh; tệp của bạn không còn <code>as</code> nào.</p>",
+    "khoiDau": {
+      "src/seed.ts": "import type { Lab } from './types.ts';\n\n// Seed data, built first and collected at the end.\nconst be201 = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40 } as const;\nconst be202 = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 } as const;\nconst al301 = { code: 'AL-301', name: 'AI Lab', capasity: 30 } as const;\n\nexport const SEED: Lab[] = [be201, be202, al301];\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n",
+      "src/types.ts": "import type { LabCode } from './codes.ts';\n\n// The data model (given — do not edit). capacity is required on purpose.\nexport type Lab = { readonly code: LabCode; name: string; capacity: number };\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n",
+      "test/seed.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { SEED } from '../src/seed.ts';\nimport { freeSeats } from '../src/types.ts';\n\ntest('three labs', () => assert.deepEqual(SEED.map((l) => l.code), ['BE-201', 'BE-202', 'AL-301']));\ntest('the AI lab has 30 seats', () => {\n  const ai = SEED[2];\n  assert.ok(ai);\n  assert.equal(freeSeats(ai, 10), 20);\n});\ntest('every capacity is a number', () => assert.ok(SEED.every((l) => typeof l.capacity === 'number')));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/seed.test.ts"
+      ],
+      "chay": [
+        "node --test test/seed.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/seed.ts": "import type { Lab } from './types.ts';\n\n// Each lab is typed where it is created: the literal is fresh, so a typo gets \"Did you mean\".\nconst be201: Lab = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40 };\nconst be202: Lab = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 };\nconst al301: Lab = { code: 'AL-301', name: 'AI Lab', capacity: 30 };\n\nexport const SEED: Lab[] = [be201, be202, al301];\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "a spread that papers over the typo: capacity 0",
+        "tep": {
+          "src/seed.ts": "import type { Lab } from './types.ts';\n\n// Seed data, built first and collected at the end.\nconst be201 = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40 } as const;\nconst be202 = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 } as const;\nconst al301 = { code: 'AL-301', name: 'AI Lab', capasity: 30 } as const;\n\nexport const SEED: Lab[] = [be201, be202, { ...al301, capacity: 0 }];\n"
+        }
+      },
+      {
+        "nhan": "typo fixed but still \"as const\" variables — the habit the exercise is about",
+        "tep": {
+          "src/seed.ts": "import type { Lab } from './types.ts';\n\n// Seed data, built first and collected at the end.\nconst be201 = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40 } as const;\nconst be202 = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 } as const;\nconst al301 = { code: 'AL-301', name: 'AI Lab', capacity: 30 } as const;\n\nexport const SEED: Lab[] = [be201, be202, al301];\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-1-c",
+    "bai": "typescript-4-1-dang-object",
+    "tieuDe": "Two labs, one shared array: readonly all the way down|||Hai phòng, một mảng dùng chung: readonly tới tận cùng",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p>Two labs are created from the same <code>STANDARD</code> list. <code>addEquipment</code> pushes into the lab’s list — so adding a GPU to BE-201 also adds it to BE-202 (the test shows it). Change src/lab.ts so that (1) the code and the equipment list are read-only all the way down: the wrong uses in kiem/sai.ts are refused, (2) <code>addEquipment</code> returns a new lab and changes nothing it was given, (3) the tests pass.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>Hai phòng được tạo từ cùng danh sách <code>STANDARD</code>. <code>addEquipment</code> push vào danh sách của phòng — nên thêm GPU cho BE-201 cũng thêm cho BE-202 (test cho thấy). Sửa src/lab.ts để (1) mã phòng và danh sách thiết bị chỉ đọc tới tận cùng: các cách dùng sai trong kiem/sai.ts bị từ chối, (2) <code>addEquipment</code> trả về phòng mới và không đổi thứ gì nó nhận, (3) test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/lab.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  capacity: number;\n  equipment: string[];\n};\n\nexport const STANDARD: string[] = ['projector', 'whiteboard'];\n\n// Adds one item to a lab's equipment.\nexport function addEquipment(lab: Lab, item: string): Lab {\n  lab.equipment.push(item);\n  return lab;\n}\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n",
+      "kiem/sai.ts": "import { STANDARD } from '../src/lab.ts';\nimport type { Lab } from '../src/lab.ts';\n\ndeclare const lab: Lab;\nlab.code = 'BE-202'; // expect TS2540\nlab.equipment = []; // expect TS2540\nlab.equipment.push('printer'); // expect TS2339\nSTANDARD.push('printer'); // expect TS2339\n",
+      "test/lab.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { STANDARD, addEquipment } from '../src/lab.ts';\nimport type { Lab } from '../src/lab.ts';\n\nconst be201: Lab = { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: STANDARD };\nconst be202: Lab = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40, equipment: STANDARD };\n\ntest('the new lab has the item', () => assert.deepEqual(addEquipment(be201, 'GPU server').equipment, ['projector', 'whiteboard', 'GPU server']));\ntest('the other lab is untouched', () => {\n  addEquipment(be201, 'GPU server');\n  assert.deepEqual(be202.equipment, ['projector', 'whiteboard']);\n});\ntest('the old lab is untouched', () => {\n  addEquipment(be201, 'GPU server');\n  assert.deepEqual(be201.equipment, ['projector', 'whiteboard']);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/lab.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/lab.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = {\n  readonly code: LabCode;\n  name: string;\n  capacity: number;\n  readonly equipment: readonly string[]; // the property AND the list\n};\n\nexport const STANDARD: readonly string[] = ['projector', 'whiteboard'];\n\n// Returns a NEW lab with a NEW list; the old lab and a shared list stay untouched.\nexport function addEquipment(lab: Lab, item: string): Lab {\n  return { ...lab, equipment: [...lab.equipment, item] };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "readonly on the property only — push still compiles",
+        "tep": {
+          "src/lab.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = {\n  readonly code: LabCode;\n  name: string;\n  capacity: number;\n  readonly equipment: string[]; // the property AND the list\n};\n\nexport const STANDARD: string[] = ['projector', 'whiteboard'];\n\n// Returns a NEW lab with a NEW list; the old lab and a shared list stay untouched.\nexport function addEquipment(lab: Lab, item: string): Lab {\n  return { ...lab, equipment: [...lab.equipment, item] };\n}\n"
+        }
+      },
+      {
+        "nhan": "types right, but addEquipment still mutates (a copy of the lab, the same list)",
+        "tep": {
+          "src/lab.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = {\n  readonly code: LabCode;\n  name: string;\n  capacity: number;\n  readonly equipment: readonly string[]; // the property AND the list\n};\n\nexport const STANDARD: readonly string[] = ['projector', 'whiteboard'];\n\n// Returns a NEW lab with a NEW list; the old lab and a shared list stay untouched.\nexport function addEquipment(lab: Lab, item: string): Lab {\n  const list = lab.equipment as string[];\n  list.push(item);\n  return { ...lab };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-1-d",
+    "bai": "typescript-4-1-dang-object",
+    "tieuDe": "Name the nested shape: Place|||Đặt tên cho dáng lồng: Place",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>The same inline shape <code>{ building: string; floor: number | string }</code> is written three times in src/place.ts, and a floor is stored as the text <code>'2'</code>. Export a named type <code>Place</code> (floor is a number), use it in all three places, and fix the data, so that (1) kiem/dung.ts compiles (it imports <code>Place</code>), (2) the wrong places in kiem/sai.ts are refused, (3) the test passes.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>Cùng một dáng viết tại chỗ <code>{ building: string; floor: number | string }</code> xuất hiện ba lần trong src/place.ts, và một tầng được lưu thành chữ <code>'2'</code>. Export một kiểu có tên <code>Place</code> (floor là số), dùng nó ở cả ba chỗ và sửa dữ liệu, để (1) kiem/dung.ts biên dịch được (nó import <code>Place</code>), (2) các địa điểm sai trong kiem/sai.ts bị từ chối, (3) test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/place.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  place: { building: string; floor: number | string };\n};\n\nexport type Office = {\n  owner: string;\n  place: { building: string; floor: number | string };\n};\n\n// \"Beta, floor 2\"\nexport function placeLine(place: { building: string; floor: number | string }): string {\n  return place.building + ', floor ' + place.floor;\n}\n\nexport const BE201: Lab = { code: 'BE-201', name: 'Backend Lab 1', place: { building: 'Beta', floor: '2' } };\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n",
+      "kiem/dung.ts": "import { placeLine } from '../src/place.ts';\nimport type { Place, Office } from '../src/place.ts';\n\nconst alpha: Place = { building: 'Alpha', floor: 3 };\nconst office: Office = { owner: 'binh.tt', place: alpha };\nconsole.log(placeLine(office.place));\n",
+      "kiem/sai.ts": "import type { Lab, Place } from '../src/place.ts';\n\nconst noFloor: Place = { building: 'Alpha' }; // expect TS2741\nconst textFloor: Place = { building: 'Alpha', floor: '3' }; // expect TS2322\nconst lab: Lab = { code: 'AL-301', name: 'AI Lab', place: { building: 'Alpha', level: 3 } }; // expect TS2353\nexport { noFloor, textFloor, lab };\n",
+      "test/place.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BE201, placeLine } from '../src/place.ts';\n\ntest('the line', () => assert.equal(placeLine(BE201.place), 'Beta, floor 2'));\ntest('floors are numbers, so they sort as numbers', () => assert.equal(typeof BE201.place.floor, 'number'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/place.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/place.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/place.ts": "import type { LabCode } from './codes.ts';\n\n// The inner shape has a name: one definition, and errors say \"in type 'Place'\".\nexport type Place = { building: string; floor: number };\n\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  place: Place;\n};\n\nexport type Office = {\n  owner: string;\n  place: Place;\n};\n\n// \"Beta, floor 2\"\nexport function placeLine(place: Place): string {\n  return place.building + ', floor ' + place.floor;\n}\n\nexport const BE201: Lab = { code: 'BE-201', name: 'Backend Lab 1', place: { building: 'Beta', floor: 2 } };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Place exported but floor still number | string",
+        "tep": {
+          "src/place.ts": "import type { LabCode } from './codes.ts';\n\n// The inner shape has a name: one definition, and errors say \"in type 'Place'\".\nexport type Place = { building: string; floor: number | string };\n\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  place: Place;\n};\n\nexport type Office = {\n  owner: string;\n  place: Place;\n};\n\n// \"Beta, floor 2\"\nexport function placeLine(place: Place): string {\n  return place.building + ', floor ' + place.floor;\n}\n\nexport const BE201: Lab = { code: 'BE-201', name: 'Backend Lab 1', place: { building: 'Beta', floor: '2' } };\n"
+        }
+      },
+      {
+        "nhan": "Place named, data still floor: '2'",
+        "tep": {
+          "src/place.ts": "import type { LabCode } from './codes.ts';\n\n// The inner shape has a name: one definition, and errors say \"in type 'Place'\".\nexport type Place = { building: string; floor: number | string };\n\nexport type Lab = {\n  code: LabCode;\n  name: string;\n  place: Place;\n};\n\nexport type Office = {\n  owner: string;\n  place: Place;\n};\n\n// \"Beta, floor 2\"\nexport function placeLine(place: Place): string {\n  return place.building + ', floor ' + place.floor;\n}\n\nexport const BE201: Lab = { code: 'BE-201', name: 'Backend Lab 1', place: { building: 'Beta', floor: 2 } };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-2-a",
+    "bai": "typescript-4-2-interface-vs-type",
+    "tieuDe": "Two interfaces, one name: split the merged Booking|||Hai interface, một tên: tách Booking bị gộp",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>src/booking.ts declares <code>interface Booking</code> twice, so the two merged and every booking now needs a <code>title</code> and an <code>allDay</code> flag. Keep one <code>Booking</code> (id, lab, range, seats), give the calendar its own exported <code>CalendarEvent</code> (title, allDay, range) and write <code>toEvent(b)</code> so that kiem/dung.ts compiles and the tests pass. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; node --test is green.</p>|||<p>src/booking.ts khai <code>interface Booking</code> hai lần, nên hai cái gộp lại và lượt đặt nào cũng phải có <code>title</code> với cờ <code>allDay</code>. Giữ một <code>Booking</code> (id, lab, range, seats), cho lịch một kiểu riêng được export là <code>CalendarEvent</code> (title, allDay, range) và viết <code>toEvent(b)</code> để kiem/dung.ts biên dịch được và test qua. Không any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; node --test xanh.</p>",
+    "khoiDau": {
+      "src/booking.ts": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// Booking as the calendar export sees it (added later by another teammate).\nexport interface Booking {\n  title: string;\n  allDay: boolean;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { toEvent } from '../src/booking.ts';\nimport type { Booking, CalendarEvent } from '../src/booking.ts';\n\nconst b: Booking = { id: 1, lab: 'BE-201', range: [480, 600], seats: 30 };\nconst e: CalendarEvent = toEvent(b);\nexport { e };\n",
+      "test/booking.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label, toEvent } from '../src/booking.ts';\n\ntest('label', () => assert.equal(label({ id: 1, lab: 'BE-201', range: [480, 600], seats: 30 }), 'BE-201 · 30 seats'));\ntest('toEvent', () => assert.deepEqual(toEvent({ id: 1, lab: 'AL-301', range: [600, 720], seats: 12 }), { title: 'AL-301 · 12 seats', allDay: false, range: [600, 720] }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/booking.test.ts"
+      ],
+      "chay": [
+        "node --test test/booking.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/booking.ts": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// The calendar's view is a different shape, so it has its own name — no second \"interface Booking\".\nexport interface CalendarEvent {\n  title: string;\n  allDay: boolean;\n  range: TimeRange;\n}\n\nexport function toEvent(b: Booking): CalendarEvent {\n  return { title: label(b), allDay: false, range: b.range };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "made the calendar fields optional on Booking instead of splitting",
+        "tep": {
+          "src/booking.ts": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// Booking as the calendar export sees it (added later by another teammate).\nexport interface Booking {\n  title?: string;\n  allDay?: boolean;\n}\n"
+        }
+      },
+      {
+        "nhan": "CalendarEvent added, the second interface Booking left in place",
+        "tep": {
+          "src/booking.ts": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// The calendar's view is a different shape, so it has its own name — no second \"interface Booking\".\nexport interface CalendarEvent {\n  title: string;\n  allDay: boolean;\n  range: TimeRange;\n}\n\nexport function toEvent(b: Booking): CalendarEvent {\n  return { title: label(b), allDay: false, range: b.range };\n}\n\nexport interface Booking {\n  title: string;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-2-b",
+    "bai": "typescript-4-2-interface-vs-type",
+    "tieuDe": "A union an interface cannot extend|||Một union mà interface không extends được",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>src/state.ts tries <code>interface StateWithLab extends BookingState</code>, where <code>BookingState</code> is a union — tsc refuses it with TS2312. Rewrite <code>StateWithLab</code> so that (1) it compiles, (2) the correct states in kiem/dung.ts compile, (3) the wrong ones in kiem/sai.ts are refused, (4) the test passes. Keep <code>BookingState</code> as it is.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/state.ts thử viết <code>interface StateWithLab extends BookingState</code>, mà <code>BookingState</code> là một union — tsc từ chối với TS2312. Viết lại <code>StateWithLab</code> để (1) biên dịch được, (2) các trạng thái đúng trong kiem/dung.ts biên dịch được, (3) các trạng thái sai trong kiem/sai.ts bị từ chối, (4) test qua. Giữ nguyên <code>BookingState</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/state.ts": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// Every state, plus the lab it belongs to.\nexport interface StateWithLab extends BookingState {\n  lab: string;\n}\n\nexport function describe(s: StateWithLab): string {\n  return s.lab + ': ' + s.status;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { StateWithLab } from '../src/state.ts';\n\nconst a: StateWithLab = { status: 'PENDING', lab: 'BE-201' };\nconst b: StateWithLab = { status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' };\nexport { a, b };\n",
+      "kiem/sai.ts": "import type { StateWithLab } from '../src/state.ts';\n\nconst noLab: StateWithLab = { status: 'PENDING' }; // expect TS2322\nconst done: StateWithLab = { status: 'DONE', lab: 'BE-201' }; // expect TS2322\nexport { noLab, done };\n",
+      "test/state.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/state.ts';\n\ntest('describe', () => assert.equal(describe({ status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' }), 'AL-301: CONFIRMED'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/state.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/state.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/state.ts": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// An interface cannot extend a union (TS2312); a type alias can intersect it.\nexport type StateWithLab = BookingState & { lab: string };\n\nexport function describe(s: StateWithLab): string {\n  return s.lab + ': ' + s.status;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "interface with status: string — compiles, but DONE slips through",
+        "tep": {
+          "src/state.ts": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// Every state, plus the lab it belongs to.\nexport interface StateWithLab {\n  status: string;\n  approvedBy?: string;\n  lab: string;\n}\n\nexport function describe(s: StateWithLab): string {\n  return s.lab + ': ' + s.status;\n}\n"
+        }
+      },
+      {
+        "nhan": "lab made optional in the intersection",
+        "tep": {
+          "src/state.ts": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// An interface cannot extend a union (TS2312); a type alias can intersect it.\nexport type StateWithLab = BookingState & { lab?: string };\n\nexport function describe(s: StateWithLab): string {\n  return (s.lab ?? '?') + ': ' + s.status;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-2-c",
+    "bai": "typescript-4-2-interface-vs-type",
+    "tieuDe": "Add a field to a library’s interface (augmentation)|||Thêm trường vào interface của thư viện (augmentation)",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>src/lib.ts plays the role of a library you may not edit: its <code>Req</code> has only <code>url</code>. Your login code stores <code>userId</code> on the request, so <code>req.userId</code> in src/auth.ts is TS2339. Without touching src/lib.ts and without casts, make the library’s <code>Req</code> know about an optional numeric <code>userId</code> — the way this website adds <code>userId</code> to Express’s <code>Request</code> — so that kiem/dung.ts compiles, the wrong uses in kiem/sai.ts are refused, and the test passes. Hint: <code>declare module './lib.ts' { … }</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/lib.ts đóng vai một thư viện bạn không được sửa: <code>Req</code> của nó chỉ có <code>url</code>. Code đăng nhập của bạn lưu <code>userId</code> lên request, nên <code>req.userId</code> trong src/auth.ts là TS2339. Không đụng src/lib.ts và không ép kiểu, hãy làm cho <code>Req</code> của thư viện biết một <code>userId</code> kiểu số, optional — đúng cách website này thêm <code>userId</code> vào <code>Request</code> của Express — để kiem/dung.ts biên dịch được, các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Gợi ý: <code>declare module './lib.ts' { … }</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/auth.ts": "import type { Handler } from './lib.ts';\n\n// The login middleware stores the user id on the request. Make the \"library\" type know about it.\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+    },
+    "coDinh": {
+      "src/lib.ts": "// A tiny \"library\" (given — do not edit): a request object and a handler type.\nexport interface Req {\n  url: string;\n}\nexport type Handler = (req: Req) => string;\n\nexport function handle(h: Handler, req: Req): string {\n  return h(req);\n}\n",
+      "kiem/dung.ts": "import { handle } from '../src/lib.ts';\nimport type { Req } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\nconst guest: Req = { url: '/me' };\nconst logged: Req = { url: '/me', userId: 7 };\nconsole.log(handle(whoAmI, guest), handle(whoAmI, logged));\n",
+      "kiem/sai.ts": "import type { Req } from '../src/lib.ts';\nimport '../src/auth.ts';\n\ndeclare const req: Req;\nconst id: number = req.userId; // expect TS2322\nconst text: Req = { url: '/me', userId: '7' }; // expect TS2322\nexport { id, text };\n",
+      "test/auth.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { handle } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\ntest('guest', () => assert.equal(handle(whoAmI, { url: '/me' }), 'guest'));\ntest('logged in', () => assert.equal(handle(whoAmI, { url: '/me', userId: 7 }), 'user 7'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/auth.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/auth.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)\\w+"
+      ]
+    },
+    "loiGiai": {
+      "src/auth.ts": "import type { Handler } from './lib.ts';\n\n// Module augmentation: this interface MERGES with the library's Req (only an interface can do this).\ndeclare module './lib.ts' {\n  interface Req {\n    userId?: number;\n  }\n}\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "userId: number (required) — every request in the project now needs one",
+        "tep": {
+          "src/auth.ts": "import type { Handler } from './lib.ts';\n\n// Module augmentation: this interface MERGES with the library's Req (only an interface can do this).\ndeclare module './lib.ts' {\n  interface Req {\n    userId: number;\n  }\n}\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+        }
+      },
+      {
+        "nhan": "a new local interface with the same name — it does not touch the library",
+        "tep": {
+          "src/auth.ts": "import type { Handler } from './lib.ts';\n\ninterface Req {\n  userId?: number;\n}\nexport type { Req };\n\n// The login middleware stores the user id on the request. Make the \"library\" type know about it.\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-3-a",
+    "bai": "typescript-4-3-extends-intersection",
+    "tieuDe": "Write id and createdAt once: an Entity base|||Viết id và createdAt một lần: kiểu nền Entity",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>src/model.ts copies <code>id</code> and <code>createdAt</code> into both <code>User</code> and <code>Lab</code> — and the <code>Lab</code> copy drifted (a string id, nothing read-only). Export an <code>Entity</code> interface (read-only numeric <code>id</code>, read-only <code>createdAt</code>), make both models <code>extends</code> it, and let <code>age</code> take an <code>Entity</code>, so that kiem/dung.ts compiles, the wrong uses in kiem/sai.ts are refused, and the test passes.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/model.ts chép <code>id</code> và <code>createdAt</code> vào cả <code>User</code> lẫn <code>Lab</code> — và bản chép trong <code>Lab</code> đã lệch (id kiểu chuỗi, không gì chỉ đọc). Export một interface <code>Entity</code> (<code>id</code> kiểu số chỉ đọc, <code>createdAt</code> chỉ đọc), cho cả hai model <code>extends</code> nó, và cho <code>age</code> nhận <code>Entity</code>, để kiem/dung.ts biên dịch được, các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/model.ts": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// Two models, each with its own copy of id + createdAt. One copy already drifted.\nexport interface User {\n  readonly id: number;\n  readonly createdAt: string;\n  email: string;\n  role: Role;\n}\n\nexport interface Lab {\n  id: string;\n  createdAt: string;\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: { createdAt: string }, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { age } from '../src/model.ts';\nimport type { Entity, User, Lab } from '../src/model.ts';\n\nconst u: User = { id: 1, createdAt: '2026-11-01T00:00:00Z', email: 'an.nv@fpt.edu.vn', role: 'STUDENT' };\nconst lab: Lab = { id: 7, createdAt: '2026-10-01T00:00:00Z', code: 'AL-301', capacity: 30 };\nconst all: Entity[] = [u, lab];\nconsole.log(all.map((e) => age(e, '2026-11-02T00:00:00Z')));\n",
+      "kiem/sai.ts": "import type { User, Lab } from '../src/model.ts';\n\ndeclare const u: User;\ndeclare const lab: Lab;\nconst ghost: Lab = { id: 'AL-301', createdAt: '2026-10-01', code: 'AL-301', capacity: 30 }; // expect TS2322\nconst noDate: User = { id: 2, email: 'b@fpt.edu.vn', role: 'LECTURER' }; // expect TS2741\nlab.id = 8; // expect TS2540\nu.createdAt = 'now'; // expect TS2540\nexport { ghost, noDate };\n",
+      "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { age } from '../src/model.ts';\n\ntest('age in days', () => assert.equal(age({ id: 1, createdAt: '2026-11-01T00:00:00Z' }, '2026-11-03T00:00:00Z'), 2));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/model.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/model.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/model.ts": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// What every stored record has — written once.\nexport interface Entity {\n  readonly id: number;\n  readonly createdAt: string;\n}\n\nexport interface User extends Entity {\n  email: string;\n  role: Role;\n}\n\nexport interface Lab extends Entity {\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: Entity, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Entity without readonly",
+        "tep": {
+          "src/model.ts": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// What every stored record has — written once.\nexport interface Entity {\n  id: number;\n  createdAt: string;\n}\n\nexport interface User extends Entity {\n  email: string;\n  role: Role;\n}\n\nexport interface Lab extends Entity {\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: Entity, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+        }
+      },
+      {
+        "nhan": "Entity added, but Lab still redeclares id: string — refused with TS2430",
+        "tep": {
+          "src/model.ts": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\n// What every stored record has — written once.\nexport interface Entity {\n  readonly id: number;\n  readonly createdAt: string;\n}\n\nexport interface User extends Entity {\n  email: string;\n  role: Role;\n}\n\nexport interface Lab extends Entity {\n  id: string;\n  code: string;\n  capacity: number;\n}\n\nexport function age(e: Entity, now: string): number {\n  return (Date.parse(now) - Date.parse(e.createdAt)) / 86400000;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-3-b",
+    "bai": "typescript-4-3-extends-intersection",
+    "tieuDe": "Derive BookingView with & and spread|||Suy ra BookingView bằng & và spread",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p>src/view.ts has a hand-written <code>BookingView</code> that already fell behind <code>BookingRecord</code> (no <code>userId</code>, no <code>seats</code>). Replace it with a type <strong>derived</strong> from the record with <code>&amp;</code>, and build the view with spread, so that kiem/dung.ts compiles (it reads <code>view.seats</code>), the wrong views in kiem/sai.ts are refused, and the tests pass.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/view.ts có <code>BookingView</code> viết tay đã tụt lại so với <code>BookingRecord</code> (thiếu <code>userId</code>, thiếu <code>seats</code>). Thay nó bằng một kiểu <strong>suy ra</strong> từ bản ghi bằng <code>&amp;</code>, và dựng góc nhìn bằng spread, để kiem/dung.ts biên dịch được (nó đọc <code>view.seats</code>), các góc nhìn sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/view.ts": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// What the admin list shows. Written by hand — and already behind: BookingRecord has userId and seats now.\nexport interface BookingView {\n  id: number;\n  lab: string;\n  labName: string;\n  userName: string;\n}\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    id: b.id,\n    lab: b.lab,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+    },
+    "coDinh": {
+      "src/model.ts": "// Given — do not edit.\nexport interface BookingRecord {\n  readonly id: number;\n  readonly lab: string;\n  readonly userId: number;\n  readonly seats: number;\n}\nexport interface User {\n  readonly id: number;\n  name: string;\n}\nexport const LAB_NAMES: { [code: string]: string } = { 'BE-201': 'Backend Lab 1', 'AL-301': 'AI Lab' };\n",
+      "kiem/dung.ts": "import { toView } from '../src/view.ts';\nimport type { BookingView } from '../src/view.ts';\n\nconst view: BookingView = toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]);\nconst seats: number = view.seats;\nconsole.log(view.labName, seats);\n",
+      "kiem/sai.ts": "import type { BookingView } from '../src/view.ts';\n\nconst noName: BookingView = { id: 1, lab: 'BE-201', userId: 1, seats: 5, labName: 'Backend Lab 1' }; // expect TS2322\nconst noSeats: BookingView = { id: 1, lab: 'BE-201', userId: 1, labName: 'Backend Lab 1', userName: 'An' }; // expect TS2322\nexport { noName, noSeats };\n",
+      "test/view.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toView } from '../src/view.ts';\n\ntest('every record field plus two names', () => assert.deepEqual(\n  toView({ id: 11, lab: 'AL-301', userId: 2, seats: 25 }, [{ id: 2, name: 'Tran Thi Binh' }]),\n  { id: 11, lab: 'AL-301', userId: 2, seats: 25, labName: 'AI Lab', userName: 'Tran Thi Binh' },\n));\ntest('a deleted user', () => assert.equal(toView({ id: 12, lab: 'BE-201', userId: 9, seats: 5 }, []).userName, '(deleted user)'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/view.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/view.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/view.ts": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// Derived from the record: every field it has, plus two names. It cannot fall behind.\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    ...b,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "type derived, but the object is still built field by field (seats lost at runtime) — refused by tsc",
+        "tep": {
+          "src/view.ts": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// What the admin list shows. Written by hand — and already behind: BookingRecord has userId and seats now.\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    id: b.id,\n    lab: b.lab,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+        }
+      },
+      {
+        "nhan": "hand-written interface extended with the two missing fields — the test passes, but userName became optional",
+        "tep": {
+          "src/view.ts": "import { LAB_NAMES } from './model.ts';\nimport type { BookingRecord, User } from './model.ts';\n\n// Derived from the record: every field it has, plus two names. It cannot fall behind.\nexport interface BookingView extends BookingRecord {\n  labName: string;\n  userName?: string;\n}\n\nexport function toView(b: BookingRecord, users: readonly User[]): BookingView {\n  return {\n    ...b,\n    labName: LAB_NAMES[b.lab] ?? b.lab,\n    userName: users.find((u) => u.id === b.userId)?.name ?? '(deleted user)',\n  };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-3-c",
+    "bai": "typescript-4-3-extends-intersection",
+    "tieuDe": "Find the hidden never|||Tìm cái never bị giấu",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>src/model.ts compiles its types, then the seed fails: “Type 'string' is not assignable to type 'never'” on a line that looks right. Find where <code>never</code> comes from, rewrite the model so a conflict like this is reported <strong>at the declaration</strong> (interfaces with <code>extends</code>), and fix it: every entity keeps a numeric <code>id</code>, and the supplier’s code <code>\"EQ-0042\"</code> is stored as <code>supplierCode</code>. kiem/sai.ts must be refused, the tests must pass.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/model.ts biên dịch được phần kiểu, rồi seed hỏng: “Type 'string' is not assignable to type 'never'” ở một dòng trông đúng. Tìm xem <code>never</code> từ đâu ra, viết lại mô hình để xung đột kiểu này được báo <strong>ngay ở khai báo</strong> (interface với <code>extends</code>), và sửa: mọi thực thể giữ <code>id</code> kiểu số, mã nhà cung cấp <code>\"EQ-0042\"</code> lưu ở <code>supplierCode</code>. kiem/sai.ts phải bị từ chối, test phải qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/model.ts": "// The model, composed with &. The seed below fails on a line that looks correct.\nexport type Entity = { readonly id: number; readonly createdAt: string };\nexport type Lab = Entity & { code: string; capacity: number };\nexport type Equipment = Entity & { id: string; labCode: string; name: string }; // ids from the supplier: \"EQ-0042\"\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import type { Equipment } from '../src/model.ts';\n\nconst textId: Equipment = { id: 'EQ-0043', supplierCode: 'EQ-0043', createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2322\nconst noCode: Equipment = { id: 43, createdAt: '2026-11-01', labCode: 'BE-201', name: 'Printer' }; // expect TS2741\nexport { textId, noCode };\n",
+      "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LAB, GPU } from '../src/model.ts';\n\ntest('every entity has a numeric id', () => assert.ok([LAB, GPU].every((e) => typeof e.id === 'number')));\ntest('the supplier code is kept', () => assert.equal(GPU.supplierCode, 'EQ-0042'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/model.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/model.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "&"
+      ]
+    },
+    "loiGiai": {
+      "src/model.ts": "// Interfaces with extends report a conflict at the declaration (TS2430) instead of hiding a never.\nexport interface Entity { readonly id: number; readonly createdAt: string }\nexport interface Lab extends Entity { code: string; capacity: number }\n// The supplier's code is a different fact, so it has its own name; equipment keeps a numeric id.\nexport interface Equipment extends Entity { supplierCode: string; labCode: string; name: string }\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 42, supplierCode: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Entity id widened to number | string — the never disappears, the text id stays",
+        "tep": {
+          "src/model.ts": "// The model, composed with &. The seed below fails on a line that looks correct.\nexport type Entity = { readonly id: number | string; readonly createdAt: string };\nexport type Lab = Entity & { code: string; capacity: number };\nexport type Equipment = Entity & { id: string; supplierCode: string; labCode: string; name: string }; // ids from the supplier: \"EQ-0042\"\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 'EQ-0042', supplierCode: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+        }
+      },
+      {
+        "nhan": "still composed with & (supplierCode added, id fixed)",
+        "tep": {
+          "src/model.ts": "// The model, composed with &. The seed below fails on a line that looks correct.\nexport type Entity = { readonly id: number; readonly createdAt: string };\nexport type Lab = Entity & { code: string; capacity: number };\nexport type Equipment = Entity & { supplierCode: string; labCode: string; name: string }; // ids from the supplier: \"EQ-0042\"\n\nexport const LAB: Lab = { id: 1, createdAt: '2026-11-01', code: 'AL-301', capacity: 30 };\nexport const GPU: Equipment = { id: 42, supplierCode: 'EQ-0042', createdAt: '2026-11-01', labCode: 'AL-301', name: 'GPU server' };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-4-a",
+    "bai": "typescript-4-4-index-record",
+    "tieuDe": "Close the LAB_INFO table with Record|||Đóng bảng LAB_INFO bằng Record",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>src/labs.ts types the lab table as an open dictionary, so a ghost lab is accepted and every read needs a fallback (<code>?? 0</code> — a lab that does not exist “has 0 seats”). Change <code>LabTable</code> so the key set is exactly <code>LabCode</code>, and remove the fallback, so that kiem/dung.ts compiles (it reads <code>LAB_INFO[code].capacity</code> with no check), the wrong uses in kiem/sai.ts are refused, and the test passes.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>src/labs.ts gõ kiểu bảng phòng là một từ điển mở, nên phòng ma vẫn được nhận và phép đọc nào cũng cần giá trị dự phòng (<code>?? 0</code> — phòng không tồn tại “có 0 chỗ”). Đổi <code>LabTable</code> để tập khoá đúng là <code>LabCode</code>, và bỏ giá trị dự phòng, để kiem/dung.ts biên dịch được (nó đọc <code>LAB_INFO[code].capacity</code> không kiểm), các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/labs.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\nexport type LabTable = { [code: string]: Lab };\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code]?.capacity ?? 0;\n}\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n",
+      "kiem/dung.ts": "import { LAB_INFO } from '../src/labs.ts';\nimport { LABS } from '../src/codes.ts';\n\nfor (const code of LABS) {\n  const seats: number = LAB_INFO[code].capacity;\n  console.log(code, seats);\n}\n",
+      "kiem/sai.ts": "import { LAB_INFO } from '../src/labs.ts';\nimport type { LabTable } from '../src/labs.ts';\n\nconst ghost = LAB_INFO['BE-999']; // expect TS7053\nconst two: LabTable = { 'BE-201': { name: 'Backend Lab 1', capacity: 40 }, 'BE-202': { name: 'Backend Lab 2', capacity: 40 } }; // expect TS2741\ndeclare const fromUrl: string;\nconst raw = LAB_INFO[fromUrl]; // expect TS7053\nexport { ghost, two, raw };\n",
+      "test/labs.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf } from '../src/labs.ts';\n\ntest('capacity', () => assert.deepEqual([capacityOf('BE-201'), capacityOf('AL-301')], [40, 30]));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/labs.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/labs.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\?\\?"
+      ]
+    },
+    "loiGiai": {
+      "src/labs.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\n// Closed: exactly one entry per LabCode.\nexport type LabTable = Record<LabCode, Lab>;\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code].capacity; // every LabCode is a key: nothing to check\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Record<string, Lab> — the same open dictionary, spelled shorter",
+        "tep": {
+          "src/labs.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\nexport type LabTable = Record<string, Lab>;\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code]?.capacity ?? 0;\n}\n"
+        }
+      },
+      {
+        "nhan": "Record<LabCode, Lab>, but the ?? 0 fallback kept",
+        "tep": {
+          "src/labs.ts": "import type { LabCode } from './codes.ts';\n\nexport type Lab = { name: string; capacity: number };\nexport type LabTable = Record<LabCode, Lab>;\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { name: 'Backend Lab 1', capacity: 40 },\n  'BE-202': { name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { name: 'AI Lab', capacity: 30 },\n};\n\nexport function capacityOf(code: LabCode): number {\n  return LAB_INFO[code]?.capacity ?? 0;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-4-b",
+    "bai": "typescript-4-4-index-record",
+    "tieuDe": "Count per lab without losing the zeros|||Đếm theo phòng mà không mất số không",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p><code>seatsByLab</code> in src/count.ts returns an open dictionary that starts empty: a lab with no booking is simply missing, and the dashboard shows <code>NaN</code> for it. Give it the return type <code>Record&lt;LabCode, number&gt;</code> and fix the body so that kiem/dung.ts compiles (it reads <code>result['BE-202']</code> as a <code>number</code>), the wrong uses in kiem/sai.ts are refused, and the tests pass. No any, no casts.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p><code>seatsByLab</code> trong src/count.ts trả về một từ điển mở bắt đầu rỗng: phòng chưa có lượt đặt thì đơn giản là không có, và bảng điều khiển hiện <code>NaN</code> cho nó. Cho hàm kiểu trả về <code>Record&lt;LabCode, number&gt;</code> và sửa thân hàm để kiem/dung.ts biên dịch được (nó đọc <code>result['BE-202']</code> như một <code>number</code>), các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Không any, không ép kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/count.ts": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Seats booked per lab today (cancelled rows do not count).\nexport function seatsByLab(rows: readonly Row[]): { [lab: string]: number } {\n  const total: { [lab: string]: number } = {};\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] = (total[r.lab] ?? 0) + r.seats;\n  }\n  return total;\n}\n"
+    },
+    "coDinh": {
+      "src/codes.ts": "// LabFlow lab codes (given — do not edit).\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n",
+      "kiem/dung.ts": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }]);\nconst be202: number = result['BE-202'];\nconst percent: number = Math.round((be202 / 40) * 100);\nconsole.log(percent);\n",
+      "kiem/sai.ts": "import { seatsByLab } from '../src/count.ts';\n\nconst result = seatsByLab([]);\nconst ghost = result['BE-999']; // expect TS7053\nconst text: string = result['BE-201']; // expect TS2322\nexport { ghost, text };\n",
+      "test/count.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsByLab } from '../src/count.ts';\n\ntest('every lab, zeros included', () => assert.deepEqual(\n  seatsByLab([{ lab: 'BE-201', seats: 30, cancelled: false }, { lab: 'AL-301', seats: 25, cancelled: false }, { lab: 'BE-201', seats: 6, cancelled: false }]),\n  { 'BE-201': 36, 'BE-202': 0, 'AL-301': 25 },\n));\ntest('cancelled rows do not count', () => assert.deepEqual(seatsByLab([{ lab: 'AL-301', seats: 25, cancelled: true }]), { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/count.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/count.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)\\w+"
+      ]
+    },
+    "loiGiai": {
+      "src/count.ts": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Every lab appears, even with 0. Add a lab to LABS and tsc points at the zeros below.\nexport function seatsByLab(rows: readonly Row[]): Record<LabCode, number> {\n  const total: Record<LabCode, number> = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] += r.seats;\n  }\n  return total;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Record<string, number> starting from {} — still loses BE-202",
+        "tep": {
+          "src/count.ts": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Seats booked per lab today (cancelled rows do not count).\nexport function seatsByLab(rows: readonly Row[]): Record<string, number> {\n  const total: Record<string, number> = {};\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] = (total[r.lab] ?? 0) + r.seats;\n  }\n  return total;\n}\n"
+        }
+      },
+      {
+        "nhan": "zeros added, but the return type is still an open dictionary",
+        "tep": {
+          "src/count.ts": "import type { LabCode } from './codes.ts';\n\nexport type Row = { lab: LabCode; seats: number; cancelled: boolean };\n\n// Seats booked per lab today (cancelled rows do not count).\nexport function seatsByLab(rows: readonly Row[]): { [lab: string]: number } {\n  const total: { [lab: string]: number } = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const r of rows) {\n    if (!r.cancelled) total[r.lab] = (total[r.lab] ?? 0) + r.seats;\n  }\n  return total;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-4-4-c",
+    "bai": "typescript-4-4-index-record",
+    "tieuDe": "A user index that admits a miss|||Chỉ mục người dùng phải thừa nhận có lúc trượt",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>In src/users.ts, <code>findUser</code> promises it always returns a <code>User</code> — with a cast. A booking whose user was deleted crashes <code>nameOf</code> (“Cannot read properties of undefined”). Remove the cast, make the return type honest, and make <code>nameOf</code> return <code>'(deleted user)'</code> for a missing id, so that kiem/dung.ts compiles, the wrong use in kiem/sai.ts is refused, and the tests pass. No <code>as</code>, no <code>!</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; the marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p>Trong src/users.ts, <code>findUser</code> hứa luôn trả về một <code>User</code> — bằng một phép ép kiểu. Lượt đặt có người dùng đã bị xoá làm <code>nameOf</code> sập (“Cannot read properties of undefined”). Bỏ phép ép, cho kiểu trả về trung thực, và cho <code>nameOf</code> trả <code>'(deleted user)'</code> khi id không có, để kiem/dung.ts biên dịch được, cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Không <code>as</code>, không <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/users.ts": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// \"Always finds the user\" — a promise the data cannot keep.\nexport function findUser(byId: Record<number, User>, id: number): User {\n  return byId[id] as User;\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  return findUser(byId, id).name;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { indexById, findUser } from '../src/users.ts';\nimport type { User } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst maybe: User | undefined = findUser(byId, 2);\nconsole.log(maybe?.name ?? 'nobody');\n",
+      "kiem/sai.ts": "import { indexById, findUser } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'An' }]);\nconst name: string = findUser(byId, 2).name; // expect TS2532\nexport { name };\n",
+      "test/users.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { indexById, findUser, nameOf } from '../src/users.ts';\n\nconst byId = indexById([{ id: 1, name: 'Nguyen Van An' }, { id: 2, name: 'Tran Thi Binh' }]);\ntest('found', () => assert.equal(nameOf(byId, 2), 'Tran Thi Binh'));\ntest('a deleted user does not crash', () => assert.equal(nameOf(byId, 99), '(deleted user)'));\ntest('findUser misses with undefined', () => assert.equal(findUser(byId, 99), undefined));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/users.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/users.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)\\w+",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/users.ts": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// Ids arrive at runtime: a lookup may miss, and the type says so.\nexport function findUser(byId: Record<number, User>, id: number): User | undefined {\n  return byId[id];\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  return findUser(byId, id)?.name ?? '(deleted user)';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "cast swapped for a non-null assertion: byId[id]!",
+        "tep": {
+          "src/users.ts": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// \"Always finds the user\" — a promise the data cannot keep.\nexport function findUser(byId: Record<number, User>, id: number): User {\n  return byId[id]!;\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  return findUser(byId, id).name;\n}\n"
+        }
+      },
+      {
+        "nhan": "return type honest, nameOf still crashes on a missing id",
+        "tep": {
+          "src/users.ts": "export type User = { readonly id: number; name: string };\n\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// Ids arrive at runtime: a lookup may miss, and the type says so.\nexport function findUser(byId: Record<number, User>, id: number): User | undefined {\n  return byId[id];\n}\n\nexport function nameOf(byId: Record<number, User>, id: number): string {\n  const u = findUser(byId, id);\n  if (u === undefined) throw new Error('no user ' + id);\n  return u.name;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-4",
+    "bai": "typescript-4-6-lab-mo-hinh-du-lieu",
+    "tieuDe": "Lab 4 — LabFlow’s data model|||Lab 4 — Mô hình dữ liệu LabFlow",
+    "doKho": "HARD",
+    "phut": 75,
+    "moTa": "<p><code>src/model.ts</code> compiles under strict with zero errors — and its types are loose: any string is a lab code or a role, <code>capacity</code> is optional, the lab table is an open dictionary, nothing is read-only, and three behaviours are wrong (BE-202 recorded as “no equipment”, a seat count that loses labs with 0, a <code>withStatus</code> that edits the record in place). Rewrite it with Chapter 4: <code>interface Entity</code> + <code>extends</code>, <code>readonly</code>, optional only where “not recorded” is true, a <code>BookingStatus</code> union, <code>BookingView</code> with <code>&amp;</code>, <code>LAB_INFO: Record&lt;LabCode, Lab&gt;</code>. No <code>any</code>, <code>as</code> (except <code>as const</code>), <code>!</code> or <code>@ts-</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, the test and kiem/phai-dung.ts; each marked line of kiem/sai.ts gets its code; node --test is green.</p>|||<p><code>src/model.ts</code> biên dịch dưới strict không lỗi nào — nhưng kiểu thì lỏng: chuỗi nào cũng là mã phòng hay vai trò, <code>capacity</code> là optional, bảng phòng là từ điển mở, không gì chỉ đọc, và ba hành vi sai (BE-202 ghi là “không có thiết bị”, phép đếm chỗ mất các phòng bằng 0, <code>withStatus</code> sửa bản ghi tại chỗ). Viết lại bằng Chương 4: <code>interface Entity</code> + <code>extends</code>, <code>readonly</code>, optional chỉ ở chỗ “chưa ghi” là thật, union <code>BookingStatus</code>, <code>BookingView</code> bằng <code>&amp;</code>, <code>LAB_INFO: Record&lt;LabCode, Lab&gt;</code>. Không <code>any</code>, <code>as</code> (trừ <code>as const</code>), <code>!</code> hay <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test và kiem/phai-dung.ts; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>",
+    "khoiDau": {
+      "src/model.ts": "// LabFlow — data model (a teammate's first version). It compiles under strict. Is it right?\nimport type { Role } from './booking.ts';\n\nexport type Lab = {\n  code: string;\n  name: string;\n  capacity?: number; // \"made optional: the seed did not compile without it\"\n  equipment: string[];\n};\n\nexport type User = {\n  id: number;\n  createdAt: string;\n  email: string;\n  name: string;\n  role: string;\n  studentCode?: string;\n};\n\nexport type BookingRecord = {\n  id: number;\n  createdAt: string;\n  lab: string;\n  userId: number;\n  range: number[];\n  seats: number;\n  status: string;\n  note: string | null;\n};\n\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport type LabTable = { [code: string]: Lab };\n\nexport const LAB_INFO: LabTable = {\n  'BE-201': { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: ['projector', 'whiteboard'] },\n  'BE-202': { code: 'BE-202', name: 'Backend Lab 2', capacity: 40, equipment: [] },\n  'AL-301': { code: 'AL-301', name: 'AI Lab', capacity: 30, equipment: ['GPU server'] },\n};\n\nexport function labName(code: string): string {\n  return LAB_INFO[code]?.name ?? 'unknown lab';\n}\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, (lab.capacity ?? 0) - booked);\n}\n\nexport function seatsByLab(bookings: BookingRecord[]): { [lab: string]: number } {\n  const total: { [lab: string]: number } = {};\n  for (const b of bookings) {\n    if (b.status !== 'CANCELLED') total[b.lab] = (total[b.lab] ?? 0) + b.seats;\n  }\n  return total;\n}\n\nexport function indexById(users: User[]): { [id: number]: User } {\n  const byId: { [id: number]: User } = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\nexport function withStatus(b: BookingRecord, status: string): BookingRecord {\n  b.status = status;\n  return b;\n}\n\nexport function toView(b: BookingRecord, users: { [id: number]: User }): BookingView {\n  return { ...b, labName: labName(b.lab), userName: users[b.userId]?.name ?? '(deleted user)' };\n}\n"
+    },
+    "coDinh": {
+      "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "src/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n",
+      "src/schedule.ts": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n",
+      "test/model.test.ts": "// Lab 4 — behaviour of the data model. Run: node --test --test-reporter=spec lab4/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LAB_INFO, labName, freeSeats, seatsByLab, indexById, withStatus, toView } from '../src/model.ts';\nimport type { BookingRecord, User } from '../src/model.ts';\n\nconst an: User = { id: 1, createdAt: '2026-11-01T08:00:00Z', email: 'an.nv@fpt.edu.vn', name: 'Nguyen Van An', role: 'STUDENT', studentCode: 'HE176322' };\nconst binh: User = { id: 2, createdAt: '2026-11-01T08:05:00Z', email: 'binh.tt@fpt.edu.vn', name: 'Tran Thi Binh', role: 'LECTURER' };\nconst b1: BookingRecord = { id: 10, createdAt: '2026-11-01T09:00:00Z', lab: 'BE-201', userId: 1, range: [480, 600], seats: 30, status: 'CONFIRMED', note: null };\nconst b2: BookingRecord = { ...b1, id: 11, lab: 'AL-301', userId: 2, seats: 25, status: 'PENDING', note: 'AI demo' };\nconst b3: BookingRecord = { ...b1, id: 12, seats: 5, status: 'CANCELLED' };\n\ntest('LAB_INFO has the three labs', () => assert.deepEqual(Object.keys(LAB_INFO), ['BE-201', 'BE-202', 'AL-301']));\ntest('labName', () => assert.equal(labName('AL-301'), 'AI Lab'));\ntest('freeSeats never goes below 0', () => {\n  assert.equal(freeSeats(LAB_INFO['BE-201'], 30), 10);\n  assert.equal(freeSeats(LAB_INFO['AL-301'], 35), 0);\n});\ntest('equipment: BE-202 has not been recorded yet', () => assert.equal(LAB_INFO['BE-202'].equipment, undefined));\ntest('seatsByLab lists EVERY lab, even with 0', () => assert.deepEqual(seatsByLab([b1, b2]), { 'BE-201': 30, 'BE-202': 0, 'AL-301': 25 }));\ntest('seatsByLab ignores cancelled bookings', () => assert.deepEqual(seatsByLab([b1, b3]), { 'BE-201': 30, 'BE-202': 0, 'AL-301': 0 }));\ntest('indexById finds by id, misses with undefined', () => {\n  const byId = indexById([an, binh]);\n  assert.equal(byId[2]?.name, 'Tran Thi Binh');\n  assert.equal(byId[99], undefined);\n});\ntest('withStatus returns a NEW record and leaves the list alone', () => {\n  const list = [b2];\n  const approved = withStatus(b2, 'CONFIRMED');\n  assert.equal(approved.status, 'CONFIRMED');\n  assert.equal(list[0]?.status, 'PENDING');\n});\ntest('toView adds the two names', () => {\n  const v = toView(b2, indexById([an, binh]));\n  assert.deepEqual([v.labName, v.userName, v.seats], ['AI Lab', 'Tran Thi Binh', 25]);\n});\ntest('toView survives a deleted user', () => assert.equal(toView(b1, indexById([binh])).userName, '(deleted user)'));\n",
+      "kiem/phai-dung.ts": "// Lab 4 — CORRECT uses. They must keep compiling with your types (part B).\nimport { LAB_INFO, labName, freeSeats, seatsByLab, indexById, withStatus, toView } from '../src/model.ts';\nimport type { Lab, User, BookingRecord, BookingView } from '../src/model.ts';\nimport { LABS } from '../src/schedule.ts';\n\nconst an: User = { id: 1, createdAt: '2026-11-01T08:00:00Z', email: 'an.nv@fpt.edu.vn', name: 'An', role: 'STUDENT', studentCode: 'HE176322' };\nconst rec: BookingRecord = { id: 10, createdAt: '2026-11-01T09:00:00Z', lab: 'BE-201', userId: 1, range: [480, 600], seats: 30, status: 'PENDING', note: null };\n\nfor (const code of LABS) {\n  const capacity: number = LAB_INFO[code].capacity;            // every lab is there: no undefined to check\n  console.log(labName(code), capacity);\n}\nconst lab: Lab = LAB_INFO['AL-301'];\nconst tools: number = lab.equipment?.length ?? 0;             // optional: checked before use\nconst free: number = freeSeats(lab, 12);\nconst perLab: number = seatsByLab([rec])['BE-202'];          // a number, not number | undefined\nconst byId = indexById([an]);\nconst maybe: User | undefined = byId[1];                      // an open key set may miss\nconst approved: BookingRecord = withStatus(rec, 'CONFIRMED');\nconst view: BookingView = toView(rec, byId);\nconst room: Lab = { code: 'BE-202', name: 'Backend Lab 2', capacity: 40, equipment: [] };   // recorded: nothing\nconsole.log(tools, free, perLab, maybe, approved, view.labName, room);\n",
+      "kiem/sai.ts": "// Lab 4 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { LAB_INFO } from '../src/model.ts';\nimport type { Lab, User, BookingRecord } from '../src/model.ts';\n\ndeclare const lab: Lab;\ndeclare const record: BookingRecord;\n\nconst ai: Lab = { code: 'AL-301', name: 'AI Lab' }; // S1 a lab without a capacity // expect TS2741\nconst typo: Lab = { code: 'BE-201', name: 'Backend Lab 1', capasity: 40 }; // S2 a misspelled property // expect TS2561\nconst t: User = { id: 3, createdAt: '2026-11-01', email: 't@fpt.edu.vn', name: 'T', role: 'TEACHER' }; // S3 there is no TEACHER role // expect TS2322\nrecord.status = 'CONFIRMED'; // S4 a stored record is changed with withStatus // expect TS2540\nlab.equipment?.push('printer'); // S5 nobody edits a lab's equipment list in place // expect TS2339\nconst n = lab.equipment.length; // S6 equipment may not be recorded yet // expect TS18048\nconst ghost = LAB_INFO['BE-999']; // S7 there is no lab BE-999 // expect TS7053\nconst anon: User = { email: 'x@fpt.edu.vn', name: 'X', role: 'STUDENT' }; // S8 a user has an id and a createdAt // expect TS2739\nexport { ai, typo, t, n, ghost, anon };\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/model.test.ts",
+        "kiem/phai-dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/model.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)\\w+",
+        "[\\w$]+!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/model.ts": "// LabFlow — the data model: labs, users, stored bookings (Chapter 4, = Lab 4 reference solution).\nimport type { Role } from './booking.ts';\nimport type { LabCode, TimeRange } from './schedule.ts';\n\n// Every stored record has an id and a creation time, both set once by the database.\nexport interface Entity {\n  readonly id: number;\n  readonly createdAt: string;\n}\n\n// A lab room. equipment is absent until someone records it ([] would mean \"recorded: nothing\").\nexport interface Lab {\n  readonly code: LabCode;\n  name: string;\n  capacity: number;\n  equipment?: readonly string[];\n}\n\nexport interface User extends Entity {\n  email: string;\n  name: string;\n  role: Role;\n  studentCode?: string; // students only\n}\n\nexport type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\n// A stored booking is a snapshot: change it with withStatus, which returns a NEW record.\nexport interface BookingRecord extends Entity {\n  readonly lab: LabCode;\n  readonly userId: number;\n  readonly range: TimeRange;\n  readonly seats: number;\n  readonly status: BookingStatus;\n  readonly note: string | null;\n}\n\n// What the admin list shows: the record plus two names looked up elsewhere.\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\n// One entry per lab — no more, no less. Add a lab to LABS and tsc points here.\nexport const LAB_INFO: Record<LabCode, Lab> = {\n  'BE-201': { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: ['projector', 'whiteboard'] },\n  'BE-202': { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { code: 'AL-301', name: 'AI Lab', capacity: 30, equipment: ['GPU server'] },\n};\n\nexport function labName(code: LabCode): string {\n  return LAB_INFO[code].name;\n}\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n\n// Seats booked per lab (cancelled bookings do not count). Every lab appears, even with 0.\nexport function seatsByLab(bookings: readonly BookingRecord[]): Record<LabCode, number> {\n  const total: Record<LabCode, number> = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const b of bookings) {\n    if (b.status !== 'CANCELLED') total[b.lab] += b.seats;\n  }\n  return total;\n}\n\n// Users by id: ids arrive at runtime, so the key set is open. A read may miss: User | undefined.\nexport function indexById(users: readonly User[]): Record<number, User> {\n  const byId: Record<number, User> = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\n// A new record with another status; the original is untouched.\nexport function withStatus(b: BookingRecord, status: BookingStatus): BookingRecord {\n  return { ...b, status };\n}\n\nexport function toView(b: BookingRecord, users: Record<number, User>): BookingView {\n  return { ...b, labName: labName(b.lab), userName: users[b.userId]?.name ?? '(deleted user)' };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "a \"flexible model\": [extra: string]: any and LAB_INFO: any",
+        "tep": {
+          "src/model.ts": "// Attempt A — \"a flexible model\": the tests pass, and nothing complains any more.\nexport interface Lab {\n  code: string;\n  name: string;\n  capacity: number;\n  equipment?: string[];\n  [extra: string]: any; // room for whatever the seed adds later\n}\n\nexport interface User {\n  id: number;\n  createdAt: string;\n  email: string;\n  name: string;\n  role: string;\n  studentCode?: string;\n}\n\nexport interface BookingRecord {\n  id: number;\n  createdAt: string;\n  lab: string;\n  userId: number;\n  range: number[];\n  seats: number;\n  status: string;\n  note: string | null;\n}\n\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport const LAB_INFO: any = {\n  'BE-201': { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: ['projector', 'whiteboard'] },\n  'BE-202': { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { code: 'AL-301', name: 'AI Lab', capacity: 30, equipment: ['GPU server'] },\n};\n\nexport function labName(code: string): string {\n  return LAB_INFO[code].name;\n}\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n\nexport function seatsByLab(bookings: BookingRecord[]): any {\n  const total: any = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const b of bookings) {\n    if (b.status !== 'CANCELLED') total[b.lab] += b.seats;\n  }\n  return total;\n}\n\nexport function indexById(users: User[]): { [id: number]: User } {\n  const byId: { [id: number]: User } = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\nexport function withStatus(b: BookingRecord, status: string): BookingRecord {\n  return { ...b, status };\n}\n\nexport function toView(b: BookingRecord, users: { [id: number]: User }): BookingView {\n  return { ...b, labName: labName(b.lab), userName: users[b.userId]?.name ?? '(deleted user)' };\n}\n"
+        }
+      },
+      {
+        "nhan": "interfaces and unions, but no readonly and an open lab table",
+        "tep": {
+          "src/model.ts": "// Attempt B — interfaces, literal unions, a required capacity. No readonly, and the lab table is an open dictionary.\nimport type { Role } from './booking.ts';\nimport type { LabCode, TimeRange } from './schedule.ts';\n\nexport interface Entity {\n  id: number;\n  createdAt: string;\n}\n\nexport interface Lab {\n  code: LabCode;\n  name: string;\n  capacity: number;\n  equipment?: string[];\n}\n\nexport interface User extends Entity {\n  email: string;\n  name: string;\n  role: Role;\n  studentCode?: string;\n}\n\nexport type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\nexport interface BookingRecord extends Entity {\n  lab: LabCode;\n  userId: number;\n  range: TimeRange;\n  seats: number;\n  status: BookingStatus;\n  note: string | null;\n}\n\nexport type BookingView = BookingRecord & { labName: string; userName: string };\n\nexport const LAB_INFO: { [code: string]: Lab } = {\n  'BE-201': { code: 'BE-201', name: 'Backend Lab 1', capacity: 40, equipment: ['projector', 'whiteboard'] },\n  'BE-202': { code: 'BE-202', name: 'Backend Lab 2', capacity: 40 },\n  'AL-301': { code: 'AL-301', name: 'AI Lab', capacity: 30, equipment: ['GPU server'] },\n};\n\nexport function labName(code: LabCode): string {\n  return LAB_INFO[code]?.name ?? code;\n}\n\nexport function freeSeats(lab: Lab, booked: number): number {\n  return Math.max(0, lab.capacity - booked);\n}\n\nexport function seatsByLab(bookings: readonly BookingRecord[]): { [lab: string]: number } {\n  const total: { [lab: string]: number } = { 'BE-201': 0, 'BE-202': 0, 'AL-301': 0 };\n  for (const b of bookings) {\n    if (b.status !== 'CANCELLED') total[b.lab] = (total[b.lab] ?? 0) + b.seats;\n  }\n  return total;\n}\n\nexport function indexById(users: readonly User[]): { [id: number]: User } {\n  const byId: { [id: number]: User } = {};\n  for (const u of users) byId[u.id] = u;\n  return byId;\n}\n\nexport function withStatus(b: BookingRecord, status: BookingStatus): BookingRecord {\n  return { ...b, status };\n}\n\nexport function toView(b: BookingRecord, users: { [id: number]: User }): BookingView {\n  return { ...b, labName: labName(b.lab), userName: users[b.userId]?.name ?? '(deleted user)' };\n}\n"
+        }
+      }
+    ]
   }
 ]

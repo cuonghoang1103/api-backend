@@ -476,6 +476,11 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
 <a class="link-card" href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript — the <code>satisfies</code> operator</span><span class="lc-sub">typescriptlang.org · Why it preserves the literal type where an annotation widens it</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">CuongThai course — TypeScript</span><span class="lc-sub"><code>ReturnType</code>, <code>Awaited</code>, indexed access and conditional types — the machinery behind all three answers</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Replace four hand-written response interfaces with derived types, then remove a field and count what breaks</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Composing the shape yourself — TypeScript 4.3: extends &amp; intersection</span><span class="lc-sub">Same: “the model plus something” should be derived, not hand-copied, or it drifts. Different: there you compose it by hand — BookingView = BookingRecord &amp; { labName; userName } built with spread — and measure why interface … extends reports a conflicting property at the declaration (TS2430) while &amp; silently turns it into never.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
@@ -627,6 +632,11 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
 <a class="link-card" href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript — toán tử <code>satisfies</code></span><span class="lc-sub">typescriptlang.org · Vì sao nó giữ nguyên kiểu chữ trong khi một chú thích kiểu thì nới rộng</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — TypeScript</span><span class="lc-sub"><code>ReturnType</code>, <code>Awaited</code>, truy cập theo chỉ số và kiểu điều kiện — bộ máy đứng sau cả ba cách</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Thay bốn interface phản hồi viết tay bằng kiểu suy ra, rồi bỏ một trường và đếm xem có bao nhiêu chỗ vỡ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Tự ghép dáng — TypeScript 4.3: extends &amp; intersection</span><span class="lc-sub">Giống: “model cộng thêm gì đó” nên được suy ra, không chép tay, kẻo lệch dần. Khác: ở đó bạn tự ghép — BookingView = BookingRecord &amp; { labName; userName } dựng bằng spread — và đo vì sao interface … extends báo thuộc tính xung đột ngay ở khai báo (TS2430) còn &amp; âm thầm biến nó thành never.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

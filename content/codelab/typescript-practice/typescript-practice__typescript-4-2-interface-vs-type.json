@@ -1,0 +1,494 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-4-2-interface-vs-type",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-4-2-interface-vs-type"
+  },
+  "exercises": [
+    {
+      "title": "Two interfaces, one name: split the merged Booking",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-2-interface-vs-type"
+      ],
+      "problemHtml": "<p>src/booking.ts declares <code>interface Booking</code> twice, so the two merged and every booking now needs a <code>title</code> and an <code>allDay</code> flag. Keep one <code>Booking</code> (id, lab, range, seats), give the calendar its own exported <code>CalendarEvent</code> (title, allDay, range) and write <code>toEvent(b)</code> so that kiem/dung.ts compiles and the tests pass. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/booking.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/booking.test.ts</code>.</li>\n  <li><code>node --test test/booking.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/booking.ts khai <code>interface Booking</code> hai lần, nên hai cái gộp lại và lượt đặt nào cũng phải có <code>title</code> với cờ <code>allDay</code>. Giữ một <code>Booking</code> (id, lab, range, seats), cho lịch một kiểu riêng được export là <code>CalendarEvent</code> (title, allDay, range) và viết <code>toEvent(b)</code> để kiem/dung.ts biên dịch được và test qua. Không any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/booking.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/booking.test.ts</code>.</li>\n  <li><code>node --test test/booking.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/booking.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/booking.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/booking.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// Booking as the calendar export sees it (added later by another teammate).\nexport interface Booking {\n  title: string;\n  allDay: boolean;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { toEvent } from '../src/booking.ts';\nimport type { Booking, CalendarEvent } from '../src/booking.ts';\n\nconst b: Booking = { id: 1, lab: 'BE-201', range: [480, 600], seats: 30 };\nconst e: CalendarEvent = toEvent(b);\nexport { e };\n"
+        },
+        {
+          "name": "test/booking.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label, toEvent } from '../src/booking.ts';\n\ntest('label', () => assert.equal(label({ id: 1, lab: 'BE-201', range: [480, 600], seats: 30 }), 'BE-201 · 30 seats'));\ntest('toEvent', () => assert.deepEqual(toEvent({ id: 1, lab: 'AL-301', range: [600, 720], seats: 12 }), { title: 'AL-301 · 12 seats', allDay: false, range: [600, 720] }));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "export type TimeRange = readonly [start: number, end: number];\n\nexport interface Booking {\n  readonly id: number;\n  lab: string;\n  range: TimeRange;\n  seats: number;\n}\n\nexport function label(b: Booking): string {\n  return b.lab + ' · ' + b.seats + ' seats';\n}\n\n// The calendar's view is a different shape, so it has its own name — no second \"interface Booking\".\nexport interface CalendarEvent {\n  title: string;\n  allDay: boolean;\n  range: TimeRange;\n}\n\nexport function toEvent(b: Booking): CalendarEvent {\n  return { title: label(b), allDay: false, range: b.range };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { toEvent } from '../src/booking.ts';\nimport type { Booking, CalendarEvent } from '../src/booking.ts';\n\nconst b: Booking = { id: 1, lab: 'BE-201', range: [480, 600], seats: 30 };\nconst e: CalendarEvent = toEvent(b);\nexport { e };\n"
+        },
+        {
+          "name": "test/booking.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label, toEvent } from '../src/booking.ts';\n\ntest('label', () => assert.equal(label({ id: 1, lab: 'BE-201', range: [480, 600], seats: 30 }), 'BE-201 · 30 seats'));\ntest('toEvent', () => assert.deepEqual(toEvent({ id: 1, lab: 'AL-301', range: [600, 720], seats: 12 }), { title: 'AL-301 · 12 seats', allDay: false, range: [600, 720] }));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — made the calendar fields optional on Booking instead of splitting; CalendarEvent added, the second interface Booking left in place — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — made the calendar fields optional on Booking instead of splitting; CalendarEvent added, the second interface Booking left in place — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { toEvent } from '../src/booking.ts';\nimport type { Booking, CalendarEvent } from '../src/booking.ts';\n\nconst b: Booking = { id: 1, lab: 'BE-201', range: [480, 600], seats: 30 };\nconst e: CalendarEvent = toEvent(b);\nexport { e };\n",
+          "test/booking.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label, toEvent } from '../src/booking.ts';\n\ntest('label', () => assert.equal(label({ id: 1, lab: 'BE-201', range: [480, 600], seats: 30 }), 'BE-201 · 30 seats'));\ntest('toEvent', () => assert.deepEqual(toEvent({ id: 1, lab: 'AL-301', range: [600, 720], seats: 12 }), { title: 'AL-301 · 12 seats', allDay: false, range: [600, 720] }));\n"
+        },
+        "tepHoc": [
+          "src/booking.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/booking.test.ts"
+            ],
+            "moTa": "tsc (strict): src/booking.ts + kiem/dung.ts, test/booking.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/booking.test.ts",
+            "moTa": "node --test test/booking.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "made the calendar fields optional on Booking instead of splitting — caught by: tsc (strict): src/booking.ts + kiem/dung.ts, test/booking.test.ts compile with 0 errors; node --test test/booking.test.ts exits 0|||made the calendar fields optional on Booking instead of splitting — máy chấm bắt ở: tsc (strict): src/booking.ts + kiem/dung.ts, test/booking.test.ts compile with 0 errors; node --test test/booking.test.ts exits 0"
+        },
+        {
+          "loi": "CalendarEvent added, the second interface Booking left in place — caught by: tsc (strict): src/booking.ts + kiem/dung.ts, test/booking.test.ts compile with 0 errors|||CalendarEvent added, the second interface Booking left in place — máy chấm bắt ở: tsc (strict): src/booking.ts + kiem/dung.ts, test/booking.test.ts compile with 0 errors"
+        }
+      ]
+    },
+    {
+      "title": "A union an interface cannot extend",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-2-interface-vs-type"
+      ],
+      "problemHtml": "<p>src/state.ts tries <code>interface StateWithLab extends BookingState</code>, where <code>BookingState</code> is a union — tsc refuses it with TS2312. Rewrite <code>StateWithLab</code> so that (1) it compiles, (2) the correct states in kiem/dung.ts compile, (3) the wrong ones in kiem/sai.ts are refused, (4) the test passes. Keep <code>BookingState</code> as it is.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/state.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/state.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/state.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/state.ts thử viết <code>interface StateWithLab extends BookingState</code>, mà <code>BookingState</code> là một union — tsc từ chối với TS2312. Viết lại <code>StateWithLab</code> để (1) biên dịch được, (2) các trạng thái đúng trong kiem/dung.ts biên dịch được, (3) các trạng thái sai trong kiem/sai.ts bị từ chối, (4) test qua. Giữ nguyên <code>BookingState</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/state.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/state.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/state.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/state.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/state.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const noLab: StateWithLab = { status: 'PENDING' };|||kiem/sai.ts, dòng 3: const noLab: StateWithLab = { status: 'PENDING' };",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/state.ts",
+          "language": "typescript",
+          "code": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// Every state, plus the lab it belongs to.\nexport interface StateWithLab extends BookingState {\n  lab: string;\n}\n\nexport function describe(s: StateWithLab): string {\n  return s.lab + ': ' + s.status;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { StateWithLab } from '../src/state.ts';\n\nconst a: StateWithLab = { status: 'PENDING', lab: 'BE-201' };\nconst b: StateWithLab = { status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' };\nexport { a, b };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { StateWithLab } from '../src/state.ts';\n\nconst noLab: StateWithLab = { status: 'PENDING' }; // expect TS2322\nconst done: StateWithLab = { status: 'DONE', lab: 'BE-201' }; // expect TS2322\nexport { noLab, done };\n"
+        },
+        {
+          "name": "test/state.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/state.ts';\n\ntest('describe', () => assert.equal(describe({ status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' }), 'AL-301: CONFIRMED'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/state.ts",
+          "language": "typescript",
+          "code": "type Pending = { status: 'PENDING' };\ntype Confirmed = { status: 'CONFIRMED'; approvedBy: string };\nexport type BookingState = Pending | Confirmed;\n\n// An interface cannot extend a union (TS2312); a type alias can intersect it.\nexport type StateWithLab = BookingState & { lab: string };\n\nexport function describe(s: StateWithLab): string {\n  return s.lab + ': ' + s.status;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { StateWithLab } from '../src/state.ts';\n\nconst a: StateWithLab = { status: 'PENDING', lab: 'BE-201' };\nconst b: StateWithLab = { status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' };\nexport { a, b };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { StateWithLab } from '../src/state.ts';\n\nconst noLab: StateWithLab = { status: 'PENDING' }; // expect TS2322\nconst done: StateWithLab = { status: 'DONE', lab: 'BE-201' }; // expect TS2322\nexport { noLab, done };\n"
+        },
+        {
+          "name": "test/state.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/state.ts';\n\ntest('describe', () => assert.equal(describe({ status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' }), 'AL-301: CONFIRMED'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — interface with status: string — compiles, but DONE slips through; lab made optional in the intersection — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — interface with status: string — compiles, but DONE slips through; lab made optional in the intersection — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import type { StateWithLab } from '../src/state.ts';\n\nconst a: StateWithLab = { status: 'PENDING', lab: 'BE-201' };\nconst b: StateWithLab = { status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' };\nexport { a, b };\n",
+          "kiem/sai.ts": "import type { StateWithLab } from '../src/state.ts';\n\nconst noLab: StateWithLab = { status: 'PENDING' }; // expect TS2322\nconst done: StateWithLab = { status: 'DONE', lab: 'BE-201' }; // expect TS2322\nexport { noLab, done };\n",
+          "test/state.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/state.ts';\n\ntest('describe', () => assert.equal(describe({ status: 'CONFIRMED', approvedBy: 'binh.tt', lab: 'AL-301' }), 'AL-301: CONFIRMED'));\n"
+        },
+        "tepHoc": [
+          "src/state.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/state.test.ts"
+            ],
+            "moTa": "tsc (strict): src/state.ts + kiem/dung.ts, test/state.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const noLab: StateWithLab = { status: 'PENDING' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2322 — const done: StateWithLab = { status: 'DONE', lab: 'BE-201' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/state.test.ts",
+            "moTa": "node --test test/state.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "interface with status: string — compiles, but DONE slips through — caught by: kiem/sai.ts:3 is refused with TS2322 — const noLab: StateWithLab = { status: 'PENDING' };; kiem/sai.ts:4 is refused with TS2322 — const done: StateWithLab = { status: 'DONE', lab: 'BE-201' };|||interface with status: string — compiles, but DONE slips through — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const noLab: StateWithLab = { status: 'PENDING' };; kiem/sai.ts:4 is refused with TS2322 — const done: StateWithLab = { status: 'DONE', lab: 'BE-201' };"
+        },
+        {
+          "loi": "lab made optional in the intersection — caught by: kiem/sai.ts:3 is refused with TS2322 — const noLab: StateWithLab = { status: 'PENDING' };|||lab made optional in the intersection — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const noLab: StateWithLab = { status: 'PENDING' };"
+        }
+      ]
+    },
+    {
+      "title": "Add a field to a library’s interface (augmentation)",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-4-2-interface-vs-type"
+      ],
+      "problemHtml": "<p>src/lib.ts plays the role of a library you may not edit: its <code>Req</code> has only <code>url</code>. Your login code stores <code>userId</code> on the request, so <code>req.userId</code> in src/auth.ts is TS2339. Without touching src/lib.ts and without casts, make the library’s <code>Req</code> know about an optional numeric <code>userId</code> — the way this website adds <code>userId</code> to Express’s <code>Request</code> — so that kiem/dung.ts compiles, the wrong uses in kiem/sai.ts are refused, and the test passes. Hint: <code>declare module './lib.ts' { … }</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; each marked line of kiem/sai.ts gets its code; node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/auth.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/auth.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/auth.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/lib.ts đóng vai một thư viện bạn không được sửa: <code>Req</code> của nó chỉ có <code>url</code>. Code đăng nhập của bạn lưu <code>userId</code> lên request, nên <code>req.userId</code> trong src/auth.ts là TS2339. Không đụng src/lib.ts và không ép kiểu, hãy làm cho <code>Req</code> của thư viện biết một <code>userId</code> kiểu số, optional — đúng cách website này thêm <code>userId</code> vào <code>Request</code> của Express — để kiem/dung.ts biên dịch được, các cách dùng sai trong kiem/sai.ts bị từ chối, và test qua. Gợi ý: <code>declare module './lib.ts' { … }</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; mỗi dòng đánh dấu của kiem/sai.ts có đúng mã; node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/auth.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/auth.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/auth.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/auth.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/auth.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 5: const id: number = req.userId;|||kiem/sai.ts, dòng 5: const id: number = req.userId;",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/auth.ts",
+          "language": "typescript",
+          "code": "import type { Handler } from './lib.ts';\n\n// The login middleware stores the user id on the request. Make the \"library\" type know about it.\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+        },
+        {
+          "name": "src/lib.ts",
+          "language": "typescript",
+          "code": "// A tiny \"library\" (given — do not edit): a request object and a handler type.\nexport interface Req {\n  url: string;\n}\nexport type Handler = (req: Req) => string;\n\nexport function handle(h: Handler, req: Req): string {\n  return h(req);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { handle } from '../src/lib.ts';\nimport type { Req } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\nconst guest: Req = { url: '/me' };\nconst logged: Req = { url: '/me', userId: 7 };\nconsole.log(handle(whoAmI, guest), handle(whoAmI, logged));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Req } from '../src/lib.ts';\nimport '../src/auth.ts';\n\ndeclare const req: Req;\nconst id: number = req.userId; // expect TS2322\nconst text: Req = { url: '/me', userId: '7' }; // expect TS2322\nexport { id, text };\n"
+        },
+        {
+          "name": "test/auth.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { handle } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\ntest('guest', () => assert.equal(handle(whoAmI, { url: '/me' }), 'guest'));\ntest('logged in', () => assert.equal(handle(whoAmI, { url: '/me', userId: 7 }), 'user 7'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/auth.ts",
+          "language": "typescript",
+          "code": "import type { Handler } from './lib.ts';\n\n// Module augmentation: this interface MERGES with the library's Req (only an interface can do this).\ndeclare module './lib.ts' {\n  interface Req {\n    userId?: number;\n  }\n}\n\nexport const whoAmI: Handler = (req) => (req.userId === undefined ? 'guest' : 'user ' + req.userId);\n"
+        },
+        {
+          "name": "src/lib.ts",
+          "language": "typescript",
+          "code": "// A tiny \"library\" (given — do not edit): a request object and a handler type.\nexport interface Req {\n  url: string;\n}\nexport type Handler = (req: Req) => string;\n\nexport function handle(h: Handler, req: Req): string {\n  return h(req);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { handle } from '../src/lib.ts';\nimport type { Req } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\nconst guest: Req = { url: '/me' };\nconst logged: Req = { url: '/me', userId: 7 };\nconsole.log(handle(whoAmI, guest), handle(whoAmI, logged));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Req } from '../src/lib.ts';\nimport '../src/auth.ts';\n\ndeclare const req: Req;\nconst id: number = req.userId; // expect TS2322\nconst text: Req = { url: '/me', userId: '7' }; // expect TS2322\nexport { id, text };\n"
+        },
+        {
+          "name": "test/auth.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { handle } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\ntest('guest', () => assert.equal(handle(whoAmI, { url: '/me' }), 'guest'));\ntest('logged in', () => assert.equal(handle(whoAmI, { url: '/me', userId: 7 }), 'user 7'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — userId: number (required) — every request in the project now needs one; a new local interface with the same name — it does not touch the library — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — userId: number (required) — every request in the project now needs one; a new local interface with the same name — it does not touch the library — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/lib.ts": "// A tiny \"library\" (given — do not edit): a request object and a handler type.\nexport interface Req {\n  url: string;\n}\nexport type Handler = (req: Req) => string;\n\nexport function handle(h: Handler, req: Req): string {\n  return h(req);\n}\n",
+          "kiem/dung.ts": "import { handle } from '../src/lib.ts';\nimport type { Req } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\nconst guest: Req = { url: '/me' };\nconst logged: Req = { url: '/me', userId: 7 };\nconsole.log(handle(whoAmI, guest), handle(whoAmI, logged));\n",
+          "kiem/sai.ts": "import type { Req } from '../src/lib.ts';\nimport '../src/auth.ts';\n\ndeclare const req: Req;\nconst id: number = req.userId; // expect TS2322\nconst text: Req = { url: '/me', userId: '7' }; // expect TS2322\nexport { id, text };\n",
+          "test/auth.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { handle } from '../src/lib.ts';\nimport { whoAmI } from '../src/auth.ts';\n\ntest('guest', () => assert.equal(handle(whoAmI, { url: '/me' }), 'guest'));\ntest('logged in', () => assert.equal(handle(whoAmI, { url: '/me', userId: 7 }), 'user 7'));\n"
+        },
+        "tepHoc": [
+          "src/auth.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/auth.test.ts"
+            ],
+            "moTa": "tsc (strict): src/auth.ts + kiem/dung.ts, test/auth.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2322 — const id: number = req.userId; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2322 — const text: Req = { url: '/me', userId: '7' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/auth.test.ts",
+            "moTa": "node --test test/auth.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)\\w+"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "userId: number (required) — every request in the project now needs one — caught by: tsc (strict): src/auth.ts + kiem/dung.ts, test/auth.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const id: number = req.userId;|||userId: number (required) — every request in the project now needs one — máy chấm bắt ở: tsc (strict): src/auth.ts + kiem/dung.ts, test/auth.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const id: number = req.userId;"
+        },
+        {
+          "loi": "a new local interface with the same name — it does not touch the library — caught by: tsc (strict): src/auth.ts + kiem/dung.ts, test/auth.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const id: number = req.userId; (+1)|||a new local interface with the same name — it does not touch the library — máy chấm bắt ở: tsc (strict): src/auth.ts + kiem/dung.ts, test/auth.test.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2322 — const id: number = req.userId; (+1)"
+        }
+      ]
+    }
+  ]
+}

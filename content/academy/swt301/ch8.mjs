@@ -2791,6 +2791,26 @@ ${SEL}`),
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 8.3: test chập chờn, tái hiện và sửa</span><span class="lc-sub">Giống bài này: test chập chờn đỏ mà code không đổi, và một lần sleep cố định thì quá ngắn trên máy CI chậm, quá dài ở mọi chỗ khác. Sâu thêm ở đó: năm nguyên nhân được tái hiện có chủ đích và đo (đồng hồ thật, dữ liệu ngẫu nhiên, thứ tự và trạng thái chung, mạng, tranh chấp) — 21, 28 và 33 lần đỏ trong 100 lần chạy, 13 lần đỏ trong 20 khi xáo thứ tự; retry biến 17/50 lần đỏ thành 0 trong khi một lượt đặt trùng thật vẫn còn; cách ly bằng tag; và sửa ở từng nguyên nhân.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>`),
+    // Liên kết chéo sang khoá Courses /courses/testing — Chương 9 (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 9.1: running tests in GitHub Actions</span><span class="lc-sub">Same as this lesson: CI builds and tests every change, and the server tells red from green by the exit code. Deeper there: a real workflow for a Node project, run and measured locally with act — npm ci from the lockfile, the npm cache (49.6 s → 15.0 s), PostgreSQL as a service container, Playwright browsers with their system libraries.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 9.3: required checks and branch protection</span><span class="lc-sub">Same as this lesson: no merge on red. Deeper there: how GitHub enforces it — one required gate job, if: always() because a skipped job counts as passed, a pipe that hides a red test, and flaky tests quarantined so they never block.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 9.1: chạy test trong GitHub Actions</span><span class="lc-sub">Giống bài này: CI build và test mọi thay đổi, server phân biệt đỏ/xanh bằng mã thoát. Sâu thêm ở đó: một workflow thật cho dự án Node, chạy và đo trên máy bằng act — npm ci theo lockfile, cache npm (49,6 s → 15,0 s), PostgreSQL dạng service container, trình duyệt Playwright kèm thư viện hệ thống.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 9.3: check bắt buộc và bảo vệ nhánh</span><span class="lc-sub">Giống bài này: không merge khi đỏ. Sâu thêm ở đó: GitHub thi hành điều đó thế nào — một job cổng bắt buộc duy nhất, if: always() vì job bị bỏ qua được tính là đạt, đường ống che mất test đỏ, và test chập chờn bị cách ly để không bao giờ chặn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

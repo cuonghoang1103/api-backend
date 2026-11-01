@@ -7,3 +7,5 @@ playwright/.auth/
 coverage/
 reports/
 .stryker-tmp/
+.act/
+.vitest/

@@ -267,6 +267,11 @@ tai artifact len          8s</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">zstd — the Zstandard format</span><span class="lc-sub">facebook.github.io/zstd — the compression-ratio-versus-speed curve behind the 6.4× result above, and why level 3 is the usual default.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — measure the hit rate before you tune the cache</span><span class="lc-sub">/courses/redis/learn${REF} — the same discipline: a cache is an optimisation with a measurable return, and the first number to get is what it is actually saving.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Node.js — what npm ci does after the download</span><span class="lc-sub">/courses/nodejs/learn${REF} — unpacking, linking and lifecycle scripts, which is the 60% that no dependency cache removes.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.1: a test workflow, rehearsed with act</span><span class="lc-sub">Same: cache: npm saves ~/.npm and npm ci still runs. Different: here it is measured on GitHub’s runners; there the whole test workflow (unit, a PostgreSQL service, Playwright with --with-deps) runs locally with act — npm ci 49.6 s cold, 15.0 s warm on a laptop.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -457,6 +462,11 @@ tai artifact len          8s</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">zstd — định dạng Zstandard</span><span class="lc-sub">facebook.github.io/zstd — đường cong tỉ-lệ-nén với tốc-độ đứng sau kết quả 6,4 lần bên trên, và vì sao mức 3 là mặc định thường dùng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — đo tỉ lệ trúng TRƯỚC khi đi tinh chỉnh cache</span><span class="lc-sub">/courses/redis/learn${REF} — cùng kỷ luật ấy: một cái cache là một phép tối ưu có lãi ĐO ĐƯỢC, và con số đầu tiên cần lấy là nó đang tiết kiệm được cái gì.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Node.js — npm ci làm gì SAU khi tải xong</span><span class="lc-sub">/courses/nodejs/learn${REF} — giải nén, liên kết và các script vòng đời, tức là 60% mà không cache phụ thuộc nào gỡ bỏ được.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.1: một workflow test, tổng duyệt bằng act</span><span class="lc-sub">Giống: cache: npm lưu ~/.npm và npm ci vẫn chạy. Khác: ở đây đo trên runner của GitHub; ở đó cả workflow test (unit, service PostgreSQL, Playwright kèm --with-deps) chạy trên máy bằng act — npm ci lạnh 49,6 s, ấm 15,0 s trên một laptop.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1520,6 +1530,11 @@ Artifact artifact has been successfully uploaded!   &lt;- the log still says "ar
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PKZIP APPNOTE — per-entry compression</span><span class="lc-sub">pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.3.9.TXT — the format detail that explains the measurement: each entry is compressed independently, so a zip cannot share a dictionary across files the way a compressed tar can.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — tar, and why "tar then compress" beats "compress each"</span><span class="lc-sub">/courses/linux-bash/learn${REF} — the ordering that makes the single-file column of the table above possible, and the cases where it does not help.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — acceptance checks before the swap</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — the file-count check above is a release acceptance test, and this is the treatment of that idea at length.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-2-bao-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.2: reports, annotations and artifacts</span><span class="lc-sub">Same: artifacts outlive the runner. Deeper there: which test evidence to upload — a Playwright report with traces, JUnit XML, coverage — with if: !cancelled(), and act keeping one of two same-named artifacts that upload-artifact v4 refuses on GitHub.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -1749,6 +1764,11 @@ Artifact artifact has been successfully uploaded!   &lt;- log van ghi "artifact"
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PKZIP APPNOTE — nén theo từng mục</span><span class="lc-sub">pkware.cachefly.net/webdocs/APPNOTE/APPNOTE-6.3.9.TXT — chi tiết định dạng giải thích phép đo: mỗi mục được nén độc lập, nên một tệp zip không chia sẻ được từ điển giữa các tệp theo cách một tar-đã-nén làm được.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — tar, và vì sao "tar rồi nén" thắng "nén từng cái"</span><span class="lc-sub">/courses/linux-bash/learn${REF} — cái thứ tự làm cho cột một-tệp của bảng bên trên khả thi, và những ca mà nó KHÔNG giúp được gì.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — kiểm nghiệm thu TRƯỚC lúc tráo</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — phép đếm file bên trên là một bài kiểm nghiệm thu bản phát hành, và đây là phần trình bày đầy đủ của ý tưởng ấy.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-2-bao-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.2: báo cáo, annotation và artifact</span><span class="lc-sub">Giống: artifact sống lâu hơn runner. Sâu thêm ở đó: upload bằng chứng test nào — báo cáo Playwright kèm trace, JUnit XML, độ phủ — với if: !cancelled(), và act giữ một trong hai artifact trùng tên mà upload-artifact v4 từ chối trên GitHub.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

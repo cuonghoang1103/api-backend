@@ -1,0 +1,17 @@
+# Lesson 9.4 — the same slow suite in ONE job, for comparison with 94-shard.yml
+name: shards
+on: [push, pull_request]
+
+jobs:
+  slow:
+    name: slow suite (one job)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx vitest run demo9/cham --no-file-parallelism --reporter=tree

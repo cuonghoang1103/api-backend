@@ -1,0 +1,47 @@
+# Lesson 9.3 — two gate jobs side by side, and a test step behind a pipe
+name: gate
+on: [push, pull_request]
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit
+
+  unit-tee:                                   # the log is kept in a file — and the exit code is lost
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx vitest run src/ --reporter=dot | tee unit.log
+      - name: same command, shell bash (adds -o pipefail)
+        shell: bash
+        run: npx vitest run src/ --reporter=dot | tee unit.log
+
+  naive-gate:                                 # no if: always()
+    needs: [unit]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all green"
+
+  ci-ok:
+    if: always()
+    needs: [unit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: every required job passed?
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+          REQUIRED: unit
+        run: node scripts/ci-gate.mjs

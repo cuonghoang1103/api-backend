@@ -1,0 +1,61 @@
+# Lab 9 — a FIRST ATTEMPT at fixing lab9/ci.yml (lesson text): the lint error, npm ci, and the gate renamed. Not enough.
+#   actionlint lab9/ci.yml          → 0 problems
+#   node scripts/cham-lab-9.mjs     → 8/8 rules
+#   node scripts/cham-lab-9.mjs --act   → green on the real code, red (gate) on a planted bug
+# Branch protection today requires: "tests passed (pull_request)".
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    name: unit (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    continue-on-error: true            # "Node 20 is sometimes red, don't let it block us"
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run test:web
+      - run: npm run test:quarantine
+
+  integration:
+    runs-on: ubuntu-latest
+    env:
+      TEST_DATABASE_URL: postgres://postgres:test@localhost:5432/labflow_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:int -- test/integration
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - run: npm run test:e2e
+
+  ci-ok:
+    name: ci-ok
+    needs: [unit, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "all green"

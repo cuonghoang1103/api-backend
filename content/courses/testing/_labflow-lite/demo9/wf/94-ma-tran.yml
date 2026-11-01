@@ -1,0 +1,21 @@
+# Lesson 9.4 — the unit job on three Node versions (fail-fast left at its default: true)
+name: tests
+on: [push, pull_request]
+
+jobs:
+  unit:
+    name: unit (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: node --version
+      - run: npm ci
+      - run: npm run test:unit

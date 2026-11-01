@@ -3,7 +3,8 @@
  * Chạy thật (Vitest 5.0.5 + @vitest/coverage-v8 / coverage-istanbul 5.0.5): unit suite 96.31% dòng nhưng chỉ đếm file đã import —
  * thêm coverage.include ⇒ 78.91% (app.js, main.js, pgRepo.js, reminder.js, code.js 0%); bộ test chỉ toBeDefined đạt 100% dòng,
  * 96.29% nhánh ('CONFIRMED' dòng 40 chưa chạy) rồi 100% cả bốn chỉ số — và hai bug cài sẵn (>= 30, bỏ ADMIN) vẫn xanh, trong khi
- * booking.test.js thật chỉ 87.5% dòng mà bắt được >= MAX_MINUTES; v8 vs istanbul trên JSX 86 vs 84 câu lệnh; ngưỡng trong cấu hình đỏ
+ * booking.test.js thật chỉ 87.5% dòng mà bắt được >= MAX_MINUTES; v8 vs istanbul trên JSX 86 vs 84 câu lệnh, trên src/ nhánh 109 vs 107/117
+ * (sửa 01/11 theo số đo: tham số mặc định now = new Date() trong cancel.js/days.js — istanbul tính là nhánh, v8 không); ngưỡng trong cấu hình đỏ
  * ở lần đầu (83.9% dòng) ⇒ chuyển test từ demo2/demo3 vào src + loại app.js ⇒ xanh (95.78%); perFile bắt server.js và code.js.
  */
 import G from '../giang/tst-08-1.mjs';
@@ -27,6 +28,9 @@ const HTML = loc(OUT['81-html'], /^\$ |title=/);
 const WEB = (k) => loc(OUT[k], /^\$ |Coverage report|Statements|Lines/);
 const V8 = WEB('81-v8-web');
 const IST = WEB('81-istanbul-web');
+const SRC = (k) => loc(OUT[k], /^\$ |Tests {2}|Coverage report|Statements|Branches|Functions|Lines/);
+const V8_SRC = SRC('81-v8-src');
+const IST_SRC = SRC('81-istanbul-src');
 const COV_DO = loc(OUT['81-cov-do'], /^> vitest|Tests {2}|All files|app\.js|reminder|code\.js|ERROR/);
 const COV_XANH = loc(OUT['81-cov-xanh'], /^> vitest|Tests {2}|All files|reminder|code\.js|Lines {8}/);
 const PER_FILE = loc(OUT['81-per-file'], /^\$ |ERROR/);
@@ -124,7 +128,10 @@ ${STACK_EN}
 <p>The 16 web tests of Chapter 6, measured on the JSX components by each provider:</p>
 ${ra(V8)}
 ${ra(IST)}
-<p>Statements (86 vs 84) and lines (67 vs 65) differ: JSX is compiled first and each tool maps it back its own way. On plain JavaScript in <code>src/</code> they matched in our runs. Use v8; never compare numbers across providers.</p>
+<p>Statements (86 vs 84) and lines (67 vs 65) differ: JSX is compiled first and each tool maps it back its own way. Plain JavaScript in <code>src/</code>, the 116 unit tests:</p>
+${ra(V8_SRC)}
+${ra(IST_SRC)}
+<p>Statements, functions and lines match exactly (226/233, 62/64, 186/189); branches do not — 109 vs 107 of 117. The two extra misses are the default parameter <code>now = new Date()</code> in <code>cancel.js</code> and <code>days.js</code>: every test passes its own clock, so the default never runs. istanbul counts that unused default as an uncovered branch; v8 did not count it here (the arrow-function defaults of <code>code.js</code> are branches for both: 5 of 5 each). Use v8; never compare numbers across providers.</p>
 ${BANG_EN}
 <p><strong>Coming from Java?</strong> Spring Boot teams use JaCoCo: same counters (instruction, line, branch, method) and a <code>check</code> goal that fails the build below a minimum — like <code>thresholds</code>.</p>
 
@@ -223,7 +230,10 @@ ${STACK_VI}
 <p>16 test web của Chương 6, đo trên các component JSX bằng từng provider:</p>
 ${ra(V8)}
 ${ra(IST)}
-<p>Câu lệnh (86 so với 84) và dòng (67 so với 65) lệch: JSX được biên dịch trước và mỗi công cụ ánh xạ ngược theo cách riêng. Với JavaScript thường trong <code>src/</code> chúng khớp trong các lần đo của chúng tôi. Dùng v8; đừng so số giữa hai provider.</p>
+<p>Câu lệnh (86 so với 84) và dòng (67 so với 65) lệch: JSX được biên dịch trước và mỗi công cụ ánh xạ ngược theo cách riêng. JavaScript thường trong <code>src/</code>, 116 unit test:</p>
+${ra(V8_SRC)}
+${ra(IST_SRC)}
+<p>Câu lệnh, hàm và dòng khớp đúng từng số (226/233, 62/64, 186/189); nhánh thì không — 109 so với 107 trên 117. Hai chỗ thiếu thêm là tham số mặc định <code>now = new Date()</code> trong <code>cancel.js</code> và <code>days.js</code>: test nào cũng truyền đồng hồ riêng, nên giá trị mặc định không bao giờ chạy. istanbul tính giá trị mặc định chưa dùng đó là một nhánh chưa phủ; v8 ở đây thì không (giá trị mặc định dạng arrow function của <code>code.js</code> thì cả hai đều tính là nhánh: mỗi bên 5 trên 5). Dùng v8; đừng so số giữa hai provider.</p>
 ${BANG_VI}
 <p><strong>Bạn từ Java sang?</strong> Nhóm Spring Boot dùng JaCoCo: cùng các bộ đếm (instruction, line, branch, method) và goal <code>check</code> làm build thất bại dưới mức tối thiểu — như <code>thresholds</code>.</p>
 

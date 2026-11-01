@@ -2501,6 +2501,11 @@ tung-cai-mot (3)   tao 10:54:35   chay 10:55:09   "nhanh 3 chay luc 10:55:10"
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — jobs.&lt;id&gt;.strategy.fail-fast and max-parallel</span><span class="lc-sub">docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast — the default value, and the per-step <code>continue-on-error</code> interaction that lets one leg be tolerated while others are not.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — jobs.&lt;id&gt;.timeout-minutes</span><span class="lc-sub">docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes — the 360-minute default that applies when you set nothing, and the separate per-step timeout.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — partial success is a result, not a failure</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — the same argument in a deploy: a rollout that reached two of three nodes is information you want to keep, and a pipeline that discards it on the first error is harder to reason about than one that does not.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-4-ma-tran" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.4: a matrix and shards for a test suite</span><span class="lc-sub">Same: fail-fast cancels the other legs on GitHub. Deeper there: a Node 20 leg that fails 4 tests through a library (Promise.withResolvers), shards balanced by test timings, and a measured case where sharding took 147 s against 36 s in one job.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.5</span>
@@ -2753,6 +2758,11 @@ tung-cai-mot (3)   tao 10:54:35   chay 10:55:09   "nhanh 3 chay luc 10:55:10"
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — jobs.&lt;id&gt;.strategy.fail-fast và max-parallel</span><span class="lc-sub">docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast — giá trị mặc định, và tương tác với <code>continue-on-error</code> ở mức bước, thứ cho phép dung thứ một nhánh trong khi không dung thứ những nhánh khác.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — jobs.&lt;id&gt;.timeout-minutes</span><span class="lc-sub">docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idtimeout-minutes — mặc định 360 phút áp dụng khi bạn không đặt gì, và thời hạn riêng ở mức từng bước.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — thành công một phần là một KẾT QUẢ, không phải một cú hỏng</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — cùng lập luận ấy trong một cuộc deploy: một lượt triển khai tới được hai trong ba nút là thông tin bạn muốn giữ, và một đường ống vứt nó đi ngay lỗi đầu tiên thì khó lập luận hơn một đường ống không vứt.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-4-ma-tran" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.4: matrix và shard cho bộ test</span><span class="lc-sub">Giống: fail-fast huỷ các nhánh khác trên GitHub. Sâu thêm ở đó: nhánh Node 20 đỏ 4 test qua một thư viện (Promise.withResolvers), shard cân theo thời gian test, và một trường hợp đo được chia shard mất 147 s so với 36 s trong một job.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

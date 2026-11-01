@@ -1,0 +1,29 @@
+# Practice 9.1 — a teammate's integration workflow. It never went green. Find why with actionlint, then with act.
+name: tests
+on: [push, pull_request]
+
+jobs:
+  integration:
+    runs-on: ubuntu-lastest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: labflow_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d labflow_test"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      TEST_DATABASE_URL: postgres://postgres:test@localhost:5432/labflow
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:int -- test/integration

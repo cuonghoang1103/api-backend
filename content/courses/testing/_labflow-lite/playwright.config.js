@@ -7,7 +7,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: [['list']],
+  // CI (lesson 9.2): annotations on the pull request, an HTML report to upload, JUnit XML for other tools
+  reporter: process.env.CI
+    ? [['list'], ['github'], ['html', { open: 'never' }], ['junit', { outputFile: 'reports/junit-e2e.xml' }]]
+    : [['list']],
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',

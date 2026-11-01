@@ -1,0 +1,17 @@
+# Lesson 9.2 — two matrix legs upload an artifact with the SAME name
+name: artifacts
+on: [push]
+
+jobs:
+  report:
+    name: report (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - run: mkdir -p reports && echo "tests on Node ${{ matrix.node }}" > reports/result.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: reports/

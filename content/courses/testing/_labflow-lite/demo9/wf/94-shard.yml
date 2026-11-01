@@ -1,0 +1,51 @@
+# Lesson 9.4 — a slow suite split into 3 shards by timing, then ONE merged report
+name: shards
+on: [push, pull_request]
+
+jobs:
+  slow:
+    name: slow suite (shard ${{ matrix.shard }}/3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: tests of this shard
+        run: >-
+          node scripts/shard.mjs ${{ matrix.shard }}/3 demo9/cham/timings.json |
+          xargs npx vitest run --no-file-parallelism --reporter=tree
+          --reporter=blob --outputFile.blob=.vitest/blob/blob-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-${{ matrix.shard }}
+          path: .vitest/blob/
+          retention-days: 1
+
+  report:
+    name: slow suite (merged report)
+    needs: slow
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: blob-*
+          merge-multiple: true
+          path: .vitest/blob/
+      - run: npx vitest --merge-reports .vitest/blob --reporter=tree

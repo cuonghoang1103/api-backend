@@ -921,6 +921,11 @@ jobs:
 
 <div class="pitfall"><strong>Trap:</strong> protecting <code>main</code> and forgetting the branches that also reach production — a <code>release/*</code> line, a <code>staging</code> branch a deploy watches, or the tags a release workflow triggers on. Protection is per-pattern, so <code>main</code> being safe says nothing about <code>release/2.0</code>. List every ref that can cause a deploy and protect all of them.</div>
 <p class="note-ct"><strong>The framing that gets teams to accept this:</strong> protection is not about trusting people less. It is about removing a class of accident — the tired force-push, the wrong terminal window, the "just this once" at midnight. Nobody argues that a seatbelt implies bad driving.</p>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.3: the check that branch protection requires</span><span class="lc-sub">Same: required checks block a merge. Deeper there: the CI side — one gate job ci-ok with if: always(), tested as code, rehearsed with act, and the four ways red code still gets merged.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1042,6 +1047,11 @@ jobs:
 
 <div class="pitfall"><strong>Bẫy:</strong> bảo vệ <code>main</code> mà quên những nhánh cũng dẫn tới production — một dòng <code>release/*</code>, một nhánh <code>staging</code> mà một tiến trình deploy đang canh, hay những tag mà một workflow phát hành kích hoạt theo. Bảo vệ áp theo từng mẫu, nên <code>main</code> an toàn chẳng nói gì về <code>release/2.0</code>. Hãy liệt kê mọi ref có thể gây ra một lần deploy và bảo vệ tất cả.</div>
 <p class="note-ct"><strong>Cách diễn đạt khiến các nhóm chấp nhận điều này:</strong> bảo vệ không phải là bớt tin người. Nó là gỡ đi một lớp tai nạn — cú force-push lúc mệt, nhầm cửa sổ terminal, cái "chỉ lần này thôi" lúc nửa đêm. Không ai lập luận rằng đeo dây an toàn nghĩa là lái xe kém.</p>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.3: check mà luật bảo vệ nhánh đòi</span><span class="lc-sub">Giống: check bắt buộc chặn merge. Sâu thêm ở đó: phía CI — một job cổng ci-ok có if: always(), được test như code, tổng duyệt bằng act, và bốn đường code đỏ vẫn được merge.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

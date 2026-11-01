@@ -1150,6 +1150,11 @@ success  …  1m49s</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-993"><span class="lc-t">Code Lab · Observability in CI/CD</span><span class="lc-d">Observing the pipeline itself — continuing into chapter 15</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — Chapter 9: tests in CI, step by step</span><span class="lc-sub">Same: CI runs the suite on every push. Deeper there: the course project’s workflow rehearsed with act — a PostgreSQL service, Playwright, reports and artifacts, one required check, a Node matrix and shards.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1278,6 +1283,11 @@ success  …  1m49s</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-993"><span class="lc-t">Code Lab · Observability in CI/CD</span><span class="lc-d">Quan sát chính cái pipeline — nối tiếp chương 15</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — Chương 9: test trong CI, từng bước</span><span class="lc-sub">Giống: CI chạy bộ test ở mỗi lần push. Sâu thêm ở đó: workflow của dự án khoá học tổng duyệt bằng act — service PostgreSQL, Playwright, báo cáo và artifact, một check bắt buộc, matrix Node và shard.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

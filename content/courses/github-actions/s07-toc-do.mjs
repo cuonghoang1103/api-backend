@@ -706,6 +706,11 @@ ${slide('ga-07', 13, 'Hai workflow, hai group = KHÔNG có khoá — cơ chế s
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Canceling a workflow</span><span class="lc-sub">docs.github.com/en/actions/managing-workflow-runs/canceling-a-workflow — what actually happens to a cancelled job, including the grace period and which steps still run, which is the detail behind the pitfall above.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — two deploys racing, and the container that exited 137</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — the outage this repository had when two deploy workflows overlapped, which is the incident that produced these concurrency blocks.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — idempotency is a state check, not an ordering guarantee</span><span class="lc-sub">/courses/redis/learn${REF} — the distinction the v0.5.40 incident turns on, stated generally: serialising two writers does not make the second one correct.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-4-ma-tran" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.4: cancel outdated test runs</span><span class="lc-sub">Same: cancel-in-progress for pull requests. Deeper there: the concurrency block of a full test workflow (never cancelling runs on main), next to a matrix and timing-balanced shards.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
@@ -909,6 +914,11 @@ ${slide('ga-07', 13, 'Hai workflow, hai group = KHÔNG có khoá — cơ chế s
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Canceling a workflow</span><span class="lc-sub">docs.github.com/en/actions/managing-workflow-runs/canceling-a-workflow — chuyện gì THẬT SỰ xảy ra với một job bị huỷ, gồm cả khoảng ân hạn và những bước nào vẫn chạy, tức là chi tiết đứng sau cái bẫy bên trên.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Deploy VPS — hai cuộc deploy đua nhau, và cái container thoát 137</span><span class="lc-sub">/courses/deploy-vps/learn${REF} — sự cố mà kho này gặp khi hai workflow deploy chồng lên nhau, chính là sự cố đã đẻ ra mấy khối concurrency này.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — bất biến-theo-số-lần-chạy là một phép kiểm TRẠNG THÁI, không phải một bảo đảm THỨ TỰ</span><span class="lc-sub">/courses/redis/learn${REF} — chỗ phân biệt mà sự cố v0.5.40 xoay quanh, phát biểu tổng quát: tuần tự hoá hai người ghi không làm cho người thứ hai trở nên đúng.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-4-ma-tran" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.4: huỷ lần chạy test đã cũ</span><span class="lc-sub">Giống: cancel-in-progress cho pull request. Sâu thêm ở đó: khối concurrency của một workflow test đầy đủ (không bao giờ huỷ lần chạy trên main), cạnh matrix và shard cân theo thời gian.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

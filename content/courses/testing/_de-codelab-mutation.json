@@ -1,5 +1,5 @@
 {
-  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173. Chương 8: đề Vitest có \"args\" thêm vào lệnh vitest run — [\"--sequence.shuffle\", \"--repeats=9\"] bắt test chập chờn (phải xanh ở mọi thứ tự, mọi lần lặp), [\"--testTimeout=500\"] bắt test ngủ thật.",
+  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173. Chương 8: đề Vitest có \"args\" thêm vào lệnh vitest run — [\"--sequence.shuffle\", \"--repeats=9\"] bắt test chập chờn (phải xanh ở mọi thứ tự, mọi lần lặp), [\"--testTimeout=500\"] bắt test ngủ thật. Chương 9: đề kiểm cả file workflow YAML (test đọc .github/workflows/test.yml bằng gói yaml) và các module src/ci/* (cổng ci-ok, tóm tắt job, chia shard, 8 luật của Lab 9).",
   "de": [
     {
       "id": "tst-cl-1-1",
@@ -2162,6 +2162,317 @@
           "from": "(d) => d <= t &&",
           "to": "(d) => d < t &&",
           "label": "a no-show dated today does not count yet"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-9-1",
+      "bai": "tst-9-1-github-actions",
+      "tieuDe": "Tests for the CI workflow itself|||Test cho chính workflow CI",
+      "ham": ".github/workflows/test.yml (parsed with yaml)",
+      "fileDung": [
+        ".github/workflows/test.yml"
+      ],
+      "testThamKhao": [
+        "src/ci/workflow.test.js"
+      ],
+      "yeuCau": "Read .github/workflows/test.yml with the yaml package and test the promises it makes: npm ci with the npm cache, Node versions = package.json engines, a postgres:17 service with a health check reached at localhost:5432, Playwright installed --with-deps, reports uploaded even on red, a ci-ok gate that always runs and needs unit, integration and e2e. Renaming a step must not turn your tests red.|||Đọc .github/workflows/test.yml bằng gói yaml và test những lời hứa của nó: npm ci kèm cache npm, các bản Node = engines trong package.json, service postgres:17 có health check, tới qua localhost:5432, Playwright cài --with-deps, báo cáo được upload cả khi đỏ, cổng ci-ok luôn chạy và cần unit, integration, e2e. Đổi tên một bước không được làm test của bạn đỏ.",
+      "dotBien": [
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "      - run: npm ci\n      - run: npx playwright install --with-deps chromium",
+          "to": "      - run: npm install\n      - run: npx playwright install --with-deps chromium",
+          "label": "the e2e job installs with npm install"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "npx playwright install --with-deps chromium",
+          "to": "npx playwright install chromium",
+          "label": "Chromium without its system libraries"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "cache: npm                          # ~/.npm, keyed by package-lock.json",
+          "to": "cache: ''                           # ~/.npm, keyed by package-lock.json",
+          "label": "the unit job lost the npm cache"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "--health-cmd \"pg_isready -U postgres -d labflow_test\"",
+          "to": "--name labflow-db",
+          "label": "PostgreSQL without a health check"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "image: postgres:17",
+          "to": "image: postgres:16",
+          "label": "integration tests on PostgreSQL 16"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "if: always()                              # must run",
+          "to": "if: success()                             # must run",
+          "label": "the gate is skipped when a job fails"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "needs: [unit, integration, e2e]",
+          "to": "needs: [unit, e2e]",
+          "label": "the gate forgot the integration job"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "node: [22, 24]",
+          "to": "node: [20, 22, 24]",
+          "label": "the matrix tests Node 20, below engines"
+        }
+      ],
+      "voHai": [
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "      - name: web tests\n",
+          "to": "      - name: web tests (jsdom)\n",
+          "label": "a step renamed"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-9-2",
+      "bai": "tst-9-2-bao-cao",
+      "tieuDe": "A job summary that tells the truth|||Bản tóm tắt job nói đúng sự thật",
+      "ham": "testHeadline, failedTests, coverageTable, mergeReports",
+      "fileDung": [
+        "src/ci/summary.js"
+      ],
+      "testThamKhao": [
+        "src/ci/summary.test.js"
+      ],
+      "yeuCau": "Test the Markdown that scripts/ci-summary.mjs writes to $GITHUB_STEP_SUMMARY: the headline counts failed, passed and skipped tests correctly; each failed test is listed once with its file relative to the project and the first line of its error; coverage has two decimals and passes exactly at the minimum; several reports (unit + web) add up.|||Test phần Markdown mà scripts/ci-summary.mjs ghi vào $GITHUB_STEP_SUMMARY: dòng tiêu đề đếm đúng số test đỏ, xanh và bỏ qua; mỗi test đỏ được liệt kê một lần với file tính từ gốc dự án và dòng đầu của lỗi; độ phủ có hai chữ số thập phân và đạt khi đúng bằng ngưỡng; nhiều báo cáo (unit + web) được cộng dồn.",
+      "dotBien": [
+        {
+          "file": "src/ci/summary.js",
+          "from": "pct.toFixed(2)",
+          "to": "pct.toFixed(0)",
+          "label": "coverage rounded to whole percents: 79.99% shows as 80%"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "pct >= min",
+          "to": "pct > min",
+          "label": "exactly at the minimum is marked as below"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "if (failed > 0)",
+          "to": "if (failed > 1)",
+          "label": "one failed test still says ✅ passed"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "(skipped ? ' (' + skipped + ' skipped)' : '')",
+          "to": "''",
+          "label": "skipped tests disappear into the total"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "if (t.status !== 'failed') continue;",
+          "to": "if (t.status === 'passed') continue;",
+          "label": "skipped tests are listed as failures"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "(t.failureMessages[0] ?? '').split('\\n')[0]",
+          "to": "(t.failureMessages[0] ?? '')",
+          "label": "the whole stack trace lands in the summary"
+        },
+        {
+          "file": "src/ci/summary.js",
+          "from": "numFailedTests: sum('numFailedTests')",
+          "to": "numFailedTests: reports[0].numFailedTests",
+          "label": "failures of the web report are not counted (the measured 174 of 174)"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/ci/summary.js",
+          "from": "const METRICS = ['lines', 'branches', 'functions', 'statements'];",
+          "to": "const METRICS = Object.freeze(['lines', 'branches', 'functions', 'statements']);",
+          "label": "a frozen list of metrics"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-9-3",
+      "bai": "tst-9-3-bat-buoc",
+      "tieuDe": "The gate that decides a merge|||Cổng quyết định có được merge",
+      "ham": "decideMerge",
+      "fileDung": [
+        "src/ci/gate.js"
+      ],
+      "testThamKhao": [
+        "src/ci/gate.test.js"
+      ],
+      "yeuCau": "Test decideMerge(needs, required): only success lets a pull request merge — failure, cancelled and skipped all block; a required job missing from needs blocks; every problem is listed with its job and result; a job that is not required (quarantine) never blocks.|||Test decideMerge(needs, required): chỉ success mới cho merge — failure, cancelled và skipped đều chặn; một job bắt buộc vắng mặt trong needs thì chặn; mọi vấn đề đều được liệt kê kèm tên job và kết quả; một job không bắt buộc (quarantine) không bao giờ chặn.",
+      "dotBien": [
+        {
+          "file": "src/ci/gate.js",
+          "from": "else if (result !== 'success')",
+          "to": "else if (result === 'failure')",
+          "label": "skipped and cancelled jobs count as passed"
+        },
+        {
+          "file": "src/ci/gate.js",
+          "from": "if (result === undefined) problems.push(job + ': not in needs');",
+          "to": "if (result === undefined) continue;",
+          "label": "a job deleted from the workflow is not noticed"
+        },
+        {
+          "file": "src/ci/gate.js",
+          "from": "ok: problems.length === 0",
+          "to": "ok: problems.length < 2",
+          "label": "one problem is tolerated"
+        },
+        {
+          "file": "src/ci/gate.js",
+          "from": "for (const job of required)",
+          "to": "for (const job of Object.keys(needs))",
+          "label": "checks what ran instead of what is required"
+        },
+        {
+          "file": "src/ci/gate.js",
+          "from": "problems.push(job + ': ' + result)",
+          "to": "problems.push(job)",
+          "label": "the reason (failure/skipped) is lost"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/ci/gate.js",
+          "from": "const result = needs[job]?.result;",
+          "to": "const { result } = needs[job] ?? {};",
+          "label": "destructuring instead of ?."
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-9-4",
+      "bai": "tst-9-4-ma-tran",
+      "tieuDe": "Shards that take the same time|||Các shard chạy lâu như nhau",
+      "ham": "splitIntoShards, pickShard",
+      "fileDung": [
+        "src/ci/shard.js"
+      ],
+      "testThamKhao": [
+        "src/ci/shard.test.js"
+      ],
+      "yeuCau": "Test the shard splitter: longest file first into the lightest shard (the exact split for known timings), every file exactly once for any number of shards, the same split whatever the input order, a file without timing costs UNKNOWN_MS, \"1/3\" is the first shard and \"0/3\", \"4/3\" or \"1-3\" are refused.|||Test bộ chia shard: file lâu nhất trước, vào shard nhẹ nhất (đúng cách chia với thời gian đã biết), mỗi file đúng một lần với mọi số shard, cùng một cách chia dù thứ tự đầu vào khác, file chưa có thời gian tính UNKNOWN_MS, \"1/3\" là shard đầu và \"0/3\", \"4/3\", \"1-3\" bị từ chối.",
+      "dotBien": [
+        {
+          "file": "src/ci/shard.js",
+          "from": "cost(b) - cost(a)",
+          "to": "cost(a) - cost(b)",
+          "label": "shortest file first: the long files pile up at the end"
+        },
+        {
+          "file": "src/ci/shard.js",
+          "from": " || a.localeCompare(b)",
+          "to": "",
+          "label": "ties depend on the input order: two machines split differently"
+        },
+        {
+          "file": "src/ci/shard.js",
+          "from": "(s.ms < min.ms ? s : min)",
+          "to": "(s.ms > min.ms ? s : min)",
+          "label": "each file goes to the HEAVIEST shard"
+        },
+        {
+          "file": "src/ci/shard.js",
+          "from": "durations[f] ?? UNKNOWN_MS",
+          "to": "durations[f] ?? 0",
+          "label": "a new test file costs nothing"
+        },
+        {
+          "file": "src/ci/shard.js",
+          "from": "if (index < 1 || index > total)",
+          "to": "if (index > total)",
+          "label": "shard 0/3 is accepted"
+        },
+        {
+          "file": "src/ci/shard.js",
+          "from": "[index - 1].files",
+          "to": "[index % total].files",
+          "label": "shards are numbered from 0, like an array"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/ci/shard.js",
+          "from": "Array.from({ length: total }, () => ({ files: [], ms: 0 }))",
+          "to": "[...Array(total)].map(() => ({ files: [], ms: 0 }))",
+          "label": "another way to build the empty shards"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-9",
+      "bai": "tst-9-5-lab-ci",
+      "tieuDe": "Lab 9 — rules that keep a workflow safe|||Lab 9 — luật giữ một workflow an toàn",
+      "ham": "checkWorkflow (8 rules)",
+      "fileDung": [
+        "src/ci/policy.js"
+      ],
+      "testThamKhao": [
+        "src/ci/policy.test.js"
+      ],
+      "yeuCau": "Test checkWorkflow: a workflow that follows every rule passes all 8, and breaking ONE thing fails exactly the matching rule with its message — npm install, a setup-node without cache, no PostgreSQL service / no health check / a URL to an unpublished port, Playwright without --with-deps, no gate named ci-ok, a gate without always() or that never reads the results, a gate that forgot a job or needs the quarantine job, quarantined tests in a blocking job, continue-on-error on a matrix, a Node version below engines.|||Test checkWorkflow: workflow theo đủ luật thì qua cả 8, và làm hỏng MỘT chỗ thì đúng luật tương ứng đỏ kèm lời báo — npm install, setup-node thiếu cache, không có service PostgreSQL / không health check / URL tới cổng không mở, Playwright thiếu --with-deps, không có cổng tên ci-ok, cổng thiếu always() hoặc không đọc kết quả, cổng quên một job hoặc cần job quarantine, test quarantine trong job chặn, continue-on-error trên matrix, bản Node dưới engines.",
+      "dotBien": [
+        {
+          "file": "src/ci/policy.js",
+          "from": "/\\bnpm (install|i)\\b/",
+          "to": "/\\bnpm i\\b/",
+          "label": "R1: npm install is no longer caught"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "s.with?.cache !== 'npm'",
+          "to": "s.with?.cache === false",
+          "label": "R2: a missing cache passes"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "if (!String(pg.options ?? '').includes('--health-cmd'))",
+          "to": "if (false)",
+          "label": "R3: a service without a health check passes"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "'@localhost:' + p + '/'",
+          "to": "'@localhost:'",
+          "label": "R3: any port is accepted"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "runs(j).some((r) => r.includes('playwright install') && !r.includes('--with-deps'))",
+          "to": "runs(j).every((r) => r.includes('playwright install') && !r.includes('--with-deps'))",
+          "label": "R4: only a job with nothing but the install is checked"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "text.includes('ci-gate.mjs') || /needs\\.[\\w*-]+\\.result|contains\\(needs/.test(text) ? '' :",
+          "to": "true ? '' :",
+          "label": "R6: a gate that never reads the results passes"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "r.includes('test:quarantine'))).map(([id]) => id);",
+          "to": "r.includes('test:flaky'))).map(([id]) => id);",
+          "label": "R7: quarantined tests in a blocking job pass"
+        },
+        {
+          "file": "src/ci/policy.js",
+          "from": "Number.parseInt(v, 10) < minNode",
+          "to": "Number.parseInt(v, 10) < minNode - 2",
+          "label": "R8: Node 20 passes"
         }
       ]
     }

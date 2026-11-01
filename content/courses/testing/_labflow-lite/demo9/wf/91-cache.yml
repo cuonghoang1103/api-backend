@@ -1,0 +1,21 @@
+# Lesson 9.1 — the same job with the npm download cache
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    name: unit + web
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm          # caches ~/.npm, keyed by package-lock.json
+      - run: npm ci
+      - run: npm run test:unit
+      - run: npm run test:web

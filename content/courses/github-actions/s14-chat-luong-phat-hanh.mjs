@@ -281,6 +281,11 @@ ${slide('ga-14', 8, 'Three tiers: the PR tier blocks, the queue tier blocks, the
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — About rulesets; Available rules for rulesets; Troubleshooting rules</span><span class="lc-sub">docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets — layering, enforcement statuses, strict vs loose checks, expected source, check-name format.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Managing a merge queue</span><span class="lc-sub">docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue — availability, <code>merge_group</code>, build concurrency and merge limits.</span></span></div>
 <div class="link-card"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Sandbox — branch ch14-chat-luong and pull requests #5–#7</span><span class="lc-sub">github.com/cuonghoang1103/ga-san-tap/tree/ch14-chat-luong — <code>ch14-cong.yml</code>, <code>ch14-paths.yml</code> and the runs quoted in this lesson.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.3: one required check for a test suite</span><span class="lc-sub">Same: a summary job needs always() because skipped counts as passing. Deeper there: the gate as tested code (decideMerge), a pipe that swallows the exit code (| tee without pipefail), and a flaky test quarantined so it never blocks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 14 · Bài 14.1</span>
@@ -498,6 +503,11 @@ ${slide('ga-14', 8, 'Ba tầng: tầng PR chặn, tầng hàng đợi chặn, t�
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Docs — Managing a merge queue</span><span class="lc-sub">docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue — phạm vi, <code>merge_group</code>, build concurrency và giới hạn merge.</span></span></div>
 <div class="link-card"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Sân tập — nhánh ch14-chat-luong và PR #5–#7</span><span class="lc-sub">github.com/cuonghoang1103/ga-san-tap/tree/ch14-chat-luong — <code>ch14-cong.yml</code>, <code>ch14-paths.yml</code> và các run được dẫn trong bài.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git — pull request, review và bảo vệ nhánh</span><span class="lc-sub">/courses/git/learn${REF} — nếu bạn cần ôn lại luồng PR trước khi đặt luật lên nó.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.3: một check bắt buộc cho bộ test</span><span class="lc-sub">Giống: job tổng hợp cần always() vì bị bỏ qua được tính là đạt. Sâu thêm ở đó: cổng là code có test (decideMerge), đường ống nuốt mã thoát (| tee không có pipefail), và một test chập chờn bị cách ly để không bao giờ chặn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

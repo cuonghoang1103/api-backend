@@ -3,6 +3,7 @@
  * Output = chạy thật (Vitest 5.0.5, @vitest/coverage-v8 / coverage-istanbul 5.0.5): 96.31% ⇒ 78.91% khi bật include;
  * bộ toBeDefined 100/100/100/100 mà hai bug cài sẵn vẫn xanh; booking.test.js thật 87.5% dòng bắt được bug; JSX v8 86 vs istanbul 84 câu lệnh;
  * ngưỡng đỏ lần đầu (83.9% dòng) ⇒ chuyển test demo vào src ⇒ 95.78%; th81: 93 test, server.js + login-guard.js 100% dòng.
+ * v2 (01/11, TST/v2): slide 8 thêm cột src/ đo thật — nhánh v8 109/117, istanbul 107/117 (tham số mặc định now = new Date()); trước ghi “matched”.
  */
 import { lamDeck, js, vt, two, box, steps, c, zm, flow } from './_tst-chung.mjs';
 
@@ -94,12 +95,13 @@ export const slides = lamDeck({ chuong: 'Chapter 8 — Coverage, quality and fla
   { t: 'Two planted bugs survive 100%', body: vt(LOI, { title: 'terminal — thu-loi.mjs on the 100% suite', fs: 15 }) +
     vt(THAT, { title: 'terminal — the real booking.test.js of Chapter 1', fs: 15 }) +
     box('Conditions are not measured', `${c("role === 'ADMIN'")} was evaluated (branch covered) but never true in any check. That is condition coverage / MC/DC — Vitest does not measure it.`, 'do2') },
-  { t: 'v8 or istanbul?', body: zm(`<table class="t"><tr><th>web/ JSX, same 16 tests</th><th>v8</th><th>istanbul</th></tr>
-    <tr><td>Statements</td><td>81.39% (70/86)</td><td>80.95% (68/84)</td></tr>
-    <tr><td>Branches</td><td>78.78% (52/66)</td><td>78.78% (52/66)</td></tr>
-    <tr><td>Functions</td><td>66.66% (12/18)</td><td>66.66% (12/18)</td></tr>
-    <tr><td>Lines</td><td>83.58% (56/67)</td><td>83.07% (54/65)</td></tr></table>`, 1.05) +
-    two(box('Pick one, write it down', 'JSX is compiled before it runs, so the two map it back slightly differently. On plain src/ they matched. Never compare numbers across providers.', 'lam'),
+  { t: 'v8 or istanbul?', body: zm(`<table class="t"><tr><th></th><th colspan="2">web/ JSX, same 16 tests</th><th colspan="2">src/ plain JS, same 116 tests</th></tr>
+    <tr><th></th><th>v8</th><th>istanbul</th><th>v8</th><th>istanbul</th></tr>
+    <tr><td>Statements</td><td>70/86</td><td>68/84</td><td>226/233</td><td>226/233</td></tr>
+    <tr><td>Branches</td><td>52/66</td><td>52/66</td><td>109/117</td><td>107/117</td></tr>
+    <tr><td>Functions</td><td>12/18</td><td>12/18</td><td>62/64</td><td>62/64</td></tr>
+    <tr><td>Lines</td><td>56/67</td><td>54/65</td><td>186/189</td><td>186/189</td></tr></table>`, 1.0) +
+    two(box('Pick one, write it down', `JSX: compiled first, mapped back differently. src/: istanbul counts an unused default ${c('now = new Date()')} (cancel.js, days.js) as a missed branch; v8 does not. Never compare across providers.`, 'lam'),
       box('Spring Boot: JaCoCo', `Same idea as v8 (bytecode agent), same counters (instruction, line, branch, method), and a ${c('check')} goal with minimum ratios.`, 'xanh')) },
   { t: 'Thresholds as a ratchet', body: js(CFG) + vt(DO, { title: 'terminal — npm run test:cov, before / after promoting the demo tests', fs: 15 }) +
     two(box('Wrong fixes', 'Lower the thresholds, or exclude real code. Demo-folder tests protect nothing.', 'do2'),

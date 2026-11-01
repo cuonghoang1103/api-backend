@@ -1,0 +1,7 @@
+{
+  "pull_request": {
+    "number": 7,
+    "head": { "ref": "feature/cancel-booking" },
+    "base": { "ref": "main" }
+  }
+}

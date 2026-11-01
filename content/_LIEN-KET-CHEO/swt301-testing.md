@@ -53,3 +53,17 @@ FER202 (Academy, slug `front-end-web-development-with-react`) ↔ Testing — ha
 
 Một chiều sang Courses khác (Chương 6): `tst-6-1` → `react` `rx-9-1-testing-library`; `tst-6-2` → `rx-9-2-async`; `tst-6-3` → `rx-6-1-fetch`;
 `tst-6-4` → `nextjs` `nextjs-19-2-unit-test-vitest`, `nextjs-11-3-route-handlers`.
+
+Chương 9 Courses (01/11) — Test trong CI:
+
+| Phía kia | Courses testing | Chiều | Giống | Courses sâu thêm |
+|---|---|---|---|---|
+| SWT301 `swt301-ci-automation` (8.6) | `tst-9-1-github-actions`, `tst-9-3-bat-buoc` | hai chiều (SWT301 thêm MỘT cặp `bi()` có 2 thẻ) | CI build + test mọi thay đổi, đỏ/xanh theo mã thoát, không merge khi đỏ | workflow thật chạy bằng act: npm ci, cache, service PostgreSQL, Playwright --with-deps; một cổng ci-ok, skipped = đạt, pipefail, quarantine |
+| Courses `github-actions` `ga-5-1-cache-mua-gi` | `tst-9-1-github-actions` | hai chiều | cache: npm lưu ~/.npm, npm ci vẫn chạy | cả workflow test đo bằng act trên laptop (49,6 s → 15,0 s) |
+| Courses `github-actions` `ga-5-4-artifact` | `tst-9-2-bao-cao` | hai chiều | artifact sống lâu hơn runner | bằng chứng test nào cần upload, if: !cancelled(), act nhận tên trùng mà v4 từ chối |
+| Courses `github-actions` `ga-14-1-cong-chat-luong` | `tst-9-3-bat-buoc` | hai chiều | job tổng hợp cần always() vì skipped = đạt (bên đó đo trên PR thật của GitHub) | cổng là code có test, \| tee nuốt mã thoát, quarantine |
+| Courses `github-actions` `ga-2-5-ma-tran`, `ga-7-2-concurrency` | `tst-9-4-ma-tran` | hai chiều | fail-fast, concurrency | Node 20 đỏ qua MSW, shard theo thời gian, 147 s vs 36 s |
+| Courses `git` `git-6-4-bao-ve-nhanh` | `tst-9-3-bat-buoc` | hai chiều | check bắt buộc chặn merge | phía CI: cổng ci-ok thật sự đỏ |
+| Courses `nodejs` `nodejs-14-5-do-phu-flaky-ci` | `tst-9-1-github-actions` | hai chiều (theo yêu cầu điều phối Ch9 — trước đây Node chỉ một chiều) | CI chạy bộ test mỗi lần push | workflow của dự án khoá học, tổng duyệt bằng act |
+
+Không cặp Chương 9: Lab 9 và quiz (SWT301 không có bài sửa pipeline); 9.2 không cặp SWT301 (SWT301 không dạy reporter/artifact).

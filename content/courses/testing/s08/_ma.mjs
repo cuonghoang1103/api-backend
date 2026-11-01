@@ -1524,6 +1524,26 @@ Branches     : 79.81% ( 87/109 )
 Functions    : 74.19% ( 46/62 )
 Lines        : 78.91% ( 146/185 )
 ================================================================================`,
+  '81-istanbul-src': `$ npx vitest run src/ --coverage --coverage.provider=istanbul --coverage.reporter=text-summary --reporter=dot
+
+ RUN  v5.0.5 …/labflow-lite
+      Coverage enabled with istanbul
+
+····················································································································
+
+ Test Files  15 passed (15)
+      Tests  116 passed (116)
+   Start at  07:55:47
+   Duration  671ms (transform 68%, tests 16%, import 13%, worker 3%)
+
+ % Coverage report from istanbul
+
+=============================== Coverage summary ===============================
+Statements   : 96.99% ( 226/233 )
+Branches     : 91.45% ( 107/117 )
+Functions    : 96.87% ( 62/64 )
+Lines        : 98.41% ( 186/189 )
+================================================================================`,
   '81-istanbul-web': `$ npx vitest run --config vitest.web.config.js web/ --reporter=dot --coverage --coverage.provider=istanbul --coverage.include='web/*.{js,jsx}' --coverage.exclude='**/*.test.*'
 
  RUN  v5.0.5 …/labflow-lite
@@ -1718,6 +1738,26 @@ Statements   : 87.09% ( 27/31 )
 Branches     : 96.29% ( 26/27 )
 Functions    : 80% ( 4/5 )
 Lines        : 87.5% ( 21/24 )
+================================================================================`,
+  '81-v8-src': `$ npx vitest run src/ --coverage --coverage.reporter=text-summary --reporter=dot
+
+ RUN  v5.0.5 …/labflow-lite
+      Coverage enabled with v8
+
+····················································································································
+
+ Test Files  15 passed (15)
+      Tests  116 passed (116)
+   Start at  07:55:45
+   Duration  684ms (import 32%, transform 30%, tests 25%, worker 13%)
+
+ % Coverage report from v8
+
+=============================== Coverage summary ===============================
+Statements   : 96.99% ( 226/233 )
+Branches     : 93.16% ( 109/117 )
+Functions    : 96.87% ( 62/64 )
+Lines        : 98.41% ( 186/189 )
 ================================================================================`,
   '81-v8-web': `$ npx vitest run --config vitest.web.config.js web/ --reporter=dot --coverage --coverage.provider=v8 --coverage.include='web/*.{js,jsx}' --coverage.exclude='**/*.test.*'
 

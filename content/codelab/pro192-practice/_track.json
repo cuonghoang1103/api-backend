@@ -248,6 +248,30 @@
       "name": "⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders",
       "level": "ADVANCED",
       "description": "Luyện: Bug hunt: equals ignores case, hashCode does not · An immutable invoice, attacked four ways · VAT on a VND invoice: round each line or round the total? · A borrow slip: static factory plus a builder that reports every problem at once"
+    },
+    {
+      "slug": "pro192-cs5-on",
+      "name": "⭐ CS.5 The JVM seen from your code: leaks, the stack, caches, initialisation",
+      "level": "ADVANCED",
+      "description": "Luyện: A leak: tickets that can never leave a HashSet · StackOverflowError: walk a chain of a million links without recursion · Stock count reconciliation: Integer == works up to 127 · ExceptionInInitializerError: the order of static initialisation"
+    },
+    {
+      "slug": "pro192-cs6-on",
+      "name": "⭐ CS.6 Testable code: composition, injection, exceptions, boundaries",
+      "level": "ADVANCED",
+      "description": "Luyện: A counting collection: inheritance breaks, a wrapper works for any Collection · An overdue report that read the clock by itself: inject Clock, repository and sink · Importing devices from CSV: one exception type with a code, a line number and the cause · No JUnit in the exam room: a late fee checked on its boundaries"
+    },
+    {
+      "slug": "pro192-cs7-on",
+      "name": "⭐ CS.7 SOLID & design patterns: Strategy, Liskov, Observer, Template Method",
+      "level": "ADVANCED",
+      "description": "Luyện: A fee-policy registry: add VIP and HOLIDAY without touching old code · Liskov in the JDK: java.util.Stack extends Vector — write a pile that cannot be misused · A listener that unsubscribes itself while being notified · Template Method: one import job, two file formats"
+    },
+    {
+      "slug": "pro192-cs8-on",
+      "name": "⭐ CS.8 Concurrency with deterministic results",
+      "level": "ADVANCED",
+      "description": "Luyện: Two desks collect fines into one account: the lost update · A transfer that deadlocks, and a lock order that does not · Scan a million loans on four threads with invokeAll · Producer and consumer through a BlockingQueue"
     }
   ]
 }

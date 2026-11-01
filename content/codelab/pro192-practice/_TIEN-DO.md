@@ -18,7 +18,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 8 | `pro192-8-1-collections` 4 · `pro192-on-ch8` 4 · `pro192-lab-8-collections` 1 | 9 |
 | 9 | `pro192-9-1-file-io` 4 · `pro192-on-ch9` 4 · `pro192-lab-9-luu-tep` 1 | 9 |
 | 🎓 LAB211 | `pro192-lab211-cach-qua-review` 4 (khung Note từ TODO + 3 đề "sửa lỗi thầy bắt": lỗi thường gặp, service giữ repo, Java 8) · `-p0011-change-base-number` 1 · `-p0021-student-management` 1 · `-p0056-worker-management` 1 · `-p0070-ebank-login` 1 · `-p0071-task-management` 1 · `-p0073-handy-expense` 1 | 10 |
-| **tổng** | 36 module | **95** |
+| ⭐ CS (Java 17) | `pro192-cs1-on` 5 (max generic, PECS, sắp 4 khoá, Repo<T,ID>, ẩn danh→lambda) · `cs2` 5 (groupingBy, top 3 từ, toMap gộp, câu 3 PE `java: 8`, Optional) · `cs3` 5 (record kiểm dữ liệu, enum + switch expression, sealed + instanceof pattern, text block, về JDK 8 `release: 8`) · `cs4` 4 (equals/hashCode, bất biến, VAT BigDecimal, builder) · `cs5` 4 (rò HashSet, đệ quy sâu, Integer cache, thứ tự static) · `cs6` 4 (bọc thay kế thừa, tiêm Clock, ngoại lệ có mã, bảng biên `java: 8`) · `cs7` 4 (registry Strategy, LSP Stack, Observer tự huỷ, Template Method) · `cs8` 4 (mất cập nhật, khoá chết, invokeAll, BlockingQueue) | 35 |
+| **tổng** | 44 module | **130** |
 
 Đăng ký track: `src/services/codeLab.practice.ts` (`'object-oriented-programming': 'pro192-practice'`; PRACTICE_CATALOG có sẵn dòng PRO192).
 
@@ -48,7 +49,11 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 
 1. (LAB211 xong — xem trên.) Có thể thêm đề "sửa lỗi review" cho từng bài từ `bay/truoc-khi-sua` của khoá, nhưng các bản đó
    viết lại gần hết (package `constant`, câu chữ khác) nên không hợp làm đề sửa N chỗ.
-2. **⭐ Chuyên sâu CS.1–CS.8** — module `pro192-cs1-on` … `pro192-cs8-on` (3–6 đề/bài, Java 17+: đặt `java: 17` trong spec ⇒
+2. ~~⭐ Chuyên sâu~~ — XONG (35 đề, bảng trên). Ghi chú: `"""` và nội dung chuỗi bị cham.mjs xoá trước khi soát luật ⇒ luật
+   không tìm được chữ trong chuỗi (dùng tên hằng, vd `put(STOP)`, hay dấu vết `""` + xuống dòng của text block). Đề đa luồng in
+   KẾT QUẢ CUỐI, không in thứ tự xen kẽ; khoá chết: luồng daemon + join(5000) + ThreadMXBean ⇒ in DEADLOCK thay vì treo; 5 lần chạy
+   lại lời giải CS.8 đều ALL PASSED. Mô tả gốc (giữ để tra):
+   **⭐ Chuyên sâu CS.1–CS.8** — module `pro192-cs1-on` … `pro192-cs8-on` (3–6 đề/bài, Java 17+: đặt `java: 17` trong spec ⇒
    `javac --release 17` và cham.mjs đòi JDK 17). Ý đề + lời giải chạy thật có sẵn ở `gen/src/extra/csN-on.txt` + `gen/java/csN/`.
    Đề đa luồng (CS.8): output phải tất định (join, CountDownLatch, kết quả cuối) — đừng in thứ tự xen kẽ của luồng.
 3. **🏁 Dự án cuối khoá** `pro192-du-an-ct-library` — `gen/lab/da/` có starter (8 "TODO DA") + solution + data CSV 200/300/2000 dòng.

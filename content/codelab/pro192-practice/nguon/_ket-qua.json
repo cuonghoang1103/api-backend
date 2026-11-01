@@ -459,6 +459,122 @@
    "exact VAT: 55555556.05\nrule A (round each line): 55555556\nrule B (round the total): 55555556\nA - B: 0\ndouble: 5.5555556050000004E7\n"
   ]
  },
+ "pro192-cs5-de-quy-sau": {
+  "bam": "a236bd4798f11bf2",
+  "ra": [
+   "chain of 0: length 0, pages 0\nchain of 1: length 1, pages 2\nchain of 10: length 10, pages 65\n",
+   "chain of 1000000: length 1000000, pages 150490100\n",
+   "chain of 2000000: length 2000000, pages 300990200\nchain of 299: length 299, pages 45149\nchain of 300: length 300, pages 45150\n"
+  ]
+ },
+ "pro192-cs5-integer-cache": {
+  "bam": "9f0ef7ca2bc41a75",
+  "ra": [
+   "Keyboard: system 7, counted 6\nUSB-C cable: system 200, counted 198\nMonitor: system 3, counted 0\n3 difference(s)\n",
+   "0 difference(s)\n"
+  ]
+ },
+ "pro192-cs5-ro-ri-hashset": {
+  "bam": "2c841cecc2897e30",
+  "ra": [
+   "day 1: still in the set 0, failed removals 0\nday 2: still in the set 0, failed removals 0\nday 3: still in the set 0, failed removals 0\nno leak\n",
+   "day 1: still in the set 0, failed removals 0\nday 2: still in the set 0, failed removals 0\nday 3: still in the set 0, failed removals 0\nday 4: still in the set 0, failed removals 0\nday 5: still in the set 0, failed removals 0\nno leak\n",
+   "day 1: still in the set 0, failed removals 0\nno leak\n"
+  ]
+ },
+ "pro192-cs5-thu-tu-khoi-tao": {
+  "bam": "df711e90dab4e7b1",
+  "ra": [
+   "VAT 8%\npen: 5400\ncalculator: 378000\nruler: not sold here\nnotebook: 19440\n",
+   "VAT 8%\n"
+  ]
+ },
+ "pro192-cs6-bang-gia-tri-bien": {
+  "bam": "927d18cca1189f42",
+  "ra": [
+   "guest 0 day(s): 0\nguest 1 day(s): 5000\nguest 10 day(s): 50000\nguest 11 day(s): 50000\nmember 16 day(s): 48000\nmember 17 day(s): 50000\nguest -1 day(s): rejected (days must be >= 0)\n",
+   "member 0 day(s): 0\nmember 1 day(s): 3000\nguest 9 day(s): 45000\nmember 100 day(s): 50000\nmember -5 day(s): rejected (days must be >= 0)\nguest 2147483 day(s): 50000\n"
+  ]
+ },
+ "pro192-cs6-boc-thay-ke-thua": {
+  "bam": "28d7453d09315a31",
+  "ra": [
+   "after addAll [scope, pi, meter]: list counted 3, set counted 3\nlist: counted 5, size 5, [scope, pi, meter, pi, laptop]\nset:  counted 5, size 4, contains scope true\n",
+   "after addAll [a, b, a, c, a]: list counted 5, set counted 5\nlist: counted 7, size 7, [a, b, a, c, a, b, b]\nset:  counted 7, size 3, contains a true\n"
+  ]
+ },
+ "pro192-cs6-ngoai-le-co-ma": {
+  "bam": "9ca02ef15a1d74b2",
+  "ra": [
+   "line 3: IMP_02 bad number \"1O\" (cause: NumberFormatException)\nline 4: IMP_03 duplicate code d01\nline 5: IMP_01 missing field (3 fields)\nline 6: IMP_04 non-positive value\nimported 2: [Device[code=D01, name=Oscilloscope, quantity=3, price=9500000], Device[code=D02, name=Raspberry Pi, quantity=10, price=1800000]]\n",
+   "line 1: IMP_01 missing field\nline 2: IMP_04 non-positive value\nline 3: IMP_02 bad number \"12.5\" (cause: NumberFormatException)\nline 4: IMP_01 missing field (1 fields)\nline 6: IMP_03 duplicate code x4\nimported 1: [Device[code=X4, name=Kit, quantity=0, price=1]]\n"
+  ]
+ },
+ "pro192-cs6-tiem-phu-thuoc": {
+  "bam": "37f144a34bbf88be",
+  "ra": [
+   "  | overdue on 2026-10-15\n  | M007 Clean Code: 5 day(s) late, fine 10000\n  | total fine 10000\n  returned 1\n  | overdue on 2026-10-21\n  | M007 Clean Code: 11 day(s) late, fine 22000\n  | M012 Refactoring: 6 day(s) late, fine 12000\n  | M003 Head First Java: 3 day(s) late, fine 6000\n  | total fine 40000\n  returned 3\n",
+   "  | overdue on 2024-03-01\n  | A1 Book A: 2 day(s) late, fine 4000\n  | total fine 4000\n  returned 1\n  | overdue on 2027-01-02\n  | A1 Book A: 1039 day(s) late, fine 2078000\n  | A2 Book B: 2 day(s) late, fine 4000\n  | total fine 2082000\n  returned 2\n  | overdue on 2020-01-01\n  | total fine 0\n  returned 0\n"
+  ]
+ },
+ "pro192-cs7-lsp-stack": {
+  "bam": "545f7cc4cf8d3b26",
+  "ra": [
+   "pushed B001, size 1\npushed B002, size 2\npushed B003, size 3\npile [B003, B002, B001]\ntop B003\npopped B003\npile [B002, B001]\nis a List: false, is a Collection: false\n",
+   "IllegalStateException: pile is empty\nIllegalStateException: pile is empty\npile []\npushed X, size 1\npopped X\nIllegalStateException: pile is empty\nis a List: false, is a Collection: false\n"
+  ]
+ },
+ "pro192-cs7-observer-tu-huy": {
+  "bam": "62aa45240e405285",
+  "ra": [
+   "return B001:\n  log: B001\n  notify M007: B001 is back\n  notify M020: B001 is back\nreturn B001:\n  log: B001\nreturn B002:\n  log: B002\n  notify M012: B002 is back\nlisteners left: 1\n",
+   "return X:\n  log: X\nreturn Z:\n  log: Z\n  notify A: Z is back\nreturn Z:\n  log: Z\nreturn Z:\n  log: Z\n  notify B: Z is back\n  notify C: Z is back\nlisteners left: 1\n"
+  ]
+ },
+ "pro192-cs7-registry-chinh-sach": {
+  "bam": "f66f69e7505eb4f3",
+  "ra": [
+   "refused: policy already registered: VIP\ntype         1d     4d     9d\nGUEST      2000   8000  18000\nMEMBER     1000   4000   9000\nSTAFF         0      0      0\nVIP           0   1000   6000\nHOLIDAY       0      0      0\nALUMNI     2000   8000  18000\nunknown types charged as GUEST: [ALUMNI]\n",
+   "refused: policy already registered: VIP\ntype         1d     4d     9d\nvip        2000   8000  18000\nRESEARCHER   2000   8000  18000\nvip        2000   8000  18000\nALUMNI     2000   8000  18000\nunknown types charged as GUEST: [ALUMNI, RESEARCHER, vip]\n"
+  ]
+ },
+ "pro192-cs7-template-method": {
+  "bam": "d349c91dd520384b",
+  "ra": [
+   "CSV: 2 imported, 1 rejected [line 3]\n",
+   "PIPE: 2 imported, 1 rejected [line 3]\n",
+   "CSV: 1 imported, 2 rejected [line 3, line 4]\n"
+  ]
+ },
+ "pro192-cs8-chia-viec": {
+  "bam": "1a20a3c7a55343a3",
+  "ra": [
+   "sequential: Result[overdue=499999, fees=7999996000]\nparallel (4 threads): Result[overdue=499999, fees=7999996000]\nsame: true\n",
+   "sequential: Result[overdue=500001, fees=8000022000]\nparallel (7 threads): Result[overdue=500001, fees=8000022000]\nsame: true\n",
+   "sequential: Result[overdue=2, fees=42000]\nparallel (8 threads): Result[overdue=2, fees=42000]\nsame: true\n"
+  ]
+ },
+ "pro192-cs8-khoa-chet": {
+  "bam": "b4aa2a411d4a96cf",
+  "ra": [
+   "50000 transfers each way done\nlibrary 1000000, club 1000000, total 2000000\n",
+   "200000 transfers each way done\nlibrary 1000000, club 1000000, total 2000000\n"
+  ]
+ },
+ "pro192-cs8-mat-cap-nhat": {
+  "bam": "381ba83d568dcc01",
+  "ra": [
+   "expected: 200000000\nsynchronized: 200000000\nAtomicLong:   200000000\n",
+   "expected: 160000000\nsynchronized: 160000000\nAtomicLong:   160000000\n"
+  ]
+ },
+ "pro192-cs8-producer-consumer": {
+  "bam": "eead7e4d2c10a854",
+  "ra": [
+   "shelved: [B01, B02, B03, B04, B05, B06]\ndesk had to wait: true\nsame order: true\n",
+   "shelved: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]\ndesk had to wait: true\nsame order: true\n"
+  ]
+ },
  "pro192-l211-p0011": {
   "bam": "e872eef450ae4539",
   "ra": [

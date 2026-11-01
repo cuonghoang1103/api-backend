@@ -333,6 +333,25 @@ const corsOptions: cors.CorsOptions = {
 };
 app.use(cors(corsOptions));
 
+// ─── 6. HTTP Logging ──────────────────────────────────────
+// Đứng TRƯỚC body parsers (01/11/2026): trước đây gắn sau express.json ⇒ request JSON hỏng / 413
+// bị bộ đọc ném lỗi trước khi morgan kịp gắn ⇒ không có dòng access log nào.
+// SECURITY: some endpoints accept a JWT via `?token=` (SSE streaming).
+// The default morgan `:url` token would write that JWT into access logs
+// verbatim. Override the token to redact any `token`/`code` query value.
+morgan.token('url', (req: any) => {
+  const url = (req.originalUrl || req.url || '') as string;
+  return url.replace(/([?&](?:token|code)=)[^&]+/gi, '$1[REDACTED]');
+});
+if (config.nodeEnv !== 'test') {
+  app.use(
+    morgan('combined', {
+      skip: (req: Request) =>
+        req.url === '/health' || req.url === '/api/v1/system/health',
+    }),
+  );
+}
+
 // ─── 4. Body Parsers ───────────────────────────────────────
 // Chat AI nhận ảnh + tệp dạng base64 NGAY TRONG thân JSON, nên nó cần trần
 // riêng, SUY RA từ hạn mức đính kèm — xem `CHAT_BODY_LIMIT_BYTES` trong
@@ -370,22 +389,6 @@ app.use(compression({
   },
 }));
 
-// ─── 6. HTTP Logging ──────────────────────────────────────
-// SECURITY: some endpoints accept a JWT via `?token=` (SSE streaming).
-// The default morgan `:url` token would write that JWT into access logs
-// verbatim. Override the token to redact any `token`/`code` query value.
-morgan.token('url', (req: any) => {
-  const url = (req.originalUrl || req.url || '') as string;
-  return url.replace(/([?&](?:token|code)=)[^&]+/gi, '$1[REDACTED]');
-});
-if (config.nodeEnv !== 'test') {
-  app.use(
-    morgan('combined', {
-      skip: (req: Request) =>
-        req.url === '/health' || req.url === '/api/v1/system/health',
-    }),
-  );
-}
 
 // ─── 7. Static File Serving (Development) ───────────────────
 // Trong production, Nginx sẽ serve /uploads/* trực tiếp từ SSD

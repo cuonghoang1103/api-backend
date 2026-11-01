@@ -472,6 +472,42 @@
       "description": "Luyện: Exercise 1 — how tall is the tree? A 4-byte key vs a 200-byte key · Exercise 2 — one index for three queries · Exercise 3 — make three conditions SARGable (and prove nothing changed) · Exercise 4 — a filtered index for \"pending orders\" and the missing foreign-key index · Exercise 5 — diagnose a slow query in six steps (50,000 orders)"
     },
     {
+      "slug": "dbi202-slide-cs4-1",
+      "name": "⭐ CS.4 Concurrency (1): anomalies, isolation, locks",
+      "level": "ADVANCED",
+      "description": "Luyện: The isolation matrix on SQL Server · Lock compatibility: granted or waits? · Schedules, 2PL, escalation, locking vs MVCC"
+    },
+    {
+      "slug": "dbi202-slide-cs4-2",
+      "name": "⭐ CS.4 Concurrency (2): MVCC, deadlocks, optimistic locking",
+      "level": "ADVANCED",
+      "description": "Luyện: MVCC on both engines: versions, VACUUM, RCSI and SNAPSHOT · Optimistic locking with a version column: save only if nobody changed it · Error codes: retry or not?"
+    },
+    {
+      "slug": "dbi202-cs4-on",
+      "name": "⭐ CS.4 Exercises: transactions & concurrency",
+      "level": "ADVANCED",
+      "description": "Luyện: Exercise 1 — name the anomaly from the timeline · Exercise 2 — a safe money-transfer procedure · Exercise 3 — pick the technique · Exercise 4 — predict: REPEATABLE READ doctors, lock order, who blocks whom"
+    },
+    {
+      "slug": "dbi202-slide-cs5-1",
+      "name": "⭐ CS.5 Advanced SQL (1): window functions and CTEs",
+      "level": "ADVANCED",
+      "description": "Luyện: ROW_NUMBER, RANK, DENSE_RANK side by side · A running total that stays correct with duplicate dates · A recursive CTE: the chain of bosses above one employee (PostgreSQL) · Where windows live: WHERE, frames, LAG and CTEs"
+    },
+    {
+      "slug": "dbi202-slide-cs5-2",
+      "name": "⭐ CS.5 Advanced SQL (2): top-N, gaps, pivot, upsert",
+      "level": "ADVANCED",
+      "description": "Luyện: Top-N per group: the two highest salary levels of every department · Gaps: which invoice numbers are missing? · Pivot with CASE: hours of each employee on projects 1–3 · MERGE, upsert, APPLY / LATERAL: what really happens"
+    },
+    {
+      "slug": "dbi202-cs5-on",
+      "name": "⭐ CS.5 Exercises: advanced SQL",
+      "level": "ADVANCED",
+      "description": "Luyện: Exercise 1 — rank inside the department, gap to the top, share of payroll · Exercise 2 — months that grew · Exercise 3 — how many people are under each manager, at every level? (PostgreSQL) · Exercise 4 — who worked most on each project (ties included)? · Exercise 5 — the longest attendance streak (gaps and islands) · Exercise 6 — synchronise a price list with MERGE, safely"
+    },
+    {
       "slug": "dbi202-9-pe-1-ct-rent",
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",

@@ -1,0 +1,537 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs4-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs4-1"
+  },
+  "exercises": [
+    {
+      "title": "The isolation matrix on SQL Server",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "isolation levels",
+        "dirty read",
+        "non-repeatable read",
+        "phantom"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "isolation"
+      ],
+      "problemHtml": "<p>Slides 9–10. For each isolation level on SQL Server, is the anomaly <b>prevented</b> or still <b>possible</b>?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9–10. Với mỗi mức cô lập trên SQL Server, hiện tượng bị <b>ngăn</b> (prevented) hay vẫn <b>có thể</b> (possible)?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the level names literally: \"repeatable\" = re-reading a row gives the same value.|||Đọc tên mức theo nghĩa đen: \"repeatable\" = đọc lại một dòng ra cùng giá trị.",
+        "Only SERIALIZABLE (key-range locks) or a snapshot stops phantoms on SQL Server.|||Trên SQL Server chỉ SERIALIZABLE (khoá dải khoá) hoặc snapshot chặn được phantom."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The isolation matrix on SQL Server\n\nAnswer in the answer panel (no code needed).\n\n1. Level × anomalyMức × hiện tượng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The isolation matrix on SQL Server — answer key\n\n1. Level × anomalyMức × hiện tượng\n   - r1.dr: possible\n   - r1.nr: possible\n   - r1.ph: possible\n   - r2.dr: prevented\n   - r2.nr: possible\n   - r2.ph: possible\n   - r3.dr: prevented\n   - r3.nr: prevented\n   - r3.ph: possible\n   - r4.dr: prevented\n   - r4.nr: prevented\n   - r4.ph: prevented\n   - r5.dr: prevented\n   - r5.nr: prevented\n   - r5.ph: prevented\n   Each level adds one guarantee. SNAPSHOT reads a frozen version so none of the three read anomalies appear — but write skew still can (slide 8). On PostgreSQL READ UNCOMMITTED behaves as READ COMMITTED and REPEATABLE READ is a snapshot, so phantoms are prevented there too.VI: Mỗi mức thêm một đảm bảo. SNAPSHOT đọc một phiên bản đóng băng nên không có hiện tượng đọc nào — nhưng write skew vẫn có thể (slide 8). Trên PostgreSQL READ UNCOMMITTED chạy như READ COMMITTED và REPEATABLE READ là snapshot nên cũng ngăn được phantom.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each level adds one guarantee. SNAPSHOT reads a frozen version so none of the three read anomalies appear — but write skew still can (slide 8). On PostgreSQL READ UNCOMMITTED behaves as READ COMMITTED and REPEATABLE READ is a snapshot, so phantoms are prevented there too.</p><p><i>VI: Mỗi mức thêm một đảm bảo. SNAPSHOT đọc một phiên bản đóng băng nên không có hiện tượng đọc nào — nhưng write skew vẫn có thể (slide 8). Trên PostgreSQL READ UNCOMMITTED chạy như READ COMMITTED và REPEATABLE READ là snapshot nên cũng ngăn được phantom.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Level × anomaly</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức × hiện tượng</i></p>",
+            "cot": [
+              {
+                "ma": "muc",
+                "ten": "Level / Mức"
+              },
+              {
+                "ma": "dr",
+                "ten": "dirty read",
+                "luaChon": [
+                  "prevented",
+                  "possible"
+                ]
+              },
+              {
+                "ma": "nr",
+                "ten": "non-repeatable read",
+                "luaChon": [
+                  "prevented",
+                  "possible"
+                ]
+              },
+              {
+                "ma": "ph",
+                "ten": "phantom",
+                "luaChon": [
+                  "prevented",
+                  "possible"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "muc": "READ UNCOMMITTED"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "muc": "READ COMMITTED (default)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "muc": "REPEATABLE READ"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "muc": "SERIALIZABLE"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "muc": "SNAPSHOT"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dr": "possible",
+              "r1.nr": "possible",
+              "r1.ph": "possible",
+              "r2.dr": "prevented",
+              "r2.nr": "possible",
+              "r2.ph": "possible",
+              "r3.dr": "prevented",
+              "r3.nr": "prevented",
+              "r3.ph": "possible",
+              "r4.dr": "prevented",
+              "r4.nr": "prevented",
+              "r4.ph": "prevented",
+              "r5.dr": "prevented",
+              "r5.nr": "prevented",
+              "r5.ph": "prevented"
+            },
+            "giaiThich": "<p>Each level adds one guarantee. SNAPSHOT reads a frozen version so none of the three read anomalies appear — but write skew still can (slide 8). On PostgreSQL READ UNCOMMITTED behaves as READ COMMITTED and REPEATABLE READ is a snapshot, so phantoms are prevented there too.</p><p><i>VI: Mỗi mức thêm một đảm bảo. SNAPSHOT đọc một phiên bản đóng băng nên không có hiện tượng đọc nào — nhưng write skew vẫn có thể (slide 8). Trên PostgreSQL READ UNCOMMITTED chạy như READ COMMITTED và REPEATABLE READ là snapshot nên cũng ngăn được phantom.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking REPEATABLE READ stops phantoms on SQL Server — new rows can still appear.|||Tưởng REPEATABLE READ chặn phantom trên SQL Server — dòng mới vẫn xuất hiện được."
+        },
+        {
+          "loi": "Thinking SNAPSHOT is as strong as SERIALIZABLE — write skew slips through.|||Tưởng SNAPSHOT mạnh ngang SERIALIZABLE — write skew lọt qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "isolation level",
+          "vi": "mức cô lập"
+        },
+        {
+          "en": "phantom read",
+          "vi": "đọc bóng ma"
+        },
+        {
+          "en": "write skew",
+          "vi": "lệch ghi"
+        }
+      ]
+    },
+    {
+      "title": "Lock compatibility: granted or waits?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "S lock",
+        "U lock",
+        "X lock",
+        "lock compatibility"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "locking"
+      ],
+      "problemHtml": "<p>Slide 11. Session A holds a lock on a row; session B requests another. Is B's request granted at once or does it wait?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 11. Phiên A giữ một khoá trên dòng; phiên B xin một khoá khác. Yêu cầu của B được cấp ngay hay phải chờ?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "X is compatible with nothing.|||X không hợp với khoá nào.",
+        "Only one U at a time per resource.|||Mỗi tài nguyên chỉ một U tại một thời điểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lock compatibility: granted or waits?\n\nAnswer in the answer panel (no code needed).\n\n1. Held by A → requested by BA giữ → B xin\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lock compatibility: granted or waits? — answer key\n\n1. Held by A → requested by BA giữ → B xin\n   - r1.kq: granted\n   - r2.kq: granted\n   - r3.kq: waits\n   - r4.kq: granted\n   - r5.kq: waits\n   - r6.kq: waits\n   Readers share S. U (\"I will update this\") is compatible with readers but not with another U — that is exactly what prevents the classic conversion deadlock of two S locks both trying to become X.VI: Người đọc chia sẻ S. U (\"tôi sẽ sửa dòng này\") hợp với người đọc nhưng không hợp với U khác — chính điều đó ngăn deadlock chuyển đổi kinh điển khi hai khoá S cùng muốn lên X.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Readers share S. U (\"I will update this\") is compatible with readers but not with another U — that is exactly what prevents the classic conversion deadlock of two S locks both trying to become X.</p><p><i>VI: Người đọc chia sẻ S. U (\"tôi sẽ sửa dòng này\") hợp với người đọc nhưng không hợp với U khác — chính điều đó ngăn deadlock chuyển đổi kinh điển khi hai khoá S cùng muốn lên X.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Held by A → requested by B</p><p style=\"opacity:.75;font-size:.92em\"><i>A giữ → B xin</i></p>",
+            "cot": [
+              {
+                "ma": "ab",
+                "ten": "A holds → B requests"
+              },
+              {
+                "ma": "kq",
+                "ten": "Result",
+                "luaChon": [
+                  "granted",
+                  "waits"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "ab": "S → S"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "ab": "S → U"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "ab": "S → X"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "ab": "U → S"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "ab": "U → U"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "ab": "X → S"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kq": "granted",
+              "r2.kq": "granted",
+              "r3.kq": "waits",
+              "r4.kq": "granted",
+              "r5.kq": "waits",
+              "r6.kq": "waits"
+            },
+            "giaiThich": "<p>Readers share S. U (\"I will update this\") is compatible with readers but not with another U — that is exactly what prevents the classic conversion deadlock of two S locks both trying to become X.</p><p><i>VI: Người đọc chia sẻ S. U (\"tôi sẽ sửa dòng này\") hợp với người đọc nhưng không hợp với U khác — chính điều đó ngăn deadlock chuyển đổi kinh điển khi hai khoá S cùng muốn lên X.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking U blocks readers.|||Tưởng U chặn người đọc."
+        },
+        {
+          "loi": "Forgetting that, under READ COMMITTED SNAPSHOT, readers take no S lock at all.|||Quên rằng dưới READ COMMITTED SNAPSHOT, người đọc không lấy khoá S nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shared lock (S)",
+          "vi": "khoá chia sẻ"
+        },
+        {
+          "en": "update lock (U)",
+          "vi": "khoá cập nhật"
+        },
+        {
+          "en": "exclusive lock (X)",
+          "vi": "khoá độc quyền"
+        }
+      ]
+    },
+    {
+      "title": "Schedules, 2PL, escalation, locking vs MVCC",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "serializability",
+        "two-phase locking",
+        "lock escalation",
+        "MVCC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction"
+      ],
+      "problemHtml": "<p>Five questions on slides 1–3 and 9–12.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 1–3 và 9–12.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Serializable ≠ serial: interleaving is fine if the result matches a serial order.|||Khả tuần tự ≠ tuần tự: xen kẽ không sao nếu kết quả khớp một thứ tự tuần tự.",
+        "~5,000 locks ⇒ escalation.|||~5.000 khoá ⇒ leo thang."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Schedules, 2PL, escalation, locking vs MVCC\n\nAnswer in the answer panel (no code needed).\n\n1. An interleaved schedule is correct when…Một lịch xen kẽ là đúng khi…\n2. Strict two-phase locking means a transaction…Khoá hai pha nghiêm ngặt nghĩa là một giao dịch…\n3. One UPDATE touches 8,000 rows and suddenly other sessions cannot read ANY row of the table. Why?Một UPDATE chạm 8.000 dòng và bỗng các phiên khác không đọc được BẤT KỲ dòng nào của bảng. Vì sao?\n4. On PostgreSQL (MVCC), a long report SELECT and an UPDATE of the same rows…Trên PostgreSQL (MVCC), một SELECT báo cáo dài và một UPDATE cùng các dòng…\n5. SQL Server's default READ COMMITTED (without RCSI) implements \"no dirty reads\" by…READ COMMITTED mặc định của SQL Server (không RCSI) thực hiện \"không dirty read\" bằng…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Schedules, 2PL, escalation, locking vs MVCC — answer key\n\n1. An interleaved schedule is correct when…Một lịch xen kẽ là đúng khi…\n   Answer: a) its result equals some serial order of the same transactions\n   That is the definition of serializable: equivalent to running them one after another in SOME order.VI: Đó là định nghĩa khả tuần tự: tương đương chạy lần lượt theo MỘT thứ tự nào đó.\n\n2. Strict two-phase locking means a transaction…Khoá hai pha nghiêm ngặt nghĩa là một giao dịch…\n   Answer: b) acquires locks as it goes and releases its write locks only at COMMIT/ROLLBACK\n   Growing phase, then all releases at the end — this guarantees serializable schedules.VI: Pha tăng, rồi nhả tất cả ở cuối — điều này bảo đảm lịch khả tuần tự.\n\n3. One UPDATE touches 8,000 rows and suddenly other sessions cannot read ANY row of the table. Why?Một UPDATE chạm 8.000 dòng và bỗng các phiên khác không đọc được BẤT KỲ dòng nào của bảng. Vì sao?\n   Answer: b) lock escalation: about 5,000 row locks became one table X lock\n   SQL Server escalates past ~5,000 locks on one object to save memory. Batch big updates to stay under it.VI: SQL Server leo thang khi vượt ~5.000 khoá trên một đối tượng để tiết kiệm bộ nhớ. Chia lô cập nhật lớn để ở dưới ngưỡng.\n\n4. On PostgreSQL (MVCC), a long report SELECT and an UPDATE of the same rows…Trên PostgreSQL (MVCC), một SELECT báo cáo dài và một UPDATE cùng các dòng…\n   Answer: d) do not block each other: the reader sees an older version\n   Readers never block writers and writers never block readers under MVCC; writers still block writers.VI: Dưới MVCC người đọc không chặn người ghi và ngược lại; người ghi vẫn chặn người ghi.\n\n5. SQL Server's default READ COMMITTED (without RCSI) implements \"no dirty reads\" by…READ COMMITTED mặc định của SQL Server (không RCSI) thực hiện \"không dirty read\" bằng…\n   Answer: a) taking a short S lock on each row as it is read\n   That is why a reader waits behind an uncommitted UPDATE until RCSI is turned on.VI: Vì thế người đọc phải chờ sau một UPDATE chưa commit cho tới khi bật RCSI.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> its result equals some serial order of the same transactions</p><p>That is the definition of serializable: equivalent to running them one after another in SOME order.</p><p><i>VI: Đó là định nghĩa khả tuần tự: tương đương chạy lần lượt theo MỘT thứ tự nào đó.</i></p></li><li><p><b>b)</b> acquires locks as it goes and releases its write locks only at COMMIT/ROLLBACK</p><p>Growing phase, then all releases at the end — this guarantees serializable schedules.</p><p><i>VI: Pha tăng, rồi nhả tất cả ở cuối — điều này bảo đảm lịch khả tuần tự.</i></p></li><li><p><b>b)</b> lock escalation: about 5,000 row locks became one table X lock</p><p>SQL Server escalates past ~5,000 locks on one object to save memory. Batch big updates to stay under it.</p><p><i>VI: SQL Server leo thang khi vượt ~5.000 khoá trên một đối tượng để tiết kiệm bộ nhớ. Chia lô cập nhật lớn để ở dưới ngưỡng.</i></p></li><li><p><b>d)</b> do not block each other: the reader sees an older version</p><p>Readers never block writers and writers never block readers under MVCC; writers still block writers.</p><p><i>VI: Dưới MVCC người đọc không chặn người ghi và ngược lại; người ghi vẫn chặn người ghi.</i></p></li><li><p><b>a)</b> taking a short S lock on each row as it is read</p><p>That is why a reader waits behind an uncommitted UPDATE until RCSI is turned on.</p><p><i>VI: Vì thế người đọc phải chờ sau một UPDATE chưa commit cho tới khi bật RCSI.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An interleaved schedule is correct when…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lịch xen kẽ là đúng khi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "its result equals some serial order of the same transactions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "transactions commit in the order they started"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no transaction waits for a lock at any time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every statement finishes in under one second"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is the definition of serializable: equivalent to running them one after another in SOME order.</p><p><i>VI: Đó là định nghĩa khả tuần tự: tương đương chạy lần lượt theo MỘT thứ tự nào đó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Strict two-phase locking means a transaction…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá hai pha nghiêm ngặt nghĩa là một giao dịch…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "releases each lock right after the statement that used it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "acquires locks as it goes and releases its write locks only at COMMIT/ROLLBACK"
+              },
+              {
+                "ma": "c",
+                "noiDung": "takes only shared locks until the very last statement"
+              },
+              {
+                "ma": "d",
+                "noiDung": "locks every table it might touch before starting"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Growing phase, then all releases at the end — this guarantees serializable schedules.</p><p><i>VI: Pha tăng, rồi nhả tất cả ở cuối — điều này bảo đảm lịch khả tuần tự.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>One UPDATE touches 8,000 rows and suddenly other sessions cannot read ANY row of the table. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một UPDATE chạm 8.000 dòng và bỗng các phiên khác không đọc được BẤT KỲ dòng nào của bảng. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the buffer pool evicted every page of the table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "lock escalation: about 5,000 row locks became one table X lock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "statistics were rebuilt in the middle of the UPDATE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the transaction log filled up and froze the table"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>SQL Server escalates past ~5,000 locks on one object to save memory. Batch big updates to stay under it.</p><p><i>VI: SQL Server leo thang khi vượt ~5.000 khoá trên một đối tượng để tiết kiệm bộ nhớ. Chia lô cập nhật lớn để ở dưới ngưỡng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>On PostgreSQL (MVCC), a long report SELECT and an UPDATE of the same rows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên PostgreSQL (MVCC), một SELECT báo cáo dài và một UPDATE cùng các dòng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "block each other until the report finishes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deadlock, and the report is chosen as the victim"
+              },
+              {
+                "ma": "c",
+                "noiDung": "force the UPDATE to wait for the next VACUUM"
+              },
+              {
+                "ma": "d",
+                "noiDung": "do not block each other: the reader sees an older version"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Readers never block writers and writers never block readers under MVCC; writers still block writers.</p><p><i>VI: Dưới MVCC người đọc không chặn người ghi và ngược lại; người ghi vẫn chặn người ghi.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>SQL Server's default READ COMMITTED (without RCSI) implements \"no dirty reads\" by…</p><p style=\"opacity:.75;font-size:.92em\"><i>READ COMMITTED mặc định của SQL Server (không RCSI) thực hiện \"không dirty read\" bằng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "taking a short S lock on each row as it is read"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reading the last committed version from tempdb"
+              },
+              {
+                "ma": "c",
+                "noiDung": "copying the table at the start of the transaction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "refusing to read rows that were updated today"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is why a reader waits behind an uncommitted UPDATE until RCSI is turned on.</p><p><i>VI: Vì thế người đọc phải chờ sau một UPDATE chưa commit cho tới khi bật RCSI.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a fast, interleaved schedule is automatically correct.|||Tưởng lịch xen kẽ chạy nhanh là tự động đúng."
+        },
+        {
+          "loi": "Expecting readers to block writers on PostgreSQL.|||Tưởng người đọc chặn người ghi trên PostgreSQL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "serializable schedule",
+          "vi": "lịch khả tuần tự"
+        },
+        {
+          "en": "two-phase locking (2PL)",
+          "vi": "khoá hai pha"
+        },
+        {
+          "en": "lock escalation",
+          "vi": "leo thang khoá"
+        }
+      ]
+    }
+  ]
+}

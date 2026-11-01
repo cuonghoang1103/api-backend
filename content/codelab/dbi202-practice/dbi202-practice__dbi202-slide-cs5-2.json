@@ -1,0 +1,892 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs5-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs5-2"
+  },
+  "exercises": [
+    {
+      "title": "Top-N per group: the two highest salary levels of every department",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "top-N per group",
+        "DENSE_RANK",
+        "ties"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "window",
+        "top-n"
+      ],
+      "problemHtml": "<p>Slides 13–14. For every department list the employees paid at one of the <b>two highest distinct salary levels</b> of that department (everyone tied at those levels must appear). Show <code>depNum, empName, empSalary</code>, sorted by depNum, salary (high first), then empSSN.</p>\n<details class=\"cl-luoc-do\" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns (PK underlined, FK in italics)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Rank inside a CTE or subquery, filter outside.</li>\n  <li>\"Distinct salary levels\" ⇒ the ranking function that leaves no gaps.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 13–14. Với mỗi phòng liệt kê nhân viên có lương ở một trong <b>hai mức lương khác nhau cao nhất</b> của phòng (mọi người hoà ở các mức đó đều phải có). Hiện <code>depNum, empName, empSalary</code>, sắp theo depNum, lương (cao trước), rồi empSSN.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột (khoá chính gạch chân, khoá ngoại in nghiêng)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Xếp hạng trong CTE hoặc truy vấn con, lọc ở ngoài.</li>\n  <li>\"Mức lương khác nhau\" ⇒ hàm xếp hạng không chừa khoảng trống.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "depNum | empName         | empSalary\n-------+-----------------+----------\n1      | Trần Minh Quang | 150000   \n1      | Hoàng Thị Hà    | 90000    \n2      | Đặng Tuấn Anh   | 105000   \n2      | Phạm Quốc Bảo   | 95000    \n3      | Nguyễn Thị Mai  | 88000    \n3      | Trương Thị Thu  | 52000    \n4      | Huỳnh Văn Tài   | 70000    \n5      | Lý Thanh Tâm    | 65000    \n… (9 rows)",
+          "explanation": "Expected result of check \"Two salary levels per department\" (row order matters).|||Kết quả mong đợi của kiểm \"Hai mức lương mỗi phòng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "ROW_NUMBER = exactly N rows; RANK = N positions with gaps; DENSE_RANK = N distinct values.|||ROW_NUMBER = đúng N dòng; RANK = N vị trí có khoảng trống; DENSE_RANK = N giá trị khác nhau.",
+        "TOP (n) WITH TIES only works for ONE group — a window is needed per group.|||TOP (n) WITH TIES chỉ dùng được cho MỘT nhóm — mỗi nhóm cần một cửa sổ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH xh AS (\n    SELECT depNum, empSSN, empName, empSalary,\n           DENSE_RANK() OVER (PARTITION BY depNum ORDER BY empSalary DESC) AS muc\n    FROM tblEmployee\n)\nSELECT depNum, empName, empSalary\nFROM xh\nWHERE muc <= 2                      -- filter the window result outside\nORDER BY depNum, empSalary DESC, empSSN;\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Top-N per group is the most asked window question in interviews. Always ask \"what about ties?\" — the three ranking functions give three different, defensible answers.</p>",
+      "solutionExplanationHtmlVi": "<p>Top-N mỗi nhóm là câu hàm cửa sổ hay hỏi nhất khi phỏng vấn. Luôn hỏi \"hoà thì sao?\" — ba hàm xếp hạng cho ba đáp án khác nhau, đều có lý.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Two salary levels per department|||Hai mức lương mỗi phòng",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "empName",
+                "empSalary"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Trần Minh Quang",
+                  150000
+                ],
+                [
+                  1,
+                  "Hoàng Thị Hà",
+                  90000
+                ],
+                [
+                  2,
+                  "Đặng Tuấn Anh",
+                  105000
+                ],
+                [
+                  2,
+                  "Phạm Quốc Bảo",
+                  95000
+                ],
+                [
+                  3,
+                  "Nguyễn Thị Mai",
+                  88000
+                ],
+                [
+                  3,
+                  "Trương Thị Thu",
+                  52000
+                ],
+                [
+                  4,
+                  "Huỳnh Văn Tài",
+                  70000
+                ],
+                [
+                  5,
+                  "Lý Thanh Tâm",
+                  65000
+                ],
+                [
+                  5,
+                  "Phan Hữu Nghĩa",
+                  38000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a tie at the top of department 2 and at the second level of department 1|||Ẩn: hoà ở đỉnh phòng 2 và ở mức hai phòng 1",
+            "an": true,
+            "themCsdl": "INSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES (30121050090, N'Test Top', NULL, 105000, 'M', NULL, 2, 30121050010), (30121050091, N'Test Second', NULL, 90000, 'F', NULL, 1, 30121050001)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "depNum",
+                "empName",
+                "empSalary"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Trần Minh Quang",
+                  150000
+                ],
+                [
+                  1,
+                  "Hoàng Thị Hà",
+                  90000
+                ],
+                [
+                  1,
+                  "Test Second",
+                  90000
+                ],
+                [
+                  2,
+                  "Đặng Tuấn Anh",
+                  105000
+                ],
+                [
+                  2,
+                  "Test Top",
+                  105000
+                ],
+                [
+                  2,
+                  "Phạm Quốc Bảo",
+                  95000
+                ],
+                [
+                  3,
+                  "Nguyễn Thị Mai",
+                  88000
+                ],
+                [
+                  3,
+                  "Trương Thị Thu",
+                  52000
+                ],
+                [
+                  4,
+                  "Huỳnh Văn Tài",
+                  70000
+                ],
+                [
+                  5,
+                  "Lý Thanh Tâm",
+                  65000
+                ],
+                [
+                  5,
+                  "Phan Hữu Nghĩa",
+                  38000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses DENSE_RANK|||Dùng DENSE_RANK",
+            "khop": "\\bDENSE_RANK\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "ROW_NUMBER drops the second person at a tied level.|||ROW_NUMBER bỏ người thứ hai ở mức hoà."
+        },
+        {
+          "loi": "RANK after a tie at the top skips level 2 entirely.|||RANK sau một lần hoà ở đỉnh bỏ hẳn mức 2."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "top-N per group",
+          "vi": "N phần tử đầu mỗi nhóm"
+        }
+      ]
+    },
+    {
+      "title": "Gaps: which invoice numbers are missing?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "gaps and islands",
+        "LEAD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "window",
+        "gaps-islands"
+      ],
+      "problemHtml": "<p>Slides 15–16. Invoice numbers should be consecutive. Return every missing range as <code>tu</code> (first missing number) and <code>den</code> (last missing number), sorted by tu. With 1003 followed by 1006 the range is 1004–1005.</p>\n<p><code>HoaDon(so, tongTien)</code> — invoice numbers, some missing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>LEAD(so) OVER (ORDER BY so) gives the next number that exists.</li>\n  <li>A gap exists where next − current > 1.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 15–16. Số hoá đơn phải liên tiếp. Trả mọi khoảng bị thiếu dưới dạng <code>tu</code> (số thiếu đầu tiên) và <code>den</code> (số thiếu cuối cùng), sắp theo tu. 1003 rồi tới 1006 thì khoảng là 1004–1005.</p>\n<p><code>HoaDon(so, tongTien)</code> — số hoá đơn, có số bị thiếu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>LEAD(so) OVER (ORDER BY so) cho số tiếp theo có thật.</li>\n  <li>Có khoảng trống khi tiếp − hiện tại > 1.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tu   | den \n-----+-----\n1004 | 1005\n1009 | 1011\n1014 | 1014",
+          "explanation": "Expected result of check \"Three gaps\" (row order matters).|||Kết quả mong đợi của kiểm \"Ba khoảng trống\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Compare each row with the next one: that is LEAD.|||So mỗi dòng với dòng kế tiếp: đó là LEAD.",
+        "The last row has no next number: tiep is NULL and the WHERE drops it.|||Dòng cuối không có số kế: tiep là NULL và WHERE loại nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "HoaDon.sql",
+          "language": "sql",
+          "code": "-- HoaDon.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- HoaDon.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE HoaDon (\n  so      INT           NOT NULL PRIMARY KEY,\n  tongTien DECIMAL(12,0) NOT NULL\n);\nINSERT INTO HoaDon (so, tongTien) VALUES\n  (1001, 500), (1002, 700), (1003, 120), (1006, 90), (1007, 300), (1008, 410), (1012, 75), (1013, 60), (1015, 980);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT so + 1   AS tu,\n       tiep - 1 AS den\nFROM (\n    SELECT so, LEAD(so) OVER (ORDER BY so) AS tiep\n    FROM HoaDon\n) t\nWHERE tiep - so > 1\nORDER BY tu;\n"
+        },
+        {
+          "name": "HoaDon.sql",
+          "language": "sql",
+          "code": "-- HoaDon.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- HoaDon.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE HoaDon (\n  so      INT           NOT NULL PRIMARY KEY,\n  tongTien DECIMAL(12,0) NOT NULL\n);\nINSERT INTO HoaDon (so, tongTien) VALUES\n  (1001, 500), (1002, 700), (1003, 120), (1006, 90), (1007, 300), (1008, 410), (1012, 75), (1013, 60), (1015, 980);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Gaps = compare neighbours (LEAD/LAG). Islands (runs of consecutive values) = value − ROW_NUMBER() is constant inside a run; GROUP BY that difference. Both are standard SQL and run on both engines.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoảng trống = so láng giềng (LEAD/LAG). Đảo (dãy giá trị liên tiếp) = giá trị − ROW_NUMBER() không đổi trong một dãy; GROUP BY hiệu đó. Cả hai là SQL chuẩn, chạy cả hai hệ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE HoaDon (\n  so      INT           NOT NULL PRIMARY KEY,\n  tongTien DECIMAL(12,0) NOT NULL\n);\nINSERT INTO HoaDon (so, tongTien) VALUES\n  (1001, 500), (1002, 700), (1003, 120), (1006, 90), (1007, 300), (1008, 410), (1012, 75), (1013, 60), (1015, 980);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Three gaps|||Ba khoảng trống",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "tu",
+                "den"
+              ],
+              "hang": [
+                [
+                  1004,
+                  1005
+                ],
+                [
+                  1009,
+                  1011
+                ],
+                [
+                  1014,
+                  1014
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a single missing number and invoices after a long gap|||Ẩn: thiếu đúng một số và hoá đơn sau một khoảng dài",
+            "an": true,
+            "themCsdl": "INSERT INTO HoaDon VALUES (1017, 10), (1030, 20), (1031, 30)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "tu",
+                "den"
+              ],
+              "hang": [
+                [
+                  1004,
+                  1005
+                ],
+                [
+                  1009,
+                  1011
+                ],
+                [
+                  1014,
+                  1014
+                ],
+                [
+                  1016,
+                  1016
+                ],
+                [
+                  1018,
+                  1029
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses LEAD or LAG|||Dùng LEAD hoặc LAG",
+            "khop": "\\b(LEAD|LAG)\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the existing numbers around the gap instead of the missing ones.|||Trả các số có thật quanh khoảng trống thay vì các số bị thiếu."
+        },
+        {
+          "loi": "Testing > 2 — a single missing number is then lost.|||Kiểm > 2 — thiếu đúng một số thì bị bỏ sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gaps and islands",
+          "vi": "khoảng trống và đảo"
+        }
+      ]
+    },
+    {
+      "title": "Pivot with CASE: hours of each employee on projects 1–3",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pivot",
+        "conditional aggregation",
+        "CASE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "pivot"
+      ],
+      "problemHtml": "<p>Slides 17–18. One row per employee who appears in tblWorksOn: <code>empSSN</code>, <code>p1</code>, <code>p2</code>, <code>p3</code> = hours on projects 1, 2, 3 (0 when none), and <code>tong</code> = hours on all projects. Sort by empSSN. Write it with CASE so it runs on both engines (T-SQL's PIVOT does not).</p>\n<details class=\"cl-luoc-do\" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns (PK underlined, FK in italics)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>SUM(CASE WHEN proNum = 1 THEN workHours ELSE 0 END) AS p1, … GROUP BY empSSN.</li>\n  <li>tong counts every project, not only 1–3.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 17–18. Mỗi nhân viên có trong tblWorksOn một dòng: <code>empSSN</code>, <code>p1</code>, <code>p2</code>, <code>p3</code> = số giờ ở dự án 1, 2, 3 (0 nếu không), và <code>tong</code> = số giờ ở mọi dự án. Sắp theo empSSN. Viết bằng CASE để chạy cả hai hệ (PIVOT của T-SQL thì không).</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột (khoá chính gạch chân, khoá ngoại in nghiêng)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>SUM(CASE WHEN proNum = 1 THEN workHours ELSE 0 END) AS p1, … GROUP BY empSSN.</li>\n  <li>tong tính mọi dự án, không chỉ 1–3.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "empSSN      | p1 | p2   | p3 | tong\n------------+----+------+----+-----\n30121050001 | 10 | 0    | 0  | 10  \n30121050002 | 20 | 0    | 0  | 20  \n30121050003 | 30 | 12.5 | 10 | 52.5\n30121050004 | 0  | 35   | 0  | 35  \n30121050005 | 0  | 20   | 25 | 45  \n30121050010 | 0  | 0    | 0  | 30  \n30121050011 | 0  | 0    | 30 | 30  \n30121050012 | 0  | 0    | 15 | 35  \n… (12 rows)",
+          "explanation": "Expected result of check \"One row per employee\" (row order matters).|||Kết quả mong đợi của kiểm \"Mỗi nhân viên một dòng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "One SUM(CASE …) per output column.|||Mỗi cột kết quả một SUM(CASE …).",
+        "ELSE 0 turns \"no hours\" into 0 instead of NULL.|||ELSE 0 biến \"không có giờ\" thành 0 thay vì NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT empSSN,\n       SUM(CASE WHEN proNum = 1 THEN workHours ELSE 0 END) AS p1,\n       SUM(CASE WHEN proNum = 2 THEN workHours ELSE 0 END) AS p2,\n       SUM(CASE WHEN proNum = 3 THEN workHours ELSE 0 END) AS p3,\n       SUM(workHours)                                      AS tong\nFROM tblWorksOn\nGROUP BY empSSN\nORDER BY empSSN;\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>T-SQL: <code>SELECT … FROM (…) s PIVOT (SUM(workHours) FOR proNum IN ([1], [2], [3])) p</code>. PostgreSQL: <code>SUM(workHours) FILTER (WHERE proNum = 1)</code> or crosstab(). CASE works everywhere and is what most reports use.</p>",
+      "solutionExplanationHtmlVi": "<p>T-SQL: <code>SELECT … FROM (…) s PIVOT (SUM(workHours) FOR proNum IN ([1], [2], [3])) p</code>. PostgreSQL: <code>SUM(workHours) FILTER (WHERE proNum = 1)</code> hoặc crosstab(). CASE chạy mọi nơi và là cách đa số báo cáo dùng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "One row per employee|||Mỗi nhân viên một dòng",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "p1",
+                "p2",
+                "p3",
+                "tong"
+              ],
+              "hang": [
+                [
+                  30121050001,
+                  10,
+                  0,
+                  0,
+                  10
+                ],
+                [
+                  30121050002,
+                  20,
+                  0,
+                  0,
+                  20
+                ],
+                [
+                  30121050003,
+                  30,
+                  12.5,
+                  10,
+                  52.5
+                ],
+                [
+                  30121050004,
+                  0,
+                  35,
+                  0,
+                  35
+                ],
+                [
+                  30121050005,
+                  0,
+                  20,
+                  25,
+                  45
+                ],
+                [
+                  30121050010,
+                  0,
+                  0,
+                  0,
+                  30
+                ],
+                [
+                  30121050011,
+                  0,
+                  0,
+                  30,
+                  30
+                ],
+                [
+                  30121050012,
+                  0,
+                  0,
+                  15,
+                  35
+                ],
+                [
+                  30121050020,
+                  0,
+                  0,
+                  0,
+                  15
+                ],
+                [
+                  30121050021,
+                  0,
+                  0,
+                  0,
+                  40
+                ],
+                [
+                  30121050027,
+                  0,
+                  0,
+                  0,
+                  30
+                ],
+                [
+                  30121050030,
+                  0,
+                  0,
+                  0,
+                  40
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Quang also works on projects 2 and 6|||Ẩn: Quang làm thêm dự án 2 và 6",
+            "an": true,
+            "themCsdl": "INSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES (30121050001, 2, 5.0), (30121050001, 6, 7.5)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "empSSN",
+                "p1",
+                "p2",
+                "p3",
+                "tong"
+              ],
+              "hang": [
+                [
+                  30121050001,
+                  10,
+                  5,
+                  0,
+                  22.5
+                ],
+                [
+                  30121050002,
+                  20,
+                  0,
+                  0,
+                  20
+                ],
+                [
+                  30121050003,
+                  30,
+                  12.5,
+                  10,
+                  52.5
+                ],
+                [
+                  30121050004,
+                  0,
+                  35,
+                  0,
+                  35
+                ],
+                [
+                  30121050005,
+                  0,
+                  20,
+                  25,
+                  45
+                ],
+                [
+                  30121050010,
+                  0,
+                  0,
+                  0,
+                  30
+                ],
+                [
+                  30121050011,
+                  0,
+                  0,
+                  30,
+                  30
+                ],
+                [
+                  30121050012,
+                  0,
+                  0,
+                  15,
+                  35
+                ],
+                [
+                  30121050020,
+                  0,
+                  0,
+                  0,
+                  15
+                ],
+                [
+                  30121050021,
+                  0,
+                  0,
+                  0,
+                  40
+                ],
+                [
+                  30121050027,
+                  0,
+                  0,
+                  0,
+                  30
+                ],
+                [
+                  30121050030,
+                  0,
+                  0,
+                  0,
+                  40
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Conditional aggregation with CASE|||Tổng có điều kiện bằng CASE",
+            "khop": "\\bSUM\\s*\\(\\s*CASE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving out ELSE 0 — the cell shows NULL.|||Bỏ ELSE 0 — ô hiện NULL."
+        },
+        {
+          "loi": "Filtering WHERE proNum <= 3 — tong loses the other projects and some employees disappear.|||Lọc WHERE proNum <= 3 — tong mất các dự án khác và vài nhân viên biến mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pivot",
+          "vi": "xoay bảng"
+        },
+        {
+          "en": "conditional aggregation",
+          "vi": "tổng hợp có điều kiện"
+        }
+      ]
+    },
+    {
+      "title": "MERGE, upsert, APPLY / LATERAL: what really happens",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "MERGE",
+        "upsert",
+        "ON CONFLICT",
+        "APPLY",
+        "LATERAL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "merge"
+      ],
+      "problemHtml": "<p>Five questions on slides 19–24.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 19–24.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "MERGE is not race-free by itself on SQL Server.|||MERGE tự nó không chống đua trên SQL Server.",
+        "APPLY / LATERAL = a correlated subquery that may return many rows.|||APPLY / LATERAL = truy vấn con tương quan có thể trả nhiều dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MERGE, upsert, APPLY / LATERAL: what really happens\n\nAnswer in the answer panel (no code needed).\n\n1. Two sessions run the same MERGE for a key that does not exist yet (SQL Server, default isolation). Risk?Hai phiên cùng chạy MERGE cho một khoá chưa tồn tại (SQL Server, mức mặc định). Rủi ro?\n2. PostgreSQL's INSERT … ON CONFLICT (id) DO UPDATE requires…INSERT … ON CONFLICT (id) DO UPDATE của PostgreSQL cần…\n3. In a MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE removes…Trong MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE xoá…\n4. CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) lets a subquery…CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) cho phép truy vấn con…\n5. An upsert should only touch prices that really changed. The best condition is…Upsert chỉ nên đụng giá thật sự thay đổi. Điều kiện tốt nhất là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MERGE, upsert, APPLY / LATERAL: what really happens — answer key\n\n1. Two sessions run the same MERGE for a key that does not exist yet (SQL Server, default isolation). Risk?Hai phiên cùng chạy MERGE cho một khoá chưa tồn tại (SQL Server, mức mặc định). Rủi ro?\n   Answer: b) both see \"not matched\", both insert: a duplicate-key error\n   Add WITH (HOLDLOCK) on the target (serializable range lock) so the check and the insert are one unit.VI: Thêm WITH (HOLDLOCK) trên bảng đích (khoá dải tuần tự) để phép kiểm và lệnh chèn là một khối.\n\n2. PostgreSQL's INSERT … ON CONFLICT (id) DO UPDATE requires…INSERT … ON CONFLICT (id) DO UPDATE của PostgreSQL cần…\n   Answer: c) a unique index or constraint on id\n   The conflict target must match a unique index; then the upsert is race-free.VI: Đích xung đột phải khớp một chỉ mục duy nhất; khi đó upsert không bị đua.\n\n3. In a MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE removes…Trong MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE xoá…\n   Answer: c) target rows that the source does not mention\n   Dangerous for a partial source: \"the supplier did not mention it\" would delete it.VI: Nguy hiểm với nguồn không đầy đủ: \"nhà cung cấp không nhắc tới\" sẽ bị xoá.\n\n4. CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) lets a subquery…CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) cho phép truy vấn con…\n   Answer: d) refer to columns of the row on its left, once per row\n   Typical use: \"the top 3 orders of each customer\" with ORDER BY … FETCH inside.VI: Dùng điển hình: \"3 đơn lớn nhất của mỗi khách\" với ORDER BY … FETCH bên trong.\n\n5. An upsert should only touch prices that really changed. The best condition is…Upsert chỉ nên đụng giá thật sự thay đổi. Điều kiện tốt nhất là…\n   Answer: d) WHEN MATCHED AND t.gia <> s.gia THEN UPDATE …\n   Skipping identical rows avoids useless writes, log records and trigger fires.VI: Bỏ qua dòng giống hệt tránh ghi thừa, bản ghi nhật ký và trigger chạy vô ích.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> both see \"not matched\", both insert: a duplicate-key error</p><p>Add WITH (HOLDLOCK) on the target (serializable range lock) so the check and the insert are one unit.</p><p><i>VI: Thêm WITH (HOLDLOCK) trên bảng đích (khoá dải tuần tự) để phép kiểm và lệnh chèn là một khối.</i></p></li><li><p><b>c)</b> a unique index or constraint on id</p><p>The conflict target must match a unique index; then the upsert is race-free.</p><p><i>VI: Đích xung đột phải khớp một chỉ mục duy nhất; khi đó upsert không bị đua.</i></p></li><li><p><b>c)</b> target rows that the source does not mention</p><p>Dangerous for a partial source: \"the supplier did not mention it\" would delete it.</p><p><i>VI: Nguy hiểm với nguồn không đầy đủ: \"nhà cung cấp không nhắc tới\" sẽ bị xoá.</i></p></li><li><p><b>d)</b> refer to columns of the row on its left, once per row</p><p>Typical use: \"the top 3 orders of each customer\" with ORDER BY … FETCH inside.</p><p><i>VI: Dùng điển hình: \"3 đơn lớn nhất của mỗi khách\" với ORDER BY … FETCH bên trong.</i></p></li><li><p><b>d)</b> WHEN MATCHED AND t.gia <> s.gia THEN UPDATE …</p><p>Skipping identical rows avoids useless writes, log records and trigger fires.</p><p><i>VI: Bỏ qua dòng giống hệt tránh ghi thừa, bản ghi nhật ký và trigger chạy vô ích.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Two sessions run the same MERGE for a key that does not exist yet (SQL Server, default isolation). Risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai phiên cùng chạy MERGE cho một khoá chưa tồn tại (SQL Server, mức mặc định). Rủi ro?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing: MERGE is always atomic and safe"
+              },
+              {
+                "ma": "b",
+                "noiDung": "both see \"not matched\", both insert: a duplicate-key error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the second MERGE silently updates the first row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "both block forever waiting for each other"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Add WITH (HOLDLOCK) on the target (serializable range lock) so the check and the insert are one unit.</p><p><i>VI: Thêm WITH (HOLDLOCK) trên bảng đích (khoá dải tuần tự) để phép kiểm và lệnh chèn là một khối.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>PostgreSQL's INSERT … ON CONFLICT (id) DO UPDATE requires…</p><p style=\"opacity:.75;font-size:.92em\"><i>INSERT … ON CONFLICT (id) DO UPDATE của PostgreSQL cần…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "that the row already exists"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a trigger on the target table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a unique index or constraint on id"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SERIALIZABLE isolation"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The conflict target must match a unique index; then the upsert is race-free.</p><p><i>VI: Đích xung đột phải khớp một chỉ mục duy nhất; khi đó upsert không bị đua.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In a MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE removes…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong MERGE, WHEN NOT MATCHED BY SOURCE THEN DELETE xoá…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every row of the target, then re-inserts them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "source rows that are missing in the target"
+              },
+              {
+                "ma": "c",
+                "noiDung": "target rows that the source does not mention"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rows whose values did not change"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Dangerous for a partial source: \"the supplier did not mention it\" would delete it.</p><p><i>VI: Nguy hiểm với nguồn không đầy đủ: \"nhà cung cấp không nhắc tới\" sẽ bị xoá.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) lets a subquery…</p><p style=\"opacity:.75;font-size:.92em\"><i>CROSS APPLY (SQL Server) / JOIN LATERAL (PostgreSQL) cho phép truy vấn con…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "skip rows that other sessions locked"
+              },
+              {
+                "ma": "b",
+                "noiDung": "be cached and reused across queries"
+              },
+              {
+                "ma": "c",
+                "noiDung": "run in parallel on several CPU cores"
+              },
+              {
+                "ma": "d",
+                "noiDung": "refer to columns of the row on its left, once per row"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Typical use: \"the top 3 orders of each customer\" with ORDER BY … FETCH inside.</p><p><i>VI: Dùng điển hình: \"3 đơn lớn nhất của mỗi khách\" với ORDER BY … FETCH bên trong.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An upsert should only touch prices that really changed. The best condition is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Upsert chỉ nên đụng giá thật sự thay đổi. Điều kiện tốt nhất là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "WHEN NOT MATCHED BY TARGET THEN UPDATE …"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DELETE everything, then INSERT the new list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "WHEN MATCHED THEN UPDATE … for every row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "WHEN MATCHED AND t.gia <> s.gia THEN UPDATE …"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Skipping identical rows avoids useless writes, log records and trigger fires.</p><p><i>VI: Bỏ qua dòng giống hệt tránh ghi thừa, bản ghi nhật ký và trigger chạy vô ích.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding NOT MATCHED BY SOURCE … DELETE to a partial feed.|||Thêm NOT MATCHED BY SOURCE … DELETE cho nguồn không đầy đủ."
+        },
+        {
+          "loi": "Believing ON CONFLICT works without a unique index.|||Tưởng ON CONFLICT chạy được khi không có chỉ mục duy nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "upsert",
+          "vi": "chèn-hoặc-cập-nhật"
+        },
+        {
+          "en": "lateral join",
+          "vi": "phép nối bên"
+        }
+      ]
+    }
+  ]
+}

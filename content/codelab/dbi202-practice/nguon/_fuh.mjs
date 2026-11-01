@@ -176,3 +176,6 @@ export const LUOC_DO_FUH = {
   en: `<details class="cl-luoc-do" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary>${bangHtml(['Table', 'Columns (PK underlined, FK in italics)'])}<p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>`,
   vi: `<details class="cl-luoc-do" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary>${bangHtml(['Bảng', 'Cột (khoá chính gạch chân, khoá ngoại in nghiêng)'])}<p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>`,
 };
+
+/** FUHCompany bằng cú pháp PostgreSQL (cho đề 'sql-pg' của phần ⭐ Chuyên sâu): NVARCHAR → VARCHAR, bỏ tiền tố N. */
+export const FUH_PG = FUH.replace(/\bNVARCHAR\b/g, 'VARCHAR').replace(/\bN'/g, "'");

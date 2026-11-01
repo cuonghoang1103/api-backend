@@ -391,3 +391,12 @@ export const hinhChiMuc = (ten) => `SELECT lower(i.relname) AS chi_muc, lower(t.
   lower(replace(pg_get_expr(x.indpred, x.indrelid), ' ', '')) AS dieu_kien
 FROM pg_index x JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid
 WHERE lower(i.relname) = '${String(ten).toLowerCase()}'`;
+
+/** Đề chấm trên PostgreSQL THẬT (loại 'sql-pg') với dữ liệu `o.csdl` viết bằng cú pháp PostgreSQL — cho phần ⭐ Chuyên sâu
+ *  cần cú pháp chỉ PostgreSQL có (WITH RECURSIVE, LATERAL, FILTER, ON CONFLICT…). Dựng như de() rồi đổi loại máy chấm. */
+export const dePg = (o) => {
+  const x = de({ ...o, tag: ['postgresql', ...(o.tag || [])], khoi: o.khoi ?? '-- PostgreSQL: this exercise runs on real PostgreSQL (not in SQL Server mode).\n-- PostgreSQL: bài này chạy trên PostgreSQL thật (không ở chế độ SQL Server).\n\n' });
+  const doi = (m) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, typeof v === 'string' ? v.replace("-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.", '-- Plain PostgreSQL: run it as-is in psql.') : v]));
+  const { phuongNgu: _p, ...tests } = x.tests; void _p;
+  return { ...x, khoiDau: doi(x.khoiDau), loiGiai: doi(x.loiGiai), tests: { ...tests, loai: 'sql-pg' } };
+};

@@ -1,0 +1,572 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs4-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs4-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — name the anomaly from the timeline",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "dirty read",
+        "non-repeatable read",
+        "phantom",
+        "lost update",
+        "write skew"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction"
+      ],
+      "problemHtml": "<p>Each line is a short timeline of two sessions A and B. Name the anomaly.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là dòng thời gian ngắn của hai phiên A và B. Gọi tên hiện tượng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "New row vs changed row.|||Dòng mới hay dòng bị đổi.",
+        "Did one write overwrite the other (lost update) or did two writes together break a rule (write skew)?|||Một lần ghi đè lần kia (lost update) hay hai lần ghi cùng phá luật (write skew)?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — name the anomaly from the timeline\n\nAnswer in the answer panel (no code needed).\n\n1. Timeline → anomalyDòng thời gian → hiện tượng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — name the anomaly from the timeline — answer key\n\n1. Timeline → anomalyDòng thời gian → hiện tượng\n   - r1.ht: phantom\n   - r2.ht: lost update\n   - r3.ht: dirty read\n   - r4.ht: write skew\n   - r5.ht: non-repeatable read\n   Phantom = a new ROW in a range; non-repeatable = the same row CHANGED; lost update = read-modify-write overwritten; write skew = both checks pass on a snapshot, each writes something different, and together they break a rule.VI: Phantom = DÒNG mới trong một khoảng; non-repeatable = cùng dòng BỊ ĐỔI; lost update = đọc-sửa-ghi bị ghi đè; write skew = hai phép kiểm cùng qua trên snapshot, mỗi bên ghi một thứ khác, gộp lại phá luật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Phantom = a new ROW in a range; non-repeatable = the same row CHANGED; lost update = read-modify-write overwritten; write skew = both checks pass on a snapshot, each writes something different, and together they break a rule.</p><p><i>VI: Phantom = DÒNG mới trong một khoảng; non-repeatable = cùng dòng BỊ ĐỔI; lost update = đọc-sửa-ghi bị ghi đè; write skew = hai phép kiểm cùng qua trên snapshot, mỗi bên ghi một thứ khác, gộp lại phá luật.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Timeline → anomaly</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng thời gian → hiện tượng</i></p>",
+            "cot": [
+              {
+                "ma": "tl",
+                "ten": "Timeline"
+              },
+              {
+                "ma": "ht",
+                "ten": "Anomaly",
+                "luaChon": [
+                  "dirty read",
+                  "non-repeatable read",
+                  "phantom",
+                  "lost update",
+                  "write skew"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tl": "A counts orders with status 'new' → 12. B inserts a new order and commits. A counts again → 13."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tl": "A reads stock 5. B reads stock 5. B sells 2, writes 3, commits. A sells 1, writes 4, commits."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tl": "A sets a price to 0 by mistake, does not commit. B's report shows 0. A rolls back."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tl": "Rule: one booking per room per slot. A checks 9:00 is free, B checks too; A inserts booking A, B inserts booking B; both commit."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tl": "A reads a customer's address. B changes it and commits. A reads it again in the same transaction: new value."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ht": "phantom",
+              "r2.ht": "lost update",
+              "r3.ht": "dirty read",
+              "r4.ht": "write skew",
+              "r5.ht": "non-repeatable read"
+            },
+            "giaiThich": "<p>Phantom = a new ROW in a range; non-repeatable = the same row CHANGED; lost update = read-modify-write overwritten; write skew = both checks pass on a snapshot, each writes something different, and together they break a rule.</p><p><i>VI: Phantom = DÒNG mới trong một khoảng; non-repeatable = cùng dòng BỊ ĐỔI; lost update = đọc-sửa-ghi bị ghi đè; write skew = hai phép kiểm cùng qua trên snapshot, mỗi bên ghi một thứ khác, gộp lại phá luật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the double booking a phantom — it is write skew: each saw a free slot and wrote a different row.|||Gọi đặt trùng là phantom — đó là write skew: mỗi bên thấy chỗ trống và ghi một dòng khác."
+        },
+        {
+          "loi": "Calling the stock example a dirty read — B committed before A wrote.|||Gọi ví dụ tồn kho là dirty read — B đã commit trước khi A ghi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        },
+        {
+          "en": "dirty read",
+          "vi": "đọc bẩn"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — a safe money-transfer procedure",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "XACT_ABORT",
+        "TRY/CATCH + THROW",
+        "UPDLOCK",
+        "lock ordering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "transaction",
+        "procedure"
+      ],
+      "problemHtml": "<p>Table <code>TaiKhoan(id, chuTk, soDu ≥ 0)</code>: (1, An, 100), (2, Bình, 50), (3, Chi, 0). Write <code>dbo.chuyen_tien @tu INT, @den INT, @soTien DECIMAL(12,0)</code> that:</p>\n<ul><li>rolls back everything on any error and re-throws it to the caller;</li>\n<li>locks the two rows <b>in id order</b> (smaller id first) with <code>UPDLOCK</code>, so two opposite transfers cannot deadlock;</li>\n<li>refuses a non-positive amount with error <b>50003</b>, an unknown (or identical) account with <b>50001</b>, and an overdraft with <b>50002</b> — leaving every balance unchanged.</li></ul><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 6 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (6 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 6 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>THROW 5000x, N'message', 1 for the business errors; THROW; (no arguments) in CATCH.</li>\n  <li>Check the unknown account BEFORE updating — an UPDATE that matches 0 rows is not an error and money would vanish.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng <code>TaiKhoan(id, chuTk, soDu ≥ 0)</code>: (1, An, 100), (2, Bình, 50), (3, Chi, 0). Viết <code>dbo.chuyen_tien @tu INT, @den INT, @soTien DECIMAL(12,0)</code> sao cho:</p>\n<ul><li>hoàn tác mọi thứ khi có lỗi bất kỳ và ném lại lỗi cho nơi gọi;</li>\n<li>khoá hai dòng <b>theo thứ tự id</b> (id nhỏ trước) bằng <code>UPDLOCK</code>, để hai lệnh chuyển ngược chiều không deadlock;</li>\n<li>từ chối số tiền không dương bằng lỗi <b>50003</b>, tài khoản không tồn tại (hoặc trùng nhau) bằng <b>50001</b>, và rút quá số dư bằng <b>50002</b> — mọi số dư giữ nguyên.</li></ul><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 6 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (6 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 6 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>THROW 5000x, N'thông báo', 1 cho lỗi nghiệp vụ; THROW; (không đối số) trong CATCH.</li>\n  <li>Kiểm tài khoản không tồn tại TRƯỚC khi cập nhật — UPDATE khớp 0 dòng không phải lỗi và tiền sẽ biến mất.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. A good transfer 1 → 2 of 30: balances 70 and 80\nPASS 2. An overdraft 3 → 1 of 10: error 50002, nothing changes\nPASS 3. An unknown account 1 → 99: error 50001, the 30 does not vanish\nPASS 4. A zero or negative amount: error 50003\nPASS 5. A transfer to the same account: error 50001\nPASS 6. The rows are locked with UPDLOCK, and no transaction is left open\nALL 6 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Lock in a fixed global order (smaller id first): a cycle — and so a deadlock — becomes impossible.|||Khoá theo một thứ tự toàn cục cố định (id nhỏ trước): không thể có chu trình — nên không có deadlock.",
+        "UPDLOCK on the reads: two transfers from the same account queue up instead of both reading the old balance.|||UPDLOCK khi đọc: hai lệnh chuyển từ cùng tài khoản xếp hàng thay vì cùng đọc số dư cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 2 — a safe money-transfer procedure\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE dbo.chuyen_tien @tu INT, @den INT, @soTien DECIMAL(12,0)\nAS\nBEGIN\n    -- your code\n    RETURN;\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 2 — a safe money-transfer procedure\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.TaiKhoan (\n    id    INT           NOT NULL CONSTRAINT pk_taikhoan PRIMARY KEY,\n    chuTk NVARCHAR(50)  NOT NULL,\n    soDu  DECIMAL(12,0) NOT NULL CONSTRAINT ck_taikhoan_sodu CHECK (soDu >= 0)\n);\nINSERT INTO dbo.TaiKhoan VALUES (1, N'An', 100), (2, N'Bình', 50), (3, N'Chi', 0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 2 — a safe money-transfer procedure\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 6 checks ──────────';\n\n-- CHECK 1: A good transfer 1 → 2 of 30: balances 70 and 80\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 1, 2, 30; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 0 AND @sau = N''1:70,2:80,3:0'', 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A good transfer 1 → 2 of 30: balances 70 and 80 | Chuyển hợp lệ 1 → 2 số 30: số dư 70 và 80'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A good transfer 1 → 2 of 30: balances 70 and 80 | Chuyển hợp lệ 1 → 2 số 30: số dư 70 và 80', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: An overdraft 3 → 1 of 10: error 50002, nothing changes\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 3, 1, 10; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50002 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. An overdraft 3 → 1 of 10: error 50002, nothing changes | Rút quá 3 → 1 số 10: lỗi 50002, không gì đổi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. An overdraft 3 → 1 of 10: error 50002, nothing changes | Rút quá 3 → 1 số 10: lỗi 50002, không gì đổi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown account 1 → 99: error 50001, the 30 does not vanish\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 1, 99, 30; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50001 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown account 1 → 99: error 50001, the 30 does not vanish | Tài khoản lạ 1 → 99: lỗi 50001, 30 không biến mất'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown account 1 → 99: error 50001, the 30 does not vanish | Tài khoản lạ 1 → 99: lỗi 50001, 30 không biến mất', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A zero or negative amount: error 50003\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 2, 1, -20; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50003 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A zero or negative amount: error 50003 | Số tiền 0 hoặc âm: lỗi 50003'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A zero or negative amount: error 50003 | Số tiền 0 hoặc âm: lỗi 50003', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: A transfer to the same account: error 50001\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 2, 2, 10; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50001 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. A transfer to the same account: error 50001 | Chuyển cho chính mình: lỗi 50001'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. A transfer to the same account: error 50001 | Chuyển cho chính mình: lỗi 50001', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 6: The rows are locked with UPDLOCK, and no transaction is left open\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.chuyen_tien''));\nBEGIN TRY EXEC dbo.chuyen_tien 3, 1, 10; END TRY BEGIN CATCH END CATCH;\nDECLARE @mo INT = @@TRANCOUNT; WHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@d LIKE N''%UPDLOCK%'' AND @mo = 0, 1, 0);\nSET @info = CONCAT(N''UPDLOCK: '', IIF(@d LIKE N''%UPDLOCK%'', N''yes'', N''no''), N'' · open transactions after an error: '', @mo);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 6. The rows are locked with UPDLOCK, and no transaction is left open | Dòng được khoá bằng UPDLOCK, không để giao dịch treo'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 6. The rows are locked with UPDLOCK, and no transaction is left open | Dòng được khoá bằng UPDLOCK, không để giao dịch treo', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 2 — a safe money-transfer procedure\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE dbo.chuyen_tien @tu INT, @den INT, @soTien DECIMAL(12,0)\nAS\nBEGIN\n    SET NOCOUNT ON;\n    SET XACT_ABORT ON;                                    -- any error dooms the transaction\n    BEGIN TRY\n        IF @soTien IS NULL OR @soTien <= 0\n            THROW 50003, N'Amount must be positive', 1;\n        BEGIN TRANSACTION;\n            DECLARE @nho INT = IIF(@tu < @den, @tu, @den), @lon INT = IIF(@tu < @den, @den, @tu), @x DECIMAL(12,0);\n            SELECT @x = soDu FROM dbo.TaiKhoan WITH (UPDLOCK) WHERE id = @nho;   -- lock the smaller id first…\n            SELECT @x = soDu FROM dbo.TaiKhoan WITH (UPDLOCK) WHERE id = @lon;   -- …then the larger: no deadlock cycle\n            IF @tu = @den OR (SELECT COUNT(*) FROM dbo.TaiKhoan WHERE id IN (@tu, @den)) < 2\n                THROW 50001, N'Unknown account', 1;\n            IF (SELECT soDu FROM dbo.TaiKhoan WHERE id = @tu) < @soTien\n                THROW 50002, N'Insufficient funds', 1;\n            UPDATE dbo.TaiKhoan SET soDu = soDu - @soTien WHERE id = @tu;\n            UPDATE dbo.TaiKhoan SET soDu = soDu + @soTien WHERE id = @den;\n        COMMIT TRANSACTION;\n    END TRY\n    BEGIN CATCH\n        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;\n        THROW;                                            -- report the original error to the caller\n    END CATCH\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 2 — a safe money-transfer procedure\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.TaiKhoan (\n    id    INT           NOT NULL CONSTRAINT pk_taikhoan PRIMARY KEY,\n    chuTk NVARCHAR(50)  NOT NULL,\n    soDu  DECIMAL(12,0) NOT NULL CONSTRAINT ck_taikhoan_sodu CHECK (soDu >= 0)\n);\nINSERT INTO dbo.TaiKhoan VALUES (1, N'An', 100), (2, N'Bình', 50), (3, N'Chi', 0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 2 — a safe money-transfer procedure\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 6 checks ──────────';\n\n-- CHECK 1: A good transfer 1 → 2 of 30: balances 70 and 80\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 1, 2, 30; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 0 AND @sau = N''1:70,2:80,3:0'', 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A good transfer 1 → 2 of 30: balances 70 and 80 | Chuyển hợp lệ 1 → 2 số 30: số dư 70 và 80'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A good transfer 1 → 2 of 30: balances 70 and 80 | Chuyển hợp lệ 1 → 2 số 30: số dư 70 và 80', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: An overdraft 3 → 1 of 10: error 50002, nothing changes\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 3, 1, 10; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50002 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. An overdraft 3 → 1 of 10: error 50002, nothing changes | Rút quá 3 → 1 số 10: lỗi 50002, không gì đổi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. An overdraft 3 → 1 of 10: error 50002, nothing changes | Rút quá 3 → 1 số 10: lỗi 50002, không gì đổi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown account 1 → 99: error 50001, the 30 does not vanish\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 1, 99, 30; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50001 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown account 1 → 99: error 50001, the 30 does not vanish | Tài khoản lạ 1 → 99: lỗi 50001, 30 không biến mất'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown account 1 → 99: error 50001, the 30 does not vanish | Tài khoản lạ 1 → 99: lỗi 50001, 30 không biến mất', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A zero or negative amount: error 50003\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 2, 1, -20; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50003 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e, N'' · balances '', @sau);\nUPDATE dbo.TaiKhoan SET soDu = CASE id WHEN 1 THEN 100 WHEN 2 THEN 50 ELSE 0 END;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A zero or negative amount: error 50003 | Số tiền 0 hoặc âm: lỗi 50003'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A zero or negative amount: error 50003 | Số tiền 0 hoặc âm: lỗi 50003', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: A transfer to the same account: error 50001\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0, @truoc NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nBEGIN TRY EXEC dbo.chuyen_tien 2, 2, 10; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nDECLARE @sau NVARCHAR(100) = (SELECT STRING_AGG(CONCAT(id, '':'', soDu), '','') WITHIN GROUP (ORDER BY id) FROM dbo.TaiKhoan);\nSET @ok = IIF(@e = 50001 AND @sau = @truoc, 1, 0);\nSET @info = CONCAT(N''error='', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. A transfer to the same account: error 50001 | Chuyển cho chính mình: lỗi 50001'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. A transfer to the same account: error 50001 | Chuyển cho chính mình: lỗi 50001', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 6: The rows are locked with UPDLOCK, and no transaction is left open\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.chuyen_tien''));\nBEGIN TRY EXEC dbo.chuyen_tien 3, 1, 10; END TRY BEGIN CATCH END CATCH;\nDECLARE @mo INT = @@TRANCOUNT; WHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@d LIKE N''%UPDLOCK%'' AND @mo = 0, 1, 0);\nSET @info = CONCAT(N''UPDLOCK: '', IIF(@d LIKE N''%UPDLOCK%'', N''yes'', N''no''), N'' · open transactions after an error: '', @mo);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 6. The rows are locked with UPDLOCK, and no transaction is left open | Dòng được khoá bằng UPDLOCK, không để giao dịch treo'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 6. The rows are locked with UPDLOCK, and no transaction is left open | Dòng được khoá bằng UPDLOCK, không để giao dịch treo', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The CHECK (soDu ≥ 0) would also stop an overdraft, but with error 547 and a message meant for DBAs. Raising 50002 yourself gives the application a clear, stable code. The deadlock-free lock order cannot be proven by a one-session check, so check.sql verifies the UPDLOCK reads; try it yourself with two SSMS windows (1 → 2 and 2 → 1 at the same time).</p>",
+      "solutionExplanationHtmlVi": "<p>CHECK (soDu ≥ 0) cũng chặn được rút quá, nhưng bằng lỗi 547 và thông báo dành cho DBA. Tự ném 50002 cho ứng dụng một mã rõ và ổn định. Thứ tự khoá chống deadlock không chứng minh được bằng kiểm một phiên, nên check.sql kiểm các lần đọc UPDLOCK; hãy tự thử với hai cửa sổ SSMS (1 → 2 và 2 → 1 cùng lúc).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…).|||Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. A good transfer 1 → 2 of 30: balances 70 and 80",
+            "2. An overdraft 3 → 1 of 10: error 50002, nothing changes",
+            "3. An unknown account 1 → 99: error 50001, the 30 does not vanish",
+            "4. A zero or negative amount: error 50003",
+            "5. A transfer to the same account: error 50001",
+            "6. The rows are locked with UPDLOCK, and no transaction is left open"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not checking the target account: UPDATE … WHERE id = 99 affects 0 rows, the debit commits, money vanishes.|||Không kiểm tài khoản đích: UPDATE … WHERE id = 99 ảnh hưởng 0 dòng, khoản trừ được commit, tiền biến mất."
+        },
+        {
+          "loi": "Swallowing the error in CATCH (no THROW): the caller believes the transfer worked.|||Nuốt lỗi trong CATCH (không THROW): nơi gọi tưởng đã chuyển xong."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lock ordering",
+          "vi": "thứ tự khoá"
+        },
+        {
+          "en": "re-throw",
+          "vi": "ném lại lỗi"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — pick the technique",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "atomic UPDATE",
+        "UPDLOCK / FOR UPDATE",
+        "version column",
+        "SERIALIZABLE + retry",
+        "SKIP LOCKED",
+        "RCSI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction"
+      ],
+      "problemHtml": "<p>For each situation, choose the one technique that fits best.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi tình huống, chọn kỹ thuật hợp nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Minutes of user think time ⇒ never hold a lock: optimistic.|||Người dùng nghĩ hàng phút ⇒ đừng giữ khoá: lạc quan.",
+        "A queue with many workers ⇒ skip what others locked.|||Hàng đợi nhiều worker ⇒ bỏ qua thứ người khác đã khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — pick the technique\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → techniqueTình huống → kỹ thuật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 3 — pick the technique — answer key\n\n1. Situation → techniqueTình huống → kỹ thuật\n   - r1.kt: atomic UPDATE … WHERE stock >= @n\n   - r2.kt: SELECT … FOR UPDATE / WITH (UPDLOCK)\n   - r3.kt: version column checked on save\n   - r4.kt: SERIALIZABLE + retry on 40001\n   - r5.kt: FOR UPDATE SKIP LOCKED / READPAST\n   - r6.kt: READ COMMITTED SNAPSHOT (RCSI)\n   Prefer the simplest tool that closes the gap: one atomic statement beats a read-then-write; long think time ⇒ optimistic; rules over many rows ⇒ SERIALIZABLE with retry.VI: Ưu tiên công cụ đơn giản nhất bịt được lỗ hổng: một câu lệnh nguyên tử hơn đọc-rồi-ghi; thời gian suy nghĩ dài ⇒ lạc quan; luật trên nhiều dòng ⇒ SERIALIZABLE kèm thử lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prefer the simplest tool that closes the gap: one atomic statement beats a read-then-write; long think time ⇒ optimistic; rules over many rows ⇒ SERIALIZABLE with retry.</p><p><i>VI: Ưu tiên công cụ đơn giản nhất bịt được lỗ hổng: một câu lệnh nguyên tử hơn đọc-rồi-ghi; thời gian suy nghĩ dài ⇒ lạc quan; luật trên nhiều dòng ⇒ SERIALIZABLE kèm thử lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → technique</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → kỹ thuật</i></p>",
+            "cot": [
+              {
+                "ma": "th",
+                "ten": "Situation / Tình huống"
+              },
+              {
+                "ma": "kt",
+                "ten": "Technique",
+                "luaChon": [
+                  "atomic UPDATE … WHERE stock >= @n",
+                  "SELECT … FOR UPDATE / WITH (UPDLOCK)",
+                  "version column checked on save",
+                  "SERIALIZABLE + retry on 40001",
+                  "FOR UPDATE SKIP LOCKED / READPAST",
+                  "READ COMMITTED SNAPSHOT (RCSI)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "th": "Decrease stock by the quantity ordered, never below 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "th": "Read a seat map, let the code decide which seat, then book it, all in one short transaction"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "th": "An admin edits a product form for 5 minutes before saving"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "th": "The on-call rule spans many rows (\"at least one doctor on call\")"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "th": "10 workers take jobs from one queue table without waiting on each other"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "th": "Reports are blocked by writers on SQL Server all day"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kt": "atomic UPDATE … WHERE stock >= @n",
+              "r2.kt": "SELECT … FOR UPDATE / WITH (UPDLOCK)",
+              "r3.kt": "version column checked on save",
+              "r4.kt": "SERIALIZABLE + retry on 40001",
+              "r5.kt": "FOR UPDATE SKIP LOCKED / READPAST",
+              "r6.kt": "READ COMMITTED SNAPSHOT (RCSI)"
+            },
+            "giaiThich": "<p>Prefer the simplest tool that closes the gap: one atomic statement beats a read-then-write; long think time ⇒ optimistic; rules over many rows ⇒ SERIALIZABLE with retry.</p><p><i>VI: Ưu tiên công cụ đơn giản nhất bịt được lỗ hổng: một câu lệnh nguyên tử hơn đọc-rồi-ghi; thời gian suy nghĩ dài ⇒ lạc quan; luật trên nhiều dòng ⇒ SERIALIZABLE kèm thử lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Holding FOR UPDATE while a user edits a form.|||Giữ FOR UPDATE trong lúc người dùng sửa form."
+        },
+        {
+          "loi": "Using NOLOCK to \"fix\" blocked reports — that reads dirty data; RCSI is the safe switch.|||Dùng NOLOCK để \"chữa\" báo cáo bị chặn — đó là đọc bẩn; RCSI mới là công tắc an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "job queue",
+          "vi": "hàng đợi công việc"
+        },
+        {
+          "en": "SKIP LOCKED",
+          "vi": "bỏ qua dòng đang bị khoá"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — predict: REPEATABLE READ doctors, lock order, who blocks whom",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "REPEATABLE READ",
+        "deadlock",
+        "blocking diagnosis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "locking"
+      ],
+      "problemHtml": "<p>Three predictions from the lesson, each checked on a real server.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba dự đoán của bài, đều kiểm trên server thật.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Deadlock = a cycle of waits; one fixed lock order breaks every cycle.|||Deadlock = chu trình chờ; một thứ tự khoá cố định phá mọi chu trình.",
+        "Blocking ≠ deadlock: a blocker that never finishes is usually an open transaction.|||Chặn ≠ deadlock: kẻ chặn không bao giờ xong thường là một giao dịch còn mở."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — predict: REPEATABLE READ doctors, lock order, who blocks whom\n\nAnswer in the answer panel (no code needed).\n\n1. SQL Server, REPEATABLE READ: An and Bình each COUNT the doctors on call (S locks kept), then each UPDATE their own row to off call. Result?SQL Server, REPEATABLE READ: An và Bình đều COUNT bác sĩ trực (giữ khoá S), rồi mỗi người UPDATE dòng của mình thành nghỉ. Kết quả?\n2. A transfers 1 → 2 (locks 1, then 2); B transfers 2 → 1. B is rewritten to lock the smaller id first. Now…A chuyển 1 → 2 (khoá 1 rồi 2); B chuyển 2 → 1. Viết lại B để khoá id nhỏ trước. Giờ…\n3. Diagnostics: session B waits on LCK_M_S for a KEY, blocked by A; A holds KEY X, open_transaction_count = 1, and runs nothing. What do you do?Chẩn đoán: phiên B chờ LCK_M_S trên một KEY, bị A chặn; A giữ KEY X, open_transaction_count = 1, không chạy gì. Bạn làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — predict: REPEATABLE READ doctors, lock order, who blocks whom — answer key\n\n1. SQL Server, REPEATABLE READ: An and Bình each COUNT the doctors on call (S locks kept), then each UPDATE their own row to off call. Result?SQL Server, REPEATABLE READ: An và Bình đều COUNT bác sĩ trực (giữ khoá S), rồi mỗi người UPDATE dòng của mình thành nghỉ. Kết quả?\n   Answer: a) deadlock: one is the victim (1205), the other succeeds\n   Each holds S on the other's row and needs X on its own row that the other has S on: a cycle. The victim retries and now sees only one doctor on call.VI: Mỗi bên giữ S trên dòng của bên kia và cần X trên dòng mình mà bên kia giữ S: chu trình. Nạn nhân thử lại và lúc đó chỉ thấy một bác sĩ trực.\n\n2. A transfers 1 → 2 (locks 1, then 2); B transfers 2 → 1. B is rewritten to lock the smaller id first. Now…A chuyển 1 → 2 (khoá 1 rồi 2); B chuyển 2 → 1. Viết lại B để khoá id nhỏ trước. Giờ…\n   Answer: b) B waits for A to finish, then runs: no deadlock\n   Both want row 1 first; whoever gets it finishes, the other queues behind. A cycle needs two different orders.VI: Cả hai cùng xin dòng 1 trước; ai được thì làm xong, người kia xếp hàng. Chu trình cần hai thứ tự khác nhau.\n\n3. Diagnostics: session B waits on LCK_M_S for a KEY, blocked by A; A holds KEY X, open_transaction_count = 1, and runs nothing. What do you do?Chẩn đoán: phiên B chờ LCK_M_S trên một KEY, bị A chặn; A giữ KEY X, open_transaction_count = 1, không chạy gì. Bạn làm gì?\n   Answer: d) find why A never committed, then end that open transaction\n   A sleeping session with an open transaction is a code bug (missing COMMIT/ROLLBACK on some path). KILL it as first aid, then fix the code.VI: Phiên ngủ mà còn giao dịch mở là lỗi mã (thiếu COMMIT/ROLLBACK ở một nhánh). KILL để sơ cứu rồi sửa mã.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> deadlock: one is the victim (1205), the other succeeds</p><p>Each holds S on the other's row and needs X on its own row that the other has S on: a cycle. The victim retries and now sees only one doctor on call.</p><p><i>VI: Mỗi bên giữ S trên dòng của bên kia và cần X trên dòng mình mà bên kia giữ S: chu trình. Nạn nhân thử lại và lúc đó chỉ thấy một bác sĩ trực.</i></p></li><li><p><b>b)</b> B waits for A to finish, then runs: no deadlock</p><p>Both want row 1 first; whoever gets it finishes, the other queues behind. A cycle needs two different orders.</p><p><i>VI: Cả hai cùng xin dòng 1 trước; ai được thì làm xong, người kia xếp hàng. Chu trình cần hai thứ tự khác nhau.</i></p></li><li><p><b>d)</b> find why A never committed, then end that open transaction</p><p>A sleeping session with an open transaction is a code bug (missing COMMIT/ROLLBACK on some path). KILL it as first aid, then fix the code.</p><p><i>VI: Phiên ngủ mà còn giao dịch mở là lỗi mã (thiếu COMMIT/ROLLBACK ở một nhánh). KILL để sơ cứu rồi sửa mã.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>SQL Server, REPEATABLE READ: An and Bình each COUNT the doctors on call (S locks kept), then each UPDATE their own row to off call. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL Server, REPEATABLE READ: An và Bình đều COUNT bác sĩ trực (giữ khoá S), rồi mỗi người UPDATE dòng của mình thành nghỉ. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "deadlock: one is the victim (1205), the other succeeds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "both fail with an update conflict (3960)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both succeed and nobody is on call"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the second waits forever without an error"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each holds S on the other's row and needs X on its own row that the other has S on: a cycle. The victim retries and now sees only one doctor on call.</p><p><i>VI: Mỗi bên giữ S trên dòng của bên kia và cần X trên dòng mình mà bên kia giữ S: chu trình. Nạn nhân thử lại và lúc đó chỉ thấy một bác sĩ trực.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A transfers 1 → 2 (locks 1, then 2); B transfers 2 → 1. B is rewritten to lock the smaller id first. Now…</p><p style=\"opacity:.75;font-size:.92em\"><i>A chuyển 1 → 2 (khoá 1 rồi 2); B chuyển 2 → 1. Viết lại B để khoá id nhỏ trước. Giờ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "B fails immediately with a lock timeout"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B waits for A to finish, then runs: no deadlock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both still deadlock, only less often"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A and B run fully in parallel"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both want row 1 first; whoever gets it finishes, the other queues behind. A cycle needs two different orders.</p><p><i>VI: Cả hai cùng xin dòng 1 trước; ai được thì làm xong, người kia xếp hàng. Chu trình cần hai thứ tự khác nhau.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Diagnostics: session B waits on LCK_M_S for a KEY, blocked by A; A holds KEY X, open_transaction_count = 1, and runs nothing. What do you do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chẩn đoán: phiên B chờ LCK_M_S trên một KEY, bị A chặn; A giữ KEY X, open_transaction_count = 1, không chạy gì. Bạn làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "rebuild the index so that B can read through it again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "add WITH (NOLOCK) to the SELECT that session B runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "restart SQL Server so that every lock is cleared at once"
+              },
+              {
+                "ma": "d",
+                "noiDung": "find why A never committed, then end that open transaction"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A sleeping session with an open transaction is a code bug (missing COMMIT/ROLLBACK on some path). KILL it as first aid, then fix the code.</p><p><i>VI: Phiên ngủ mà còn giao dịch mở là lỗi mã (thiếu COMMIT/ROLLBACK ở một nhánh). KILL để sơ cứu rồi sửa mã.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting REPEATABLE READ to behave like SNAPSHOT (both succeed) on SQL Server.|||Tưởng REPEATABLE READ chạy như SNAPSHOT (cả hai thành công) trên SQL Server."
+        },
+        {
+          "loi": "\"Fixing\" blocking with NOLOCK.|||\"Chữa\" chặn bằng NOLOCK."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blocking",
+          "vi": "chặn chờ khoá"
+        },
+        {
+          "en": "deadlock",
+          "vi": "khoá chết"
+        }
+      ]
+    }
+  ]
+}

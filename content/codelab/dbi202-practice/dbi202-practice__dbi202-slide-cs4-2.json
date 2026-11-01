@@ -1,0 +1,590 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs4-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs4-2"
+  },
+  "exercises": [
+    {
+      "title": "MVCC on both engines: versions, VACUUM, RCSI and SNAPSHOT",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "MVCC",
+        "xmin/xmax",
+        "VACUUM",
+        "RCSI",
+        "SNAPSHOT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "mvcc"
+      ],
+      "problemHtml": "<p>Five questions on slides 13–16.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 13–16.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Old versions live in the table (PostgreSQL) or in tempdb (SQL Server).|||Phiên bản cũ nằm trong bảng (PostgreSQL) hoặc tempdb (SQL Server).",
+        "Same row ⇒ conflict detected; different rows ⇒ write skew possible.|||Cùng dòng ⇒ phát hiện xung đột; khác dòng ⇒ có thể write skew."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MVCC on both engines: versions, VACUUM, RCSI and SNAPSHOT\n\nAnswer in the answer panel (no code needed).\n\n1. On PostgreSQL, UPDATE of one row…Trên PostgreSQL, UPDATE một dòng…\n2. A transaction left open for 6 hours on PostgreSQL causes…Một giao dịch mở 6 giờ trên PostgreSQL gây ra…\n3. SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) gives each…SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) cho mỗi…\n4. Two SNAPSHOT transactions update the SAME row; the second one to write gets…Hai giao dịch SNAPSHOT cập nhật CÙNG một dòng; giao dịch ghi sau nhận…\n5. Two doctors each check \"someone else is on call\", then both go off call (different rows). Under SNAPSHOT…Hai bác sĩ đều kiểm \"còn người trực\", rồi cả hai cùng nghỉ (hai dòng khác nhau). Dưới SNAPSHOT…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MVCC on both engines: versions, VACUUM, RCSI and SNAPSHOT — answer key\n\n1. On PostgreSQL, UPDATE of one row…Trên PostgreSQL, UPDATE một dòng…\n   Answer: c) writes a new row version and stamps xmax on the old one\n   The old tuple stays in the heap until VACUUM removes it — that is where table bloat comes from.VI: Tuple cũ nằm lại trong heap tới khi VACUUM dọn — đó là nguồn gốc phình bảng.\n\n2. A transaction left open for 6 hours on PostgreSQL causes…Một giao dịch mở 6 giờ trên PostgreSQL gây ra…\n   Answer: a) VACUUM cannot remove any version newer than its snapshot, so tables bloat\n   Dead versions might still be visible to that old snapshot, so they must be kept.VI: Phiên bản chết có thể vẫn nhìn thấy với snapshot cũ đó nên phải giữ lại.\n\n3. SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) gives each…SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) cho mỗi…\n   Answer: a) statement a consistent view, with versions kept in tempdb\n   RCSI = statement-level snapshot (like PostgreSQL READ COMMITTED); SNAPSHOT isolation = transaction-level.VI: RCSI = snapshot theo câu lệnh (như READ COMMITTED của PostgreSQL); SNAPSHOT = theo giao dịch.\n\n4. Two SNAPSHOT transactions update the SAME row; the second one to write gets…Hai giao dịch SNAPSHOT cập nhật CÙNG một dòng; giao dịch ghi sau nhận…\n   Answer: b) error 3960 (update conflict) and must retry\n   SNAPSHOT prevents lost updates by failing the loser — the application must retry.VI: SNAPSHOT ngăn mất cập nhật bằng cách làm kẻ thua thất bại — ứng dụng phải thử lại.\n\n5. Two doctors each check \"someone else is on call\", then both go off call (different rows). Under SNAPSHOT…Hai bác sĩ đều kiểm \"còn người trực\", rồi cả hai cùng nghỉ (hai dòng khác nhau). Dưới SNAPSHOT…\n   Answer: c) both succeed and nobody is on call: write skew\n   They wrote different rows, so no conflict is detected. Only SERIALIZABLE (or a lock on the shared fact) stops it.VI: Họ ghi hai dòng khác nhau nên không phát hiện xung đột. Chỉ SERIALIZABLE (hoặc khoá trên sự kiện chung) chặn được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> writes a new row version and stamps xmax on the old one</p><p>The old tuple stays in the heap until VACUUM removes it — that is where table bloat comes from.</p><p><i>VI: Tuple cũ nằm lại trong heap tới khi VACUUM dọn — đó là nguồn gốc phình bảng.</i></p></li><li><p><b>a)</b> VACUUM cannot remove any version newer than its snapshot, so tables bloat</p><p>Dead versions might still be visible to that old snapshot, so they must be kept.</p><p><i>VI: Phiên bản chết có thể vẫn nhìn thấy với snapshot cũ đó nên phải giữ lại.</i></p></li><li><p><b>a)</b> statement a consistent view, with versions kept in tempdb</p><p>RCSI = statement-level snapshot (like PostgreSQL READ COMMITTED); SNAPSHOT isolation = transaction-level.</p><p><i>VI: RCSI = snapshot theo câu lệnh (như READ COMMITTED của PostgreSQL); SNAPSHOT = theo giao dịch.</i></p></li><li><p><b>b)</b> error 3960 (update conflict) and must retry</p><p>SNAPSHOT prevents lost updates by failing the loser — the application must retry.</p><p><i>VI: SNAPSHOT ngăn mất cập nhật bằng cách làm kẻ thua thất bại — ứng dụng phải thử lại.</i></p></li><li><p><b>c)</b> both succeed and nobody is on call: write skew</p><p>They wrote different rows, so no conflict is detected. Only SERIALIZABLE (or a lock on the shared fact) stops it.</p><p><i>VI: Họ ghi hai dòng khác nhau nên không phát hiện xung đột. Chỉ SERIALIZABLE (hoặc khoá trên sự kiện chung) chặn được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>On PostgreSQL, UPDATE of one row…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên PostgreSQL, UPDATE một dòng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "moves the old version to tempdb for readers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "overwrites the row in place and logs the old value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "writes a new row version and stamps xmax on the old one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "locks the whole page until COMMIT"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The old tuple stays in the heap until VACUUM removes it — that is where table bloat comes from.</p><p><i>VI: Tuple cũ nằm lại trong heap tới khi VACUUM dọn — đó là nguồn gốc phình bảng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A transaction left open for 6 hours on PostgreSQL causes…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một giao dịch mở 6 giờ trên PostgreSQL gây ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "VACUUM cannot remove any version newer than its snapshot, so tables bloat"
+              },
+              {
+                "ma": "b",
+                "noiDung": "all other sessions to wait for its locks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing, because MVCC readers never matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the WAL to be deleted when it commits"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Dead versions might still be visible to that old snapshot, so they must be kept.</p><p><i>VI: Phiên bản chết có thể vẫn nhìn thấy với snapshot cũ đó nên phải giữ lại.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) gives each…</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL Server READ_COMMITTED_SNAPSHOT ON (RCSI) cho mỗi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "statement a consistent view, with versions kept in tempdb"
+              },
+              {
+                "ma": "b",
+                "noiDung": "writer the right to skip locked rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "transaction one frozen view for its whole duration"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reader a dirty view of uncommitted changes"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>RCSI = statement-level snapshot (like PostgreSQL READ COMMITTED); SNAPSHOT isolation = transaction-level.</p><p><i>VI: RCSI = snapshot theo câu lệnh (như READ COMMITTED của PostgreSQL); SNAPSHOT = theo giao dịch.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Two SNAPSHOT transactions update the SAME row; the second one to write gets…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai giao dịch SNAPSHOT cập nhật CÙNG một dòng; giao dịch ghi sau nhận…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a deadlock victim message (1205)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "error 3960 (update conflict) and must retry"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a wait until the first one commits, then success"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the row silently overwritten by its value"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>SNAPSHOT prevents lost updates by failing the loser — the application must retry.</p><p><i>VI: SNAPSHOT ngăn mất cập nhật bằng cách làm kẻ thua thất bại — ứng dụng phải thử lại.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Two doctors each check \"someone else is on call\", then both go off call (different rows). Under SNAPSHOT…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai bác sĩ đều kiểm \"còn người trực\", rồi cả hai cùng nghỉ (hai dòng khác nhau). Dưới SNAPSHOT…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the second waits, then sees the first change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one is chosen as a deadlock victim"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both succeed and nobody is on call: write skew"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the second fails with an update conflict"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>They wrote different rows, so no conflict is detected. Only SERIALIZABLE (or a lock on the shared fact) stops it.</p><p><i>VI: Họ ghi hai dòng khác nhau nên không phát hiện xung đột. Chỉ SERIALIZABLE (hoặc khoá trên sự kiện chung) chặn được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing RCSI (per statement) with SNAPSHOT (per transaction).|||Nhầm RCSI (theo câu lệnh) với SNAPSHOT (theo giao dịch)."
+        },
+        {
+          "loi": "Leaving transactions open in an app \"because reads do not lock\".|||Để giao dịch mở trong app \"vì đọc không khoá\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MVCC",
+          "vi": "điều khiển tương tranh đa phiên bản"
+        },
+        {
+          "en": "table bloat",
+          "vi": "phình bảng"
+        },
+        {
+          "en": "update conflict",
+          "vi": "xung đột cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "Optimistic locking with a version column: save only if nobody changed it",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "optimistic concurrency",
+        "version column",
+        "lost update"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "optimistic"
+      ],
+      "problemHtml": "<p>Slides 20–21. An admin opened laptop 7 when it was at <b>version 3</b>, edited the price to <b>14,500,000</b> and pressed Save several minutes later. Holding a lock for those minutes is not an option. Write ONE statement that saves the new price <b>only if the row is still at version 3</b>, and moves the version to 4 so that any other stale editor fails in turn.</p>\n<p><code>Product(id, name, price, version)</code> — 2 rows; laptop 7 is at version 3.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One UPDATE whose WHERE checks both the id and the version you read.</li>\n  <li>The application then looks at the affected-row count: 0 means \"someone else saved first — reload\".</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 20–21. Một admin mở laptop 7 lúc nó ở <b>phiên bản 3</b>, sửa giá thành <b>14.500.000</b> và bấm Lưu vài phút sau. Giữ khoá suốt mấy phút đó là không được. Viết MỘT câu lệnh lưu giá mới <b>chỉ khi dòng vẫn ở phiên bản 3</b>, và đưa phiên bản lên 4 để người sửa bằng dữ liệu cũ khác lần lượt thất bại.</p>\n<p><code>Product(id, name, price, version)</code> — 2 dòng; laptop 7 đang ở phiên bản 3.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một UPDATE với WHERE kiểm cả id lẫn phiên bản bạn đã đọc.</li>\n  <li>Sau đó ứng dụng xem số dòng bị ảnh hưởng: 0 nghĩa là \"người khác đã lưu trước — tải lại\".</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | price    | version\n---+----------+--------\n7  | 14500000 | 4      \n8  | 200000   | 1      ",
+          "explanation": "Expected result of check \"Laptop 7 now costs 14,500,000 at version 4; the mouse is untouched\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Laptop 7 giờ giá 14.500.000 ở phiên bản 4; chuột không đổi\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Put the version you read into the WHERE.|||Đặt phiên bản đã đọc vào WHERE.",
+        "Bump the version in the same statement.|||Tăng phiên bản trong cùng câu lệnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Product.sql",
+          "language": "sql",
+          "code": "-- Product.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Product.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Product (\n  id      INT           NOT NULL PRIMARY KEY,\n  name    NVARCHAR(50)  NOT NULL,\n  price   DECIMAL(12,0) NOT NULL,\n  version INT           NOT NULL\n);\nINSERT INTO Product (id, name, price, version) VALUES (7, N'Laptop', 15000000, 3), (8, N'Mouse', 200000, 1);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE Product\nSET price   = 14500000,\n    version = version + 1            -- the next stale editor will not match any more\nWHERE id = 7\n  AND version = 3;                   -- the version this editor read\n"
+        },
+        {
+          "name": "Product.sql",
+          "language": "sql",
+          "code": "-- Product.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Product.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Product (\n  id      INT           NOT NULL PRIMARY KEY,\n  name    NVARCHAR(50)  NOT NULL,\n  price   DECIMAL(12,0) NOT NULL,\n  version INT           NOT NULL\n);\nINSERT INTO Product (id, name, price, version) VALUES (7, N'Laptop', 15000000, 3), (8, N'Mouse', 200000, 1);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Optimistic locking fits long \"think time\" (forms, mobile apps). SQL Server can maintain the version for you with a <code>rowversion</code> column; ORMs (Prisma, EF, Hibernate @Version) generate exactly this WHERE.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoá lạc quan hợp với \"thời gian suy nghĩ\" dài (form, app di động). SQL Server có thể tự duy trì phiên bản bằng cột <code>rowversion</code>; ORM (Prisma, EF, Hibernate @Version) sinh đúng câu WHERE này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Product (\n  id      INT           NOT NULL PRIMARY KEY,\n  name    NVARCHAR(50)  NOT NULL,\n  price   DECIMAL(12,0) NOT NULL,\n  version INT           NOT NULL\n);\nINSERT INTO Product (id, name, price, version) VALUES (7, N'Laptop', 15000000, 3), (8, N'Mouse', 200000, 1);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Laptop 7 now costs 14,500,000 at version 4; the mouse is untouched|||Laptop 7 giờ giá 14.500.000 ở phiên bản 4; chuột không đổi",
+            "kiemTra": "SELECT id, price, version FROM Product ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "price",
+                "version"
+              ],
+              "hang": [
+                [
+                  7,
+                  14500000,
+                  4
+                ],
+                [
+                  8,
+                  200000,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: someone else saved first (version 4) — your save changes nothing|||Ẩn: người khác đã lưu trước (phiên bản 4) — lần lưu của bạn không đổi gì",
+            "kiemTra": "SELECT id, price, version FROM Product ORDER BY id",
+            "an": true,
+            "themCsdl": "UPDATE Product SET price = 15500000, version = 4 WHERE id = 7",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "price",
+                "version"
+              ],
+              "hang": [
+                [
+                  7,
+                  15500000,
+                  4
+                ],
+                [
+                  8,
+                  200000,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: the mouse also happens to be at version 3 — it must not change|||Ẩn: chuột cũng tình cờ ở phiên bản 3 — không được đổi",
+            "kiemTra": "SELECT id, price, version FROM Product ORDER BY id",
+            "an": true,
+            "themCsdl": "UPDATE Product SET version = 3 WHERE id = 8",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "price",
+                "version"
+              ],
+              "hang": [
+                [
+                  7,
+                  14500000,
+                  4
+                ],
+                [
+                  8,
+                  200000,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: pressing Save twice applies once|||Ẩn: bấm Lưu hai lần chỉ áp dụng một lần",
+            "kiemTra": "UPDATE Product SET price = 14500000, version = version + 1 WHERE id = 7 AND version = 3; SELECT id, price, version FROM Product ORDER BY id",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "price",
+                "version"
+              ],
+              "hang": [
+                [
+                  7,
+                  14500000,
+                  4
+                ],
+                [
+                  8,
+                  200000,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "The WHERE checks the version|||WHERE có kiểm phiên bản",
+            "khop": "\\bWHERE\\b[\\s\\S]*\\bversion\\s*=\\s*3\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "WHERE id = 7 only — the last writer silently wins: a lost update.|||Chỉ WHERE id = 7 — người ghi sau thắng âm thầm: mất cập nhật."
+        },
+        {
+          "loi": "Forgetting to bump the version — two stale editors can both \"succeed\".|||Quên tăng phiên bản — hai người sửa dữ liệu cũ đều \"thành công\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "optimistic locking",
+          "vi": "khoá lạc quan"
+        },
+        {
+          "en": "pessimistic locking",
+          "vi": "khoá bi quan"
+        },
+        {
+          "en": "rowversion",
+          "vi": "cột phiên bản dòng"
+        }
+      ]
+    },
+    {
+      "title": "Error codes: retry or not?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "deadlock",
+        "serialization failure",
+        "retry logic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "transaction",
+        "errors"
+      ],
+      "problemHtml": "<p>Slides 17–18 and 22–25. For each error, say what happened and whether the application should retry the whole transaction.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 17–18 và 22–25. Với mỗi lỗi, nói chuyện gì đã xảy ra và ứng dụng có nên thử lại cả giao dịch không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Concurrency failure ⇒ retry; data failure ⇒ do not.|||Lỗi tương tranh ⇒ thử lại; lỗi dữ liệu ⇒ không.",
+        "Retry the WHOLE transaction, not the last statement.|||Thử lại CẢ giao dịch, không chỉ câu cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Error codes: retry or not?\n\nAnswer in the answer panel (no code needed).\n\n1. Error → meaning → retry?Lỗi → nghĩa → thử lại?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Error codes: retry or not? — answer key\n\n1. Error → meaning → retry?Lỗi → nghĩa → thử lại?\n   - r1.nghia: chosen as deadlock victim\n   - r1.thu: yes, the whole transaction\n   - r2.nghia: chosen as deadlock victim\n   - r2.thu: yes, the whole transaction\n   - r3.nghia: serialization failure\n   - r3.thu: yes, the whole transaction\n   - r4.nghia: snapshot update conflict\n   - r4.thu: yes, the whole transaction\n   - r5.nghia: duplicate key\n   - r5.thu: no, fix the data or the request\n   - r6.nghia: CHECK constraint violated\n   - r6.thu: no, fix the data or the request\n   Concurrency errors are transient: the same transaction may succeed a moment later, so retry it from BEGIN (with a small random back-off). Data errors will fail the same way every time. Msg 547 also covers FOREIGN KEY violations.VI: Lỗi tương tranh là tạm thời: cùng giao dịch có thể thành công ngay sau đó nên thử lại từ BEGIN (chờ ngẫu nhiên một chút). Lỗi dữ liệu sẽ hỏng y như cũ mỗi lần. Msg 547 cũng là lỗi vi phạm FOREIGN KEY.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Concurrency errors are transient: the same transaction may succeed a moment later, so retry it from BEGIN (with a small random back-off). Data errors will fail the same way every time. Msg 547 also covers FOREIGN KEY violations.</p><p><i>VI: Lỗi tương tranh là tạm thời: cùng giao dịch có thể thành công ngay sau đó nên thử lại từ BEGIN (chờ ngẫu nhiên một chút). Lỗi dữ liệu sẽ hỏng y như cũ mỗi lần. Msg 547 cũng là lỗi vi phạm FOREIGN KEY.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Error → meaning → retry?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → nghĩa → thử lại?</i></p>",
+            "cot": [
+              {
+                "ma": "loi",
+                "ten": "Error / Lỗi"
+              },
+              {
+                "ma": "nghia",
+                "ten": "Meaning / Nghĩa",
+                "luaChon": [
+                  "chosen as deadlock victim",
+                  "serialization failure",
+                  "snapshot update conflict",
+                  "duplicate key",
+                  "CHECK constraint violated"
+                ]
+              },
+              {
+                "ma": "thu",
+                "ten": "Retry?",
+                "luaChon": [
+                  "yes, the whole transaction",
+                  "no, fix the data or the request"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "loi": "SQL Server Msg 1205"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "loi": "PostgreSQL SQLSTATE 40P01"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "loi": "PostgreSQL SQLSTATE 40001"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "loi": "SQL Server Msg 3960"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "loi": "SQL Server Msg 2627"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "loi": "SQL Server Msg 547"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.nghia": "chosen as deadlock victim",
+              "r1.thu": "yes, the whole transaction",
+              "r2.nghia": "chosen as deadlock victim",
+              "r2.thu": "yes, the whole transaction",
+              "r3.nghia": "serialization failure",
+              "r3.thu": "yes, the whole transaction",
+              "r4.nghia": "snapshot update conflict",
+              "r4.thu": "yes, the whole transaction",
+              "r5.nghia": "duplicate key",
+              "r5.thu": "no, fix the data or the request",
+              "r6.nghia": "CHECK constraint violated",
+              "r6.thu": "no, fix the data or the request"
+            },
+            "giaiThich": "<p>Concurrency errors are transient: the same transaction may succeed a moment later, so retry it from BEGIN (with a small random back-off). Data errors will fail the same way every time. Msg 547 also covers FOREIGN KEY violations.</p><p><i>VI: Lỗi tương tranh là tạm thời: cùng giao dịch có thể thành công ngay sau đó nên thử lại từ BEGIN (chờ ngẫu nhiên một chút). Lỗi dữ liệu sẽ hỏng y như cũ mỗi lần. Msg 547 cũng là lỗi vi phạm FOREIGN KEY.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Retrying only the failed statement after a deadlock — the victim's whole transaction was rolled back.|||Chỉ chạy lại câu lỗi sau deadlock — cả giao dịch của nạn nhân đã bị hoàn tác."
+        },
+        {
+          "loi": "Retrying a duplicate-key error forever.|||Thử lại lỗi trùng khoá mãi mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deadlock victim",
+          "vi": "nạn nhân deadlock"
+        },
+        {
+          "en": "serialization failure",
+          "vi": "lỗi tuần tự hoá"
+        },
+        {
+          "en": "back-off",
+          "vi": "chờ lùi trước khi thử lại"
+        }
+      ]
+    }
+  ]
+}

@@ -40,7 +40,9 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | ⭐ CS.1 | slide-cs1-1/1-2, cs1-on | 0 → 12 | ✅ (tĩnh: lịch sử, NoSQL, CAP, T-SQL ↔ PostgreSQL; 1 SQL trình duyệt: viết lại câu T-SQL thành SQL chạy cả hai hệ) |
 | ⭐ CS.2 | slide-cs2-1/2-2, cs2-on | 0 → 11 | ✅ (1 đề tay: 1.000 dòng → 115 byte/15 trang đo bằng DMV; còn lại tĩnh, số liệu đo thật trên SQL Server) |
 | ⭐ CS.3 | slide-cs3-1/3-2, cs3-on | 0 → 13 | ✅ (2 đề tay: độ sâu cây INT 2 / CHAR(200) 4 tầng, chẩn đoán 6 bước đo logical reads qua sys.dm_exec_procedure_stats; 5 đề trình duyệt: SARGable ×2, chỉ mục ghép + INCLUDE, chỉ mục lọc + khoá ngoại — hình chỉ mục soi bằng hinhChiMuc()) |
-| ⭐ CS.4–CS.8 + cầu nối | 3 bài/chủ đề + cau-noi-di-lam | 0 → … | ⏳ |
+| ⭐ CS.4 | slide-cs4-1/4-2, cs4-on | 0 → 10 | ✅ (1 đề tay: chuyen_tien khoá theo thứ tự id + UPDLOCK + THROW 5000x; 1 SQL trình duyệt: khoá lạc quan cột version; còn lại tĩnh: ma trận cô lập, tương thích khoá S/U/X, mã lỗi thử lại, chọn kỹ thuật) |
+| ⭐ CS.5 | slide-cs5-1/5-2, cs5-on | 0 → 14 | ✅ (11 SQL trình duyệt: ROW_NUMBER/RANK/DENSE_RANK, cộng dồn ROWS, top-N mỗi nhóm, khoảng trống, pivot CASE, LAG, đảo; 3 đề sql-pg: CTE đệ quy WITH RECURSIVE — SQL Server mode không chạy được CTE đệ quy (thiếu RECURSIVE ⇒ PG lỗi, có RECURSIVE ⇒ bị chặn là cú pháp PG); 1 đề tay: MERGE WITH (HOLDLOCK) + OUTPUT $action) |
+| ⭐ CS.6–CS.8 + cầu nối | 3 bài/chủ đề + cau-noi-di-lam | 0 → … | ⏳ |
 | Ôn thi | on-pe, ngan-hang-cau-hoi, PE 1–3 chữa đề, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
 
 Bài KHÔNG có đề (định hướng, không có gì để luyện): dbi202-bat-dau-tai-day, dbi202-slide-dbi1-1, dbi202-gioi-thieu,

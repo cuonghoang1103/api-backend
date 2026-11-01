@@ -17,7 +17,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 5 | `csd201-do-thi` 3 (bậc/cạnh/đỉnh lẻ trên ma trận, BFS+DFS duyệt hết đỉnh như Graph của PE — ca 1 trùng đáp án đề thật, thành phần liên thông) · `csd201-do-thi-bieu-dien` 3 (danh sách cạnh → ma trận + danh sách kề, BFS CSR 10⁶ đỉnh ⏱, đếm walk bằng luỹ thừa ma trận) · `csd201-dfs` 3 (chu trình + topo theo thời điểm kết thúc, Kahn nhỏ nhất trước ⏱, thành phần bằng DFS lặp ⏱) · `csd201-bfs` 3 (đường ít cạnh nhất, mê cung 2000² ⏱, BFS nhiều nguồn ⏱) · `csd201-dijkstra` 3 (ma trận 99=∞ kiểu PE — ca 1 trùng đáp án đề SP26 B5 P4, PQ 200k đỉnh ⏱, lưới phí ⏱) · `csd201-mst` 3 (Prim ma trận, Kruskal + union-find ⏱, nối thành phố có đường sẵn) · `csd201-euler` 3 (kiểm Euler, Hierholzer lặp ⏱, Hamilton quay lui) · `csd201-on-ch5` 3 (tô màu tuần tự 2 thứ tự, Floyd cạnh âm + truy vết, 🎯 **PE Graph f1/f2** với phần (1) Graph.java THẬT) | 24 |
 | 6 | `csd201-sap-xep-co-ban` 3 (chọn in từng lượt + đếm đổi/so sánh, chèn in lượt + số lần dời, nổi bọt dừng sớm) · `csd201-sap-xep-hieu-qua` 3 (Shell Knuth ⏱, Comparator hai khoá ổn định, cặp gần nhất sau khi sắp ⏱) · `csd201-quicksort` 3 (Lomuto in từng lần phân hoạch, quicksort trung vị 3 + Hoare + đệ quy phía nhỏ ⏱ trên đã sắp/ngược/bằng nhau, quickselect ⏱) · `csd201-mergesort` 3 (trộn từ trên xuống in từng lần trộn, từ dưới lên không đệ quy ⏱, bản ghi ổn định) · `csd201-heapsort` 3 (dấu vết heap sort, mảng lệch ≤ k ⏱, trung vị chạy hai heap ⏱) · `csd201-sap-xep-tuyen-tinh` 3 (counting sort ổn định ⏱, radix LSD từng lượt, bucket [0,1) ⏱) · `csd201-so-sanh-sap-xep` 3 (cờ Hà Lan, số lần đổi tối thiểu = n − số chu trình ⏱, sắp một lần + tìm nhị phân ⏱) · `csd201-on-ch6` 3 (merge sort danh sách Car ⏱, sắp đoạn [i..j] kiểu PE, sắp chèn nối lại nút) | 24 |
 | 7 | `csd201-bam` 3 (cặp tổng K bằng HashSet ⏱, tần suất từ + top k, nhóm đảo chữ) · `csd201-ham-bam` 3 (băm đa thức = String.hashCode + đếm va chạm, lớp Plate equals/hashCode, Rabin–Karp ⏱) · `csd201-va-cham` 3 (dò tuyến tính có dấu DELETED, dò bậc hai biển số (m không nguyên tố bỏ sót ô), dây chuyền) · `csd201-load-factor` 3 (dây chuyền tự băm lại α > 0,75 ⏱, hashCode tồi trong HashMap ⏱, tập int địa chỉ mở có nới ⏱) · `csd201-on-ch7` 3 (dãy liên tiếp dài nhất ⏱, đếm đoạn con tổng K ⏱, danh mục sách dây chuyền kiểu PE f1–f4) | 15 |
-| **tổng** | 48 module | **149** |
+| 8 | `csd201-nen-van-ban` 3 (RLE + tỉ lệ nén, DNA 2 bit/base, mã tiền tố + giải mã) · `csd201-kmp` 3 (bảng T[] như slide + vị trí + số so sánh, KMP 2·10⁶ ký tự ⏱, chu kỳ ngắn nhất ⏱) · `csd201-huffman` 3 (cây Huffman quy ước slide + mã/giải mã, tổng bit = tổng các lần gộp ⏱, entropy/độ dài TB/tỉ lệ) · `csd201-lzw-rle` 3 (LZW mã hoá đánh số từ 1 ⏱, LZW giải mã ca KwKwK, RLE ảnh đen trắng) · `csd201-on-ch8` 3 (vét cạn + số so sánh kiểu PE, nhật ký tin nhắn f1–f3 kiểu PE, so sánh RLE/LZW/Huffman) | 15 |
+| **tổng** | 53 module | **164** |
 
 ⏱ = có ca kiểm độ phức tạp. 🎯 = đề đúng khuôn PE của trường.
 
@@ -48,7 +49,7 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 ## Còn thiếu (làm tiếp theo đúng khuôn)
 
 Ch6 (sắp xếp) ·
-Ch8 (KMP, Huffman, LZW/RLE) · Nâng cao (A.1, A.2) · ⭐ CS.1–CS.10 · 🎯 Luyện PE (`csd201-on-pe`: đề thật SP26 B5 P4).
+Nâng cao (A.1, A.2) · ⭐ CS.1–CS.10 · 🎯 Luyện PE (`csd201-on-pe`: đề thật SP26 B5 P4).
 Nguồn ý đề + code thật: `~/Documents/FLM-nguon/_repo/CSD201/gen/src/practice/chN.txt` + `gen/java/chN/Pe*.java`,
 `gen/src/extra/csN-on.txt` + `gen/java/csN/Ex*.java` (CHỈ ĐỌC — không sửa flm-nguon).
 

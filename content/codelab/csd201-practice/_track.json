@@ -296,6 +296,36 @@
       "name": "7.5 🧪 Practice — consecutive runs, subarray sums, a PE-style chained catalogue",
       "level": "INTERMEDIATE",
       "description": "Luyện: The longest run of consecutive integers in O(n) · How many subarrays sum to K? Prefix sums in a HashMap · PE style: a book catalogue with separate chaining (f1–f4)"
+    },
+    {
+      "slug": "csd201-nen-van-ban",
+      "name": "8.1 Compression: Huffman, LZW, RLE",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: RLE: encode, decode, and the compression rate of the slides · DNA in 2 bits per base: pack four bases into one byte · Is it a prefix code? Then decode a bit string with it"
+    },
+    {
+      "slug": "csd201-kmp",
+      "name": "8.2 Pattern matching: brute force & KMP",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The KMP table T[] of the slides, and every occurrence with the comparisons · KMP against brute force on two million characters · The shortest period of a string, read from the KMP table"
+    },
+    {
+      "slug": "csd201-huffman",
+      "name": "8.3 Huffman coding, built step by step",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Build the Huffman tree the slides’ way, then encode and decode · The total Huffman length without building codes: the sum of the merges · Entropy, average code length and compression rate of a text"
+    },
+    {
+      "slug": "csd201-lzw-rle",
+      "name": "8.4 LZW & RLE, encoded and decoded",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: LZW encoding with the slides’ numbering (codes start at 1) · LZW decoding — including the special case cW = the code being created · RLE for black-and-white images: alternating run lengths"
+    },
+    {
+      "slug": "csd201-on-ch8",
+      "name": "8.5 🧪 Practice — brute force, a PE-style message log, choosing a compression",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE style: brute-force matching, every position and the number of comparisons · The message log (close to a real PE): f1 KMP search, f2 RLE, f3 Huffman bits · Which compression wins? RLE, LZW and Huffman on the same text"
     }
   ]
 }

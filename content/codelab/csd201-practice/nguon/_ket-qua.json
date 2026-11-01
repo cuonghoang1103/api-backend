@@ -1146,5 +1146,114 @@
    "0 : 0 0 0 0 -> 10\n100 : 1 2 3 -> 0\n4000000000 : 2000000000 2000000000 -> 1\n",
    "PERF -> n = 1,000,000: OK, count 115398513\n"
   ]
+ },
+ "csd201-8-1-dna-two-bits": {
+  "bam": "1e7376efdf965d79",
+  "ra": [
+   "ACGT -> 1 byte(s): 1B | back ACGT\nA -> 1 byte(s): 00 | back A\nTTTT -> 1 byte(s): FF | back TTTT\nGATTACA -> 2 byte(s): 8F 10 | back GATTACA\n",
+   "CCCCC -> 2 byte(s): 55 40 | back CCCCC\nGGGGGGGGG -> 3 byte(s): AA AA 80 | back GGGGGGGGG\nACGTACGTA -> 3 byte(s): 1B 1B 00 | back ACGTACGTA\nTGCA -> 1 byte(s): E4 | back TGCA\n"
+  ]
+ },
+ "csd201-8-1-prefix-code": {
+  "bam": "7135658328711d18",
+  "ra": [
+   "CODE a=0 b=10 c=110 d=111 -> {a=0, b=10, c=110, d=111}\nCHECK -> true\nDEC 0101100111 -> abcad\nDEC 0 -> a\nDEC 11 -> ERROR\nCODE a=0 b=01 c=11 -> {a=0, b=01, c=11}\nCHECK -> false\n",
+   "CODE x=1 y=1 -> {x=1, y=1}\nCHECK -> false\nCODE a=00 b=01 c=10 -> {a=00, b=01, c=10}\nCHECK -> true\nDEC 0010 -> ac\nDEC 11 -> ERROR\nDEC -> \n"
+  ]
+ },
+ "csd201-8-1-rle": {
+  "bam": "5c54c6e85e81cb8c",
+  "ra": [
+   "ENC FFFFOOOOFFFOOFFFFFOOOOOOO -> 4F4O3F2O5F7O rate 52% round-trip true\nENC WWWWWWWWWWWWBWWWWWWWWWWWWBBB -> 12W1B12W3B rate 64% round-trip true\nDEC 12W1B -> WWWWWWWWWWWWB\nENC ABCD -> 1A1B1C1D rate -100% round-trip true\n",
+   "ENC Z -> 1Z rate -100% round-trip true\nENC aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab -> 108a1b rate 94% round-trip true\nDEC 3a10b1c -> aaabbbbbbbbbbc\nDEC 1x -> x\n"
+  ]
+ },
+ "csd201-8-2-kmp-big": {
+  "bam": "5d21f5008878c6ea",
+  "ra": [
+   "abababab | abab -> 3\nmississippi | ss -> 2\nhello | world -> 0\n",
+   "ab | abc -> 0\naaaaaaaaaa | a -> 10\nabcabcab | cab -> 2\n",
+   "PERF -> aaa...a vs aaa...ab: OK, counts 0 1\n"
+  ]
+ },
+ "csd201-8-2-kmp-table": {
+  "bam": "4881bda8b482add9",
+  "ra": [
+   "TABLE abacab -> [-1, 0, 0, 1, 0, 1, 2]\nTABLE aaaa -> [-1, 0, 1, 2, 3]\nTABLE abcd -> [-1, 0, 0, 0, 0]\nFIND abacaabaccabacabaabb | abacab -> 10 | comparisons 26\nFIND aaaaa | aa -> 0 1 2 3 | comparisons 5\n",
+   "TABLE ababaca -> [-1, 0, 0, 1, 2, 3, 0, 1]\nFIND abcabcabd | abd -> 6 | comparisons 11\nFIND xyz | xyz -> 0 | comparisons 3\nFIND aaaa | b ->  | comparisons 4\n"
+  ]
+ },
+ "csd201-8-2-period": {
+  "bam": "97786f258e69e67c",
+  "ra": [
+   "abab -> period 2, unit ab\nabcabcab -> period 3, unit none\naaaa -> period 1, unit a\nabcd -> period 4, unit none\nabaaba -> period 3, unit aba\n",
+   "z -> period 1, unit none\nxyzxyz -> period 3, unit xyz\nabcabca -> period 3, unit none\n",
+   "PERF -> m = 2,000,000: OK, period 2000001, unit none\n"
+  ]
+ },
+ "csd201-8-3-entropy": {
+  "bam": "8b6fb298df171999",
+  "ra": [
+   "ABRACADABRA -> H=2.040 L=2.091 rate=73.9%\nABCDABCD -> H=2.000 L=2.000 rate=75.0%\nAAAAAA -> H=0.000 L=1.000 rate=87.5%\n",
+   "AAAAAAAB -> H=0.544 L=1.000 rate=87.5%\nthe quick brown fox jumps over the lazy dog -> H=4.385 L=4.465 rate=44.2%\n"
+  ]
+ },
+ "csd201-8-3-huffman-codes": {
+  "bam": "3c6d23cd704bfa19",
+  "ra": [
+   "BUILD ABRCD 5 2 2 1 1 -> tree 11(6(4(2,2),2(1,1)),5)\nCODES -> A=1 B=001 R=000 C=011 D=010\nENC ABRACADABRA -> 10010001011101010010001 (23 bits)\nDEC 0110111000 -> CCAR\nBUILD ABCDE 15 7 6 6 5 -> tree 39(24(13(7,6),11(6,5)),15)\nCODES -> A=1 B=000 C=010 D=001 E=011\nENC ABCDE -> 1000010001011 (13 bits)\n",
+   "BUILD Z 9 -> tree 9\nCODES -> Z=0\nENC ZZZ -> 000 (3 bits)\nDEC 000 -> ZZZ\nBUILD XY 1 1 -> tree 2(1,1)\nCODES -> X=1 Y=0\nBUILD abcd 1 1 1 1 -> tree 4(2(1,1),2(1,1))\nCODES -> a=11 b=10 c=01 d=00\nENC dcba -> 00011011 (8 bits)\nDEC 00011011 -> dcba\n"
+  ]
+ },
+ "csd201-8-3-huffman-cost": {
+  "bam": "0ab67fb072093c36",
+  "ra": [
+   "5 2 2 1 1 -> 23\n15 7 6 6 5 -> 87\n4 -> 4\n- -> 0\n",
+   "1 1 1 1 1 1 1 1 -> 24\n1000000000000 1 1 -> 1000000000004\n3 3 -> 6\n",
+   "PERF -> n = 1,000,000: OK, bits 9847938586297\n"
+  ]
+ },
+ "csd201-8-4-bitmap-rle": {
+  "bam": "9637daa06962f769",
+  "ra": [
+   "ENC 0001100 -> 3 2 2 | back true\nENC 1100 -> 0 2 2 | back true\nENC 0000 -> 4 | back true\nDEC 3 2 2 -> 0001100\nDEC 0 1 1 1 -> 101\n",
+   "ENC 1111 -> 0 4 | back true\nENC 01010101 -> 1 1 1 1 1 1 1 1 | back true\nENC -> 0 | back true\nDEC 0 -> \nDEC 0 3 -> 111\n"
+  ]
+ },
+ "csd201-8-4-lzw-decode": {
+  "bam": "857884f036870d70",
+  "ra": [
+   "ABC : 1 2 2 4 7 3 -> [ABBABABAC]\nA : 1 2 1 -> [AAAA]\nAB : 1 2 3 5 -> [ABABABA]\n",
+   "ABC : 1 2 2 4 7 -> [ABBABABA]\nab : 1 2 3 5 4 7 -> [abababababab]\nA : 1 2 3 4 -> [AAAAAAAAAA]\nxy : -> []\n"
+  ]
+ },
+ "csd201-8-4-lzw-encode": {
+  "bam": "356a31158dc1ab0f",
+  "ra": [
+   "ABC : ABBABABAC -> [1 2 2 4 7 3]\nA : AAAA -> [1 2 1]\nAB : ABABABA -> [1 2 3 5]\n",
+   "ABRCD : ABRACADABRA -> [1 2 3 1 4 1 5 6 8]\nab : abababababababab -> [1 2 3 5 4 7 6]\nxy : -> []\n",
+   "PERF -> 500,000 random DNA characters: OK, codes 72957, hash 905518537\n"
+  ]
+ },
+ "csd201-8-5-brute-force": {
+  "bam": "f0f54d41baad5186",
+  "ra": [
+   "abacaabaccabacabaabb | abacab -> 10 | comparisons 36\naaaaa | aa -> 0 1 2 3 | comparisons 8\nabc | d ->  | comparisons 3\n",
+   "aaaaaaaaab | aaab -> 6 | comparisons 28\nab | abc ->  | comparisons 0\nxyz | xyz -> 0 | comparisons 3\n"
+  ]
+ },
+ "csd201-8-5-message-log": {
+  "bam": "eb6fe18d7a733ef8",
+  "ra": [
+   "MSG An aaaaaabbbb -> ok\nMSG Binh hello world -> ok\nMSG Chi zzzzzzzzzzzz -> ok\nMSG Dung hello hello -> ok\nF1 hello -> 2\nF1 ab -> 1\nF1 xyz -> 0\nF3 -> 136\nF2 -> 2\nPRINT -> (An,6a4b) (Binh,hello world) (Chi,12z) (Dung,hello hello)\nF2 -> 0\n",
+   "F1 a -> 0\nF2 -> 0\nF3 -> 0\nMSG X AAAA -> ok\nF3 -> 4\nMSG Y ABR -> ok\nMSG Z ACADABRA -> ok\nF3 -> 27\nF1 ABRA -> 1\nF1 CAD -> 1\n"
+  ]
+ },
+ "csd201-8-5-which-compression": {
+  "bam": "66279c1302040d35",
+  "ra": [
+   "AB : AAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBB -> raw 320 rle 48 lzw 144 huffman 40 best huffman\nAB : ABABABABABABABABABABABABABABABABABABABAB -> raw 320 rle 640 lzw 144 huffman 40 best huffman\nABCDR : ABRACADABRA -> raw 88 rle 176 lzw 108 huffman 23 best huffman\nABCDEFGH : ABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGHABCDEFGH -> raw 3840 rle 7680 lzw 1008 huffman 1440 best lzw\n",
+   "A : AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -> raw 800 rle 32 lzw 168 huffman 100 best rle\nABCDEFGH : HGFEDCBA -> raw 64 rle 128 lzw 96 huffman 24 best huffman\n"
+  ]
  }
 }

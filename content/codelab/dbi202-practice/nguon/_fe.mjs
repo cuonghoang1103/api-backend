@@ -43,7 +43,7 @@ export async function feMod(code, slug, ten) {
       gy: [['Read every option before choosing: several are "almost right".', 'Đọc hết các phương án trước khi chọn: nhiều phương án "gần đúng".'], ['For closures and keys, work it out on paper — the options list the usual mistakes.', 'Câu bao đóng và khoá: tính ra giấy — các phương án liệt kê đúng những lỗi hay gặp.']],
       lhg: [['Choosing the first option that sounds familiar.', 'Chọn phương án đầu tiên nghe quen.'], ['Skipping the "NOT" or "EXCEPT" in the question.', 'Bỏ sót chữ "NOT" hoặc "EXCEPT" trong câu hỏi.']],
       tn: [tn('final exam', 'thi cuối kỳ')],
-      dangBai: 'fe',
+      dangBai: 'practice', // 01/11: 'fe' không thuộc EXERCISE_KINDS ⇒ seed từ chối 15 đề
     });
   });
   return mod(slug, `${ten} — all ${qs.length} questions`, de);

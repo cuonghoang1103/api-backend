@@ -322,7 +322,7 @@
         ]
       },
       "gradeKind": "choice",
-      "kind": "fe",
+      "kind": "practice",
       "mistakesJson": [
         {
           "loi": "Choosing the first option that sounds familiar.|||Chọn phương án đầu tiên nghe quen."
@@ -666,7 +666,7 @@
         ]
       },
       "gradeKind": "choice",
-      "kind": "fe",
+      "kind": "practice",
       "mistakesJson": [
         {
           "loi": "Choosing the first option that sounds familiar.|||Chọn phương án đầu tiên nghe quen."
@@ -998,7 +998,7 @@
         ]
       },
       "gradeKind": "choice",
-      "kind": "fe",
+      "kind": "practice",
       "mistakesJson": [
         {
           "loi": "Choosing the first option that sounds familiar.|||Chọn phương án đầu tiên nghe quen."
@@ -1343,7 +1343,7 @@
         ]
       },
       "gradeKind": "choice",
-      "kind": "fe",
+      "kind": "practice",
       "mistakesJson": [
         {
           "loi": "Choosing the first option that sounds familiar.|||Chọn phương án đầu tiên nghe quen."
@@ -1671,7 +1671,7 @@
         ]
       },
       "gradeKind": "choice",
-      "kind": "fe",
+      "kind": "practice",
       "mistakesJson": [
         {
           "loi": "Choosing the first option that sounds familiar.|||Chọn phương án đầu tiên nghe quen."

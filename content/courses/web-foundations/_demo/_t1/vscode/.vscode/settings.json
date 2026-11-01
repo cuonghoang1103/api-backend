@@ -1,0 +1,8 @@
+{
+  // Workspace settings: committed with the project, so everyone gets the same behaviour.
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+}

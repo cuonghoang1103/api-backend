@@ -508,6 +508,42 @@
       "description": "Luyện: Exercise 1 — rank inside the department, gap to the top, share of payroll · Exercise 2 — months that grew · Exercise 3 — how many people are under each manager, at every level? (PostgreSQL) · Exercise 4 — who worked most on each project (ties included)? · Exercise 5 — the longest attendance streak (gaps and islands) · Exercise 6 — synchronise a price list with MERGE, safely"
     },
     {
+      "slug": "dbi202-slide-cs6-1",
+      "name": "⭐ CS.6 Real-world design (1): requirements, keys, types, soft delete",
+      "level": "ADVANCED",
+      "description": "Luyện: Read the brief: entity, relationship or constraint? · Choose and defend a primary key · Money, time zones, Vietnamese text: pick the type · Soft delete without breaking the unique rule"
+    },
+    {
+      "slug": "dbi202-slide-cs6-2",
+      "name": "⭐ CS.6 Real-world design (2): history, relationships, constraints, migrations",
+      "level": "ADVANCED",
+      "description": "Luyện: Business rules as constraints: a meeting-room booking table · ON DELETE: CASCADE, SET NULL or NO ACTION? · Change a live schema without downtime: expand, migrate, contract · History, audit, polymorphic links, EAV and deliberate denormalisation"
+    },
+    {
+      "slug": "dbi202-cs6-on",
+      "name": "⭐ CS.6 Exercises: real-world database design",
+      "level": "ADVANCED",
+      "description": "Luyện: Exercise 1 — from a brief to tables: a mini LMS · Exercise 2 — what is wrong with this table? · Exercise 3 — discount codes: unique per shop, soft-deleted, reusable · Exercise 4 — price periods: what did it cost on 31 December 2024? · Exercise 5 — choose ON DELETE for a blog, then prove it · Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches · Exercise 7 — review the migration Prisma generates for the LMS"
+    },
+    {
+      "slug": "dbi202-slide-cs7-1",
+      "name": "⭐ CS.7 Security (1): SQL injection, accounts, permissions",
+      "level": "ADVANCED",
+      "description": "Luyện: SQL injection: spot it, explain it, fix it · Least privilege: what does each account really need? · From login to permission: set up an account in order"
+    },
+    {
+      "slug": "dbi202-slide-cs7-2",
+      "name": "⭐ CS.7 Security (2) & operations: RLS, encryption, backup, scaling",
+      "level": "ADVANCED",
+      "description": "Luyện: RLS, encryption, hashing, masking: which protects what? · Backups and recovery: full, differential, log, point-in-time · Scaling and running a database: replication, partitioning, sharding, pooling"
+    },
+    {
+      "slug": "dbi202-cs7-on",
+      "name": "⭐ CS.7 Exercises: database security & operations",
+      "level": "ADVANCED",
+      "description": "Luyện: Exercise 1 — fix the SQL injection in a product search · Exercise 2 — a least-privilege account for the revenue report · Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT · Exercise 4 — why two equal passwords must not get equal hashes · Exercise 5 — partition a bookings table by month, then purge January fast"
+    },
+    {
       "slug": "dbi202-9-pe-1-ct-rent",
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",

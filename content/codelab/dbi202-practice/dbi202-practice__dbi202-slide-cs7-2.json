@@ -1,0 +1,561 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs7-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs7-2"
+  },
+  "exercises": [
+    {
+      "title": "RLS, encryption, hashing, masking: which protects what?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "RLS",
+        "TDE",
+        "Always Encrypted",
+        "TLS",
+        "hashing",
+        "Dynamic Data Masking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "security"
+      ],
+      "problemHtml": "<p>Slides 14–18. Match each threat with the feature that actually stops it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 14–18. Ghép mỗi mối đe doạ với tính năng thật sự chặn nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: who is the attacker, and where is the data when they reach it?|||Hỏi: kẻ tấn công là ai, và dữ liệu đang ở đâu khi họ chạm tới?",
+        "Passwords are hashed, never encrypted.|||Mật khẩu được băm, không bao giờ được mã hoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RLS, encryption, hashing, masking: which protects what?\n\nAnswer in the answer panel (no code needed).\n\n1. Threat → featureMối đe doạ → tính năng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RLS, encryption, hashing, masking: which protects what? — answer key\n\n1. Threat → featureMối đe doạ → tính năng\n   - r1.tn: Row-Level Security\n   - r2.tn: TDE (encryption at rest)\n   - r3.tn: TLS (encryption in transit)\n   - r4.tn: salted slow hash (bcrypt/Argon2)\n   - r5.tn: Always Encrypted (client-side keys)\n   - r6.tn: Dynamic Data Masking\n   Masking is a convenience, not security: anyone who can query with a WHERE can infer the hidden value. TDE protects files, not a logged-in user. Only client-side encryption keeps the DBA out.VI: Masking là tiện ích, không phải bảo mật: ai truy vấn được với WHERE đều suy ra giá trị bị che. TDE bảo vệ tệp, không bảo vệ trước người đã đăng nhập. Chỉ mã hoá phía client mới giữ DBA ở ngoài.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Masking is a convenience, not security: anyone who can query with a WHERE can infer the hidden value. TDE protects files, not a logged-in user. Only client-side encryption keeps the DBA out.</p><p><i>VI: Masking là tiện ích, không phải bảo mật: ai truy vấn được với WHERE đều suy ra giá trị bị che. TDE bảo vệ tệp, không bảo vệ trước người đã đăng nhập. Chỉ mã hoá phía client mới giữ DBA ở ngoài.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Threat → feature</p><p style=\"opacity:.75;font-size:.92em\"><i>Mối đe doạ → tính năng</i></p>",
+            "cot": [
+              {
+                "ma": "md",
+                "ten": "Threat / Mối đe doạ"
+              },
+              {
+                "ma": "tn",
+                "ten": "Feature",
+                "luaChon": [
+                  "Row-Level Security",
+                  "TDE (encryption at rest)",
+                  "TLS (encryption in transit)",
+                  "salted slow hash (bcrypt/Argon2)",
+                  "Always Encrypted (client-side keys)",
+                  "Dynamic Data Masking"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "md": "Company A's user must never see company B's rows, whatever query they run"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "md": "A stolen backup file or disk must be unreadable"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "md": "Someone sniffing the Wi-Fi between app and database"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "md": "A leaked Users table must not reveal passwords"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "md": "Even the DBA must not read the national ID column"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "md": "Support staff should see 0912***678, not the full phone"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.tn": "Row-Level Security",
+              "r2.tn": "TDE (encryption at rest)",
+              "r3.tn": "TLS (encryption in transit)",
+              "r4.tn": "salted slow hash (bcrypt/Argon2)",
+              "r5.tn": "Always Encrypted (client-side keys)",
+              "r6.tn": "Dynamic Data Masking"
+            },
+            "giaiThich": "<p>Masking is a convenience, not security: anyone who can query with a WHERE can infer the hidden value. TDE protects files, not a logged-in user. Only client-side encryption keeps the DBA out.</p><p><i>VI: Masking là tiện ích, không phải bảo mật: ai truy vấn được với WHERE đều suy ra giá trị bị che. TDE bảo vệ tệp, không bảo vệ trước người đã đăng nhập. Chỉ mã hoá phía client mới giữ DBA ở ngoài.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting Dynamic Data Masking as protection against a determined user.|||Coi Dynamic Data Masking là bảo vệ trước người dùng quyết tâm."
+        },
+        {
+          "loi": "Thinking TDE hides data from people who can log in.|||Tưởng TDE giấu dữ liệu khỏi người đăng nhập được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "encryption at rest",
+          "vi": "mã hoá khi lưu"
+        },
+        {
+          "en": "encryption in transit",
+          "vi": "mã hoá khi truyền"
+        },
+        {
+          "en": "data masking",
+          "vi": "che dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "Backups and recovery: full, differential, log, point-in-time",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "full backup",
+        "differential backup",
+        "log backup",
+        "PITR",
+        "recovery model"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "operations",
+        "backup"
+      ],
+      "problemHtml": "<p>Slides 19–21. Full backup every Sunday 00:00, differential every night 00:00, log backup every 15 minutes, FULL recovery model.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 19–21. Sao lưu full mỗi Chủ nhật 00:00, differential mỗi đêm 00:00, sao lưu log mỗi 15 phút, recovery model FULL.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RPO (how much data you may lose) decides the log-backup interval.|||RPO (được phép mất bao nhiêu dữ liệu) quyết định chu kỳ sao lưu log.",
+        "Restore chain: full → latest diff → logs.|||Chuỗi khôi phục: full → diff mới nhất → log."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Backups and recovery: full, differential, log, point-in-time\n\nAnswer in the answer panel (no code needed).\n\n1. A wrong DELETE runs on Wednesday at 10:07. To restore to 10:06 you need…Một lệnh DELETE sai chạy thứ Tư lúc 10:07. Để khôi phục về 10:06 cần…\n2. A differential backup contains…Bản sao lưu differential chứa…\n3. Under the SIMPLE recovery model, point-in-time restore is…Với recovery model SIMPLE, khôi phục theo thời điểm…\n4. \"We have backups but we have never restored one\" means…\"Chúng tôi có bản sao lưu nhưng chưa từng khôi phục\" nghĩa là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Backups and recovery: full, differential, log, point-in-time — answer key\n\n1. A wrong DELETE runs on Wednesday at 10:07. To restore to 10:06 you need…Một lệnh DELETE sai chạy thứ Tư lúc 10:07. Để khôi phục về 10:06 cần…\n   Answer: d) Sunday's full + Wednesday's differential + every log backup since, with STOPAT 10:06\n   Full → latest differential → the log chain up to the moment, stopping just before the mistake.VI: Full → differential gần nhất → chuỗi log tới thời điểm, dừng ngay trước sai lầm.\n\n2. A differential backup contains…Bản sao lưu differential chứa…\n   Answer: b) every page changed since the last FULL backup\n   So each differential grows during the week, and you only need the latest one.VI: Nên mỗi differential lớn dần trong tuần, và chỉ cần bản mới nhất.\n\n3. Under the SIMPLE recovery model, point-in-time restore is…Với recovery model SIMPLE, khôi phục theo thời điểm…\n   Answer: d) impossible: the log is truncated and there are no log backups\n   SIMPLE fits dev/test databases; production data that matters needs FULL + log backups (PostgreSQL: WAL archiving).VI: SIMPLE hợp CSDL dev/test; dữ liệu production quan trọng cần FULL + sao lưu log (PostgreSQL: lưu trữ WAL).\n\n4. \"We have backups but we have never restored one\" means…\"Chúng tôi có bản sao lưu nhưng chưa từng khôi phục\" nghĩa là…\n   Answer: d) you do not know whether you have a backup at all\n   A backup counts when a restore has been tested — GitLab 2017 (CS.1).VI: Bản sao lưu chỉ tính khi đã thử khôi phục — GitLab 2017 (CS.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Sunday's full + Wednesday's differential + every log backup since, with STOPAT 10:06</p><p>Full → latest differential → the log chain up to the moment, stopping just before the mistake.</p><p><i>VI: Full → differential gần nhất → chuỗi log tới thời điểm, dừng ngay trước sai lầm.</i></p></li><li><p><b>b)</b> every page changed since the last FULL backup</p><p>So each differential grows during the week, and you only need the latest one.</p><p><i>VI: Nên mỗi differential lớn dần trong tuần, và chỉ cần bản mới nhất.</i></p></li><li><p><b>d)</b> impossible: the log is truncated and there are no log backups</p><p>SIMPLE fits dev/test databases; production data that matters needs FULL + log backups (PostgreSQL: WAL archiving).</p><p><i>VI: SIMPLE hợp CSDL dev/test; dữ liệu production quan trọng cần FULL + sao lưu log (PostgreSQL: lưu trữ WAL).</i></p></li><li><p><b>d)</b> you do not know whether you have a backup at all</p><p>A backup counts when a restore has been tested — GitLab 2017 (CS.1).</p><p><i>VI: Bản sao lưu chỉ tính khi đã thử khôi phục — GitLab 2017 (CS.1).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A wrong DELETE runs on Wednesday at 10:07. To restore to 10:06 you need…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lệnh DELETE sai chạy thứ Tư lúc 10:07. Để khôi phục về 10:06 cần…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sunday's full backup only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Wednesday's differential only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the last log backup only, restored over the live database"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Sunday's full + Wednesday's differential + every log backup since, with STOPAT 10:06"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Full → latest differential → the log chain up to the moment, stopping just before the mistake.</p><p><i>VI: Full → differential gần nhất → chuỗi log tới thời điểm, dừng ngay trước sai lầm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A differential backup contains…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản sao lưu differential chứa…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every page changed since the last differential"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every page changed since the last FULL backup"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a copy of the tables that were queried today"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only the transaction log since the last backup"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>So each differential grows during the week, and you only need the latest one.</p><p><i>VI: Nên mỗi differential lớn dần trong tuần, và chỉ cần bản mới nhất.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Under the SIMPLE recovery model, point-in-time restore is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với recovery model SIMPLE, khôi phục theo thời điểm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "possible if the server was not restarted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "automatic after every checkpoint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "possible from the latest differential backup"
+              },
+              {
+                "ma": "d",
+                "noiDung": "impossible: the log is truncated and there are no log backups"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SIMPLE fits dev/test databases; production data that matters needs FULL + log backups (PostgreSQL: WAL archiving).</p><p><i>VI: SIMPLE hợp CSDL dev/test; dữ liệu production quan trọng cần FULL + sao lưu log (PostgreSQL: lưu trữ WAL).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>\"We have backups but we have never restored one\" means…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Chúng tôi có bản sao lưu nhưng chưa từng khôi phục\" nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the backups are encrypted and therefore safe"
+              },
+              {
+                "ma": "b",
+                "noiDung": "you only need to test once a year"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the backups are fine as long as the job is green"
+              },
+              {
+                "ma": "d",
+                "noiDung": "you do not know whether you have a backup at all"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A backup counts when a restore has been tested — GitLab 2017 (CS.1).</p><p><i>VI: Bản sao lưu chỉ tính khi đã thử khôi phục — GitLab 2017 (CS.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Restoring every differential of the week in sequence.|||Khôi phục lần lượt mọi differential trong tuần."
+        },
+        {
+          "loi": "Expecting point-in-time restore under SIMPLE recovery.|||Mong khôi phục theo thời điểm với SIMPLE."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "point-in-time recovery (PITR)",
+          "vi": "khôi phục về thời điểm"
+        },
+        {
+          "en": "recovery point objective (RPO)",
+          "vi": "mục tiêu điểm khôi phục"
+        }
+      ]
+    },
+    {
+      "title": "Scaling and running a database: replication, partitioning, sharding, pooling",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "replication",
+        "read replica",
+        "partitioning",
+        "sharding",
+        "connection pooling",
+        "monitoring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "operations"
+      ],
+      "problemHtml": "<p>Five questions on slides 22–25.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 22–25.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Replicas scale reads, shards scale writes, pools save connections.|||Bản sao mở rộng đọc, shard mở rộng ghi, pool tiết kiệm kết nối.",
+        "Monitor capacity and failures, not vanity numbers.|||Giám sát dung lượng và lỗi, không phải con số cho đẹp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scaling and running a database: replication, partitioning, sharding, pooling\n\nAnswer in the answer panel (no code needed).\n\n1. A read replica with asynchronous replication may…Bản sao chỉ đọc với nhân bản bất đồng bộ có thể…\n2. Partitioning differs from sharding because partitions…Phân vùng khác sharding vì các phân vùng…\n3. A connection pool (PgBouncer, the pool in a Node driver) exists because…Pool kết nối (PgBouncer, pool trong driver Node) tồn tại vì…\n4. Which signal most likely means \"a session left a transaction open\"?Tín hiệu nào nhiều khả năng nghĩa là \"một phiên để giao dịch mở\"?\n5. What should alert you BEFORE users complain?Điều gì nên cảnh báo bạn TRƯỚC khi người dùng phàn nàn?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scaling and running a database: replication, partitioning, sharding, pooling — answer key\n\n1. A read replica with asynchronous replication may…Bản sao chỉ đọc với nhân bản bất đồng bộ có thể…\n   Answer: b) return data a few seconds old (replication lag)\n   Read-your-own-writes screens should read from the primary.VI: Màn hình cần thấy ngay dữ liệu vừa ghi nên đọc từ bản chính.\n\n2. Partitioning differs from sharding because partitions…Phân vùng khác sharding vì các phân vùng…\n   Answer: b) stay on ONE server; shards spread over several servers\n   Sharding scales writes but makes cross-shard joins and transactions hard.VI: Sharding mở rộng việc ghi nhưng làm khó phép nối và giao dịch giữa các shard.\n\n3. A connection pool (PgBouncer, the pool in a Node driver) exists because…Pool kết nối (PgBouncer, pool trong driver Node) tồn tại vì…\n   Answer: c) connections are costly to open and the server allows only so many\n   Thousands of web requests share tens of connections; PostgreSQL forks one process per connection.VI: Hàng nghìn request web dùng chung vài chục kết nối; PostgreSQL tạo một tiến trình cho mỗi kết nối.\n\n4. Which signal most likely means \"a session left a transaction open\"?Tín hiệu nào nhiều khả năng nghĩa là \"một phiên để giao dịch mở\"?\n   Answer: a) many sessions waiting on locks held by one idle session\n   Look for \"idle in transaction\" (PostgreSQL) or a sleeping session with open_transaction_count > 0 (SQL Server).VI: Tìm \"idle in transaction\" (PostgreSQL) hoặc phiên ngủ với open_transaction_count > 0 (SQL Server).\n\n5. What should alert you BEFORE users complain?Điều gì nên cảnh báo bạn TRƯỚC khi người dùng phàn nàn?\n   Answer: a) disk free space, failed backup jobs and long-running queries\n   A full disk once killed this course's own production PostgreSQL — free space is the first alert to set.VI: Đĩa đầy từng làm chết PostgreSQL production của chính khoá học này — dung lượng trống là cảnh báo đầu tiên nên đặt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> return data a few seconds old (replication lag)</p><p>Read-your-own-writes screens should read from the primary.</p><p><i>VI: Màn hình cần thấy ngay dữ liệu vừa ghi nên đọc từ bản chính.</i></p></li><li><p><b>b)</b> stay on ONE server; shards spread over several servers</p><p>Sharding scales writes but makes cross-shard joins and transactions hard.</p><p><i>VI: Sharding mở rộng việc ghi nhưng làm khó phép nối và giao dịch giữa các shard.</i></p></li><li><p><b>c)</b> connections are costly to open and the server allows only so many</p><p>Thousands of web requests share tens of connections; PostgreSQL forks one process per connection.</p><p><i>VI: Hàng nghìn request web dùng chung vài chục kết nối; PostgreSQL tạo một tiến trình cho mỗi kết nối.</i></p></li><li><p><b>a)</b> many sessions waiting on locks held by one idle session</p><p>Look for \"idle in transaction\" (PostgreSQL) or a sleeping session with open_transaction_count > 0 (SQL Server).</p><p><i>VI: Tìm \"idle in transaction\" (PostgreSQL) hoặc phiên ngủ với open_transaction_count > 0 (SQL Server).</i></p></li><li><p><b>a)</b> disk free space, failed backup jobs and long-running queries</p><p>A full disk once killed this course's own production PostgreSQL — free space is the first alert to set.</p><p><i>VI: Đĩa đầy từng làm chết PostgreSQL production của chính khoá học này — dung lượng trống là cảnh báo đầu tiên nên đặt.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A read replica with asynchronous replication may…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản sao chỉ đọc với nhân bản bất đồng bộ có thể…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "block every write on the primary"
+              },
+              {
+                "ma": "b",
+                "noiDung": "return data a few seconds old (replication lag)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "accept writes and merge them back later"
+              },
+              {
+                "ma": "d",
+                "noiDung": "lose committed data on the primary"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Read-your-own-writes screens should read from the primary.</p><p><i>VI: Màn hình cần thấy ngay dữ liệu vừa ghi nên đọc từ bản chính.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Partitioning differs from sharding because partitions…</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân vùng khác sharding vì các phân vùng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "can only split a table by a date column, never by id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stay on ONE server; shards spread over several servers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "need the application to know where each row lives"
+              },
+              {
+                "ma": "d",
+                "noiDung": "are always faster than one table for every query"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Sharding scales writes but makes cross-shard joins and transactions hard.</p><p><i>VI: Sharding mở rộng việc ghi nhưng làm khó phép nối và giao dịch giữa các shard.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A connection pool (PgBouncer, the pool in a Node driver) exists because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Pool kết nối (PgBouncer, pool trong driver Node) tồn tại vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a pool encrypts the traffic between the app and the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "each query needs its own brand-new connection to the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "connections are costly to open and the server allows only so many"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SQL statements are compiled faster when they run inside a pool"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Thousands of web requests share tens of connections; PostgreSQL forks one process per connection.</p><p><i>VI: Hàng nghìn request web dùng chung vài chục kết nối; PostgreSQL tạo một tiến trình cho mỗi kết nối.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which signal most likely means \"a session left a transaction open\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tín hiệu nào nhiều khả năng nghĩa là \"một phiên để giao dịch mở\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "many sessions waiting on locks held by one idle session"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a growing number of rows in a log table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a high buffer cache hit ratio"
+              },
+              {
+                "ma": "d",
+                "noiDung": "CPU at 100 % with no waits at all"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Look for \"idle in transaction\" (PostgreSQL) or a sleeping session with open_transaction_count > 0 (SQL Server).</p><p><i>VI: Tìm \"idle in transaction\" (PostgreSQL) hoặc phiên ngủ với open_transaction_count > 0 (SQL Server).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What should alert you BEFORE users complain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì nên cảnh báo bạn TRƯỚC khi người dùng phàn nàn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "disk free space, failed backup jobs and long-running queries"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number of tables in the database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the version string from SELECT @@VERSION"
+              },
+              {
+                "ma": "d",
+                "noiDung": "how many developers have db_owner"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A full disk once killed this course's own production PostgreSQL — free space is the first alert to set.</p><p><i>VI: Đĩa đầy từng làm chết PostgreSQL production của chính khoá học này — dung lượng trống là cảnh báo đầu tiên nên đặt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending every read to a lagging replica, including \"show my new order\".|||Gửi mọi lượt đọc tới bản sao bị trễ, kể cả \"xem đơn tôi vừa đặt\"."
+        },
+        {
+          "loi": "Sharding before trying indexes, partitioning and a bigger server.|||Sharding trước khi thử chỉ mục, phân vùng và máy chủ lớn hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replication lag",
+          "vi": "độ trễ nhân bản"
+        },
+        {
+          "en": "sharding",
+          "vi": "phân mảnh ngang trên nhiều máy"
+        },
+        {
+          "en": "connection pool",
+          "vi": "vùng chứa kết nối"
+        }
+      ]
+    }
+  ]
+}

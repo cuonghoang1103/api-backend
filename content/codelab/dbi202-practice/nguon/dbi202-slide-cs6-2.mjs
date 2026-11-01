@@ -1,0 +1,96 @@
+/**
+ * DBI202 · ⭐ CS.6 phần 2 — created_at/updated_at, lịch sử & kiểm toán, N-N có thuộc tính, liên kết đa hình, EAV/JSON, phi chuẩn hoá có chủ ý,
+ * CHECK / EXCLUDE / hành động khoá ngoại, migration không dừng máy, Prisma ↔ SQL (slide 13–25). Đề luật đặt phòng chấm trong trình duyệt.
+ */
+import { mod, de, cs, q, ord, bang1, chan, duoc, YC_DDL, tn } from './_chung.mjs';
+
+const GIAI = `CREATE TABLE DatPhong (
+    id         INT         NOT NULL CONSTRAINT pk_datphong PRIMARY KEY,
+    phong      VARCHAR(10) NOT NULL,
+    ngay       DATE        NOT NULL,
+    gioBatDau  INT         NOT NULL,
+    gioKetThuc INT         NOT NULL,
+    soNguoi    INT         NOT NULL CONSTRAINT ck_datphong_songuoi CHECK (soNguoi BETWEEN 1 AND 10),
+    trangThai  VARCHAR(10) NOT NULL CONSTRAINT ck_datphong_trangthai CHECK (trangThai IN ('CHO', 'XAC_NHAN', 'HUY')),
+    CONSTRAINT ck_datphong_gio  CHECK (gioBatDau >= 7 AND gioKetThuc <= 22 AND gioKetThuc > gioBatDau),
+    CONSTRAINT uq_datphong_slot UNIQUE (phong, ngay, gioBatDau)
+);`;
+
+export default mod('dbi202-slide-cs6-2', '⭐ CS.6 Real-world design (2): history, relationships, constraints, migrations', [
+  de({
+    csdl: '', ld: null,
+    t: 'Business rules as constraints: a meeting-room booking table', k: 'MEDIUM', p: 12,
+    kn: ['CHECK', 'multi-column CHECK', 'UNIQUE', 'named constraints'], tag: ['advanced', 'design', 'constraints'],
+    en: '<p>Slides 19–20. Create <code>DatPhong(id, phong, ngay, gioBatDau, gioKetThuc, soNguoi, trangThai)</code> (hours are whole numbers) so that the database itself enforces:</p><ul><li>bookings are between 7:00 and 22:00, and end after they start;</li><li>1 to 10 people;</li><li>status is one of CHO, XAC_NHAN, HUY;</li><li>a room cannot have two bookings starting at the same hour of the same day.</li></ul>',
+    vi: '<p>Slide 19–20. Tạo <code>DatPhong(id, phong, ngay, gioBatDau, gioKetThuc, soNguoi, trangThai)</code> (giờ là số nguyên) sao cho chính CSDL thi hành:</p><ul><li>đặt phòng trong khoảng 7:00–22:00 và kết thúc sau khi bắt đầu;</li><li>từ 1 đến 10 người;</li><li>trạng thái là một trong CHO, XAC_NHAN, HUY;</li><li>một phòng không có hai lần đặt bắt đầu cùng giờ cùng ngày.</li></ul>',
+    yc: [YC_DDL, ['Name every constraint (ck_…, uq_…). A rule that compares two columns is a table-level CHECK.', 'Đặt tên mọi ràng buộc (ck_…, uq_…). Luật so hai cột là CHECK mức bảng.']],
+    giai: GIAI,
+    kiem: [
+      duoc(['A normal booking, and the same hour in another room', 'Một lần đặt bình thường, và cùng giờ ở phòng khác'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 11, 4, 'CHO'), (2, 'P102', '2026-11-02', 9, 10, 2, 'XAC_NHAN')"),
+      chan(['Ending before it starts is refused', 'Kết thúc trước khi bắt đầu bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 11, 9, 4, 'CHO')", '23514'),
+      chan(['Ending exactly when it starts is refused', 'Kết thúc đúng lúc bắt đầu bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 10, 10, 4, 'CHO')", '23514'),
+      chan(['Starting at 6:00 is refused', 'Bắt đầu 6:00 bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 6, 8, 4, 'CHO')", '23514'),
+      chan(['Ending at 23:00 is refused', 'Kết thúc 23:00 bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 20, 23, 4, 'CHO')", '23514'),
+      duoc(['The edges 7:00 and 22:00 are allowed', 'Biên 7:00 và 22:00 được phép'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 7, 22, 10, 'HUY')"),
+      chan(['0 people is refused', '0 người bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 0, 'CHO')", '23514'),
+      chan(['An unknown status is refused', 'Trạng thái lạ bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'DONE')", '23514'),
+      chan(['Two bookings of P101 starting at 9:00 on the same day are refused', 'Hai lần đặt P101 bắt đầu 9:00 cùng ngày bị từ chối'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'CHO'); INSERT INTO DatPhong VALUES (2, 'P101', '2026-11-02', 9, 12, 5, 'CHO')", '23505'),
+      duoc(['The same room at the same hour on another day is fine', 'Cùng phòng cùng giờ nhưng ngày khác thì được'], "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'CHO'), (2, 'P101', '2026-11-03', 9, 10, 3, 'CHO')"),
+      chan(['Every column is required', 'Mọi cột đều bắt buộc'], "INSERT INTO DatPhong (id, phong, ngay, gioBatDau, gioKetThuc, soNguoi) VALUES (1, 'P101', '2026-11-02', 9, 10, 3)", '23502'),
+    ],
+    sai: [
+      GIAI.replace('AND gioKetThuc > gioBatDau', ''),
+      GIAI.replace('gioKetThuc > gioBatDau', 'gioKetThuc >= gioBatDau'),
+      GIAI.replace('CONSTRAINT uq_datphong_slot UNIQUE (phong, ngay, gioBatDau)', 'CONSTRAINT uq_datphong_slot UNIQUE (phong, gioBatDau)'),
+      GIAI.replace('BETWEEN 1 AND 10', 'BETWEEN 0 AND 10'),
+      GIAI.replace("trangThai  VARCHAR(10) NOT NULL", 'trangThai  VARCHAR(10) NULL'),
+    ],
+    gy: [['Column-level CHECK sees one column; a rule over two columns goes at table level.', 'CHECK mức cột chỉ thấy một cột; luật trên hai cột đặt ở mức bảng.'], ['UNIQUE (phong, ngay, gioBatDau): the triple, not each column.', 'UNIQUE (phong, ngay, gioBatDau): bộ ba, không phải từng cột.']],
+    lhg: [['UNIQUE (phong, gioBatDau) — the room could then be booked at 9:00 only once in its whole life.', 'UNIQUE (phong, gioBatDau) — phòng khi đó chỉ được đặt lúc 9:00 đúng một lần trong đời.'], ['Forgetting NOT NULL: a CHECK lets NULL through.', 'Quên NOT NULL: CHECK cho NULL lọt qua.']],
+    gt: ['<p>Overlapping bookings (9–11 and 10–12) are NOT stopped by this table: that needs PostgreSQL\'s EXCLUDE USING gist (phong WITH =, khoang WITH &&) on a range column, or a trigger / serializable check on SQL Server — slide 20.</p>', '<p>Hai lần đặt chồng nhau (9–11 và 10–12) KHÔNG bị bảng này chặn: việc đó cần EXCLUDE USING gist (phong WITH =, khoang WITH &&) trên cột khoảng của PostgreSQL, hoặc trigger / kiểm tra tuần tự trên SQL Server — slide 20.</p>'],
+    tn: [tn('table-level CHECK', 'CHECK mức bảng'), tn('exclusion constraint', 'ràng buộc loại trừ')],
+  }),
+  cs({
+    t: 'ON DELETE: CASCADE, SET NULL or NO ACTION?', k: 'MEDIUM', p: 6, loai: 'table',
+    kn: ['foreign-key actions'], tag: ['advanced', 'design', 'constraints'],
+    en: '<p>Slide 20. For each foreign key, choose the action that matches the business rule.</p>', vi: '<p>Slide 20. Với mỗi khoá ngoại, chọn hành động khớp luật nghiệp vụ.</p>',
+    bang: [bang1('b1', ['Foreign key → ON DELETE', 'Khoá ngoại → ON DELETE'],
+      [{ ma: 'fk', ten: 'Foreign key and rule / Khoá ngoại và luật' }, { ma: 'hd', ten: 'ON DELETE', luaChon: ['CASCADE', 'SET NULL', 'NO ACTION (refuse)'] }],
+      [{ o: { fk: 'OrderLine.orderId → Order: lines have no meaning without their order' }, a: { hd: 'CASCADE' } },
+        { o: { fk: 'Invoice.customerId → Customer: invoices must be kept for 10 years by law' }, a: { hd: 'NO ACTION (refuse)' } },
+        { o: { fk: 'Post.categoryId → Category (nullable): deleting a category keeps its posts' }, a: { hd: 'SET NULL' } },
+        { o: { fk: 'Comment.postId → Post: deleting a post deletes its comments' }, a: { hd: 'CASCADE' } },
+        { o: { fk: 'Comment.userId → User (nullable): a deleted reader leaves anonymous comments' }, a: { hd: 'SET NULL' } },
+        { o: { fk: 'Employee.departmentId → Department: a department with staff cannot disappear' }, a: { hd: 'NO ACTION (refuse)' } }],
+      ['CASCADE for parts that only exist inside their parent; SET NULL for optional links (the column must be nullable); NO ACTION (the default) whenever deleting would destroy something you must keep.', 'CASCADE cho phần chỉ tồn tại bên trong cha; SET NULL cho liên kết tuỳ chọn (cột phải cho NULL); NO ACTION (mặc định) khi xoá sẽ phá thứ bạn phải giữ.'])],
+    gy: [['Ask: may the child live on without the parent?', 'Hỏi: con có sống tiếp được khi không có cha không?'], ['SET NULL needs a nullable column.', 'SET NULL cần cột cho NULL.']],
+    lhg: [['CASCADE everywhere — one DELETE can wipe years of invoices.', 'CASCADE khắp nơi — một lệnh DELETE có thể xoá sạch hoá đơn nhiều năm.'], ['SET NULL on a NOT NULL column — the DELETE then fails.', 'SET NULL trên cột NOT NULL — lệnh DELETE khi đó lỗi.']],
+    tn: [tn('referential action', 'hành động tham chiếu'), tn('cascade delete', 'xoá lan truyền')],
+  }),
+  cs({
+    t: 'Change a live schema without downtime: expand, migrate, contract', k: 'HARD', p: 6, loai: 'order',
+    kn: ['zero-downtime migration', 'expand/contract'], tag: ['advanced', 'design', 'migration'],
+    en: '<p>Slides 21–22. You must rename <code>customer.phone</code> to <code>customer.mobile</code> while the app keeps running and old app servers are still deployed. Order the steps.</p>',
+    vi: '<p>Slide 21–22. Phải đổi <code>customer.phone</code> thành <code>customer.mobile</code> trong khi app vẫn chạy và máy chủ app bản cũ vẫn đang triển khai. Sắp các bước.</p>',
+    cau: [ord('o1', ['First → last', 'Đầu → cuối'], ['Add the new nullable column mobile', 'Deploy app code that writes to BOTH columns', 'Backfill mobile from phone in small batches', 'Switch every read to mobile', 'Add NOT NULL / constraints on mobile', 'Drop the old column phone once no code uses it'],
+      ['Expand (add, dual-write, backfill), switch, then contract. A single RENAME COLUMN would break every old app server the second it runs.', 'Mở rộng (thêm, ghi đôi, đổ dữ liệu), chuyển, rồi thu gọn. Một lệnh RENAME COLUMN sẽ làm hỏng mọi máy chủ app cũ ngay khi nó chạy.'])],
+    gy: [['Never remove anything that running code still reads.', 'Không bao giờ bỏ thứ mà mã đang chạy còn đọc.'], ['Backfill in batches to keep locks and log small.', 'Đổ dữ liệu theo lô để khoá và nhật ký nhỏ.']],
+    lhg: [['Adding NOT NULL before the backfill — the ALTER fails or locks the table.', 'Thêm NOT NULL trước khi đổ dữ liệu — ALTER lỗi hoặc khoá bảng.'], ['Dropping the old column in the same deploy.', 'Bỏ cột cũ trong cùng lần triển khai.']],
+    tn: [tn('expand/contract', 'mở rộng / thu gọn'), tn('backfill', 'đổ dữ liệu bù')],
+  }),
+  cs({
+    t: 'History, audit, polymorphic links, EAV and deliberate denormalisation', k: 'HARD', p: 8,
+    kn: ['audit table', 'temporal table', 'polymorphic association', 'EAV', 'denormalisation'], tag: ['advanced', 'design'],
+    en: '<p>Five questions on slides 13–18 and 22.</p>', vi: '<p>Năm câu về slide 13–18 và 22.</p>',
+    cau: [
+      q('c1', ['"What was the price of product 7 on 1 March?" is answered best by…', '"Giá sản phẩm 7 ngày 1/3 là bao nhiêu?" được trả lời tốt nhất bằng…'], ['a price-history table with valid-from dates (or a temporal table)', 'the updatedAt column of the product row', 'the transaction log of last March', 'a nightly backup restored to another server'], ['updatedAt only says WHEN it last changed, not what it was before.', 'updatedAt chỉ nói LẦN CUỐI đổi lúc nào, không nói trước đó là gì.']),
+      q('c2', ['A Comment table with (targetType, targetId) pointing to posts OR photos OR videos loses…', 'Bảng Comment với (targetType, targetId) trỏ tới bài viết HOẶC ảnh HOẶC video sẽ mất…'], ['a real foreign key: the database cannot check targetId exists', 'the ability to store more than one comment per post', 'support for indexes on targetId', 'the primary key of the Comment table'], ['Alternatives: one nullable FK column per target with a CHECK that exactly one is set, or a shared parent table.', 'Cách khác: mỗi đích một cột FK cho NULL kèm CHECK đúng một cột có giá trị, hoặc một bảng cha chung.']),
+      q('c3', ['EAV (entity, attribute, value) rows for product specs make it hard to…', 'Dòng EAV (thực thể, thuộc tính, giá trị) cho thông số sản phẩm làm khó…'], ['type-check values and write simple queries on them', 'add a new kind of attribute later', 'store products with different attributes', 'delete a product and all its specs'], ['Everything becomes a string in one column. Modern alternative: a JSON/jsonb column for the truly variable part.', 'Mọi thứ thành chuỗi trong một cột. Cách hiện đại: cột JSON/jsonb cho phần thực sự thay đổi.']),
+      q('c4', ['Storing order.total although it can be computed from the lines is acceptable when…', 'Lưu order.total dù tính được từ các dòng là chấp nhận được khi…'], ['it is a deliberate snapshot kept in sync in the same transaction', 'the team does not want to write JOIN queries', 'the order lines table has no primary key', 'the database does not support SUM()'], ['Deliberate denormalisation needs one owner of the update (a transaction or trigger) and a check query.', 'Phi chuẩn hoá có chủ ý cần một nơi duy nhất cập nhật (giao dịch hoặc trigger) và truy vấn kiểm tra.']),
+      q('c5', ['Prisma generated a migration for a link table with @@id([studentId, courseId]). What must you still add yourself?', 'Prisma sinh migration cho bảng nối với @@id([studentId, courseId]). Bạn vẫn phải tự thêm gì?'], ['CHECK constraints such as score BETWEEN 0 AND 10', 'the composite primary key on the two columns', 'the foreign keys to Student and Course', 'the index on studentId, the first key column'], ['Prisma has no CHECK in its schema language: add it by editing the generated SQL migration.', 'Ngôn ngữ schema của Prisma không có CHECK: thêm bằng cách sửa file migration SQL đã sinh.']),
+    ],
+    gy: [['History = rows with validity periods, not a single updatedAt.', 'Lịch sử = các dòng có khoảng hiệu lực, không phải một updatedAt.'], ['If the database cannot enforce it, someone will break it.', 'Nếu CSDL không thi hành được thì sẽ có người phá nó.']],
+    lhg: [['Polymorphic (type, id) links without any integrity check.', 'Liên kết đa hình (type, id) không có kiểm tra toàn vẹn nào.'], ['Trusting the ORM to generate every rule.', 'Tin ORM sinh đủ mọi luật.']],
+    tn: [tn('audit trail', 'vết kiểm toán'), tn('polymorphic association', 'liên kết đa hình'), tn('entity–attribute–value (EAV)', 'mô hình thực thể–thuộc tính–giá trị')],
+  }),
+]);

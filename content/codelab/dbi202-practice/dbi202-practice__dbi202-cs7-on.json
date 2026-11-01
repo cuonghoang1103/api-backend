@@ -1,0 +1,657 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs7-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs7-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — fix the SQL injection in a product search",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "SQL injection",
+        "dynamic SQL",
+        "parameters"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "security",
+        "injection"
+      ],
+      "problemHtml": "<p>The search procedure in solution.sql glues the user's text into SQL code. Try it: <code>EXEC dbo.prTimSanPham N'x%'' UNION SELECT id, ten, 1 FROM dbo.SanPham --'</code> shows every product at price 1. Rewrite <code>dbo.prTimSanPham @tuKhoa</code> so that the keyword is only ever a <b>value</b>: normal searches work, the payload returns nothing and raises no error, and <code>'; DROP TABLE …</code> does nothing.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The vulnerable code is T-SQL dynamic SQL (EXEC of a concatenated string) inside a procedure; the attack and the fix only make sense on a real SQL Server. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Simplest fix: no dynamic SQL at all — WHERE ten LIKE N'%' + @tuKhoa + N'%'.</li>\n  <li>If SQL must be dynamic: sp_executesql with a parameter (@p), never string concatenation.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thủ tục tìm kiếm trong solution.sql ghép chữ người dùng gõ vào mã SQL. Thử xem: <code>EXEC dbo.prTimSanPham N'x%'' UNION SELECT id, ten, 1 FROM dbo.SanPham --'</code> hiện mọi sản phẩm với giá 1. Viết lại <code>dbo.prTimSanPham @tuKhoa</code> để từ khoá chỉ là <b>giá trị</b>: tìm bình thường vẫn chạy, payload không trả gì và không báo lỗi, còn <code>'; DROP TABLE …</code> không làm gì cả.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Mã có lỗ hổng là SQL động T-SQL (EXEC một chuỗi ghép) trong procedure; tấn công và cách vá chỉ có nghĩa trên SQL Server thật. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cách vá đơn giản nhất: bỏ hẳn SQL động — WHERE ten LIKE N'%' + @tuKhoa + N'%'.</li>\n  <li>Nếu bắt buộc SQL động: sp_executesql với tham số (@p), không bao giờ ghép chuỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. A normal search for \"kẻ\" finds the two rulers/notebooks\nPASS 2. The UNION payload returns nothing and raises no error\nPASS 3. A DROP TABLE payload does nothing\nPASS 4. A product name with an apostrophe can be searched\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "The attack works because the quote in the input ends the string literal and the rest is read as SQL.|||Tấn công chạy được vì dấu nháy trong dữ liệu kết thúc chuỗi và phần còn lại bị đọc thành SQL.",
+        "A parameter is never parsed as code, whatever it contains.|||Tham số không bao giờ bị phân tích thành mã, dù chứa gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — fix the SQL injection in a product search\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE dbo.prTimSanPham @tuKhoa NVARCHAR(100)\nAS\nBEGIN\n    SET NOCOUNT ON;\n    -- VULNERABLE: the user's text becomes part of the SQL code\n    DECLARE @sql NVARCHAR(MAX) = N'SELECT id, ten, gia FROM dbo.SanPham WHERE ten LIKE N''%' + @tuKhoa + N'%''';\n    EXEC (@sql);\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — fix the SQL injection in a product search\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.SanPham (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL, gia DECIMAL(12,0) NOT NULL);\nINSERT INTO dbo.SanPham VALUES (1, N'Bút bi', 5000), (2, N'Vở kẻ ngang', 12000), (3, N'Thước kẻ', 8000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — fix the SQL injection in a product search\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A normal search for \"kẻ\" finds the two rulers/notebooks\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''kẻ''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 2 AND NOT EXISTS (SELECT 1 FROM @r WHERE id = 1), 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'', error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A normal search for \"kẻ\" finds the two rulers/notebooks | Tìm bình thường \"kẻ\" ra hai sản phẩm'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A normal search for \"kẻ\" finds the two rulers/notebooks | Tìm bình thường \"kẻ\" ra hai sản phẩm', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: The UNION payload returns nothing and raises no error\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''x%'''' UNION SELECT id, ten, 1 FROM dbo.SanPham --''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 0, 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'' (fake prices: '', (SELECT COUNT(*) FROM @r WHERE gia = 1), N''), error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. The UNION payload returns nothing and raises no error | Payload UNION không trả gì và không báo lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. The UNION payload returns nothing and raises no error | Payload UNION không trả gì và không báo lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: A DROP TABLE payload does nothing\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (x INT); BEGIN TRAN;\nDECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''''''; DROP TABLE dbo.SanPham; --''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(OBJECT_ID(N''dbo.SanPham'') IS NOT NULL, 1, 0);\nSET @info = IIF(@ok = 1, N''table still there'', N''dbo.SanPham was dropped!'');\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. A DROP TABLE payload does nothing | Payload DROP TABLE không làm gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. A DROP TABLE payload does nothing | Payload DROP TABLE không làm gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A product name with an apostrophe can be searched\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; INSERT INTO dbo.SanPham VALUES (4, N''Bút O''''Neil'', 9000);\nDECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''O''''Neil''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 1, 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'', error = '', @e);\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A product name with an apostrophe can be searched | Tìm được tên có dấu nháy đơn'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A product name with an apostrophe can be searched | Tìm được tên có dấu nháy đơn', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — fix the SQL injection in a product search\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE dbo.prTimSanPham @tuKhoa NVARCHAR(100)\nAS\nBEGIN\n    SET NOCOUNT ON;\n    -- SAFE: @tuKhoa is only ever a VALUE, never part of the SQL text\n    SELECT id, ten, gia\n    FROM dbo.SanPham\n    WHERE ten LIKE N'%' + @tuKhoa + N'%';\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — fix the SQL injection in a product search\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.SanPham (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL, gia DECIMAL(12,0) NOT NULL);\nINSERT INTO dbo.SanPham VALUES (1, N'Bút bi', 5000), (2, N'Vở kẻ ngang', 12000), (3, N'Thước kẻ', 8000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — fix the SQL injection in a product search\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A normal search for \"kẻ\" finds the two rulers/notebooks\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''kẻ''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 2 AND NOT EXISTS (SELECT 1 FROM @r WHERE id = 1), 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'', error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A normal search for \"kẻ\" finds the two rulers/notebooks | Tìm bình thường \"kẻ\" ra hai sản phẩm'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A normal search for \"kẻ\" finds the two rulers/notebooks | Tìm bình thường \"kẻ\" ra hai sản phẩm', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: The UNION payload returns nothing and raises no error\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''x%'''' UNION SELECT id, ten, 1 FROM dbo.SanPham --''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 0, 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'' (fake prices: '', (SELECT COUNT(*) FROM @r WHERE gia = 1), N''), error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. The UNION payload returns nothing and raises no error | Payload UNION không trả gì và không báo lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. The UNION payload returns nothing and raises no error | Payload UNION không trả gì và không báo lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: A DROP TABLE payload does nothing\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @t TABLE (x INT); BEGIN TRAN;\nDECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''''''; DROP TABLE dbo.SanPham; --''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(OBJECT_ID(N''dbo.SanPham'') IS NOT NULL, 1, 0);\nSET @info = IIF(@ok = 1, N''table still there'', N''dbo.SanPham was dropped!'');\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. A DROP TABLE payload does nothing | Payload DROP TABLE không làm gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. A DROP TABLE payload does nothing | Payload DROP TABLE không làm gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A product name with an apostrophe can be searched\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; INSERT INTO dbo.SanPham VALUES (4, N''Bút O''''Neil'', 9000);\nDECLARE @r TABLE (id INT, ten NVARCHAR(50), gia DECIMAL(12,0)); DECLARE @e INT = 0;\nBEGIN TRY INSERT INTO @r EXEC dbo.prTimSanPham N''O''''Neil''; END TRY BEGIN CATCH SET @e = ERROR_NUMBER(); END CATCH;\nSET @ok = IIF(@e = 0 AND (SELECT COUNT(*) FROM @r) = 1, 1, 0);\nSET @info = CONCAT(N''rows = '', (SELECT COUNT(*) FROM @r), N'', error = '', @e);\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A product name with an apostrophe can be searched | Tìm được tên có dấu nháy đơn'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A product name with an apostrophe can be searched | Tìm được tên có dấu nháy đơn', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Correct dynamic version, when the SQL text really must be built (e.g. a column chosen from a whitelist): <code>EXEC sp_executesql N'SELECT id, ten, gia FROM dbo.SanPham WHERE ten LIKE @p', N'@p NVARCHAR(102)', @p = CONCAT(N'%', @tuKhoa, N'%');</code>. In application code the same rule applies: prepared statements / parameters (Prisma, JDBC PreparedStatement), never template strings.</p>",
+      "solutionExplanationHtmlVi": "<p>Bản động đúng, khi thật sự phải dựng chuỗi SQL (vd cột chọn từ danh sách trắng): <code>EXEC sp_executesql N'SELECT id, ten, gia FROM dbo.SanPham WHERE ten LIKE @p', N'@p NVARCHAR(102)', @p = CONCAT(N'%', @tuKhoa, N'%');</code>. Trong mã ứng dụng cùng luật: prepared statement / tham số (Prisma, JDBC PreparedStatement), không bao giờ chuỗi mẫu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The vulnerable code is T-SQL dynamic SQL (EXEC of a concatenated string) inside a procedure; the attack and the fix only make sense on a real SQL Server.|||Mã có lỗ hổng là SQL động T-SQL (EXEC một chuỗi ghép) trong procedure; tấn công và cách vá chỉ có nghĩa trên SQL Server thật.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. A normal search for \"kẻ\" finds the two rulers/notebooks",
+            "2. The UNION payload returns nothing and raises no error",
+            "3. A DROP TABLE payload does nothing",
+            "4. A product name with an apostrophe can be searched"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Switching to sp_executesql but still concatenating — the injection is identical.|||Chuyển sang sp_executesql nhưng vẫn ghép chuỗi — lỗ hổng y nguyên."
+        },
+        {
+          "loi": "Blacklisting words such as UNION — attackers have endless variants; the apostrophe test also breaks real names.|||Chặn từ như UNION — kẻ tấn công có vô số biến thể; phép thử dấu nháy còn làm hỏng tên thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SQL injection",
+          "vi": "tiêm SQL"
+        },
+        {
+          "en": "parameterized query",
+          "vi": "truy vấn tham số hoá"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — a least-privilege account for the revenue report",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "CREATE ROLE",
+        "GRANT",
+        "least privilege",
+        "EXECUTE AS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "security",
+        "permissions"
+      ],
+      "problemHtml": "<p>A revenue report only needs to READ <code>DonHang</code> and <code>KhachHang</code>. <code>NhanVien</code> (salaries) must stay off-limits, and the report must not change anything. Create the role <code>rBaoCao</code> with exactly those permissions, and the user <code>report_user</code> (<code>WITHOUT LOGIN</code>, so the exercise works on any server) as its only member. check.sql impersonates the user with <code>EXECUTE AS USER</code>.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> Users, roles, GRANT and EXECUTE AS are SQL Server security objects; the browser grader has a single all-powerful user. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>GRANT to the role, not to the user; add the user to the role with ALTER ROLE … ADD MEMBER.</li>\n  <li>Do NOT use db_datareader: it can read every table, salaries included.</li>\n</ul>",
+      "problemHtmlVi": "<p>Báo cáo doanh thu chỉ cần ĐỌC <code>DonHang</code> và <code>KhachHang</code>. <code>NhanVien</code> (lương) phải ngoài tầm, và báo cáo không được sửa gì. Tạo role <code>rBaoCao</code> với đúng các quyền đó, và user <code>report_user</code> (<code>WITHOUT LOGIN</code> để bài chạy trên mọi server) là thành viên duy nhất của nó. check.sql đóng vai user bằng <code>EXECUTE AS USER</code>.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> User, role, GRANT và EXECUTE AS là đối tượng bảo mật của SQL Server; máy chấm trình duyệt chỉ có một người dùng toàn quyền. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>GRANT cho role, không cho user; thêm user vào role bằng ALTER ROLE … ADD MEMBER.</li>\n  <li>KHÔNG dùng db_datareader: nó đọc được mọi bảng, kể cả lương.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. report_user can read DonHang joined with KhachHang\nPASS 2. report_user cannot read NhanVien (error 229)\nPASS 3. report_user cannot change orders (INSERT, UPDATE, DELETE refused)\nPASS 4. The permissions belong to rBaoCao, and report_user is in no other role\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Login (server) → user (database) → role (group of permissions).|||Login (máy chủ) → user (CSDL) → role (nhóm quyền).",
+        "Grant to roles: when a new analyst joins, one ALTER ROLE gives them exactly the same rights.|||Cấp cho role: khi có chuyên viên mới, một lệnh ALTER ROLE cho họ đúng y các quyền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 2 — a least-privilege account for the revenue report\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE ROLE rBaoCao; GRANT ... TO rBaoCao;\n-- CREATE USER report_user WITHOUT LOGIN; ALTER ROLE rBaoCao ADD MEMBER report_user;\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 2 — a least-privilege account for the revenue report\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.KhachHang (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL);\nCREATE TABLE dbo.DonHang (id INT NOT NULL PRIMARY KEY, khachHangId INT NOT NULL REFERENCES dbo.KhachHang (id), tongTien DECIMAL(12,0) NOT NULL);\nCREATE TABLE dbo.NhanVien (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL, luong DECIMAL(12,0) NOT NULL);\nINSERT INTO dbo.KhachHang VALUES (1, N'An'), (2, N'Bình');\nINSERT INTO dbo.DonHang VALUES (1, 1, 150000), (2, 2, 90000), (3, 1, 40000);\nINSERT INTO dbo.NhanVien VALUES (1, N'Quang', 30000000), (2, N'Hà', 18000000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 2 — a least-privilege account for the revenue report\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: report_user can read DonHang joined with KhachHang\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0;\nBEGIN TRY\n    EXECUTE AS USER = N''report_user'';\n    DECLARE @n INT = (SELECT COUNT(*) FROM dbo.DonHang d JOIN dbo.KhachHang k ON k.id = d.khachHangId);\n    REVERT;\nEND TRY\nBEGIN CATCH\n    SET @e = ERROR_NUMBER();\n    IF USER_NAME() = N''report_user'' REVERT;\nEND CATCH;\nSET @ok = IIF(@e = 0 AND USER_ID(N''report_user'') IS NOT NULL, 1, 0);\nSET @info = CONCAT(N''error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. report_user can read DonHang joined with KhachHang | report_user đọc được DonHang nối KhachHang'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. report_user can read DonHang joined with KhachHang | report_user đọc được DonHang nối KhachHang', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: report_user cannot read NhanVien (error 229)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0;\nBEGIN TRY\n    EXECUTE AS USER = N''report_user'';\n    DECLARE @n INT = (SELECT COUNT(*) FROM dbo.NhanVien);\n    REVERT;\nEND TRY\nBEGIN CATCH\n    SET @e = ERROR_NUMBER();\n    IF USER_NAME() = N''report_user'' REVERT;\nEND CATCH;\nSET @ok = IIF(@e = 229, 1, 0);\nSET @info = CONCAT(N''error = '', @e, IIF(@e = 0, N'' — the salaries are readable!'', N''''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. report_user cannot read NhanVien (error 229) | report_user không đọc được NhanVien (lỗi 229)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. report_user cannot read NhanVien (error 229) | report_user không đọc được NhanVien (lỗi 229)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: report_user cannot change orders (INSERT, UPDATE, DELETE refused)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @bad INT = 0;\nBEGIN TRAN;\nBEGIN TRY EXECUTE AS USER = N''report_user''; UPDATE dbo.DonHang SET tongTien = 0; REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nBEGIN TRY EXECUTE AS USER = N''report_user''; INSERT INTO dbo.DonHang VALUES (9, 1, 1); REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nBEGIN TRY EXECUTE AS USER = N''report_user''; DELETE FROM dbo.DonHang; REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@bad = 0, 1, 0);\nSET @info = CONCAT(N''writes that went through: '', @bad % 10, N'' · other errors: '', @bad / 10);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. report_user cannot change orders (INSERT, UPDATE, DELETE refused) | report_user không sửa được đơn (INSERT, UPDATE, DELETE bị từ chối)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. report_user cannot change orders (INSERT, UPDATE, DELETE refused) | report_user không sửa được đơn (INSERT, UPDATE, DELETE bị từ chối)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The permissions belong to rBaoCao, and report_user is in no other role\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.database_permissions p WHERE p.grantee_principal_id = DATABASE_PRINCIPAL_ID(N''rBaoCao'') AND p.permission_name = ''SELECT'' AND p.major_id = OBJECT_ID(N''dbo.DonHang''))\n  AND NOT EXISTS (SELECT 1 FROM sys.database_permissions p WHERE p.grantee_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'') AND p.class = 1)\n  AND (SELECT COUNT(*) FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'')) = 1\n  AND EXISTS (SELECT 1 FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'') AND m.role_principal_id = DATABASE_PRINCIPAL_ID(N''rBaoCao'')), 1, 0);\nSET @info = CONCAT(N''roles of report_user: '', (SELECT STRING_AGG(USER_NAME(m.role_principal_id), '', '') FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'')));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The permissions belong to rBaoCao, and report_user is in no other role | Quyền thuộc rBaoCao, và report_user không ở role nào khác'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The permissions belong to rBaoCao, and report_user is in no other role | Quyền thuộc rBaoCao, và report_user không ở role nào khác', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 2 — a least-privilege account for the revenue report\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE ROLE rBaoCao;                                    -- permissions go to a ROLE, people join the role\nGRANT SELECT ON dbo.DonHang   TO rBaoCao;\nGRANT SELECT ON dbo.KhachHang TO rBaoCao;\nGO\nCREATE USER report_user WITHOUT LOGIN;                   -- a database user (a real setup maps it to a login)\nALTER ROLE rBaoCao ADD MEMBER report_user;\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 2 — a least-privilege account for the revenue report\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.KhachHang (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL);\nCREATE TABLE dbo.DonHang (id INT NOT NULL PRIMARY KEY, khachHangId INT NOT NULL REFERENCES dbo.KhachHang (id), tongTien DECIMAL(12,0) NOT NULL);\nCREATE TABLE dbo.NhanVien (id INT NOT NULL PRIMARY KEY, ten NVARCHAR(50) NOT NULL, luong DECIMAL(12,0) NOT NULL);\nINSERT INTO dbo.KhachHang VALUES (1, N'An'), (2, N'Bình');\nINSERT INTO dbo.DonHang VALUES (1, 1, 150000), (2, 2, 90000), (3, 1, 40000);\nINSERT INTO dbo.NhanVien VALUES (1, N'Quang', 30000000), (2, N'Hà', 18000000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 2 — a least-privilege account for the revenue report\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: report_user can read DonHang joined with KhachHang\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0;\nBEGIN TRY\n    EXECUTE AS USER = N''report_user'';\n    DECLARE @n INT = (SELECT COUNT(*) FROM dbo.DonHang d JOIN dbo.KhachHang k ON k.id = d.khachHangId);\n    REVERT;\nEND TRY\nBEGIN CATCH\n    SET @e = ERROR_NUMBER();\n    IF USER_NAME() = N''report_user'' REVERT;\nEND CATCH;\nSET @ok = IIF(@e = 0 AND USER_ID(N''report_user'') IS NOT NULL, 1, 0);\nSET @info = CONCAT(N''error = '', @e);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. report_user can read DonHang joined with KhachHang | report_user đọc được DonHang nối KhachHang'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. report_user can read DonHang joined with KhachHang | report_user đọc được DonHang nối KhachHang', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: report_user cannot read NhanVien (error 229)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @e INT = 0;\nBEGIN TRY\n    EXECUTE AS USER = N''report_user'';\n    DECLARE @n INT = (SELECT COUNT(*) FROM dbo.NhanVien);\n    REVERT;\nEND TRY\nBEGIN CATCH\n    SET @e = ERROR_NUMBER();\n    IF USER_NAME() = N''report_user'' REVERT;\nEND CATCH;\nSET @ok = IIF(@e = 229, 1, 0);\nSET @info = CONCAT(N''error = '', @e, IIF(@e = 0, N'' — the salaries are readable!'', N''''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. report_user cannot read NhanVien (error 229) | report_user không đọc được NhanVien (lỗi 229)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. report_user cannot read NhanVien (error 229) | report_user không đọc được NhanVien (lỗi 229)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: report_user cannot change orders (INSERT, UPDATE, DELETE refused)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @bad INT = 0;\nBEGIN TRAN;\nBEGIN TRY EXECUTE AS USER = N''report_user''; UPDATE dbo.DonHang SET tongTien = 0; REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nBEGIN TRY EXECUTE AS USER = N''report_user''; INSERT INTO dbo.DonHang VALUES (9, 1, 1); REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nBEGIN TRY EXECUTE AS USER = N''report_user''; DELETE FROM dbo.DonHang; REVERT; SET @bad += 1; END TRY BEGIN CATCH IF USER_NAME() = N''report_user'' REVERT; IF ERROR_NUMBER() <> 229 SET @bad += 10; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@bad = 0, 1, 0);\nSET @info = CONCAT(N''writes that went through: '', @bad % 10, N'' · other errors: '', @bad / 10);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. report_user cannot change orders (INSERT, UPDATE, DELETE refused) | report_user không sửa được đơn (INSERT, UPDATE, DELETE bị từ chối)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. report_user cannot change orders (INSERT, UPDATE, DELETE refused) | report_user không sửa được đơn (INSERT, UPDATE, DELETE bị từ chối)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The permissions belong to rBaoCao, and report_user is in no other role\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.database_permissions p WHERE p.grantee_principal_id = DATABASE_PRINCIPAL_ID(N''rBaoCao'') AND p.permission_name = ''SELECT'' AND p.major_id = OBJECT_ID(N''dbo.DonHang''))\n  AND NOT EXISTS (SELECT 1 FROM sys.database_permissions p WHERE p.grantee_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'') AND p.class = 1)\n  AND (SELECT COUNT(*) FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'')) = 1\n  AND EXISTS (SELECT 1 FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'') AND m.role_principal_id = DATABASE_PRINCIPAL_ID(N''rBaoCao'')), 1, 0);\nSET @info = CONCAT(N''roles of report_user: '', (SELECT STRING_AGG(USER_NAME(m.role_principal_id), '', '') FROM sys.database_role_members m WHERE m.member_principal_id = DATABASE_PRINCIPAL_ID(N''report_user'')));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The permissions belong to rBaoCao, and report_user is in no other role | Quyền thuộc rBaoCao, và report_user không ở role nào khác'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The permissions belong to rBaoCao, and report_user is in no other role | Quyền thuộc rBaoCao, và report_user không ở role nào khác', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Msg 229 \"The SELECT permission was denied on the object 'NhanVien'\" is the error the report would see. DENY is stronger than GRANT and wins over any role grant — keep it for explicit exceptions. PostgreSQL: CREATE ROLE … NOLOGIN; GRANT SELECT ON … TO …; GRANT role TO user.</p>",
+      "solutionExplanationHtmlVi": "<p>Msg 229 \"The SELECT permission was denied on the object 'NhanVien'\" là lỗi báo cáo sẽ gặp. DENY mạnh hơn GRANT và thắng mọi quyền cấp qua role — giữ cho ngoại lệ tường minh. PostgreSQL: CREATE ROLE … NOLOGIN; GRANT SELECT ON … TO …; GRANT role TO user.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "Users, roles, GRANT and EXECUTE AS are SQL Server security objects; the browser grader has a single all-powerful user.|||User, role, GRANT và EXECUTE AS là đối tượng bảo mật của SQL Server; máy chấm trình duyệt chỉ có một người dùng toàn quyền.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. report_user can read DonHang joined with KhachHang",
+            "2. report_user cannot read NhanVien (error 229)",
+            "3. report_user cannot change orders (INSERT, UPDATE, DELETE refused)",
+            "4. The permissions belong to rBaoCao, and report_user is in no other role"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the account to db_datareader \"to save time\" — every table, including salaries, becomes readable.|||Thêm tài khoản vào db_datareader \"cho nhanh\" — mọi bảng, kể cả lương, đều đọc được."
+        },
+        {
+          "loi": "Granting to the user directly — permissions get scattered and forgotten.|||Cấp thẳng cho user — quyền bị rải rác và bị quên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "least privilege",
+          "vi": "quyền tối thiểu"
+        },
+        {
+          "en": "database role",
+          "vi": "vai trò CSDL"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Row-Level Security",
+        "security policy",
+        "filter predicate",
+        "block predicate",
+        "SESSION_CONTEXT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "security",
+        "rls"
+      ],
+      "problemHtml": "<p><code>Ve(id, congTyId, tieuDe)</code> holds support tickets of several companies. After login the app runs <code>EXEC sp_set_session_context N'congTyId', @id</code>. Make the database itself guarantee that a session sees <b>only its company's tickets</b> (and none when the context is not set) and cannot <b>insert</b> a ticket for another company — no WHERE clause needed in the app.</p><p>Create the inline function <code>dbo.fnRlsCongTy(@congTyId)</code> and the security policy <code>dbo.spVeTheoCongTy</code> with a FILTER and an AFTER INSERT BLOCK predicate.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> Row-Level Security (security policies, inline predicate functions, SESSION_CONTEXT) is a SQL Server engine feature; nothing in the browser grader can enforce it. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The predicate function: RETURNS TABLE WITH SCHEMABINDING AS RETURN SELECT 1 … WHERE @congTyId = CAST(SESSION_CONTEXT(N'congTyId') AS INT).</li>\n  <li>CREATE SECURITY POLICY … ADD FILTER PREDICATE … ON dbo.Ve, ADD BLOCK PREDICATE … ON dbo.Ve AFTER INSERT WITH (STATE = ON).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Ve(id, congTyId, tieuDe)</code> chứa phiếu hỗ trợ của nhiều công ty. Sau khi đăng nhập app chạy <code>EXEC sp_set_session_context N'congTyId', @id</code>. Làm cho chính CSDL bảo đảm một phiên chỉ thấy <b>phiếu của công ty mình</b> (và không thấy gì khi chưa đặt ngữ cảnh) và không <b>chèn</b> được phiếu cho công ty khác — app không cần WHERE.</p><p>Tạo hàm inline <code>dbo.fnRlsCongTy(@congTyId)</code> và security policy <code>dbo.spVeTheoCongTy</code> với một FILTER và một BLOCK AFTER INSERT.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Row-Level Security (security policy, hàm điều kiện inline, SESSION_CONTEXT) là tính năng của bộ máy SQL Server; máy chấm trình duyệt không thi hành được. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hàm điều kiện: RETURNS TABLE WITH SCHEMABINDING AS RETURN SELECT 1 … WHERE @congTyId = CAST(SESSION_CONTEXT(N'congTyId') AS INT).</li>\n  <li>CREATE SECURITY POLICY … ADD FILTER PREDICATE … ON dbo.Ve, ADD BLOCK PREDICATE … ON dbo.Ve AFTER INSERT WITH (STATE = ON).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. Company 1 sees its 2 tickets, company 2 its 3\nPASS 2. Without a context nothing is visible\nPASS 3. Company 1 cannot insert a ticket for company 2, but can for itself\nPASS 4. A security policy with a FILTER and a BLOCK predicate is ON\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "The filter predicate is applied to every SELECT/UPDATE/DELETE of the table, by everyone — the app cannot forget it.|||Điều kiện lọc được áp cho mọi SELECT/UPDATE/DELETE của bảng, với mọi người — app không thể quên.",
+        "A FILTER hides rows; only a BLOCK predicate stops writes into other tenants.|||FILTER chỉ giấu dòng; chỉ BLOCK mới chặn việc ghi vào khách thuê khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE FUNCTION dbo.fnRlsCongTy (@congTyId INT) RETURNS TABLE WITH SCHEMABINDING AS RETURN ...\n-- GO\n-- CREATE SECURITY POLICY dbo.spVeTheoCongTy ... WITH (STATE = ON);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.Ve (id INT NOT NULL PRIMARY KEY, congTyId INT NOT NULL, tieuDe NVARCHAR(100) NOT NULL);\nINSERT INTO dbo.Ve VALUES (1, 1, N'Lỗi đăng nhập'), (2, 1, N'Đổi mật khẩu'), (3, 2, N'Hoá đơn sai'), (4, 2, N'Xuất báo cáo'), (5, 2, N'Thêm người dùng'), (6, 3, N'Hỏi giá');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: Company 1 sees its 2 tickets, company 2 its 3\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC sp_set_session_context @key = N''congTyId'', @value = 1; DECLARE @a INT = (SELECT COUNT(*) FROM dbo.Ve), @x INT = (SELECT COUNT(*) FROM dbo.Ve WHERE congTyId <> 1);\nEXEC sp_set_session_context @key = N''congTyId'', @value = 2; DECLARE @b INT = (SELECT COUNT(*) FROM dbo.Ve);\nEXEC sp_set_session_context @key = N''congTyId'', @value = NULL;\nSET @ok = IIF(@a = 2 AND @x = 0 AND @b = 3, 1, 0);\nSET @info = CONCAT(N''company 1 sees '', @a, N'', company 2 sees '', @b);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Company 1 sees its 2 tickets, company 2 its 3 | Công ty 1 thấy 2 phiếu, công ty 2 thấy 3'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Company 1 sees its 2 tickets, company 2 its 3 | Công ty 1 thấy 2 phiếu, công ty 2 thấy 3', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Without a context nothing is visible\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC sp_set_session_context @key = N''congTyId'', @value = NULL; SET @ok = IIF((SELECT COUNT(*) FROM dbo.Ve) = 0, 1, 0);\nSET @info = CONCAT(N''rows visible without context: '', (SELECT COUNT(*) FROM dbo.Ve));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Without a context nothing is visible | Không đặt ngữ cảnh thì không thấy gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Without a context nothing is visible | Không đặt ngữ cảnh thì không thấy gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Company 1 cannot insert a ticket for company 2, but can for itself\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @chan INT = 0, @duoc INT = 0;\nEXEC sp_set_session_context @key = N''congTyId'', @value = 1;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Ve VALUES (100, 2, N''Giả mạo''); END TRY BEGIN CATCH SET @chan = ERROR_NUMBER(); END CATCH;\nBEGIN TRY INSERT INTO dbo.Ve VALUES (101, 1, N''Thật''); SET @duoc = 1; END TRY BEGIN CATCH END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nEXEC sp_set_session_context @key = N''congTyId'', @value = NULL;\nSET @ok = IIF(@chan = 33504 AND @duoc = 1, 1, 0);\nSET @info = CONCAT(N''cross-company insert error = '', @chan, N'' (expected 33504) · own insert ok = '', @duoc);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Company 1 cannot insert a ticket for company 2, but can for itself | Công ty 1 không chèn được phiếu cho công ty 2, nhưng chèn được cho mình'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Company 1 cannot insert a ticket for company 2, but can for itself | Công ty 1 không chèn được phiếu cho công ty 2, nhưng chèn được cho mình', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A security policy with a FILTER and a BLOCK predicate is ON\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.security_policies WHERE name = N''spVeTheoCongTy'' AND is_enabled = 1)\n  AND EXISTS (SELECT 1 FROM sys.security_predicates sp JOIN sys.security_policies p ON p.object_id = sp.object_id WHERE p.name = N''spVeTheoCongTy'' AND sp.predicate_type_desc = ''FILTER'')\n  AND EXISTS (SELECT 1 FROM sys.security_predicates sp JOIN sys.security_policies p ON p.object_id = sp.object_id WHERE p.name = N''spVeTheoCongTy'' AND sp.predicate_type_desc = ''BLOCK''), 1, 0);\nSET @info = N''expected dbo.spVeTheoCongTy, STATE = ON, one FILTER and one BLOCK predicate'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A security policy with a FILTER and a BLOCK predicate is ON | Security policy có FILTER và BLOCK đang bật'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A security policy with a FILTER and a BLOCK predicate is ON | Security policy có FILTER và BLOCK đang bật', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE FUNCTION dbo.fnRlsCongTy (@congTyId INT)\nRETURNS TABLE\nWITH SCHEMABINDING\nAS\nRETURN SELECT 1 AS duoc\n       WHERE @congTyId = CAST(SESSION_CONTEXT(N'congTyId') AS INT);   -- set by the app right after login\nGO\nCREATE SECURITY POLICY dbo.spVeTheoCongTy\n    ADD FILTER PREDICATE dbo.fnRlsCongTy(congTyId) ON dbo.Ve,                 -- hides other companies' rows\n    ADD BLOCK  PREDICATE dbo.fnRlsCongTy(congTyId) ON dbo.Ve AFTER INSERT     -- cannot write into another company\n    WITH (STATE = ON);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.Ve (id INT NOT NULL PRIMARY KEY, congTyId INT NOT NULL, tieuDe NVARCHAR(100) NOT NULL);\nINSERT INTO dbo.Ve VALUES (1, 1, N'Lỗi đăng nhập'), (2, 1, N'Đổi mật khẩu'), (3, 2, N'Hoá đơn sai'), (4, 2, N'Xuất báo cáo'), (5, 2, N'Thêm người dùng'), (6, 3, N'Hỏi giá');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: Company 1 sees its 2 tickets, company 2 its 3\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC sp_set_session_context @key = N''congTyId'', @value = 1; DECLARE @a INT = (SELECT COUNT(*) FROM dbo.Ve), @x INT = (SELECT COUNT(*) FROM dbo.Ve WHERE congTyId <> 1);\nEXEC sp_set_session_context @key = N''congTyId'', @value = 2; DECLARE @b INT = (SELECT COUNT(*) FROM dbo.Ve);\nEXEC sp_set_session_context @key = N''congTyId'', @value = NULL;\nSET @ok = IIF(@a = 2 AND @x = 0 AND @b = 3, 1, 0);\nSET @info = CONCAT(N''company 1 sees '', @a, N'', company 2 sees '', @b);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Company 1 sees its 2 tickets, company 2 its 3 | Công ty 1 thấy 2 phiếu, công ty 2 thấy 3'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Company 1 sees its 2 tickets, company 2 its 3 | Công ty 1 thấy 2 phiếu, công ty 2 thấy 3', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Without a context nothing is visible\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC sp_set_session_context @key = N''congTyId'', @value = NULL; SET @ok = IIF((SELECT COUNT(*) FROM dbo.Ve) = 0, 1, 0);\nSET @info = CONCAT(N''rows visible without context: '', (SELECT COUNT(*) FROM dbo.Ve));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Without a context nothing is visible | Không đặt ngữ cảnh thì không thấy gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Without a context nothing is visible | Không đặt ngữ cảnh thì không thấy gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Company 1 cannot insert a ticket for company 2, but can for itself\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @chan INT = 0, @duoc INT = 0;\nEXEC sp_set_session_context @key = N''congTyId'', @value = 1;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Ve VALUES (100, 2, N''Giả mạo''); END TRY BEGIN CATCH SET @chan = ERROR_NUMBER(); END CATCH;\nBEGIN TRY INSERT INTO dbo.Ve VALUES (101, 1, N''Thật''); SET @duoc = 1; END TRY BEGIN CATCH END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nEXEC sp_set_session_context @key = N''congTyId'', @value = NULL;\nSET @ok = IIF(@chan = 33504 AND @duoc = 1, 1, 0);\nSET @info = CONCAT(N''cross-company insert error = '', @chan, N'' (expected 33504) · own insert ok = '', @duoc);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Company 1 cannot insert a ticket for company 2, but can for itself | Công ty 1 không chèn được phiếu cho công ty 2, nhưng chèn được cho mình'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Company 1 cannot insert a ticket for company 2, but can for itself | Công ty 1 không chèn được phiếu cho công ty 2, nhưng chèn được cho mình', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: A security policy with a FILTER and a BLOCK predicate is ON\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.security_policies WHERE name = N''spVeTheoCongTy'' AND is_enabled = 1)\n  AND EXISTS (SELECT 1 FROM sys.security_predicates sp JOIN sys.security_policies p ON p.object_id = sp.object_id WHERE p.name = N''spVeTheoCongTy'' AND sp.predicate_type_desc = ''FILTER'')\n  AND EXISTS (SELECT 1 FROM sys.security_predicates sp JOIN sys.security_policies p ON p.object_id = sp.object_id WHERE p.name = N''spVeTheoCongTy'' AND sp.predicate_type_desc = ''BLOCK''), 1, 0);\nSET @info = N''expected dbo.spVeTheoCongTy, STATE = ON, one FILTER and one BLOCK predicate'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. A security policy with a FILTER and a BLOCK predicate is ON | Security policy có FILTER và BLOCK đang bật'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. A security policy with a FILTER and a BLOCK predicate is ON | Security policy có FILTER và BLOCK đang bật', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RLS is enforced by the engine, which is why it differs from a WHERE: ad hoc tools, reports and forgotten endpoints are all covered. Set the context with @read_only = 1 in the app so the user cannot change it later in the same session. PostgreSQL: ALTER TABLE ve ENABLE ROW LEVEL SECURITY; CREATE POLICY … USING (cong_ty_id = current_setting('app.cong_ty_id')::int) WITH CHECK (…).</p>",
+      "solutionExplanationHtmlVi": "<p>RLS do bộ máy thi hành nên khác WHERE: công cụ tuỳ biến, báo cáo và endpoint bị quên đều được bảo vệ. Đặt ngữ cảnh với @read_only = 1 trong app để người dùng không đổi được trong cùng phiên. PostgreSQL: ALTER TABLE ve ENABLE ROW LEVEL SECURITY; CREATE POLICY … USING (cong_ty_id = current_setting('app.cong_ty_id')::int) WITH CHECK (…).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "Row-Level Security (security policies, inline predicate functions, SESSION_CONTEXT) is a SQL Server engine feature; nothing in the browser grader can enforce it.|||Row-Level Security (security policy, hàm điều kiện inline, SESSION_CONTEXT) là tính năng của bộ máy SQL Server; máy chấm trình duyệt không thi hành được.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. Company 1 sees its 2 tickets, company 2 its 3",
+            "2. Without a context nothing is visible",
+            "3. Company 1 cannot insert a ticket for company 2, but can for itself",
+            "4. A security policy with a FILTER and a BLOCK predicate is ON"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"No context ⇒ see everything\" — one missing sp_set_session_context call leaks every company.|||\"Không có ngữ cảnh ⇒ thấy hết\" — thiếu một lệnh sp_set_session_context là lộ mọi công ty."
+        },
+        {
+          "loi": "Only a FILTER: a session can still insert rows for another company (it just cannot see them afterwards).|||Chỉ có FILTER: một phiên vẫn chèn được dòng cho công ty khác (chỉ là không thấy lại)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Row-Level Security",
+          "vi": "bảo mật mức dòng"
+        },
+        {
+          "en": "multi-tenant",
+          "vi": "nhiều khách thuê"
+        },
+        {
+          "en": "session context",
+          "vi": "ngữ cảnh phiên"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — why two equal passwords must not get equal hashes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "password hashing",
+        "salt",
+        "bcrypt",
+        "rainbow table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "security",
+        "hashing"
+      ],
+      "problemHtml": "<p>Users <code>an</code> and <code>binh</code> both pick the password <code>MatKhau1</code>.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng <code>an</code> và <code>binh</code> cùng chọn mật khẩu <code>MatKhau1</code>.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hash ≠ encryption: a hash cannot be turned back.|||Băm ≠ mã hoá: hash không đảo ngược được.",
+        "Salt per password + a slow algorithm.|||Muối riêng mỗi mật khẩu + thuật toán chậm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — why two equal passwords must not get equal hashes\n\nAnswer in the answer panel (no code needed).\n\n1. Stored as SHA-256(password), the two rows…Lưu dạng SHA-256(mật khẩu), hai dòng…\n2. bcrypt stores something like $2b$12$<22-char salt><hash>. The salt…bcrypt lưu dạng $2b$12$<muối 22 ký tự><hash>. Muối…\n3. The \"12\" in $2b$12$ is…Số \"12\" trong $2b$12$ là…\n4. Where should the password hashing happen?Việc băm mật khẩu nên làm ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — why two equal passwords must not get equal hashes — answer key\n\n1. Stored as SHA-256(password), the two rows…Lưu dạng SHA-256(mật khẩu), hai dòng…\n   Answer: c) hold identical hashes: cracking one cracks both\n   Same input, same fast hash — and precomputed (rainbow) tables reverse common passwords instantly.VI: Cùng đầu vào, cùng hàm băm nhanh — và bảng tính sẵn (rainbow) đảo ngược mật khẩu phổ biến ngay lập tức.\n\n2. bcrypt stores something like $2b$12$<22-char salt><hash>. The salt…bcrypt lưu dạng $2b$12$<muối 22 ký tự><hash>. Muối…\n   Answer: c) is random per password, so equal passwords get different hashes\n   The salt is not secret; it defeats precomputed tables and hides equal passwords.VI: Muối không bí mật; nó vô hiệu bảng tính sẵn và che việc hai mật khẩu giống nhau.\n\n3. The \"12\" in $2b$12$ is…Số \"12\" trong $2b$12$ là…\n   Answer: a) the cost factor: 2¹² rounds, deliberately slow to slow down guessing\n   Fast hashes are good for files; for passwords you want slow (bcrypt, scrypt, Argon2).VI: Hàm băm nhanh tốt cho tệp; với mật khẩu cần chậm (bcrypt, scrypt, Argon2).\n\n4. Where should the password hashing happen?Việc băm mật khẩu nên làm ở đâu?\n   Answer: c) in the application, before the value reaches SQL\n   The plain password should never travel to (or be logged by) the database. Encryption is reversible; a password needs a one-way hash.VI: Mật khẩu gốc không nên đi tới (hay bị ghi log bởi) CSDL. Mã hoá là đảo ngược được; mật khẩu cần băm một chiều.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> hold identical hashes: cracking one cracks both</p><p>Same input, same fast hash — and precomputed (rainbow) tables reverse common passwords instantly.</p><p><i>VI: Cùng đầu vào, cùng hàm băm nhanh — và bảng tính sẵn (rainbow) đảo ngược mật khẩu phổ biến ngay lập tức.</i></p></li><li><p><b>c)</b> is random per password, so equal passwords get different hashes</p><p>The salt is not secret; it defeats precomputed tables and hides equal passwords.</p><p><i>VI: Muối không bí mật; nó vô hiệu bảng tính sẵn và che việc hai mật khẩu giống nhau.</i></p></li><li><p><b>a)</b> the cost factor: 2¹² rounds, deliberately slow to slow down guessing</p><p>Fast hashes are good for files; for passwords you want slow (bcrypt, scrypt, Argon2).</p><p><i>VI: Hàm băm nhanh tốt cho tệp; với mật khẩu cần chậm (bcrypt, scrypt, Argon2).</i></p></li><li><p><b>c)</b> in the application, before the value reaches SQL</p><p>The plain password should never travel to (or be logged by) the database. Encryption is reversible; a password needs a one-way hash.</p><p><i>VI: Mật khẩu gốc không nên đi tới (hay bị ghi log bởi) CSDL. Mã hoá là đảo ngược được; mật khẩu cần băm một chiều.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Stored as SHA-256(password), the two rows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lưu dạng SHA-256(mật khẩu), hai dòng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "cannot be compared by anyone who reads the table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "are encrypted and can be decrypted with the key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "hold identical hashes: cracking one cracks both"
+              },
+              {
+                "ma": "d",
+                "noiDung": "hold different hashes because the usernames differ"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same input, same fast hash — and precomputed (rainbow) tables reverse common passwords instantly.</p><p><i>VI: Cùng đầu vào, cùng hàm băm nhanh — và bảng tính sẵn (rainbow) đảo ngược mật khẩu phổ biến ngay lập tức.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>bcrypt stores something like $2b$12$&lt;22-char salt&gt;&lt;hash&gt;. The salt…</p><p style=\"opacity:.75;font-size:.92em\"><i>bcrypt lưu dạng $2b$12$&lt;muối 22 ký tự&gt;&lt;hash&gt;. Muối…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is the same for every user of the system"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is a secret kept outside the database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is random per password, so equal passwords get different hashes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "makes the hash reversible for the server"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The salt is not secret; it defeats precomputed tables and hides equal passwords.</p><p><i>VI: Muối không bí mật; nó vô hiệu bảng tính sẵn và che việc hai mật khẩu giống nhau.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The \"12\" in $2b$12$ is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Số \"12\" trong $2b$12$ là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the cost factor: 2¹² rounds, deliberately slow to slow down guessing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the length of the password in characters"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of times the user may log in per day"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the version of the bcrypt library in use"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fast hashes are good for files; for passwords you want slow (bcrypt, scrypt, Argon2).</p><p><i>VI: Hàm băm nhanh tốt cho tệp; với mật khẩu cần chậm (bcrypt, scrypt, Argon2).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Where should the password hashing happen?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc băm mật khẩu nên làm ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "with ENCRYPTBYPASSPHRASE inside the INSERT"
+              },
+              {
+                "ma": "b",
+                "noiDung": "in a trigger, so the database sees the plain password"
+              },
+              {
+                "ma": "c",
+                "noiDung": "in the application, before the value reaches SQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "in a view that hides the password column"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The plain password should never travel to (or be logged by) the database. Encryption is reversible; a password needs a one-way hash.</p><p><i>VI: Mật khẩu gốc không nên đi tới (hay bị ghi log bởi) CSDL. Mã hoá là đảo ngược được; mật khẩu cần băm một chiều.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing MD5/SHA-256 of passwords without salt.|||Lưu MD5/SHA-256 của mật khẩu không muối."
+        },
+        {
+          "loi": "Encrypting passwords — whoever has the key can read them all.|||Mã hoá mật khẩu — ai có khoá cũng đọc được tất cả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "salt",
+          "vi": "muối"
+        },
+        {
+          "en": "key stretching",
+          "vi": "kéo giãn khoá"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 5 — partition a bookings table by month, then purge January fast",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "partition function",
+        "partition scheme",
+        "partition elimination",
+        "TRUNCATE … WITH (PARTITIONS)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "operations",
+        "partitioning"
+      ],
+      "problemHtml": "<p><code>DatPhongNguon(id, ngay, phong)</code> holds bookings from January to April 2026. Build the partitioned table <code>dbo.datphong(id, ngay, phong)</code>:</p>\n<ol><li>partition function <code>pfThang (DATE)</code> — RANGE RIGHT with boundaries 2026-02-01, 2026-03-01, 2026-04-01 (4 partitions);</li>\n<li>partition scheme <code>psThang</code> (ALL TO ([PRIMARY]));</li>\n<li><code>dbo.datphong</code> on <code>psThang(ngay)</code>, primary key <code>(ngay, id)</code>, filled from DatPhongNguon;</li>\n<li>then purge January with <code>TRUNCATE TABLE … WITH (PARTITIONS (1))</code>.</li></ol><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> Partition functions, partition schemes and TRUNCATE … WITH (PARTITIONS) are SQL Server storage features; the browser grader cannot create or inspect them. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>RANGE RIGHT: each boundary date belongs to the partition on its RIGHT (2026-02-01 is in partition 2).</li>\n  <li>The partitioning column must be part of the clustered primary key.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>DatPhongNguon(id, ngay, phong)</code> chứa lượt đặt phòng từ tháng 1 tới tháng 4/2026. Dựng bảng phân vùng <code>dbo.datphong(id, ngay, phong)</code>:</p>\n<ol><li>partition function <code>pfThang (DATE)</code> — RANGE RIGHT với các mốc 2026-02-01, 2026-03-01, 2026-04-01 (4 phân vùng);</li>\n<li>partition scheme <code>psThang</code> (ALL TO ([PRIMARY]));</li>\n<li><code>dbo.datphong</code> trên <code>psThang(ngay)</code>, khoá chính <code>(ngay, id)</code>, đổ dữ liệu từ DatPhongNguon;</li>\n<li>rồi xoá tháng 1 bằng <code>TRUNCATE TABLE … WITH (PARTITIONS (1))</code>.</li></ol><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Partition function, partition scheme và TRUNCATE … WITH (PARTITIONS) là tính năng lưu trữ của SQL Server; máy chấm trình duyệt không tạo hay soi được. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>RANGE RIGHT: mỗi ngày mốc thuộc phân vùng bên PHẢI nó (2026-02-01 ở phân vùng 2).</li>\n  <li>Cột phân vùng phải nằm trong khoá chính cụm.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions\nPASS 2. 1 February falls in partition 2, 15 March in partition 3\nPASS 3. dbo.datphong is stored on psThang by ngay\nPASS 4. January is gone, February–April (6 rows) are kept\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "RANGE RIGHT for dates: each boundary is the FIRST day of a month.|||RANGE RIGHT với ngày: mỗi mốc là NGÀY ĐẦU của một tháng.",
+        "A report WHERE ngay >= '2026-03-01' AND ngay < '2026-04-01' touches only partition 3 (partition elimination).|||Báo cáo WHERE ngay >= '2026-03-01' AND ngay < '2026-04-01' chỉ chạm phân vùng 3 (loại bỏ phân vùng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE PARTITION FUNCTION pfThang (DATE) AS RANGE RIGHT FOR VALUES (...);\n-- CREATE PARTITION SCHEME psThang AS PARTITION pfThang ALL TO ([PRIMARY]);\n-- CREATE TABLE dbo.datphong (...) ON psThang (ngay);\n-- INSERT ...; TRUNCATE TABLE dbo.datphong WITH (PARTITIONS (1));\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.DatPhongNguon (id INT NOT NULL PRIMARY KEY, ngay DATE NOT NULL, phong VARCHAR(10) NOT NULL);\nINSERT INTO dbo.DatPhongNguon VALUES\n  (1, '2026-01-05', 'P101'), (2, '2026-01-20', 'P102'),\n  (3, '2026-02-01', 'P101'), (4, '2026-02-14', 'P103'), (5, '2026-02-28', 'P101'),\n  (6, '2026-03-10', 'P102'), (7, '2026-03-31', 'P103'),\n  (8, '2026-04-02', 'P101');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N''pfThang'' AND boundary_value_on_right = 1 AND fanout = 4), 1, 0);\nSET @info = CONCAT(N''fanout = '', (SELECT fanout FROM sys.partition_functions WHERE name = N''pfThang''), N'', right = '', (SELECT boundary_value_on_right FROM sys.partition_functions WHERE name = N''pfThang''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions | pfThang: RANGE RIGHT, 3 mốc ⇒ 4 phân vùng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions | pfThang: RANGE RIGHT, 3 mốc ⇒ 4 phân vùng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: 1 February falls in partition 2, 15 March in partition 3\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'IF OBJECT_ID(N''dbo.datphong'') IS NULL OR NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N''pfThang'') BEGIN SET @ok = 0; SET @info = N''pfThang / dbo.datphong missing''; END\nELSE EXEC sp_executesql N''SELECT @o = IIF($PARTITION.pfThang(''''2026-02-01'''') = 2 AND $PARTITION.pfThang(''''2026-03-15'''') = 3 AND $PARTITION.pfThang(''''2026-01-31'''') = 1, 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. 1 February falls in partition 2, 15 March in partition 3 | Ngày 1/2 vào phân vùng 2, ngày 15/3 vào phân vùng 3'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. 1 February falls in partition 2, 15 March in partition 3 | Ngày 1/2 vào phân vùng 2, ngày 15/3 vào phân vùng 3', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: dbo.datphong is stored on psThang by ngay\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.partition_schemes s ON s.data_space_id = i.data_space_id WHERE i.object_id = OBJECT_ID(N''dbo.datphong'') AND i.index_id <= 1 AND s.name = N''psThang'')\n  AND EXISTS (SELECT 1 FROM sys.index_columns ic JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE ic.object_id = OBJECT_ID(N''dbo.datphong'') AND ic.index_id <= 1 AND ic.partition_ordinal = 1 AND c.name = N''ngay''), 1, 0);\nSET @info = N''expected CREATE TABLE … ON psThang (ngay)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. dbo.datphong is stored on psThang by ngay | dbo.datphong lưu trên psThang theo ngay'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. dbo.datphong is stored on psThang by ngay | dbo.datphong lưu trên psThang theo ngay', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: January is gone, February–April (6 rows) are kept\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(OBJECT_ID(N''dbo.datphong'') IS NOT NULL, 1, 0);\nIF @ok = 1 EXEC sp_executesql N''SELECT @o = IIF((SELECT COUNT(*) FROM dbo.datphong) = 6 AND NOT EXISTS (SELECT 1 FROM dbo.datphong WHERE ngay < ''''2026-02-01'''') AND (SELECT SUM(rows) FROM sys.partitions WHERE object_id = OBJECT_ID(N''''dbo.datphong'''') AND index_id <= 1 AND partition_number = 1) = 0, 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;\nSET @info = N''expected 0 rows in partition 1 and 6 rows in total'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. January is gone, February–April (6 rows) are kept | Tháng 1 đã xoá, tháng 2–4 (6 dòng) còn'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. January is gone, February–April (6 rows) are kept | Tháng 1 đã xoá, tháng 2–4 (6 dòng) còn', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE PARTITION FUNCTION pfThang (DATE)\n    AS RANGE RIGHT FOR VALUES ('2026-02-01', '2026-03-01', '2026-04-01');   -- 4 partitions: <Feb | Feb | Mar | >=Apr\nCREATE PARTITION SCHEME psThang AS PARTITION pfThang ALL TO ([PRIMARY]);\nGO\nCREATE TABLE dbo.datphong (\n    id    INT         NOT NULL,\n    ngay  DATE        NOT NULL,\n    phong VARCHAR(10) NOT NULL,\n    CONSTRAINT pk_datphong PRIMARY KEY (ngay, id)        -- the partitioning column must be part of the clustered key\n) ON psThang (ngay);\nGO\nINSERT INTO dbo.datphong (id, ngay, phong) SELECT id, ngay, phong FROM dbo.DatPhongNguon;\nGO\nTRUNCATE TABLE dbo.datphong WITH (PARTITIONS (1));       -- purge January: a metadata operation, not 1 log record per row\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.DatPhongNguon (id INT NOT NULL PRIMARY KEY, ngay DATE NOT NULL, phong VARCHAR(10) NOT NULL);\nINSERT INTO dbo.DatPhongNguon VALUES\n  (1, '2026-01-05', 'P101'), (2, '2026-01-20', 'P102'),\n  (3, '2026-02-01', 'P101'), (4, '2026-02-14', 'P103'), (5, '2026-02-28', 'P101'),\n  (6, '2026-03-10', 'P102'), (7, '2026-03-31', 'P103'),\n  (8, '2026-04-02', 'P101');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 5 — partition a bookings table by month, then purge January fast\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N''pfThang'' AND boundary_value_on_right = 1 AND fanout = 4), 1, 0);\nSET @info = CONCAT(N''fanout = '', (SELECT fanout FROM sys.partition_functions WHERE name = N''pfThang''), N'', right = '', (SELECT boundary_value_on_right FROM sys.partition_functions WHERE name = N''pfThang''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions | pfThang: RANGE RIGHT, 3 mốc ⇒ 4 phân vùng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions | pfThang: RANGE RIGHT, 3 mốc ⇒ 4 phân vùng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: 1 February falls in partition 2, 15 March in partition 3\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'IF OBJECT_ID(N''dbo.datphong'') IS NULL OR NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N''pfThang'') BEGIN SET @ok = 0; SET @info = N''pfThang / dbo.datphong missing''; END\nELSE EXEC sp_executesql N''SELECT @o = IIF($PARTITION.pfThang(''''2026-02-01'''') = 2 AND $PARTITION.pfThang(''''2026-03-15'''') = 3 AND $PARTITION.pfThang(''''2026-01-31'''') = 1, 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. 1 February falls in partition 2, 15 March in partition 3 | Ngày 1/2 vào phân vùng 2, ngày 15/3 vào phân vùng 3'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. 1 February falls in partition 2, 15 March in partition 3 | Ngày 1/2 vào phân vùng 2, ngày 15/3 vào phân vùng 3', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: dbo.datphong is stored on psThang by ngay\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.partition_schemes s ON s.data_space_id = i.data_space_id WHERE i.object_id = OBJECT_ID(N''dbo.datphong'') AND i.index_id <= 1 AND s.name = N''psThang'')\n  AND EXISTS (SELECT 1 FROM sys.index_columns ic JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE ic.object_id = OBJECT_ID(N''dbo.datphong'') AND ic.index_id <= 1 AND ic.partition_ordinal = 1 AND c.name = N''ngay''), 1, 0);\nSET @info = N''expected CREATE TABLE … ON psThang (ngay)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. dbo.datphong is stored on psThang by ngay | dbo.datphong lưu trên psThang theo ngay'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. dbo.datphong is stored on psThang by ngay | dbo.datphong lưu trên psThang theo ngay', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: January is gone, February–April (6 rows) are kept\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(OBJECT_ID(N''dbo.datphong'') IS NOT NULL, 1, 0);\nIF @ok = 1 EXEC sp_executesql N''SELECT @o = IIF((SELECT COUNT(*) FROM dbo.datphong) = 6 AND NOT EXISTS (SELECT 1 FROM dbo.datphong WHERE ngay < ''''2026-02-01'''') AND (SELECT SUM(rows) FROM sys.partitions WHERE object_id = OBJECT_ID(N''''dbo.datphong'''') AND index_id <= 1 AND partition_number = 1) = 0, 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;\nSET @info = N''expected 0 rows in partition 1 and 6 rows in total'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. January is gone, February–April (6 rows) are kept | Tháng 1 đã xoá, tháng 2–4 (6 dòng) còn'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. January is gone, February–April (6 rows) are kept | Tháng 1 đã xoá, tháng 2–4 (6 dòng) còn', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Partitioning is a management tool first (purge or archive a whole month instantly, rebuild one partition), a performance tool second (elimination only helps when the query filters on the partitioning column). PostgreSQL: CREATE TABLE datphong (…) PARTITION BY RANGE (ngay); CREATE TABLE datphong_2026_01 PARTITION OF datphong FOR VALUES FROM ('2026-01-01') TO ('2026-02-01'); purge = DROP TABLE of that partition.</p>",
+      "solutionExplanationHtmlVi": "<p>Phân vùng trước hết là công cụ quản trị (xoá hay lưu trữ cả tháng tức thì, dựng lại một phân vùng), sau mới là công cụ hiệu năng (chỉ giúp khi truy vấn lọc theo cột phân vùng). PostgreSQL: CREATE TABLE datphong (…) PARTITION BY RANGE (ngay); CREATE TABLE datphong_2026_01 PARTITION OF datphong FOR VALUES FROM ('2026-01-01') TO ('2026-02-01'); xoá = DROP TABLE phân vùng đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "Partition functions, partition schemes and TRUNCATE … WITH (PARTITIONS) are SQL Server storage features; the browser grader cannot create or inspect them.|||Partition function, partition scheme và TRUNCATE … WITH (PARTITIONS) là tính năng lưu trữ của SQL Server; máy chấm trình duyệt không tạo hay soi được.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. pfThang: RANGE RIGHT, 3 boundaries ⇒ 4 partitions",
+            "2. 1 February falls in partition 2, 15 March in partition 3",
+            "3. dbo.datphong is stored on psThang by ngay",
+            "4. January is gone, February–April (6 rows) are kept"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "RANGE LEFT with first-of-month boundaries — 1 February lands in the January partition.|||RANGE LEFT với mốc ngày đầu tháng — ngày 1/2 rơi vào phân vùng tháng 1."
+        },
+        {
+          "loi": "DELETE … WHERE ngay < '2026-02-01' on a huge table — one log record per row instead of a metadata change.|||DELETE … WHERE ngay < '2026-02-01' trên bảng khổng lồ — mỗi dòng một bản ghi nhật ký thay vì đổi siêu dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partitioning",
+          "vi": "phân vùng"
+        },
+        {
+          "en": "partition elimination",
+          "vi": "loại bỏ phân vùng"
+        }
+      ]
+    }
+  ]
+}

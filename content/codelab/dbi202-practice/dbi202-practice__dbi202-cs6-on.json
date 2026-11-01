@@ -1,0 +1,1004 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs6-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs6-on"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — from a brief to tables: a mini LMS",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "requirements to constraints",
+        "composite key",
+        "snapshot column"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "ddl"
+      ],
+      "problemHtml": "<p>\"Students register for courses. A student cannot register for the same course twice. Each course has a code (unique) and a fee; the fee can change, but a student pays the fee valid on the day they register. A score from 0 to 10 is entered at the end (empty until then). Students log in by email, so emails are unique.\"</p>\n<p>Create exactly these tables and columns, with every rule as a constraint:</p>\n<ul><li><code>HocVien(id, email, hoTen)</code></li><li><code>KhoaHoc(id, ma, ten, hocPhi)</code></li><li><code>DangKy(hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem)</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n  <li>\"Pays the fee valid on the day\" ⇒ copy it into DangKy.hocPhiDaTra; do not compute it from KhoaHoc.hocPhi later.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Học viên đăng ký khoá học. Một học viên không đăng ký cùng một khoá hai lần. Mỗi khoá có mã (duy nhất) và học phí; học phí có thể đổi, nhưng học viên trả học phí có hiệu lực vào ngày đăng ký. Điểm từ 0 tới 10 được nhập cuối khoá (trống tới lúc đó). Học viên đăng nhập bằng email nên email là duy nhất.\"</p>\n<p>Tạo đúng các bảng và cột sau, mọi luật thành ràng buộc:</p>\n<ul><li><code>HocVien(id, email, hoTen)</code></li><li><code>KhoaHoc(id, ma, ten, hocPhi)</code></li><li><code>DangKy(hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem)</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n  <li>\"Trả học phí có hiệu lực ngày đó\" ⇒ chép vào DangKy.hocPhiDaTra; đừng tính lại từ KhoaHoc.hocPhi sau này.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem) VALUES (1, 10, '2026-09-01', 2500000, NULL), (1, 11, '2026-09-01', 2400000, NULL), (2, 10, '2026-09-02', 2500000, 8.5)|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem) VALUES (1, 10, '2026-09-01', 2500000, NULL), (1, 11, '2026-09-01', 2400000, NULL), (2, 10, '2026-09-02', 2500000, 8.5)",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"Normal registrations, score still empty\".|||Kiểm \"Đăng ký bình thường, điểm còn trống\"."
+        }
+      ],
+      "hintsJson": [
+        "\"Cannot twice\" on a pair ⇒ the pair is the key of DangKy.|||\"Không được hai lần\" trên một cặp ⇒ cặp đó là khoá của DangKy.",
+        "A value that must not change when the source changes ⇒ store a snapshot.|||Giá trị không được đổi khi nguồn đổi ⇒ lưu bản chụp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE HocVien (\n    id    INT          NOT NULL CONSTRAINT pk_hocvien PRIMARY KEY,\n    email VARCHAR(254) NOT NULL CONSTRAINT uq_hocvien_email UNIQUE,          -- login ⇒ unique\n    hoTen VARCHAR(100) NOT NULL\n);\nCREATE TABLE KhoaHoc (\n    id     INT           NOT NULL CONSTRAINT pk_khoahoc PRIMARY KEY,\n    ma     VARCHAR(10)   NOT NULL CONSTRAINT uq_khoahoc_ma UNIQUE,\n    ten    VARCHAR(100)  NOT NULL,\n    hocPhi DECIMAL(12,0) NOT NULL CONSTRAINT ck_khoahoc_hocphi CHECK (hocPhi >= 0)   -- the CURRENT fee, may change\n);\nCREATE TABLE DangKy (\n    hocVienId   INT           NOT NULL CONSTRAINT fk_dangky_hocvien REFERENCES HocVien (id),\n    khoaHocId   INT           NOT NULL CONSTRAINT fk_dangky_khoahoc REFERENCES KhoaHoc (id),\n    ngayDangKy  DATE          NOT NULL,\n    hocPhiDaTra DECIMAL(12,0) NOT NULL CONSTRAINT ck_dangky_hocphi CHECK (hocPhiDaTra >= 0),  -- snapshot of the fee that day\n    diem        DECIMAL(4,2)  NULL CONSTRAINT ck_dangky_diem CHECK (diem BETWEEN 0 AND 10),  -- empty until the end\n    CONSTRAINT pk_dangky PRIMARY KEY (hocVienId, khoaHocId)                                   -- no double registration\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each sentence of the brief became exactly one constraint, and each constraint has a test that tries to break it — that is how you defend a schema in a review.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu của mô tả thành đúng một ràng buộc, và mỗi ràng buộc có một phép thử cố phá nó — đó là cách bảo vệ lược đồ trong buổi review.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Normal registrations, score still empty|||Đăng ký bình thường, điểm còn trống",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem) VALUES (1, 10, '2026-09-01', 2500000, NULL), (1, 11, '2026-09-01', 2400000, NULL), (2, 10, '2026-09-02', 2500000, 8.5)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Registering twice for the same course is refused|||Đăng ký một khoá hai lần bị từ chối",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra) VALUES (1, 10, '2026-09-01', 2500000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra) VALUES (1, 10, '2026-10-01', 2600000)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Two students with one email are refused|||Hai học viên một email bị từ chối",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'an@fpt.edu.vn', 'An 2')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Two courses with one code are refused|||Hai khoá một mã bị từ chối",
+            "thu": "INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'A', 1), (11, 'DBI202', 'B', 1)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A score of 11 is refused|||Điểm 11 bị từ chối",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra, diem) VALUES (1, 10, '2026-09-01', 2500000, 11)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A negative fee is refused|||Học phí âm bị từ chối",
+            "thu": "INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'X', 'X', -1)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A registration for an unknown student is refused|||Đăng ký cho học viên không tồn tại bị từ chối",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy, hocPhiDaTra) VALUES (99, 10, '2026-09-01', 2500000)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The fee paid is required|||Học phí đã trả là bắt buộc",
+            "thu": "INSERT INTO HocVien (id, email, hoTen) VALUES (1, 'an@fpt.edu.vn', 'An'), (2, 'binh@fpt.edu.vn', 'Binh'); INSERT INTO KhoaHoc (id, ma, ten, hocPhi) VALUES (10, 'DBI202', 'Databases', 2500000), (11, 'CSD201', 'Data structures', 2400000); INSERT INTO DangKy (hocVienId, khoaHocId, ngayDangKy) VALUES (1, 10, '2026-09-01')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A missing email is refused|||Thiếu email bị từ chối",
+            "thu": "INSERT INTO HocVien (id, hoTen) VALUES (1, 'An')",
+            "maLoi": "23502"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding ngayDangKy to the key — the same course can then be registered on another day.|||Thêm ngayDangKy vào khoá — khi đó đăng ký được cùng khoá vào ngày khác."
+        },
+        {
+          "loi": "Reading the fee from KhoaHoc at report time — every past registration changes when the fee changes.|||Đọc học phí từ KhoaHoc lúc làm báo cáo — mọi lần đăng ký cũ đổi theo khi học phí đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "snapshot column",
+          "vi": "cột lưu bản chụp"
+        },
+        {
+          "en": "composite primary key",
+          "vi": "khoá chính ghép"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 2 — what is wrong with this table?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "bad keys",
+        "FLOAT money",
+        "DATETIME rounding",
+        "Unicode"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "review"
+      ],
+      "problemHtml": "<p>A previous team left <code>don_cu(email_khach VARCHAR(100) PRIMARY KEY, ten_khach VARCHAR(100), tong_tien FLOAT, ngay_dat DATETIME)</code> on SQL Server, holding one order of 19,999.99 placed at 23:59:59.999 on 31 Dec 2024 by \"Lê Thị Ánh Tuyết\". For each column, what goes wrong, and what is the fix?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhóm trước để lại <code>don_cu(email_khach VARCHAR(100) PRIMARY KEY, ten_khach VARCHAR(100), tong_tien FLOAT, ngay_dat DATETIME)</code> trên SQL Server, chứa một đơn 19.999,99 đặt lúc 23:59:59.999 ngày 31/12/2024 của \"Lê Thị Ánh Tuyết\". Với mỗi cột, chuyện gì sai và sửa thế nào?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask \"how many orders can one customer have?\" about the key.|||Hỏi \"một khách có bao nhiêu đơn?\" về khoá.",
+        "DATETIME stores .000, .003, .007 only.|||DATETIME chỉ lưu .000, .003, .007."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — what is wrong with this table?\n\nAnswer in the answer panel (no code needed).\n\n1. Column → what goes wrong → fixCột → sai gì → sửa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 2 — what is wrong with this table? — answer key\n\n1. Column → what goes wrong → fixCột → sai gì → sửa\n   - r1.sai: each customer can place only one order, ever\n   - r1.sua: surrogate id PK + customer table with a UNIQUE email\n   - r2.sai: rounding error: 19,999.99 is stored as 19999.9899999…\n   - r2.sua: DECIMAL(19,2)\n   - r3.sai: 23:59:59.999 rounds up to 2025-01-01 00:00:00.000 — the order moves to next year\n   - r3.sua: DATETIME2(3) or DATETIMEOFFSET\n   - r4.sai: \"Lê Thị Ánh Tuyết\" can lose its diacritics (stored as ?)\n   - r4.sua: NVARCHAR(100)\n   The email key is the worst one: an order table keyed by the customer allows a single order per customer, and changing an email rewrites history. DATETIME is accurate only to 1/300 s, so .999 rounds to the next second — here, the next year.VI: Khoá email là lỗi nặng nhất: bảng đơn hàng có khoá là khách hàng chỉ cho mỗi khách một đơn, và đổi email là viết lại lịch sử. DATETIME chỉ chính xác tới 1/300 giây nên .999 làm tròn sang giây kế — ở đây là sang năm sau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The email key is the worst one: an order table keyed by the customer allows a single order per customer, and changing an email rewrites history. DATETIME is accurate only to 1/300 s, so .999 rounds to the next second — here, the next year.</p><p><i>VI: Khoá email là lỗi nặng nhất: bảng đơn hàng có khoá là khách hàng chỉ cho mỗi khách một đơn, và đổi email là viết lại lịch sử. DATETIME chỉ chính xác tới 1/300 giây nên .999 làm tròn sang giây kế — ở đây là sang năm sau.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Column → what goes wrong → fix</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột → sai gì → sửa</i></p>",
+            "cot": [
+              {
+                "ma": "cot",
+                "ten": "Column / Cột"
+              },
+              {
+                "ma": "sai",
+                "ten": "What goes wrong",
+                "luaChon": [
+                  "the key changes when the customer changes email, and every order of that customer must change too",
+                  "rounding error: 19,999.99 is stored as 19999.9899999…",
+                  "23:59:59.999 rounds up to 2025-01-01 00:00:00.000 — the order moves to next year",
+                  "\"Lê Thị Ánh Tuyết\" can lose its diacritics (stored as ?)",
+                  "each customer can place only one order, ever"
+                ]
+              },
+              {
+                "ma": "sua",
+                "ten": "Fix",
+                "luaChon": [
+                  "surrogate id PK + customer table with a UNIQUE email",
+                  "DECIMAL(19,2)",
+                  "DATETIME2(3) or DATETIMEOFFSET",
+                  "NVARCHAR(100)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cot": "email_khach VARCHAR(100) PRIMARY KEY"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cot": "tong_tien FLOAT"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cot": "ngay_dat DATETIME"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cot": "ten_khach VARCHAR(100)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.sai": "each customer can place only one order, ever",
+              "r1.sua": "surrogate id PK + customer table with a UNIQUE email",
+              "r2.sai": "rounding error: 19,999.99 is stored as 19999.9899999…",
+              "r2.sua": "DECIMAL(19,2)",
+              "r3.sai": "23:59:59.999 rounds up to 2025-01-01 00:00:00.000 — the order moves to next year",
+              "r3.sua": "DATETIME2(3) or DATETIMEOFFSET",
+              "r4.sai": "\"Lê Thị Ánh Tuyết\" can lose its diacritics (stored as ?)",
+              "r4.sua": "NVARCHAR(100)"
+            },
+            "giaiThich": "<p>The email key is the worst one: an order table keyed by the customer allows a single order per customer, and changing an email rewrites history. DATETIME is accurate only to 1/300 s, so .999 rounds to the next second — here, the next year.</p><p><i>VI: Khoá email là lỗi nặng nhất: bảng đơn hàng có khoá là khách hàng chỉ cho mỗi khách một đơn, và đổi email là viết lại lịch sử. DATETIME chỉ chính xác tới 1/300 giây nên .999 làm tròn sang giây kế — ở đây là sang năm sau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking FLOAT is fine because it \"shows\" 19999.99.|||Tưởng FLOAT ổn vì nó \"hiện\" 19999.99."
+        },
+        {
+          "loi": "Missing that .999 is not representable in DATETIME.|||Không thấy .999 không biểu diễn được trong DATETIME."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "floating point",
+          "vi": "số dấu phẩy động"
+        },
+        {
+          "en": "precision",
+          "vi": "độ chính xác"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — discount codes: unique per shop, soft-deleted, reusable",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "composite filtered unique index",
+        "soft delete",
+        "view"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "soft-delete"
+      ],
+      "problemHtml": "<p>Each shop creates discount codes. A code is unique <b>within a shop</b> (two shops may both use TET2025); retired codes are soft-deleted and may be reused next year. Create:</p><ul><li><code>MaGiamGia(id, shopId, ma, phanTram 1–100, deletedAt NULL)</code>;</li><li>the index <code>ux_magiamgia_shop_ma</code> enforcing the rule;</li><li>the view <code>vMaGiamGiaConHan(id, shopId, ma, phanTram)</code> of live codes.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n  <li>The uniqueness covers the pair (shopId, ma), only for rows WHERE deletedAt IS NULL.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi shop tạo mã giảm giá. Mã là duy nhất <b>trong một shop</b> (hai shop có thể cùng dùng TET2025); mã nghỉ được xoá mềm và dùng lại năm sau. Tạo:</p><ul><li><code>MaGiamGia(id, shopId, ma, phanTram 1–100, deletedAt NULL)</code>;</li><li>chỉ mục <code>ux_magiamgia_shop_ma</code> thi hành luật;</li><li>view <code>vMaGiamGiaConHan(id, shopId, ma, phanTram)</code> gồm các mã còn hiệu lực.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n  <li>Tính duy nhất trên cặp (shopId, ma), chỉ cho dòng WHERE deletedAt IS NULL.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | shopId | ma   | phanTram\n---+--------+------+---------\n2  | 1      | TET  | 12      \n3  | 2      | SALE | 30      ",
+          "explanation": "Expected result of check \"The view lists only live codes\" (row order does not matter).|||Kết quả mong đợi của kiểm \"View chỉ liệt kê mã còn hiệu lực\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Composite + filtered: CREATE UNIQUE INDEX … ON t (shopId, ma) WHERE deletedAt IS NULL.|||Ghép + lọc: CREATE UNIQUE INDEX … ON t (shopId, ma) WHERE deletedAt IS NULL.",
+        "The view hides the soft-delete detail from every query.|||View giấu chi tiết xoá mềm khỏi mọi truy vấn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE MaGiamGia (\n    id        INT         NOT NULL CONSTRAINT pk_magiamgia PRIMARY KEY,\n    shopId    INT         NOT NULL,\n    ma        VARCHAR(20) NOT NULL,\n    phanTram  INT         NOT NULL CONSTRAINT ck_magiamgia_pt CHECK (phanTram BETWEEN 1 AND 100),\n    deletedAt DATE        NULL\n);\nCREATE UNIQUE INDEX ux_magiamgia_shop_ma ON MaGiamGia (shopId, ma) WHERE deletedAt IS NULL;   -- unique per shop, live codes only\nCREATE VIEW vMaGiamGiaConHan AS\nSELECT id, shopId, ma, phanTram FROM MaGiamGia WHERE deletedAt IS NULL;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Unique within X\" always means a composite key or index that starts with X. Add the soft-delete filter and the rule follows the business exactly.</p>",
+      "solutionExplanationHtmlVi": "<p>\"Duy nhất trong X\" luôn nghĩa là khoá hoặc chỉ mục ghép bắt đầu bằng X. Thêm điều kiện xoá mềm là luật khớp đúng nghiệp vụ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Two shops use the same code|||Hai shop dùng cùng một mã",
+            "thu": "INSERT INTO MaGiamGia VALUES (1, 1, 'TET2025', 10, NULL), (2, 2, 'TET2025', 15, NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same shop cannot have the code twice while live|||Một shop không có cùng mã hai lần khi còn hiệu lực",
+            "thu": "INSERT INTO MaGiamGia VALUES (1, 1, 'TET2025', 10, NULL); INSERT INTO MaGiamGia VALUES (2, 1, 'TET2025', 20, NULL)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A retired code is reused the next year|||Mã đã nghỉ được dùng lại năm sau",
+            "thu": "INSERT INTO MaGiamGia VALUES (1, 1, 'TET', 10, '2025-03-01'), (2, 1, 'TET', 12, '2026-03-01'), (3, 1, 'TET', 15, NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "0 % is refused|||0 % bị từ chối",
+            "thu": "INSERT INTO MaGiamGia VALUES (1, 1, 'X', 0, NULL)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The view lists only live codes|||View chỉ liệt kê mã còn hiệu lực",
+            "kiemTra": "INSERT INTO MaGiamGia VALUES (1, 1, 'TET', 10, '2025-03-01'), (2, 1, 'TET', 12, NULL), (3, 2, 'SALE', 30, NULL), (4, 2, 'OLD', 5, '2024-01-01'); SELECT id, shopId, ma, phanTram FROM vMaGiamGiaConHan ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "shopId",
+                "ma",
+                "phanTram"
+              ],
+              "hang": [
+                [
+                  2,
+                  1,
+                  "TET",
+                  12
+                ],
+                [
+                  3,
+                  2,
+                  "SALE",
+                  30
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Unique on ma alone — shop 2 cannot use TET2025.|||Duy nhất chỉ trên ma — shop 2 không dùng được TET2025."
+        },
+        {
+          "loi": "No filter — a retired code can never be reused.|||Không lọc — mã đã nghỉ không bao giờ dùng lại được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scoped uniqueness",
+          "vi": "duy nhất trong phạm vi"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — price periods: what did it cost on 31 December 2024?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "valid-from history",
+        "correlated subquery",
+        "as-of query"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "history"
+      ],
+      "problemHtml": "<p>Return <code>dichVuId, gia</code> = the price of every service valid on <b>2024-12-31</b> (the row with the latest tuNgay that is not after that date). A service with no price yet on that day does not appear. Sort by dichVuId.</p>\n<p><code>GiaDichVu(dichVuId, tuNgay, gia)</code> — each row: the price of a service from a date until the next row.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>tuNgay = (SELECT MAX(tuNgay) … WHERE same service AND tuNgay <= '2024-12-31').</li>\n  <li>A price starting exactly on 2024-12-31 is already valid that day.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>dichVuId, gia</code> = giá của mọi dịch vụ có hiệu lực ngày <b>2024-12-31</b> (dòng có tuNgay muộn nhất không sau ngày đó). Dịch vụ chưa có giá vào ngày đó thì không hiện. Sắp theo dichVuId.</p>\n<p><code>GiaDichVu(dichVuId, tuNgay, gia)</code> — mỗi dòng: giá của dịch vụ từ một ngày tới dòng kế tiếp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>tuNgay = (SELECT MAX(tuNgay) … WHERE cùng dịch vụ AND tuNgay <= '2024-12-31').</li>\n  <li>Giá bắt đầu đúng ngày 2024-12-31 đã có hiệu lực ngày đó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "dichVuId | gia   \n---------+-------\n1        | 120000\n2        | 45000 ",
+          "explanation": "Expected result of check \"Services 1 and 2\" (row order matters).|||Kết quả mong đợi của kiểm \"Dịch vụ 1 và 2\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "\"Valid on day X\" = the latest start that is ≤ X, per service.|||\"Hiệu lực ngày X\" = lần bắt đầu muộn nhất ≤ X, theo từng dịch vụ.",
+        "Correlate the subquery on dichVuId.|||Tương quan truy vấn con theo dichVuId."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "GiaDichVu.sql",
+          "language": "sql",
+          "code": "-- GiaDichVu.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- GiaDichVu.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE GiaDichVu (\n  dichVuId INT           NOT NULL,\n  tuNgay   DATE          NOT NULL,\n  gia      DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_giadichvu PRIMARY KEY (dichVuId, tuNgay)\n);\nINSERT INTO GiaDichVu (dichVuId, tuNgay, gia) VALUES\n  (1, '2024-01-01', 100000), (1, '2024-06-01', 120000), (1, '2025-01-01', 150000),\n  (2, '2024-07-01', 50000), (2, '2024-10-01', 45000), (2, '2025-03-01', 55000),\n  (3, '2025-02-01', 80000);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT g.dichVuId, g.gia\nFROM GiaDichVu g\nWHERE g.tuNgay = (SELECT MAX(x.tuNgay)\n                  FROM GiaDichVu x\n                  WHERE x.dichVuId = g.dichVuId\n                    AND x.tuNgay <= '2024-12-31')\nORDER BY g.dichVuId;\n"
+        },
+        {
+          "name": "GiaDichVu.sql",
+          "language": "sql",
+          "code": "-- GiaDichVu.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- GiaDichVu.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE GiaDichVu (\n  dichVuId INT           NOT NULL,\n  tuNgay   DATE          NOT NULL,\n  gia      DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_giadichvu PRIMARY KEY (dichVuId, tuNgay)\n);\nINSERT INTO GiaDichVu (dichVuId, tuNgay, gia) VALUES\n  (1, '2024-01-01', 100000), (1, '2024-06-01', 120000), (1, '2025-01-01', 150000),\n  (2, '2024-07-01', 50000), (2, '2024-10-01', 45000), (2, '2025-03-01', 55000),\n  (3, '2025-02-01', 80000);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Storing only the start date keeps periods gap-free by construction (each period ends where the next begins). PostgreSQL can instead store a daterange and forbid overlaps with EXCLUDE USING gist; SQL Server system-versioned temporal tables track <i>system</i> time, not business-decided dates.</p>",
+      "solutionExplanationHtmlVi": "<p>Chỉ lưu ngày bắt đầu khiến các khoảng tự liền mạch (khoảng này kết thúc nơi khoảng sau bắt đầu). PostgreSQL có thể lưu daterange và cấm chồng lấn bằng EXCLUDE USING gist; bảng temporal của SQL Server theo dõi thời gian <i>hệ thống</i>, không phải ngày do nghiệp vụ quyết.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE GiaDichVu (\n  dichVuId INT           NOT NULL,\n  tuNgay   DATE          NOT NULL,\n  gia      DECIMAL(12,0) NOT NULL,\n  CONSTRAINT pk_giadichvu PRIMARY KEY (dichVuId, tuNgay)\n);\nINSERT INTO GiaDichVu (dichVuId, tuNgay, gia) VALUES\n  (1, '2024-01-01', 100000), (1, '2024-06-01', 120000), (1, '2025-01-01', 150000),\n  (2, '2024-07-01', 50000), (2, '2024-10-01', 45000), (2, '2025-03-01', 55000),\n  (3, '2025-02-01', 80000);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Services 1 and 2|||Dịch vụ 1 và 2",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "dichVuId",
+                "gia"
+              ],
+              "hang": [
+                [
+                  1,
+                  120000
+                ],
+                [
+                  2,
+                  45000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a price change exactly on 31 December and a new service from that day|||Ẩn: đổi giá đúng ngày 31/12 và dịch vụ mới từ ngày đó",
+            "an": true,
+            "themCsdl": "INSERT INTO GiaDichVu VALUES (1, '2024-12-31', 130000), (4, '2024-12-31', 99000)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "dichVuId",
+                "gia"
+              ],
+              "hang": [
+                [
+                  1,
+                  130000
+                ],
+                [
+                  2,
+                  45000
+                ],
+                [
+                  4,
+                  99000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Compares tuNgay with the date|||So tuNgay với ngày",
+            "khop": "tuNgay\\s*<=?\\s*'2024-12-31'",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "MAX(gia) — prices can go down too.|||MAX(gia) — giá cũng có thể giảm."
+        },
+        {
+          "loi": "< instead of <= — a change on the day itself is missed.|||< thay vì <= — lần đổi giá đúng ngày đó bị bỏ sót."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "as-of query",
+          "vi": "truy vấn tại một thời điểm"
+        },
+        {
+          "en": "application time",
+          "vi": "thời gian nghiệp vụ"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 5 — choose ON DELETE for a blog, then prove it",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "ON DELETE CASCADE",
+        "ON DELETE SET NULL",
+        "NO ACTION"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "constraints"
+      ],
+      "problemHtml": "<p>Create <code>Post(id, authorId, categoryId NULL, title)</code> and <code>Comment(id, postId, userId NULL, noiDung)</code> so that:</p><ul><li>deleting a category does not delete its posts;</li><li>deleting a post deletes its comments;</li><li>a reader who deletes the account leaves anonymous comments behind;</li><li>an author who still has posts cannot be deleted.</li></ul>\n<p><code>Users(id, ten)</code>: 1 author, 2 reader. <code>Category(id, ten)</code>: 1 SQL, 2 Java.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n  <li>Four foreign keys, four ON DELETE decisions (NO ACTION is the default when you write nothing).</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo <code>Post(id, authorId, categoryId NULL, title)</code> và <code>Comment(id, postId, userId NULL, noiDung)</code> sao cho:</p><ul><li>xoá chuyên mục không xoá bài viết của nó;</li><li>xoá bài viết thì xoá bình luận của nó;</li><li>người đọc xoá tài khoản thì để lại bình luận ẩn danh;</li><li>tác giả còn bài viết thì không xoá được.</li></ul>\n<p><code>Users(id, ten)</code>: 1 author, 2 reader. <code>Category(id, ten)</code>: 1 SQL, 2 Java.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n  <li>Bốn khoá ngoại, bốn quyết định ON DELETE (không ghi gì thì mặc định NO ACTION).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id  | categoryId\n----+-----------\n100 | NULL      \n101 | 2         ",
+          "explanation": "Expected result of check \"Deleting category SQL keeps the post, its category becomes NULL\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Xoá chuyên mục SQL giữ bài viết, chuyên mục thành NULL\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Optional link + \"keep the child\" ⇒ SET NULL (the column must allow NULL).|||Liên kết tuỳ chọn + \"giữ con\" ⇒ SET NULL (cột phải cho NULL).",
+        "\"Cannot be deleted while …\" ⇒ leave the default NO ACTION.|||\"Không xoá được khi còn …\" ⇒ để mặc định NO ACTION."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Blog.sql",
+          "language": "sql",
+          "code": "-- Blog.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Blog.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Users (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nCREATE TABLE Category (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nINSERT INTO Users (id, ten) VALUES (1, 'author'), (2, 'reader');\nINSERT INTO Category (id, ten) VALUES (1, 'SQL'), (2, 'Java');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Post (\n    id         INT          NOT NULL CONSTRAINT pk_post PRIMARY KEY,\n    authorId   INT          NOT NULL CONSTRAINT fk_post_author   REFERENCES Users (id),                       -- NO ACTION: an author with posts cannot go\n    categoryId INT          NULL     CONSTRAINT fk_post_category REFERENCES Category (id) ON DELETE SET NULL, -- posts survive\n    title      VARCHAR(100) NOT NULL\n);\nCREATE TABLE Comment (\n    id      INT          NOT NULL CONSTRAINT pk_comment PRIMARY KEY,\n    postId  INT          NOT NULL CONSTRAINT fk_comment_post REFERENCES Post (id) ON DELETE CASCADE,   -- comments go with the post\n    userId  INT          NULL     CONSTRAINT fk_comment_user REFERENCES Users (id) ON DELETE SET NULL, -- anonymous comment stays\n    noiDung VARCHAR(500) NOT NULL\n);\n"
+        },
+        {
+          "name": "Blog.sql",
+          "language": "sql",
+          "code": "-- Blog.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Blog.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Users (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nCREATE TABLE Category (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nINSERT INTO Users (id, ten) VALUES (1, 'author'), (2, 'reader');\nINSERT INTO Category (id, ten) VALUES (1, 'SQL'), (2, 'Java');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Note the chain: deleting a post cascades to comments; deleting an author is blocked by Post (NO ACTION) before anything cascades. SQL Server refuses some combinations of cascade paths (\"may cause cycles or multiple cascade paths\") — Comment has two FKs, but only one of them cascades, so this design is accepted.</p>",
+      "solutionExplanationHtmlVi": "<p>Chú ý chuỗi: xoá bài viết lan sang bình luận; xoá tác giả bị Post (NO ACTION) chặn trước khi có gì lan đi. SQL Server từ chối một số tổ hợp đường lan (\"may cause cycles or multiple cascade paths\") — Comment có hai khoá ngoại nhưng chỉ một cái lan nên thiết kế này được chấp nhận.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Users (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nCREATE TABLE Category (\n  id  INT         NOT NULL PRIMARY KEY,\n  ten VARCHAR(50) NOT NULL\n);\nINSERT INTO Users (id, ten) VALUES (1, 'author'), (2, 'reader');\nINSERT INTO Category (id, ten) VALUES (1, 'SQL'), (2, 'Java');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting category SQL keeps the post, its category becomes NULL|||Xoá chuyên mục SQL giữ bài viết, chuyên mục thành NULL",
+            "kiemTra": "INSERT INTO Post (id, authorId, categoryId, title) VALUES (100, 1, 1, 'Indexes'), (101, 1, 2, 'Streams'); INSERT INTO Comment (id, postId, userId, noiDung) VALUES (1, 100, 2, 'Great'), (2, 100, 1, 'Thanks'), (3, 101, 2, 'Nice'); DELETE FROM Category WHERE id = 1; SELECT id, categoryId FROM Post ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "categoryId"
+              ],
+              "hang": [
+                [
+                  100,
+                  null
+                ],
+                [
+                  101,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting post 100 deletes its two comments only|||Xoá bài 100 chỉ xoá hai bình luận của nó",
+            "kiemTra": "INSERT INTO Post (id, authorId, categoryId, title) VALUES (100, 1, 1, 'Indexes'), (101, 1, 2, 'Streams'); INSERT INTO Comment (id, postId, userId, noiDung) VALUES (1, 100, 2, 'Great'), (2, 100, 1, 'Thanks'), (3, 101, 2, 'Nice'); DELETE FROM Post WHERE id = 100; SELECT id, postId FROM Comment ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "postId"
+              ],
+              "hang": [
+                [
+                  3,
+                  101
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting the reader keeps the comments, anonymously|||Xoá người đọc giữ bình luận, ẩn danh",
+            "kiemTra": "INSERT INTO Post (id, authorId, categoryId, title) VALUES (100, 1, 1, 'Indexes'), (101, 1, 2, 'Streams'); INSERT INTO Comment (id, postId, userId, noiDung) VALUES (1, 100, 2, 'Great'), (2, 100, 1, 'Thanks'), (3, 101, 2, 'Nice'); DELETE FROM Users WHERE id = 2; SELECT id, userId FROM Comment ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "userId"
+              ],
+              "hang": [
+                [
+                  1,
+                  null
+                ],
+                [
+                  2,
+                  1
+                ],
+                [
+                  3,
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Deleting an author who has posts is refused|||Xoá tác giả còn bài viết bị từ chối",
+            "thu": "INSERT INTO Post (id, authorId, categoryId, title) VALUES (100, 1, 1, 'Indexes'), (101, 1, 2, 'Streams'); INSERT INTO Comment (id, postId, userId, noiDung) VALUES (1, 100, 2, 'Great'), (2, 100, 1, 'Thanks'), (3, 101, 2, 'Nice'); DELETE FROM Users WHERE id = 1",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A post needs an author|||Bài viết cần tác giả",
+            "thu": "INSERT INTO Post (id, categoryId, title) VALUES (1, 1, 'x')",
+            "maLoi": "23502"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CASCADE from Users to Comment — a reader's comments vanish with the account.|||CASCADE từ Users sang Comment — bình luận của người đọc biến mất theo tài khoản."
+        },
+        {
+          "loi": "CASCADE from Users to Post — deleting an author silently deletes their whole blog.|||CASCADE từ Users sang Post — xoá tác giả âm thầm xoá cả blog của họ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ON DELETE SET NULL",
+          "vi": "đặt NULL khi xoá cha"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "expand/contract",
+        "batched UPDATE",
+        "UPDATE TOP",
+        "@@ROWCOUNT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "advanced",
+        "design",
+        "migration"
+      ],
+      "problemHtml": "<p><code>khach_hang(id, ho_ten)</code> has 10,000 rows and the app is running. Add <code>ma_khach</code> = <code>KH</code> + the id on 6 digits (id 7 → <code>KH000007</code>), which must end up <b>NOT NULL</b> and <b>UNIQUE</b> (constraint <code>uq_khach_hang_ma</code>) — without one long UPDATE that locks the whole table.</p>\n<ol><li>Add the column as NULL.</li><li>Write <code>dbo.prBackfillMaKhach @lo INT = 1000</code> that fills it <b>in batches</b> (UPDATE TOP (@lo) … in a WHILE loop until nothing is left), and run it.</li><li>Then make the column NOT NULL and add the UNIQUE constraint.</li></ol><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> ALTER TABLE … ALTER COLUMN, UPDATE TOP (n) in a WHILE loop and @@ROWCOUNT are SQL Server syntax, and the point is a 10,000-row table that is being used while you change it. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>CONCAT('KH', RIGHT(CONCAT('000000', id), 6)) builds the code.</li>\n  <li>Stop the loop with IF @@ROWCOUNT = 0 BREAK right after the UPDATE.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>khach_hang(id, ho_ten)</code> có 10.000 dòng và app đang chạy. Thêm <code>ma_khach</code> = <code>KH</code> + id đủ 6 chữ số (id 7 → <code>KH000007</code>), cuối cùng phải <b>NOT NULL</b> và <b>UNIQUE</b> (ràng buộc <code>uq_khach_hang_ma</code>) — không dùng một câu UPDATE dài khoá cả bảng.</p>\n<ol><li>Thêm cột dạng NULL.</li><li>Viết <code>dbo.prBackfillMaKhach @lo INT = 1000</code> điền cột <b>theo lô</b> (UPDATE TOP (@lo) … trong vòng WHILE tới khi hết), rồi chạy nó.</li><li>Sau đó đặt cột NOT NULL và thêm ràng buộc UNIQUE.</li></ol><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> ALTER TABLE … ALTER COLUMN, UPDATE TOP (n) trong vòng WHILE và @@ROWCOUNT là cú pháp SQL Server, và điểm mấu chốt là bảng 10.000 dòng đang được dùng trong lúc bạn đổi nó. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CONCAT('KH', RIGHT(CONCAT('000000', id), 6)) dựng mã.</li>\n  <li>Dừng vòng bằng IF @@ROWCOUNT = 0 BREAK ngay sau UPDATE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. Every customer has the right code (KH000007, KH010000…)\nPASS 2. ma_khach is NOT NULL\nPASS 3. uq_khach_hang_ma refuses a duplicate code\nPASS 4. The backfill works in batches (WHILE + UPDATE TOP)\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Adding a NULL column without a default is instant; adding NOT NULL first would need a value for 10,000 rows at once.|||Thêm cột NULL không mặc định là tức thì; thêm NOT NULL trước thì cần giá trị cho 10.000 dòng một lúc.",
+        "Each batch commits on its own: locks stay small and the log can be reused.|||Mỗi lô tự commit: khoá nhỏ và nhật ký được dùng lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- 1) ALTER TABLE dbo.khach_hang ADD ma_khach ... NULL;\n-- 2) CREATE OR ALTER PROCEDURE dbo.prBackfillMaKhach @lo INT = 1000 AS ... ; EXEC it\n-- 3) ALTER COLUMN ... NOT NULL; ADD CONSTRAINT uq_khach_hang_ma UNIQUE (ma_khach);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.khach_hang (\n    id     INT           NOT NULL CONSTRAINT pk_khach_hang PRIMARY KEY,\n    ho_ten NVARCHAR(100) NOT NULL\n);\nGO\nWITH n AS (SELECT TOP (10000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn FROM sys.all_columns a CROSS JOIN sys.all_columns b)\nINSERT INTO dbo.khach_hang (id, ho_ten) SELECT rn, CONCAT(N'Khách ', rn) FROM n;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: Every customer has the right code (KH000007, KH010000…)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(COL_LENGTH(N''dbo.khach_hang'', N''ma_khach'') IS NOT NULL, 1, 0);\nIF @ok = 1 EXEC sp_executesql N''SELECT @o = IIF(NOT EXISTS (SELECT 1 FROM dbo.khach_hang WHERE ma_khach IS NULL OR ma_khach <> CONCAT(''''KH'''', RIGHT(CONCAT(''''000000'''', id), 6))) AND (SELECT ma_khach FROM dbo.khach_hang WHERE id = 7) = ''''KH000007'''', 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;\nSET @info = N''expected KH + 6-digit id on every row'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Every customer has the right code (KH000007, KH010000…) | Mọi khách có đúng mã (KH000007, KH010000…)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Every customer has the right code (KH000007, KH010000…) | Mọi khách có đúng mã (KH000007, KH010000…)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: ma_khach is NOT NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID(N''dbo.khach_hang'') AND name = N''ma_khach'' AND is_nullable = 0), 1, 0);\nSET @info = N''ALTER TABLE … ALTER COLUMN ma_khach VARCHAR(8) NOT NULL'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. ma_khach is NOT NULL | ma_khach là NOT NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. ma_khach is NOT NULL | ma_khach là NOT NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: uq_khach_hang_ma refuses a duplicate code\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @c INT = 0; BEGIN TRAN;\nIF COL_LENGTH(N''dbo.khach_hang'', N''ma_khach'') IS NOT NULL\nBEGIN TRY EXEC (N''INSERT INTO dbo.khach_hang (id, ho_ten, ma_khach) VALUES (20000, N''''Trùng'''', ''''KH000007'''')''); END TRY BEGIN CATCH SET @c = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@c = 1 AND EXISTS (SELECT 1 FROM sys.key_constraints WHERE parent_object_id = OBJECT_ID(N''dbo.khach_hang'') AND name = N''uq_khach_hang_ma'' AND type = ''UQ''), 1, 0);\nSET @info = CONCAT(N''duplicate refused: '', @c);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. uq_khach_hang_ma refuses a duplicate code | uq_khach_hang_ma từ chối mã trùng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. uq_khach_hang_ma refuses a duplicate code | uq_khach_hang_ma từ chối mã trùng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The backfill works in batches (WHILE + UPDATE TOP)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.prBackfillMaKhach''));\nSET @ok = IIF(@d LIKE N''%WHILE%'' AND @d LIKE N''%UPDATE TOP%'', 1, 0);\nSET @info = IIF(@d IS NULL, N''procedure dbo.prBackfillMaKhach not found'', N''expected WHILE … UPDATE TOP (@lo) …'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The backfill works in batches (WHILE + UPDATE TOP) | Việc điền dữ liệu chạy theo lô (WHILE + UPDATE TOP)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The backfill works in batches (WHILE + UPDATE TOP) | Việc điền dữ liệu chạy theo lô (WHILE + UPDATE TOP)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- 1) expand: a NULLable column is a metadata-only change, no long lock\nALTER TABLE dbo.khach_hang ADD ma_khach VARCHAR(8) NULL;\nGO\n-- 2) backfill in small batches: each UPDATE is its own short transaction\nCREATE OR ALTER PROCEDURE dbo.prBackfillMaKhach @lo INT = 1000\nAS\nBEGIN\n    SET NOCOUNT ON;\n    WHILE 1 = 1\n    BEGIN\n        UPDATE TOP (@lo) dbo.khach_hang\n        SET ma_khach = CONCAT('KH', RIGHT(CONCAT('000000', id), 6))\n        WHERE ma_khach IS NULL;\n        IF @@ROWCOUNT = 0 BREAK;\n    END\nEND\nGO\nEXEC dbo.prBackfillMaKhach @lo = 1000;\nGO\n-- 3) contract: now the rules can be added\nALTER TABLE dbo.khach_hang ALTER COLUMN ma_khach VARCHAR(8) NOT NULL;\nALTER TABLE dbo.khach_hang ADD CONSTRAINT uq_khach_hang_ma UNIQUE (ma_khach);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE dbo.khach_hang (\n    id     INT           NOT NULL CONSTRAINT pk_khach_hang PRIMARY KEY,\n    ho_ten NVARCHAR(100) NOT NULL\n);\nGO\nWITH n AS (SELECT TOP (10000) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS rn FROM sys.all_columns a CROSS JOIN sys.all_columns b)\nINSERT INTO dbo.khach_hang (id, ho_ten) SELECT rn, CONCAT(N'Khách ', rn) FROM n;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 6 — add a NOT NULL UNIQUE column to a live table, in batches\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: Every customer has the right code (KH000007, KH010000…)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(COL_LENGTH(N''dbo.khach_hang'', N''ma_khach'') IS NOT NULL, 1, 0);\nIF @ok = 1 EXEC sp_executesql N''SELECT @o = IIF(NOT EXISTS (SELECT 1 FROM dbo.khach_hang WHERE ma_khach IS NULL OR ma_khach <> CONCAT(''''KH'''', RIGHT(CONCAT(''''000000'''', id), 6))) AND (SELECT ma_khach FROM dbo.khach_hang WHERE id = 7) = ''''KH000007'''', 1, 0)'', N''@o BIT OUTPUT'', @o = @ok OUTPUT;\nSET @info = N''expected KH + 6-digit id on every row'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Every customer has the right code (KH000007, KH010000…) | Mọi khách có đúng mã (KH000007, KH010000…)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Every customer has the right code (KH000007, KH010000…) | Mọi khách có đúng mã (KH000007, KH010000…)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: ma_khach is NOT NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID(N''dbo.khach_hang'') AND name = N''ma_khach'' AND is_nullable = 0), 1, 0);\nSET @info = N''ALTER TABLE … ALTER COLUMN ma_khach VARCHAR(8) NOT NULL'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. ma_khach is NOT NULL | ma_khach là NOT NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. ma_khach is NOT NULL | ma_khach là NOT NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: uq_khach_hang_ma refuses a duplicate code\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @c INT = 0; BEGIN TRAN;\nIF COL_LENGTH(N''dbo.khach_hang'', N''ma_khach'') IS NOT NULL\nBEGIN TRY EXEC (N''INSERT INTO dbo.khach_hang (id, ho_ten, ma_khach) VALUES (20000, N''''Trùng'''', ''''KH000007'''')''); END TRY BEGIN CATCH SET @c = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@c = 1 AND EXISTS (SELECT 1 FROM sys.key_constraints WHERE parent_object_id = OBJECT_ID(N''dbo.khach_hang'') AND name = N''uq_khach_hang_ma'' AND type = ''UQ''), 1, 0);\nSET @info = CONCAT(N''duplicate refused: '', @c);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. uq_khach_hang_ma refuses a duplicate code | uq_khach_hang_ma từ chối mã trùng'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. uq_khach_hang_ma refuses a duplicate code | uq_khach_hang_ma từ chối mã trùng', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: The backfill works in batches (WHILE + UPDATE TOP)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @d NVARCHAR(MAX) = OBJECT_DEFINITION(OBJECT_ID(N''dbo.prBackfillMaKhach''));\nSET @ok = IIF(@d LIKE N''%WHILE%'' AND @d LIKE N''%UPDATE TOP%'', 1, 0);\nSET @info = IIF(@d IS NULL, N''procedure dbo.prBackfillMaKhach not found'', N''expected WHILE … UPDATE TOP (@lo) …'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. The backfill works in batches (WHILE + UPDATE TOP) | Việc điền dữ liệu chạy theo lô (WHILE + UPDATE TOP)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. The backfill works in batches (WHILE + UPDATE TOP) | Việc điền dữ liệu chạy theo lô (WHILE + UPDATE TOP)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On a real system step 2 runs while new customers keep arriving: the app must already write ma_khach for new rows (dual write) before the backfill starts, otherwise a row inserted during the loop stays NULL and step 3 fails.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên hệ thống thật, bước 2 chạy trong khi khách mới vẫn đến: app phải ghi ma_khach cho dòng mới (ghi đôi) trước khi đổ dữ liệu, nếu không dòng chèn trong lúc vòng chạy sẽ còn NULL và bước 3 lỗi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "ALTER TABLE … ALTER COLUMN, UPDATE TOP (n) in a WHILE loop and @@ROWCOUNT are SQL Server syntax, and the point is a 10,000-row table that is being used while you change it.|||ALTER TABLE … ALTER COLUMN, UPDATE TOP (n) trong vòng WHILE và @@ROWCOUNT là cú pháp SQL Server, và điểm mấu chốt là bảng 10.000 dòng đang được dùng trong lúc bạn đổi nó.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. Every customer has the right code (KH000007, KH010000…)",
+            "2. ma_khach is NOT NULL",
+            "3. uq_khach_hang_ma refuses a duplicate code",
+            "4. The backfill works in batches (WHILE + UPDATE TOP)"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "One UPDATE of the whole table — one long transaction, possibly a table lock (escalation past ~5,000 row locks).|||Một UPDATE cả bảng — một giao dịch dài, có thể khoá bảng (leo thang khi vượt ~5.000 khoá dòng)."
+        },
+        {
+          "loi": "CONCAT('KH', id) — KH7 instead of KH000007, and the codes do not sort.|||CONCAT('KH', id) — KH7 thay vì KH000007, và mã không sắp đúng thứ tự."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "batched update",
+          "vi": "cập nhật theo lô"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 7 — review the migration Prisma generates for the LMS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "Prisma",
+        "generated migrations",
+        "CHECK constraints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "prisma"
+      ],
+      "problemHtml": "<p>The LMS of exercise 1 written in Prisma:</p>\n<pre>model HocVien { id Int @id @default(autoincrement())  email String @unique @db.VarChar(254)  hoTen String @db.VarChar(100)  dangKy DangKy[] }\nmodel KhoaHoc { id Int @id @default(autoincrement())  ma String @unique @db.VarChar(10)  ten String  hocPhi Decimal @db.Decimal(12, 0)  dangKy DangKy[] }\nmodel DangKy  { hocVienId Int  khoaHocId Int  ngayDangKy DateTime @db.Date  hocPhiDaTra Decimal @db.Decimal(12, 0)  diem Decimal? @db.Decimal(4, 2)\n                hocVien HocVien @relation(fields: [hocVienId], references: [id])\n                khoaHoc KhoaHoc @relation(fields: [khoaHocId], references: [id])\n                @@id([hocVienId, khoaHocId])  @@index([khoaHocId]) }</pre><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LMS của bài 1 viết bằng Prisma:</p>\n<pre>model HocVien { id Int @id @default(autoincrement())  email String @unique @db.VarChar(254)  hoTen String @db.VarChar(100)  dangKy DangKy[] }\nmodel KhoaHoc { id Int @id @default(autoincrement())  ma String @unique @db.VarChar(10)  ten String  hocPhi Decimal @db.Decimal(12, 0)  dangKy DangKy[] }\nmodel DangKy  { hocVienId Int  khoaHocId Int  ngayDangKy DateTime @db.Date  hocPhiDaTra Decimal @db.Decimal(12, 0)  diem Decimal? @db.Decimal(4, 2)\n                hocVien HocVien @relation(fields: [hocVienId], references: [id])\n                khoaHoc KhoaHoc @relation(fields: [khoaHocId], references: [id])\n                @@id([hocVienId, khoaHocId])  @@index([khoaHocId]) }</pre><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read every generated migration.sql before applying it.|||Đọc mọi migration.sql được sinh trước khi áp dụng.",
+        "ORMs generate structure, not business rules.|||ORM sinh cấu trúc, không sinh luật nghiệp vụ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 7 — review the migration Prisma generates for the LMS\n\nAnswer in the answer panel (no code needed).\n\n1. Which rules of exercise 1 are MISSING from the SQL that prisma migrate generates? (choose all)Luật nào của bài 1 THIẾU trong SQL mà prisma migrate sinh ra? (chọn tất cả)\n2. Why is there @@index([khoaHocId]) but no index on hocVienId?Vì sao có @@index([khoaHocId]) mà không có chỉ mục trên hocVienId?\n3. How do you add the missing CHECKs and keep them across future migrations?Thêm các CHECK còn thiếu và giữ chúng qua các migration sau bằng cách nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 7 — review the migration Prisma generates for the LMS — answer key\n\n1. Which rules of exercise 1 are MISSING from the SQL that prisma migrate generates? (choose all)Luật nào của bài 1 THIẾU trong SQL mà prisma migrate sinh ra? (chọn tất cả)\n   Answer: a) diem BETWEEN 0 AND 10 + e) hocPhiDaTra >= 0 + f) hocPhi >= 0\n   Prisma's schema language has no CHECK: the three value rules must be added by hand to migration.sql. @unique, @@id and @relation are generated.VI: Ngôn ngữ schema của Prisma không có CHECK: ba luật giá trị phải tự thêm vào migration.sql. @unique, @@id và @relation đều được sinh.\n\n2. Why is there @@index([khoaHocId]) but no index on hocVienId?Vì sao có @@index([khoaHocId]) mà không có chỉ mục trên hocVienId?\n   Answer: b) hocVienId is already the leading column of the composite primary key\n   The PK (hocVienId, khoaHocId) serves lookups by hocVienId; khoaHocId needs its own index for the FK and joins.VI: Khoá chính (hocVienId, khoaHocId) phục vụ tra theo hocVienId; khoaHocId cần chỉ mục riêng cho khoá ngoại và phép nối.\n\n3. How do you add the missing CHECKs and keep them across future migrations?Thêm các CHECK còn thiếu và giữ chúng qua các migration sau bằng cách nào?\n   Answer: d) migrate dev --create-only, append ADD CONSTRAINT, then apply\n   Prisma keeps hand-written SQL in the migration history; later migrations do not drop constraints they do not know about.VI: Prisma giữ SQL viết tay trong lịch sử migration; migration sau không xoá ràng buộc mà nó không biết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> diem BETWEEN 0 AND 10 + <b>e)</b> hocPhiDaTra >= 0 + <b>f)</b> hocPhi >= 0</p><p>Prisma's schema language has no CHECK: the three value rules must be added by hand to migration.sql. @unique, @@id and @relation are generated.</p><p><i>VI: Ngôn ngữ schema của Prisma không có CHECK: ba luật giá trị phải tự thêm vào migration.sql. @unique, @@id và @relation đều được sinh.</i></p></li><li><p><b>b)</b> hocVienId is already the leading column of the composite primary key</p><p>The PK (hocVienId, khoaHocId) serves lookups by hocVienId; khoaHocId needs its own index for the FK and joins.</p><p><i>VI: Khoá chính (hocVienId, khoaHocId) phục vụ tra theo hocVienId; khoaHocId cần chỉ mục riêng cho khoá ngoại và phép nối.</i></p></li><li><p><b>d)</b> migrate dev --create-only, append ADD CONSTRAINT, then apply</p><p>Prisma keeps hand-written SQL in the migration history; later migrations do not drop constraints they do not know about.</p><p><i>VI: Prisma giữ SQL viết tay trong lịch sử migration; migration sau không xoá ràng buộc mà nó không biết.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which rules of exercise 1 are MISSING from the SQL that prisma migrate generates? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật nào của bài 1 THIẾU trong SQL mà prisma migrate sinh ra? (chọn tất cả)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "diem BETWEEN 0 AND 10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the composite primary key of DangKy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the foreign key to KhoaHoc"
+              },
+              {
+                "ma": "d",
+                "noiDung": "UNIQUE on email"
+              },
+              {
+                "ma": "e",
+                "noiDung": "hocPhiDaTra >= 0"
+              },
+              {
+                "ma": "f",
+                "noiDung": "hocPhi >= 0"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "e",
+                "f"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Prisma's schema language has no CHECK: the three value rules must be added by hand to migration.sql. @unique, @@id and @relation are generated.</p><p><i>VI: Ngôn ngữ schema của Prisma không có CHECK: ba luật giá trị phải tự thêm vào migration.sql. @unique, @@id và @relation đều được sinh.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is there @@index([khoaHocId]) but no index on hocVienId?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao có @@index([khoaHocId]) mà không có chỉ mục trên hocVienId?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the index on hocVienId is created by @unique on email"
+              },
+              {
+                "ma": "b",
+                "noiDung": "hocVienId is already the leading column of the composite primary key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prisma never indexes the first foreign key of a model"
+              },
+              {
+                "ma": "d",
+                "noiDung": "hocVienId is a smaller column, so it needs no index"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The PK (hocVienId, khoaHocId) serves lookups by hocVienId; khoaHocId needs its own index for the FK and joins.</p><p><i>VI: Khoá chính (hocVienId, khoaHocId) phục vụ tra theo hocVienId; khoaHocId cần chỉ mục riêng cho khoá ngoại và phép nối.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How do you add the missing CHECKs and keep them across future migrations?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm các CHECK còn thiếu và giữ chúng qua các migration sau bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keep the rules in the application code only, never in SQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "run prisma db push after each change to the schema file"
+              },
+              {
+                "ma": "c",
+                "noiDung": "edit the tables in SSMS directly on the production server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "migrate dev --create-only, append ADD CONSTRAINT, then apply"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Prisma keeps hand-written SQL in the migration history; later migrations do not drop constraints they do not know about.</p><p><i>VI: Prisma giữ SQL viết tay trong lịch sử migration; migration sau không xoá ràng buộc mà nó không biết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming @db.Decimal(4, 2) limits the score to 10 — it allows up to 99.99.|||Tưởng @db.Decimal(4, 2) giới hạn điểm ≤ 10 — nó cho tới 99.99."
+        },
+        {
+          "loi": "Fixing the database by hand outside migrations — the next environment does not get it.|||Sửa CSDL bằng tay ngoài migration — môi trường kế tiếp không có nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "migration",
+          "vi": "bản di trú lược đồ"
+        },
+        {
+          "en": "ORM",
+          "vi": "ánh xạ đối tượng–quan hệ"
+        }
+      ]
+    }
+  ]
+}

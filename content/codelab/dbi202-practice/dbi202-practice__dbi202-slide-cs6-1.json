@@ -1,0 +1,629 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs6-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs6-1"
+  },
+  "exercises": [
+    {
+      "title": "Read the brief: entity, relationship or constraint?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "requirements analysis",
+        "entity",
+        "relationship",
+        "constraint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design"
+      ],
+      "problemHtml": "<p>Slides 2–3. Each sentence of a clinic brief becomes one design element. Classify it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 2–3. Mỗi câu trong bản mô tả phòng khám thành một thành phần thiết kế. Phân loại nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for the verbs: \"cannot\", \"must\" are rules.|||Tìm động từ: \"không được\", \"phải\" là luật.",
+        "\"Many … each with its own …\" ⇒ a link table with columns.|||\"Nhiều … mỗi cái có … riêng\" ⇒ bảng nối có cột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the brief: entity, relationship or constraint?\n\nAnswer in the answer panel (no code needed).\n\n1. Sentence → elementCâu → thành phần\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the brief: entity, relationship or constraint? — answer key\n\n1. Sentence → elementCâu → thành phần\n   - r1.tp: entity (a table)\n   - r2.tp: relationship (a foreign key or a link table)\n   - r3.tp: constraint (CHECK / UNIQUE / NOT NULL)\n   - r4.tp: attribute (a column)\n   - r5.tp: relationship (a foreign key or a link table)\n   - r6.tp: constraint (CHECK / UNIQUE / NOT NULL)\n   Nouns that are tracked on their own ⇒ tables; \"each/exactly one/many\" ⇒ relationships (many-to-many with attributes ⇒ a link table); \"cannot/never/must\" ⇒ constraints.VI: Danh từ được theo dõi riêng ⇒ bảng; \"mỗi/đúng một/nhiều\" ⇒ quan hệ (nhiều-nhiều có thuộc tính ⇒ bảng nối); \"không được/không bao giờ/phải\" ⇒ ràng buộc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nouns that are tracked on their own ⇒ tables; \"each/exactly one/many\" ⇒ relationships (many-to-many with attributes ⇒ a link table); \"cannot/never/must\" ⇒ constraints.</p><p><i>VI: Danh từ được theo dõi riêng ⇒ bảng; \"mỗi/đúng một/nhiều\" ⇒ quan hệ (nhiều-nhiều có thuộc tính ⇒ bảng nối); \"không được/không bao giờ/phải\" ⇒ ràng buộc.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Sentence → element</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu → thành phần</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Sentence / Câu"
+              },
+              {
+                "ma": "tp",
+                "ten": "Element",
+                "luaChon": [
+                  "entity (a table)",
+                  "relationship (a foreign key or a link table)",
+                  "constraint (CHECK / UNIQUE / NOT NULL)",
+                  "attribute (a column)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "The clinic keeps a record of every patient."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "Each appointment is with exactly one doctor."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "A doctor cannot have two appointments starting at the same time."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "We need each patient's phone number."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cau": "A prescription may contain many medicines, each with its own dosage."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cau": "A visit fee is never negative."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.tp": "entity (a table)",
+              "r2.tp": "relationship (a foreign key or a link table)",
+              "r3.tp": "constraint (CHECK / UNIQUE / NOT NULL)",
+              "r4.tp": "attribute (a column)",
+              "r5.tp": "relationship (a foreign key or a link table)",
+              "r6.tp": "constraint (CHECK / UNIQUE / NOT NULL)"
+            },
+            "giaiThich": "<p>Nouns that are tracked on their own ⇒ tables; \"each/exactly one/many\" ⇒ relationships (many-to-many with attributes ⇒ a link table); \"cannot/never/must\" ⇒ constraints.</p><p><i>VI: Danh từ được theo dõi riêng ⇒ bảng; \"mỗi/đúng một/nhiều\" ⇒ quan hệ (nhiều-nhiều có thuộc tính ⇒ bảng nối); \"không được/không bao giờ/phải\" ⇒ ràng buộc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving rules in the application only — they belong in the database too.|||Chỉ để luật trong ứng dụng — chúng cũng thuộc về CSDL."
+        },
+        {
+          "loi": "Turning every noun into a table (a phone number is an attribute).|||Biến mọi danh từ thành bảng (số điện thoại là thuộc tính)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rule",
+          "vi": "luật nghiệp vụ"
+        },
+        {
+          "en": "link table",
+          "vi": "bảng nối"
+        }
+      ]
+    },
+    {
+      "title": "Choose and defend a primary key",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "natural key",
+        "surrogate key",
+        "IDENTITY",
+        "SEQUENCE",
+        "UUID v4/v7"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "keys"
+      ],
+      "problemHtml": "<p>Five questions on slides 4–8.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 4–8.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Stable, small, meaningless ⇒ a good surrogate key.|||Ổn định, nhỏ, không mang nghĩa ⇒ khoá thay thế tốt.",
+        "Natural candidates become UNIQUE constraints.|||Ứng viên tự nhiên thành ràng buộc UNIQUE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose and defend a primary key\n\nAnswer in the answer panel (no code needed).\n\n1. Why not use the customer's email as the primary key?Vì sao không dùng email khách hàng làm khoá chính?\n2. A random UUID v4 as a clustered key on SQL Server tends to…UUID v4 ngẫu nhiên làm khoá cụm trên SQL Server thường…\n3. A SEQUENCE differs from IDENTITY because it…SEQUENCE khác IDENTITY vì nó…\n4. A composite primary key is the natural choice for…Khoá chính ghép là lựa chọn tự nhiên cho…\n5. Why name constraints explicitly (pk_order, fk_order_customer, ck_order_total)?Vì sao đặt tên ràng buộc tường minh (pk_order, fk_order_customer, ck_order_total)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose and defend a primary key — answer key\n\n1. Why not use the customer's email as the primary key?Vì sao không dùng email khách hàng làm khoá chính?\n   Answer: a) it changes, and every foreign key would have to change with it\n   Keys should be stable. Keep email UNIQUE, and use a surrogate id as the PK.VI: Khoá phải ổn định. Giữ email UNIQUE, dùng id thay thế làm khoá chính.\n\n2. A random UUID v4 as a clustered key on SQL Server tends to…UUID v4 ngẫu nhiên làm khoá cụm trên SQL Server thường…\n   Answer: b) insert all over the tree: page splits and fragmentation\n   UUID v7 (time-ordered) or NEWSEQUENTIALID() keep inserts at the end like an IDENTITY.VI: UUID v7 (theo thời gian) hoặc NEWSEQUENTIALID() giữ việc chèn ở cuối như IDENTITY.\n\n3. A SEQUENCE differs from IDENTITY because it…SEQUENCE khác IDENTITY vì nó…\n   Answer: c) is a separate object that several tables (or the app) can draw numbers from\n   Both may leave gaps (a rolled-back insert burns a number); never rely on \"no gaps\".VI: Cả hai đều có thể có khoảng trống (insert bị huỷ đốt mất số); đừng trông vào \"không trống\".\n\n4. A composite primary key is the natural choice for…Khoá chính ghép là lựa chọn tự nhiên cho…\n   Answer: c) a link table such as Enrollment(studentId, courseId)\n   The pair IS the identity of the fact and prevents duplicates for free.VI: Cặp đó CHÍNH LÀ danh tính của sự kiện và chống trùng miễn phí.\n\n5. Why name constraints explicitly (pk_order, fk_order_customer, ck_order_total)?Vì sao đặt tên ràng buộc tường minh (pk_order, fk_order_customer, ck_order_total)?\n   Answer: b) error messages and migrations then say exactly which rule failed\n   Generated names like CK__Order__total__5EBF139D differ per server and break scripts.VI: Tên tự sinh như CK__Order__total__5EBF139D khác nhau mỗi server và làm hỏng script.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> it changes, and every foreign key would have to change with it</p><p>Keys should be stable. Keep email UNIQUE, and use a surrogate id as the PK.</p><p><i>VI: Khoá phải ổn định. Giữ email UNIQUE, dùng id thay thế làm khoá chính.</i></p></li><li><p><b>b)</b> insert all over the tree: page splits and fragmentation</p><p>UUID v7 (time-ordered) or NEWSEQUENTIALID() keep inserts at the end like an IDENTITY.</p><p><i>VI: UUID v7 (theo thời gian) hoặc NEWSEQUENTIALID() giữ việc chèn ở cuối như IDENTITY.</i></p></li><li><p><b>c)</b> is a separate object that several tables (or the app) can draw numbers from</p><p>Both may leave gaps (a rolled-back insert burns a number); never rely on \"no gaps\".</p><p><i>VI: Cả hai đều có thể có khoảng trống (insert bị huỷ đốt mất số); đừng trông vào \"không trống\".</i></p></li><li><p><b>c)</b> a link table such as Enrollment(studentId, courseId)</p><p>The pair IS the identity of the fact and prevents duplicates for free.</p><p><i>VI: Cặp đó CHÍNH LÀ danh tính của sự kiện và chống trùng miễn phí.</i></p></li><li><p><b>b)</b> error messages and migrations then say exactly which rule failed</p><p>Generated names like CK__Order__total__5EBF139D differ per server and break scripts.</p><p><i>VI: Tên tự sinh như CK__Order__total__5EBF139D khác nhau mỗi server và làm hỏng script.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why not use the customer's email as the primary key?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao không dùng email khách hàng làm khoá chính?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it changes, and every foreign key would have to change with it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a primary key must always be an integer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two customers can never share one email"
+              },
+              {
+                "ma": "d",
+                "noiDung": "emails cannot be stored in a VARCHAR column"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Keys should be stable. Keep email UNIQUE, and use a surrogate id as the PK.</p><p><i>VI: Khoá phải ổn định. Giữ email UNIQUE, dùng id thay thế làm khoá chính.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A random UUID v4 as a clustered key on SQL Server tends to…</p><p style=\"opacity:.75;font-size:.92em\"><i>UUID v4 ngẫu nhiên làm khoá cụm trên SQL Server thường…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keep every insert at the end of the index"
+              },
+              {
+                "ma": "b",
+                "noiDung": "insert all over the tree: page splits and fragmentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "make the table read-only after a million rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "need less space than an INT key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>UUID v7 (time-ordered) or NEWSEQUENTIALID() keep inserts at the end like an IDENTITY.</p><p><i>VI: UUID v7 (theo thời gian) hoặc NEWSEQUENTIALID() giữ việc chèn ở cuối như IDENTITY.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A SEQUENCE differs from IDENTITY because it…</p><p style=\"opacity:.75;font-size:.92em\"><i>SEQUENCE khác IDENTITY vì nó…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is stored inside the table definition itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "never leaves gaps after a ROLLBACK"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is a separate object that several tables (or the app) can draw numbers from"
+              },
+              {
+                "ma": "d",
+                "noiDung": "can only produce numbers in ascending order"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Both may leave gaps (a rolled-back insert burns a number); never rely on \"no gaps\".</p><p><i>VI: Cả hai đều có thể có khoảng trống (insert bị huỷ đốt mất số); đừng trông vào \"không trống\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A composite primary key is the natural choice for…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá chính ghép là lựa chọn tự nhiên cho…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "any table that has more than ten columns"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a log table that only ever receives inserts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a link table such as Enrollment(studentId, courseId)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a Customer table with a name and a birth date"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The pair IS the identity of the fact and prevents duplicates for free.</p><p><i>VI: Cặp đó CHÍNH LÀ danh tính của sự kiện và chống trùng miễn phí.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why name constraints explicitly (pk_order, fk_order_customer, ck_order_total)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đặt tên ràng buộc tường minh (pk_order, fk_order_customer, ck_order_total)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "explicit names make every query run faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "error messages and migrations then say exactly which rule failed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL refuses constraints without a name"
+              },
+              {
+                "ma": "d",
+                "noiDung": "unnamed constraints are not enforced by SQL Server"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Generated names like CK__Order__total__5EBF139D differ per server and break scripts.</p><p><i>VI: Tên tự sinh như CK__Order__total__5EBF139D khác nhau mỗi server và làm hỏng script.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a phone number or email as the PK.|||Dùng số điện thoại hoặc email làm khoá chính."
+        },
+        {
+          "loi": "Using random UUIDs as clustered keys without thinking about inserts.|||Dùng UUID ngẫu nhiên làm khoá cụm mà không nghĩ tới việc chèn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "surrogate key",
+          "vi": "khoá thay thế"
+        },
+        {
+          "en": "natural key",
+          "vi": "khoá tự nhiên"
+        }
+      ]
+    },
+    {
+      "title": "Money, time zones, Vietnamese text: pick the type",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "DECIMAL for money",
+        "time zones",
+        "Unicode"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "types"
+      ],
+      "problemHtml": "<p>Slides 9–11. Choose the SQL Server type for each column.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9–11. Chọn kiểu SQL Server cho từng cột.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Will you do arithmetic on it? If not, it is probably text.|||Có tính toán trên nó không? Không thì nhiều khả năng là chữ.",
+        "Exact money ⇒ DECIMAL; VND has no minor unit.|||Tiền chính xác ⇒ DECIMAL; VND không có đơn vị lẻ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Money, time zones, Vietnamese text: pick the type\n\nAnswer in the answer panel (no code needed).\n\n1. Column → typeCột → kiểu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Money, time zones, Vietnamese text: pick the type — answer key\n\n1. Column → typeCột → kiểu\n   - r1.kieu: DECIMAL(19,0)\n   - r2.kieu: DECIMAL(5,2)\n   - r3.kieu: DATETIMEOFFSET\n   - r4.kieu: DATE\n   - r5.kieu: NVARCHAR(100)\n   - r6.kieu: VARCHAR(15)\n   - r7.kieu: VARCHAR(254)\n   Never FLOAT for money (0.1 + 0.2 ≠ 0.3). Store instants with an offset (or UTC) when users span time zones. Phone numbers are text: leading zeros and spaces matter, you never add them up. On PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).VI: Không bao giờ FLOAT cho tiền (0.1 + 0.2 ≠ 0.3). Lưu thời điểm kèm độ lệch (hoặc UTC) khi người dùng ở nhiều múi giờ. Số điện thoại là chữ: số 0 đầu và khoảng trắng có nghĩa, không ai cộng chúng. PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Never FLOAT for money (0.1 + 0.2 ≠ 0.3). Store instants with an offset (or UTC) when users span time zones. Phone numbers are text: leading zeros and spaces matter, you never add them up. On PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).</p><p><i>VI: Không bao giờ FLOAT cho tiền (0.1 + 0.2 ≠ 0.3). Lưu thời điểm kèm độ lệch (hoặc UTC) khi người dùng ở nhiều múi giờ. Số điện thoại là chữ: số 0 đầu và khoảng trắng có nghĩa, không ai cộng chúng. PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Column → type</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột → kiểu</i></p>",
+            "cot": [
+              {
+                "ma": "cot",
+                "ten": "Column / Cột"
+              },
+              {
+                "ma": "kieu",
+                "ten": "Type",
+                "luaChon": [
+                  "DECIMAL(19,0)",
+                  "DECIMAL(5,2)",
+                  "DATETIMEOFFSET",
+                  "DATE",
+                  "NVARCHAR(100)",
+                  "VARCHAR(15)",
+                  "VARCHAR(254)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cot": "order total in VND"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cot": "discount rate such as 12.50 %"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cot": "online appointment booked from several countries"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cot": "date of birth"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cot": "customer full name \"Lê Thị Ánh Tuyết\""
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cot": "phone number \"0912 345 678\""
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "cot": "email address"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kieu": "DECIMAL(19,0)",
+              "r2.kieu": "DECIMAL(5,2)",
+              "r3.kieu": "DATETIMEOFFSET",
+              "r4.kieu": "DATE",
+              "r5.kieu": "NVARCHAR(100)",
+              "r6.kieu": "VARCHAR(15)",
+              "r7.kieu": "VARCHAR(254)"
+            },
+            "giaiThich": "<p>Never FLOAT for money (0.1 + 0.2 ≠ 0.3). Store instants with an offset (or UTC) when users span time zones. Phone numbers are text: leading zeros and spaces matter, you never add them up. On PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).</p><p><i>VI: Không bao giờ FLOAT cho tiền (0.1 + 0.2 ≠ 0.3). Lưu thời điểm kèm độ lệch (hoặc UTC) khi người dùng ở nhiều múi giờ. Số điện thoại là chữ: số 0 đầu và khoảng trắng có nghĩa, không ai cộng chúng. PostgreSQL: numeric, timestamptz, varchar/text (UTF-8).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "INT for phone numbers — the leading 0 disappears.|||INT cho số điện thoại — số 0 đầu biến mất."
+        },
+        {
+          "loi": "VARCHAR for Vietnamese names on SQL Server — \"Ánh\" becomes \"?nh\" with a non-UTF-8 collation.|||VARCHAR cho tên tiếng Việt trên SQL Server — \"Ánh\" thành \"?nh\" với collation không UTF-8."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "time zone offset",
+          "vi": "độ lệch múi giờ"
+        },
+        {
+          "en": "exact numeric",
+          "vi": "số chính xác"
+        }
+      ]
+    },
+    {
+      "title": "Soft delete without breaking the unique rule",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "soft delete",
+        "filtered unique index",
+        "partial unique index"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "soft-delete"
+      ],
+      "problemHtml": "<p>Slide 12. Products are never really deleted: <code>deletedAt</code> is set instead. A product code must be unique <b>among live products</b>, but a retired code may be reused. Create:</p><ul><li><code>SanPham(id INT PK, maSP VARCHAR(20) NOT NULL, ten VARCHAR(100) NOT NULL, deletedAt DATE NULL)</code>;</li><li>the unique index <code>ux_sanpham_ma_live</code> that enforces the rule.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n  <li>A UNIQUE constraint on maSP is too strict: use CREATE UNIQUE INDEX … WHERE deletedAt IS NULL (filtered on SQL Server, partial on PostgreSQL — same syntax).</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 12. Sản phẩm không bao giờ bị xoá thật: đặt <code>deletedAt</code> thay thế. Mã sản phẩm phải duy nhất <b>trong các sản phẩm còn sống</b>, nhưng mã đã nghỉ được dùng lại. Tạo:</p><ul><li><code>SanPham(id INT PK, maSP VARCHAR(20) NOT NULL, ten VARCHAR(100) NOT NULL, deletedAt DATE NULL)</code>;</li><li>chỉ mục duy nhất <code>ux_sanpham_ma_live</code> thi hành luật đó.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n  <li>UNIQUE trên maSP là quá chặt: dùng CREATE UNIQUE INDEX … WHERE deletedAt IS NULL (filtered trên SQL Server, partial trên PostgreSQL — cùng cú pháp).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO SanPham VALUES (1, 'TET2025', 'Hop qua Tet', '2025-03-01'); INSERT INTO SanPham VALUES (2, 'TET2025', 'Hop qua Tet 2026', NULL)|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO SanPham VALUES (1, 'TET2025', 'Hop qua Tet', '2025-03-01'); INSERT INTO SanPham VALUES (2, 'TET2025', 'Hop qua Tet 2026', NULL)",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"A retired code can be reused by a new live product\".|||Kiểm \"Mã đã nghỉ được dùng lại cho sản phẩm mới còn sống\"."
+        }
+      ],
+      "hintsJson": [
+        "Only live rows (deletedAt IS NULL) take part in the uniqueness.|||Chỉ dòng còn sống (deletedAt IS NULL) tham gia luật duy nhất.",
+        "Every query of live data must also say WHERE deletedAt IS NULL — a view helps.|||Mọi truy vấn dữ liệu sống cũng phải ghi WHERE deletedAt IS NULL — một view sẽ giúp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE SanPham (\n    id        INT          NOT NULL CONSTRAINT pk_sanpham PRIMARY KEY,\n    maSP      VARCHAR(20)  NOT NULL,\n    ten       VARCHAR(100) NOT NULL,\n    deletedAt DATE         NULL                 -- NULL = live\n);\nCREATE UNIQUE INDEX ux_sanpham_ma_live ON SanPham (maSP) WHERE deletedAt IS NULL;   -- unique among live rows only\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Soft delete keeps history and makes \"undo\" easy, but every unique rule and every query must learn about it. The filtered/partial unique index is the standard fix; foreign keys pointing to a soft-deleted row still succeed, which is usually what you want for history.</p>",
+      "solutionExplanationHtmlVi": "<p>Xoá mềm giữ lịch sử và giúp \"hoàn tác\" dễ, nhưng mọi luật duy nhất và mọi truy vấn phải biết đến nó. Chỉ mục duy nhất filtered/partial là cách sửa chuẩn; khoá ngoại trỏ tới dòng đã xoá mềm vẫn hợp lệ, thường đúng là điều ta muốn cho lịch sử.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A retired code can be reused by a new live product|||Mã đã nghỉ được dùng lại cho sản phẩm mới còn sống",
+            "thu": "INSERT INTO SanPham VALUES (1, 'TET2025', 'Hop qua Tet', '2025-03-01'); INSERT INTO SanPham VALUES (2, 'TET2025', 'Hop qua Tet 2026', NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Two live products with the same code are refused|||Hai sản phẩm còn sống cùng mã bị từ chối",
+            "thu": "INSERT INTO SanPham VALUES (1, 'BUT01', 'But bi', NULL); INSERT INTO SanPham VALUES (2, 'BUT01', 'But bi xanh', NULL)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The code may be retired several times|||Mã được nghỉ nhiều lần",
+            "thu": "INSERT INTO SanPham VALUES (1, 'VO', 'Vo 2023', '2023-12-31'), (2, 'VO', 'Vo 2024', '2024-12-31'), (3, 'VO', 'Vo 2025', NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The id is still a real primary key|||id vẫn là khoá chính thật",
+            "thu": "INSERT INTO SanPham VALUES (1, 'A', 'A', NULL); INSERT INTO SanPham VALUES (1, 'B', 'B', NULL)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A filtered unique index|||Chỉ mục duy nhất có lọc",
+            "khop": "\\bCREATE\\s+UNIQUE\\s+INDEX\\b[^;]*\\bWHERE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "UNIQUE (maSP): a retired code can never come back.|||UNIQUE (maSP): mã đã nghỉ không bao giờ quay lại được."
+        },
+        {
+          "loi": "UNIQUE (maSP, deletedAt): NULLs are distinct on PostgreSQL, so two live rows with the same code slip through (and SQL Server allows only one NULL).|||UNIQUE (maSP, deletedAt): NULL khác nhau trên PostgreSQL nên hai dòng sống cùng mã lọt qua (còn SQL Server chỉ cho một NULL)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "soft delete",
+          "vi": "xoá mềm"
+        },
+        {
+          "en": "filtered unique index",
+          "vi": "chỉ mục duy nhất có lọc"
+        }
+      ]
+    }
+  ]
+}

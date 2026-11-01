@@ -1,0 +1,626 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs6-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs6-2"
+  },
+  "exercises": [
+    {
+      "title": "Business rules as constraints: a meeting-room booking table",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "CHECK",
+        "multi-column CHECK",
+        "UNIQUE",
+        "named constraints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "constraints"
+      ],
+      "problemHtml": "<p>Slides 19–20. Create <code>DatPhong(id, phong, ngay, gioBatDau, gioKetThuc, soNguoi, trangThai)</code> (hours are whole numbers) so that the database itself enforces:</p><ul><li>bookings are between 7:00 and 22:00, and end after they start;</li><li>1 to 10 people;</li><li>status is one of CHO, XAC_NHAN, HUY;</li><li>a room cannot have two bookings starting at the same hour of the same day.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n  <li>Name every constraint (ck_…, uq_…). A rule that compares two columns is a table-level CHECK.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 19–20. Tạo <code>DatPhong(id, phong, ngay, gioBatDau, gioKetThuc, soNguoi, trangThai)</code> (giờ là số nguyên) sao cho chính CSDL thi hành:</p><ul><li>đặt phòng trong khoảng 7:00–22:00 và kết thúc sau khi bắt đầu;</li><li>từ 1 đến 10 người;</li><li>trạng thái là một trong CHO, XAC_NHAN, HUY;</li><li>một phòng không có hai lần đặt bắt đầu cùng giờ cùng ngày.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n  <li>Đặt tên mọi ràng buộc (ck_…, uq_…). Luật so hai cột là CHECK mức bảng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 11, 4, 'CHO'), (2, 'P102', '2026-11-02', 9, 10, 2, 'XAC_NHAN')|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 11, 4, 'CHO'), (2, 'P102', '2026-11-02', 9, 10, 2, 'XAC_NHAN')",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"A normal booking, and the same hour in another room\".|||Kiểm \"Một lần đặt bình thường, và cùng giờ ở phòng khác\"."
+        }
+      ],
+      "hintsJson": [
+        "Column-level CHECK sees one column; a rule over two columns goes at table level.|||CHECK mức cột chỉ thấy một cột; luật trên hai cột đặt ở mức bảng.",
+        "UNIQUE (phong, ngay, gioBatDau): the triple, not each column.|||UNIQUE (phong, ngay, gioBatDau): bộ ba, không phải từng cột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE DatPhong (\n    id         INT         NOT NULL CONSTRAINT pk_datphong PRIMARY KEY,\n    phong      VARCHAR(10) NOT NULL,\n    ngay       DATE        NOT NULL,\n    gioBatDau  INT         NOT NULL,\n    gioKetThuc INT         NOT NULL,\n    soNguoi    INT         NOT NULL CONSTRAINT ck_datphong_songuoi CHECK (soNguoi BETWEEN 1 AND 10),\n    trangThai  VARCHAR(10) NOT NULL CONSTRAINT ck_datphong_trangthai CHECK (trangThai IN ('CHO', 'XAC_NHAN', 'HUY')),\n    CONSTRAINT ck_datphong_gio  CHECK (gioBatDau >= 7 AND gioKetThuc <= 22 AND gioKetThuc > gioBatDau),\n    CONSTRAINT uq_datphong_slot UNIQUE (phong, ngay, gioBatDau)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Overlapping bookings (9–11 and 10–12) are NOT stopped by this table: that needs PostgreSQL's EXCLUDE USING gist (phong WITH =, khoang WITH &&) on a range column, or a trigger / serializable check on SQL Server — slide 20.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai lần đặt chồng nhau (9–11 và 10–12) KHÔNG bị bảng này chặn: việc đó cần EXCLUDE USING gist (phong WITH =, khoang WITH &&) trên cột khoảng của PostgreSQL, hoặc trigger / kiểm tra tuần tự trên SQL Server — slide 20.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A normal booking, and the same hour in another room|||Một lần đặt bình thường, và cùng giờ ở phòng khác",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 11, 4, 'CHO'), (2, 'P102', '2026-11-02', 9, 10, 2, 'XAC_NHAN')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Ending before it starts is refused|||Kết thúc trước khi bắt đầu bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 11, 9, 4, 'CHO')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Ending exactly when it starts is refused|||Kết thúc đúng lúc bắt đầu bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 10, 10, 4, 'CHO')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Starting at 6:00 is refused|||Bắt đầu 6:00 bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 6, 8, 4, 'CHO')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Ending at 23:00 is refused|||Kết thúc 23:00 bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 20, 23, 4, 'CHO')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The edges 7:00 and 22:00 are allowed|||Biên 7:00 và 22:00 được phép",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 7, 22, 10, 'HUY')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "0 people is refused|||0 người bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 0, 'CHO')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An unknown status is refused|||Trạng thái lạ bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'DONE')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Two bookings of P101 starting at 9:00 on the same day are refused|||Hai lần đặt P101 bắt đầu 9:00 cùng ngày bị từ chối",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'CHO'); INSERT INTO DatPhong VALUES (2, 'P101', '2026-11-02', 9, 12, 5, 'CHO')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The same room at the same hour on another day is fine|||Cùng phòng cùng giờ nhưng ngày khác thì được",
+            "thu": "INSERT INTO DatPhong VALUES (1, 'P101', '2026-11-02', 9, 10, 3, 'CHO'), (2, 'P101', '2026-11-03', 9, 10, 3, 'CHO')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Every column is required|||Mọi cột đều bắt buộc",
+            "thu": "INSERT INTO DatPhong (id, phong, ngay, gioBatDau, gioKetThuc, soNguoi) VALUES (1, 'P101', '2026-11-02', 9, 10, 3)",
+            "maLoi": "23502"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "UNIQUE (phong, gioBatDau) — the room could then be booked at 9:00 only once in its whole life.|||UNIQUE (phong, gioBatDau) — phòng khi đó chỉ được đặt lúc 9:00 đúng một lần trong đời."
+        },
+        {
+          "loi": "Forgetting NOT NULL: a CHECK lets NULL through.|||Quên NOT NULL: CHECK cho NULL lọt qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "table-level CHECK",
+          "vi": "CHECK mức bảng"
+        },
+        {
+          "en": "exclusion constraint",
+          "vi": "ràng buộc loại trừ"
+        }
+      ]
+    },
+    {
+      "title": "ON DELETE: CASCADE, SET NULL or NO ACTION?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "foreign-key actions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "constraints"
+      ],
+      "problemHtml": "<p>Slide 20. For each foreign key, choose the action that matches the business rule.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 20. Với mỗi khoá ngoại, chọn hành động khớp luật nghiệp vụ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: may the child live on without the parent?|||Hỏi: con có sống tiếp được khi không có cha không?",
+        "SET NULL needs a nullable column.|||SET NULL cần cột cho NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ON DELETE: CASCADE, SET NULL or NO ACTION?\n\nAnswer in the answer panel (no code needed).\n\n1. Foreign key → ON DELETEKhoá ngoại → ON DELETE\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ON DELETE: CASCADE, SET NULL or NO ACTION? — answer key\n\n1. Foreign key → ON DELETEKhoá ngoại → ON DELETE\n   - r1.hd: CASCADE\n   - r2.hd: NO ACTION (refuse)\n   - r3.hd: SET NULL\n   - r4.hd: CASCADE\n   - r5.hd: SET NULL\n   - r6.hd: NO ACTION (refuse)\n   CASCADE for parts that only exist inside their parent; SET NULL for optional links (the column must be nullable); NO ACTION (the default) whenever deleting would destroy something you must keep.VI: CASCADE cho phần chỉ tồn tại bên trong cha; SET NULL cho liên kết tuỳ chọn (cột phải cho NULL); NO ACTION (mặc định) khi xoá sẽ phá thứ bạn phải giữ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CASCADE for parts that only exist inside their parent; SET NULL for optional links (the column must be nullable); NO ACTION (the default) whenever deleting would destroy something you must keep.</p><p><i>VI: CASCADE cho phần chỉ tồn tại bên trong cha; SET NULL cho liên kết tuỳ chọn (cột phải cho NULL); NO ACTION (mặc định) khi xoá sẽ phá thứ bạn phải giữ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Foreign key → ON DELETE</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá ngoại → ON DELETE</i></p>",
+            "cot": [
+              {
+                "ma": "fk",
+                "ten": "Foreign key and rule / Khoá ngoại và luật"
+              },
+              {
+                "ma": "hd",
+                "ten": "ON DELETE",
+                "luaChon": [
+                  "CASCADE",
+                  "SET NULL",
+                  "NO ACTION (refuse)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "fk": "OrderLine.orderId → Order: lines have no meaning without their order"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "fk": "Invoice.customerId → Customer: invoices must be kept for 10 years by law"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "fk": "Post.categoryId → Category (nullable): deleting a category keeps its posts"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "fk": "Comment.postId → Post: deleting a post deletes its comments"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "fk": "Comment.userId → User (nullable): a deleted reader leaves anonymous comments"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "fk": "Employee.departmentId → Department: a department with staff cannot disappear"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.hd": "CASCADE",
+              "r2.hd": "NO ACTION (refuse)",
+              "r3.hd": "SET NULL",
+              "r4.hd": "CASCADE",
+              "r5.hd": "SET NULL",
+              "r6.hd": "NO ACTION (refuse)"
+            },
+            "giaiThich": "<p>CASCADE for parts that only exist inside their parent; SET NULL for optional links (the column must be nullable); NO ACTION (the default) whenever deleting would destroy something you must keep.</p><p><i>VI: CASCADE cho phần chỉ tồn tại bên trong cha; SET NULL cho liên kết tuỳ chọn (cột phải cho NULL); NO ACTION (mặc định) khi xoá sẽ phá thứ bạn phải giữ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CASCADE everywhere — one DELETE can wipe years of invoices.|||CASCADE khắp nơi — một lệnh DELETE có thể xoá sạch hoá đơn nhiều năm."
+        },
+        {
+          "loi": "SET NULL on a NOT NULL column — the DELETE then fails.|||SET NULL trên cột NOT NULL — lệnh DELETE khi đó lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "referential action",
+          "vi": "hành động tham chiếu"
+        },
+        {
+          "en": "cascade delete",
+          "vi": "xoá lan truyền"
+        }
+      ]
+    },
+    {
+      "title": "Change a live schema without downtime: expand, migrate, contract",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 6,
+      "points": 30,
+      "concepts": [
+        "zero-downtime migration",
+        "expand/contract"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design",
+        "migration"
+      ],
+      "problemHtml": "<p>Slides 21–22. You must rename <code>customer.phone</code> to <code>customer.mobile</code> while the app keeps running and old app servers are still deployed. Order the steps.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 21–22. Phải đổi <code>customer.phone</code> thành <code>customer.mobile</code> trong khi app vẫn chạy và máy chủ app bản cũ vẫn đang triển khai. Sắp các bước.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Never remove anything that running code still reads.|||Không bao giờ bỏ thứ mà mã đang chạy còn đọc.",
+        "Backfill in batches to keep locks and log small.|||Đổ dữ liệu theo lô để khoá và nhật ký nhỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change a live schema without downtime: expand, migrate, contract\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Change a live schema without downtime: expand, migrate, contract — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m1) Add the new nullable column mobile  →  m6) Deploy app code that writes to BOTH columns  →  m5) Backfill mobile from phone in small batches  →  m4) Switch every read to mobile  →  m3) Add NOT NULL / constraints on mobile  →  m2) Drop the old column phone once no code uses it\n   Expand (add, dual-write, backfill), switch, then contract. A single RENAME COLUMN would break every old app server the second it runs.VI: Mở rộng (thêm, ghi đôi, đổ dữ liệu), chuyển, rồi thu gọn. Một lệnh RENAME COLUMN sẽ làm hỏng mọi máy chủ app cũ ngay khi nó chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expand (add, dual-write, backfill), switch, then contract. A single RENAME COLUMN would break every old app server the second it runs.</p><p><i>VI: Mở rộng (thêm, ghi đôi, đổ dữ liệu), chuyển, rồi thu gọn. Một lệnh RENAME COLUMN sẽ làm hỏng mọi máy chủ app cũ ngay khi nó chạy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Add the new nullable column mobile"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Drop the old column phone once no code uses it"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Add NOT NULL / constraints on mobile"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Switch every read to mobile"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Backfill mobile from phone in small batches"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Deploy app code that writes to BOTH columns"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m6",
+              "m5",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Expand (add, dual-write, backfill), switch, then contract. A single RENAME COLUMN would break every old app server the second it runs.</p><p><i>VI: Mở rộng (thêm, ghi đôi, đổ dữ liệu), chuyển, rồi thu gọn. Một lệnh RENAME COLUMN sẽ làm hỏng mọi máy chủ app cũ ngay khi nó chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding NOT NULL before the backfill — the ALTER fails or locks the table.|||Thêm NOT NULL trước khi đổ dữ liệu — ALTER lỗi hoặc khoá bảng."
+        },
+        {
+          "loi": "Dropping the old column in the same deploy.|||Bỏ cột cũ trong cùng lần triển khai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "expand/contract",
+          "vi": "mở rộng / thu gọn"
+        },
+        {
+          "en": "backfill",
+          "vi": "đổ dữ liệu bù"
+        }
+      ]
+    },
+    {
+      "title": "History, audit, polymorphic links, EAV and deliberate denormalisation",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "audit table",
+        "temporal table",
+        "polymorphic association",
+        "EAV",
+        "denormalisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "design"
+      ],
+      "problemHtml": "<p>Five questions on slides 13–18 and 22.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 13–18 và 22.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "History = rows with validity periods, not a single updatedAt.|||Lịch sử = các dòng có khoảng hiệu lực, không phải một updatedAt.",
+        "If the database cannot enforce it, someone will break it.|||Nếu CSDL không thi hành được thì sẽ có người phá nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History, audit, polymorphic links, EAV and deliberate denormalisation\n\nAnswer in the answer panel (no code needed).\n\n1. \"What was the price of product 7 on 1 March?\" is answered best by…\"Giá sản phẩm 7 ngày 1/3 là bao nhiêu?\" được trả lời tốt nhất bằng…\n2. A Comment table with (targetType, targetId) pointing to posts OR photos OR videos loses…Bảng Comment với (targetType, targetId) trỏ tới bài viết HOẶC ảnh HOẶC video sẽ mất…\n3. EAV (entity, attribute, value) rows for product specs make it hard to…Dòng EAV (thực thể, thuộc tính, giá trị) cho thông số sản phẩm làm khó…\n4. Storing order.total although it can be computed from the lines is acceptable when…Lưu order.total dù tính được từ các dòng là chấp nhận được khi…\n5. Prisma generated a migration for a link table with @@id([studentId, courseId]). What must you still add yourself?Prisma sinh migration cho bảng nối với @@id([studentId, courseId]). Bạn vẫn phải tự thêm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History, audit, polymorphic links, EAV and deliberate denormalisation — answer key\n\n1. \"What was the price of product 7 on 1 March?\" is answered best by…\"Giá sản phẩm 7 ngày 1/3 là bao nhiêu?\" được trả lời tốt nhất bằng…\n   Answer: d) a price-history table with valid-from dates (or a temporal table)\n   updatedAt only says WHEN it last changed, not what it was before.VI: updatedAt chỉ nói LẦN CUỐI đổi lúc nào, không nói trước đó là gì.\n\n2. A Comment table with (targetType, targetId) pointing to posts OR photos OR videos loses…Bảng Comment với (targetType, targetId) trỏ tới bài viết HOẶC ảnh HOẶC video sẽ mất…\n   Answer: c) a real foreign key: the database cannot check targetId exists\n   Alternatives: one nullable FK column per target with a CHECK that exactly one is set, or a shared parent table.VI: Cách khác: mỗi đích một cột FK cho NULL kèm CHECK đúng một cột có giá trị, hoặc một bảng cha chung.\n\n3. EAV (entity, attribute, value) rows for product specs make it hard to…Dòng EAV (thực thể, thuộc tính, giá trị) cho thông số sản phẩm làm khó…\n   Answer: c) type-check values and write simple queries on them\n   Everything becomes a string in one column. Modern alternative: a JSON/jsonb column for the truly variable part.VI: Mọi thứ thành chuỗi trong một cột. Cách hiện đại: cột JSON/jsonb cho phần thực sự thay đổi.\n\n4. Storing order.total although it can be computed from the lines is acceptable when…Lưu order.total dù tính được từ các dòng là chấp nhận được khi…\n   Answer: a) it is a deliberate snapshot kept in sync in the same transaction\n   Deliberate denormalisation needs one owner of the update (a transaction or trigger) and a check query.VI: Phi chuẩn hoá có chủ ý cần một nơi duy nhất cập nhật (giao dịch hoặc trigger) và truy vấn kiểm tra.\n\n5. Prisma generated a migration for a link table with @@id([studentId, courseId]). What must you still add yourself?Prisma sinh migration cho bảng nối với @@id([studentId, courseId]). Bạn vẫn phải tự thêm gì?\n   Answer: a) CHECK constraints such as score BETWEEN 0 AND 10\n   Prisma has no CHECK in its schema language: add it by editing the generated SQL migration.VI: Ngôn ngữ schema của Prisma không có CHECK: thêm bằng cách sửa file migration SQL đã sinh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> a price-history table with valid-from dates (or a temporal table)</p><p>updatedAt only says WHEN it last changed, not what it was before.</p><p><i>VI: updatedAt chỉ nói LẦN CUỐI đổi lúc nào, không nói trước đó là gì.</i></p></li><li><p><b>c)</b> a real foreign key: the database cannot check targetId exists</p><p>Alternatives: one nullable FK column per target with a CHECK that exactly one is set, or a shared parent table.</p><p><i>VI: Cách khác: mỗi đích một cột FK cho NULL kèm CHECK đúng một cột có giá trị, hoặc một bảng cha chung.</i></p></li><li><p><b>c)</b> type-check values and write simple queries on them</p><p>Everything becomes a string in one column. Modern alternative: a JSON/jsonb column for the truly variable part.</p><p><i>VI: Mọi thứ thành chuỗi trong một cột. Cách hiện đại: cột JSON/jsonb cho phần thực sự thay đổi.</i></p></li><li><p><b>a)</b> it is a deliberate snapshot kept in sync in the same transaction</p><p>Deliberate denormalisation needs one owner of the update (a transaction or trigger) and a check query.</p><p><i>VI: Phi chuẩn hoá có chủ ý cần một nơi duy nhất cập nhật (giao dịch hoặc trigger) và truy vấn kiểm tra.</i></p></li><li><p><b>a)</b> CHECK constraints such as score BETWEEN 0 AND 10</p><p>Prisma has no CHECK in its schema language: add it by editing the generated SQL migration.</p><p><i>VI: Ngôn ngữ schema của Prisma không có CHECK: thêm bằng cách sửa file migration SQL đã sinh.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"What was the price of product 7 on 1 March?\" is answered best by…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Giá sản phẩm 7 ngày 1/3 là bao nhiêu?\" được trả lời tốt nhất bằng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a nightly backup restored to another server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the transaction log of last March"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the updatedAt column of the product row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a price-history table with valid-from dates (or a temporal table)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>updatedAt only says WHEN it last changed, not what it was before.</p><p><i>VI: updatedAt chỉ nói LẦN CUỐI đổi lúc nào, không nói trước đó là gì.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A Comment table with (targetType, targetId) pointing to posts OR photos OR videos loses…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng Comment với (targetType, targetId) trỏ tới bài viết HOẶC ảnh HOẶC video sẽ mất…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the primary key of the Comment table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the ability to store more than one comment per post"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a real foreign key: the database cannot check targetId exists"
+              },
+              {
+                "ma": "d",
+                "noiDung": "support for indexes on targetId"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Alternatives: one nullable FK column per target with a CHECK that exactly one is set, or a shared parent table.</p><p><i>VI: Cách khác: mỗi đích một cột FK cho NULL kèm CHECK đúng một cột có giá trị, hoặc một bảng cha chung.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>EAV (entity, attribute, value) rows for product specs make it hard to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng EAV (thực thể, thuộc tính, giá trị) cho thông số sản phẩm làm khó…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "add a new kind of attribute later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "store products with different attributes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "type-check values and write simple queries on them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "delete a product and all its specs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Everything becomes a string in one column. Modern alternative: a JSON/jsonb column for the truly variable part.</p><p><i>VI: Mọi thứ thành chuỗi trong một cột. Cách hiện đại: cột JSON/jsonb cho phần thực sự thay đổi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Storing order.total although it can be computed from the lines is acceptable when…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lưu order.total dù tính được từ các dòng là chấp nhận được khi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is a deliberate snapshot kept in sync in the same transaction"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the team does not want to write JOIN queries"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the database does not support SUM()"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the order lines table has no primary key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Deliberate denormalisation needs one owner of the update (a transaction or trigger) and a check query.</p><p><i>VI: Phi chuẩn hoá có chủ ý cần một nơi duy nhất cập nhật (giao dịch hoặc trigger) và truy vấn kiểm tra.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Prisma generated a migration for a link table with @@id([studentId, courseId]). What must you still add yourself?</p><p style=\"opacity:.75;font-size:.92em\"><i>Prisma sinh migration cho bảng nối với @@id([studentId, courseId]). Bạn vẫn phải tự thêm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CHECK constraints such as score BETWEEN 0 AND 10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the index on studentId, the first key column"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the foreign keys to Student and Course"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the composite primary key on the two columns"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Prisma has no CHECK in its schema language: add it by editing the generated SQL migration.</p><p><i>VI: Ngôn ngữ schema của Prisma không có CHECK: thêm bằng cách sửa file migration SQL đã sinh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Polymorphic (type, id) links without any integrity check.|||Liên kết đa hình (type, id) không có kiểm tra toàn vẹn nào."
+        },
+        {
+          "loi": "Trusting the ORM to generate every rule.|||Tin ORM sinh đủ mọi luật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audit trail",
+          "vi": "vết kiểm toán"
+        },
+        {
+          "en": "polymorphic association",
+          "vi": "liên kết đa hình"
+        },
+        {
+          "en": "entity–attribute–value (EAV)",
+          "vi": "mô hình thực thể–thuộc tính–giá trị"
+        }
+      ]
+    }
+  ]
+}

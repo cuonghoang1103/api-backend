@@ -1,0 +1,476 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs7-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs7-1"
+  },
+  "exercises": [
+    {
+      "title": "SQL injection: spot it, explain it, fix it",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "SQL injection",
+        "string concatenation",
+        "parameters"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "security",
+        "injection"
+      ],
+      "problemHtml": "<p>Five questions on slides 3–7.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 3–7.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: can this input change the SQL text?|||Hỏi: dữ liệu này có đổi được văn bản SQL không?",
+        "Values ⇒ parameters; identifiers ⇒ whitelist.|||Giá trị ⇒ tham số; định danh ⇒ danh sách trắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL injection: spot it, explain it, fix it\n\nAnswer in the answer panel (no code needed).\n\n1. Login code: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". The input name = admin' -- logs in because…Mã đăng nhập: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". Nhập name = admin' -- đăng nhập được vì…\n2. The real fix is…Cách vá thật sự là…\n3. A UNION-based injection needs to match…Tiêm SQL kiểu UNION cần khớp…\n4. Which is still vulnerable?Cách nào vẫn có lỗ hổng?\n5. Even with parameters, a column or table NAME chosen by the user must be…Kể cả có tham số, TÊN cột hay bảng do người dùng chọn phải…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL injection: spot it, explain it, fix it — answer key\n\n1. Login code: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". The input name = admin' -- logs in because…Mã đăng nhập: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". Nhập name = admin' -- đăng nhập được vì…\n   Answer: d) the quote closes the string and -- comments out the password test\n   The data became code. Any value that reaches the SQL text unescaped can change the statement.VI: Dữ liệu đã thành mã. Giá trị nào lọt vào văn bản SQL mà không được xử lý đều có thể đổi câu lệnh.\n\n2. The real fix is…Cách vá thật sự là…\n   Answer: b) parameterized queries: the value is sent separately from the SQL text\n   Escaping and blacklists are fragile; parameters cannot be parsed as code at all.VI: Escape và danh sách đen rất mong manh; tham số hoàn toàn không bị phân tích thành mã.\n\n3. A UNION-based injection needs to match…Tiêm SQL kiểu UNION cần khớp…\n   Answer: b) the number and types of the columns of the original SELECT\n   That is why attackers first probe the column count (ORDER BY 1, 2, 3…).VI: Vì thế kẻ tấn công dò số cột trước (ORDER BY 1, 2, 3…).\n\n4. Which is still vulnerable?Cách nào vẫn có lỗ hổng?\n   Answer: c) EXEC sp_executesql N'SELECT … WHERE ten = ''' + @x + N''''\n   sp_executesql is only safe when the value is passed as a parameter, not glued into the string.VI: sp_executesql chỉ an toàn khi giá trị được truyền dưới dạng tham số, không ghép vào chuỗi.\n\n5. Even with parameters, a column or table NAME chosen by the user must be…Kể cả có tham số, TÊN cột hay bảng do người dùng chọn phải…\n   Answer: a) checked against a whitelist (and QUOTENAME-d) — identifiers cannot be parameters\n   Parameters replace values, never identifiers such as ORDER BY columns.VI: Tham số thay giá trị, không thay định danh như cột ORDER BY.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> the quote closes the string and -- comments out the password test</p><p>The data became code. Any value that reaches the SQL text unescaped can change the statement.</p><p><i>VI: Dữ liệu đã thành mã. Giá trị nào lọt vào văn bản SQL mà không được xử lý đều có thể đổi câu lệnh.</i></p></li><li><p><b>b)</b> parameterized queries: the value is sent separately from the SQL text</p><p>Escaping and blacklists are fragile; parameters cannot be parsed as code at all.</p><p><i>VI: Escape và danh sách đen rất mong manh; tham số hoàn toàn không bị phân tích thành mã.</i></p></li><li><p><b>b)</b> the number and types of the columns of the original SELECT</p><p>That is why attackers first probe the column count (ORDER BY 1, 2, 3…).</p><p><i>VI: Vì thế kẻ tấn công dò số cột trước (ORDER BY 1, 2, 3…).</i></p></li><li><p><b>c)</b> EXEC sp_executesql N'SELECT … WHERE ten = ''' + @x + N''''</p><p>sp_executesql is only safe when the value is passed as a parameter, not glued into the string.</p><p><i>VI: sp_executesql chỉ an toàn khi giá trị được truyền dưới dạng tham số, không ghép vào chuỗi.</i></p></li><li><p><b>a)</b> checked against a whitelist (and QUOTENAME-d) — identifiers cannot be parameters</p><p>Parameters replace values, never identifiers such as ORDER BY columns.</p><p><i>VI: Tham số thay giá trị, không thay định danh như cột ORDER BY.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Login code: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". The input name = admin' -- logs in because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã đăng nhập: \"SELECT * FROM Users WHERE name = '\" + name + \"' AND pass = '\" + pass + \"'\". Nhập name = admin' -- đăng nhập được vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the password column is empty for admin"
+              },
+              {
+                "ma": "b",
+                "noiDung": "admin accounts never need a password"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the database ignores quotes inside names"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the quote closes the string and -- comments out the password test"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The data became code. Any value that reaches the SQL text unescaped can change the statement.</p><p><i>VI: Dữ liệu đã thành mã. Giá trị nào lọt vào văn bản SQL mà không được xử lý đều có thể đổi câu lệnh.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The real fix is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách vá thật sự là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "hiding error messages from the user"
+              },
+              {
+                "ma": "b",
+                "noiDung": "parameterized queries: the value is sent separately from the SQL text"
+              },
+              {
+                "ma": "c",
+                "noiDung": "removing quotes and dashes from every input"
+              },
+              {
+                "ma": "d",
+                "noiDung": "limiting the input length to 20 characters"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Escaping and blacklists are fragile; parameters cannot be parsed as code at all.</p><p><i>VI: Escape và danh sách đen rất mong manh; tham số hoàn toàn không bị phân tích thành mã.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A UNION-based injection needs to match…</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêm SQL kiểu UNION cần khớp…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the database collation and language"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number and types of the columns of the original SELECT"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the name of the table in the original query"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the primary key of the target table"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>That is why attackers first probe the column count (ORDER BY 1, 2, 3…).</p><p><i>VI: Vì thế kẻ tấn công dò số cột trước (ORDER BY 1, 2, 3…).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which is still vulnerable?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách nào vẫn có lỗ hổng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SELECT … WHERE ten = @x inside a stored procedure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a Prisma findMany({ where: { ten: x } }) call"
+              },
+              {
+                "ma": "c",
+                "noiDung": "EXEC sp_executesql N'SELECT … WHERE ten = ''' + @x + N''''"
+              },
+              {
+                "ma": "d",
+                "noiDung": "EXEC sp_executesql N'SELECT … WHERE ten = @p', N'@p NVARCHAR(50)', @p = @x"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>sp_executesql is only safe when the value is passed as a parameter, not glued into the string.</p><p><i>VI: sp_executesql chỉ an toàn khi giá trị được truyền dưới dạng tham số, không ghép vào chuỗi.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Even with parameters, a column or table NAME chosen by the user must be…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kể cả có tham số, TÊN cột hay bảng do người dùng chọn phải…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "checked against a whitelist (and QUOTENAME-d) — identifiers cannot be parameters"
+              },
+              {
+                "ma": "b",
+                "noiDung": "passed as a parameter like any other value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "escaped by doubling every quote inside it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "accepted only if it is shorter than 30 characters"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Parameters replace values, never identifiers such as ORDER BY columns.</p><p><i>VI: Tham số thay giá trị, không thay định danh như cột ORDER BY.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"We escape quotes, so we are safe.\"|||\"Chúng tôi đã escape dấu nháy nên an toàn.\""
+        },
+        {
+          "loi": "Thinking stored procedures are automatically safe — not if they build dynamic SQL by concatenation.|||Tưởng stored procedure tự động an toàn — không, nếu nó ghép chuỗi SQL động."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SQL injection",
+          "vi": "tiêm SQL"
+        },
+        {
+          "en": "whitelist",
+          "vi": "danh sách trắng"
+        }
+      ]
+    },
+    {
+      "title": "Least privilege: what does each account really need?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "GRANT",
+        "DENY",
+        "EXECUTE permission",
+        "least privilege"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "security",
+        "permissions"
+      ],
+      "problemHtml": "<p>Slides 8–13. Choose the smallest permission set that lets each account do its job.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 8–13. Chọn tập quyền nhỏ nhất cho mỗi tài khoản làm được việc.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start from nothing and add only what the job needs.|||Bắt đầu từ không có gì và chỉ thêm thứ công việc cần.",
+        "Procedures are a permission boundary.|||Procedure là một ranh giới quyền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Least privilege: what does each account really need?\n\nAnswer in the answer panel (no code needed).\n\n1. Account → permissionsTài khoản → quyền\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Least privilege: what does each account really need? — answer key\n\n1. Account → permissionsTài khoản → quyền\n   - r1.q: GRANT SELECT on the two report tables\n   - r2.q: GRANT EXECUTE on the app's stored procedures only\n   - r3.q: GRANT SELECT, INSERT, UPDATE on its tables, no DELETE\n   - r4.q: GRANT BACKUP DATABASE (no table access)\n   - r5.q: db_owner on its own development database\n   EXECUTE on a procedure works through ownership chaining: the app needs no rights on the tables the procedure touches. Never let an application log in as sa / postgres.VI: EXECUTE trên procedure chạy nhờ ownership chaining: app không cần quyền trên các bảng mà procedure chạm tới. Không bao giờ để ứng dụng đăng nhập bằng sa / postgres.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>EXECUTE on a procedure works through ownership chaining: the app needs no rights on the tables the procedure touches. Never let an application log in as sa / postgres.</p><p><i>VI: EXECUTE trên procedure chạy nhờ ownership chaining: app không cần quyền trên các bảng mà procedure chạm tới. Không bao giờ để ứng dụng đăng nhập bằng sa / postgres.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Account → permissions</p><p style=\"opacity:.75;font-size:.92em\"><i>Tài khoản → quyền</i></p>",
+            "cot": [
+              {
+                "ma": "tk",
+                "ten": "Account / Tài khoản"
+              },
+              {
+                "ma": "q",
+                "ten": "Permissions",
+                "luaChon": [
+                  "GRANT SELECT on the two report tables",
+                  "GRANT EXECUTE on the app's stored procedures only",
+                  "GRANT SELECT, INSERT, UPDATE on its tables, no DELETE",
+                  "db_owner on its own development database",
+                  "GRANT BACKUP DATABASE (no table access)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tk": "A revenue dashboard that only reads orders and customers"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tk": "A web app that only calls stored procedures"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tk": "A web app with soft delete (it never deletes rows)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tk": "A nightly backup job"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tk": "A developer on a local copy with fake data"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "GRANT SELECT on the two report tables",
+              "r2.q": "GRANT EXECUTE on the app's stored procedures only",
+              "r3.q": "GRANT SELECT, INSERT, UPDATE on its tables, no DELETE",
+              "r4.q": "GRANT BACKUP DATABASE (no table access)",
+              "r5.q": "db_owner on its own development database"
+            },
+            "giaiThich": "<p>EXECUTE on a procedure works through ownership chaining: the app needs no rights on the tables the procedure touches. Never let an application log in as sa / postgres.</p><p><i>VI: EXECUTE trên procedure chạy nhờ ownership chaining: app không cần quyền trên các bảng mà procedure chạm tới. Không bao giờ để ứng dụng đăng nhập bằng sa / postgres.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the app db_owner \"because it is easier\".|||Cho app db_owner \"cho dễ\"."
+        },
+        {
+          "loi": "Granting table access to an app that only uses procedures.|||Cấp quyền bảng cho app chỉ dùng procedure."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ownership chaining",
+          "vi": "xâu chuỗi quyền sở hữu"
+        },
+        {
+          "en": "principle of least privilege",
+          "vi": "nguyên tắc quyền tối thiểu"
+        }
+      ]
+    },
+    {
+      "title": "From login to permission: set up an account in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "login",
+        "user",
+        "role",
+        "GRANT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "security",
+        "permissions"
+      ],
+      "problemHtml": "<p>Slides 9–11. Order the steps that give a new analyst read access to the report tables on SQL Server.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9–11. Sắp các bước cho một chuyên viên mới quyền đọc các bảng báo cáo trên SQL Server.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Server first, then database, then permissions.|||Máy chủ trước, rồi CSDL, rồi quyền.",
+        "The role can exist before anyone is in it.|||Role có thể tồn tại trước khi có ai trong nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# From login to permission: set up an account in order\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# From login to permission: set up an account in order — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m6) CREATE LOGIN analyst WITH PASSWORD = … (server level)  →  m2) USE ShopDB; CREATE USER analyst FOR LOGIN analyst  →  m1) CREATE ROLE rBaoCao  →  m5) GRANT SELECT ON dbo.DonHang TO rBaoCao  →  m4) ALTER ROLE rBaoCao ADD MEMBER analyst  →  m3) EXECUTE AS USER = 'analyst' to test, then REVERT\n   Login = who can connect to the server; user = who they are inside one database; role = a reusable bundle of permissions. Test as the user before handing over the password.VI: Login = ai được kết nối tới máy chủ; user = họ là ai trong một CSDL; role = gói quyền dùng lại được. Thử bằng chính user trước khi giao mật khẩu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Login = who can connect to the server; user = who they are inside one database; role = a reusable bundle of permissions. Test as the user before handing over the password.</p><p><i>VI: Login = ai được kết nối tới máy chủ; user = họ là ai trong một CSDL; role = gói quyền dùng lại được. Thử bằng chính user trước khi giao mật khẩu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "CREATE ROLE rBaoCao"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "USE ShopDB; CREATE USER analyst FOR LOGIN analyst"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "EXECUTE AS USER = 'analyst' to test, then REVERT"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ALTER ROLE rBaoCao ADD MEMBER analyst"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "GRANT SELECT ON dbo.DonHang TO rBaoCao"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "CREATE LOGIN analyst WITH PASSWORD = … (server level)"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m2",
+              "m1",
+              "m5",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Login = who can connect to the server; user = who they are inside one database; role = a reusable bundle of permissions. Test as the user before handing over the password.</p><p><i>VI: Login = ai được kết nối tới máy chủ; user = họ là ai trong một CSDL; role = gói quyền dùng lại được. Thử bằng chính user trước khi giao mật khẩu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CREATE USER before the login exists.|||CREATE USER trước khi có login."
+        },
+        {
+          "loi": "Skipping the test and discovering error 229 in production.|||Bỏ bước thử và gặp lỗi 229 trên production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "login",
+          "vi": "tài khoản đăng nhập máy chủ"
+        },
+        {
+          "en": "database user",
+          "vi": "người dùng CSDL"
+        }
+      ]
+    }
+  ]
+}

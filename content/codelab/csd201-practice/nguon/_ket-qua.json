@@ -1,0 +1,219 @@
+{
+ "csd201-0-3-array-max-ops": {
+  "bam": "a3691948488ea810",
+  "ra": [
+   "1 2 3 4 5 6 7 8 -> max/comparisons/assignments = 8/7/8\n8 7 6 5 4 3 2 1 -> max/comparisons/assignments = 8/7/1\n3 9 2 9 5 1 7 4 -> max/comparisons/assignments = 9/7/2\n",
+   "42 -> max/comparisons/assignments = 42/0/1\n-5 -2 -9 -> max/comparisons/assignments = -2/2/2\n4 4 4 4 -> max/comparisons/assignments = 4/3/1\n",
+   "10 20 30 -> max/comparisons/assignments = 30/2/3\n10 20 30 -> max/comparisons/assignments = 30/2/3\n-1 -1 0 -1 -> max/comparisons/assignments = 0/3/2\n100 1 2 3 101 -> max/comparisons/assignments = 101/4/2\n"
+  ]
+ },
+ "csd201-0-3-binary-search-probes": {
+  "bam": "e08cec3e917117fe",
+  "ra": [
+   "array of 8 even numbers 0..14\nfind 0 -> 0 (3 probes)\nfind 6 -> 3 (1 probes)\nfind 14 -> 7 (4 probes)\nfind 7 -> -1 (3 probes)\nfind -1 -> -1 (3 probes)\nfind 16 -> -1 (4 probes)\n",
+   "array of 1024 even numbers 0..2046\nfind 2048 -> -1 (11 probes)\nfind 0 -> 0 (10 probes)\nfind 1022 -> 511 (1 probes)\nfind 2046 -> 1023 (11 probes)\nfind 1023 -> -1 (10 probes)\narray of 1 even numbers 0..0\nfind 0 -> 0 (1 probes)\nfind 5 -> -1 (1 probes)\narray of 0 even numbers 0..-2\nfind 3 -> -1 (0 probes)\n",
+   "array of 1000000 even numbers 0..1999998\nfind 2000000 -> -1 (20 probes)\nfind 0 -> 0 (19 probes)\nfind 1999998 -> 999999 (20 probes)\nfind 999999 -> -1 (19 probes)\nfind 777776 -> 388888 (19 probes)\narray of 7 even numbers 0..12\nfind 12 -> 6 (3 probes)\nfind 13 -> -1 (3 probes)\nfind 0 -> 0 (3 probes)\n",
+   "2,000,000 searches, n = 2,000,000: OK\nfound 999902\n"
+  ]
+ },
+ "csd201-0-3-loop-count-formula": {
+  "bam": "fe7544ba8d95f8cd",
+  "ra": [
+   "f1 n=8 count=8 O(n)\nf2 n=8 count=64 O(n^2)\nf3 n=8 count=28 O(n^2)\nf4 n=8 count=3 O(log n)\nf5 n=8 count=24 O(n log n)\nf6 n=8 count=100 O(1)\nf7 n=8 count=4 O(n)\nf4 n=16 count=4 O(log n)\nf5 n=32 count=160 O(n log n)\nf3 n=32 count=496 O(n^2)\n",
+   "f4 n=5 count=3 O(log n)\nf4 n=1 count=0 O(log n)\nf4 n=2 count=1 O(log n)\nf5 n=5 count=15 O(n log n)\nf7 n=7 count=4 O(n)\nf3 n=1 count=0 O(n^2)\nf2 n=1 count=1 O(n^2)\nf6 n=1 count=100 O(1)\n",
+   "f2 n=3000000000 count=9000000000000000000 O(n^2)\nf3 n=3000000000 count=4499999998500000000 O(n^2)\nf4 n=3000000000 count=32 O(log n)\nf5 n=2147483648 count=66571993088 O(n log n)\nf7 n=2999999999 count=1500000000 O(n)\nf1 n=3000000000 count=3000000000 O(n)\n",
+   "7 fragments x 2000 values of n up to 3e9: OK\nchecksum 1016067225467814263\n"
+  ]
+ },
+ "csd201-0-5-car-shop": {
+  "bam": "b1443f6da51244e9",
+  "ra": [
+   "F1 -> null\nF1 -> (Lan,40) (same object as slot 2)\nF2 12 33 -> 4\nF2 41 99 -> 0\nF3 -> (An,7) (Nam,12) (Minh,18) (Hoa,25) (Tuan,33) (Lan,40) (Binh,40)\nF4 33 -> a car with price 33\nF4 7 -> a car with price 7\nF4 26 -> -1\n",
+   "F1 -> (A,5) (same object as slot 0)\nF3 -> (B,3) (D,3) (A,5) (C,5) (E,5)\nF4 5 -> a car with price 5\nF2 3 3 -> 2\n",
+   "F1 -> (Solo,10) (same object as slot 0)\nF3 -> (Solo,10)\nF4 10 -> a car with price 10\nF4 9 -> -1\nF4 11 -> -1\nF2 10 10 -> 1\n"
+  ]
+ },
+ "csd201-0-5-duplicates": {
+  "bam": "15deeb0cfdf74b82",
+  "ra": [
+   "5 1 3 1 5 -> 1\n1 2 3 2 -> 2\n5 4 3 -> null\n7 -> null\n- -> null\n",
+   "1000 2000 1000 -> 1000\n-1 -2 -3 -2 -1 -> -2\n0 0 -> 0\n2147483647 -2147483648 2147483647 -> 2147483647\n",
+   "n = 1,000,000 without duplicate, then with one at the end: OK\nresults null 488123\n"
+  ]
+ },
+ "csd201-0-5-flex-array": {
+  "bam": "9e7203d32c6ad4a3",
+  "ra": [
+   "capacity 1, size 0, copies 0\nADD 1 -> capacity 1, size 1, copies 0\nADD 1 -> capacity 2, size 2, copies 1\nADD 1 -> capacity 4, size 3, copies 3\nADD 5 -> capacity 8, size 8, copies 7\nGET 0 -> 0\nGET 7 -> 21\nGET 8 -> IndexOutOfBoundsException: index 8, size 8\nGET -1 -> IndexOutOfBoundsException: index -1, size 8\nADD 992 -> capacity 1024, size 1000, copies 1023\nGET 999 -> 2997\n",
+   "ADD 16 -> capacity 16, size 16, copies 15\ncapacity 16, size 16, copies 15\nADD 1 -> capacity 32, size 17, copies 31\nGET 16 -> 48\nGET 17 -> IndexOutOfBoundsException: index 17, size 17\nADD 1007 -> capacity 1024, size 1024, copies 1023\ncapacity 1024, size 1024, copies 1023\n",
+   "2,000,000 appends: OK\ncapacity 2097152, size 2000000, copies 2097151, last 1999999\n"
+  ]
+ },
+ "csd201-0-5-prefix-sums": {
+  "bam": "3b67b661ffdb6797",
+  "ra": [
+   "sum(2..5) = 19\nsum(0..7) = 31\nsum(0..0) = 3\nsum(7..7) = 6\nsum(3..4) = 6\n",
+   "sum(0..2) = 3000000000\nsum(0..4) = 1999999995\nsum(3..4) = -1000000005\nsum(1..3) = 1999999995\n",
+   "n = 200,000, 200,000 queries: OK\nchecksum -1252415566729249689\n"
+  ]
+ },
+ "csd201-1-1-array-list-shift": {
+  "bam": "7bf425e057e19737",
+  "ra": [
+   "INS 0 10 -> ok | size 1 [10, 0]\nINS 1 30 -> ok | size 2 [10, 30]\nINS 1 20 -> ok | size 3 [10, 20, 30, 0]\nINS 0 5 -> ok | size 4 [5, 10, 20, 30]\nINS 4 40 -> ok | size 5 [5, 10, 20, 30, 40, 0, 0, 0]\nDEL 0 -> 5 | size 4 [10, 20, 30, 40, 0, 0, 0, 0]\nDEL 3 -> 40 | size 3 [10, 20, 30, 0, 0, 0, 0, 0]\nDEL 1 -> 20 | size 2 [10, 30, 0, 0, 0, 0, 0, 0]\nGET 1 -> 30 | size 2 [10, 30, 0, 0, 0, 0, 0, 0]\n",
+   "INS 1 7 -> THROWS IndexOutOfBoundsException: index 1, size 0 | size 0 [0, 0]\nINS 0 7 -> ok | size 1 [7, 0]\nINS 2 8 -> THROWS IndexOutOfBoundsException: index 2, size 1 | size 1 [7, 0]\nINS -1 9 -> THROWS IndexOutOfBoundsException: index -1, size 1 | size 1 [7, 0]\nDEL 1 -> THROWS IndexOutOfBoundsException: index 1, size 1 | size 1 [7, 0]\nDEL -1 -> THROWS IndexOutOfBoundsException: index -1, size 1 | size 1 [7, 0]\nGET 1 -> THROWS IndexOutOfBoundsException: index 1, size 1 | size 1 [7, 0]\nDEL 0 -> 7 | size 0 [0, 0]\nDEL 0 -> THROWS IndexOutOfBoundsException: index 0, size 0 | size 0 [0, 0]\n",
+   "INS 0 1 -> ok | size 1 [1, 0]\nINS 1 2 -> ok | size 2 [1, 2]\nINS 1 3 -> ok | size 3 [1, 3, 2, 0]\nINS 1 4 -> ok | size 4 [1, 4, 3, 2]\nINS 2 5 -> ok | size 5 [1, 4, 5, 3, 2, 0, 0, 0]\nINS 0 6 -> ok | size 6 [6, 1, 4, 5, 3, 2, 0, 0]\nDEL 5 -> 2 | size 5 [6, 1, 4, 5, 3, 0, 0, 0]\nDEL 2 -> 4 | size 4 [6, 1, 5, 3, 0, 0, 0, 0]\nINS 4 9 -> ok | size 5 [6, 1, 5, 3, 9, 0, 0, 0]\n"
+  ]
+ },
+ "csd201-1-1-remove-all-one-pass": {
+  "bam": "b8289661d4460567",
+  "ra": [
+   "3 : 3 1 3 3 2 3 -> size 2 [1, 2, 0, 0, 0, 0]\n5 : 1 2 3 4 -> size 4 [1, 2, 3, 4]\n9 : 9 9 9 -> size 0 [0, 0, 0]\n0 : 0 -> size 0 [0]\n",
+   "-1 : -1 2 -1 2 -1 -> size 2 [2, 2, 0, 0, 0]\n2 : -1 2 -1 2 -1 -> size 3 [-1, -1, -1, 0, 0]\n4 : 4 1 4 1 4 1 4 -> size 3 [1, 1, 1, 0, 0, 0, 0]\n",
+   "PERF -> n = 400,000, remove 200,000 sevens: OK, new size 199999, a[0..2] = 1 3 5\n"
+  ]
+ },
+ "csd201-1-1-rotate-in-place": {
+  "bam": "ed1019fb9c3b804c",
+  "ra": [
+   "3 : 1 2 3 4 5 6 7 -> [5, 6, 7, 1, 2, 3, 4]\n0 : 1 2 3 -> [1, 2, 3]\n3 : 1 2 3 -> [1, 2, 3]\n10 : 1 2 3 4 -> [3, 4, 1, 2]\n",
+   "-1 : 1 2 3 4 5 -> [2, 3, 4, 5, 1]\n-7 : 1 2 3 -> [2, 3, 1]\n5 : 42 -> [42]\n4 : -> []\n",
+   "PERF -> n = 2,000,000, k = 999,999: OK, a[0] = 1000001, a[999999] = 0, a[1999999] = 1000000\n"
+  ]
+ },
+ "csd201-1-2-circular-list": {
+  "bam": "cad57e728117fa80",
+  "ra": [
+   "AL 1 -> ok | ring 1 (tail 1)\nAL 2 -> ok | ring 1 2 (tail 2)\nAF 0 -> ok | ring 0 1 2 (tail 2)\nAL 3 -> ok | ring 0 1 2 3 (tail 3)\nROT -> ok | ring 1 2 3 0 (tail 0)\nROT -> ok | ring 2 3 0 1 (tail 1)\nRF -> 2 | ring 3 0 1 (tail 1)\nRF -> 3 | ring 0 1 (tail 1)\n",
+   "RF -> THROWS IllegalStateException: empty list | (empty)\nROT -> ok | (empty)\nAF 9 -> ok | ring 9 (tail 9)\nROT -> ok | ring 9 (tail 9)\nRF -> 9 | (empty)\nAL 4 -> ok | ring 4 (tail 4)\nAL 5 -> ok | ring 4 5 (tail 5)\nRF -> 4 | ring 5 (tail 5)\nRF -> 5 | (empty)\nRF -> THROWS IllegalStateException: empty list | (empty)\n",
+   "AL 1 -> ok | ring 1 (tail 1)\nAL 2 -> ok | ring 1 2 (tail 2)\nAL 3 -> ok | ring 1 2 3 (tail 3)\nAL 4 -> ok | ring 1 2 3 4 (tail 4)\nAL 5 -> ok | ring 1 2 3 4 5 (tail 5)\nROT -> ok | ring 2 3 4 5 1 (tail 1)\nROT -> ok | ring 3 4 5 1 2 (tail 2)\nROT -> ok | ring 4 5 1 2 3 (tail 3)\nROT -> ok | ring 5 1 2 3 4 (tail 4)\nROT -> ok | ring 1 2 3 4 5 (tail 5)\nRF -> 1 | ring 2 3 4 5 (tail 5)\nROT -> ok | ring 3 4 5 2 (tail 2)\nRF -> 3 | ring 4 5 2 (tail 2)\nAF 6 -> ok | ring 6 4 5 2 (tail 2)\nROT -> ok | ring 4 5 2 6 (tail 6)\n"
+  ]
+ },
+ "csd201-1-2-doubly-list": {
+  "bam": "680a4ea454f47a15",
+  "ra": [
+   "AL 2 -> ok | links OK | fwd 2 | back 2\nAF 1 -> ok | links OK | fwd 1 2 | back 2 1\nAL 3 -> ok | links OK | fwd 1 2 3 | back 3 2 1\nAF 0 -> ok | links OK | fwd 0 1 2 3 | back 3 2 1 0\nRL -> 3 | links OK | fwd 0 1 2 | back 2 1 0\nRF -> 0 | links OK | fwd 1 2 | back 2 1\nRL -> 2 | links OK | fwd 1 | back 1\nRL -> 1 | links OK (empty) | fwd (empty) | back (empty)\n",
+   "RL -> THROWS IllegalStateException: empty list | links OK (empty) | fwd (empty) | back (empty)\nRF -> THROWS IllegalStateException: empty list | links OK (empty) | fwd (empty) | back (empty)\nAF 5 -> ok | links OK | fwd 5 | back 5\nRL -> 5 | links OK (empty) | fwd (empty) | back (empty)\nAL 6 -> ok | links OK | fwd 6 | back 6\nRF -> 6 | links OK (empty) | fwd (empty) | back (empty)\nAL 7 -> ok | links OK | fwd 7 | back 7\nAL 8 -> ok | links OK | fwd 7 8 | back 8 7\nRF -> 7 | links OK | fwd 8 | back 8\nRL -> 8 | links OK (empty) | fwd (empty) | back (empty)\nRL -> THROWS IllegalStateException: empty list | links OK (empty) | fwd (empty) | back (empty)\n",
+   "AL 1 -> ok | links OK | fwd 1 | back 1\nAL 2 -> ok | links OK | fwd 1 2 | back 2 1\nAL 3 -> ok | links OK | fwd 1 2 3 | back 3 2 1\nAL 4 -> ok | links OK | fwd 1 2 3 4 | back 4 3 2 1\nAF 0 -> ok | links OK | fwd 0 1 2 3 4 | back 4 3 2 1 0\nRL -> 4 | links OK | fwd 0 1 2 3 | back 3 2 1 0\nRL -> 3 | links OK | fwd 0 1 2 | back 2 1 0\nAF -1 -> ok | links OK | fwd -1 0 1 2 | back 2 1 0 -1\nRF -> -1 | links OK | fwd 0 1 2 | back 2 1 0\nRF -> 0 | links OK | fwd 1 2 | back 2 1\nAL 9 -> ok | links OK | fwd 1 2 9 | back 9 2 1\nRL -> 9 | links OK | fwd 1 2 | back 2 1\nRL -> 2 | links OK | fwd 1 | back 1\nRL -> 1 | links OK (empty) | fwd (empty) | back (empty)\nAF 5 -> ok | links OK | fwd 5 | back 5\n"
+  ]
+ },
+ "csd201-1-2-insert-delete-at": {
+  "bam": "9e3f32203802a3d7",
+  "ra": [
+   "AL 10 -> ok | [10] tail ok size=1\nAL 20 -> ok | [10 20] tail ok size=2\nAL 30 -> ok | [10 20 30] tail ok size=3\nINS 1 15 -> true | [10 15 20 30] tail ok size=4\nINS 0 5 -> true | [5 10 15 20 30] tail ok size=5\nINS 5 40 -> true | [5 10 15 20 30 40] tail ok size=6\nDEL 5 -> true | [5 10 15 20 30] tail ok size=5\nDEL 0 -> true | [10 15 20 30] tail ok size=4\nDEL 1 -> true | [10 20 30] tail ok size=3\nINS 3 99 -> true | [10 20 30 99] tail ok size=4\n",
+   "DEL 0 -> false | [(empty)] tail ok size=0\nINS 1 7 -> false | [(empty)] tail ok size=0\nINS -1 7 -> false | [(empty)] tail ok size=0\nINS 0 7 -> true | [7] tail ok size=1\nDEL 1 -> false | [7] tail ok size=1\nDEL 0 -> true | [(empty)] tail ok size=0\nINS 0 8 -> true | [8] tail ok size=1\nINS 1 9 -> true | [8 9] tail ok size=2\nDEL 1 -> true | [8] tail ok size=1\nDEL -2 -> false | [8] tail ok size=1\n",
+   "AL 1 -> ok | [1] tail ok size=1\nAL 2 -> ok | [1 2] tail ok size=2\nAL 3 -> ok | [1 2 3] tail ok size=3\nDEL 2 -> true | [1 2] tail ok size=2\nDEL 1 -> true | [1] tail ok size=1\nINS 1 4 -> true | [1 4] tail ok size=2\nINS 2 5 -> true | [1 4 5] tail ok size=3\nDEL 2 -> true | [1 4] tail ok size=2\nDEL 0 -> true | [4] tail ok size=1\nDEL 0 -> true | [(empty)] tail ok size=0\nINS 0 6 -> true | [6] tail ok size=1\n"
+  ]
+ },
+ "csd201-1-2-sll-basics": {
+  "bam": "d59824f9e70ca597",
+  "ra": [
+   "AL 2 -> ok | [2] tail ok size=1\nAF 1 -> ok | [1 2] tail ok size=2\nAL 3 -> ok | [1 2 3] tail ok size=3\nAL 4 -> ok | [1 2 3 4] tail ok size=4\nRL -> 4 | [1 2 3] tail ok size=3\nRF -> 1 | [2 3] tail ok size=2\nAF 0 -> ok | [0 2 3] tail ok size=3\nRL -> 3 | [0 2] tail ok size=2\nRL -> 2 | [0] tail ok size=1\nRL -> 0 | [(empty)] tail ok size=0\n",
+   "RF -> THROWS IllegalStateException: empty list | [(empty)] tail ok size=0\nRL -> THROWS IllegalStateException: empty list | [(empty)] tail ok size=0\nAF 7 -> ok | [7] tail ok size=1\nRL -> 7 | [(empty)] tail ok size=0\nAL 8 -> ok | [8] tail ok size=1\nRF -> 8 | [(empty)] tail ok size=0\nAL 9 -> ok | [9] tail ok size=1\nAL 10 -> ok | [9 10] tail ok size=2\nRF -> 9 | [10] tail ok size=1\nRF -> 10 | [(empty)] tail ok size=0\nAF 11 -> ok | [11] tail ok size=1\n",
+   "AF 5 -> ok | [5] tail ok size=1\nRL -> 5 | [(empty)] tail ok size=0\nAL 6 -> ok | [6] tail ok size=1\nAL 7 -> ok | [6 7] tail ok size=2\nRL -> 7 | [6] tail ok size=1\nAL 8 -> ok | [6 8] tail ok size=2\nRF -> 6 | [8] tail ok size=1\nRL -> 8 | [(empty)] tail ok size=0\nRL -> THROWS IllegalStateException: empty list | [(empty)] tail ok size=0\n",
+   "PERF -> 300,000 addLast: OK, nodes 300000, size 300000 | [(empty)] tail ok size=0\n"
+  ]
+ },
+ "csd201-1-3-browser-history": {
+  "bam": "caa90b81ad235ee8",
+  "ra": [
+   "VISIT google -> ok | fwd null home google null | back null google home null\nVISIT facebook -> ok | fwd null home google facebook null | back null facebook google home null\nVISIT youtube -> ok | fwd null home google facebook youtube null | back null youtube facebook google home null\nBACK 1 -> facebook | fwd null home google facebook youtube null | back null youtube facebook google home null\nBACK 1 -> google | fwd null home google facebook youtube null | back null youtube facebook google home null\nFWD 1 -> facebook | fwd null home google facebook youtube null | back null youtube facebook google home null\nVISIT linkedin -> ok | fwd null home google facebook linkedin null | back null linkedin facebook google home null\nFWD 2 -> linkedin | fwd null home google facebook linkedin null | back null linkedin facebook google home null\nBACK 2 -> google | fwd null home google facebook linkedin null | back null linkedin facebook google home null\nBACK 7 -> home | fwd null home google facebook linkedin null | back null linkedin facebook google home null\n",
+   "BACK 3 -> home | fwd null home null | back null home null\nFWD 3 -> home | fwd null home null | back null home null\nVISIT a -> ok | fwd null home a null | back null a home null\nVISIT b -> ok | fwd null home a b null | back null b a home null\nBACK 5 -> home | fwd null home a b null | back null b a home null\nFWD 1 -> a | fwd null home a b null | back null b a home null\nVISIT c -> ok | fwd null home a c null | back null c a home null\nFWD 9 -> c | fwd null home a c null | back null c a home null\nBACK 1 -> a | fwd null home a c null | back null c a home null\n"
+  ]
+ },
+ "csd201-1-3-sentinel-basics": {
+  "bam": "6fa4a75a7e4a0df3",
+  "ra": [
+   "FIRST -> null | fwd null null | back null null | size 0\nAL B -> ok | fwd null B null | back null B null | size 1\nAF A -> ok | fwd null A B null | back null B A null | size 2\nAL C -> ok | fwd null A B C null | back null C B A null | size 3\nFIRST -> A | fwd null A B C null | back null C B A null | size 3\nLAST -> C | fwd null A B C null | back null C B A null | size 3\nRF -> A | fwd null B C null | back null C B null | size 2\nRL -> C | fwd null B null | back null B null | size 1\nRL -> B | fwd null null | back null null | size 0\nRL -> null | fwd null null | back null null | size 0\nLAST -> null | fwd null null | back null null | size 0\n",
+   "AF x -> ok | fwd null x null | back null x null | size 1\nRL -> x | fwd null null | back null null | size 0\nAF y -> ok | fwd null y null | back null y null | size 1\nAL z -> ok | fwd null y z null | back null z y null | size 2\nRF -> y | fwd null z null | back null z null | size 1\nRF -> z | fwd null null | back null null | size 0\nRF -> null | fwd null null | back null null | size 0\nAL w -> ok | fwd null w null | back null w null | size 1\nFIRST -> w | fwd null w null | back null w null | size 1\nLAST -> w | fwd null w null | back null w null | size 1\n"
+  ]
+ },
+ "csd201-1-3-sentinel-sorted": {
+  "bam": "5d4f8212111577a7",
+  "ra": [
+   "INS Minh -> ok | [Minh] | objects Minh#1 | back null Minh null\nINS An -> ok | [An, Minh] | objects An#2 Minh#1 | back null Minh An null\nINS Tuan -> ok | [An, Minh, Tuan] | objects An#2 Minh#1 Tuan#3 | back null Tuan Minh An null\nINS Binh -> ok | [An, Binh, Minh, Tuan] | objects An#2 Binh#4 Minh#1 Tuan#3 | back null Tuan Minh Binh An null\nINS An -> ok | [An, An, Binh, Minh, Tuan] | objects An#2 An#5 Binh#4 Minh#1 Tuan#3 | back null Tuan Minh Binh An An null\nINS Zoe -> ok | [An, An, Binh, Minh, Tuan, Zoe] | objects An#2 An#5 Binh#4 Minh#1 Tuan#3 Zoe#6 | back null Zoe Tuan Minh Binh An An null\nINS An -> ok | [An, An, An, Binh, Minh, Tuan, Zoe] | objects An#2 An#5 An#7 Binh#4 Minh#1 Tuan#3 Zoe#6 | back null Zoe Tuan Minh Binh An An An null\nDEL An -> 3 | [Binh, Minh, Tuan, Zoe] | objects Binh#4 Minh#1 Tuan#3 Zoe#6 | back null Zoe Tuan Minh Binh null\nDEL Khanh -> 0 | [Binh, Minh, Tuan, Zoe] | objects Binh#4 Minh#1 Tuan#3 Zoe#6 | back null Zoe Tuan Minh Binh null\nDEL Zoe -> 1 | [Binh, Minh, Tuan] | objects Binh#4 Minh#1 Tuan#3 | back null Tuan Minh Binh null\n",
+   "DEL X -> 0 | [] | objects  | back null null\nINS B -> ok | [B] | objects B#1 | back null B null\nINS B -> ok | [B, B] | objects B#1 B#2 | back null B B null\nINS A -> ok | [A, B, B] | objects A#3 B#1 B#2 | back null B B A null\nDEL B -> 2 | [A] | objects A#3 | back null A null\nDEL A -> 1 | [] | objects  | back null null\nINS C -> ok | [C] | objects C#4 | back null C null\nINS C -> ok | [C, C] | objects C#4 C#5 | back null C C null\nINS C -> ok | [C, C, C] | objects C#4 C#5 C#6 | back null C C C null\nDEL C -> 3 | [] | objects  | back null null\n"
+  ]
+ },
+ "csd201-1-4-iterator-remove": {
+  "bam": "baa6caef6d1cb059",
+  "ra": [
+   "ARRAY 2 : 1 2 4 5 6 7 -> removed 3 [1, 5, 7]\nLINKED 2 : 1 2 4 5 6 7 -> removed 3 [1, 5, 7]\nLINKED 3 : 3 6 9 -> removed 3 []\nARRAY 5 : 1 2 3 -> removed 0 [1, 2, 3]\n",
+   "LINKED 2 : -> removed 0 []\nARRAY 4 : -8 -3 0 4 7 -> removed 3 [-3, 7]\nLINKED 7 : 7 14 1 21 2 -> removed 3 [1, 2]\n",
+   "PERF -> LinkedList of 300,000, remove the even ones: OK, removed 150000, left 150000, first 1\n"
+  ]
+ },
+ "csd201-1-4-merge-iterators": {
+  "bam": "86f202f1f5e24896",
+  "ra": [
+   "ARRAY 1 4 9 | 2 3 10 11 -> [1, 2, 3, 4, 9, 10, 11] (a [1, 4, 9], b [2, 3, 10, 11])\nLINKED 1 4 9 | 2 3 10 11 -> [1, 2, 3, 4, 9, 10, 11] (a [1, 4, 9], b [2, 3, 10, 11])\nLINKED | 5 6 -> [5, 6] (a [], b [5, 6])\nARRAY 7 | -> [7] (a [7], b [])\n",
+   "LINKED -5 0 0 7 | -5 0 8 -> [-5, -5, 0, 0, 0, 7, 8] (a [-5, 0, 0, 7], b [-5, 0, 8])\nARRAY 1 2 3 | 100 200 -> [1, 2, 3, 100, 200] (a [1, 2, 3], b [100, 200])\nLINKED 1000 1000 | 1000 -> [1000, 1000, 1000] (a [1000, 1000], b [1000])\n",
+   "PERF -> merge 2 x 200,000 (LinkedList): OK, size 400000\n"
+  ]
+ },
+ "csd201-1-4-ticket-queue": {
+  "bam": "3d262f08f488db6b",
+  "ra": [
+   "A -> 1 | waiting 1 [1]\nA -> 2 | waiting 2 [1, 2]\nA -> 3 | waiting 3 [1, 2, 3]\nS -> 1 | waiting 2 [2, 3]\nA -> 4 | waiting 3 [2, 3, 4]\nS -> 2 | waiting 2 [3, 4]\nS -> 3 | waiting 1 [4]\nS -> 4 | waiting 0 []\nS -> -1 | waiting 0 []\nA -> 5 | waiting 1 [5]\n",
+   "PERF -> 400,000 arrivals, 400,000 services: OK, sum of served tickets 80000200000 | waiting 0 []\n"
+  ]
+ },
+ "csd201-1-5-floyd-cycle": {
+  "bam": "376468ed439c4053",
+  "ra": [
+   "5 -1 -> null\n5 0 -> node 0\n6 2 -> node 2\n6 5 -> node 5\n",
+   "0 -1 -> null\n1 -1 -> null\n1 0 -> node 0\n2 1 -> node 1\n2 0 -> node 0\n",
+   "1000 999 -> node 999\n1000 1 -> node 1\n997 500 -> node 500\n",
+   "PERF -> 3,000,000 nodes, entry at node 2,000,000: OK, entry 2000000\n"
+  ]
+ },
+ "csd201-1-5-merge-relink": {
+  "bam": "eb3dd7e1ee8c6642",
+  "ra": [
+   "M 1 4 9 | 2 3 10 11 -> 1 2 3 4 9 10 11 (same node objects)\nM | 5 6 -> 5 6 (same node objects)\nM 7 8 | -> 7 8 (same node objects)\nM | -> (empty) (same node objects)\n",
+   "M 1 1 2 | 1 2 2 -> 1 1 1 2 2 2 (same node objects)\nM 5 6 | 1 2 -> 1 2 5 6 (same node objects)\nM 0 | 0 -> 0 0 (same node objects)\n",
+   "PERF -> merge 2 x 1,000,000 nodes: OK, nodes 2000000\n"
+  ]
+ },
+ "csd201-1-5-reverse-in-place": {
+  "bam": "8cf21b069b57d533",
+  "ra": [
+   "R 1 2 3 4 5 -> 5 4 3 2 1 (same node objects)\nR 10 20 -> 20 10 (same node objects)\nR 7 -> 7 (same node objects)\nR -> (empty) (same node objects)\n",
+   "R 3 3 1 3 -> 3 1 3 3 (same node objects)\nR -1 0 -1 -> -1 0 -1 (same node objects)\n",
+   "PERF -> reverse 1,000,000 nodes: OK, head 999999, nodes 1000000\n"
+  ]
+ },
+ "csd201-1-6-josephus": {
+  "bam": "46fa273207e8d5d0",
+  "ra": [
+   "7 3 -> 3 6 2 7 5 1 | survivor 4\n5 2 -> 2 4 1 5 | survivor 3\n4 1 -> 1 2 3 | survivor 4\n1 3 -> | survivor 1\n",
+   "3 5 -> 2 3 | survivor 1\n2 2 -> 2 | survivor 1\n2 1 -> 1 | survivor 2\n10 10 -> 10 1 3 6 2 9 5 7 4 | survivor 8\n",
+   "PERF -> n = 300,000, k = 3: OK, | survivor 200089\n"
+  ]
+ },
+ "csd201-1-6-palindrome-list": {
+  "bam": "8387b0b5547ca95b",
+  "ra": [
+   "P 1 2 3 2 1 -> true (list restored)\nP 4 4 -> true (list restored)\nP 1 2 2 1 -> true (list restored)\nP 1 2 3 1 -> false (list restored)\nP -> true (list restored)\nP 7 -> true (list restored)\n",
+   "P 1 2 -> false (list restored)\nP 1 2 3 3 1 -> false (list restored)\nP 5 1 1 1 5 5 -> false (list restored)\nP 9 8 7 7 8 9 -> true (list restored)\n",
+   "PERF -> 2,000,001 nodes: OK, true, list restored\n"
+  ]
+ },
+ "csd201-1-6-pe-mylist-car": {
+  "bam": "a925a01b22acaf99",
+  "ra": [
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  (A,9) (C,6) (D,2) (E,7) (F,4) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (C,9) (D,6) (E,8) (F,5) (I,4) \n  (C,9) (D,6) (X,1) (E,8) (F,5) (I,4) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (C,8) (D,3) (E,9) (F,5) (G,9) (H,6) (I,7) \n  (C,8) (D,3) (F,5) (G,9) (H,6) (I,7) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (C,1) (D,10) (E,2) (F,5) (I,2) (J,11) (K,7) \n  (C,1) (E,2) (I,2) (F,5) (K,7) (D,10) (J,11) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  (A,2) (C,4) (D,5) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (P,3) (Q,4) \n  (P,3) (Q,4) (X,1) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (M,9) (N,1) (O,2) (P,3) \n  (N,1) (O,2) (P,3) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (Z,9) (Y,7) (W,5) (V,3) (U,1) \n  (U,1) (V,3) (W,5) (Y,7) (Z,9) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f1.txt:\n  \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f2.txt:\n  (R,6) \n  (R,6) (X,1) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (S,2) (T,4) (U,6) (V,8) \n  (S,2) (T,4) (U,6) \n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (A,5) (C,5) (D,1) (E,5) (F,1) (G,5) \n  (D,1) (F,1) (A,5) (C,5) (E,5) (G,5) \n\n"
+  ]
+ }
+}

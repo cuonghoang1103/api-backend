@@ -1,0 +1,61 @@
+{
+  "groupSlug": "fptu",
+  "slug": "csd201-practice",
+  "name": "CSD201 — Luyện tập Cấu trúc dữ liệu & Giải thuật bằng Java (chạy & tự chấm trên máy)",
+  "language": "java",
+  "color": "#2f6f9f",
+  "docsUrl": "https://docs.oracle.com/javase/8/docs/api/",
+  "status": "PUBLISHED",
+  "level": "INTERMEDIATE",
+  "description": "Bộ luyện môn CSD201 (Data Structures and Algorithms, Java) theo từng bài học: độ phức tạp, mảng động, danh sách liên kết đơn/vòng/kép, ngăn xếp, hàng đợi, hàng đợi ưu tiên, đệ quy, cây nhị phân, BST, AVL, heap, đồ thị (BFS, DFS, Dijkstra, cây khung nhỏ nhất, Euler), sắp xếp, băm, xử lý văn bản (KMP, Huffman, LZW, RLE), ⭐ thuật toán phỏng vấn và đề PE đúng khuôn trường (MyList/BSTree/Graph đọc data.txt, ghi f1.txt…). Website KHÔNG chấm: mỗi đề tải về một thư mục (code khởi đầu + máy chấm cham.mjs + ca mẫu), bạn làm trên máy với JDK của mình rồi chạy \"node cham.mjs\" — nó biên dịch bằng javac --release 8, chạy nhiều ca (có ca ẩn), so output từng dòng có diff, đi theo đúng các liên kết head/next/prev/left/right của cấu trúc bạn dựng (reflection), đo độ phức tạp trên input lớn có hạn giờ rồi cho điểm; đạt hết thì bấm \"Tự đánh dấu đã giải\".",
+  "modules": [
+    {
+      "slug": "csd201-big-o",
+      "name": "0.3 Big-O: the language of efficiency",
+      "level": "BEGINNER",
+      "description": "Luyện: arrayMax: count the primitive operations · Count without counting: closed forms for seven loops · Linear vs binary search: count the probes, then search a million times"
+    },
+    {
+      "slug": "csd201-on-ch0",
+      "name": "0.5 🧪 Practice — complexity in code: prefix sums, duplicates, doubling, a PE-style CarList",
+      "level": "BEGINNER",
+      "description": "Luyện: Prefix sums: answer 200,000 range-sum queries · Find a duplicate in O(n): from all pairs to a HashSet · A flexible array that doubles: amortized O(1) append · CarList f1–f4 on an array: max, range count, stable sort, binary search"
+    },
+    {
+      "slug": "csd201-mang",
+      "name": "1.1 Arrays & dynamic arrays",
+      "level": "BEGINNER",
+      "description": "Luyện: MyArrayList: insert and remove at an index by shifting · Remove every occurrence in one pass (two indexes) · Rotate an array by k in place: three reversals"
+    },
+    {
+      "slug": "csd201-linked-list",
+      "name": "1.2 Singly, circular & doubly linked lists",
+      "level": "BEGINNER",
+      "description": "Luyện: Singly linked list: addFirst, addLast in O(1), removeFirst, removeLast · insertAt(k, x) and deleteAt(k) on a singly linked list · A circular list with only a tail: add, remove, rotate in O(1) · Doubly linked list: O(1) at both ends, links checked both ways"
+    },
+    {
+      "slug": "csd201-doubly-sentinel",
+      "name": "1.3 Doubly linked lists with sentinels",
+      "level": "BEGINNER",
+      "description": "Luyện: Header and trailer sentinels: every operation through addBetween and remove · A sorted doubly linked list with sentinels: insertSorted and removeAll · Browser history on a doubly linked list: visit, back, forward"
+    },
+    {
+      "slug": "csd201-java-list-api",
+      "name": "1.4 Java in practice: ArrayList vs LinkedList",
+      "level": "BEGINNER",
+      "description": "Luyện: Remove while iterating: Iterator.remove on any List · Merge two sorted Lists with iterators, whatever their class · Pick the right structure: a ticket queue of 400,000 customers"
+    },
+    {
+      "slug": "csd201-luyen-tap-list",
+      "name": "1.5 Three classic list problems: reverse, cycle, merge",
+      "level": "BEGINNER",
+      "description": "Luyện: Reverse a singly linked list in place — the same nodes, no recursion · Floyd’s tortoise and hare: find where the cycle starts, in O(1) memory · Merge two sorted linked lists by relinking — not one new node"
+    },
+    {
+      "slug": "csd201-on-ch1",
+      "name": "1.6 🧪 Practice — Josephus, palindrome list and a 🎯 PE-format MyList paper",
+      "level": "BEGINNER",
+      "description": "Luyện: The Josephus circle on a circular linked list · Is the linked list a palindrome? O(n) time, O(1) memory, list restored · 🎯 PE format — MyList of Cars: f1 addLast with a condition, f2 insert as 3rd, f3 delete the first max, f4 stable sort"
+    }
+  ]
+}

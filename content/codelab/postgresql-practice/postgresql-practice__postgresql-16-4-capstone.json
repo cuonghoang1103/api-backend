@@ -1,0 +1,625 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-16-4-capstone",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-16-4-capstone"
+  },
+  "exercises": [
+    {
+      "title": "The order of an investigation",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "capture state first",
+        "right now before over time",
+        "restart last"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "incident"
+      ],
+      "problemHtml": "<p>The pager goes off: \"the site is slow\". Put the steps in the order the lesson recommends.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Máy nhắn kêu: \"web chậm\". Sắp các bước theo thứ tự bài học khuyên.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Evidence first, theories later.|||Bằng chứng trước, giả thuyết sau.",
+        "Most incidents end at \"right now\".|||Phần lớn sự cố kết thúc ở bước \"ngay lúc này\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The order of an investigation\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp thứ tự các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The order of an investigation — answer key\n\n1. Order the stepsSắp thứ tự các bước\n   Answer: m4) capture state: pg_stat_activity, top of pg_stat_statements, connections per app / chụp lại trạng thái: pg_stat_activity, đầu pg_stat_statements, kết nối theo app  →  m1) ask \"right now\": stuck transactions, lock waits, connection floods / hỏi \"ngay lúc này\": giao dịch kẹt, chờ khoá, ngập kết nối  →  m3) ask \"over time\": pg_stat_statements ORDER BY total_exec_time / hỏi \"theo thời gian\": pg_stat_statements ORDER BY total_exec_time  →  m5) only now EXPLAIN (ANALYZE, BUFFERS) the query you found / giờ mới EXPLAIN (ANALYZE, BUFFERS) truy vấn đã tìm ra  →  m2) restart — last, if at all / khởi động lại — sau cùng, nếu thật cần\n   Capturing takes a minute and is the only chance you get; a restart restores service and destroys the evidence, so the cause comes back with nothing left to diagnose.VI: Chụp trạng thái mất một phút và là cơ hội duy nhất; khởi động lại khôi phục dịch vụ nhưng xoá bằng chứng, nên nguyên nhân quay lại mà không còn gì để chẩn đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Capturing takes a minute and is the only chance you get; a restart restores service and destroys the evidence, so the cause comes back with nothing left to diagnose.</p><p><i>VI: Chụp trạng thái mất một phút và là cơ hội duy nhất; khởi động lại khôi phục dịch vụ nhưng xoá bằng chứng, nên nguyên nhân quay lại mà không còn gì để chẩn đoán.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "ask \"right now\": stuck transactions, lock waits, connection floods / hỏi \"ngay lúc này\": giao dịch kẹt, chờ khoá, ngập kết nối"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "restart — last, if at all / khởi động lại — sau cùng, nếu thật cần"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ask \"over time\": pg_stat_statements ORDER BY total_exec_time / hỏi \"theo thời gian\": pg_stat_statements ORDER BY total_exec_time"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "capture state: pg_stat_activity, top of pg_stat_statements, connections per app / chụp lại trạng thái: pg_stat_activity, đầu pg_stat_statements, kết nối theo app"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "only now EXPLAIN (ANALYZE, BUFFERS) the query you found / giờ mới EXPLAIN (ANALYZE, BUFFERS) truy vấn đã tìm ra"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m3",
+              "m5",
+              "m2"
+            ],
+            "giaiThich": "<p>Capturing takes a minute and is the only chance you get; a restart restores service and destroys the evidence, so the cause comes back with nothing left to diagnose.</p><p><i>VI: Chụp trạng thái mất một phút và là cơ hội duy nhất; khởi động lại khôi phục dịch vụ nhưng xoá bằng chứng, nên nguyên nhân quay lại mà không còn gì để chẩn đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening EXPLAIN first and optimising a query that was never the problem.|||Mở EXPLAIN trước và tối ưu một truy vấn chưa bao giờ là vấn đề."
+        },
+        {
+          "loi": "Restarting first.|||Khởi động lại trước tiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "incident",
+          "vi": "sự cố"
+        }
+      ]
+    },
+    {
+      "title": "Symptom → the first thing to run",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "symptom vs cause",
+        "pg_stat_activity",
+        "pg_stat_replication",
+        "code review for lost updates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "incident"
+      ],
+      "problemHtml": "<p>For each of the lesson's four cases, what do you look at first?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi ca trong bốn ca của bài, bạn nhìn gì trước?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask where the cause could be global while the symptom is local.|||Tự hỏi nguyên nhân có thể là toàn cục trong khi triệu chứng là cục bộ không.",
+        "Case 2 is not answered by any statistics view.|||Ca 2 không khung nhìn thống kê nào trả lời được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Symptom → the first thing to run\n\nAnswer in the answer panel (no code needed).\n\n1. Case → first moveCa → bước đầu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Symptom → the first thing to run — answer key\n\n1. Case → first moveCa → bước đầu\n   - r1.m: pg_stat_activity ordered by xact_start\n   - r2.m: read the code path that writes it\n   - r3.m: pg_stat_activity grouped by user and application\n   - r4.m: pg_stat_replication: bytes between sent_lsn and replay_lsn\n   Each symptom points away from its cause: an idle session slows a table (vacuum blocked), wrong data without errors is a read-modify-write, a new container breaks deploys, a \"bug\" is async replication working as configured.VI: Mỗi triệu chứng chỉ sai hướng nguyên nhân: một phiên ngồi yên làm chậm một bảng (vacuum bị chặn), dữ liệu sai không lỗi là đọc-rồi-ghi, một container mới làm hỏng deploy, một \"lỗi\" là nhân bản bất đồng bộ đang chạy đúng cấu hình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each symptom points away from its cause: an idle session slows a table (vacuum blocked), wrong data without errors is a read-modify-write, a new container breaks deploys, a \"bug\" is async replication working as configured.</p><p><i>VI: Mỗi triệu chứng chỉ sai hướng nguyên nhân: một phiên ngồi yên làm chậm một bảng (vacuum bị chặn), dữ liệu sai không lỗi là đọc-rồi-ghi, một container mới làm hỏng deploy, một \"lỗi\" là nhân bản bất đồng bộ đang chạy đúng cấu hình.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Case → first move</p><p style=\"opacity:.75;font-size:.92em\"><i>Ca → bước đầu</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Symptom / Triệu chứng"
+              },
+              {
+                "ma": "m",
+                "ten": "First move / Bước đầu",
+                "luaChon": [
+                  "pg_stat_activity ordered by xact_start",
+                  "read the code path that writes it",
+                  "pg_stat_activity grouped by user and application",
+                  "pg_stat_replication: bytes between sent_lsn and replay_lsn"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "Slow for an hour, nothing deployed, one table much worse / Chậm cả tiếng, không deploy gì, một bảng tệ hơn hẳn"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "Balances occasionally too low, no errors anywhere / Số dư thỉnh thoảng thấp hơn, không lỗi nào"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "Deploys fail with \"too many clients already\" / Deploy hỏng với \"too many clients already\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "A saved change is missing, then appears on refresh / Thay đổi vừa lưu biến mất, tải lại thì hiện ra"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "pg_stat_activity ordered by xact_start",
+              "r2.m": "read the code path that writes it",
+              "r3.m": "pg_stat_activity grouped by user and application",
+              "r4.m": "pg_stat_replication: bytes between sent_lsn and replay_lsn"
+            },
+            "giaiThich": "<p>Each symptom points away from its cause: an idle session slows a table (vacuum blocked), wrong data without errors is a read-modify-write, a new container breaks deploys, a \"bug\" is async replication working as configured.</p><p><i>VI: Mỗi triệu chứng chỉ sai hướng nguyên nhân: một phiên ngồi yên làm chậm một bảng (vacuum bị chặn), dữ liệu sai không lỗi là đọc-rồi-ghi, một container mới làm hỏng deploy, một \"lỗi\" là nhân bản bất đồng bộ đang chạy đúng cấu hình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "EXPLAINing the slow table's queries in case 1.|||EXPLAIN các truy vấn của bảng chậm ở ca 1."
+        },
+        {
+          "loi": "Raising max_connections in case 3.|||Tăng max_connections ở ca 3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "root cause",
+          "vi": "nguyên nhân gốc"
+        }
+      ]
+    },
+    {
+      "title": "Case 1: which session, and cancel or terminate?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "transaction age",
+        "pg_terminate_backend vs pg_cancel_backend",
+        "format()"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "incident",
+        "pg_stat_activity"
+      ],
+      "problemHtml": "<p>List the sessions whose transaction has been open for more than <b>10 minutes</b> at <code>snap.taken_at</code>: <code>pid, app, state, minutes, command</code> — minutes = whole minutes, command = <code>SELECT pg_terminate_backend(&lt;pid&gt;);</code> for sessions that are idle in a transaction (aborted or not), <code>SELECT pg_cancel_backend(&lt;pid&gt;);</code> for active ones. Oldest first.</p>\n<h4>Tables (snapshot at 15:00:00)</h4><pre>snap (taken_at)\nactivity (pid, application_name, state, xact_start, query)   -- 6 client sessions</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>format('SELECT pg_terminate_backend(%s);', pid)</code>.</li>\n  <li><code>(extract(epoch FROM taken_at - xact_start) / 60)::int</code> rounds; use <code>floor()</code> for whole minutes.</li>\n</ul>",
+      "problemHtmlVi": "<p>Liệt kê các phiên có giao dịch mở quá <b>10 phút</b> tính tới <code>snap.taken_at</code>: <code>pid, app, state, minutes, command</code> — minutes = số phút nguyên, command = <code>SELECT pg_terminate_backend(&lt;pid&gt;);</code> cho phiên ngồi yên trong giao dịch (aborted hay không), <code>SELECT pg_cancel_backend(&lt;pid&gt;);</code> cho phiên đang active. Cũ nhất trước.</p>\n<h4>Bảng (ảnh chụp lúc 15:00:00)</h4><pre>snap (taken_at)\nactivity (pid, application_name, state, xact_start, query)   -- 6 phiên client</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>format('SELECT pg_terminate_backend(%s);', pid)</code>.</li>\n  <li><code>(extract(epoch FROM taken_at - xact_start) / 60)::int</code> làm tròn; dùng <code>floor()</code> để ra số phút nguyên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "pid  | app          | state                        | minutes | command                     \n-----+--------------+------------------------------+---------+-----------------------------\n4101 | admin-export | idle in transaction          | 197     | SELECT pg_terminate_backend…\n4188 | report       | active                       | 29      | SELECT pg_cancel_backend(41…\n4203 | web          | idle in transaction (aborte… | 11      | SELECT pg_terminate_backend…",
+          "explanation": "Expected result of check \"The 3-hour idle transaction, the report and the failed web transaction\" (row order matters).|||Kết quả mong đợi của kiểm \"Giao dịch ngồi yên 3 giờ, báo cáo và giao dịch web đã hỏng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Generate the commands, read them, then run them by hand — never pipe them blindly.|||Sinh lệnh, đọc lại, rồi chạy bằng tay — đừng bao giờ đẩy thẳng mù quáng.",
+        "After terminating, VACUUM the affected table and fix the code path that left the transaction open.|||Sau khi kết thúc phiên, VACUUM bảng bị ảnh hưởng và sửa đường mã đã để giao dịch mở."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "activity.sql",
+          "language": "sql",
+          "code": "-- activity.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- activity.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE snap (taken_at timestamptz NOT NULL);\nINSERT INTO snap VALUES ('2026-10-26 15:00:00+07');\nCREATE TABLE activity (pid int PRIMARY KEY, application_name text NOT NULL, state text, xact_start timestamptz, query text);\nINSERT INTO activity VALUES\n  (4101, 'admin-export', 'idle in transaction',           '2026-10-26 11:42:10+07', 'SELECT * FROM notes WHERE owner_id = 77'),\n  (4188, 'report',       'active',                        '2026-10-26 14:31:00+07', 'SELECT … FROM orders JOIN order_item …'),\n  (4203, 'web',          'idle in transaction (aborted)', '2026-10-26 14:48:30+07', 'UPDATE cart SET qty = qty + 1 …'),\n  (4250, 'web',          'active',                        '2026-10-26 14:59:58+07', 'SELECT id FROM product WHERE sku = $1'),\n  (4260, 'web',          'idle',                          NULL,                     'SELECT 1'),\n  (4301, 'worker',       'idle in transaction',           '2026-10-26 14:58:00+07', 'SELECT … FOR UPDATE');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT a.pid, a.application_name AS app, a.state,\n       floor(extract(epoch FROM s.taken_at - a.xact_start) / 60)::int AS minutes,\n       CASE WHEN a.state LIKE 'idle in transaction%'\n            THEN format('SELECT pg_terminate_backend(%s);', a.pid)   -- cancel does nothing to an idle session\n            ELSE format('SELECT pg_cancel_backend(%s);', a.pid)      -- a running query: cancel first\n       END AS command\nFROM activity a, snap s\nWHERE a.xact_start IS NOT NULL\n  AND s.taken_at - a.xact_start > interval '10 minutes'\nORDER BY a.xact_start;\n"
+        },
+        {
+          "name": "activity.sql",
+          "language": "sql",
+          "code": "-- activity.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- activity.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE snap (taken_at timestamptz NOT NULL);\nINSERT INTO snap VALUES ('2026-10-26 15:00:00+07');\nCREATE TABLE activity (pid int PRIMARY KEY, application_name text NOT NULL, state text, xact_start timestamptz, query text);\nINSERT INTO activity VALUES\n  (4101, 'admin-export', 'idle in transaction',           '2026-10-26 11:42:10+07', 'SELECT * FROM notes WHERE owner_id = 77'),\n  (4188, 'report',       'active',                        '2026-10-26 14:31:00+07', 'SELECT … FROM orders JOIN order_item …'),\n  (4203, 'web',          'idle in transaction (aborted)', '2026-10-26 14:48:30+07', 'UPDATE cart SET qty = qty + 1 …'),\n  (4250, 'web',          'active',                        '2026-10-26 14:59:58+07', 'SELECT id FROM product WHERE sku = $1'),\n  (4260, 'web',          'idle',                          NULL,                     'SELECT 1'),\n  (4301, 'worker',       'idle in transaction',           '2026-10-26 14:58:00+07', 'SELECT … FOR UPDATE');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>pid 4101 has held a snapshot for over 3 hours, so vacuum could not remove any newer row version anywhere — the slow table is a victim, not the cause. Cancel stops a running query; only terminate ends a session that is not running anything.</p>",
+      "solutionExplanationHtmlVi": "<p>pid 4101 giữ một snapshot hơn 3 giờ, nên vacuum không gỡ được phiên bản dòng mới hơn nào ở bất cứ đâu — bảng chậm là nạn nhân, không phải nguyên nhân. Cancel dừng một truy vấn đang chạy; chỉ terminate mới kết thúc được phiên không chạy gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE snap (taken_at timestamptz NOT NULL);\nINSERT INTO snap VALUES ('2026-10-26 15:00:00+07');\nCREATE TABLE activity (pid int PRIMARY KEY, application_name text NOT NULL, state text, xact_start timestamptz, query text);\nINSERT INTO activity VALUES\n  (4101, 'admin-export', 'idle in transaction',           '2026-10-26 11:42:10+07', 'SELECT * FROM notes WHERE owner_id = 77'),\n  (4188, 'report',       'active',                        '2026-10-26 14:31:00+07', 'SELECT … FROM orders JOIN order_item …'),\n  (4203, 'web',          'idle in transaction (aborted)', '2026-10-26 14:48:30+07', 'UPDATE cart SET qty = qty + 1 …'),\n  (4250, 'web',          'active',                        '2026-10-26 14:59:58+07', 'SELECT id FROM product WHERE sku = $1'),\n  (4260, 'web',          'idle',                          NULL,                     'SELECT 1'),\n  (4301, 'worker',       'idle in transaction',           '2026-10-26 14:58:00+07', 'SELECT … FOR UPDATE');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The 3-hour idle transaction, the report and the failed web transaction|||Giao dịch ngồi yên 3 giờ, báo cáo và giao dịch web đã hỏng",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "pid",
+                "app",
+                "state",
+                "minutes",
+                "command"
+              ],
+              "hang": [
+                [
+                  4101,
+                  "admin-export",
+                  "idle in transaction",
+                  197,
+                  "SELECT pg_terminate_backend(4101);"
+                ],
+                [
+                  4188,
+                  "report",
+                  "active",
+                  29,
+                  "SELECT pg_cancel_backend(4188);"
+                ],
+                [
+                  4203,
+                  "web",
+                  "idle in transaction (aborted)",
+                  11,
+                  "SELECT pg_terminate_backend(4203);"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Ten minutes later the worker joins the list|||Mười phút sau worker vào danh sách",
+            "an": true,
+            "themCsdl": "UPDATE snap SET taken_at = taken_at + interval '10 minutes'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "pid",
+                "app",
+                "state",
+                "minutes",
+                "command"
+              ],
+              "hang": [
+                [
+                  4101,
+                  "admin-export",
+                  "idle in transaction",
+                  207,
+                  "SELECT pg_terminate_backend(4101);"
+                ],
+                [
+                  4188,
+                  "report",
+                  "active",
+                  39,
+                  "SELECT pg_cancel_backend(4188);"
+                ],
+                [
+                  4203,
+                  "web",
+                  "idle in transaction (aborted)",
+                  21,
+                  "SELECT pg_terminate_backend(4203);"
+                ],
+                [
+                  4301,
+                  "worker",
+                  "idle in transaction",
+                  12,
+                  "SELECT pg_terminate_backend(4301);"
+                ],
+                [
+                  4250,
+                  "web",
+                  "active",
+                  10,
+                  "SELECT pg_cancel_backend(4250);"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Generates pg_terminate_backend|||Sinh lệnh pg_terminate_backend",
+            "khop": "pg_terminate_backend",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "pg_cancel_backend on an idle-in-transaction session — measured: it returns t and the session stays idle in transaction.|||pg_cancel_backend trên phiên idle in transaction — đo được: nó trả t và phiên vẫn idle in transaction."
+        },
+        {
+          "loi": "Missing the \"(aborted)\" variant.|||Sót dạng \"(aborted)\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pg_terminate_backend",
+          "vi": "kết thúc phiên"
+        },
+        {
+          "en": "snapshot",
+          "vi": "ảnh chụp dữ liệu của giao dịch"
+        }
+      ]
+    },
+    {
+      "title": "Case 2: replace read-modify-write with one statement",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "atomic UPDATE",
+        "guard in WHERE",
+        "RETURNING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "incident",
+        "concurrency"
+      ],
+      "problemHtml": "<p>The app does this, and two concurrent requests sometimes lose one debit:</p><pre>const row = await db.query('SELECT balance FROM account WHERE id = $1', [id]);\nconst next = row.balance - amount;                                   // computed in the app\nawait db.query('UPDATE account SET balance = $1 WHERE id = $2', [next, id]);</pre><p>Write the replacement as <b>one</b> UPDATE using <code>req</code> (account_id, amount): subtract the amount only if the balance is enough, and return <code>id, balance</code> of the changed row — no row back means \"insufficient funds\".</p>\n<h4>Tables</h4><pre>account (id, owner, balance ≥ 0)   -- An 100.00 · Bình 15.00 · Chi 0.00\nreq (account_id, amount)             -- the request being served: debit 30.00 from account 1</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SET balance = balance - r.amount</code> — the database computes from the current row, under its row lock.</li>\n  <li><code>AND a.balance &gt;= r.amount</code> in WHERE — no error, just no row.</li>\n</ul>",
+      "problemHtmlVi": "<p>App làm như sau, và hai yêu cầu đồng thời đôi khi làm mất một lần trừ:</p><pre>const row = await db.query('SELECT balance FROM account WHERE id = $1', [id]);\nconst next = row.balance - amount;                                   // tính ở app\nawait db.query('UPDATE account SET balance = $1 WHERE id = $2', [next, id]);</pre><p>Viết bản thay thế bằng <b>một</b> lệnh UPDATE dùng <code>req</code> (account_id, amount): chỉ trừ khi số dư đủ, và trả <code>id, balance</code> của dòng đã đổi — không có dòng nào trả về nghĩa là \"không đủ tiền\".</p>\n<h4>Bảng</h4><pre>account (id, owner, balance ≥ 0)   -- An 100.00 · Bình 15.00 · Chi 0.00\nreq (account_id, amount)             -- yêu cầu đang xử lý: trừ 30.00 từ tài khoản 1</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SET balance = balance - r.amount</code> — CSDL tính từ dòng hiện tại, dưới khoá dòng của nó.</li>\n  <li><code>AND a.balance &gt;= r.amount</code> trong WHERE — không lỗi, chỉ là không có dòng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | balance\n---+--------\n1  | 70     ",
+          "explanation": "Expected result of check \"An: 100.00 − 30.00\" (row order does not matter).|||Kết quả mong đợi của kiểm \"An: 100.00 − 30.00\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Two concurrent UPDATEs on the same row serialise on its lock, and the second recomputes from the first one's result.|||Hai UPDATE đồng thời trên cùng dòng xếp hàng theo khoá dòng, và lệnh thứ hai tính lại từ kết quả của lệnh thứ nhất.",
+        "The app checks rowCount: 0 ⇒ tell the user the balance is too low.|||App kiểm rowCount: 0 ⇒ báo người dùng số dư không đủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "bank.sql",
+          "language": "sql",
+          "code": "-- bank.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- bank.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE account (id int PRIMARY KEY, owner text NOT NULL, balance numeric(12,2) NOT NULL CHECK (balance >= 0));\nINSERT INTO account VALUES (1, 'An', 100.00), (2, 'Bình', 15.00), (3, 'Chi', 0.00);\n-- the parameters of the request the app is handling\nCREATE TABLE req (account_id int NOT NULL, amount numeric(12,2) NOT NULL);\nINSERT INTO req VALUES (1, 30.00);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE account a\nSET balance = a.balance - r.amount          -- arithmetic on the CURRENT value, inside the row lock\nFROM req r\nWHERE a.id = r.account_id\n  AND a.balance >= r.amount                 -- not enough money ⇒ 0 rows, nothing changed\nRETURNING a.id, a.balance;\n"
+        },
+        {
+          "name": "bank.sql",
+          "language": "sql",
+          "code": "-- bank.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- bank.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE account (id int PRIMARY KEY, owner text NOT NULL, balance numeric(12,2) NOT NULL CHECK (balance >= 0));\nINSERT INTO account VALUES (1, 'An', 100.00), (2, 'Bình', 15.00), (3, 'Chi', 0.00);\n-- the parameters of the request the app is handling\nCREATE TABLE req (account_id int NOT NULL, amount numeric(12,2) NOT NULL);\nINSERT INTO req VALUES (1, 30.00);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured in 11.4: the read-modify-write version ended at 80.00 instead of 70.00 with both requests reporting success; the single statement ended at 70.00 with no locking code at all. Where the new value cannot be arithmetic on the old one, SELECT … FOR UPDATE first.</p>",
+      "solutionExplanationHtmlVi": "<p>Đo ở 11.4: bản đọc-rồi-ghi kết thúc ở 80.00 thay vì 70.00 trong khi cả hai yêu cầu đều báo thành công; một câu lệnh duy nhất kết thúc ở 70.00 mà không cần dòng mã khoá nào. Khi giá trị mới không phải phép tính trên giá trị cũ, hãy SELECT … FOR UPDATE trước.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE account (id int PRIMARY KEY, owner text NOT NULL, balance numeric(12,2) NOT NULL CHECK (balance >= 0));\nINSERT INTO account VALUES (1, 'An', 100.00), (2, 'Bình', 15.00), (3, 'Chi', 0.00);\n-- the parameters of the request the app is handling\nCREATE TABLE req (account_id int NOT NULL, amount numeric(12,2) NOT NULL);\nINSERT INTO req VALUES (1, 30.00);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "An: 100.00 − 30.00|||An: 100.00 − 30.00",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  1,
+                  70
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Only account 1 changed|||Chỉ tài khoản 1 thay đổi",
+            "kiemTra": "SELECT id, balance FROM account ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  1,
+                  70
+                ],
+                [
+                  2,
+                  15
+                ],
+                [
+                  3,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another amount: 25.50|||Số tiền khác: 25.50",
+            "an": true,
+            "themCsdl": "UPDATE req SET amount = 25.50",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  1,
+                  74.5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Bình asks for 30.00 with 15.00 — no row comes back|||Bình xin 30.00 khi có 15.00 — không dòng nào trả về",
+            "an": true,
+            "themCsdl": "UPDATE req SET account_id = 2",
+            "choPhepRong": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": []
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "…and nothing changed|||…và không gì thay đổi",
+            "kiemTra": "SELECT id, balance FROM account ORDER BY id",
+            "thuTu": true,
+            "an": true,
+            "themCsdl": "UPDATE req SET account_id = 2",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  1,
+                  100
+                ],
+                [
+                  2,
+                  15
+                ],
+                [
+                  3,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No SELECT of the balance before the UPDATE|||Không SELECT số dư trước UPDATE",
+            "khop": "\\bSELECT\\s+balance\\b",
+            "tep": "query.sql",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping the SELECT and wrapping both in a transaction — at READ COMMITTED the lost update still happens.|||Giữ SELECT rồi bọc cả hai trong giao dịch — ở READ COMMITTED vẫn mất cập nhật."
+        },
+        {
+          "loi": "No guard — the CHECK fails with an error instead of a clean \"insufficient funds\".|||Không chặn — CHECK hỏng thành lỗi thay vì một \"không đủ tiền\" gọn gàng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        },
+        {
+          "en": "atomic statement",
+          "vi": "câu lệnh nguyên tử"
+        }
+      ]
+    }
+  ]
+}

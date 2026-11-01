@@ -1,0 +1,575 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-15-1-pg-dump",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-15-1-pg-dump"
+  },
+  "exercises": [
+    {
+      "title": "Dump in three formats, then restore a single table",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "pg_dump -Fc / -Fd -j",
+        "pg_restore -l / -t",
+        "what -t does not bring back"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "backup",
+        "pg_dump",
+        "docker"
+      ],
+      "problemHtml": "<p>On your PostgreSQL of lesson 0.3 (CT Shop loaded):</p><pre># formats.sh — run next to your PostgreSQL of lesson 0.3 (container pgdemo, database ctshop)\ndocker exec pgdemo bash -c '\n  cd /tmp &amp;&amp; rm -rf plain.sql custom.dump dir\n  time pg_dump -U postgres -d ctshop -f plain.sql\n  time pg_dump -U postgres -d ctshop -Fc -f custom.dump\n  time pg_dump -U postgres -d ctshop -Fd -j 4 -f dir\n  du -sh plain.sql custom.dump dir\n  pg_restore -l custom.dump | head -20\n  createdb -U postgres one_table\n  pg_restore -U postgres -d one_table -t orders custom.dump          # what comes back? (schema? PK? indexes?)\n  psql -U postgres -d one_table -c \"\\d orders\"\n'</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> pg_dump and pg_restore are client programs working on a real server and real files; the browser grader has neither. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>custom and directory are about 4× smaller than plain; plain is the fastest to write.</li>\n  <li><code>pg_restore -l</code> lists the table of contents (TABLE, TABLE DATA, CONSTRAINT, INDEX…).</li>\n  <li><code>-t orders</code> brings back the table and its rows but NOT its primary key, identity or indexes — note what \\d shows.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên PostgreSQL của bài 0.3 (đã nạp CT Shop):</p><pre># formats.sh — run next to your PostgreSQL of lesson 0.3 (container pgdemo, database ctshop)\ndocker exec pgdemo bash -c '\n  cd /tmp &amp;&amp; rm -rf plain.sql custom.dump dir\n  time pg_dump -U postgres -d ctshop -f plain.sql\n  time pg_dump -U postgres -d ctshop -Fc -f custom.dump\n  time pg_dump -U postgres -d ctshop -Fd -j 4 -f dir\n  du -sh plain.sql custom.dump dir\n  pg_restore -l custom.dump | head -20\n  createdb -U postgres one_table\n  pg_restore -U postgres -d one_table -t orders custom.dump          # what comes back? (schema? PK? indexes?)\n  psql -U postgres -d one_table -c \"\\d orders\"\n'</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> pg_dump và pg_restore là chương trình phía client làm việc với máy chủ và tệp thật; máy chấm trình duyệt không có cả hai. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>custom và directory nhỏ hơn plain khoảng 4 lần; plain ghi nhanh nhất.</li>\n  <li><code>pg_restore -l</code> liệt kê mục lục (TABLE, TABLE DATA, CONSTRAINT, INDEX…).</li>\n  <li><code>-t orders</code> trả lại bảng và các dòng nhưng KHÔNG có khoá chính, identity hay chỉ mục — ghi lại \\d hiện gì.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "du -sh plain.sql custom.dump dir|||du -sh plain.sql custom.dump dir",
+          "output": "16M · 3.9M · 3.9M|||16M · 3.9M · 3.9M",
+          "explanation": "custom and directory compress.|||custom và directory có nén."
+        }
+      ],
+      "hintsJson": [
+        "Use the newest pg_dump (version ≥ the server).|||Dùng pg_dump mới nhất (phiên bản ≥ máy chủ).",
+        "A plain dump is restored with psql, the others with pg_restore.|||Dump plain khôi phục bằng psql, các dạng kia bằng pg_restore."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "formats.sh",
+          "language": "text",
+          "code": "# formats.sh — run next to your PostgreSQL of lesson 0.3 (container pgdemo, database ctshop)\ndocker exec pgdemo bash -c '\n  cd /tmp && rm -rf plain.sql custom.dump dir\n  time pg_dump -U postgres -d ctshop -f plain.sql\n  time pg_dump -U postgres -d ctshop -Fc -f custom.dump\n  time pg_dump -U postgres -d ctshop -Fd -j 4 -f dir\n  du -sh plain.sql custom.dump dir\n  pg_restore -l custom.dump | head -20\n  createdb -U postgres one_table\n  pg_restore -U postgres -d one_table -t orders custom.dump          # what comes back? (schema? PK? indexes?)\n  psql -U postgres -d one_table -c \"\\d orders\"\n'\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "formats.sh",
+          "language": "text",
+          "code": "# formats.sh — run next to your PostgreSQL of lesson 0.3 (container pgdemo, database ctshop)\ndocker exec pgdemo bash -c '\n  cd /tmp && rm -rf plain.sql custom.dump dir\n  time pg_dump -U postgres -d ctshop -f plain.sql\n  time pg_dump -U postgres -d ctshop -Fc -f custom.dump\n  time pg_dump -U postgres -d ctshop -Fd -j 4 -f dir\n  du -sh plain.sql custom.dump dir\n  pg_restore -l custom.dump | head -20\n  createdb -U postgres one_table\n  pg_restore -U postgres -d one_table -t orders custom.dump          # what comes back? (schema? PK? indexes?)\n  psql -U postgres -d one_table -c \"\\d orders\"\n'\n\n# Expected (49 MB ctshop of the slides, PostgreSQL 17.11):\n# real 0.264s / 0.595s / 0.655s\n# 16M plain.sql · 3.9M custom.dump · 3.9M dir\n# \\d orders in one_table: the columns are there, but no \"Indexes:\" section, no PRIMARY KEY, no identity —\n# -t restores TABLE + TABLE DATA only. To get a usable copy restore the whole dump, or add the schema first.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Custom is the default to use: compressed, with a table of contents that allows selective and parallel restores. Directory is the only format that dumps in parallel.</p>",
+      "solutionExplanationHtmlVi": "<p>Custom là mặc định nên dùng: có nén, có mục lục cho phép khôi phục chọn lọc và song song. Directory là định dạng duy nhất dump song song.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "bash formats.sh",
+          "lyDo": "pg_dump and pg_restore are client programs working on a real server and real files; the browser grader has neither.|||pg_dump và pg_restore là chương trình phía client làm việc với máy chủ và tệp thật; máy chấm trình duyệt không có cả hai."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Feeding a custom dump to psql — it is binary.|||Đưa dump custom cho psql — nó là nhị phân."
+        },
+        {
+          "loi": "Trusting -t to give back a production-ready table.|||Tin rằng -t trả lại một bảng sẵn sàng cho production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "logical backup",
+          "vi": "sao lưu logic"
+        },
+        {
+          "en": "table of contents",
+          "vi": "mục lục bản dump"
+        }
+      ]
+    },
+    {
+      "title": "A backup counts only after a restore: reconcile it",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "row fingerprint: count + md5(string_agg(row ORDER BY key))",
+        "comparing two schemas",
+        "UNION ALL per table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "backup",
+        "restore",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Compare the restored copy with the live database, table by table: return <code>table_name, live_rows, restored_rows, same</code> for customer, orders, payment and product (alphabetical), where <code>same</code> is true only when both the row count and <code>md5(string_agg(t::text, E'\\n' ORDER BY t.id))</code> match.</p>\n<h4>Schemas</h4><pre>public.*   -- the live CT Shop\nrestored.customer · restored.product · restored.orders · restored.payment   -- last night's dump, restored</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>A row cast to text (<code>t::text</code>) contains every column — one changed price changes the hash.</li>\n  <li>ORDER BY the key inside string_agg, or the same rows in a different order give a different hash.</li>\n</ul>",
+      "problemHtmlVi": "<p>So bản khôi phục với CSDL đang chạy, từng bảng một: trả về <code>table_name, live_rows, restored_rows, same</code> cho customer, orders, payment và product (theo chữ cái), trong đó <code>same</code> chỉ đúng khi cả số dòng lẫn <code>md5(string_agg(t::text, E'\\n' ORDER BY t.id))</code> khớp nhau.</p>\n<h4>Schema</h4><pre>public.*   -- CT Shop đang chạy\nrestored.customer · restored.product · restored.orders · restored.payment   -- bản dump đêm qua, đã khôi phục</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một dòng ép sang chữ (<code>t::text</code>) chứa mọi cột — đổi một giá là đổi mã băm.</li>\n  <li>ORDER BY khoá bên trong string_agg, nếu không cùng các dòng mà khác thứ tự sẽ ra mã băm khác.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "table_name | live_rows | restored_rows | same \n-----------+-----------+---------------+------\ncustomer   | 8         | 8             | true \norders     | 14        | 13            | false\npayment    | 10        | 10            | true \nproduct    | 16        | 16            | false",
+          "explanation": "Expected result of check \"orders lost a row, product has a changed price\" (row order matters).|||Kết quả mong đợi của kiểm \"orders thiếu một dòng, product có một giá bị đổi\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Build one fingerprint row per (table, side), then join live to restored.|||Dựng một dòng dấu vân tay cho mỗi (bảng, phía), rồi nối phía live với phía restored.",
+        "This is exactly what lab8-check.sql does, so that diff can compare two servers.|||Đây đúng là việc lab8-check.sql làm, để diff so được hai máy chủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n-- the restore of last night's dump, loaded into schema \"restored\" (pg_restore + ALTER SCHEMA … RENAME)\nCREATE SCHEMA restored;\nCREATE TABLE restored.customer AS SELECT * FROM public.customer;\nCREATE TABLE restored.product  AS SELECT * FROM public.product;\nCREATE TABLE restored.orders   AS SELECT * FROM public.orders WHERE id <> 14;          -- written while the dump ran\nCREATE TABLE restored.payment  AS SELECT * FROM public.payment;\nUPDATE restored.product SET price = 9500 WHERE id = 10;                                -- changed after the dump\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH fp AS (\n  SELECT 'customer' AS table_name, 'live' AS side, count(*) AS n, md5(string_agg(t::text, E'\\n' ORDER BY t.id)) AS h FROM public.customer t\n  UNION ALL SELECT 'customer', 'restored', count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM restored.customer t\n  UNION ALL SELECT 'orders',   'live',     count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM public.orders t\n  UNION ALL SELECT 'orders',   'restored', count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM restored.orders t\n  UNION ALL SELECT 'payment',  'live',     count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM public.payment t\n  UNION ALL SELECT 'payment',  'restored', count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM restored.payment t\n  UNION ALL SELECT 'product',  'live',     count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM public.product t\n  UNION ALL SELECT 'product',  'restored', count(*), md5(string_agg(t::text, E'\\n' ORDER BY t.id)) FROM restored.product t\n)\nSELECT l.table_name, l.n AS live_rows, r.n AS restored_rows,\n       l.n = r.n AND l.h IS NOT DISTINCT FROM r.h AS same\nFROM fp l JOIN fp r ON r.table_name = l.table_name AND r.side = 'restored'\nWHERE l.side = 'live'\nORDER BY l.table_name;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n-- the restore of last night's dump, loaded into schema \"restored\" (pg_restore + ALTER SCHEMA … RENAME)\nCREATE SCHEMA restored;\nCREATE TABLE restored.customer AS SELECT * FROM public.customer;\nCREATE TABLE restored.product  AS SELECT * FROM public.product;\nCREATE TABLE restored.orders   AS SELECT * FROM public.orders WHERE id <> 14;          -- written while the dump ran\nCREATE TABLE restored.payment  AS SELECT * FROM public.payment;\nUPDATE restored.product SET price = 9500 WHERE id = 10;                                -- changed after the dump\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Restore, then reconcile: equal counts prove little, an equal fingerprint of every row proves the copy. Here the differences are expected (a row written during the dump, a price changed after it) — the point is that the check SEES them.</p>",
+      "solutionExplanationHtmlVi": "<p>Khôi phục rồi đối soát: số dòng bằng nhau chứng minh rất ít, dấu vân tay của mọi dòng bằng nhau mới chứng minh bản sao. Ở đây khác biệt là dự kiến (một dòng ghi trong lúc dump, một giá đổi sau đó) — điều quan trọng là phép kiểm NHÌN THẤY chúng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n-- the restore of last night's dump, loaded into schema \"restored\" (pg_restore + ALTER SCHEMA … RENAME)\nCREATE SCHEMA restored;\nCREATE TABLE restored.customer AS SELECT * FROM public.customer;\nCREATE TABLE restored.product  AS SELECT * FROM public.product;\nCREATE TABLE restored.orders   AS SELECT * FROM public.orders WHERE id <> 14;          -- written while the dump ran\nCREATE TABLE restored.payment  AS SELECT * FROM public.payment;\nUPDATE restored.product SET price = 9500 WHERE id = 10;                                -- changed after the dump",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "orders lost a row, product has a changed price|||orders thiếu một dòng, product có một giá bị đổi",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "table_name",
+                "live_rows",
+                "restored_rows",
+                "same"
+              ],
+              "hang": [
+                [
+                  "customer",
+                  8,
+                  8,
+                  true
+                ],
+                [
+                  "orders",
+                  14,
+                  13,
+                  false
+                ],
+                [
+                  "payment",
+                  10,
+                  10,
+                  true
+                ],
+                [
+                  "product",
+                  16,
+                  16,
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A customer renamed after the dump|||Một khách đổi tên sau bản dump",
+            "an": true,
+            "themCsdl": "UPDATE public.customer SET full_name = 'Trần Thị Bình An' WHERE id = 1; UPDATE restored.product SET price = 9000 WHERE id = 10",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "table_name",
+                "live_rows",
+                "restored_rows",
+                "same"
+              ],
+              "hang": [
+                [
+                  "customer",
+                  8,
+                  8,
+                  false
+                ],
+                [
+                  "orders",
+                  14,
+                  13,
+                  false
+                ],
+                [
+                  "payment",
+                  10,
+                  10,
+                  true
+                ],
+                [
+                  "product",
+                  16,
+                  16,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Fingerprints rows with md5|||Lấy dấu vân tay dòng bằng md5",
+            "khop": "md5\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing counts only — a changed price or a swapped row passes.|||Chỉ so số dòng — giá bị đổi hay dòng bị tráo vẫn lọt."
+        },
+        {
+          "loi": "Forgetting ORDER BY inside string_agg — the hash depends on the physical order.|||Quên ORDER BY trong string_agg — mã băm phụ thuộc thứ tự vật lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fingerprint",
+          "vi": "dấu vân tay dữ liệu"
+        },
+        {
+          "en": "reconciliation",
+          "vi": "đối soát"
+        }
+      ]
+    },
+    {
+      "title": "Which format — or is pg_dump the wrong tool?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "plain / custom / directory",
+        "logical vs physical backup",
+        "RPO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "backup"
+      ],
+      "problemHtml": "<p>For each need, pick the dump format — or say that no dump can do it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi nhu cầu, chọn định dạng dump — hoặc nói rằng không bản dump nào làm được.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Selective restore needs a table of contents.|||Khôi phục chọn lọc cần mục lục.",
+        "Ask \"which moment can I go back to?\"|||Tự hỏi \"tôi quay về được thời điểm nào?\""
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which format — or is pg_dump the wrong tool?\n\nAnswer in the answer panel (no code needed).\n\n1. Need → formatNhu cầu → định dạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which format — or is pg_dump the wrong tool? — answer key\n\n1. Need → formatNhu cầu → định dạng\n   - r1.f: custom\n   - r2.f: plain\n   - r3.f: directory\n   - r4.f: no dump — PITR\n   - r5.f: custom\n   custom = compressed + table of contents (selective, parallel restore); plain = readable SQL; directory = the only parallel dump. A dump is one moment in time: going back to 14:31:59 needs a base backup + WAL (15.2).VI: custom = nén + mục lục (khôi phục chọn lọc, song song); plain = SQL đọc được; directory = dạng duy nhất dump song song. Bản dump là MỘT thời điểm: quay về 14:31:59 cần base backup + WAL (15.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>custom = compressed + table of contents (selective, parallel restore); plain = readable SQL; directory = the only parallel dump. A dump is one moment in time: going back to 14:31:59 needs a base backup + WAL (15.2).</p><p><i>VI: custom = nén + mục lục (khôi phục chọn lọc, song song); plain = SQL đọc được; directory = dạng duy nhất dump song song. Bản dump là MỘT thời điểm: quay về 14:31:59 cần base backup + WAL (15.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Need → format</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhu cầu → định dạng</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "Need / Nhu cầu"
+              },
+              {
+                "ma": "f",
+                "ten": "Format / Định dạng",
+                "luaChon": [
+                  "plain",
+                  "custom",
+                  "directory",
+                  "no dump — PITR"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "Restore only the review table from last night's backup / Chỉ khôi phục bảng review từ bản sao lưu đêm qua"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "Keep the schema in git and read diffs between versions / Giữ lược đồ trong git và đọc diff giữa các phiên bản"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "Dump a 400 GB database with 8 parallel jobs / Dump CSDL 400 GB với 8 tiến trình song song"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "Undo a DELETE without WHERE run at 14:32, losing at most a minute / Huỷ một DELETE thiếu WHERE lúc 14:32, mất tối đa một phút"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "Default for a nightly backup of a small app / Mặc định cho bản sao lưu hằng đêm của một app nhỏ"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "custom",
+              "r2.f": "plain",
+              "r3.f": "directory",
+              "r4.f": "no dump — PITR",
+              "r5.f": "custom"
+            },
+            "giaiThich": "<p>custom = compressed + table of contents (selective, parallel restore); plain = readable SQL; directory = the only parallel dump. A dump is one moment in time: going back to 14:31:59 needs a base backup + WAL (15.2).</p><p><i>VI: custom = nén + mục lục (khôi phục chọn lọc, song song); plain = SQL đọc được; directory = dạng duy nhất dump song song. Bản dump là MỘT thời điểm: quay về 14:31:59 cần base backup + WAL (15.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a more frequent dump replaces PITR.|||Tưởng dump dày hơn thay được PITR."
+        },
+        {
+          "loi": "Using plain for a large production database — no selective or parallel restore.|||Dùng plain cho CSDL production lớn — không khôi phục chọn lọc hay song song được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RPO",
+          "vi": "lượng dữ liệu chấp nhận mất"
+        }
+      ]
+    },
+    {
+      "title": "What a dump is, and what it is not",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "snapshot consistency",
+        "RPO of a nightly dump",
+        "pg_dump and VACUUM"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "backup"
+      ],
+      "problemHtml": "<p>Lesson 15.1 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 15.1 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A dump = one consistent moment.|||Bản dump = một thời điểm nhất quán.",
+        "Test the restore, not the file size.|||Kiểm việc khôi phục, không kiểm cỡ tệp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a dump is, and what it is not\n\nAnswer in the answer panel (no code needed).\n\n1. A row is inserted while pg_dump is running. Is it in the dump?Một dòng được chèn trong lúc pg_dump đang chạy. Nó có trong bản dump không?\n2. Nightly dump at 02:00, disk dies at 01:59. How much data is lost?Dump hằng đêm lúc 02:00, đĩa hỏng lúc 01:59. Mất bao nhiêu dữ liệu?\n3. A 3-hour pg_dump runs on a busy primary. What side effect does it have?Một pg_dump 3 giờ chạy trên primary bận. Nó có tác dụng phụ gì?\n4. Why is \"we have nightly dump files\" not yet a backup?Vì sao \"có tệp dump mỗi đêm\" vẫn chưa phải là sao lưu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a dump is, and what it is not — answer key\n\n1. A row is inserted while pg_dump is running. Is it in the dump?Một dòng được chèn trong lúc pg_dump đang chạy. Nó có trong bản dump không?\n   Answer: a) no — the dump is the snapshot taken when it started\n   pg_dump reads one MVCC snapshot from its start; later commits are invisible to it.VI: pg_dump đọc một snapshot MVCC từ lúc bắt đầu; các commit sau đó vô hình với nó.\n\n2. Nightly dump at 02:00, disk dies at 01:59. How much data is lost?Dump hằng đêm lúc 02:00, đĩa hỏng lúc 01:59. Mất bao nhiêu dữ liệu?\n   Answer: a) 23 hours 59 minutes\n   The recovery point is the last dump. Less loss needs WAL archiving.VI: Điểm khôi phục là bản dump gần nhất. Mất ít hơn thì cần lưu trữ WAL.\n\n3. A 3-hour pg_dump runs on a busy primary. What side effect does it have?Một pg_dump 3 giờ chạy trên primary bận. Nó có tác dụng phụ gì?\n   Answer: a) its open snapshot stops VACUUM cleaning newer dead rows for 3 hours\n   Like any long transaction (11.1, 14.3). Run long dumps on a replica.VI: Như mọi giao dịch dài (11.1, 14.3). Hãy chạy dump dài trên bản sao.\n\n4. Why is \"we have nightly dump files\" not yet a backup?Vì sao \"có tệp dump mỗi đêm\" vẫn chưa phải là sao lưu?\n   Answer: c) until a restore is tested, the files may be empty, partial or unusable\n   Zero-byte files after a password change, a missing schema… are silent until you restore.VI: Tệp 0 byte sau khi đổi mật khẩu, thiếu một schema… im lặng cho tới khi bạn khôi phục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> no — the dump is the snapshot taken when it started</p><p>pg_dump reads one MVCC snapshot from its start; later commits are invisible to it.</p><p><i>VI: pg_dump đọc một snapshot MVCC từ lúc bắt đầu; các commit sau đó vô hình với nó.</i></p></li><li><p><b>a)</b> 23 hours 59 minutes</p><p>The recovery point is the last dump. Less loss needs WAL archiving.</p><p><i>VI: Điểm khôi phục là bản dump gần nhất. Mất ít hơn thì cần lưu trữ WAL.</i></p></li><li><p><b>a)</b> its open snapshot stops VACUUM cleaning newer dead rows for 3 hours</p><p>Like any long transaction (11.1, 14.3). Run long dumps on a replica.</p><p><i>VI: Như mọi giao dịch dài (11.1, 14.3). Hãy chạy dump dài trên bản sao.</i></p></li><li><p><b>c)</b> until a restore is tested, the files may be empty, partial or unusable</p><p>Zero-byte files after a password change, a missing schema… are silent until you restore.</p><p><i>VI: Tệp 0 byte sau khi đổi mật khẩu, thiếu một schema… im lặng cho tới khi bạn khôi phục.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A row is inserted while pg_dump is running. Is it in the dump?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dòng được chèn trong lúc pg_dump đang chạy. Nó có trong bản dump không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no — the dump is the snapshot taken when it started"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only with the custom format"
+              },
+              {
+                "ma": "c",
+                "noiDung": "yes — pg_dump waits for running writes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only if the row was committed before the dump ended"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>pg_dump reads one MVCC snapshot from its start; later commits are invisible to it.</p><p><i>VI: pg_dump đọc một snapshot MVCC từ lúc bắt đầu; các commit sau đó vô hình với nó.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Nightly dump at 02:00, disk dies at 01:59. How much data is lost?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dump hằng đêm lúc 02:00, đĩa hỏng lúc 01:59. Mất bao nhiêu dữ liệu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "23 hours 59 minutes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one minute"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only the rows of the last transaction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing — the dump is recent"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The recovery point is the last dump. Less loss needs WAL archiving.</p><p><i>VI: Điểm khôi phục là bản dump gần nhất. Mất ít hơn thì cần lưu trữ WAL.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A 3-hour pg_dump runs on a busy primary. What side effect does it have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một pg_dump 3 giờ chạy trên primary bận. Nó có tác dụng phụ gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "its open snapshot stops VACUUM cleaning newer dead rows for 3 hours"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it switches WAL writing off until the dump ends"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it blocks every INSERT on every table for 3 hours"
+              },
+              {
+                "ma": "d",
+                "noiDung": "none at all — a dump only reads, so it is free"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Like any long transaction (11.1, 14.3). Run long dumps on a replica.</p><p><i>VI: Như mọi giao dịch dài (11.1, 14.3). Hãy chạy dump dài trên bản sao.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why is \"we have nightly dump files\" not yet a backup?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"có tệp dump mỗi đêm\" vẫn chưa phải là sao lưu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only physical backups count as backups in PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dump files must be signed by a DBA before they count"
+              },
+              {
+                "ma": "c",
+                "noiDung": "until a restore is tested, the files may be empty, partial or unusable"
+              },
+              {
+                "ma": "d",
+                "noiDung": "dump files older than one week expire automatically"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Zero-byte files after a password change, a missing schema… are silent until you restore.</p><p><i>VI: Tệp 0 byte sau khi đổi mật khẩu, thiếu một schema… im lặng cho tới khi bạn khôi phục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming rows written during the dump are included.|||Tưởng các dòng ghi trong lúc dump được tính vào."
+        },
+        {
+          "loi": "Measuring backups by \"the cron job is green\".|||Đánh giá sao lưu bằng \"cron chạy xanh\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "snapshot",
+          "vi": "ảnh chụp nhất quán"
+        }
+      ]
+    }
+  ]
+}

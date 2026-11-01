@@ -1,0 +1,725 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-16-1-prisma-migration",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-16-1-prisma-migration"
+  },
+  "exercises": [
+    {
+      "title": "Every Prisma word is SQL you already know",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "model / @id / @unique / @relation / @@index",
+        "$transaction",
+        "migrate deploy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "prisma",
+        "migration"
+      ],
+      "problemHtml": "<p>Match each Prisma concept with the PostgreSQL feature it generates.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi khái niệm Prisma với tính năng PostgreSQL mà nó sinh ra.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each line has exactly one SQL counterpart.|||Mỗi dòng có đúng một bản tương ứng SQL.",
+        "migrate deploy never generates anything.|||migrate deploy không bao giờ sinh ra gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Every Prisma word is SQL you already know\n\nAnswer in the answer panel (no code needed).\n\n1. Prisma → PostgreSQLPrisma → PostgreSQL\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Every Prisma word is SQL you already know — answer key\n\n1. Prisma → PostgreSQLPrisma → PostgreSQL\n   - r1.s: CREATE TABLE\n   - r2.s: PRIMARY KEY / UNIQUE + B-tree index\n   - r3.s: FOREIGN KEY … ON DELETE CASCADE\n   - r4.s: composite index (column order matters)\n   - r5.s: BEGIN … COMMIT\n   - r6.s: apply pending migration files in order\n   The ORM is a naming layer over chapters 3, 9 and 11. When something misbehaves, read the generated SQL in prisma/migrations/ and EXPLAIN the generated queries.VI: ORM chỉ là một lớp đặt tên phủ lên chương 3, 9 và 11. Khi có gì sai, đọc SQL sinh ra trong prisma/migrations/ và EXPLAIN các truy vấn sinh ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The ORM is a naming layer over chapters 3, 9 and 11. When something misbehaves, read the generated SQL in prisma/migrations/ and EXPLAIN the generated queries.</p><p><i>VI: ORM chỉ là một lớp đặt tên phủ lên chương 3, 9 và 11. Khi có gì sai, đọc SQL sinh ra trong prisma/migrations/ và EXPLAIN các truy vấn sinh ra.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Prisma → PostgreSQL</p><p style=\"opacity:.75;font-size:.92em\"><i>Prisma → PostgreSQL</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Prisma"
+              },
+              {
+                "ma": "s",
+                "ten": "SQL",
+                "luaChon": [
+                  "CREATE TABLE",
+                  "PRIMARY KEY / UNIQUE + B-tree index",
+                  "FOREIGN KEY … ON DELETE CASCADE",
+                  "composite index (column order matters)",
+                  "BEGIN … COMMIT",
+                  "apply pending migration files in order"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "model Order { … } @@map(\"orders\")"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "id Int @id · email String @unique"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "@@index([customerId, createdAt])"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "prisma.$transaction(async (tx) => { … })"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "npx prisma migrate deploy"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "CREATE TABLE",
+              "r2.s": "PRIMARY KEY / UNIQUE + B-tree index",
+              "r3.s": "FOREIGN KEY … ON DELETE CASCADE",
+              "r4.s": "composite index (column order matters)",
+              "r5.s": "BEGIN … COMMIT",
+              "r6.s": "apply pending migration files in order"
+            },
+            "giaiThich": "<p>The ORM is a naming layer over chapters 3, 9 and 11. When something misbehaves, read the generated SQL in prisma/migrations/ and EXPLAIN the generated queries.</p><p><i>VI: ORM chỉ là một lớp đặt tên phủ lên chương 3, 9 và 11. Khi có gì sai, đọc SQL sinh ra trong prisma/migrations/ và EXPLAIN các truy vấn sinh ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking @@index order is irrelevant — it is the leading-column rule of chapter 9.|||Tưởng thứ tự trong @@index không quan trọng — đó là luật cột dẫn đầu của chương 9."
+        },
+        {
+          "loi": "Confusing migrate deploy with migrate dev.|||Nhầm migrate deploy với migrate dev."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ORM",
+          "vi": "lớp ánh xạ đối tượng – quan hệ"
+        }
+      ]
+    },
+    {
+      "title": "Predict the lock a migration takes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "ACCESS EXCLUSIVE vs SHARE",
+        "CREATE INDEX CONCURRENTLY",
+        "NOT VALID + VALIDATE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "migration",
+        "locks"
+      ],
+      "problemHtml": "<p>Which table lock does each statement take on the table it changes? (Measured with pg_locks inside a transaction.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi lệnh lấy khoá bảng nào trên bảng nó thay đổi? (Đã đo bằng pg_locks trong một giao dịch.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which ones still let INSERT/UPDATE run?|||Lệnh nào vẫn cho INSERT/UPDATE chạy?",
+        "Verify on your server: BEGIN; &lt;DDL&gt;; SELECT mode FROM pg_locks WHERE relation = 'orders'::regclass; ROLLBACK;|||Kiểm trên máy bạn: BEGIN; &lt;DDL&gt;; SELECT mode FROM pg_locks WHERE relation = 'orders'::regclass; ROLLBACK;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the lock a migration takes\n\nAnswer in the answer panel (no code needed).\n\n1. DDL → lockDDL → khoá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Predict the lock a migration takes — answer key\n\n1. DDL → lockDDL → khoá\n   - r1.l: ACCESS EXCLUSIVE\n   - r2.l: SHARE\n   - r3.l: SHARE UPDATE EXCLUSIVE\n   - r4.l: SHARE ROW EXCLUSIVE\n   - r5.l: SHARE UPDATE EXCLUSIVE\n   - r6.l: ACCESS EXCLUSIVE\n   ACCESS EXCLUSIVE blocks even SELECT — fine for a metadata-only change (ADD COLUMN with a constant default, PostgreSQL 11+), deadly if it scans or rewrites. SHARE blocks writes for the whole index build. SHARE UPDATE EXCLUSIVE lets reads AND writes continue: that is why CONCURRENTLY and VALIDATE are the safe halves of a migration.VI: ACCESS EXCLUSIVE chặn cả SELECT — ổn với thay đổi chỉ siêu dữ liệu (ADD COLUMN có mặc định hằng, PostgreSQL 11+), chết người nếu phải quét hay viết lại. SHARE chặn ghi suốt thời gian dựng chỉ mục. SHARE UPDATE EXCLUSIVE cho đọc LẪN ghi tiếp tục: vì thế CONCURRENTLY và VALIDATE là nửa an toàn của một migration.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ACCESS EXCLUSIVE blocks even SELECT — fine for a metadata-only change (ADD COLUMN with a constant default, PostgreSQL 11+), deadly if it scans or rewrites. SHARE blocks writes for the whole index build. SHARE UPDATE EXCLUSIVE lets reads AND writes continue: that is why CONCURRENTLY and VALIDATE are the safe halves of a migration.</p><p><i>VI: ACCESS EXCLUSIVE chặn cả SELECT — ổn với thay đổi chỉ siêu dữ liệu (ADD COLUMN có mặc định hằng, PostgreSQL 11+), chết người nếu phải quét hay viết lại. SHARE chặn ghi suốt thời gian dựng chỉ mục. SHARE UPDATE EXCLUSIVE cho đọc LẪN ghi tiếp tục: vì thế CONCURRENTLY và VALIDATE là nửa an toàn của một migration.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>DDL → lock</p><p style=\"opacity:.75;font-size:.92em\"><i>DDL → khoá</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Statement / Lệnh"
+              },
+              {
+                "ma": "l",
+                "ten": "Lock / Khoá",
+                "luaChon": [
+                  "ACCESS EXCLUSIVE",
+                  "SHARE",
+                  "SHARE ROW EXCLUSIVE",
+                  "SHARE UPDATE EXCLUSIVE"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "ALTER TABLE orders ADD COLUMN channel text NOT NULL DEFAULT 'web'"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "CREATE INDEX ON orders (note)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "CREATE INDEX CONCURRENTLY ON orders (note)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "ALTER TABLE stock_movement ADD CONSTRAINT … FOREIGN KEY (order_id) REFERENCES orders NOT VALID"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "ALTER TABLE stock_movement VALIDATE CONSTRAINT …"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "ALTER TABLE orders ALTER COLUMN note SET NOT NULL"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "ACCESS EXCLUSIVE",
+              "r2.l": "SHARE",
+              "r3.l": "SHARE UPDATE EXCLUSIVE",
+              "r4.l": "SHARE ROW EXCLUSIVE",
+              "r5.l": "SHARE UPDATE EXCLUSIVE",
+              "r6.l": "ACCESS EXCLUSIVE"
+            },
+            "giaiThich": "<p>ACCESS EXCLUSIVE blocks even SELECT — fine for a metadata-only change (ADD COLUMN with a constant default, PostgreSQL 11+), deadly if it scans or rewrites. SHARE blocks writes for the whole index build. SHARE UPDATE EXCLUSIVE lets reads AND writes continue: that is why CONCURRENTLY and VALIDATE are the safe halves of a migration.</p><p><i>VI: ACCESS EXCLUSIVE chặn cả SELECT — ổn với thay đổi chỉ siêu dữ liệu (ADD COLUMN có mặc định hằng, PostgreSQL 11+), chết người nếu phải quét hay viết lại. SHARE chặn ghi suốt thời gian dựng chỉ mục. SHARE UPDATE EXCLUSIVE cho đọc LẪN ghi tiếp tục: vì thế CONCURRENTLY và VALIDATE là nửa an toàn của một migration.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Plain CREATE INDEX on a busy table from an ORM migration — writes queue for minutes.|||CREATE INDEX thường trên bảng bận từ migration của ORM — lệnh ghi xếp hàng nhiều phút."
+        },
+        {
+          "loi": "Forgetting that any ACCESS EXCLUSIVE request waits behind long transactions and blocks everyone queued after it — set lock_timeout.|||Quên rằng mọi yêu cầu ACCESS EXCLUSIVE phải chờ sau giao dịch dài và chặn mọi người xếp sau nó — hãy đặt lock_timeout."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lock mode",
+          "vi": "chế độ khoá"
+        },
+        {
+          "en": "lock_timeout",
+          "vi": "thời hạn chờ khoá"
+        }
+      ]
+    },
+    {
+      "title": "A migration that can be replayed (the shadow-database bug)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "UNIQUE creates an index with the constraint's name",
+        "42P07 duplicate relation",
+        "shadow database replay"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "migration",
+        "prisma"
+      ],
+      "problemHtml": "<p>This repository has a migration that applied once and can never be replayed on a shadow database:</p><pre>ALTER TABLE \"post_music\" ADD CONSTRAINT \"post_music_post_id_key\" UNIQUE (\"post_id\");\nCREATE INDEX \"post_music_post_id_key\" ON \"post_music\"(\"post_id\");</pre><p>Write the migration for <code>post_id Int @unique</code> the way it should have been: post_id becomes unique, backed by exactly <b>one</b> index named <code>post_music_post_id_key</code>.</p>\n<h4>Tables</h4><pre>post (id, title)\npost_music (id, post_id → post, track)   -- 2 rows; schema.prisma now says: post_id Int @unique</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Either <code>CREATE UNIQUE INDEX \"post_music_post_id_key\" ON \"post_music\"(\"post_id\");</code> (what Prisma generates) or the UNIQUE constraint alone.</li>\n  <li>Run it twice in your head on an empty database: it must succeed.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kho mã này có một migration đã áp dụng một lần và không bao giờ phát lại được trên shadow database:</p><pre>ALTER TABLE \"post_music\" ADD CONSTRAINT \"post_music_post_id_key\" UNIQUE (\"post_id\");\nCREATE INDEX \"post_music_post_id_key\" ON \"post_music\"(\"post_id\");</pre><p>Viết migration cho <code>post_id Int @unique</code> theo đúng cách lẽ ra phải viết: post_id thành duy nhất, có đúng <b>một</b> chỉ mục tên <code>post_music_post_id_key</code> phía sau.</p>\n<h4>Bảng</h4><pre>post (id, title)\npost_music (id, post_id → post, track)   -- 2 dòng; schema.prisma giờ ghi: post_id Int @unique</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hoặc <code>CREATE UNIQUE INDEX \"post_music_post_id_key\" ON \"post_music\"(\"post_id\");</code> (thứ Prisma sinh ra), hoặc chỉ ràng buộc UNIQUE.</li>\n  <li>Hình dung chạy nó trên một CSDL trống: nó phải thành công.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "index_name             | is_unique\n-----------------------+----------\npost_music_post_id_key | true     ",
+          "explanation": "Expected result of check \"Exactly one index on post_id, and it is unique\" (row order matters).|||Kết quả mong đợi của kiểm \"Đúng một chỉ mục trên post_id, và nó là duy nhất\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A UNIQUE constraint builds its own index and gives it the constraint's name.|||Ràng buộc UNIQUE tự dựng chỉ mục và đặt cho nó tên của ràng buộc.",
+        "The bug fails every time with 42P07 relation \"post_music_post_id_key\" already exists.|||Lỗi xảy ra mọi lần với 42P07 relation \"post_music_post_id_key\" already exists."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "migration.sql",
+          "language": "sql",
+          "code": "-- migration.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- migration.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE post (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text NOT NULL);\nCREATE TABLE post_music (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  post_id int NOT NULL REFERENCES post(id),\n  track   text NOT NULL);\nINSERT INTO post (title) VALUES ('Một'), ('Hai'), ('Ba');\nINSERT INTO post_music (post_id, track) VALUES (1, 'lofi'), (2, 'jazz');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE UNIQUE INDEX \"post_music_post_id_key\" ON \"post_music\"(\"post_id\");   -- one statement, one index, replayable\n"
+        },
+        {
+          "name": "migration.sql",
+          "language": "sql",
+          "code": "-- migration.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- migration.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE post (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text NOT NULL);\nCREATE TABLE post_music (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  post_id int NOT NULL REFERENCES post(id),\n  track   text NOT NULL);\nINSERT INTO post (title) VALUES ('Một'), ('Hai'), ('Ba');\nINSERT INTO post_music (post_id, track) VALUES (1, 'lofi'), (2, 'jazz');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The original file was applied on production only because its history row says so; on any fresh database (the shadow DB of migrate dev) it fails with P3006. The fix in a real repository is a NEW migration or a baseline — never editing an applied file. Here you write what the file should have said.</p>",
+      "solutionExplanationHtmlVi": "<p>Tệp gốc chỉ \"đã áp dụng\" trên production vì dòng lịch sử nói vậy; trên mọi CSDL mới (shadow DB của migrate dev) nó hỏng với P3006. Cách sửa trong kho mã thật là một migration MỚI hoặc một baseline — không bao giờ sửa tệp đã áp dụng. Ở đây bạn viết điều tệp đó lẽ ra phải ghi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE post (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text NOT NULL);\nCREATE TABLE post_music (\n  id      int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  post_id int NOT NULL REFERENCES post(id),\n  track   text NOT NULL);\nINSERT INTO post (title) VALUES ('Một'), ('Hai'), ('Ba');\nINSERT INTO post_music (post_id, track) VALUES (1, 'lofi'), (2, 'jazz');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Exactly one index on post_id, and it is unique|||Đúng một chỉ mục trên post_id, và nó là duy nhất",
+            "kiemTra": "SELECT c.relname AS index_name, i.indisunique AS is_unique FROM pg_index i JOIN pg_class c ON c.oid = i.indexrelid WHERE i.indrelid = 'post_music'::regclass AND NOT i.indisprimary ORDER BY 1",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "index_name",
+                "is_unique"
+              ],
+              "hang": [
+                [
+                  "post_music_post_id_key",
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A second track for post 1 is refused|||Bản nhạc thứ hai cho bài 1 bị từ chối",
+            "thu": "INSERT INTO post_music (post_id, track) VALUES (1, 'rock')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No second CREATE INDEX with the same name|||Không có CREATE INDEX thứ hai trùng tên",
+            "khop": "\\bCREATE\\s+INDEX\\b",
+            "tep": "query.sql",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A plain (non-unique) index — the schema says @unique, the database accepts duplicates.|||Chỉ mục thường (không duy nhất) — lược đồ ghi @unique, CSDL vẫn nhận bản trùng."
+        },
+        {
+          "loi": "\"Fixing\" the already-applied migration file — its checksum no longer matches _prisma_migrations.|||\"Sửa\" tệp migration đã áp dụng — checksum không còn khớp _prisma_migrations."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shadow database",
+          "vi": "CSDL bóng"
+        },
+        {
+          "en": "replayable",
+          "vi": "phát lại được"
+        }
+      ]
+    },
+    {
+      "title": "NOT NULL on a big table without a long lock",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "SET LOCAL lock_timeout",
+        "backfill",
+        "CHECK … NOT VALID + VALIDATE",
+        "SET NOT NULL using a validated CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "migration",
+        "locks",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Make <code>orders.note</code> NOT NULL (empty string for the rows that have none) the way you would on a 50-million-row table: (1) <code>SET LOCAL lock_timeout = '2s'</code> so the migration fails fast instead of queueing everyone behind it; (2) backfill the NULLs; (3) add <code>orders_note_not_null CHECK (note IS NOT NULL) NOT VALID</code>, then <code>VALIDATE</code> it (no write-blocking scan); (4) <code>SET NOT NULL</code> — PostgreSQL uses the validated CHECK and skips the scan; (5) drop the now redundant CHECK.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>On production, (2) runs in batches and (3)–(5) are separate short transactions; here they run in one.</li>\n  <li>Order matters: SET NOT NULL before the backfill fails with 23502.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến <code>orders.note</code> thành NOT NULL (chuỗi rỗng cho các dòng chưa có) theo cách bạn làm trên bảng 50 triệu dòng: (1) <code>SET LOCAL lock_timeout = '2s'</code> để migration hỏng nhanh thay vì bắt mọi người xếp hàng sau nó; (2) điền các NULL; (3) thêm <code>orders_note_not_null CHECK (note IS NOT NULL) NOT VALID</code>, rồi <code>VALIDATE</code> (quét không chặn ghi); (4) <code>SET NOT NULL</code> — PostgreSQL dùng CHECK đã kiểm và bỏ qua việc quét; (5) xoá CHECK giờ đã thừa.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trên production, (2) chạy theo lô và (3)–(5) là các giao dịch ngắn riêng; ở đây chúng chạy trong một.</li>\n  <li>Thứ tự quan trọng: SET NOT NULL trước khi điền sẽ hỏng với 23502.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "not_null | helper_check | backfilled\n---------+--------------+-----------\ntrue     | 0            | 14        ",
+          "explanation": "Expected result of check \"note is NOT NULL and the helper CHECK is gone\" (row order does not matter).|||Kết quả mong đợi của kiểm \"note là NOT NULL và CHECK phụ đã bỏ\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "VALIDATE takes SHARE UPDATE EXCLUSIVE: reads and writes continue during the scan.|||VALIDATE lấy SHARE UPDATE EXCLUSIVE: đọc và ghi vẫn tiếp tục trong lúc quét.",
+        "SET NOT NULL still takes ACCESS EXCLUSIVE, but only for an instant when a valid CHECK proves it.|||SET NOT NULL vẫn lấy ACCESS EXCLUSIVE, nhưng chỉ trong khoảnh khắc khi một CHECK hợp lệ đã chứng minh điều đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nUPDATE orders SET note = NULL WHERE id IN (2, 5, 9);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SET LOCAL lock_timeout = '2s';                                     -- fail fast, never queue the site behind us\nUPDATE orders SET note = '' WHERE note IS NULL;                     -- backfill (in batches on a big table)\nALTER TABLE orders ADD CONSTRAINT orders_note_not_null CHECK (note IS NOT NULL) NOT VALID;   -- instant\nALTER TABLE orders VALIDATE CONSTRAINT orders_note_not_null;       -- scans, but reads and writes continue\nALTER TABLE orders ALTER COLUMN note SET NOT NULL;                  -- uses the validated CHECK: no scan\nALTER TABLE orders DROP CONSTRAINT orders_note_not_null;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nUPDATE orders SET note = NULL WHERE id IN (2, 5, 9);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The pattern (expand → backfill → validate → enforce) turns one long exclusive lock into several short or non-blocking steps. The ORM will not write it for you: you edit the generated migration SQL by hand.</p>",
+      "solutionExplanationHtmlVi": "<p>Mẫu này (mở rộng → điền → kiểm → áp đặt) biến một khoá độc quyền dài thành vài bước ngắn hoặc không chặn. ORM không viết nó cho bạn: bạn tự sửa SQL migration được sinh ra.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nUPDATE orders SET note = NULL WHERE id IN (2, 5, 9);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "note is NOT NULL and the helper CHECK is gone|||note là NOT NULL và CHECK phụ đã bỏ",
+            "kiemTra": "SELECT a.attnotnull AS not_null, (SELECT count(*) FROM pg_constraint WHERE conrelid = 'orders'::regclass AND conname = 'orders_note_not_null') AS helper_check, (SELECT count(*) FROM orders WHERE note = '') AS backfilled FROM pg_attribute a WHERE a.attrelid = 'orders'::regclass AND a.attname = 'note'",
+            "mongDoi": {
+              "cot": [
+                "not_null",
+                "helper_check",
+                "backfilled"
+              ],
+              "hang": [
+                [
+                  true,
+                  0,
+                  14
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A NULL note is refused from now on|||Từ nay note NULL bị từ chối",
+            "thu": "INSERT INTO orders (customer_id, note) VALUES (1, NULL)",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Sets lock_timeout first|||Đặt lock_timeout trước",
+            "khop": "lock_timeout",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses a NOT VALID CHECK|||Dùng CHECK NOT VALID",
+            "khop": "NOT\\s+VALID",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SET NOT NULL directly on a big table — ACCESS EXCLUSIVE for the whole scan, the site stops.|||SET NOT NULL thẳng trên bảng lớn — ACCESS EXCLUSIVE suốt lượt quét, web đứng."
+        },
+        {
+          "loi": "No lock_timeout — the ALTER waits behind one long report and every request queues behind the ALTER.|||Không lock_timeout — lệnh ALTER chờ sau một báo cáo dài và mọi yêu cầu xếp hàng sau lệnh ALTER."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backfill",
+          "vi": "điền dữ liệu cũ"
+        },
+        {
+          "en": "NOT VALID",
+          "vi": "chưa kiểm dữ liệu cũ"
+        }
+      ]
+    },
+    {
+      "title": "migrate dev, migrate deploy, db push — and a failed deploy",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "shadow database",
+        "migrate resolve",
+        "migrate diff"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "prisma",
+        "migration"
+      ],
+      "problemHtml": "<p>Lesson 16.1 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 16.1 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "dev = generate + shadow; deploy = apply only.|||dev = sinh + shadow; deploy = chỉ áp dụng.",
+        "When in doubt, look at the real schema.|||Khi nghi ngờ, nhìn lược đồ thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# migrate dev, migrate deploy, db push — and a failed deploy\n\nAnswer in the answer panel (no code needed).\n\n1. Which command runs on production during a deploy?Lệnh nào chạy trên production khi deploy?\n2. What is the shadow database used for?Shadow database dùng để làm gì?\n3. A migration failed halfway on deploy (P3009). What do you do first?Một migration hỏng giữa chừng khi deploy (P3009). Bạn làm gì trước?\n4. Why is prisma db push dangerous on production?Vì sao prisma db push nguy hiểm trên production?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# migrate dev, migrate deploy, db push — and a failed deploy — answer key\n\n1. Which command runs on production during a deploy?Lệnh nào chạy trên production khi deploy?\n   Answer: b) prisma migrate deploy\n   deploy applies pending files only: no shadow DB, no generation, no reset.VI: deploy chỉ áp các tệp còn chờ: không shadow DB, không sinh, không reset.\n\n2. What is the shadow database used for?Shadow database dùng để làm gì?\n   Answer: c) migrate dev replays every migration there to detect drift\n   That is why a non-replayable old migration breaks migrate dev forever after.VI: Đó là lý do một migration cũ không phát lại được làm hỏng migrate dev mãi về sau.\n\n3. A migration failed halfway on deploy (P3009). What do you do first?Một migration hỏng giữa chừng khi deploy (P3009). Bạn làm gì trước?\n   Answer: d) read the error and inspect the real schema before deciding anything\n   resolve --applied lies to Prisma about a half-applied change; find out what actually ran first (\\d, migrate diff --from-url).VI: resolve --applied nói dối Prisma về một thay đổi mới áp nửa chừng; hãy tìm xem cái gì đã thật sự chạy trước (\\d, migrate diff --from-url).\n\n4. Why is prisma db push dangerous on production?Vì sao prisma db push nguy hiểm trên production?\n   Answer: d) it changes the schema with no migration file, so the history drifts\n   After a push, the database and prisma/migrations disagree — the drift every later deploy trips over.VI: Sau một lần push, CSDL và prisma/migrations lệch nhau — thứ lệch mà mọi lần deploy sau vấp phải.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> prisma migrate deploy</p><p>deploy applies pending files only: no shadow DB, no generation, no reset.</p><p><i>VI: deploy chỉ áp các tệp còn chờ: không shadow DB, không sinh, không reset.</i></p></li><li><p><b>c)</b> migrate dev replays every migration there to detect drift</p><p>That is why a non-replayable old migration breaks migrate dev forever after.</p><p><i>VI: Đó là lý do một migration cũ không phát lại được làm hỏng migrate dev mãi về sau.</i></p></li><li><p><b>d)</b> read the error and inspect the real schema before deciding anything</p><p>resolve --applied lies to Prisma about a half-applied change; find out what actually ran first (\\d, migrate diff --from-url).</p><p><i>VI: resolve --applied nói dối Prisma về một thay đổi mới áp nửa chừng; hãy tìm xem cái gì đã thật sự chạy trước (\\d, migrate diff --from-url).</i></p></li><li><p><b>d)</b> it changes the schema with no migration file, so the history drifts</p><p>After a push, the database and prisma/migrations disagree — the drift every later deploy trips over.</p><p><i>VI: Sau một lần push, CSDL và prisma/migrations lệch nhau — thứ lệch mà mọi lần deploy sau vấp phải.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Which command runs on production during a deploy?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh nào chạy trên production khi deploy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "prisma migrate reset"
+              },
+              {
+                "ma": "b",
+                "noiDung": "prisma migrate deploy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "prisma db push"
+              },
+              {
+                "ma": "d",
+                "noiDung": "prisma migrate dev"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>deploy applies pending files only: no shadow DB, no generation, no reset.</p><p><i>VI: deploy chỉ áp các tệp còn chờ: không shadow DB, không sinh, không reset.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What is the shadow database used for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Shadow database dùng để làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is where prisma db push writes before production"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it is a hot standby kept in sync with production"
+              },
+              {
+                "ma": "c",
+                "noiDung": "migrate dev replays every migration there to detect drift"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it stores old row versions so a migration can roll back"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>That is why a non-replayable old migration breaks migrate dev forever after.</p><p><i>VI: Đó là lý do một migration cũ không phát lại được làm hỏng migrate dev mãi về sau.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>A migration failed halfway on deploy (P3009). What do you do first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một migration hỏng giữa chừng khi deploy (P3009). Bạn làm gì trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "edit the migration file and redeploy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "run prisma migrate resolve --applied"
+              },
+              {
+                "ma": "c",
+                "noiDung": "run prisma db push to force the schema"
+              },
+              {
+                "ma": "d",
+                "noiDung": "read the error and inspect the real schema before deciding anything"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>resolve --applied lies to Prisma about a half-applied change; find out what actually ran first (\\d, migrate diff --from-url).</p><p><i>VI: resolve --applied nói dối Prisma về một thay đổi mới áp nửa chừng; hãy tìm xem cái gì đã thật sự chạy trước (\\d, migrate diff --from-url).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why is prisma db push dangerous on production?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao prisma db push nguy hiểm trên production?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it needs a shadow database on the production server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it is much slower than migrate deploy on big tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it only works with SQLite, not with PostgreSQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it changes the schema with no migration file, so the history drifts"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>After a push, the database and prisma/migrations disagree — the drift every later deploy trips over.</p><p><i>VI: Sau một lần push, CSDL và prisma/migrations lệch nhau — thứ lệch mà mọi lần deploy sau vấp phải.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Auto-resolving a failed migration.|||Tự động resolve một migration hỏng."
+        },
+        {
+          "loi": "Using db push \"just this once\" on production.|||Dùng db push \"chỉ lần này\" trên production."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "migration history",
+          "vi": "lịch sử migration"
+        },
+        {
+          "en": "drift",
+          "vi": "độ lệch lược đồ"
+        }
+      ]
+    }
+  ]
+}

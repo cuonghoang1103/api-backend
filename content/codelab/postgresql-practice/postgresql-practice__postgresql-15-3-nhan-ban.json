@@ -1,0 +1,592 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-15-3-nhan-ban",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-15-3-nhan-ban"
+  },
+  "exercises": [
+    {
+      "title": "Build a replica on a second port and watch a row cross",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "pg_create_physical_replication_slot",
+        "pg_basebackup -R -X stream -S",
+        "standby.signal",
+        "pg_is_in_recovery()"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "replication",
+        "docker"
+      ],
+      "problemHtml": "<p>Two containers: a primary and a streaming replica built with the exact pg_basebackup command of lesson 15.3.</p><pre># replica.sh — a primary and a streaming replica on one machine\ndocker network create pgc15net\ndocker run -d --name pgc15-pri --network pgc15net -e POSTGRES_PASSWORD=postgres -p 5461:5432 postgres:17\nsleep 4\ndocker exec pgc15-pri psql -U postgres -c \"CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'rep'\"\ndocker exec pgc15-pri bash -c \"echo 'host replication replicator all scram-sha-256' &gt;&gt; \\$PGDATA/pg_hba.conf\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT pg_reload_conf()\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT * FROM pg_create_physical_replication_slot('ban_sao_1')\"\ndocker exec pgc15-pri psql -U postgres -c \"CREATE TABLE note (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text)\"\n# copy the primary into an empty volume, as the replica's data directory\ndocker volume create pgc15-stdv\ndocker run --rm --network pgc15net -e PGPASSWORD=rep -v pgc15-stdv:/var/lib/postgresql/data postgres:17 \\\n  pg_basebackup -h pgc15-pri -U replicator -D /var/lib/postgresql/data -S ban_sao_1 -R -X stream -P\ndocker run -d --name pgc15-std --network pgc15net -p 5462:5432 -v pgc15-stdv:/var/lib/postgresql/data postgres:17\nsleep 4\ndocker exec pgc15-std psql -U postgres -c \"SELECT pg_is_in_recovery()\"\ndocker exec pgc15-pri psql -U postgres -c \"INSERT INTO note (title) VALUES ('Từ primary')\"\nsleep 1\ndocker exec pgc15-std psql -U postgres -c \"SELECT * FROM note\"\ndocker exec pgc15-std psql -U postgres -c \"INSERT INTO note (title) VALUES ('thử ghi')\"\ndocker exec pgc15-pri psql -U postgres -xc \"SELECT application_name, state, sent_lsn, replay_lsn, replay_lag, sync_state FROM pg_stat_replication\"</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> Replication needs two running servers talking over the network; the browser grader is a single in-page PostgreSQL. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>pg_is_in_recovery()</code> on the replica = <code>t</code>.</li>\n  <li>The row inserted on the primary is on the replica within a second; INSERT on the replica fails with <code>cannot execute INSERT in a read-only transaction</code>.</li>\n  <li>pg_stat_replication: state = streaming, sent_lsn = replay_lsn. Clean up with <code>docker rm -f pgc15-pri pgc15-std; docker volume rm pgc15-stdv; docker network rm pgc15net</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai container: một primary và một bản sao streaming dựng bằng đúng lệnh pg_basebackup của bài 15.3.</p><pre># replica.sh — a primary and a streaming replica on one machine\ndocker network create pgc15net\ndocker run -d --name pgc15-pri --network pgc15net -e POSTGRES_PASSWORD=postgres -p 5461:5432 postgres:17\nsleep 4\ndocker exec pgc15-pri psql -U postgres -c \"CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'rep'\"\ndocker exec pgc15-pri bash -c \"echo 'host replication replicator all scram-sha-256' &gt;&gt; \\$PGDATA/pg_hba.conf\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT pg_reload_conf()\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT * FROM pg_create_physical_replication_slot('ban_sao_1')\"\ndocker exec pgc15-pri psql -U postgres -c \"CREATE TABLE note (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text)\"\n# copy the primary into an empty volume, as the replica's data directory\ndocker volume create pgc15-stdv\ndocker run --rm --network pgc15net -e PGPASSWORD=rep -v pgc15-stdv:/var/lib/postgresql/data postgres:17 \\\n  pg_basebackup -h pgc15-pri -U replicator -D /var/lib/postgresql/data -S ban_sao_1 -R -X stream -P\ndocker run -d --name pgc15-std --network pgc15net -p 5462:5432 -v pgc15-stdv:/var/lib/postgresql/data postgres:17\nsleep 4\ndocker exec pgc15-std psql -U postgres -c \"SELECT pg_is_in_recovery()\"\ndocker exec pgc15-pri psql -U postgres -c \"INSERT INTO note (title) VALUES ('Từ primary')\"\nsleep 1\ndocker exec pgc15-std psql -U postgres -c \"SELECT * FROM note\"\ndocker exec pgc15-std psql -U postgres -c \"INSERT INTO note (title) VALUES ('thử ghi')\"\ndocker exec pgc15-pri psql -U postgres -xc \"SELECT application_name, state, sent_lsn, replay_lsn, replay_lag, sync_state FROM pg_stat_replication\"</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> Nhân bản cần hai máy chủ đang chạy nói chuyện qua mạng; máy chấm trình duyệt chỉ là một PostgreSQL trong trang. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>pg_is_in_recovery()</code> trên bản sao = <code>t</code>.</li>\n  <li>Dòng chèn ở primary có mặt trên bản sao trong vòng một giây; INSERT trên bản sao lỗi <code>cannot execute INSERT in a read-only transaction</code>.</li>\n  <li>pg_stat_replication: state = streaming, sent_lsn = replay_lsn. Dọn bằng <code>docker rm -f pgc15-pri pgc15-std; docker volume rm pgc15-stdv; docker network rm pgc15net</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "SELECT pg_is_in_recovery();  -- on pgc15-std|||SELECT pg_is_in_recovery();  -- trên pgc15-std",
+          "output": "t|||t",
+          "explanation": "A replica is permanently \"in recovery\": replaying WAL is its job.|||Bản sao luôn \"đang khôi phục\": phát lại WAL là công việc của nó."
+        }
+      ],
+      "hintsJson": [
+        "-R writes primary_conninfo and creates standby.signal; -X stream keeps the copy consistent.|||-R ghi primary_conninfo và tạo standby.signal; -X stream giữ bản chép nhất quán.",
+        "The replication role needs a pg_hba.conf line with the database name \"replication\".|||Role replication cần một dòng pg_hba.conf với tên CSDL là \"replication\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "replica.sh",
+          "language": "text",
+          "code": "# replica.sh — a primary and a streaming replica on one machine\ndocker network create pgc15net\ndocker run -d --name pgc15-pri --network pgc15net -e POSTGRES_PASSWORD=postgres -p 5461:5432 postgres:17\nsleep 4\ndocker exec pgc15-pri psql -U postgres -c \"CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'rep'\"\ndocker exec pgc15-pri bash -c \"echo 'host replication replicator all scram-sha-256' >> \\$PGDATA/pg_hba.conf\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT pg_reload_conf()\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT * FROM pg_create_physical_replication_slot('ban_sao_1')\"\ndocker exec pgc15-pri psql -U postgres -c \"CREATE TABLE note (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text)\"\n# copy the primary into an empty volume, as the replica's data directory\ndocker volume create pgc15-stdv\ndocker run --rm --network pgc15net -e PGPASSWORD=rep -v pgc15-stdv:/var/lib/postgresql/data postgres:17 \\\n  pg_basebackup -h pgc15-pri -U replicator -D /var/lib/postgresql/data -S ban_sao_1 -R -X stream -P\ndocker run -d --name pgc15-std --network pgc15net -p 5462:5432 -v pgc15-stdv:/var/lib/postgresql/data postgres:17\nsleep 4\ndocker exec pgc15-std psql -U postgres -c \"SELECT pg_is_in_recovery()\"\ndocker exec pgc15-pri psql -U postgres -c \"INSERT INTO note (title) VALUES ('Từ primary')\"\nsleep 1\ndocker exec pgc15-std psql -U postgres -c \"SELECT * FROM note\"\ndocker exec pgc15-std psql -U postgres -c \"INSERT INTO note (title) VALUES ('thử ghi')\"\ndocker exec pgc15-pri psql -U postgres -xc \"SELECT application_name, state, sent_lsn, replay_lsn, replay_lag, sync_state FROM pg_stat_replication\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "replica.sh",
+          "language": "text",
+          "code": "# replica.sh — a primary and a streaming replica on one machine\ndocker network create pgc15net\ndocker run -d --name pgc15-pri --network pgc15net -e POSTGRES_PASSWORD=postgres -p 5461:5432 postgres:17\nsleep 4\ndocker exec pgc15-pri psql -U postgres -c \"CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'rep'\"\ndocker exec pgc15-pri bash -c \"echo 'host replication replicator all scram-sha-256' >> \\$PGDATA/pg_hba.conf\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT pg_reload_conf()\"\ndocker exec pgc15-pri psql -U postgres -c \"SELECT * FROM pg_create_physical_replication_slot('ban_sao_1')\"\ndocker exec pgc15-pri psql -U postgres -c \"CREATE TABLE note (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, title text)\"\n# copy the primary into an empty volume, as the replica's data directory\ndocker volume create pgc15-stdv\ndocker run --rm --network pgc15net -e PGPASSWORD=rep -v pgc15-stdv:/var/lib/postgresql/data postgres:17 \\\n  pg_basebackup -h pgc15-pri -U replicator -D /var/lib/postgresql/data -S ban_sao_1 -R -X stream -P\ndocker run -d --name pgc15-std --network pgc15net -p 5462:5432 -v pgc15-stdv:/var/lib/postgresql/data postgres:17\nsleep 4\ndocker exec pgc15-std psql -U postgres -c \"SELECT pg_is_in_recovery()\"\ndocker exec pgc15-pri psql -U postgres -c \"INSERT INTO note (title) VALUES ('Từ primary')\"\nsleep 1\ndocker exec pgc15-std psql -U postgres -c \"SELECT * FROM note\"\ndocker exec pgc15-std psql -U postgres -c \"INSERT INTO note (title) VALUES ('thử ghi')\"\ndocker exec pgc15-pri psql -U postgres -xc \"SELECT application_name, state, sent_lsn, replay_lsn, replay_lag, sync_state FROM pg_stat_replication\"\n\n# Expected (PostgreSQL 17.11):\n#  pg_is_in_recovery → t\n#  note on the replica → 1 | Từ primary\n#  INSERT on the replica → ERROR:  cannot execute INSERT in a read-only transaction\n#  application_name | walreceiver · state | streaming · sent_lsn = replay_lsn · sync_state | async\n# The data directory of the replica contains standby.signal and postgresql.auto.conf with primary_conninfo + primary_slot_name.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A physical replica is a byte-identical copy that replays the primary's WAL continuously. It gives read capacity and a machine to fail over to — never write capacity, and never protection from DROP TABLE.</p>",
+      "solutionExplanationHtmlVi": "<p>Bản sao vật lý là bản chép giống từng byte, liên tục phát lại WAL của primary. Nó cho thêm sức đọc và một máy để chuyển sang khi hỏng — không bao giờ thêm sức ghi, và không bao giờ bảo vệ khỏi DROP TABLE.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "bash replica.sh",
+          "lyDo": "Replication needs two running servers talking over the network; the browser grader is a single in-page PostgreSQL.|||Nhân bản cần hai máy chủ đang chạy nói chuyện qua mạng; máy chấm trình duyệt chỉ là một PostgreSQL trong trang."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the slot (-S) — a replica that falls behind may find its WAL already recycled.|||Quên khe (-S) — bản sao tụt lại có thể thấy WAL của nó đã bị tái chế."
+        },
+        {
+          "loi": "Leaving the slot behind after deleting the replica — the primary keeps WAL forever (15.2).|||Để lại khe sau khi xoá bản sao — primary giữ WAL mãi mãi (15.2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "streaming replication",
+          "vi": "nhân bản luồng"
+        },
+        {
+          "en": "standby",
+          "vi": "máy dự phòng"
+        }
+      ]
+    },
+    {
+      "title": "Measure replication lag in bytes, not seconds",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pg_wal_lsn_diff(sent_lsn, replay_lsn)",
+        "replay_lag can mislead",
+        "state <> streaming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "replication",
+        "monitoring"
+      ],
+      "problemHtml": "<p>For each standby return <code>application_name, state, behind, replay_lag, alert</code>: behind = <code>pg_size_pretty(pg_wal_lsn_diff(sent_lsn, replay_lsn))</code>; alert = the state is not <code>streaming</code> <b>or</b> the standby is more than <b>16 MB</b> (16777216 bytes) behind. Most behind first.</p>\n<h4>Table (snapshot of a primary)</h4><pre>stat_replication (application_name, client_addr, state, sent_lsn, write_lsn, flush_lsn, replay_lsn, replay_lag, sync_state)\n-- 3 standbys</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Compute the bytes once (a CTE or a LATERAL) and reuse them for behind, alert and ORDER BY.</li>\n  <li>Do not trust replay_lag alone.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi bản sao trả về <code>application_name, state, behind, replay_lag, alert</code>: behind = <code>pg_size_pretty(pg_wal_lsn_diff(sent_lsn, replay_lsn))</code>; alert = trạng thái không phải <code>streaming</code> <b>hoặc</b> bản sao chậm hơn <b>16 MB</b> (16777216 byte). Chậm nhất trước.</p>\n<h4>Bảng (ảnh chụp một primary)</h4><pre>stat_replication (application_name, client_addr, state, sent_lsn, write_lsn, flush_lsn, replay_lsn, replay_lag, sync_state)\n-- 3 bản sao</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tính số byte một lần (CTE hoặc LATERAL) rồi dùng lại cho behind, alert và ORDER BY.</li>\n  <li>Đừng tin mỗi replay_lag.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "application_name | state     | behind  | replay_lag      | alert\n-----------------+-----------+---------+-----------------+------\nreplica-bc       | streaming | 68 MB   | 00:00:00.66     | true \nreport-db        | catchup   | 33 MB   | 00:00:41        | true \nreplica-a        | streaming | 0 bytes | 00:00:00.003628 | false",
+          "explanation": "Expected result of check \"replica-bc is 68 MB behind while replay_lag says 0.66 s\" (row order matters).|||Kết quả mong đợi của kiểm \"replica-bc chậm 68 MB trong khi replay_lag nói 0,66 s\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "sent → write → flush → replay: the gap between the first and the last is what the replica has not applied yet.|||sent → write → flush → replay: khoảng cách giữa đầu và cuối là phần bản sao chưa áp dụng.",
+        "On a live primary: <code>FROM pg_stat_replication</code>.|||Trên primary thật: <code>FROM pg_stat_replication</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "replication.sql",
+          "language": "sql",
+          "code": "-- replication.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- replication.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE stat_replication (                     -- columns of pg_stat_replication on the primary\n  application_name text PRIMARY KEY, client_addr text, state text NOT NULL,\n  sent_lsn pg_lsn, write_lsn pg_lsn, flush_lsn pg_lsn, replay_lsn pg_lsn,\n  replay_lag interval, sync_state text NOT NULL);\nINSERT INTO stat_replication VALUES\n  ('replica-a',  '10.0.0.11', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/9A005660', '00:00:00.003628', 'async'),\n  ('replica-bc', '10.0.0.12', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/95C05660', '00:00:00.66',     'async'),\n  ('report-db',  '10.0.0.13', 'catchup',   '0/9A005660', '0/98000000', '0/98000000', '0/97F00000', '00:00:41',        'async');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT r.application_name, r.state,\n       pg_size_pretty(b.bytes) AS behind,\n       r.replay_lag,\n       r.state <> 'streaming' OR b.bytes > 16777216 AS alert\nFROM stat_replication r,\n     LATERAL (SELECT pg_wal_lsn_diff(r.sent_lsn, r.replay_lsn) AS bytes) b\nORDER BY b.bytes DESC;\n"
+        },
+        {
+          "name": "replication.sql",
+          "language": "sql",
+          "code": "-- replication.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- replication.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE stat_replication (                     -- columns of pg_stat_replication on the primary\n  application_name text PRIMARY KEY, client_addr text, state text NOT NULL,\n  sent_lsn pg_lsn, write_lsn pg_lsn, flush_lsn pg_lsn, replay_lsn pg_lsn,\n  replay_lag interval, sync_state text NOT NULL);\nINSERT INTO stat_replication VALUES\n  ('replica-a',  '10.0.0.11', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/9A005660', '00:00:00.003628', 'async'),\n  ('replica-bc', '10.0.0.12', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/95C05660', '00:00:00.66',     'async'),\n  ('report-db',  '10.0.0.13', 'catchup',   '0/9A005660', '0/98000000', '0/98000000', '0/97F00000', '00:00:41',        'async');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lesson paused replay on a standby and inserted 200 000 rows: 68 MB between sent_lsn and replay_lsn while replay_lag still said 0.66 s. Bytes behind is the honest measure; alert on it and on any state other than streaming.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài học dừng phát lại trên một bản sao rồi chèn 200 000 dòng: 68 MB giữa sent_lsn và replay_lsn trong khi replay_lag vẫn nói 0,66 s. Số byte chậm là thước đo trung thực; cảnh báo theo nó và theo mọi trạng thái khác streaming.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE stat_replication (                     -- columns of pg_stat_replication on the primary\n  application_name text PRIMARY KEY, client_addr text, state text NOT NULL,\n  sent_lsn pg_lsn, write_lsn pg_lsn, flush_lsn pg_lsn, replay_lsn pg_lsn,\n  replay_lag interval, sync_state text NOT NULL);\nINSERT INTO stat_replication VALUES\n  ('replica-a',  '10.0.0.11', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/9A005660', '00:00:00.003628', 'async'),\n  ('replica-bc', '10.0.0.12', 'streaming', '0/9A005660', '0/9A005660', '0/9A005660', '0/95C05660', '00:00:00.66',     'async'),\n  ('report-db',  '10.0.0.13', 'catchup',   '0/9A005660', '0/98000000', '0/98000000', '0/97F00000', '00:00:41',        'async');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "replica-bc is 68 MB behind while replay_lag says 0.66 s|||replica-bc chậm 68 MB trong khi replay_lag nói 0,66 s",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "application_name",
+                "state",
+                "behind",
+                "replay_lag",
+                "alert"
+              ],
+              "hang": [
+                [
+                  "replica-bc",
+                  "streaming",
+                  "68 MB",
+                  "00:00:00.66",
+                  true
+                ],
+                [
+                  "report-db",
+                  "catchup",
+                  "33 MB",
+                  "00:00:41",
+                  true
+                ],
+                [
+                  "replica-a",
+                  "streaming",
+                  "0 bytes",
+                  "00:00:00.003628",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "report-db is only 1 MB behind but still in catchup|||report-db chỉ còn chậm 1 MB nhưng vẫn đang catchup",
+            "an": true,
+            "themCsdl": "UPDATE stat_replication SET replay_lsn = '0/99F00000', replay_lag = '00:00:02' WHERE application_name = 'report-db'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "application_name",
+                "state",
+                "behind",
+                "replay_lag",
+                "alert"
+              ],
+              "hang": [
+                [
+                  "replica-bc",
+                  "streaming",
+                  "68 MB",
+                  "00:00:00.66",
+                  true
+                ],
+                [
+                  "report-db",
+                  "catchup",
+                  "1046 kB",
+                  "00:00:02",
+                  true
+                ],
+                [
+                  "replica-a",
+                  "streaming",
+                  "0 bytes",
+                  "00:00:00.003628",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "…and then streams again|||…rồi stream trở lại",
+            "an": true,
+            "themCsdl": "UPDATE stat_replication SET state = 'streaming', write_lsn = sent_lsn, flush_lsn = sent_lsn, replay_lsn = '0/99F00000', replay_lag = '00:00:00.2' WHERE application_name = 'report-db'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "application_name",
+                "state",
+                "behind",
+                "replay_lag",
+                "alert"
+              ],
+              "hang": [
+                [
+                  "replica-bc",
+                  "streaming",
+                  "68 MB",
+                  "00:00:00.66",
+                  true
+                ],
+                [
+                  "report-db",
+                  "streaming",
+                  "1046 kB",
+                  "00:00:00.2",
+                  false
+                ],
+                [
+                  "replica-a",
+                  "streaming",
+                  "0 bytes",
+                  "00:00:00.003628",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses pg_wal_lsn_diff|||Dùng pg_wal_lsn_diff",
+            "khop": "pg_wal_lsn_diff\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Alerting on replay_lag only — it is measured from the last replayed commit and can look tiny while megabytes wait.|||Chỉ cảnh báo theo replay_lag — nó đo từ commit cuối đã phát lại và có thể trông rất nhỏ khi hàng chục MB đang chờ."
+        },
+        {
+          "loi": "Ignoring state — a standby in catchup is not serving fresh reads.|||Lờ trạng thái — bản sao đang catchup không phục vụ dữ liệu đọc mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replication lag",
+          "vi": "độ trễ nhân bản"
+        },
+        {
+          "en": "replay_lsn",
+          "vi": "vị trí đã phát lại"
+        }
+      ]
+    },
+    {
+      "title": "What a replica does and does not solve",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "read scaling",
+        "failover",
+        "replica is not a backup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "replication"
+      ],
+      "problemHtml": "<p>For each problem, does adding a streaming replica solve it?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi vấn đề, thêm một bản sao streaming có giải quyết được không?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: is it about reading, writing, hardware or mistakes?|||Tự hỏi: chuyện đọc, ghi, phần cứng hay sai sót?",
+        "A physical replica is byte-identical, so it cannot diverge.|||Bản sao vật lý giống từng byte, nên không thể khác đi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a replica does and does not solve\n\nAnswer in the answer panel (no code needed).\n\n1. Problem → replica helps?Vấn đề → bản sao giúp được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a replica does and does not solve — answer key\n\n1. Problem → replica helps?Vấn đề → bản sao giúp được?\n   - r1.r: yes\n   - r2.r: yes\n   - r3.r: no\n   - r4.r: no\n   - r5.r: yes\n   - r6.r: no\n   A replica adds read capacity and a failover target (pg_promote). It replays every write including DROP TABLE, cannot accept writes of its own, and does nothing for write throughput — that needs partitioning or sharding; human error needs PITR.VI: Bản sao thêm sức đọc và một đích chuyển sang khi hỏng (pg_promote). Nó phát lại mọi lệnh ghi kể cả DROP TABLE, không nhận lệnh ghi riêng, và không giúp gì thông lượng ghi — việc đó cần phân mảnh hoặc sharding; lỗi con người cần PITR.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A replica adds read capacity and a failover target (pg_promote). It replays every write including DROP TABLE, cannot accept writes of its own, and does nothing for write throughput — that needs partitioning or sharding; human error needs PITR.</p><p><i>VI: Bản sao thêm sức đọc và một đích chuyển sang khi hỏng (pg_promote). Nó phát lại mọi lệnh ghi kể cả DROP TABLE, không nhận lệnh ghi riêng, và không giúp gì thông lượng ghi — việc đó cần phân mảnh hoặc sharding; lỗi con người cần PITR.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Problem → replica helps?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vấn đề → bản sao giúp được?</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Problem / Vấn đề"
+              },
+              {
+                "ma": "r",
+                "ten": "Replica? / Bản sao?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "Nightly reports slow down the checkout / Báo cáo đêm làm chậm thanh toán"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "The primary's disk dies / Đĩa của primary hỏng"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "Too many INSERTs per second for one server / Quá nhiều INSERT mỗi giây cho một máy"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "Someone ran DROP TABLE orders / Ai đó chạy DROP TABLE orders"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "A 3-hour pg_dump blocks vacuum on the primary / pg_dump 3 giờ chặn vacuum trên primary"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "Let the analytics team write their own tables on it / Cho đội phân tích tự tạo bảng trên đó"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "yes",
+              "r2.r": "yes",
+              "r3.r": "no",
+              "r4.r": "no",
+              "r5.r": "yes",
+              "r6.r": "no"
+            },
+            "giaiThich": "<p>A replica adds read capacity and a failover target (pg_promote). It replays every write including DROP TABLE, cannot accept writes of its own, and does nothing for write throughput — that needs partitioning or sharding; human error needs PITR.</p><p><i>VI: Bản sao thêm sức đọc và một đích chuyển sang khi hỏng (pg_promote). Nó phát lại mọi lệnh ghi kể cả DROP TABLE, không nhận lệnh ghi riêng, và không giúp gì thông lượng ghi — việc đó cần phân mảnh hoặc sharding; lỗi con người cần PITR.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the replica \"our backup\".|||Gọi bản sao là \"bản sao lưu của chúng ta\"."
+        },
+        {
+          "loi": "Expecting replicas to scale writes.|||Mong bản sao tăng sức ghi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "failover",
+          "vi": "chuyển sang máy dự phòng"
+        }
+      ]
+    },
+    {
+      "title": "Replica details and the stale-read trap",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "standby.signal",
+        "pg_promote()",
+        "read-your-writes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "replication"
+      ],
+      "problemHtml": "<p>Lesson 15.3 in three questions.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 15.3 trong ba câu.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Recovery mode is the replica's permanent state.|||Chế độ khôi phục là trạng thái thường trực của bản sao.",
+        "Decide per read whether stale data is acceptable.|||Quyết định theo từng lần đọc xem dữ liệu cũ có chấp nhận được không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replica details and the stale-read trap\n\nAnswer in the answer panel (no code needed).\n\n1. What makes a data directory start as a replica instead of a primary?Điều gì khiến một thư mục dữ liệu khởi động thành bản sao thay vì primary?\n2. A user saves their profile, the page reloads from a replica and shows the old name. What is this?Người dùng lưu hồ sơ, trang tải lại từ bản sao và hiện tên cũ. Đây là gì?\n3. The primary is gone for good. Which call turns the replica into the new primary?Primary hỏng hẳn. Lệnh nào biến bản sao thành primary mới?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replica details and the stale-read trap — answer key\n\n1. What makes a data directory start as a replica instead of a primary?Điều gì khiến một thư mục dữ liệu khởi động thành bản sao thay vì primary?\n   Answer: a) the empty file standby.signal (written by pg_basebackup -R)\n   standby.signal + primary_conninfo; -R writes both.VI: standby.signal + primary_conninfo; -R ghi cả hai.\n\n2. A user saves their profile, the page reloads from a replica and shows the old name. What is this?Người dùng lưu hồ sơ, trang tải lại từ bản sao và hiện tên cũ. Đây là gì?\n   Answer: b) async replication lag — reads after your own write must go to the primary\n   Route the reads that must see the user's own write to the primary (or wait for the LSN).VI: Định tuyến các lần đọc cần thấy chính thứ người dùng vừa ghi về primary (hoặc đợi tới LSN đó).\n\n3. The primary is gone for good. Which call turns the replica into the new primary?Primary hỏng hẳn. Lệnh nào biến bản sao thành primary mới?\n   Answer: d) SELECT pg_promote();\n   Measured: writable 3 s after the primary stopped, on timeline 2. Patroni/repmgr automate the election.VI: Đo được: ghi được 3 s sau khi primary dừng, trên timeline 2. Patroni/repmgr tự động hoá việc bầu chọn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> the empty file standby.signal (written by pg_basebackup -R)</p><p>standby.signal + primary_conninfo; -R writes both.</p><p><i>VI: standby.signal + primary_conninfo; -R ghi cả hai.</i></p></li><li><p><b>b)</b> async replication lag — reads after your own write must go to the primary</p><p>Route the reads that must see the user's own write to the primary (or wait for the LSN).</p><p><i>VI: Định tuyến các lần đọc cần thấy chính thứ người dùng vừa ghi về primary (hoặc đợi tới LSN đó).</i></p></li><li><p><b>d)</b> SELECT pg_promote();</p><p>Measured: writable 3 s after the primary stopped, on timeline 2. Patroni/repmgr automate the election.</p><p><i>VI: Đo được: ghi được 3 s sau khi primary dừng, trên timeline 2. Patroni/repmgr tự động hoá việc bầu chọn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What makes a data directory start as a replica instead of a primary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì khiến một thư mục dữ liệu khởi động thành bản sao thay vì primary?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the empty file standby.signal (written by pg_basebackup -R)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "setting wal_level = logical in postgresql.conf"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the name given to the container or host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a special replica role stored in pg_authid"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>standby.signal + primary_conninfo; -R writes both.</p><p><i>VI: standby.signal + primary_conninfo; -R ghi cả hai.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A user saves their profile, the page reloads from a replica and shows the old name. What is this?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người dùng lưu hồ sơ, trang tải lại từ bản sao và hiện tên cũ. Đây là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a corrupted replica that has to be rebuilt from scratch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "async replication lag — reads after your own write must go to the primary"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a bug in the UPDATE statement that saved the profile"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a failover that went wrong a few seconds earlier"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Route the reads that must see the user's own write to the primary (or wait for the LSN).</p><p><i>VI: Định tuyến các lần đọc cần thấy chính thứ người dùng vừa ghi về primary (hoặc đợi tới LSN đó).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The primary is gone for good. Which call turns the replica into the new primary?</p><p style=\"opacity:.75;font-size:.92em\"><i>Primary hỏng hẳn. Lệnh nào biến bản sao thành primary mới?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SELECT pg_is_in_recovery();"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ALTER SYSTEM SET hot_standby = off;"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DELETE standby.signal while it runs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SELECT pg_promote();"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured: writable 3 s after the primary stopped, on timeline 2. Patroni/repmgr automate the election.</p><p><i>VI: Đo được: ghi được 3 s sau khi primary dừng, trên timeline 2. Patroni/repmgr tự động hoá việc bầu chọn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending every read to replicas without thinking about the user's own writes.|||Đẩy mọi lần đọc sang bản sao mà không nghĩ tới thứ người dùng vừa ghi."
+        },
+        {
+          "loi": "Promoting while the old primary may still accept writes (split brain).|||Promote trong khi primary cũ có thể vẫn nhận ghi (split brain)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "read-your-writes",
+          "vi": "đọc thấy chính thứ mình vừa ghi"
+        },
+        {
+          "en": "promote",
+          "vi": "nâng làm primary"
+        }
+      ]
+    }
+  ]
+}

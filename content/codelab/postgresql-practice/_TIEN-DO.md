@@ -1,4 +1,4 @@
-# postgresql-practice — tiến độ phủ Code Lab theo bài học (01/11/2026)
+# postgresql-practice — tiến độ phủ Code Lab theo bài học (01/11/2026) — ✅ PHỦ ĐỦ Mục 0 → Ch17 + Lab 1–9
 
 Nguồn: `nguon/<slug-bài-học>.mjs` (module slug = slug bài ⇒ thẻ "Luyện tập trên Code Lab" dưới video bài đó, có nút về đúng bài).
 Dựng: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` → `node nguon/_dung-track.mjs` →
@@ -21,6 +21,9 @@ Dựng: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` → `node
 | Ch12 (12.1–12.4) + Lab 6 | ✅ 17 đề (users/notes của bài + CT Shop mini) + Lab 6 (T1a/T1c/T2a/T2b/T4) |
 | Ch13 (13.1–13.4) + Lab 7 | ✅ 16 đề (13.4: pg_trgm là bài tay — PGlite không nạp extension; tìm không dấu bằng khong_dau() + chỉ mục biểu thức chấm được) + Lab 7 (J1/J2 gộp/J2 sửa+canh/J3/S2+S4) |
 | Ch14 (14.1–14.4) | ✅ 18 đề (đo kết nối, PgBouncer, autovacuum chạy, pg_stat_statements là bài tay; truy vấn giám sát chấm trên ẢNH CHỤP pg_stat_* có ghi rõ; reloptions chấm thật) |
-| Ch15–Ch17, Lab 8–9 | ⏳ đang làm |
+| Ch15 (15.1–15.4) + Lab 8 | ✅ 16 đề (pg_dump, PITR, dựng bản sao là bài tay; đối soát md5, khe sao chép giữ WAL, độ trễ theo byte chấm được; phân mảnh chạy thật: định tuyến, pruning qua plan, DROP/DETACH/DEFAULT) + Lab 8 (phần SQL: R1 role chỉ đọc, R1 DEFAULT PRIVILEGES FOR ROLE, B2 trả đúng dòng xoá nhầm, B1 sequence sau --data-only; phần máy chủ: đề tay) |
+| Ch16 (16.1–16.4) + Lab 9 | ✅ 17 đề (bảng Prisma↔SQL, bảng khoá DDL đo bằng pg_locks, migration replay được, NOT NULL an toàn, danh mục hệ thống thật, FK thiếu chỉ mục, role ứng dụng, checklist một truy vấn, ca trực 1–2) + Lab 9 (phần SQL: C1 owner/app, C4 expand trigger hai chiều, C7a báo cáo giờ VN, C7b chỉ mục bỏ Sort; phần ứng dụng Node+Prisma: đề tay) |
+| Ch17 (17.1–17.4) | ✅ 14 đề (dịch T-SQL/MySQL, upsert đốt số identity, dựng document từ bảng, pipeline MongoDB → jsonb_array_elements, đổi tên trong mọi document; còn lại bảng/trắc nghiệm) |
+| PE/FE chữa đề (s18) | — không làm Code Lab riêng (bài chữa đề video; các kỹ năng đã có đề theo chương) |
 
 Ghi chú: xem đầu `nguon/_chung.mjs` (giới hạn PGlite đo thật, cách soạn pg()/cs()/tay()/deLonPg()).

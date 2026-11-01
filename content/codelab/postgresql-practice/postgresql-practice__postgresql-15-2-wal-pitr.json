@@ -1,0 +1,570 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-15-2-wal-pitr",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-15-2-wal-pitr"
+  },
+  "exercises": [
+    {
+      "title": "Point-in-time recovery, in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "base backup + WAL archive",
+        "recovery_target_time",
+        "recovery.signal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "wal",
+        "pitr"
+      ],
+      "problemHtml": "<p>At 14:32 someone ran <code>DELETE FROM users</code> without WHERE. Put the steps of a recovery to 14:31:59 in order — including the ones that had to happen long before the incident.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lúc 14:32 ai đó chạy <code>DELETE FROM users</code> thiếu WHERE. Sắp xếp các bước khôi phục về 14:31:59 — kể cả những bước lẽ ra phải làm từ rất lâu trước sự cố.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which steps are impossible to do after 14:32?|||Bước nào không thể làm sau 14:32?",
+        "recovery.signal is what makes the server enter recovery.|||recovery.signal là thứ khiến máy chủ vào chế độ khôi phục."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Point-in-time recovery, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp thứ tự các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Point-in-time recovery, in order — answer key\n\n1. Order the stepsSắp thứ tự các bước\n   Answer: m6) archive_mode = on + a working archive_command (weeks before) / bật archive_mode + archive_command chạy được (từ vài tuần trước)  →  m2) take a base backup with pg_basebackup (before the incident) / lấy base backup bằng pg_basebackup (trước sự cố)  →  m3) stop writes and copy the base backup into an empty data directory / dừng ghi và chép base backup vào thư mục dữ liệu trống  →  m1) set restore_command and recovery_target_time = '14:31:59' / đặt restore_command và recovery_target_time = '14:31:59'  →  m4) create recovery.signal and start the server: it replays WAL up to the target / tạo recovery.signal rồi khởi động: máy chủ phát lại WAL tới mốc  →  m5) check the data, then promote and point the application at it / kiểm dữ liệu, rồi promote và trỏ ứng dụng sang\n   Archiving and the base backup must exist BEFORE the disaster — they cannot be added afterwards. Recovery = base backup + every archived WAL segment since, replayed to the target.VI: Lưu trữ WAL và base backup phải có TRƯỚC thảm hoạ — không thể bổ sung sau. Khôi phục = base backup + mọi đoạn WAL đã lưu từ đó, phát lại tới mốc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Archiving and the base backup must exist BEFORE the disaster — they cannot be added afterwards. Recovery = base backup + every archived WAL segment since, replayed to the target.</p><p><i>VI: Lưu trữ WAL và base backup phải có TRƯỚC thảm hoạ — không thể bổ sung sau. Khôi phục = base backup + mọi đoạn WAL đã lưu từ đó, phát lại tới mốc.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "set restore_command and recovery_target_time = '14:31:59' / đặt restore_command và recovery_target_time = '14:31:59'"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "take a base backup with pg_basebackup (before the incident) / lấy base backup bằng pg_basebackup (trước sự cố)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "stop writes and copy the base backup into an empty data directory / dừng ghi và chép base backup vào thư mục dữ liệu trống"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "create recovery.signal and start the server: it replays WAL up to the target / tạo recovery.signal rồi khởi động: máy chủ phát lại WAL tới mốc"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "check the data, then promote and point the application at it / kiểm dữ liệu, rồi promote và trỏ ứng dụng sang"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "archive_mode = on + a working archive_command (weeks before) / bật archive_mode + archive_command chạy được (từ vài tuần trước)"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m2",
+              "m3",
+              "m1",
+              "m4",
+              "m5"
+            ],
+            "giaiThich": "<p>Archiving and the base backup must exist BEFORE the disaster — they cannot be added afterwards. Recovery = base backup + every archived WAL segment since, replayed to the target.</p><p><i>VI: Lưu trữ WAL và base backup phải có TRƯỚC thảm hoạ — không thể bổ sung sau. Khôi phục = base backup + mọi đoạn WAL đã lưu từ đó, phát lại tới mốc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting from a nightly pg_dump — WAL cannot be replayed on top of a logical dump.|||Bắt đầu từ pg_dump hằng đêm — không thể phát lại WAL lên một bản dump logic."
+        },
+        {
+          "loi": "Setting the target AFTER the delete (14:32:30) — you recover the disaster too.|||Đặt mốc SAU lệnh xoá (14:32:30) — bạn khôi phục luôn cả thảm hoạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PITR",
+          "vi": "khôi phục tới một thời điểm"
+        },
+        {
+          "en": "base backup",
+          "vi": "bản sao lưu nền"
+        }
+      ]
+    },
+    {
+      "title": "The abandoned replication slot that fills the disk",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pg_lsn",
+        "pg_wal_lsn_diff",
+        "replication slots retain WAL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "wal",
+        "replication",
+        "monitoring"
+      ],
+      "problemHtml": "<p>A slot keeps every WAL segment its consumer has not confirmed. For each slot return <code>slot_name, slot_type, active, retained, alarm</code>: retained = <code>pg_size_pretty(pg_wal_lsn_diff(current_lsn, restart_lsn))</code>; alarm = the slot is <b>inactive</b> and retains <b>more than 1 GB</b> (1073741824 bytes). Most retained first.</p>\n<h4>Tables (snapshot of a primary)</h4><pre>wal_position (current_lsn pg_lsn)                               -- 3/2A000000\nreplication_slots (slot_name, slot_type, active, restart_lsn pg_lsn)   -- 4 slots</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>An LSN like 3/2A000000 is a byte position: high part × 2³² + low part. pg_wal_lsn_diff does the subtraction.</li>\n  <li>Sort by the number of bytes, not by the pretty text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một khe giữ mọi đoạn WAL mà bên tiêu thụ chưa xác nhận. Với mỗi khe trả về <code>slot_name, slot_type, active, retained, alarm</code>: retained = <code>pg_size_pretty(pg_wal_lsn_diff(current_lsn, restart_lsn))</code>; alarm = khe <b>không hoạt động</b> và giữ <b>hơn 1 GB</b> (1073741824 byte). Giữ nhiều nhất trước.</p>\n<h4>Bảng (ảnh chụp một primary)</h4><pre>wal_position (current_lsn pg_lsn)                               -- 3/2A000000\nreplication_slots (slot_name, slot_type, active, restart_lsn pg_lsn)   -- 4 khe</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>LSN như 3/2A000000 là một vị trí byte: phần cao × 2³² + phần thấp. pg_wal_lsn_diff làm phép trừ.</li>\n  <li>Sắp theo số byte, không theo chuỗi đã định dạng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "slot_name      | slot_type | active | retained | alarm\n---------------+-----------+--------+----------+------\nold_replica    | physical  | false  | 6816 MB  | true \ndebezium_cdc   | logical   | true   | 928 MB   | false\nanalytics_test | logical   | false  | 32 MB    | false\nban_sao_1      | physical  | true   | 64 kB    | false",
+          "explanation": "Expected result of check \"old_replica has been holding 6.7 GB\" (row order matters).|||Kết quả mong đợi của kiểm \"old_replica đang giữ 6,7 GB\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "On a live primary: <code>FROM pg_replication_slots, pg_current_wal_lsn() AS current_lsn</code>.|||Trên primary thật: <code>FROM pg_replication_slots, pg_current_wal_lsn() AS current_lsn</code>.",
+        "An active slot that lags is a slow consumer; an inactive one is nobody.|||Khe đang hoạt động mà trễ là bên tiêu thụ chậm; khe không hoạt động là chẳng có ai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "slots.sql",
+          "language": "sql",
+          "code": "-- slots.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- slots.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE wal_position (current_lsn pg_lsn NOT NULL);      -- SELECT pg_current_wal_lsn() on the primary\nINSERT INTO wal_position VALUES ('3/2A000000');\nCREATE TABLE replication_slots (                                   -- columns of pg_replication_slots\n  slot_name text PRIMARY KEY, slot_type text NOT NULL, active boolean NOT NULL, restart_lsn pg_lsn NOT NULL);\nINSERT INTO replication_slots VALUES\n  ('ban_sao_1',      'physical', true,  '3/29FF0000'),\n  ('old_replica',    'physical', false, '1/80000000'),\n  ('debezium_cdc',   'logical',  true,  '2/F0000000'),\n  ('analytics_test', 'logical',  false, '3/28000000');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT s.slot_name, s.slot_type, s.active,\n       pg_size_pretty(pg_wal_lsn_diff(w.current_lsn, s.restart_lsn)) AS retained,\n       NOT s.active AND pg_wal_lsn_diff(w.current_lsn, s.restart_lsn) > 1073741824 AS alarm\nFROM replication_slots s, wal_position w\nORDER BY pg_wal_lsn_diff(w.current_lsn, s.restart_lsn) DESC;\n"
+        },
+        {
+          "name": "slots.sql",
+          "language": "sql",
+          "code": "-- slots.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- slots.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE wal_position (current_lsn pg_lsn NOT NULL);      -- SELECT pg_current_wal_lsn() on the primary\nINSERT INTO wal_position VALUES ('3/2A000000');\nCREATE TABLE replication_slots (                                   -- columns of pg_replication_slots\n  slot_name text PRIMARY KEY, slot_type text NOT NULL, active boolean NOT NULL, restart_lsn pg_lsn NOT NULL);\nINSERT INTO replication_slots VALUES\n  ('ban_sao_1',      'physical', true,  '3/29FF0000'),\n  ('old_replica',    'physical', false, '1/80000000'),\n  ('debezium_cdc',   'logical',  true,  '2/F0000000'),\n  ('analytics_test', 'logical',  false, '3/28000000');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A replication slot's guarantee is unconditional: switch the replica off and forget the slot, and the primary keeps every WAL segment until the disk is full and the server stops. Watch <code>pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn)</code>, drop slots nobody uses (<code>pg_drop_replication_slot</code>), and consider <code>max_slot_wal_keep_size</code> as a ceiling.</p>",
+      "solutionExplanationHtmlVi": "<p>Cam kết của khe sao chép là vô điều kiện: tắt bản sao rồi quên khe, primary sẽ giữ mọi đoạn WAL cho tới khi đầy đĩa và máy chủ dừng. Theo dõi <code>pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn)</code>, xoá khe không ai dùng (<code>pg_drop_replication_slot</code>), và cân nhắc <code>max_slot_wal_keep_size</code> làm trần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE wal_position (current_lsn pg_lsn NOT NULL);      -- SELECT pg_current_wal_lsn() on the primary\nINSERT INTO wal_position VALUES ('3/2A000000');\nCREATE TABLE replication_slots (                                   -- columns of pg_replication_slots\n  slot_name text PRIMARY KEY, slot_type text NOT NULL, active boolean NOT NULL, restart_lsn pg_lsn NOT NULL);\nINSERT INTO replication_slots VALUES\n  ('ban_sao_1',      'physical', true,  '3/29FF0000'),\n  ('old_replica',    'physical', false, '1/80000000'),\n  ('debezium_cdc',   'logical',  true,  '2/F0000000'),\n  ('analytics_test', 'logical',  false, '3/28000000');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "old_replica has been holding 6.7 GB|||old_replica đang giữ 6,7 GB",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "slot_name",
+                "slot_type",
+                "active",
+                "retained",
+                "alarm"
+              ],
+              "hang": [
+                [
+                  "old_replica",
+                  "physical",
+                  false,
+                  "6816 MB",
+                  true
+                ],
+                [
+                  "debezium_cdc",
+                  "logical",
+                  true,
+                  "928 MB",
+                  false
+                ],
+                [
+                  "analytics_test",
+                  "logical",
+                  false,
+                  "32 MB",
+                  false
+                ],
+                [
+                  "ban_sao_1",
+                  "physical",
+                  true,
+                  "64 kB",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "One more GB of writes later|||Sau thêm 1 GB dữ liệu ghi",
+            "an": true,
+            "themCsdl": "UPDATE wal_position SET current_lsn = current_lsn + 1073741824",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "slot_name",
+                "slot_type",
+                "active",
+                "retained",
+                "alarm"
+              ],
+              "hang": [
+                [
+                  "old_replica",
+                  "physical",
+                  false,
+                  "7840 MB",
+                  true
+                ],
+                [
+                  "debezium_cdc",
+                  "logical",
+                  true,
+                  "1952 MB",
+                  false
+                ],
+                [
+                  "analytics_test",
+                  "logical",
+                  false,
+                  "1056 MB",
+                  true
+                ],
+                [
+                  "ban_sao_1",
+                  "physical",
+                  true,
+                  "1024 MB",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses pg_wal_lsn_diff|||Dùng pg_wal_lsn_diff",
+            "khop": "pg_wal_lsn_diff\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Alarming on every big slot — the active CDC slot is just behind, not abandoned.|||Báo động mọi khe lớn — khe CDC đang hoạt động chỉ là chậm, không bị bỏ rơi."
+        },
+        {
+          "loi": "ORDER BY the pretty text — \"928 MB\" sorts above \"6816 MB\".|||ORDER BY chuỗi định dạng — \"928 MB\" xếp trên \"6816 MB\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LSN",
+          "vi": "vị trí trong dòng WAL"
+        },
+        {
+          "en": "replication slot",
+          "vi": "khe sao chép"
+        }
+      ]
+    },
+    {
+      "title": "WAL in four questions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "write-ahead rule",
+        "wal_level",
+        "archive_command exit code",
+        "LSN"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "wal"
+      ],
+      "problemHtml": "<p>Lesson 15.2 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 15.2 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Log first, pages later.|||Nhật ký trước, trang sau.",
+        "An archive_command must report failure honestly.|||archive_command phải báo lỗi trung thực."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# WAL in four questions\n\nAnswer in the answer panel (no code needed).\n\n1. What must be on disk before COMMIT returns?Cái gì phải nằm trên đĩa trước khi COMMIT trả về?\n2. Which wal_level do streaming replication and archive-based PITR need?Sao chép streaming và PITR dựa trên lưu trữ cần wal_level nào?\n3. The archive disk is full and archive_command keeps failing. What does PostgreSQL do?Đĩa lưu trữ đầy và archive_command liên tục lỗi. PostgreSQL làm gì?\n4. pg_wal_lsn_diff('0/25FFE68', '0/247EE48') after inserting 10 000 rows is 1 576 992. What is it?pg_wal_lsn_diff('0/25FFE68', '0/247EE48') sau khi chèn 10 000 dòng là 1 576 992. Đó là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# WAL in four questions — answer key\n\n1. What must be on disk before COMMIT returns?Cái gì phải nằm trên đĩa trước khi COMMIT trả về?\n   Answer: b) the WAL records of the transaction\n   Write-ahead: the log is flushed first; pages are written back lazily and rebuilt from WAL after a crash.VI: Ghi trước: nhật ký được đẩy xuống đĩa trước; trang dữ liệu ghi sau, và dựng lại từ WAL sau sự cố.\n\n2. Which wal_level do streaming replication and archive-based PITR need?Sao chép streaming và PITR dựa trên lưu trữ cần wal_level nào?\n   Answer: b) replica (the default)\n   minimal is crash recovery only; logical adds detail for logical replication.VI: minimal chỉ đủ khôi phục sau sự cố; logical thêm chi tiết cho sao chép logic.\n\n3. The archive disk is full and archive_command keeps failing. What does PostgreSQL do?Đĩa lưu trữ đầy và archive_command liên tục lỗi. PostgreSQL làm gì?\n   Answer: a) keeps the segments in pg_wal and retries — pg_wal grows until fixed\n   Correct and dangerous: no segment is lost, but the main disk fills next.VI: Đúng mà nguy hiểm: không mất đoạn nào, nhưng đĩa chính sẽ đầy tiếp theo.\n\n4. pg_wal_lsn_diff('0/25FFE68', '0/247EE48') after inserting 10 000 rows is 1 576 992. What is it?pg_wal_lsn_diff('0/25FFE68', '0/247EE48') sau khi chèn 10 000 dòng là 1 576 992. Đó là gì?\n   Answer: b) bytes of WAL written (about 1540 kB)\n   An LSN is a byte position in the WAL stream, so the difference is bytes.VI: LSN là vị trí byte trong dòng WAL, nên hiệu là số byte.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the WAL records of the transaction</p><p>Write-ahead: the log is flushed first; pages are written back lazily and rebuilt from WAL after a crash.</p><p><i>VI: Ghi trước: nhật ký được đẩy xuống đĩa trước; trang dữ liệu ghi sau, và dựng lại từ WAL sau sự cố.</i></p></li><li><p><b>b)</b> replica (the default)</p><p>minimal is crash recovery only; logical adds detail for logical replication.</p><p><i>VI: minimal chỉ đủ khôi phục sau sự cố; logical thêm chi tiết cho sao chép logic.</i></p></li><li><p><b>a)</b> keeps the segments in pg_wal and retries — pg_wal grows until fixed</p><p>Correct and dangerous: no segment is lost, but the main disk fills next.</p><p><i>VI: Đúng mà nguy hiểm: không mất đoạn nào, nhưng đĩa chính sẽ đầy tiếp theo.</i></p></li><li><p><b>b)</b> bytes of WAL written (about 1540 kB)</p><p>An LSN is a byte position in the WAL stream, so the difference is bytes.</p><p><i>VI: LSN là vị trí byte trong dòng WAL, nên hiệu là số byte.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What must be on disk before COMMIT returns?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái gì phải nằm trên đĩa trước khi COMMIT trả về?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the updated indexes only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the WAL records of the transaction"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a fresh base backup"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every changed data page"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Write-ahead: the log is flushed first; pages are written back lazily and rebuilt from WAL after a crash.</p><p><i>VI: Ghi trước: nhật ký được đẩy xuống đĩa trước; trang dữ liệu ghi sau, và dựng lại từ WAL sau sự cố.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which wal_level do streaming replication and archive-based PITR need?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sao chép streaming và PITR dựa trên lưu trữ cần wal_level nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "logical only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "replica (the default)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "minimal"
+              },
+              {
+                "ma": "d",
+                "noiDung": "archive"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>minimal is crash recovery only; logical adds detail for logical replication.</p><p><i>VI: minimal chỉ đủ khôi phục sau sự cố; logical thêm chi tiết cho sao chép logic.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>The archive disk is full and archive_command keeps failing. What does PostgreSQL do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đĩa lưu trữ đầy và archive_command liên tục lỗi. PostgreSQL làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keeps the segments in pg_wal and retries — pg_wal grows until fixed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deletes the segments it could not archive"
+              },
+              {
+                "ma": "c",
+                "noiDung": "switches archiving off by itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "stops accepting connections at once"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Correct and dangerous: no segment is lost, but the main disk fills next.</p><p><i>VI: Đúng mà nguy hiểm: không mất đoạn nào, nhưng đĩa chính sẽ đầy tiếp theo.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p><code>pg_wal_lsn_diff('0/25FFE68', '0/247EE48')</code> after inserting 10 000 rows is 1 576 992. What is it?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>pg_wal_lsn_diff('0/25FFE68', '0/247EE48')</code> sau khi chèn 10 000 dòng là 1 576 992. Đó là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "milliseconds of replay time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bytes of WAL written (about 1540 kB)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of transactions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of 16 MB segments"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An LSN is a byte position in the WAL stream, so the difference is bytes.</p><p><i>VI: LSN là vị trí byte trong dòng WAL, nên hiệu là số byte.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "archive_command that always returns 0 (\"cp … || true\") — silent holes in the archive.|||archive_command luôn trả 0 (\"cp … || true\") — lỗ hổng im lặng trong kho lưu trữ."
+        },
+        {
+          "loi": "Assuming wal_level = minimal is enough for backups.|||Tưởng wal_level = minimal là đủ cho sao lưu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "WAL",
+          "vi": "nhật ký ghi trước"
+        }
+      ]
+    },
+    {
+      "title": "Archive WAL and recover to the second before a DELETE",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "archive_mode / archive_command",
+        "pg_basebackup",
+        "restore_command + recovery_target_time + recovery.signal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "wal",
+        "pitr",
+        "docker"
+      ],
+      "problemHtml": "<p>The whole PITR loop of lesson 15.2 on a throw-away container. Write down the time printed after row 1001, then put it in recovery_target_time:</p><pre># pitr.sh — archive WAL, take a base backup, \"lose\" a table, recover to the second before\ndocker volume create pgpitr-wal\ndocker run -d --name pgpitr -e POSTGRES_PASSWORD=postgres -p 5450:5432 \\\n  -v pgpitr-wal:/mnt/wal postgres:17 \\\n  -c wal_level=replica -c archive_mode=on \\\n  -c \"archive_command=test ! -f /mnt/wal/%f &amp;&amp; cp %p /mnt/wal/%f\"\nsleep 3; docker exec pgpitr chown postgres /mnt/wal\ndocker exec pgpitr psql -U postgres -c \"CREATE TABLE note (id int PRIMARY KEY, body text)\"\ndocker exec pgpitr psql -U postgres -c \"INSERT INTO note SELECT g, 'note ' || g FROM generate_series(1, 1000) g\"\ndocker exec pgpitr pg_basebackup -U postgres -D /tmp/base -X stream -c fast\ndocker exec pgpitr psql -U postgres -Atc \"INSERT INTO note VALUES (1001, 'after the base backup'); SELECT now()\"   # ← write this time down\nsleep 2\ndocker exec pgpitr psql -U postgres -c \"DELETE FROM note\"        # the disaster\ndocker exec pgpitr psql -U postgres -c \"SELECT pg_switch_wal()\"  # push the last segment to the archive\n# recover: base backup + WAL up to the time you wrote down\ndocker exec pgpitr bash -c '\n  pg_ctl -D /tmp/base status &gt;/dev/null 2&gt;&amp;1\n  echo \"restore_command = '\\''cp /mnt/wal/%f %p'\\''\"            &gt;&gt; /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_time = '\\''&lt;THE TIME YOU WROTE DOWN&gt;'\\''\" &gt;&gt; /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_action = promote\"                          &gt;&gt; /tmp/base/postgresql.auto.conf\n  touch /tmp/base/recovery.signal\n  chown -R postgres /tmp/base &amp;&amp; chmod 700 /tmp/base\n  su postgres -c \"pg_ctl -D /tmp/base -o \\\"-p 5433\\\" -l /tmp/base.log start\" &amp;&amp; sleep 3\n  psql -U postgres -p 5433 -Atc \"SELECT count(*), max(id) FROM note\"\n'</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> PITR needs a real server that archives WAL files, is stopped and restarted from a base backup; the browser grader is one in-page session. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ls /mnt/wal</code> inside the container shows archived 16 MB segments.</li>\n  <li>The recovered server on port 5433 answers <code>1001 | 1001</code>: the row written after the base backup is back, the DELETE is not.</li>\n  <li>Clean up: <code>docker rm -f pgpitr &amp;&amp; docker volume rm pgpitr-wal</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trọn vòng PITR của bài 15.2 trên một container dùng xong bỏ. Ghi lại thời điểm in ra sau dòng 1001, rồi đặt nó vào recovery_target_time:</p><pre># pitr.sh — archive WAL, take a base backup, \"lose\" a table, recover to the second before\ndocker volume create pgpitr-wal\ndocker run -d --name pgpitr -e POSTGRES_PASSWORD=postgres -p 5450:5432 \\\n  -v pgpitr-wal:/mnt/wal postgres:17 \\\n  -c wal_level=replica -c archive_mode=on \\\n  -c \"archive_command=test ! -f /mnt/wal/%f &amp;&amp; cp %p /mnt/wal/%f\"\nsleep 3; docker exec pgpitr chown postgres /mnt/wal\ndocker exec pgpitr psql -U postgres -c \"CREATE TABLE note (id int PRIMARY KEY, body text)\"\ndocker exec pgpitr psql -U postgres -c \"INSERT INTO note SELECT g, 'note ' || g FROM generate_series(1, 1000) g\"\ndocker exec pgpitr pg_basebackup -U postgres -D /tmp/base -X stream -c fast\ndocker exec pgpitr psql -U postgres -Atc \"INSERT INTO note VALUES (1001, 'after the base backup'); SELECT now()\"   # ← write this time down\nsleep 2\ndocker exec pgpitr psql -U postgres -c \"DELETE FROM note\"        # the disaster\ndocker exec pgpitr psql -U postgres -c \"SELECT pg_switch_wal()\"  # push the last segment to the archive\n# recover: base backup + WAL up to the time you wrote down\ndocker exec pgpitr bash -c '\n  pg_ctl -D /tmp/base status &gt;/dev/null 2&gt;&amp;1\n  echo \"restore_command = '\\''cp /mnt/wal/%f %p'\\''\"            &gt;&gt; /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_time = '\\''&lt;THE TIME YOU WROTE DOWN&gt;'\\''\" &gt;&gt; /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_action = promote\"                          &gt;&gt; /tmp/base/postgresql.auto.conf\n  touch /tmp/base/recovery.signal\n  chown -R postgres /tmp/base &amp;&amp; chmod 700 /tmp/base\n  su postgres -c \"pg_ctl -D /tmp/base -o \\\"-p 5433\\\" -l /tmp/base.log start\" &amp;&amp; sleep 3\n  psql -U postgres -p 5433 -Atc \"SELECT count(*), max(id) FROM note\"\n'</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> PITR cần máy chủ thật lưu trữ tệp WAL, được dừng rồi khởi động lại từ base backup; máy chấm trình duyệt chỉ là một phiên trong trang. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ls /mnt/wal</code> trong container hiện các đoạn 16 MB đã lưu trữ.</li>\n  <li>Máy chủ khôi phục ở cổng 5433 trả <code>1001 | 1001</code>: dòng ghi sau base backup đã về, lệnh DELETE thì không.</li>\n  <li>Dọn dẹp: <code>docker rm -f pgpitr &amp;&amp; docker volume rm pgpitr-wal</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "SELECT count(*), max(id) FROM note  -- port 5433|||SELECT count(*), max(id) FROM note  -- cổng 5433",
+          "output": "1001 | 1001|||1001 | 1001",
+          "explanation": "Base backup (1000 rows) + WAL replayed up to the target time.|||Base backup (1000 dòng) + WAL phát lại tới mốc thời gian."
+        }
+      ],
+      "hintsJson": [
+        "pg_switch_wal() closes the current segment so it reaches the archive now.|||pg_switch_wal() đóng đoạn hiện tại để nó vào kho lưu trữ ngay.",
+        "If the target is earlier than the end of the base backup, recovery refuses — pick a time after it.|||Nếu mốc sớm hơn thời điểm kết thúc base backup, khôi phục sẽ từ chối — chọn thời điểm sau đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "pitr.sh",
+          "language": "text",
+          "code": "# pitr.sh — archive WAL, take a base backup, \"lose\" a table, recover to the second before\ndocker volume create pgpitr-wal\ndocker run -d --name pgpitr -e POSTGRES_PASSWORD=postgres -p 5450:5432 \\\n  -v pgpitr-wal:/mnt/wal postgres:17 \\\n  -c wal_level=replica -c archive_mode=on \\\n  -c \"archive_command=test ! -f /mnt/wal/%f && cp %p /mnt/wal/%f\"\nsleep 3; docker exec pgpitr chown postgres /mnt/wal\ndocker exec pgpitr psql -U postgres -c \"CREATE TABLE note (id int PRIMARY KEY, body text)\"\ndocker exec pgpitr psql -U postgres -c \"INSERT INTO note SELECT g, 'note ' || g FROM generate_series(1, 1000) g\"\ndocker exec pgpitr pg_basebackup -U postgres -D /tmp/base -X stream -c fast\ndocker exec pgpitr psql -U postgres -Atc \"INSERT INTO note VALUES (1001, 'after the base backup'); SELECT now()\"   # ← write this time down\nsleep 2\ndocker exec pgpitr psql -U postgres -c \"DELETE FROM note\"        # the disaster\ndocker exec pgpitr psql -U postgres -c \"SELECT pg_switch_wal()\"  # push the last segment to the archive\n# recover: base backup + WAL up to the time you wrote down\ndocker exec pgpitr bash -c '\n  pg_ctl -D /tmp/base status >/dev/null 2>&1\n  echo \"restore_command = '\\''cp /mnt/wal/%f %p'\\''\"            >> /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_time = '\\''<THE TIME YOU WROTE DOWN>'\\''\" >> /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_action = promote\"                          >> /tmp/base/postgresql.auto.conf\n  touch /tmp/base/recovery.signal\n  chown -R postgres /tmp/base && chmod 700 /tmp/base\n  su postgres -c \"pg_ctl -D /tmp/base -o \\\"-p 5433\\\" -l /tmp/base.log start\" && sleep 3\n  psql -U postgres -p 5433 -Atc \"SELECT count(*), max(id) FROM note\"\n'\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "pitr.sh",
+          "language": "text",
+          "code": "# pitr.sh — archive WAL, take a base backup, \"lose\" a table, recover to the second before\ndocker volume create pgpitr-wal\ndocker run -d --name pgpitr -e POSTGRES_PASSWORD=postgres -p 5450:5432 \\\n  -v pgpitr-wal:/mnt/wal postgres:17 \\\n  -c wal_level=replica -c archive_mode=on \\\n  -c \"archive_command=test ! -f /mnt/wal/%f && cp %p /mnt/wal/%f\"\nsleep 3; docker exec pgpitr chown postgres /mnt/wal\ndocker exec pgpitr psql -U postgres -c \"CREATE TABLE note (id int PRIMARY KEY, body text)\"\ndocker exec pgpitr psql -U postgres -c \"INSERT INTO note SELECT g, 'note ' || g FROM generate_series(1, 1000) g\"\ndocker exec pgpitr pg_basebackup -U postgres -D /tmp/base -X stream -c fast\ndocker exec pgpitr psql -U postgres -Atc \"INSERT INTO note VALUES (1001, 'after the base backup'); SELECT now()\"   # ← write this time down\nsleep 2\ndocker exec pgpitr psql -U postgres -c \"DELETE FROM note\"        # the disaster\ndocker exec pgpitr psql -U postgres -c \"SELECT pg_switch_wal()\"  # push the last segment to the archive\n# recover: base backup + WAL up to the time you wrote down\ndocker exec pgpitr bash -c '\n  pg_ctl -D /tmp/base status >/dev/null 2>&1\n  echo \"restore_command = '\\''cp /mnt/wal/%f %p'\\''\"            >> /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_time = '\\''<THE TIME YOU WROTE DOWN>'\\''\" >> /tmp/base/postgresql.auto.conf\n  echo \"recovery_target_action = promote\"                          >> /tmp/base/postgresql.auto.conf\n  touch /tmp/base/recovery.signal\n  chown -R postgres /tmp/base && chmod 700 /tmp/base\n  su postgres -c \"pg_ctl -D /tmp/base -o \\\"-p 5433\\\" -l /tmp/base.log start\" && sleep 3\n  psql -U postgres -p 5433 -Atc \"SELECT count(*), max(id) FROM note\"\n'\n\n# Expected:\n#   count | max\n#   1001  | 1001         ← recovered to the moment before the DELETE\n# /tmp/base.log contains: \"recovery stopping before commit of transaction …\" and \"archive recovery complete\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the answer to human error that no dump gives: base backup + archived WAL + a recovery target. In production let pgBackRest or WAL-G run the archive and retention, and rehearse this restore regularly.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là lời đáp cho lỗi con người mà không bản dump nào cho được: base backup + WAL đã lưu + một mốc khôi phục. Trên production hãy để pgBackRest hoặc WAL-G lo lưu trữ và thời hạn giữ, và diễn tập việc khôi phục này đều đặn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "bash pitr.sh",
+          "lyDo": "PITR needs a real server that archives WAL files, is stopped and restarted from a base backup; the browser grader is one in-page session.|||PITR cần máy chủ thật lưu trữ tệp WAL, được dừng rồi khởi động lại từ base backup; máy chấm trình duyệt chỉ là một phiên trong trang."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting recovery.signal — the server just starts as a normal primary from the base backup.|||Quên recovery.signal — máy chủ khởi động như primary bình thường từ base backup."
+        },
+        {
+          "loi": "An archive_command that never fails (\"|| true\") — the archive has holes and PITR stops early.|||archive_command không bao giờ báo lỗi (\"|| true\") — kho lưu trữ có lỗ và PITR dừng sớm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "archive_command",
+          "vi": "lệnh lưu trữ WAL"
+        },
+        {
+          "en": "recovery target",
+          "vi": "mốc khôi phục"
+        }
+      ]
+    }
+  ]
+}

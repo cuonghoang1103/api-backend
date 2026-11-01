@@ -1,0 +1,326 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-17-4-chon-he-nao",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-17-4-chon-he-nao"
+  },
+  "exercises": [
+    {
+      "title": "Situation → database",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "decision table",
+        "team and stack",
+        "licence and hosting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "comparison",
+        "decision"
+      ],
+      "problemHtml": "<p>Use the decision tree of lesson 17.4 (WordPress/MySQL-only host → MySQL; .NET shop with SQL Server licences and DBAs → SQL Server; self-contained documents, few cross-reports, sharding → MongoDB; otherwise PostgreSQL).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng cây quyết định của bài 17.4 (WordPress/host chỉ có MySQL → MySQL; công ty .NET có sẵn giấy phép và DBA SQL Server → SQL Server; document tự chứa, ít báo cáo chéo, cần sharding → MongoDB; còn lại PostgreSQL).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Walk the tree from question 1; stop at the first yes.|||Đi cây quyết định từ câu 1; dừng ở câu \"có\" đầu tiên.",
+        "Existing team and licences are real constraints, not opinions.|||Đội và giấy phép có sẵn là ràng buộc thật, không phải ý kiến."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Situation → database\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → usual pickTình huống → lựa chọn thường gặp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Situation → database — answer key\n\n1. Situation → usual pickTình huống → lựa chọn thường gặp\n   - r1.d: MySQL / MariaDB\n   - r2.d: SQL Server\n   - r3.d: PostgreSQL\n   - r4.d: MongoDB\n   - r5.d: PostgreSQL\n   - r6.d: PostgreSQL\n   The host decides WordPress; the team and licences decide the bank; document-shaped high-volume data with sharding suits MongoDB (PostgreSQL partitions with BRIN also go far); everything else — and \"not sure\" — defaults to PostgreSQL with JSONB for the flexible parts (pgvector when RAG arrives, as in LabFlow AI).VI: Host quyết định WordPress; đội và giấy phép quyết định ngân hàng; dữ liệu dạng document khối lượng lớn cần sharding hợp MongoDB (phân mảnh + BRIN của PostgreSQL cũng đi xa); mọi trường hợp còn lại — và \"chưa chắc\" — mặc định PostgreSQL với JSONB cho phần linh hoạt (pgvector khi có RAG, như LabFlow AI).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The host decides WordPress; the team and licences decide the bank; document-shaped high-volume data with sharding suits MongoDB (PostgreSQL partitions with BRIN also go far); everything else — and \"not sure\" — defaults to PostgreSQL with JSONB for the flexible parts (pgvector when RAG arrives, as in LabFlow AI).</p><p><i>VI: Host quyết định WordPress; đội và giấy phép quyết định ngân hàng; dữ liệu dạng document khối lượng lớn cần sharding hợp MongoDB (phân mảnh + BRIN của PostgreSQL cũng đi xa); mọi trường hợp còn lại — và \"chưa chắc\" — mặc định PostgreSQL với JSONB cho phần linh hoạt (pgvector khi có RAG, như LabFlow AI).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → usual pick</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → lựa chọn thường gặp</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Situation / Tình huống"
+              },
+              {
+                "ma": "d",
+                "ten": "Database / CSDL",
+                "luaChon": [
+                  "PostgreSQL",
+                  "MySQL / MariaDB",
+                  "SQL Server",
+                  "MongoDB"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "A café chain: blog + online menu on a cheap PHP host / Chuỗi cà phê: blog + thực đơn online trên host PHP giá rẻ"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "A bank's internal loan system in C#, with an existing SQL Server team / Hệ thống cho vay nội bộ của ngân hàng viết C#, đã có đội SQL Server"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "A marketplace in Next.js + Prisma: orders, reviews, flexible product specs / Sàn thương mại Next.js + Prisma: đơn, đánh giá, thông số sản phẩm linh hoạt"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Millions of sensor readings a day, each a different JSON payload, sharded / Hàng triệu số đo cảm biến mỗi ngày, mỗi bản ghi một JSON khác, cần sharding"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "A Spring Boot graduation project with RAG features coming later / Đồ án tốt nghiệp Spring Boot, sắp có tính năng RAG"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "Not sure yet: a new SaaS web app, small team, Node.js / Chưa chắc: một web SaaS mới, đội nhỏ, Node.js"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "MySQL / MariaDB",
+              "r2.d": "SQL Server",
+              "r3.d": "PostgreSQL",
+              "r4.d": "MongoDB",
+              "r5.d": "PostgreSQL",
+              "r6.d": "PostgreSQL"
+            },
+            "giaiThich": "<p>The host decides WordPress; the team and licences decide the bank; document-shaped high-volume data with sharding suits MongoDB (PostgreSQL partitions with BRIN also go far); everything else — and \"not sure\" — defaults to PostgreSQL with JSONB for the flexible parts (pgvector when RAG arrives, as in LabFlow AI).</p><p><i>VI: Host quyết định WordPress; đội và giấy phép quyết định ngân hàng; dữ liệu dạng document khối lượng lớn cần sharding hợp MongoDB (phân mảnh + BRIN của PostgreSQL cũng đi xa); mọi trường hợp còn lại — và \"chưa chắc\" — mặc định PostgreSQL với JSONB cho phần linh hoạt (pgvector khi có RAG, như LabFlow AI).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Picking MongoDB \"because no schema is faster\" for relational orders.|||Chọn MongoDB \"vì không có lược đồ thì nhanh hơn\" cho đơn hàng có quan hệ."
+        },
+        {
+          "loi": "Ignoring that WordPress supports only MySQL/MariaDB.|||Bỏ qua việc WordPress chỉ hỗ trợ MySQL/MariaDB."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision tree",
+          "vi": "cây quyết định"
+        }
+      ]
+    },
+    {
+      "title": "Six questions, and the mistakes people make",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "shape, correctness, questions, team, cost, operations",
+        "one primary database"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "comparison",
+        "decision"
+      ],
+      "problemHtml": "<p>Lesson 17.4 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 17.4 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write one sentence per question in the README before the first migration.|||Viết mỗi câu hỏi một câu trả lời trong README trước migration đầu tiên.",
+        "A database outlives most frameworks.|||CSDL sống lâu hơn phần lớn framework."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Six questions, and the mistakes people make\n\nAnswer in the answer panel (no code needed).\n\n1. Money, stock and grades are involved. Which requirement does that put first?Có tiền, tồn kho và điểm số. Điều đó đặt yêu cầu nào lên đầu?\n2. Two developers propose PostgreSQL + MongoDB + Redis + Elasticsearch for an MVP. The lesson's advice?Hai lập trình viên đề xuất PostgreSQL + MongoDB + Redis + Elasticsearch cho MVP. Lời khuyên của bài?\n3. When should the licence and price page be read?Khi nào nên đọc trang giấy phép và bảng giá?\n4. What stays the same whichever engine you choose?Điều gì giữ nguyên bất kể bạn chọn hệ nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Six questions, and the mistakes people make — answer key\n\n1. Money, stock and grades are involved. Which requirement does that put first?Có tiền, tồn kho và điểm số. Điều đó đặt yêu cầu nào lên đầu?\n   Answer: a) transactions and constraints everywhere\n   Correctness needs ACID transactions plus CHECK/FK/UNIQUE enforced by the database.VI: Tính đúng cần giao dịch ACID cùng CHECK/FK/UNIQUE do CSDL thực thi.\n\n2. Two developers propose PostgreSQL + MongoDB + Redis + Elasticsearch for an MVP. The lesson's advice?Hai lập trình viên đề xuất PostgreSQL + MongoDB + Redis + Elasticsearch cho MVP. Lời khuyên của bài?\n   Answer: a) one primary database; add another only with a measured reason\n   Each store needs backups, upgrades and monitoring — that is the real cost.VI: Mỗi kho cần sao lưu, nâng cấp và giám sát — đó mới là chi phí thật.\n\n3. When should the licence and price page be read?Khi nào nên đọc trang giấy phép và bảng giá?\n   Answer: c) on day one, before the first migration\n   SQL Server is free only while small or in development; MongoDB's SSPL has conditions for offering it as a service.VI: SQL Server chỉ miễn phí khi nhỏ hoặc đang phát triển; SSPL của MongoDB có điều kiện khi cung cấp nó như một dịch vụ.\n\n4. What stays the same whichever engine you choose?Điều gì giữ nguyên bất kể bạn chọn hệ nào?\n   Answer: c) schema design, indexes, transactions, backups you have restored\n   The engine changes syntax and some behaviours (17.2); the discipline of Chapters 3 and 9–15 transfers.VI: Hệ CSDL đổi cú pháp và một số hành vi (17.2); kỷ luật của các Chương 3 và 9–15 thì mang theo được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> transactions and constraints everywhere</p><p>Correctness needs ACID transactions plus CHECK/FK/UNIQUE enforced by the database.</p><p><i>VI: Tính đúng cần giao dịch ACID cùng CHECK/FK/UNIQUE do CSDL thực thi.</i></p></li><li><p><b>a)</b> one primary database; add another only with a measured reason</p><p>Each store needs backups, upgrades and monitoring — that is the real cost.</p><p><i>VI: Mỗi kho cần sao lưu, nâng cấp và giám sát — đó mới là chi phí thật.</i></p></li><li><p><b>c)</b> on day one, before the first migration</p><p>SQL Server is free only while small or in development; MongoDB's SSPL has conditions for offering it as a service.</p><p><i>VI: SQL Server chỉ miễn phí khi nhỏ hoặc đang phát triển; SSPL của MongoDB có điều kiện khi cung cấp nó như một dịch vụ.</i></p></li><li><p><b>c)</b> schema design, indexes, transactions, backups you have restored</p><p>The engine changes syntax and some behaviours (17.2); the discipline of Chapters 3 and 9–15 transfers.</p><p><i>VI: Hệ CSDL đổi cú pháp và một số hành vi (17.2); kỷ luật của các Chương 3 và 9–15 thì mang theo được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Money, stock and grades are involved. Which requirement does that put first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có tiền, tồn kho và điểm số. Điều đó đặt yêu cầu nào lên đầu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "transactions and constraints everywhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the fastest single-document reads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a schemaless data model"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a free managed cloud tier"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Correctness needs ACID transactions plus CHECK/FK/UNIQUE enforced by the database.</p><p><i>VI: Tính đúng cần giao dịch ACID cùng CHECK/FK/UNIQUE do CSDL thực thi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Two developers propose PostgreSQL + MongoDB + Redis + Elasticsearch for an MVP. The lesson's advice?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai lập trình viên đề xuất PostgreSQL + MongoDB + Redis + Elasticsearch cho MVP. Lời khuyên của bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one primary database; add another only with a measured reason"
+              },
+              {
+                "ma": "b",
+                "noiDung": "use all four from day one, to be safe when traffic grows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "pick only the one with the most stars on GitHub"
+              },
+              {
+                "ma": "d",
+                "noiDung": "let each developer choose and run their own database"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each store needs backups, upgrades and monitoring — that is the real cost.</p><p><i>VI: Mỗi kho cần sao lưu, nâng cấp và giám sát — đó mới là chi phí thật.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>When should the licence and price page be read?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào nên đọc trang giấy phép và bảng giá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "at the first production invoice"
+              },
+              {
+                "ma": "b",
+                "noiDung": "never — databases are free"
+              },
+              {
+                "ma": "c",
+                "noiDung": "on day one, before the first migration"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only for open-source databases"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>SQL Server is free only while small or in development; MongoDB's SSPL has conditions for offering it as a service.</p><p><i>VI: SQL Server chỉ miễn phí khi nhỏ hoặc đang phát triển; SSPL của MongoDB có điều kiện khi cung cấp nó như một dịch vụ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What stays the same whichever engine you choose?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì giữ nguyên bất kể bạn chọn hệ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the exact SQL syntax of every query you write"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the JSON operators and the functions that read JSON"
+              },
+              {
+                "ma": "c",
+                "noiDung": "schema design, indexes, transactions, backups you have restored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the default transaction isolation level of the server"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The engine changes syntax and some behaviours (17.2); the discipline of Chapters 3 and 9–15 transfers.</p><p><i>VI: Hệ CSDL đổi cú pháp và một số hành vi (17.2); kỷ luật của các Chương 3 và 9–15 thì mang theo được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Copying a famous company's stack.|||Chép bộ công nghệ của một công ty nổi tiếng."
+        },
+        {
+          "loi": "Adding databases before measuring a need.|||Thêm CSDL trước khi đo được nhu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MVP",
+          "vi": "sản phẩm khả dụng tối thiểu"
+        }
+      ]
+    }
+  ]
+}

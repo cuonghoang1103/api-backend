@@ -404,6 +404,90 @@
       "name": "14.4 Monitoring: answering \"why is it slow?\"",
       "level": "ADVANCED",
       "description": "Luyện: Find the stuck transactions (pg_stat_activity snapshot) · What has been expensive over time? (pg_stat_statements snapshot) · Indexes nobody uses — and the ones you must keep · Which view answers which question? · Run a mixed workload, then find the expensive query by total time"
+    },
+    {
+      "slug": "postgresql-15-1-pg-dump",
+      "name": "15.1 pg_dump and pg_restore: the backup you can read",
+      "level": "ADVANCED",
+      "description": "Luyện: Dump in three formats, then restore a single table · A backup counts only after a restore: reconcile it · Which format — or is pg_dump the wrong tool? · What a dump is, and what it is not"
+    },
+    {
+      "slug": "postgresql-15-2-wal-pitr",
+      "name": "15.2 WAL, archiving and point-in-time recovery",
+      "level": "ADVANCED",
+      "description": "Luyện: Point-in-time recovery, in order · The abandoned replication slot that fills the disk · WAL in four questions · Archive WAL and recover to the second before a DELETE"
+    },
+    {
+      "slug": "postgresql-15-3-nhan-ban",
+      "name": "15.3 Streaming replication: a second copy, kept current",
+      "level": "ADVANCED",
+      "description": "Luyện: Build a replica on a second port and watch a row cross · Measure replication lag in bytes, not seconds · What a replica does and does not solve · Replica details and the stale-read trap"
+    },
+    {
+      "slug": "postgresql-15-4-phan-manh",
+      "name": "15.4 Partitioning: splitting a table without splitting the queries",
+      "level": "ADVANCED",
+      "description": "Luyện: Declare a RANGE-partitioned table and let PostgreSQL route the rows · Partition pruning: write the filter the planner can use · Retention by DROP, an archive by DETACH, and a safety net · When to partition, and which kind"
+    },
+    {
+      "slug": "postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+      "name": "15.5 Lab 8 — CT Shop: backups, restores, a read-only account and a replica",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 8 (SQL part) — CT Shop: a read-only account, and repairs after a restore · Lab 8 (servers part) — back up, prove the restore, build a replica, fail over"
+    },
+    {
+      "slug": "postgresql-16-1-prisma-migration",
+      "name": "16.1 Prisma and migrations: the ORM is not a different database",
+      "level": "ADVANCED",
+      "description": "Luyện: Every Prisma word is SQL you already know · Predict the lock a migration takes · A migration that can be replayed (the shadow-database bug) · NOT NULL on a big table without a long lock · migrate dev, migrate deploy, db push — and a failed deploy"
+    },
+    {
+      "slug": "postgresql-16-2-luoc-do-that",
+      "name": "16.2 A real schema: reading one you did not write",
+      "level": "ADVANCED",
+      "description": "Luyện: The gravitational centre: which table do foreign keys point at? · Find the missing index from the statistics alone · Table, indexes and total size · How to approach a schema you did not write"
+    },
+    {
+      "slug": "postgresql-16-3-checklist",
+      "name": "16.3 The production checklist",
+      "level": "ADVANCED",
+      "description": "Luyện: Foreign keys without an index · The application role: least privilege, timeouts on the role · The checklist as one query · Which failure does each item prevent?"
+    },
+    {
+      "slug": "postgresql-16-4-capstone",
+      "name": "16.4 Four pagers, four investigations",
+      "level": "ADVANCED",
+      "description": "Luyện: The order of an investigation · Symptom → the first thing to run · Case 1: which session, and cancel or terminate? · Case 2: replace read-modify-write with one statement"
+    },
+    {
+      "slug": "postgresql-lab-9-capstone-node-prisma-ct-shop",
+      "name": "16.5 Lab 9 — Capstone: CT Shop behind a Node.js + Prisma API",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 9 (SQL part) — the database side of the capstone · Lab 9 (application part) — CT Shop behind a Node.js + Prisma API"
+    },
+    {
+      "slug": "postgresql-17-1-bon-he-csdl",
+      "name": "17.1 Four database systems, one order",
+      "level": "ADVANCED",
+      "description": "Luyện: SQL Server, MySQL, PostgreSQL, MongoDB — the facts · One order, two shapes: rows and a document · Shapes, myths and the right question"
+    },
+    {
+      "slug": "postgresql-17-2-cung-truy-van-ba-he",
+      "name": "17.2 Same report on three SQL servers — and where they disagree",
+      "level": "ADVANCED",
+      "description": "Luyện: Translate a SQL Server report · Translate a MySQL JSON report · See it yourself: an upsert burns identity numbers · Behaviour cheat sheet: where the servers disagree"
+    },
+    {
+      "slug": "postgresql-17-3-mongodb-vs-jsonb",
+      "name": "17.3 The same orders as tables, as documents, as JSONB",
+      "level": "ADVANCED",
+      "description": "Luyện: Build the documents from the tables · Ask the documents, check with the tables · An aggregation pipeline in SQL: revenue by category from documents · The price of copies: rename a product everywhere · When documents win, when tables win"
+    },
+    {
+      "slug": "postgresql-17-4-chon-he-nao",
+      "name": "17.4 Choosing a database without guessing",
+      "level": "ADVANCED",
+      "description": "Luyện: Situation → database · Six questions, and the mistakes people make"
     }
   ]
 }

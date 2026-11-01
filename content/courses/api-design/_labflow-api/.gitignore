@@ -1,0 +1,17 @@
+# LabFlow API — bản chụp mã của khoá API Design. Không đưa vào git:
+node_modules/
+# dữ liệu, log, khoá/token sinh ra khi chạy thử
+pgdata/
+pgreplica/
+redisdata/
+data/
+*.log
+*.jwt
+*.pem
+*.key
+.env
+.env.*
+lan.json
+# bản build sinh lại được
+client/labflow.d.ts.bak
+test-results/

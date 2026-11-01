@@ -1,0 +1,9 @@
+# redocly.yaml — luật lint của LabFlow: bộ "recommended" + vài luật chặt hơn
+extends:
+  - recommended
+rules:
+  no-server-example.com: off          # máy dev localhost là cố ý; production là api.labflow.example
+  operation-operationId: error        # mỗi thao tác phải có operationId (tên hàm của client sinh ra)
+  operation-4xx-response: error
+  no-unused-components: error
+  tag-description: error

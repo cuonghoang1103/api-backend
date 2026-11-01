@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>…</title>
+<script type="module">
+// Trang web gọi LabFlow từ một ORIGIN khác (cổng khác = origin khác)
+const out = [];
+async function t(name, f) { try { out.push(`${name}: ${await f()}`); } catch (e) { out.push(`${name}: ${e.name}: ${e.message}`); } }
+await t('GET /v2/labs', async () => (await fetch('http://localhost:4000/v2/labs')).status);
+await t('POST /v2/auth/login', async () => {
+  const r = await fetch('http://localhost:4000/v2/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'an@student.labflow.example', password: 'an-lab-2026' }) });
+  return `${r.status}, token ${(await r.json()).accessToken ? 'received' : 'missing'}`;
+});
+window.__out = out; document.title = 'done';
+</script>

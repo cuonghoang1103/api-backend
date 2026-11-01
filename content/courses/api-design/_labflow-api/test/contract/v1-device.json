@@ -1,0 +1,9 @@
+{
+  "id": "string",
+  "labId": "string",
+  "name": "string",
+  "type": "string",
+  "serialNo": "string",
+  "status": "string",
+  "note": "string|null"
+}

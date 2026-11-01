@@ -1,0 +1,54 @@
+# LabFlow API — mã nguồn của khoá API & System Design
+
+Bản chụp **bền** của dự án xuyên khoá `/courses/api-design` (đặt phòng lab/thiết bị, Node 22 + Express 5).
+Trước 01/11/2026 mã chỉ nằm ở thư mục tạm của phiên soạn bài và trong các gói zip trên R2
+(`https://media.cuongthai.com/files/academy/API/v1/labflow-api-chN.zip`). Từ nay mỗi chương soạn xong
+**cập nhật thư mục này** cho khớp với gói zip của chương đó.
+
+| Trạng thái hiện tại | Gói zip tương ứng |
+|---|---|
+| **Cuối Chương 9** (= lời giải Lab 9) | `labflow-api-ch9.zip` |
+
+Chỉ để HỌC. Không có bí mật thật: token demo `tok_an` / `tok_bin` / `tok_lan`, mật khẩu demo
+`an-lab-2026` / `binh-lab-2026` / `lan-lab-2026`, khoá JWT mặc định `dev-only-secret-change-me` (chỉ ngoài production).
+
+## Chạy
+
+```bash
+# Node 22 (máy soạn bài: ~/.nvm/versions/node/v22.23.3)
+npm ci                 # phiên bản đã GHIM chính xác trong package.json + package-lock.json
+npm start              # http://localhost:4000 — không cần PostgreSQL/Redis
+npm test               # 10 test (hợp đồng v1 + bảo mật)
+```
+
+Phần cần dịch vụ ngoài (chỉ bật khi đặt biến):
+
+| Chương | Cần | Lệnh |
+|---|---|---|
+| 3, 8.4, 9 | PostgreSQL 18 ở `:55432`, user/db `labflow` (biến `PGURL`) | `pg_ctl -D pgdata -o "-p 55432" start` |
+| 9.3 | replica streaming ở `:55433` (`PG_REPLICA_URL`, `recovery_min_apply_delay = '2s'`) | `pg_basebackup … -D pgreplica -R` |
+| 9.2 | Redis 8.2 ở `:6390` (`LABFLOW_REDIS`) | `redis-server --port 6390 --save "" --appendonly no` |
+
+Biến hay dùng: `LABFLOW_PG=1` (route Chương 9), `LABFLOW_CACHE_MODE=none|redis|singleflight`,
+`LABFLOW_READS=replica|token`, `SEED_BOOKINGS=n`, `LABFLOW_IP_LIMIT=1000000/60` (chỉ để test tải),
+`LABFLOW_IDEMPOTENCY=pg`, `LABFLOW_CHAOS=1`, `LABFLOW_VULN=1` (CHỈ để học bảo mật, Chương 6).
+Mô tả đầy đủ từng chương: `content/courses/api-design/_HOP-DONG.md` mục 5.
+
+## Thư mục
+
+- `src/` — server (`server.js`, `app.js`), route trong `src/routes/`, middleware theo chương (problems, paging,
+  versioning, idempotency, rateLimit, auth, cors, timing, resilience, httpCache, serverCache…).
+- `openapi/` — hợp đồng OpenAPI 3.1 (`openapi.yaml`) + bản mốc, kiểm trôi (`check-drift.mjs`), cổng phá vỡ (`diff.mjs`).
+- `perf/` — script đo của Chương 8–9; `sql/` — SQL của Chương 9; `lab/` — mã khởi đầu của các lab.
+- `client/`, `graphql/`, `grpc/` — Chương 7; `web/` — trang thử CORS/CSRF của Chương 6 (`node web/serve.mjs`);
+  `mistakes/` — ví dụ client sai kiểu (bài 7.3).
+
+## Cập nhật bản chụp sau mỗi chương
+
+```bash
+rsync -a --delete --exclude node_modules --exclude README.md --exclude .gitignore \
+  <thư mục làm việc>/labflow-chN/ content/courses/api-design/_labflow-api/
+npm ci && npm test       # chạy trên bản sao sạch trước khi commit
+gitleaks dir content/courses/api-design/_labflow-api --config .gitleaks.toml --no-banner
+```
+Rồi sửa bảng “Trạng thái hiện tại” ở trên và ghi vào `_BAN-GIAO.md`.

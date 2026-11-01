@@ -1,0 +1,49 @@
+# Bản nháp ĐẦU TIÊN — kiểu ai cũng viết lần đầu (để xem bộ lint bắt được gì)
+openapi: 3.1.0
+info:
+  title: LabFlow API
+  version: 2.0.0
+paths:
+  /bookings:
+    post:
+      summary: Book a lab
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookingCreate' }
+            example:
+              labId: lab_1
+              startAt: '2027-03-02T08:00:00+07:00'
+              endAt: '2027-03-02T10:00:00+07:00'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Booking' }
+  /bookings/{id}:
+    get:
+      summary: One booking
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    BookingCreate:
+      type: object
+      required: [labId, period]
+      additionalProperties: false
+      properties:
+        labId: { type: string }
+        period:
+          type: object
+          properties: { start: { type: string, format: date-time }, end: { type: string, format: date-time } }
+    Booking:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string, enum: [PENDING, CHECKED_IN, CANCELLED] }
+    Lab:
+      type: object
+      properties:
+        id: { type: string }

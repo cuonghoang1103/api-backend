@@ -1,0 +1,29 @@
+// labflow.proto — bài 7.5: hợp đồng gRPC viết bằng Protocol Buffers (proto3)
+syntax = "proto3";
+package labflow.v1;
+
+service Bookings {
+  rpc ListBookings (ListBookingsRequest) returns (ListBookingsResponse);   // một hỏi – một đáp
+  rpc WatchLab (WatchLabRequest) returns (stream Booking);                 // server đẩy dần (streaming)
+}
+
+enum BookingStatus {
+  BOOKING_STATUS_UNSPECIFIED = 0;   // proto3: giá trị 0 luôn là "không rõ" — client cũ gặp số lạ cũng rơi về đây
+  PENDING = 1;
+  CHECKED_IN = 2;
+  CANCELLED = 3;
+}
+
+message Booking {
+  string id = 1;          // số thứ tự TRƯỜNG (tag) mới là thứ đi trên dây — đổi tên thoải mái, đổi số là vỡ
+  string lab_id = 2;
+  string user_id = 3;
+  string start = 4;       // RFC 3339; dự án lớn dùng google.protobuf.Timestamp
+  string end = 5;
+  BookingStatus status = 6;
+  string purpose = 7;
+}
+
+message ListBookingsRequest { string lab_id = 1; int32 limit = 2; string cursor = 3; }
+message ListBookingsResponse { repeated Booking data = 1; string next_cursor = 2; }
+message WatchLabRequest { string lab_id = 1; }

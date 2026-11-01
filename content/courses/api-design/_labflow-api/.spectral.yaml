@@ -1,0 +1,24 @@
+# .spectral.yaml — "style guide" API của LabFlow: luật của ĐỘI, máy kiểm thay người review
+extends: ["spectral:oas"]
+rules:
+  labflow-camel-case-properties:
+    description: Tên trường JSON dùng camelCase (bài 1.4)
+    severity: error
+    given: "$..properties[*]~"
+    then: { function: casing, functionOptions: { type: camel } }
+  labflow-kebab-paths:
+    description: Đoạn đường dẫn viết thường, nối bằng gạch ngang (bài 1.1)
+    severity: error
+    given: "$.paths[*]~"
+    then: { function: pattern, functionOptions: { match: "^(/([a-z0-9-]+|\\{[a-zA-Z]+\\}))+$" } }
+  labflow-errors-are-problems:
+    description: Mọi câu trả lời 4xx/5xx là application/problem+json (bài 2.1)
+    severity: error
+    given: "$.paths[*][*].responses[?(@property >= '400')].content"
+    then: { field: "application/problem+json", function: truthy }
+  labflow-list-is-paged:
+    description: Danh sách bookings/issues phải có limit + cursor (bài 3.2)
+    severity: warn
+    given: "$.paths[?(@property == '/bookings' || @property == '/issues')].get"
+    then: { field: parameters, function: length, functionOptions: { min: 2 } }
+  operation-description: off   # LabFlow dùng summary một dòng; description chỉ khi cần giải thích thêm

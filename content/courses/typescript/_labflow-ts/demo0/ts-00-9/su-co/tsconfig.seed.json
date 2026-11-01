@@ -1,0 +1,5 @@
+{
+  // The fix of 8 Aug 2026: a second config that also checks the seed script.
+  "extends": "../../../tsconfig.json",
+  "include": ["types.ts", "db.ts", "seed.ts"]
+}

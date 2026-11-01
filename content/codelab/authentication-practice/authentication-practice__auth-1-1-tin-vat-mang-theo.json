@@ -1,0 +1,599 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-1-1-tin-vat-mang-theo",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-1-1-tin-vat-mang-theo"
+  },
+  "exercises": [
+    {
+      "title": "1.1-1 — Where did the reset token go?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Referer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A password-reset page <code>/reset?token=…</code> loads a same-origin script and a third-party pixel. Real Chromium, four Referrer-Policy values (token shortened with …). The third party logged:<pre>$ node demo1/third-party.js\ndemo1/third-party.js on http://127.0.0.1:4801\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/reset?token=lfid_reset_…&amp;policy=no-referrer-when-downgrade\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/reset?token=lfid_reset_…&amp;policy=unsafe-url\n[third-party] GET /pixel.gif  Referer: (none)</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang đặt lại mật khẩu <code>/reset?token=…</code> tải một script cùng origin và một pixel của bên thứ ba. Chromium thật, bốn giá trị Referrer-Policy (token cắt bằng …). Bên thứ ba ghi lại:<pre>$ node demo1/third-party.js\ndemo1/third-party.js on http://127.0.0.1:4801\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/reset?token=lfid_reset_…&amp;policy=no-referrer-when-downgrade\n[third-party] GET /pixel.gif  Referer: http://localhost:4800/reset?token=lfid_reset_…&amp;policy=unsafe-url\n[third-party] GET /pixel.gif  Referer: (none)</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare each log line with the policy in its URL.|||So từng dòng log với policy nằm trong URL của nó.",
+        "The first request had no policy query parameter.|||Request đầu tiên không có tham số policy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.1-1 — Where did the reset token go?\n\nAnswer in the answer panel (no code needed).\n\n1. With NO Referrer-Policy set, what did the third party receive?KHÔNG đặt Referrer-Policy, bên thứ ba nhận được gì?\n2. So is a token in a URL safe now?Vậy token trong URL giờ đã an toàn chưa?\n3. Which policy sends NO Referer at all?Policy nào KHÔNG gửi Referer nào cả?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.1-1 — Where did the reset token go? — answer key\n\n1. With NO Referrer-Policy set, what did the third party receive?KHÔNG đặt Referrer-Policy, bên thứ ba nhận được gì?\n   Answer: b) Only the origin, http://localhost:4800/\n   The first log line. Older advice (“the Referer leaks the token to every script”) describes the old default, no-referrer-when-downgrade — the second line shows exactly that.VI: Dòng log đầu tiên. Lời khuyên cũ (\"Referer làm lộ token cho mọi script\") mô tả mặc định cũ, no-referrer-when-downgrade — dòng thứ hai cho thấy đúng như vậy.\n\n2. So is a token in a URL safe now?Vậy token trong URL giờ đã an toàn chưa?\n   Answer: d) No: your own log and same-origin requests still get it\n   The LabFlow access log line and the same-origin Referer both contained the token. Keep tokens out of URLs, or make them single-use and short-lived (Chapter 6).VI: Dòng access log của LabFlow và Referer cùng origin đều chứa token. Đừng để token trong URL, hoặc làm nó dùng một lần và sống ngắn (Chương 6).\n\n3. Which policy sends NO Referer at all?Policy nào KHÔNG gửi Referer nào cả?\n   Answer: c) no-referrer\n   The fourth log line: “Referer: (none)”. A reset page can set it on its own response.VI: Dòng log thứ tư: \"Referer: (none)\". Trang đặt lại mật khẩu có thể tự đặt nó trên response của mình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Only the origin, http://localhost:4800/</p><p>The first log line. Older advice (“the Referer leaks the token to every script”) describes the old default, no-referrer-when-downgrade — the second line shows exactly that.</p><p><i>VI: Dòng log đầu tiên. Lời khuyên cũ (\"Referer làm lộ token cho mọi script\") mô tả mặc định cũ, no-referrer-when-downgrade — dòng thứ hai cho thấy đúng như vậy.</i></p></li><li><p><b>d)</b> No: your own log and same-origin requests still get it</p><p>The LabFlow access log line and the same-origin Referer both contained the token. Keep tokens out of URLs, or make them single-use and short-lived (Chapter 6).</p><p><i>VI: Dòng access log của LabFlow và Referer cùng origin đều chứa token. Đừng để token trong URL, hoặc làm nó dùng một lần và sống ngắn (Chương 6).</i></p></li><li><p><b>c)</b> no-referrer</p><p>The fourth log line: “Referer: (none)”. A reset page can set it on its own response.</p><p><i>VI: Dòng log thứ tư: \"Referer: (none)\". Trang đặt lại mật khẩu có thể tự đặt nó trên response của mình.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>With NO Referrer-Policy set, what did the third party receive?</p><p style=\"opacity:.75;font-size:.92em\"><i>KHÔNG đặt Referrer-Policy, bên thứ ba nhận được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The token alone, without the page path"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the origin, http://localhost:4800/"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing at all: the header was not sent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The full URL, including the reset token"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The first log line. Older advice (“the Referer leaks the token to every script”) describes the old default, no-referrer-when-downgrade — the second line shows exactly that.</p><p><i>VI: Dòng log đầu tiên. Lời khuyên cũ (\"Referer làm lộ token cho mọi script\") mô tả mặc định cũ, no-referrer-when-downgrade — dòng thứ hai cho thấy đúng như vậy.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>So is a token in a URL safe now?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vậy token trong URL giờ đã an toàn chưa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, as long as the whole site is served over HTTPS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes: modern browsers strip it from every request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only on mobile browsers, which use a stricter default"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No: your own log and same-origin requests still get it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The LabFlow access log line and the same-origin Referer both contained the token. Keep tokens out of URLs, or make them single-use and short-lived (Chapter 6).</p><p><i>VI: Dòng access log của LabFlow và Referer cùng origin đều chứa token. Đừng để token trong URL, hoặc làm nó dùng một lần và sống ngắn (Chương 6).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which policy sends NO Referer at all?</p><p style=\"opacity:.75;font-size:.92em\"><i>Policy nào KHÔNG gửi Referer nào cả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "strict-origin-when-cross-origin"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unsafe-url"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no-referrer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no-referrer-when-downgrade"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The fourth log line: “Referer: (none)”. A reset page can set it on its own response.</p><p><i>VI: Dòng log thứ tư: \"Referer: (none)\". Trang đặt lại mật khẩu có thể tự đặt nó trên response của mình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting the default and putting long-lived tokens in links.|||Tin vào mặc định rồi đặt token sống lâu vào link."
+        },
+        {
+          "loi": "Forgetting the server’s own access log.|||Quên access log của chính máy chủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Referer",
+          "vi": "header trình duyệt gửi kèm: trang nào dẫn tới request này"
+        },
+        {
+          "en": "Referrer-Policy",
+          "vi": "header trang dùng để giới hạn Referer"
+        }
+      ]
+    },
+    {
+      "title": "1.1-2 — Six hops, six defences",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "credential lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A bearer credential travels through six hops. Match each failure with the defence that stops it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một tín vật kiểu mang theo đi qua sáu chặng. Ghép mỗi kiểu hỏng với lớp phòng thủ chặn nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask where the credential is at that moment.|||Hỏi lúc đó tín vật đang nằm ở đâu.",
+        "HttpOnly is about JavaScript reading; SameSite is about the browser sending.|||HttpOnly là chuyện JavaScript đọc; SameSite là chuyện trình duyệt gửi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.1-2 — Six hops, six defences\n\nAnswer in the answer panel (no code needed).\n\n1. Hop · failure → defenceChặng · kiểu hỏng → phòng thủ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.1-2 — Six hops, six defences — answer key\n\n1. Hop · failure → defenceChặng · kiểu hỏng → phòng thủ\n   - r1.d: use the OS CSPRNG (lesson 1.2)\n   - r2.d: TLS, and never in a URL\n   - r3.d: HttpOnly cookie (Chapter 3)\n   - r4.d: SameSite + CSRF defences (Chapter 3)\n   - r5.d: constant-time check or digest lookup (lesson 1.3)\n   - r6.d: store only a digest (lesson 1.3)\n   You cannot make a bearer credential unstealable; you make each hop as hard as possible, keep lifetimes short and keep the ability to revoke.VI: Bạn không làm được tín vật mang theo \"không thể bị lấy\"; bạn làm mỗi chặng khó nhất có thể, giữ thời gian sống ngắn và giữ khả năng thu hồi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You cannot make a bearer credential unstealable; you make each hop as hard as possible, keep lifetimes short and keep the ability to revoke.</p><p><i>VI: Bạn không làm được tín vật mang theo \"không thể bị lấy\"; bạn làm mỗi chặng khó nhất có thể, giữ thời gian sống ngắn và giữ khả năng thu hồi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Hop · failure → defence</p><p style=\"opacity:.75;font-size:.92em\"><i>Chặng · kiểu hỏng → phòng thủ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Hop and failure"
+              },
+              {
+                "ma": "d",
+                "ten": "Defence",
+                "luaChon": [
+                  "use the OS CSPRNG (lesson 1.2)",
+                  "TLS, and never in a URL",
+                  "HttpOnly cookie (Chapter 3)",
+                  "SameSite + CSRF defences (Chapter 3)",
+                  "constant-time check or digest lookup (lesson 1.3)",
+                  "store only a digest (lesson 1.3)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Created: the id is Date.now() and is guessed in seconds"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "In transit: it sits in ?token= and lands in access logs"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "At rest in the browser: an injected script reads localStorage"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Sent back: the browser attaches it to a request another site caused"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Verified: === returns earlier for wrong first characters"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "At rest on the server: a backup of the session table leaks"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "use the OS CSPRNG (lesson 1.2)",
+              "r2.d": "TLS, and never in a URL",
+              "r3.d": "HttpOnly cookie (Chapter 3)",
+              "r4.d": "SameSite + CSRF defences (Chapter 3)",
+              "r5.d": "constant-time check or digest lookup (lesson 1.3)",
+              "r6.d": "store only a digest (lesson 1.3)"
+            },
+            "giaiThich": "<p>You cannot make a bearer credential unstealable; you make each hop as hard as possible, keep lifetimes short and keep the ability to revoke.</p><p><i>VI: Bạn không làm được tín vật mang theo \"không thể bị lấy\"; bạn làm mỗi chặng khó nhất có thể, giữ thời gian sống ngắn và giữ khả năng thu hồi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "HttpOnly for CSRF: the attacker never needs to read the cookie.|||HttpOnly cho CSRF: kẻ tấn công không cần đọc cookie."
+        },
+        {
+          "loi": "Encrypting session ids in the database instead of hashing them.|||Mã hoá id phiên trong CSDL thay vì băm."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "1.1-3 — Write stripSecretParams(url, names) for your access log",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "logging hygiene"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID’s access log must never record a credential that arrived in a query string. Write <code>stripSecretParams(url, names)</code>: remove every query parameter whose (decoded, lower-cased) name is in <code>names</code> (given in lower case); keep the other parameters in their order and exactly as written; drop the <code>?</code> if nothing is left; keep the <code>#fragment</code>. No <code>URL</code> class is available — parse the string yourself.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Access log của LabFlow ID không bao giờ được ghi tín vật đến trong query string. Viết <code>stripSecretParams(url, names)</code>: bỏ mọi tham số query có tên (sau khi giải mã, viết thường) nằm trong <code>names</code> (cho sẵn chữ thường); giữ các tham số khác đúng thứ tự và đúng như đã viết; bỏ dấu <code>?</code> nếu không còn gì; giữ <code>#fragment</code>. Không có lớp <code>URL</code> — tự phân tích chuỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "stripSecretParams(\"/reset?token=lfid_reset_abc&policy=unsafe-url\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+          "output": "\"/reset?policy=unsafe-url\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Cut the #fragment first, then the query.|||Cắt #fragment trước, rồi tới query.",
+        "A name can be written as To%6Ben: decode before comparing.|||Tên có thể viết dạng To%6Ben: giải mã rồi mới so."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** remove credential parameters from a URL before logging it */\nfunction stripSecretParams(url, names) {\n  // Write your solution here\n  return url.replace(/token=[^&]*/, '');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction stripSecretParams(url, names) {\n  var hash = '';\n  var h = url.indexOf('#');\n  if (h >= 0) { hash = url.slice(h); url = url.slice(0, h); }\n  var q = url.indexOf('?');\n  if (q < 0) return url + hash;\n  var base = url.slice(0, q);\n  var kept = url.slice(q + 1).split('&').filter(function (pair) {\n    if (pair === '') return false;\n    var name = pair.split('=')[0];\n    try { name = decodeURIComponent(name.replace(/\\+/g, ' ')); } catch (e) { /* keep the raw name */ }\n    return names.indexOf(name.toLowerCase()) < 0;\n  });\n  return base + (kept.length ? '?' + kept.join('&') : '') + hash;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Matching whole, decoded names is what makes the filter reliable: substring regexes either miss encoded names or delete innocent parameters. Better still: never put credentials in URLs (POST them, or use a header).</p>",
+      "solutionExplanationHtmlVi": "<p>So khớp cả tên đã giải mã mới làm bộ lọc đáng tin: regex chuỗi con hoặc bỏ sót tên bị mã hoá, hoặc xoá nhầm tham số vô hại. Tốt hơn nữa: đừng bao giờ để tín vật trong URL (gửi bằng POST, hoặc dùng header).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: stripSecretParams(\"/reset?token=lfid_reset_abc&policy=unsafe-url\", [\"token\",\"access_tok...",
+              "vi": "Ca 1"
+            },
+            "goi": "stripSecretParams(\"/reset?token=lfid_reset_abc&policy=unsafe-url\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/reset?policy=unsafe-url"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: stripSecretParams(\"/reset?token=lfid_reset_abc\", [\"token\",\"access_token\",\"code\",\"sessio...",
+              "vi": "Ca 2"
+            },
+            "goi": "stripSecretParams(\"/reset?token=lfid_reset_abc\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/reset"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "stripSecretParams(\"/cb?state=xyz&code=4%2F0Ab&scope=openid#top\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/cb?state=xyz&scope=openid#top",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "stripSecretParams(\"/search?q=token&csrf_token=keep&tokenizer=keep\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/search?q=token&csrf_token=keep&tokenizer=keep",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "stripSecretParams(\"/x?To%6Ben=abc&a=1\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/x?a=1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "stripSecretParams(\"/health\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/health",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "stripSecretParams(\"/me?&access_token=t&&page=2\", [\"token\",\"access_token\",\"code\",\"session\",\"api_key\"])",
+            "mongDoi": "/me?page=2",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A regex that removes \"token=\" but also \"csrf_token=\" or \"tokenizer=\".|||Regex xoá \"token=\" nhưng xoá luôn \"csrf_token=\" hay \"tokenizer=\"."
+        },
+        {
+          "loi": "Leaving \"?&\" or a trailing \"?\" behind.|||Để lại \"?&\" hoặc dấu \"?\" thừa ở cuối."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "1.1-4 — Write referrerFor(pageUrl, requestUrl, policy)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Referrer-Policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Predict the <code>Referer</code> a browser sends — the rules the real Chromium run of lesson 1.1 followed. Return a string or <code>null</code> (no header).</p><ul>\n<li><b>full</b> = the page URL without its <code>#fragment</code>; <b>origin</b> = <code>scheme://host[:port]/</code> (lower case, default ports :80/:443 dropped); <b>same</b> = same origin; <b>downgrade</b> = page is https and the request is http.</li>\n<li><code>no-referrer</code> ⇒ null · <code>origin</code> ⇒ origin · <code>unsafe-url</code> ⇒ full · <code>same-origin</code> ⇒ same ? full : null · <code>strict-origin</code> ⇒ downgrade ? null : origin · <code>no-referrer-when-downgrade</code> ⇒ downgrade ? null : full · <code>origin-when-cross-origin</code> ⇒ same ? full : origin · <code>strict-origin-when-cross-origin</code> (also when policy is empty/undefined — today’s default) ⇒ same ? full : (downgrade ? null : origin).</li>\n<li>An unknown policy or a URL that is not http(s) ⇒ null.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đoán header <code>Referer</code> mà trình duyệt gửi — đúng các luật mà lần chạy Chromium thật ở bài 1.1 đã theo. Trả chuỗi hoặc <code>null</code> (không có header).</p><ul>\n<li><b>full</b> = URL trang bỏ <code>#fragment</code>; <b>origin</b> = <code>scheme://host[:port]/</code> (chữ thường, bỏ cổng mặc định :80/:443); <b>same</b> = cùng origin; <b>downgrade</b> = trang là https còn request là http.</li>\n<li><code>no-referrer</code> ⇒ null · <code>origin</code> ⇒ origin · <code>unsafe-url</code> ⇒ full · <code>same-origin</code> ⇒ same ? full : null · <code>strict-origin</code> ⇒ downgrade ? null : origin · <code>no-referrer-when-downgrade</code> ⇒ downgrade ? null : full · <code>origin-when-cross-origin</code> ⇒ same ? full : origin · <code>strict-origin-when-cross-origin</code> (cả khi policy rỗng/undefined — mặc định hiện nay) ⇒ same ? full : (downgrade ? null : origin).</li>\n<li>Policy lạ hoặc URL không phải http(s) ⇒ null.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://127.0.0.1:4801/pixel.gif\", \"\")",
+          "output": "\"http://localhost:4800/\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write parse(url) ⇒ { scheme, origin } with one regex.|||Viết parse(url) ⇒ { scheme, origin } bằng một regex.",
+        "Then the policies are a switch of one-liners.|||Sau đó các policy chỉ là một switch gồm các dòng ngắn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ the Referer string, or null */\nfunction referrerFor(pageUrl, requestUrl, policy) {\n  // Write your solution here\n  if (policy === 'no-referrer') return null;\n  return pageUrl;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction referrerFor(pageUrl, requestUrl, policy) {\n  function parse(u) {\n    var m = /^(https?):\\/\\/([^/?#]+)/i.exec(u);\n    if (!m) return null;\n    var scheme = m[1].toLowerCase();\n    var host = m[2].toLowerCase();\n    if ((scheme === 'http' && /:80$/.test(host)) || (scheme === 'https' && /:443$/.test(host))) host = host.replace(/:\\d+$/, '');\n    return { scheme: scheme, origin: scheme + '://' + host };\n  }\n  var p = parse(pageUrl), r = parse(requestUrl);\n  if (!p || !r) return null;\n  var full = pageUrl.split('#')[0];\n  var origin = p.origin + '/';\n  var same = p.origin === r.origin;\n  var downgrade = p.scheme === 'https' && r.scheme === 'http';\n  switch (policy || 'strict-origin-when-cross-origin') {\n    case 'no-referrer': return null;\n    case 'origin': return origin;\n    case 'unsafe-url': return full;\n    case 'same-origin': return same ? full : null;\n    case 'strict-origin': return downgrade ? null : origin;\n    case 'no-referrer-when-downgrade': return downgrade ? null : full;\n    case 'origin-when-cross-origin': return same ? full : origin;\n    case 'strict-origin-when-cross-origin': return same ? full : (downgrade ? null : origin);\n    default: return null;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Matches the measured run: no policy ⇒ the pixel on 127.0.0.1:4801 got only http://localhost:4800/; no-referrer-when-downgrade and unsafe-url ⇒ the full URL with the token; no-referrer ⇒ nothing; the same-origin script got the full URL every time except with no-referrer.</p>",
+      "solutionExplanationHtmlVi": "<p>Khớp lần đo thật: không policy ⇒ pixel ở 127.0.0.1:4801 chỉ nhận http://localhost:4800/; no-referrer-when-downgrade và unsafe-url ⇒ cả URL kèm token; no-referrer ⇒ không gì; script cùng origin nhận URL đầy đủ ở mọi lần trừ no-referrer.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "No policy, third party (real run: origin only)",
+              "vi": "Không policy, bên thứ ba (chạy thật: chỉ origin)"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://127.0.0.1:4801/pixel.gif\", \"\")",
+            "mongDoi": "http://localhost:4800/"
+          },
+          {
+            "moTa": {
+              "en": "No policy, same origin (real run: full URL)",
+              "vi": "Không policy, cùng origin (chạy thật: URL đầy đủ)"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://localhost:4800/static/app.js\", \"\")",
+            "mongDoi": "http://localhost:4800/reset?token=lfid_reset_abc&policy=x"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://127.0.0.1:4801/pixel.gif\", \"no-referrer-when-downgrade\")",
+            "mongDoi": "http://localhost:4800/reset?token=lfid_reset_abc&policy=x",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://127.0.0.1:4801/pixel.gif\", \"no-referrer\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "https ⇒ http downgrade",
+              "vi": "Hạ cấp https ⇒ http"
+            },
+            "goi": "referrerFor(\"https://id.labflow.example/a?b=1#frag\", \"http://cdn.example/x.js\", \"strict-origin-when-cross-origin\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "referrerFor(\"https://ID.LabFlow.example:443/a#f\", \"https://id.labflow.example/b\", \"same-origin\")",
+            "mongDoi": "https://ID.LabFlow.example:443/a",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/a\", \"http://localhost:4801/b\", \"same-origin\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "referrerFor(\"https://id.labflow.example/r?t=1\", \"https://api.example/x\", undefined)",
+            "mongDoi": "https://id.labflow.example/",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "referrerFor(\"https://id.labflow.example/r?t=1\", \"http://api.example/x\", \"unsafe-url\")",
+            "mongDoi": "https://id.labflow.example/r?t=1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "referrerFor(\"file:///tmp/a.html\", \"https://api.example/x\", \"unsafe-url\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "referrerFor(\"http://localhost:4800/reset?token=lfid_reset_abc&policy=x\", \"http://127.0.0.1:4801/\", \"banana\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing hosts without the port: localhost:4800 and localhost:4801 are different origins.|||So host mà bỏ cổng: localhost:4800 và localhost:4801 là hai origin khác nhau."
+        },
+        {
+          "loi": "Forgetting that the default (no policy) is strict-origin-when-cross-origin, not no-referrer-when-downgrade.|||Quên rằng mặc định (không policy) là strict-origin-when-cross-origin, không phải no-referrer-when-downgrade."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "origin",
+          "vi": "scheme + host + port"
+        },
+        {
+          "en": "downgrade",
+          "vi": "từ https xuống http"
+        }
+      ]
+    }
+  ]
+}

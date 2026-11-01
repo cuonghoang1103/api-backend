@@ -1,0 +1,443 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-6-do-tai",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-6-do-tai"
+  },
+  "exercises": [
+    {
+      "title": "Load 1 — Reading the re-measured table",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "performance",
+        "testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.6: the Chapter 8 scripts on four setups, rounds 1 and 3, and the final contract.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.6: script Chương 8 trên bốn cấu hình, lượt 1 và 3, và hợp đồng cuối cùng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what work each request does in each store.|||Hỏi: mỗi request làm việc gì trong mỗi kho.",
+        "A number without its conditions is not evidence.|||Một con số thiếu điều kiện đo không phải bằng chứng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Load 1 — Reading the re-measured table\n\nAnswer in the answer panel (no code needed).\n\n1. GET /v2/bookings?limit=20 for a manager went from ~1,300 req/s (RAM) to ~2,900 (PostgreSQL) in round 1. Why faster?GET /v2/bookings?limit=20 của quản lý từ ~1.300 req/s (RAM) lên ~2.900 (PostgreSQL) ở lượt 1. Vì sao nhanh hơn?\n2. Round 2 was left out of the table. Why?Lượt 2 bị loại khỏi bảng. Vì sao?\n3. Two instances behind the proxy on the same laptop were not reliably faster. The right conclusion?Hai instance sau proxy trên cùng một máy không chắc nhanh hơn. Kết luận đúng?\n4. Drift check: 40/40 on PostgreSQL and also 40/40 on two RAM instances that double-booked. What does that teach?Kiểm trôi: 40/40 trên PostgreSQL và cũng 40/40 trên hai instance RAM đặt trùng. Điều đó dạy gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Load 1 — Reading the re-measured table — answer key\n\n1. GET /v2/bookings?limit=20 for a manager went from ~1,300 req/s (RAM) to ~2,900 (PostgreSQL) in round 1. Why faster?GET /v2/bookings?limit=20 của quản lý từ ~1.300 req/s (RAM) lên ~2.900 (PostgreSQL) ở lượt 1. Vì sao nhanh hơn?\n   Answer: d) RAM filters and sorts 10,000 objects per request; PostgreSQL reads 21 rows of an index\n   An index beats an array scan even across a network hop (EXPLAIN: Index Scan, 0.028 ms).VI: Index thắng quét mảng kể cả khi phải qua mạng (EXPLAIN: Index Scan, 0,028 ms).\n\n2. Round 2 was left out of the table. Why?Lượt 2 bị loại khỏi bảng. Vì sao?\n   Answer: b) It started at load average 53 from outside work, so its numbers measured the machine, not LabFlow\n   Record uptime around every run, discard runs under heavy outside load, publish ranges.VI: Ghi uptime quanh mỗi lần đo, bỏ lượt đo khi máy bị tải nặng từ ngoài, công bố khoảng.\n\n3. Two instances behind the proxy on the same laptop were not reliably faster. The right conclusion?Hai instance sau proxy trên cùng một máy không chắc nhanh hơn. Kết luận đúng?\n   Answer: a) They share the same CPU cores and add a hop: instances add availability here, capacity needs separate machines\n   The spread between rounds (2,339–3,392 for one endpoint) was larger than any gain.VI: Độ dao động giữa các lượt (2.339–3.392 cho một endpoint) lớn hơn mọi phần lợi.\n\n4. Drift check: 40/40 on PostgreSQL and also 40/40 on two RAM instances that double-booked. What does that teach?Kiểm trôi: 40/40 trên PostgreSQL và cũng 40/40 trên hai instance RAM đặt trùng. Điều đó dạy gì?\n   Answer: b) Contract checks validate shapes, not truth — behaviour tests catch double bookings\n   A 201 for Bình’s duplicate slot matches the schema perfectly. 12.3’s tests check what happened.VI: Câu 201 cho khung giờ trùng của Bình khớp lược đồ hoàn hảo. Test của 12.3 kiểm chuyện gì đã xảy ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> RAM filters and sorts 10,000 objects per request; PostgreSQL reads 21 rows of an index</p><p>An index beats an array scan even across a network hop (EXPLAIN: Index Scan, 0.028 ms).</p><p><i>VI: Index thắng quét mảng kể cả khi phải qua mạng (EXPLAIN: Index Scan, 0,028 ms).</i></p></li><li><p><b>b)</b> It started at load average 53 from outside work, so its numbers measured the machine, not LabFlow</p><p>Record uptime around every run, discard runs under heavy outside load, publish ranges.</p><p><i>VI: Ghi uptime quanh mỗi lần đo, bỏ lượt đo khi máy bị tải nặng từ ngoài, công bố khoảng.</i></p></li><li><p><b>a)</b> They share the same CPU cores and add a hop: instances add availability here, capacity needs separate machines</p><p>The spread between rounds (2,339–3,392 for one endpoint) was larger than any gain.</p><p><i>VI: Độ dao động giữa các lượt (2.339–3.392 cho một endpoint) lớn hơn mọi phần lợi.</i></p></li><li><p><b>b)</b> Contract checks validate shapes, not truth — behaviour tests catch double bookings</p><p>A 201 for Bình’s duplicate slot matches the schema perfectly. 12.3’s tests check what happened.</p><p><i>VI: Câu 201 cho khung giờ trùng của Bình khớp lược đồ hoàn hảo. Test của 12.3 kiểm chuyện gì đã xảy ra.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>GET /v2/bookings?limit=20 for a manager went from ~1,300 req/s (RAM) to ~2,900 (PostgreSQL) in round 1. Why faster?</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /v2/bookings?limit=20 của quản lý từ ~1.300 req/s (RAM) lên ~2.900 (PostgreSQL) ở lượt 1. Vì sao nhanh hơn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PostgreSQL answers on a separate core, so Node never waits for it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL caches every response in memory after the first request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The RAM store compresses every response, which costs CPU per request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RAM filters and sorts 10,000 objects per request; PostgreSQL reads 21 rows of an index"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>An index beats an array scan even across a network hop (EXPLAIN: Index Scan, 0.028 ms).</p><p><i>VI: Index thắng quét mảng kể cả khi phải qua mạng (EXPLAIN: Index Scan, 0,028 ms).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Round 2 was left out of the table. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lượt 2 bị loại khỏi bảng. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "autocannon crashed during the round and printed partial output only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It started at load average 53 from outside work, so its numbers measured the machine, not LabFlow"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Round 2 used a different number of seeded bookings than rounds 1 and 3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its numbers were higher than the others and looked too good to publish"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Record uptime around every run, discard runs under heavy outside load, publish ranges.</p><p><i>VI: Ghi uptime quanh mỗi lần đo, bỏ lượt đo khi máy bị tải nặng từ ngoài, công bố khoảng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Two instances behind the proxy on the same laptop were not reliably faster. The right conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai instance sau proxy trên cùng một máy không chắc nhanh hơn. Kết luận đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They share the same CPU cores and add a hop: instances add availability here, capacity needs separate machines"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The proxy limits throughput to one instance at a time by design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL serialises all connections from the same host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Node.js cannot use more than one process per machine, so the second is idle"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The spread between rounds (2,339–3,392 for one endpoint) was larger than any gain.</p><p><i>VI: Độ dao động giữa các lượt (2.339–3.392 cho một endpoint) lớn hơn mọi phần lợi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Drift check: 40/40 on PostgreSQL and also 40/40 on two RAM instances that double-booked. What does that teach?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm trôi: 40/40 trên PostgreSQL và cũng 40/40 trên hai instance RAM đặt trùng. Điều đó dạy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The drift checker has a bug and should be removed from CI"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Contract checks validate shapes, not truth — behaviour tests catch double bookings"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RAM and PostgreSQL stores are interchangeable in production"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Double bookings are allowed by the OpenAPI contract of LabFlow"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A 201 for Bình’s duplicate slot matches the schema perfectly. 12.3’s tests check what happened.</p><p><i>VI: Câu 201 cho khung giờ trùng của Bình khớp lược đồ hoàn hảo. Test của 12.3 kiểm chuyện gì đã xảy ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Publishing one run as “the” number.|||Công bố một lần đo như con số “chuẩn”."
+        },
+        {
+          "loi": "Expecting two instances on one laptop to double throughput.|||Mong hai instance trên một máy gấp đôi thông lượng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "throughput",
+          "vi": "thông lượng"
+        },
+        {
+          "en": "load average",
+          "vi": "tải trung bình"
+        },
+        {
+          "en": "behaviour test",
+          "vi": "test hành vi"
+        }
+      ]
+    },
+    {
+      "title": "Load 2 — Write speedupRange(before, after): honest ratios",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Each array holds one throughput per round, paired by index. Return <code>[min, max]</code> of <code>after[i] / before[i]</code>, each rounded to one decimal. Below 1 means slower.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi mảng chứa một thông lượng cho mỗi lượt, ghép theo chỉ số. Trả <code>[min, max]</code> của <code>after[i] / before[i]</code>, mỗi số làm tròn một chữ số lẻ. Dưới 1 là chậm hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "before, after — number[] of equal length|||before, after — mảng số cùng độ dài",
+      "outputSpec": "[number, number]|||[số, số]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "speedupRange([1734,1910], [2798,2593])",
+          "output": "[1.4,1.6]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Pair round 1 with round 1, never best with best.|||Ghép lượt 1 với lượt 1, đừng ghép tốt nhất với tốt nhất.",
+        "Math.round(x * 10) / 10 rounds to one decimal.|||Math.round(x * 10) / 10 làm tròn một chữ số lẻ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** paired speed-up range */\nfunction speedupRange(before, after) {\n  // Write your solution here\n  const r = Math.max(...after) / Math.min(...before);\n  return [Math.round(r * 10) / 10, Math.round(r * 10) / 10];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction speedupRange(before, after) {\n  const r = before.map((b, i) => after[i] / b);\n  const f = (x) => Math.round(x * 10) / 10;\n  return [f(Math.min(...r)), f(Math.max(...r))];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>12.6, An’s list: RAM 1,734 · 1,910, PostgreSQL 2,798 · 2,593 ⇒ 1.4–1.6×; Lan’s list 1.7–2.2× — published together as 1.4–2.2×.</p>",
+      "solutionExplanationHtmlVi": "<p>12.6, danh sách của An: RAM 1.734 · 1.910, PostgreSQL 2.798 · 2.593 ⇒ 1,4–1,6 lần; của Lan 1,7–2,2 lần — công bố chung là 1,4–2,2 lần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An’s list, rounds 1 and 3",
+              "vi": "Danh sách của An, lượt 1 và 3"
+            },
+            "goi": "speedupRange([1734,1910], [2798,2593])",
+            "mongDoi": [
+              1.4,
+              1.6
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Labs list — slower",
+              "vi": "Danh sách phòng — chậm hơn"
+            },
+            "goi": "speedupRange([7851,8091], [5549,5093])",
+            "mongDoi": [
+              0.6,
+              0.7
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "speedupRange([644,621], [2028,1705])",
+            "mongDoi": [
+              2.7,
+              3.1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "speedupRange([1318], [2865])",
+            "mongDoi": [
+              2.2,
+              2.2
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing the best “after” with the worst “before”.|||So “sau” tốt nhất với “trước” tệ nhất."
+        },
+        {
+          "loi": "Averaging first and hiding the spread.|||Lấy trung bình trước rồi giấu biên độ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "speed-up",
+          "vi": "hệ số tăng tốc"
+        }
+      ]
+    },
+    {
+      "title": "Load 3 — Write changeKind(change): is 2.4.0 safe?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "versioning",
+        "openapi"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A pocket version of <code>openapi/diff.mjs</code>. <code>change = { dir: 'req' | 'res', change }</code>. Return <code>'breaking'</code>, <code>'warn'</code>, <code>'safe'</code> or <code>'review'</code>: removing a field breaks responses (warn for requests); a new <b>required</b> field breaks requests (safe in responses); a new enum value is a warning in responses, safe in requests; a new optional field, a new error response or a new header are safe; changing a type breaks; anything else needs review.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bản bỏ túi của <code>openapi/diff.mjs</code>. <code>change = { dir: 'req' | 'res', change }</code>. Trả <code>'breaking'</code>, <code>'warn'</code>, <code>'safe'</code> hoặc <code>'review'</code>: bỏ trường phá vỡ câu trả lời (cảnh báo với request); trường <b>bắt buộc</b> mới phá vỡ request (an toàn trong câu trả lời); giá trị enum mới là cảnh báo trong câu trả lời, an toàn trong request; trường tuỳ chọn mới, câu trả lời lỗi mới hay header mới là an toàn; đổi kiểu thì phá vỡ; còn lại cần xem xét.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "change — { dir, change }",
+      "outputSpec": "string|||chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "changeKind({\"dir\":\"res\",\"change\":\"add-header\"})",
+          "output": "\"safe\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The same change has opposite rules for what clients send and receive.|||Cùng một thay đổi có luật ngược nhau cho thứ client gửi và nhận.",
+        "2.4.0 added X-Request-Id and 503 responses.|||2.4.0 thêm X-Request-Id và câu trả lời 503."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** classify one contract change */\nfunction changeKind(c) {\n  // Write your solution here\n  return c.change.startsWith('add') ? 'safe' : 'breaking';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction changeKind(c) {\n  if (c.change === 'remove-field') return c.dir === 'res' ? 'breaking' : 'warn';\n  if (c.change === 'add-required') return c.dir === 'req' ? 'breaking' : 'safe';\n  if (c.change === 'add-enum-value') return c.dir === 'res' ? 'warn' : 'safe';\n  if (c.change === 'add-optional' || c.change === 'add-error-response' || c.change === 'add-header') return 'safe';\n  if (c.change === 'change-type') return 'breaking';\n  return 'review';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rules of 4.1 and 7.4. The 2.3.0 ⇒ 2.4.0 diff printed “no breaking change”: an added header and added 503 responses are safe; clients must still handle the 503.</p>",
+      "solutionExplanationHtmlVi": "<p>Luật của 4.1 và 7.4. Diff 2.3.0 ⇒ 2.4.0 in “không có thay đổi phá vỡ”: header mới và câu 503 mới là an toàn; client vẫn phải xử lý 503.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "X-Request-Id",
+              "vi": "X-Request-Id"
+            },
+            "goi": "changeKind({\"dir\":\"res\",\"change\":\"add-header\"})",
+            "mongDoi": "safe"
+          },
+          {
+            "moTa": {
+              "en": "CHECKED_IN for old clients",
+              "vi": "CHECKED_IN cho client cũ"
+            },
+            "goi": "changeKind({\"dir\":\"res\",\"change\":\"add-enum-value\"})",
+            "mongDoi": "warn"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "changeKind({\"dir\":\"req\",\"change\":\"add-required\"})",
+            "mongDoi": "breaking",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "changeKind({\"dir\":\"res\",\"change\":\"add-error-response\"})",
+            "mongDoi": "safe",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "changeKind({\"dir\":\"req\",\"change\":\"remove-field\"})",
+            "mongDoi": "warn",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "changeKind({\"dir\":\"res\",\"change\":\"rename-path\"})",
+            "mongDoi": "review",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating every addition as safe (enum values in responses!).|||Coi mọi thứ thêm vào là an toàn (giá trị enum trong câu trả lời!)."
+        },
+        {
+          "loi": "Treating a new required request field as additive.|||Coi trường bắt buộc mới trong request là thêm vào an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breaking change",
+          "vi": "thay đổi phá vỡ"
+        },
+        {
+          "en": "additive change",
+          "vi": "thay đổi thêm vào"
+        }
+      ]
+    }
+  ]
+}

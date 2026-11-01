@@ -98,6 +98,11 @@ ${ra(gon(OUT['52-th']))}
 <li>Identity and role come from the token, never from the body.</li>
 <li>Write access control as a table: every role × own and other people’s data.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-7-lab-bo-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — Lab 1: build LabFlow ID’s toolkit of primitives</span><span class="lc-sub">Same: inject the clock and test expiry at the exact boundary (the moment of exp already counts as expired). That lab builds the signing side itself — signed values with expiry and key ids, a constant-time comparison, CSPRNG tokens — and a behaviour grader attacks it: tampering, the exp boundary, key rotation and a timing check.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LAB →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -166,6 +171,11 @@ ${ra(gon(OUT['52-th']))}
 <li>Danh tính và vai trò lấy từ token, không bao giờ từ body.</li>
 <li>Viết phân quyền thành bảng: mọi vai trò × dữ liệu của mình và của người khác.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-7-lab-bo-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — Lab 1: dựng bộ công cụ nguyên hàm của LabFlow ID</span><span class="lc-sub">Giống: tiêm đồng hồ và test hết hạn đúng tại biên (đúng mốc exp đã tính là hết hạn). Lab đó dựng chính phía ký — giá trị có ký kèm hạn và mã khoá, phép so hằng thời gian, token từ CSPRNG — và một máy chấm hành vi tấn công nó: sửa giá trị, biên exp, xoay khoá và một phép đo thời gian.</span></span>
+  <span class="lc-cta">MỞ LAB AUTHENTICATION →</span>
+</a>
 </div>
 `,
 };

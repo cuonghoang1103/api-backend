@@ -6,10 +6,10 @@ import { since, subscribe, latestId } from './events.js';
 
 export function attachWs(server) {
   const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false });
-  server.on('upgrade', (req, socket, head) => {
+  server.on('upgrade', async (req, socket, head) => {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname !== '/v2/ws') return socket.destroy();
-    const userId = redeemTicket(url.searchParams.get('ticket'));
+    const userId = await redeemTicket(url.searchParams.get('ticket')).catch(() => null);   // Chương 12: vé có thể nằm trong Redis
     if (!userId) {                                            // từ chối TRƯỚC khi nâng cấp: trả một câu HTTP bình thường
       socket.end('HTTP/1.1 401 Unauthorized\r\nContent-Type: application/problem+json\r\nConnection: close\r\n\r\n'
         + '{"type":"https://labflow.example/problems/ticket-invalid","status":401,"code":"TICKET_INVALID"}');
@@ -35,4 +35,8 @@ export function attachWs(server) {
     ws.on('close', () => { clearInterval(beat); off(); });
   });
   return wss;
+}
+// Bài 12.7: tắt êm — báo client "server đang khởi động lại, nối lại nơi khác" (mã 1012 Service Restart, RFC 6455 IANA registry)
+export function closeAllWs(wss) {
+  for (const ws of wss.clients) ws.close(1012, 'server restarting');
 }

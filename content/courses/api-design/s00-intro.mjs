@@ -989,6 +989,11 @@ Transfer-Encoding: chunked
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 1.1: HTTP, request, response &amp; your first Servlet</span><span class="lc-sub">If you took PRJ301 on Academy, the request–response cycle, GET vs POST and status codes are the same ideas, seen from Java Servlets. This lesson adds: raw HTTP read with curl, the headers an API depends on, and why a missing Content-Type silently empties the body. If you have not taken PRJ301, this lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-1-giao-thuc-quen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 0.1: a protocol that forgets everything</span><span class="lc-sub">Same: every HTTP request stands alone; the server sees only a method, a path and headers. That lesson adds what this statelessness means for identity: remembering by IP (Bình becomes An behind one address) and by TCP connection (a new connection is a stranger) both fail on real requests, so the client must carry proof.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1287,6 +1292,11 @@ Transfer-Encoding: chunked
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp phần này ở PRJ301 — bài 1.1: HTTP, request, response &amp; Servlet đầu tiên</span><span class="lc-sub">Nếu bạn đã học PRJ301 trên Academy, vòng request–response, GET với POST và mã trạng thái là cùng những ý đó, nhìn từ Java Servlet. Bài này thêm: đọc HTTP "trần" bằng curl, những header mà một API dựa vào, và vì sao thiếu Content-Type làm body lặng lẽ biến mất. Chưa học PRJ301 thì bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-1-giao-thuc-quen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 0.1: một giao thức quên sạch mọi thứ</span><span class="lc-sub">Giống: mỗi HTTP request đứng một mình; server chỉ thấy method, đường dẫn và header. Bài đó thêm ý nghĩa của việc không trạng thái với danh tính: nhớ theo IP (Bình thành An sau cùng một địa chỉ) và theo kết nối TCP (kết nối mới là người lạ) đều hỏng trên request thật, nên client phải mang theo bằng chứng.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,
@@ -2057,6 +2067,11 @@ To eliminate this warning, add "type": "module" to /…/package.json.
   <li>Always answer JSON: a 404 catch-all and a four-argument error handler, registered last.</li>
   <li>Errors carry a stable <code>error</code> code for programs and a <code>message</code> for people.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-3-dang-nhap-sai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 0.3: LabFlow ID, a login that runs and is wrong in six ways</span><span class="lc-sub">Same: one LabFlow world — An, Bình and Cô Lan, Node 22 and Express 5. That course builds LabFlow ID, the identity service of the platform, starting from a naive login attacked for real (plain passwords, email enumeration, a session id guessed in 4.37 s, no attempt limit); by Chapter 8 it signs LabFlow API users in through OpenID Connect.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2394,6 +2409,11 @@ To eliminate this warning, add "type": "module" to /…/package.json.
   <li>Luôn trả JSON: một lưới hứng 404 và một bộ xử lý lỗi bốn tham số, đăng ký sau cùng.</li>
   <li>Lỗi mang mã <code>error</code> ổn định cho chương trình và câu <code>message</code> cho con người.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-3-dang-nhap-sai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 0.3: LabFlow ID, một cái đăng nhập chạy được và sai sáu chỗ</span><span class="lc-sub">Giống: cùng một thế giới LabFlow — An, Bình và Cô Lan, Node 22 và Express 5. Khoá đó dựng LabFlow ID, dịch vụ danh tính của nền tảng, bắt đầu từ một cái đăng nhập ngây thơ bị tấn công thật (mật khẩu thô, dò email, mã phiên đoán ra trong 4,37 s, không giới hạn lượt thử); tới Chương 8 nó cho người dùng LabFlow API đăng nhập qua OpenID Connect.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
 </div>
 `,
     },

@@ -80,6 +80,11 @@ after freeze: { name: 'An' }</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — JavaScript Foundations for Node.js</span><span class="lc-sub">Practise scope, closures and async on 10 graded exercises.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-3-suy-luan-kieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next in the TypeScript course — 1.3: type inference</span><span class="lc-sub">Same: let can be reassigned, const cannot. Different: in TypeScript that difference also changes the TYPE — let x = "STUDENT" is a string, const x = "STUDENT" is exactly "STUDENT" — and object properties widen even under const, which is a classic compile error.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -145,6 +150,11 @@ sau freeze: { name: 'An' }</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 318 — Nền tảng JavaScript cho Node.js</span><span class="lc-sub">Luyện phạm vi biến, closure và bất đồng bộ qua 10 bài tập có chấm.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-3-suy-luan-kieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học tiếp ở khoá TypeScript — 1.3: suy luận kiểu</span><span class="lc-sub">Giống: let gán lại được, const thì không. Khác: trong TypeScript khác biệt đó đổi luôn KIỂU — let x = "STUDENT" là string, const x = "STUDENT" đúng là "STUDENT" — và thuộc tính object vẫn bị nới kiểu dù khai const, một lỗi biên dịch kinh điển.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

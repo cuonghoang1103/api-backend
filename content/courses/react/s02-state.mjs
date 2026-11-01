@@ -1234,6 +1234,11 @@ ${LINK('https://react.dev/learn/updating-objects-in-state', '📄', 'react.dev �
 ${LINK('https://react.dev/learn/updating-arrays-in-state', '📄', 'react.dev — Updating Arrays in State', 'The avoid/prefer table, objects inside arrays, and Immer for arrays.')}
 ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useState: troubleshooting', '"I&#39;ve updated the state, but the screen doesn&#39;t update" and "My updater function runs twice".')}
 ${LINK('https://github.com/immerjs/immer', '🧰', 'Immer on GitHub', 'produce, drafts, and the curried form used with setState.')}
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-2-mang-tuple" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same bug in the TypeScript course — 2.2: Arrays, tuples &amp; readonly</span><span class="lc-sub">Same: sort() reorders the array it receives; toSorted and spread return copies. Different: a readonly ScheduleEntry[] parameter makes tsc refuse sort and push (TS2339) before anything renders; passing a readonly array to a mutable parameter is TS4104; and readonly is erased at runtime, unlike Object.freeze.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -1375,6 +1380,11 @@ ${LINK('https://react.dev/learn/updating-objects-in-state', '📄', 'react.dev �
 ${LINK('https://react.dev/learn/updating-arrays-in-state', '📄', 'react.dev — Updating Arrays in State', 'Bảng tránh/nên dùng, object trong mảng, và Immer cho mảng.')}
 ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useState: xử lý sự cố', '"Tôi đã cập nhật state mà màn hình không đổi" và "Hàm cập nhật của tôi chạy hai lần".')}
 ${LINK('https://github.com/immerjs/immer', '🧰', 'Immer trên GitHub', 'produce, bản nháp, và dạng curried dùng với setState.')}
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-2-mang-tuple" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng con bug ở khoá TypeScript — 2.2: Mảng, tuple &amp; readonly</span><span class="lc-sub">Giống: sort() xếp lại chính mảng nó nhận; toSorted và spread trả về bản sao. Khác: tham số readonly ScheduleEntry[] khiến tsc từ chối sort và push (TS2339) trước khi render; truyền mảng chỉ đọc vào tham số thường là TS4104; và readonly bị xoá lúc chạy, khác Object.freeze.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

@@ -1616,6 +1616,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 3.2: Each cookie attribute and what it really blocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: the session lives on the server, the cookie only carries its id (the code there is Node.js, not Java — the ideas carry over). Different: Academy teaches cookies/sessions through Tomcat's JSESSIONID; Courses dissects each attribute of the session cookie. It also adds: HttpOnly stops a token being read but not used, and which attacks each other attribute blocks; the chapter also covers the sessions table, session regeneration and CSRF.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-1-giao-thuc-quen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 0.1: a protocol that forgets everything</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: HTTP remembers nothing, so the browser must bring something back on every request (the code there is Node.js, not Java — the ideas carry over). Different: Courses first tries to remember people by IP address and by TCP connection and shows both failing on real requests, then has the client carry a card — the idea behind JSESSIONID.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -1698,6 +1703,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 3.2: Từng thuộc tính cookie và nó thật sự chặn được gì</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: session sống ở server, cookie chỉ mang id của nó (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dạy cookie/session qua JSESSIONID của Tomcat; Courses mổ từng thuộc tính của cookie phiên. Ở đó có thêm: HttpOnly chặn việc token bị đọc nhưng không chặn việc nó bị dùng, và các thuộc tính khác chặn cú tấn công nào; cả chương có thêm bảng phiên, tái sinh phiên, CSRF.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-1-giao-thuc-quen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 0.1: một giao thức quên sạch mọi thứ</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: HTTP không nhớ gì, nên trình duyệt phải mang theo một thứ ở mọi request (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Courses thử nhớ người dùng theo địa chỉ IP và theo kết nối TCP, cho thấy cả hai hỏng trên request thật, rồi để client mang theo một tấm thẻ — đúng ý tưởng đứng sau JSESSIONID.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>

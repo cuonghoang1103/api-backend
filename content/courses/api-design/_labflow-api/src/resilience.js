@@ -1,6 +1,7 @@
 // resilience.js — bài 8.4: tính sẵn sàng viết VÀO hợp đồng
 //   limitInflight(max) — quá max request ĐANG XỬ LÝ cùng lúc ⇒ 503 + Retry-After ngay (bỏ bớt tải thay vì để ai cũng chậm)
 //   dependency          — giả lập "CSDL sập" để thấy API suy giảm có kiểm soát (CHỈ để học: bật bằng LABFLOW_CHAOS=1)
+// Chương 12: CSDL thật có thể sập thật — withLastGood bắt cả lỗi 503 DEPENDENCY_DOWN do src/pg.js ném ra.
 import { Router } from 'express';
 import { HttpError } from './http.js';
 
@@ -24,13 +25,23 @@ export function requireDependency(req, res, next) {             // việc GHI kh
   throw new HttpError(503, 'DEPENDENCY_DOWN');
 }
 
-// Đọc có đường lùi: nhớ bản tốt gần nhất, CSDL sập thì trả bản đó kèm Age + LabFlow-Degraded
+// Đọc có đường lùi: nhớ bản tốt gần nhất (theo khoá = URL), CSDL sập thì trả bản đó kèm Age + LabFlow-Degraded
 export function withLastGood(read) {
-  let last = null;
-  return (req, res) => {
-    if (!dependency.down) { const data = read(req); last = { data, at: Date.now() }; return { data, stale: null }; }
-    if (!last) { res.set('Retry-After', '30'); throw new HttpError(503, 'DEPENDENCY_DOWN'); }   // chưa từng đọc được ⇒ hết cách
-    return { data: last.data, stale: Math.floor((Date.now() - last.at) / 1000) };
+  const last = new Map();
+  return async (req, res) => {
+    const k = req.originalUrl;
+    if (!dependency.down) {
+      try {
+        const data = await read(req);
+        last.set(k, { data, at: Date.now() });
+        return { data, stale: null };
+      } catch (e) {
+        if (e.code !== 'DEPENDENCY_DOWN') throw e;                // chỉ "không tới được CSDL" mới được lùi; lỗi khác vẫn là lỗi
+      }
+    }
+    const hit = last.get(k);
+    if (!hit) { const e = new HttpError(503, 'DEPENDENCY_DOWN'); e.retryAfter = 30; throw e; }   // chưa từng đọc được ⇒ hết cách
+    return { data: hit.data, stale: Math.floor((Date.now() - hit.at) / 1000) };
   };
 }
 

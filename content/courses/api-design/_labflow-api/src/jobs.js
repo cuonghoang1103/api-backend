@@ -4,8 +4,9 @@
 import { Queue } from 'bullmq';
 import { createClient } from 'redis';
 import { TASKS } from './tasks.js';
+import { config } from './config.js';
 
-export const MODE = process.env.LABFLOW_JOBS ?? 'memory';
+export const MODE = config.jobs;                                                 // Chương 12: kho pg + Redis ⇒ mặc định bullmq
 export const RESULT_TTL_SEC = Number(process.env.RESULT_TTL_SEC ?? 3600);     // giữ KẾT QUẢ 1 giờ
 export const JOB_TTL_SEC = 7 * 86400;                                           // giữ BẢN GHI việc 7 ngày
 export const QUEUE = 'labflow-jobs';

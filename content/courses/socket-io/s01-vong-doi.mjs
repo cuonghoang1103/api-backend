@@ -589,6 +589,11 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Manager options</span><span class="lc-sub">socket.io/docs/v4/client-options/#manager-options — mọi option reconnect, cùng default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ để server GIỮ state (rooms + missed events) trong RAM một khoảng — trade off: memory. Không dùng ở kho này</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — acks and delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern &quot;fetch-since-last-seen&quot; đối lập với &quot;emit and hope&quot;.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.3: what reconnecting restores, measured four ways</span><span class="lc-sub">The Node.js course unplugs a proxy for 1.5 s while 5 messages are sent: default 0/5 and a new id; rejoin + REST catch-up 5/5; connectionStateRecovery 5/5 with the same id — but 0/5 after a server restart, and recovered = false behind @socket.io/redis-adapter (what this site uses). The REST catch-up stays the safety net.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
@@ -707,6 +712,11 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Manager options</span><span class="lc-sub">socket.io/docs/v4/client-options/#manager-options — mọi option reconnect, cùng default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ để server GIỮ state (rooms + missed events) trong RAM một khoảng — trade off: memory. Không dùng ở kho này</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — acks và delivery guarantees</span><span class="lc-sub">/courses/socket-io/learn${REF} — pattern &quot;fetch-since-last-seen&quot; đối lập với &quot;emit and hope&quot;.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.3: kết nối lại khôi phục gì, đo bốn cách</span><span class="lc-sub">Khoá Node.js rút một proxy 1,5 giây trong lúc phát 5 tin: mặc định 0/5 và id mới; vào lại room + bù qua REST 5/5; connectionStateRecovery 5/5 với cùng id — nhưng 0/5 sau khi server khởi động lại, và recovered = false sau @socket.io/redis-adapter (thứ website này dùng). Đường bù qua REST vẫn là lưới an toàn.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

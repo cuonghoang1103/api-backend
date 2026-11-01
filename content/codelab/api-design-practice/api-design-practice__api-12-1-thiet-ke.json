@@ -1,0 +1,445 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-1-thiet-ke",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-1-thiet-ke"
+  },
+  "exercises": [
+    {
+      "title": "Capstone 1 — What still lives in RAM, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "databases",
+        "scalability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.1: two LabFlow instances with the RAM store behind a health-checking proxy, then the schema decisions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.1: hai instance LabFlow kho RAM sau proxy kiểm sức khoẻ, rồi các quyết định lược đồ.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask where each value lives when there are two processes.|||Hỏi: khi có hai tiến trình, mỗi giá trị nằm ở đâu.",
+        "JavaScript Date keeps milliseconds.|||Date của JavaScript chỉ giữ mili giây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 1 — What still lives in RAM, measured\n\nAnswer in the answer panel (no code needed).\n\n1. A booking was made on B. Instance A answered 304 Not Modified to a list request carrying an older ETag. Why?Một lượt đặt được tạo ở B. Instance A trả 304 Not Modified cho request danh sách mang ETag cũ. Vì sao?\n2. Where should LabFlow keep realtime tickets (30-second, one-use) once there are two instances?Khi có hai instance, LabFlow nên giữ vé realtime (30 giây, dùng một lần) ở đâu?\n3. Paging 1,000 bulk-inserted rows with a millisecond cursor over a timestamptz column found only 100. What fixed it?Lật trang 1.000 dòng nhập lô bằng con trỏ mili giây trên cột timestamptz chỉ thấy 100 dòng. Cái gì sửa được?\n4. Why does the bookings table keep id text GENERATED ALWAYS AS (’bk_’ || seq)?Vì sao bảng bookings giữ id text GENERATED ALWAYS AS (’bk_’ || seq)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Capstone 1 — What still lives in RAM, measured — answer key\n\n1. A booking was made on B. Instance A answered 304 Not Modified to a list request carrying an older ETag. Why?Một lượt đặt được tạo ở B. Instance A trả 304 Not Modified cho request danh sách mang ETag cũ. Vì sao?\n   Answer: d) A’s list version lived in A’s memory, so A never saw B’s write\n   versions.bookings++ ran in B’s process only; 12.4 moves the version into a shared PostgreSQL sequence.VI: versions.bookings++ chỉ chạy trong tiến trình B; bài 12.4 chuyển số phiên bản vào sequence PostgreSQL dùng chung.\n\n2. Where should LabFlow keep realtime tickets (30-second, one-use) once there are two instances?Khi có hai instance, LabFlow nên giữ vé realtime (30 giây, dùng một lần) ở đâu?\n   Answer: a) Redis with a 30-second TTL — shared, short-lived, losing it costs only a retry\n   Rule of thumb: truth ⇒ PostgreSQL, shared but disposable ⇒ Redis, tolerant caches ⇒ local.VI: Luật nhớ: sự thật ⇒ PostgreSQL, dùng chung nhưng bỏ được ⇒ Redis, cache chịu được cũ ⇒ tại chỗ.\n\n3. Paging 1,000 bulk-inserted rows with a millisecond cursor over a timestamptz column found only 100. What fixed it?Lật trang 1.000 dòng nhập lô bằng con trỏ mili giây trên cột timestamptz chỉ thấy 100 dòng. Cái gì sửa được?\n   Answer: d) Declaring the column timestamptz(3), so the database stores exactly what the cursor carries\n   µs in the column, ms in the cursor: rows of the edge millisecond fell before the cursor. 900 lost, then 0.VI: Cột giữ µs, con trỏ giữ ms: các dòng cùng mili giây ở mép bị rơi ra trước con trỏ. Mất 900, rồi 0.\n\n4. Why does the bookings table keep id text GENERATED ALWAYS AS (’bk_’ || seq)?Vì sao bảng bookings giữ id text GENERATED ALWAYS AS (’bk_’ || seq)?\n   Answer: c) Clients were promised opaque ids like bk_42; the move to a database must not change them\n   Keep the contract; the numeric seq still drives keyset paging. Ids have gaps (a failed insert burned bk_10003).VI: Giữ hợp đồng; seq dạng số vẫn lo phân trang keyset. Id có lỗ (một INSERT hỏng đốt mất bk_10003).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A’s list version lived in A’s memory, so A never saw B’s write</p><p>versions.bookings++ ran in B’s process only; 12.4 moves the version into a shared PostgreSQL sequence.</p><p><i>VI: versions.bookings++ chỉ chạy trong tiến trình B; bài 12.4 chuyển số phiên bản vào sequence PostgreSQL dùng chung.</i></p></li><li><p><b>a)</b> Redis with a 30-second TTL — shared, short-lived, losing it costs only a retry</p><p>Rule of thumb: truth ⇒ PostgreSQL, shared but disposable ⇒ Redis, tolerant caches ⇒ local.</p><p><i>VI: Luật nhớ: sự thật ⇒ PostgreSQL, dùng chung nhưng bỏ được ⇒ Redis, cache chịu được cũ ⇒ tại chỗ.</i></p></li><li><p><b>d)</b> Declaring the column timestamptz(3), so the database stores exactly what the cursor carries</p><p>µs in the column, ms in the cursor: rows of the edge millisecond fell before the cursor. 900 lost, then 0.</p><p><i>VI: Cột giữ µs, con trỏ giữ ms: các dòng cùng mili giây ở mép bị rơi ra trước con trỏ. Mất 900, rồi 0.</i></p></li><li><p><b>c)</b> Clients were promised opaque ids like bk_42; the move to a database must not change them</p><p>Keep the contract; the numeric seq still drives keyset paging. Ids have gaps (a failed insert burned bk_10003).</p><p><i>VI: Giữ hợp đồng; seq dạng số vẫn lo phân trang keyset. Id có lỗ (một INSERT hỏng đốt mất bk_10003).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A booking was made on B. Instance A answered 304 Not Modified to a list request carrying an older ETag. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lượt đặt được tạo ở B. Instance A trả 304 Not Modified cho request danh sách mang ETag cũ. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The proxy cached the response and replayed it for 60 seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ETags are only valid on the instance that issued them, by design"
+              },
+              {
+                "ma": "c",
+                "noiDung": "B forgot to send the booking to PostgreSQL before answering"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A’s list version lived in A’s memory, so A never saw B’s write"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>versions.bookings++ ran in B’s process only; 12.4 moves the version into a shared PostgreSQL sequence.</p><p><i>VI: versions.bookings++ chỉ chạy trong tiến trình B; bài 12.4 chuyển số phiên bản vào sequence PostgreSQL dùng chung.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Where should LabFlow keep realtime tickets (30-second, one-use) once there are two instances?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi có hai instance, LabFlow nên giữ vé realtime (30 giây, dùng một lần) ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redis with a 30-second TTL — shared, short-lived, losing it costs only a retry"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A PostgreSQL table with a nightly cleanup job and a foreign key to users"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Each instance’s memory, with sticky sessions so the same user hits it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Inside the JWT itself, so no storage at all is needed for tickets"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rule of thumb: truth ⇒ PostgreSQL, shared but disposable ⇒ Redis, tolerant caches ⇒ local.</p><p><i>VI: Luật nhớ: sự thật ⇒ PostgreSQL, dùng chung nhưng bỏ được ⇒ Redis, cache chịu được cũ ⇒ tại chỗ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Paging 1,000 bulk-inserted rows with a millisecond cursor over a timestamptz column found only 100. What fixed it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lật trang 1.000 dòng nhập lô bằng con trỏ mili giây trên cột timestamptz chỉ thấy 100 dòng. Cái gì sửa được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Adding an index on created_at alone, so the keyset query stops skipping"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Switching to OFFSET pagination, which does not depend on timestamps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sorting by created_at only and removing the seq tie-breaker"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Declaring the column timestamptz(3), so the database stores exactly what the cursor carries"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>µs in the column, ms in the cursor: rows of the edge millisecond fell before the cursor. 900 lost, then 0.</p><p><i>VI: Cột giữ µs, con trỏ giữ ms: các dòng cùng mili giây ở mép bị rơi ra trước con trỏ. Mất 900, rồi 0.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does the bookings table keep id text GENERATED ALWAYS AS (’bk_’ || seq)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bảng bookings giữ id text GENERATED ALWAYS AS (’bk_’ || seq)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PostgreSQL cannot use a bigint as a primary key together with an EXCLUDE constraint"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The generated column is what makes the sequence gapless after a failed insert"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Clients were promised opaque ids like bk_42; the move to a database must not change them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Text keys are faster to index than numbers in every PostgreSQL version"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Keep the contract; the numeric seq still drives keyset paging. Ids have gaps (a failed insert burned bk_10003).</p><p><i>VI: Giữ hợp đồng; seq dạng số vẫn lo phân trang keyset. Id có lỗ (một INSERT hỏng đốt mất bk_10003).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing ETags or tickets are shared just because data is.|||Tin rằng ETag hay vé dùng chung chỉ vì dữ liệu dùng chung."
+        },
+        {
+          "loi": "Using timestamptz with microseconds under a millisecond cursor.|||Dùng timestamptz micro giây dưới con trỏ mili giây."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "in-memory state",
+          "vi": "trạng thái trong bộ nhớ"
+        },
+        {
+          "en": "source of truth",
+          "vi": "nguồn sự thật"
+        },
+        {
+          "en": "timestamp precision",
+          "vi": "độ mịn thời gian"
+        }
+      ]
+    },
+    {
+      "title": "Capstone 2 — Write truncateToMs(ts): what the cursor really carries",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pagination",
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>PostgreSQL prints <code>timestamptz</code> with up to 6 fractional digits; a JavaScript <code>Date</code> keeps 3. Write <code>truncateToMs(ts)</code> for UTC ISO strings ending in <code>Z</code>: keep the first three fractional digits (pad with zeros), always return <code>YYYY-MM-DDTHH:MM:SS.mmmZ</code>. Anything else ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>PostgreSQL in <code>timestamptz</code> tới 6 chữ số lẻ; <code>Date</code> của JavaScript giữ 3. Viết <code>truncateToMs(ts)</code> cho chuỗi ISO UTC kết thúc bằng <code>Z</code>: giữ ba chữ số lẻ đầu (thiếu thì thêm 0), luôn trả <code>YYYY-MM-DDTHH:MM:SS.mmmZ</code>. Dạng khác ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ts — string|||ts — chuỗi",
+      "outputSpec": "string | null|||chuỗi | null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "truncateToMs(\"2026-11-01T10:00:00.123456Z\")",
+          "output": "\"2026-11-01T10:00:00.123Z\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regex can capture the seconds part and the fraction separately.|||Một regex bắt riêng phần giây và phần lẻ.",
+        "Truncate, do not round: .1239 ⇒ .123.|||Cắt, không làm tròn: .1239 ⇒ .123."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** keep milliseconds only */\nfunction truncateToMs(ts) {\n  // Write your solution here\n  return new Date(ts).toISOString();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction truncateToMs(ts) {\n  const m = /^(\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d)(?:\\.(\\d+))?Z$/.exec(ts);\n  if (!m) return null;\n  return `${m[1]}.${((m[2] || '') + '000').slice(0, 3)}Z`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two rows at .123456 and .123789 both become .123 in the cursor — the same millisecond. With a µs column, the next page asks for rows “before .123” and skips both; with timestamptz(3) the column itself is .123 and the seq tie-breaker decides (12.1: 900 of 1,000 lost, then 0).</p>",
+      "solutionExplanationHtmlVi": "<p>Hai dòng .123456 và .123789 đều thành .123 trong con trỏ — cùng một mili giây. Với cột µs, trang sau hỏi các dòng “trước .123” và bỏ qua cả hai; với timestamptz(3) chính cột là .123 và seq quyết định (12.1: mất 900/1.000, rồi 0).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Six fractional digits",
+              "vi": "Sáu chữ số lẻ"
+            },
+            "goi": "truncateToMs(\"2026-11-01T10:00:00.123456Z\")",
+            "mongDoi": "2026-11-01T10:00:00.123Z"
+          },
+          {
+            "moTa": {
+              "en": "No fraction",
+              "vi": "Không có phần lẻ"
+            },
+            "goi": "truncateToMs(\"2026-11-01T10:00:00Z\")",
+            "mongDoi": "2026-11-01T10:00:00.000Z"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "truncateToMs(\"2026-11-01T10:00:00.1239Z\")",
+            "mongDoi": "2026-11-01T10:00:00.123Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "truncateToMs(\"2026-11-01T10:00:00.5Z\")",
+            "mongDoi": "2026-11-01T10:00:00.500Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "truncateToMs(\"not a date\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding instead of truncating.|||Làm tròn thay vì cắt."
+        },
+        {
+          "loi": "Forgetting a timestamp with no fraction at all.|||Quên trường hợp không có phần lẻ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "truncate",
+          "vi": "cắt bớt"
+        },
+        {
+          "en": "fractional seconds",
+          "vi": "phần lẻ của giây"
+        }
+      ]
+    },
+    {
+      "title": "Capstone 3 — Write nextPage(rows, cursor, limit): keyset on (createdAt, seq)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Newest first, like <code>ORDER BY created_at DESC, seq DESC</code>. <code>rows</code> are <code>{ seq, createdAt }</code> with millisecond ISO strings (they compare correctly as strings). <code>cursor</code> is <code>null</code> (first page) or <code>{ createdAt, seq }</code> of the last row already shown. Return the <code>seq</code> values of the next page, at most <code>limit</code>, in order. A row comes after the cursor when its <code>createdAt</code> is older, or equal with a smaller <code>seq</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mới nhất trước, như <code>ORDER BY created_at DESC, seq DESC</code>. <code>rows</code> là <code>{ seq, createdAt }</code> với chuỗi ISO mili giây (so chuỗi là đúng). <code>cursor</code> là <code>null</code> (trang đầu) hoặc <code>{ createdAt, seq }</code> của dòng cuối đã hiện. Trả các <code>seq</code> của trang kế, tối đa <code>limit</code>, đúng thứ tự. Một dòng đứng sau con trỏ khi <code>createdAt</code> cũ hơn, hoặc bằng nhau mà <code>seq</code> nhỏ hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "rows — {seq, createdAt}[]; cursor — object | null; limit — number|||rows — {seq, createdAt}[]; cursor — object | null; limit — số",
+      "outputSpec": "number[]|||mảng số",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "nextPage([{\"seq\":1,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":2,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":3,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":4,\"createdAt\":\"2026-11-01T10:00:00.124Z\"},{\"seq\":5,\"createdAt\":\"2026-11-01T10:00:00.125Z\"}], null, 2)",
+          "output": "[5,4]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare the pair (createdAt, seq), not createdAt alone.|||So cặp (createdAt, seq), không chỉ createdAt.",
+        "Sort a copy; do not sort the input in place.|||Sắp một bản sao; đừng sắp tại chỗ mảng đầu vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** next page, newest first */\nfunction nextPage(rows, cursor, limit) {\n  // Write your solution here\n  const sorted = rows.slice().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));\n  return sorted.filter((r) => !cursor || r.createdAt < cursor.createdAt).slice(0, limit).map((r) => r.seq);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction nextPage(rows, cursor, limit) {\n  const before = (r) => r.createdAt < cursor.createdAt || (r.createdAt === cursor.createdAt && r.seq < cursor.seq);\n  const sorted = rows.slice().sort((a, b) => (a.createdAt === b.createdAt ? b.seq - a.seq : (a.createdAt < b.createdAt ? 1 : -1)));\n  return (cursor ? sorted.filter(before) : sorted).slice(0, limit).map((r) => r.seq);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The tie-breaker makes every row’s position unique, so a page edge inside one millisecond loses nothing — exactly the SQL of store/pg.js: (created_at, seq) &lt; ($1, $2).</p>",
+      "solutionExplanationHtmlVi": "<p>Khoá phụ làm vị trí mỗi dòng là duy nhất, nên mép trang nằm giữa một mili giây không mất gì — đúng câu SQL của store/pg.js: (created_at, seq) &lt; ($1, $2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page",
+              "vi": "Trang đầu"
+            },
+            "goi": "nextPage([{\"seq\":1,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":2,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":3,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":4,\"createdAt\":\"2026-11-01T10:00:00.124Z\"},{\"seq\":5,\"createdAt\":\"2026-11-01T10:00:00.125Z\"}], null, 2)",
+            "mongDoi": [
+              5,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Edge inside one millisecond",
+              "vi": "Mép trang giữa một mili giây"
+            },
+            "goi": "nextPage([{\"seq\":1,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":2,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":3,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":4,\"createdAt\":\"2026-11-01T10:00:00.124Z\"},{\"seq\":5,\"createdAt\":\"2026-11-01T10:00:00.125Z\"}], {\"createdAt\":\"2026-11-01T10:00:00.123Z\",\"seq\":3}, 2)",
+            "mongDoi": [
+              2,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "nextPage([{\"seq\":1,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":2,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":3,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":4,\"createdAt\":\"2026-11-01T10:00:00.124Z\"},{\"seq\":5,\"createdAt\":\"2026-11-01T10:00:00.125Z\"}], {\"createdAt\":\"2026-11-01T10:00:00.124Z\",\"seq\":4}, 10)",
+            "mongDoi": [
+              3,
+              2,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "nextPage([{\"seq\":1,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":2,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":3,\"createdAt\":\"2026-11-01T10:00:00.123Z\"},{\"seq\":4,\"createdAt\":\"2026-11-01T10:00:00.124Z\"},{\"seq\":5,\"createdAt\":\"2026-11-01T10:00:00.125Z\"}], {\"createdAt\":\"2026-11-01T10:00:00.123Z\",\"seq\":1}, 5)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "nextPage([], null, 3)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using only createdAt < cursor: rows of the same millisecond vanish.|||Chỉ dùng createdAt < con trỏ: các dòng cùng mili giây biến mất."
+        },
+        {
+          "loi": "Sorting seq ascending inside equal timestamps.|||Sắp seq tăng dần trong các mốc bằng nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keyset pagination",
+          "vi": "phân trang theo khoá"
+        },
+        {
+          "en": "tie-breaker",
+          "vi": "khoá phụ phá hoà"
+        }
+      ]
+    }
+  ]
+}

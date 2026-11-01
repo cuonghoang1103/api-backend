@@ -1,0 +1,17 @@
+{
+  // LabFlow TS — the course's standard config (Section 0.3). Node 22 runs .ts files itself (type stripping),
+  // so tsc only CHECKS (noEmit) and imports keep their .ts extension.
+  "compilerOptions": {
+    "target": "es2024",
+    "module": "nodenext",
+    "types": ["node"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

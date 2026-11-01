@@ -1,0 +1,495 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-5-chia-se",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-5-chia-se"
+  },
+  "exercises": [
+    {
+      "title": "Shared state 1 — Two instances, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "concurrency",
+        "redis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.4: rate limits, idempotency keys, list ETags and Redis outages across instances A and B.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.4: rate limit, khoá idempotency, ETag danh sách và sự cố Redis qua hai instance A và B.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what happens between “check” and “write”.|||Hỏi: chuyện gì xảy ra giữa “kiểm” và “ghi”.",
+        "Decide per feature what “Redis down” means.|||Quyết định theo từng tính năng “Redis sập” nghĩa là gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shared state 1 — Two instances, measured\n\nAnswer in the answer panel (no code needed).\n\n1. Why is the shared token bucket one Lua script instead of GET, compute, SET from Node?Vì sao xô token dùng chung là một script Lua thay vì GET, tính, SET từ Node?\n2. Two managers PATCH dev_1 with the same If-Match through two instances, 20 trials, check-then-write version. Result?Hai quản lý PATCH dev_1 với cùng If-Match qua hai instance, 20 lần thử, bản kiểm-rồi-ghi. Kết quả?\n3. Redis is stopped. What did LabFlow answer to seven bookings in a row from Lan?Redis bị tắt. LabFlow trả gì cho bảy lượt đặt liên tiếp của Cô Lan?\n4. Why is nextval(’bookings_list_version’) called AFTER the booking’s COMMIT?Vì sao nextval(’bookings_list_version’) được gọi SAU khi lượt đặt COMMIT?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Shared state 1 — Two instances, measured — answer key\n\n1. Why is the shared token bucket one Lua script instead of GET, compute, SET from Node?Vì sao xô token dùng chung là một script Lua thay vì GET, tính, SET từ Node?\n   Answer: c) Redis runs a script atomically, so two instances cannot interleave between read and write\n   Read–compute–write from two processes is the same race as counting bookings; inside the script it is one step. The clock is Redis’s TIME.VI: Đọc–tính–ghi từ hai tiến trình là đúng cuộc đua của việc đếm lượt đặt; trong script nó là một bước. Đồng hồ là TIME của Redis.\n\n2. Two managers PATCH dev_1 with the same If-Match through two instances, 20 trials, check-then-write version. Result?Hai quản lý PATCH dev_1 với cùng If-Match qua hai instance, 20 lần thử, bản kiểm-rồi-ghi. Kết quả?\n   Answer: d) 11 trials lost an edit (both 200); with the condition inside the UPDATE, 0 of 20\n   UPDATE … WHERE id = $1 AND version = $2: zero rows means someone was first ⇒ 412.VI: UPDATE … WHERE id = $1 AND version = $2: 0 dòng nghĩa là có người tới trước ⇒ 412.\n\n3. Redis is stopped. What did LabFlow answer to seven bookings in a row from Lan?Redis bị tắt. LabFlow trả gì cho bảy lượt đặt liên tiếp của Cô Lan?\n   Answer: d) 7 × 201 — the limiter fails open to each instance’s local bucket\n   A limiter must not take the site down; the cache bypasses, tickets 503, /ready stays 200, events wait in the outbox.VI: Bộ giới hạn không được tự làm sập trang; cache bỏ qua, vé 503, /ready vẫn 200, sự kiện chờ trong outbox.\n\n4. Why is nextval(’bookings_list_version’) called AFTER the booking’s COMMIT?Vì sao nextval(’bookings_list_version’) được gọi SAU khi lượt đặt COMMIT?\n   Answer: c) Bumping first lets a reader cache the old list under the new version — a 304 that hides the booking\n   After commit, the worst case is one extra 200, never a stale 304.VI: Sau commit, tệ nhất chỉ thêm một lần 200, không bao giờ 304 sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Redis runs a script atomically, so two instances cannot interleave between read and write</p><p>Read–compute–write from two processes is the same race as counting bookings; inside the script it is one step. The clock is Redis’s TIME.</p><p><i>VI: Đọc–tính–ghi từ hai tiến trình là đúng cuộc đua của việc đếm lượt đặt; trong script nó là một bước. Đồng hồ là TIME của Redis.</i></p></li><li><p><b>d)</b> 11 trials lost an edit (both 200); with the condition inside the UPDATE, 0 of 20</p><p>UPDATE … WHERE id = $1 AND version = $2: zero rows means someone was first ⇒ 412.</p><p><i>VI: UPDATE … WHERE id = $1 AND version = $2: 0 dòng nghĩa là có người tới trước ⇒ 412.</i></p></li><li><p><b>d)</b> 7 × 201 — the limiter fails open to each instance’s local bucket</p><p>A limiter must not take the site down; the cache bypasses, tickets 503, /ready stays 200, events wait in the outbox.</p><p><i>VI: Bộ giới hạn không được tự làm sập trang; cache bỏ qua, vé 503, /ready vẫn 200, sự kiện chờ trong outbox.</i></p></li><li><p><b>c)</b> Bumping first lets a reader cache the old list under the new version — a 304 that hides the booking</p><p>After commit, the worst case is one extra 200, never a stale 304.</p><p><i>VI: Sau commit, tệ nhất chỉ thêm một lần 200, không bao giờ 304 sai.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is the shared token bucket one Lua script instead of GET, compute, SET from Node?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao xô token dùng chung là một script Lua thay vì GET, tính, SET từ Node?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lua is faster than JavaScript, so the bucket refills more precisely"
+              },
+              {
+                "ma": "b",
+                "noiDung": "GET and SET are not allowed on hash keys in Redis 8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Redis runs a script atomically, so two instances cannot interleave between read and write"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Scripts are persisted to disk, so the buckets survive a restart"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Read–compute–write from two processes is the same race as counting bookings; inside the script it is one step. The clock is Redis’s TIME.</p><p><i>VI: Đọc–tính–ghi từ hai tiến trình là đúng cuộc đua của việc đếm lượt đặt; trong script nó là một bước. Đồng hồ là TIME của Redis.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Two managers PATCH dev_1 with the same If-Match through two instances, 20 trials, check-then-write version. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai quản lý PATCH dev_1 với cùng If-Match qua hai instance, 20 lần thử, bản kiểm-rồi-ghi. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0 lost edits, because PostgreSQL serialises updates of the same row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20 trials answered 412 to both managers, so nobody could edit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "20 lost edits, because If-Match is ignored when there are two instances"
+              },
+              {
+                "ma": "d",
+                "noiDung": "11 trials lost an edit (both 200); with the condition inside the UPDATE, 0 of 20"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>UPDATE … WHERE id = $1 AND version = $2: zero rows means someone was first ⇒ 412.</p><p><i>VI: UPDATE … WHERE id = $1 AND version = $2: 0 dòng nghĩa là có người tới trước ⇒ 412.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Redis is stopped. What did LabFlow answer to seven bookings in a row from Lan?</p><p style=\"opacity:.75;font-size:.92em\"><i>Redis bị tắt. LabFlow trả gì cho bảy lượt đặt liên tiếp của Cô Lan?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5 × 201 then 2 × 429 — the limit is remembered in PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "7 × 503 — no write is allowed without the rate limiter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "7 × 500 — the Redis client throws on every command"
+              },
+              {
+                "ma": "d",
+                "noiDung": "7 × 201 — the limiter fails open to each instance’s local bucket"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A limiter must not take the site down; the cache bypasses, tickets 503, /ready stays 200, events wait in the outbox.</p><p><i>VI: Bộ giới hạn không được tự làm sập trang; cache bỏ qua, vé 503, /ready vẫn 200, sự kiện chờ trong outbox.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why is nextval(’bookings_list_version’) called AFTER the booking’s COMMIT?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao nextval(’bookings_list_version’) được gọi SAU khi lượt đặt COMMIT?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sequences cannot be called inside a transaction in PostgreSQL 18"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The ETag must be computed from the committed row’s created_at"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Bumping first lets a reader cache the old list under the new version — a 304 that hides the booking"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nextval inside the transaction would lock the version row for everyone"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>After commit, the worst case is one extra 200, never a stale 304.</p><p><i>VI: Sau commit, tệ nhất chỉ thêm một lần 200, không bao giờ 304 sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rate limiting with GET + SET from two processes.|||Giới hạn tần suất bằng GET + SET từ hai tiến trình."
+        },
+        {
+          "loi": "Failing closed: one cache outage becomes a full outage.|||Đóng cửa khi hỏng: một sự cố cache thành sập toàn bộ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "atomic script",
+          "vi": "script nguyên tử"
+        },
+        {
+          "en": "fail open",
+          "vi": "mở cửa khi hỏng"
+        },
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "Shared state 2 — Write takeToken(bucket, nowS, cap, rate): the Lua script in JS",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "rate limiting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Port the 12.4 script. <code>bucket</code> is <code>null</code> (new: full) or <code>{ tokens, at }</code>. Refill <code>(nowS − at) × rate</code>, never above <code>cap</code>. If at least one token is left, take it (<code>ok: true</code>). Return <code>{ ok, bucket: { tokens, at: nowS } }</code> with <code>tokens</code> rounded to 3 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chép sang JS script của bài 12.4. <code>bucket</code> là <code>null</code> (mới: đầy) hoặc <code>{ tokens, at }</code>. Rót thêm <code>(nowS − at) × rate</code>, không vượt <code>cap</code>. Còn ít nhất một token thì lấy (<code>ok: true</code>). Trả <code>{ ok, bucket: { tokens, at: nowS } }</code> với <code>tokens</code> làm tròn 3 chữ số lẻ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bucket — {tokens, at} | null; nowS, cap, rate — numbers|||bucket — {tokens, at} | null; nowS, cap, rate — số",
+      "outputSpec": "{ ok, bucket }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "takeToken(null, 1000, 5, 0.08333333333333333)",
+          "output": "{\"ok\":true,\"bucket\":{\"tokens\":4,\"at\":1000}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A new bucket starts full, at nowS.|||Xô mới bắt đầu đầy, tại nowS.",
+        "Always store the new time, even when refused.|||Luôn lưu thời điểm mới, kể cả khi từ chối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** one request against the bucket */\nfunction takeToken(bucket, nowS, cap, rate) {\n  // Write your solution here\n  const tokens = bucket ? bucket.tokens + (nowS - bucket.at) * rate : cap;\n  return tokens >= 1 ? { ok: true, bucket: { tokens: tokens - 1, at: nowS } } : { ok: false, bucket };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction takeToken(bucket, nowS, cap, rate) {\n  const tokens0 = bucket ? bucket.tokens : cap;\n  const at = bucket ? bucket.at : nowS;\n  let tokens = Math.min(cap, tokens0 + (nowS - at) * rate);\n  let ok = false;\n  if (tokens >= 1) { tokens -= 1; ok = true; }\n  return { ok, bucket: { tokens: Math.round(tokens * 1000) / 1000, at: nowS } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>booking: cap 5, rate 5/60 per second. Five quick bookings empty it; the sixth waits about 12 s for one token — the t=12 in RateLimit (12.4).</p>",
+      "solutionExplanationHtmlVi": "<p>booking: cap 5, rate 5/60 mỗi giây. Năm lượt nhanh làm cạn xô; lượt thứ sáu chờ chừng 12 s để có một token — chính t=12 trong RateLimit (12.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "New bucket",
+              "vi": "Xô mới"
+            },
+            "goi": "takeToken(null, 1000, 5, 0.08333333333333333)",
+            "mongDoi": {
+              "ok": true,
+              "bucket": {
+                "tokens": 4,
+                "at": 1000
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Not enough yet",
+              "vi": "Chưa đủ"
+            },
+            "goi": "takeToken({\"tokens\":0.2,\"at\":1000}, 1005, 5, 0.08333333333333333)",
+            "mongDoi": {
+              "ok": false,
+              "bucket": {
+                "tokens": 0.617,
+                "at": 1005
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "takeToken({\"tokens\":0.2,\"at\":1000}, 1010, 5, 0.08333333333333333)",
+            "mongDoi": {
+              "ok": true,
+              "bucket": {
+                "tokens": 0.033,
+                "at": 1010
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "takeToken({\"tokens\":4,\"at\":1000}, 9000, 5, 0.08333333333333333)",
+            "mongDoi": {
+              "ok": true,
+              "bucket": {
+                "tokens": 4,
+                "at": 9000
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Refilling above capacity after a long pause.|||Rót quá dung tích sau một quãng nghỉ dài."
+        },
+        {
+          "loi": "Taking a token when only 0.5 is left.|||Lấy token khi chỉ còn 0,5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "token bucket",
+          "vi": "xô token"
+        },
+        {
+          "en": "refill rate",
+          "vi": "tốc độ rót"
+        }
+      ]
+    },
+    {
+      "title": "Shared state 3 — Write conditionalUpdate(rows, id, expected, patch)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "concurrency",
+        "http caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Model <code>UPDATE devices SET …, version = version + 1 WHERE id = $1 AND ($2 IS NULL OR version = $2)</code>. Unknown id ⇒ <code>{ status: 404, rows }</code>. If <code>expected</code> is given and differs ⇒ <code>{ status: 412, currentETag: '\"dev_1-v3\"', rows }</code>. Otherwise apply <code>patch</code>, bump the version and return <code>{ status: 200, etag, rows }</code> with a <b>new</b> array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng <code>UPDATE devices SET …, version = version + 1 WHERE id = $1 AND ($2 IS NULL OR version = $2)</code>. Id lạ ⇒ <code>{ status: 404, rows }</code>. Có <code>expected</code> mà khác ⇒ <code>{ status: 412, currentETag: '\"dev_1-v3\"', rows }</code>. Ngược lại áp <code>patch</code>, tăng version và trả <code>{ status: 200, etag, rows }</code> với mảng <b>mới</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "rows — {id, version, …}[]; id — string; expected — number | undefined; patch — object|||rows — {id, version, …}[]; id — chuỗi; expected — số | undefined; patch — object",
+      "outputSpec": "{ status, etag?, currentETag?, rows }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "conditionalUpdate([{\"id\":\"dev_1\",\"note\":null,\"version\":3},{\"id\":\"dev_2\",\"note\":\"ok\",\"version\":1}], \"dev_1\", 3, {\"note\":\"Cô Lan: thay dây nguồn\"})",
+          "output": "{\"status\":200,\"etag\":\"\\\"dev_1-v4\\\"\",\"rows\":[{\"id\":\"dev_1\",\"note\":\"Cô Lan: thay dây nguồn\",\"version\":4},{\"id\":\"dev_2\",\"note\":\"ok\",\"version\":1}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "No If-Match ⇒ expected is undefined ⇒ overwrite, like before.|||Không có If-Match ⇒ expected là undefined ⇒ ghi đè như trước.",
+        "map() returns the new array; never mutate rows.|||map() trả mảng mới; đừng sửa rows."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** UPDATE … WHERE version = expected */\nfunction conditionalUpdate(rows, id, expected, patch) {\n  // Write your solution here\n  const r = rows.find((x) => x.id === id);\n  Object.assign(r, patch);\n  return { status: 200, etag: '\"' + id + '-v' + r.version + '\"', rows };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction conditionalUpdate(rows, id, expected, patch) {\n  const r = rows.find((x) => x.id === id);\n  if (!r) return { status: 404, rows };\n  if (expected !== undefined && r.version !== expected) return { status: 412, currentETag: `\"${id}-v${r.version}\"`, rows };\n  const next = { ...r, ...patch, version: r.version + 1 };\n  return { status: 200, etag: `\"${id}-v${next.version}\"`, rows: rows.map((x) => (x.id === id ? next : x)) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two managers send the same expected version: the first call bumps 3 ⇒ 4, the second finds version 4 ⇒ 412. 12.4 measured 11/20 lost edits without the condition, 0/20 with it.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai quản lý gửi cùng version mong đợi: lần gọi đầu tăng 3 ⇒ 4, lần sau thấy version 4 ⇒ 412. 12.4 đo được 11/20 lần mất bản sửa khi không có điều kiện, 0/20 khi có.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First manager wins",
+              "vi": "Quản lý thứ nhất thắng"
+            },
+            "goi": "conditionalUpdate([{\"id\":\"dev_1\",\"note\":null,\"version\":3},{\"id\":\"dev_2\",\"note\":\"ok\",\"version\":1}], \"dev_1\", 3, {\"note\":\"Cô Lan: thay dây nguồn\"})",
+            "mongDoi": {
+              "status": 200,
+              "etag": "\"dev_1-v4\"",
+              "rows": [
+                {
+                  "id": "dev_1",
+                  "note": "Cô Lan: thay dây nguồn",
+                  "version": 4
+                },
+                {
+                  "id": "dev_2",
+                  "note": "ok",
+                  "version": 1
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Second manager, stale version",
+              "vi": "Quản lý thứ hai, version cũ"
+            },
+            "goi": "conditionalUpdate([{\"id\":\"dev_1\",\"note\":\"Cô Lan: thay dây nguồn\",\"version\":4}], \"dev_1\", 3, {\"note\":\"Thầy Minh\"})",
+            "mongDoi": {
+              "status": 412,
+              "currentETag": "\"dev_1-v4\"",
+              "rows": [
+                {
+                  "id": "dev_1",
+                  "note": "Cô Lan: thay dây nguồn",
+                  "version": 4
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "conditionalUpdate([{\"id\":\"dev_1\",\"note\":null,\"version\":3},{\"id\":\"dev_2\",\"note\":\"ok\",\"version\":1}], \"dev_2\", undefined, {\"note\":\"x\"})",
+            "mongDoi": {
+              "status": 200,
+              "etag": "\"dev_2-v2\"",
+              "rows": [
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "version": 3
+                },
+                {
+                  "id": "dev_2",
+                  "note": "x",
+                  "version": 2
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "conditionalUpdate([{\"id\":\"dev_1\",\"note\":null,\"version\":3},{\"id\":\"dev_2\",\"note\":\"ok\",\"version\":1}], \"dev_9\", 1, {\"note\":\"x\"})",
+            "mongDoi": {
+              "status": 404,
+              "rows": [
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "version": 3
+                },
+                {
+                  "id": "dev_2",
+                  "note": "ok",
+                  "version": 1
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ETag strings in the route, then writing without a condition.|||So chuỗi ETag ở route rồi ghi không điều kiện."
+        },
+        {
+          "loi": "Forgetting to bump the version, so the next If-Match still matches.|||Quên tăng version nên If-Match sau vẫn khớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "optimistic locking",
+          "vi": "khoá lạc quan"
+        },
+        {
+          "en": "If-Match",
+          "vi": "điều kiện khớp ETag"
+        }
+      ]
+    }
+  ]
+}

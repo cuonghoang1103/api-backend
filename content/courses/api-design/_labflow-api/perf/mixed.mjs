@@ -3,7 +3,7 @@
 // Đo song song: một người dùng khác cứ 20 ms gọi GET /v2/labs — độ trễ của họ có bị kéo theo không?
 import autocannon from 'autocannon';
 
-const BASE = 'http://localhost:4000';
+const BASE = process.env.BASE ?? 'http://localhost:4000';   // Chương 12: đo cùng script trên cổng khác
 const SECONDS = Number(process.env.SECONDS ?? 10);
 const pct = (a, p) => { const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * p))]; };
 

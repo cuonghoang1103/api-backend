@@ -3007,6 +3007,11 @@ npx create-next-app@latest my-app
   <span class="lc-body"><span class="lc-title">Practice TypeScript basics</span><span class="lc-sub">Types, generics &amp; more on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the TypeScript course (Courses) — Start here: what TypeScript is, and why it exists</span><span class="lc-sub">Same: static types catch a wrong prop or argument before the code runs. Different: the TypeScript course starts from zero — what tsc is, why Node 22 runs .ts without checking it, real compiler output on every line — and goes on to a typed Node backend and React frontend.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao A3 · Bài A3.1</span>
@@ -3039,6 +3044,11 @@ npx create-next-app@latest my-app
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện TypeScript cơ bản</span><span class="lc-sub">Kiểu, generic &amp; hơn nữa trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá TypeScript (Courses) — Bắt đầu tại đây: TypeScript là gì, và vì sao nó ra đời</span><span class="lc-sub">Giống: kiểu tĩnh bắt sai prop hay sai đối số trước khi code chạy. Khác: khoá TypeScript đi từ số 0 — tsc là gì, vì sao Node 22 chạy .ts mà không kiểm, output thật của trình biên dịch ở mọi dòng — rồi tới backend Node và frontend React có kiểu.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

@@ -9,6 +9,9 @@
  * xoay vòng và thu hồi, vòng đời tài khoản, đa yếu tố và passkey, OAuth 2.1/OIDC, phân
  * quyền, các kiểu tấn công, vận hành và chẩn đoán.
  *
+ * Đợt mẫu 01/11/2026: Mục 0 + Chương 1 soạn lại trọn theo authentication/_HOP-DONG.md (bài trong s00/, s01/, slide AUTH/v1,
+ * dự án LabFlow ID, Lab 1 có máy chấm, Code Lab authentication-practice). Chương 2–12 vẫn là bản cũ, chờ soạn theo hợp đồng.
+ *
  * Kiểm trước khi seed:
  *   node scripts/course-content-check.mjs ./content/courses/authentication.mjs
  *   node scripts/course-depth-audit.mjs   ./content/courses/authentication.mjs
@@ -38,6 +41,7 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     isFeatured: true,
+    syncOrder: true, // 01/11/2026: Mục 0 có 2 bài "Bắt đầu tại đây" đứng đầu, Lab chương đứng trước quiz ⇒ thứ tự CSDL theo thứ tự tệp
     // Sinh bằng scripts/course-cover.mjs (logo Simple Icons chính thức trên nền
     // bìa dùng chung của CuongThai). Sinh lại, KHÔNG sửa tay:
     //   docker exec cuonghoangdev_backend node scripts/course-cover.mjs \
@@ -46,9 +50,9 @@ export default {
     // (Nếu slug "openid" trả 404 ở Simple Icons thì lùi về --icon auth0 --color EB5424.)
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/authentication.png?v=4',
     shortDescription: 'Proving who someone is, over a protocol that forgets: how to store a password, why a session and a token are the same problem with different failure modes, and how every account recovery flow becomes the weakest link.|||Chứng minh một người là ai, qua một giao thức vốn không nhớ gì: cất mật khẩu thế nào cho đúng, vì sao phiên và token là cùng một bài toán với hai kiểu hỏng khác nhau, và vì sao mọi đường khôi phục tài khoản đều thành mắt xích yếu nhất.',
-    description: 'Khoá Authentication từ số 0 tới mức vận hành được hệ xác thực cho một sản phẩm thật, do CuongThai tự biên soạn. 13 mục đi từ ba bài toán bị gộp làm một (danh tính, xác thực, phân quyền), qua mật khẩu và hàm băm chậm, phiên với cookie, JWT mổ từ bên trong, refresh token có xoay vòng và phát hiện tái dùng, vòng đời tài khoản (xác minh email, đặt lại mật khẩu, khôi phục), đa yếu tố TOTP và passkey WebAuthn, OAuth 2.1 với OpenID Connect, phân quyền RBAC/ABAC/ReBAC, các kiểu tấn công theo tần suất thật, cho tới vận hành và một sách công thức chẩn đoán. Mọi ví dụ chạy thật trên Node.js 22 + Express + PostgreSQL.',
+    description: 'Khoá Authentication từ số 0 tới mức vận hành được hệ xác thực cho một sản phẩm thật, do CuongThai tự biên soạn. 13 mục đi từ ba bài toán bị gộp làm một (danh tính, xác thực, phân quyền), qua mật khẩu và hàm băm chậm, phiên với cookie, JWT mổ từ bên trong, refresh token có xoay vòng và phát hiện tái dùng, vòng đời tài khoản (xác minh email, đặt lại mật khẩu, khôi phục), đa yếu tố TOTP và passkey WebAuthn, OAuth 2.1 với OpenID Connect, phân quyền RBAC/ABAC/ReBAC, các kiểu tấn công theo tần suất thật, cho tới vận hành và một sách công thức chẩn đoán. Mọi ví dụ chạy thật trên dự án xuyên khoá LabFlow ID — dịch vụ danh tính của nền tảng LabFlow (cùng thế giới với khoá API Design và Testing) — bằng Node.js 22 + Express 5, thêm PostgreSQL từ Chương 2; mỗi chương có lab chấm bằng máy và dự án cuối khoá đưa LabFlow ID lên mức chạy production.',
     whatYouLearn: 'Cất mật khẩu bằng Argon2id với tham số chọn theo số đo chứ không theo bài blog; biết chính xác một phiên và một JWT khác nhau ở đâu và cái nào phù hợp với sản phẩm của bạn; đọc được một token bằng tay và nhận ra tấn công alg confusion; dựng refresh token có xoay vòng và phát hiện tái dùng cả họ token; thiết kế đường đặt lại mật khẩu không rò danh sách người dùng; cài TOTP đúng RFC 6238 và hiểu vì sao passkey làm phishing bất khả thi; đi hết luồng OAuth 2.1 authorization code + PKCE và biết vì sao implicit đã chết; chọn giữa RBAC, ABAC và ReBAC bằng câu hỏi của sản phẩm; và chẩn đoán một sự cố xác thực bằng nhật ký kiểm toán thay vì bằng phỏng đoán.',
-    requirements: 'Biết một ngôn ngữ lập trình ở mức viết được hàm và đọc được mã (ví dụ dùng JavaScript/TypeScript trên Node.js). Biết HTTP ở mức request/response, header và status code — khoá Nền tảng Lập trình Web của CuongThai đủ cho phần đó. KHÔNG cần biết bảo mật trước: Mục 0 dựng lại từ đầu. Có Node.js 22 và một PostgreSQL chạy được (Docker là nhanh nhất) để làm theo phần thực hành.',
+    requirements: 'Biết một ngôn ngữ lập trình ở mức viết được hàm và đọc được mã (ví dụ dùng JavaScript/TypeScript trên Node.js). Biết HTTP ở mức request/response, header và status code — khoá Nền tảng Lập trình Web của CuongThai đủ cho phần đó. KHÔNG cần biết bảo mật trước: Mục 0 dựng lại từ đầu. Mục 0 và Chương 1 chỉ cần Node.js 22.12 trở lên (bài 0.3 cài trong mười phút, không cần Docker); từ Chương 2 cần thêm một PostgreSQL 17 (Docker là nhanh nhất).',
     documentsNote: 'Tài liệu tham chiếu chính: OWASP Cheat Sheet Series (Authentication, Session Management, Password Storage — đọc trước mọi thứ khác) • RFC 6749 + RFC 9700 (OAuth 2.0 và bản thực hành bảo mật hiện hành) • OpenID Connect Core 1.0 • RFC 7519 và RFC 8725 (JWT và JWT BCP) • RFC 6238 (TOTP) • W3C WebAuthn Level 3 • NIST SP 800-63B (Digital Identity Guidelines). Phần thực hành đi kèm: track "Authentication" trên Code Lab.',
   },
   sections: [

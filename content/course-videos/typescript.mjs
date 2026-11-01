@@ -17,6 +17,8 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 ── */
+    "typescript-0-8-bat-dau-tai-day": { yt: "uMqx8NNT4xY", credit: "GitHub — The history of C# and TypeScript with Anders Hejlsberg | GitHub" },
+    "typescript-0-9-bat-dau-tai-day-2": { yt: "P-J9Eg7hJwE", credit: "JSConf — Adopting Typescript at Scale - Brie Bunge | JSConf Hawaii 2019" },
     "typescript-0-1-gioi-thieu": { yt: "zQnBQ4tB3ZA", credit: "Fireship — TypeScript in 100 Seconds" },
     "typescript-0-2-cach-hoc": { yt: "gp5H0Vw39yw", credit: "freeCodeCamp.org — Learn TypeScript - Full Course for Beginners" },
     "typescript-0-3-cai-dat": { yt: "2pZmKW9-I_k", credit: "Net Ninja — TypeScript Tutorial #1 - Introduction & Setup" },
@@ -26,11 +28,13 @@ export default {
     "typescript-1-2-chung-minh-gi": { yt: "d56mG7DezGs", credit: "Programming with Mosh — TypeScript Tutorial for Beginners" },
     "typescript-1-3-suy-luan-kieu": { yt: "vFpY2JYjpb4", credit: "Free Tutorial Wale — TypeScript Tutorial #4 - Type Inference" },
     "typescript-1-4-any-unknown": { yt: "kWmUNChlzVw", credit: "Andrew Burgess — any vs unknown vs never: TypeScript demystified" },
+    "typescript-1-6-lab-chuyen-doi": { yt: "j92fxPpFaL8", credit: "Jack Herrington — Converting JavaScript to TypeScript - Basic Types" },
     /* ── Chương 2 ── */
     "typescript-2-1-primitive": { yt: "0DzDqtcxnz0", credit: "Net Ninja — TypeScript Tutorial #3 - Type Basics" },
     "typescript-2-2-mang-tuple": { yt: "1QgEdeejdDY", credit: "Codevolution — ES6 and Typescript Tutorial - 46 - Arrays and Tuples" },
     "typescript-2-3-kieu-dac-biet": { yt: "YpT0rCWdCaE", credit: "TypeScript with Benny Code — Any, unknown, never, and void in TypeScript" },
     "typescript-2-4-literal-as-const": { yt: "jxSh-RZTCws", credit: "Matt Pocock — Literal types are SO USEFUL in TS - Advanced TypeScript" },
+    "typescript-2-6-lab-lich-phong": { yt: "C_fjVngpUgg", credit: "newline — How The TypeScript strictNullChecks Compiler Option Works" },
     /* ── Chương 3 ── */
     "typescript-3-1-tham-so": { yt: "jXoSaX_yFh4", credit: "Net Ninja — TypeScript Tutorial #8 - Function Basics" },
     "typescript-3-2-callback": { yt: "m8O-Bo3I8pc", credit: "Smartherd — Functions as Type | TypeScript Tutorial" },

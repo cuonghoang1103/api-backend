@@ -199,6 +199,11 @@ archive_command = <span class="tok-string">'test ! -f /mnt/wal/%f &amp;&amp; cp 
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: read your own LSN advance as you write rows</span><span class="lc-sub">The Code Lab track walks an archive_command setup end to end.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.7: a backup counts only after a restore</span><span class="lc-sub">pg_dump of a real API database (148 KB, 10,000 bookings), restored into an empty database and compared table by table — with “no PITR yet” listed honestly as the gap this lesson closes.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -254,6 +259,11 @@ archive_command = <span class="tok-string">'test ! -f /mnt/wal/%f &amp;&amp; cp 
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tự đọc LSN của mình nhích lên khi bạn ghi thêm dòng</span><span class="lc-sub">Nhánh Code Lab dẫn qua một lượt dựng archive_command từ đầu tới cuối.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: sao lưu chỉ tính khi đã khôi phục</span><span class="lc-sub">pg_dump một CSDL API thật (148 KB, 10.000 lượt đặt), khôi phục vào CSDL rỗng và so từng bảng — với “chưa có PITR” ghi thật là khoảng trống mà bài này lấp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

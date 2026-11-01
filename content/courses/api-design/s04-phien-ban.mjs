@@ -187,6 +187,11 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
   <span class="lc-body"><span class="lc-title">Source: Hyrum’s Law — read 1 Nov 2026</span><span class="lc-sub">“With a sufficient number of users of an API, it does not matter what you promise in the contract: all observable behaviors of your system will be depended on by somebody.”</span></span>
   <span class="lc-cta">OPEN →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-3-kieu-dac-biet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Make the compiler find every switch — TypeScript 2.3: never and exhaustive checks</span><span class="lc-sub">Same: a new status value breaks code that handles “every” case. Different: when the value comes from your own code, a never check makes tsc list each switch to update before anything runs (TS2322 names LAB_CLOSED); values from the network still need this lesson’s tolerant runtime default.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -378,6 +383,11 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">Nguồn: Định luật Hyrum — đọc ngày 1/11/2026</span><span class="lc-sub">“Đủ nhiều người dùng một API thì bạn hứa gì trong hợp đồng cũng không quan trọng: mọi hành vi quan sát được của hệ thống đều sẽ có người dựa vào.”</span></span>
   <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-3-kieu-dac-biet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bắt trình biên dịch tìm mọi switch — TypeScript 2.3: never và kiểm vét cạn</span><span class="lc-sub">Giống: một giá trị trạng thái mới làm gãy code xử lý “mọi” trường hợp. Khác: khi giá trị đến từ chính code của bạn, phép kiểm never bắt tsc liệt kê từng switch phải sửa trước khi chạy (TS2322 gọi tên LAB_CLOSED); giá trị từ mạng vẫn cần nhánh default khoan dung lúc chạy như bài này.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>

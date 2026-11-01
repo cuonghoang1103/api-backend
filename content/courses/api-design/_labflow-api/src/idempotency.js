@@ -3,6 +3,7 @@
 import { createHash } from 'node:crypto';
 import { HttpError } from './http.js';
 import { now } from './deprecation.js';
+import { config } from './config.js';
 
 const TTL_MS = 24 * 3600 * 1000;                                   // giữ kết quả 24 giờ
 const store = new Map();   // "usr_1:<khoá>" ⇒ { fp, state: 'running' | 'done', status, body, location, at }
@@ -11,7 +12,8 @@ const store = new Map();   // "usr_1:<khoá>" ⇒ { fp, state: 'running' | 'done
 const parseKey = (raw) => /^"?([\x21\x23-\x7e]{1,255}?)"?$/.exec(raw)?.[1];
 
 // Bài 8.3 — nhiều instance: LABFLOW_IDEMPOTENCY=pg ⇒ dùng bảng chung trong PostgreSQL (idempotency-pg.js)
-const shared = process.env.LABFLOW_IDEMPOTENCY === 'pg' ? await import('./idempotency-pg.js') : null;
+// Chương 12: kho pg ⇒ mặc định dùng bảng chung luôn (một khoá chỉ thắng MỘT lần, dù request rơi vào instance nào)
+const shared = (process.env.LABFLOW_IDEMPOTENCY ?? (config.store === 'pg' ? 'pg' : 'memory')) === 'pg' ? await import('./idempotency-pg.js') : null;
 
 const memory = ({ required = false } = {}) => (req, res, next) => {
   const raw = req.get('Idempotency-Key');

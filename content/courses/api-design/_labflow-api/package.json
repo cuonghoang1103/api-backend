@@ -1,6 +1,6 @@
 {
   "name": "labflow-api",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,8 +11,14 @@
     "api:types": "openapi-typescript openapi/openapi.yaml -o client/labflow.d.ts",
     "api:docs": "redocly build-docs openapi/openapi.yaml -o docs/index.html",
     "api:mock": "prism mock openapi/openapi.yaml -p 4010",
-    "api:diff": "node openapi/diff.mjs openapi/openapi-v2.2.0.yaml openapi/openapi.yaml",
-    "api:drift": "node openapi/check-drift.mjs"
+    "api:diff": "node openapi/diff.mjs openapi/openapi-v2.3.0.yaml openapi/openapi.yaml",
+    "api:drift": "node openapi/check-drift.mjs",
+    "db:migrate": "node src/migrate.js",
+    "db:status": "node src/migrate.js --status",
+    "db:seed": "node src/seed-pg.js",
+    "test:pg": "node src/seed-pg.js --reset && LABFLOW_STORE=pg LABFLOW_REDIS= node --test --test-concurrency=1 --test-reporter=spec",
+    "worker": "node src/worker.js",
+    "smoke": "node ops/smoke.mjs"
   },
   "engines": {
     "node": ">=22"

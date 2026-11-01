@@ -820,6 +820,11 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 8.2: Production hardening: env, validation, rate limit &amp; index</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: limiting requests to stop abuse. Different: Academy uses express-rate-limit per IP; Courses builds the limiter on Redis. In this lesson we add: three algorithms (fixed window and its boundary hole, sliding window, token bucket), the INCR-then-EXPIRE bug, distributed locks. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.4: two instances, one truth</span><span class="lc-sub">The same atomic token bucket behind a real API on two instances: one Lua script with the clock from Redis TIME, 5 × 201 then 429 whichever instance answers — and what the API does when Redis is down (bookings still 201).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -950,6 +955,11 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 8.2: Gia cố production: env, validation, rate limit &amp; index</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: giới hạn số request để chặn lạm dụng. Khác: Academy dùng express-rate-limit đếm theo IP; Courses tự dựng bộ giới hạn trên Redis. Ở bài này mình học thêm: ba thuật toán (cửa sổ cố định và lỗ ở ranh giới, cửa sổ trượt, token bucket), con bug INCR rồi EXPIRE, khoá phân tán. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.4: hai instance, một sự thật</span><span class="lc-sub">Cùng token bucket nguyên tử đứng sau một API thật chạy hai instance: một script Lua lấy giờ từ TIME của Redis, 5 × 201 rồi 429 dù instance nào trả lời — và API làm gì khi Redis chết (đặt chỗ vẫn 201).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

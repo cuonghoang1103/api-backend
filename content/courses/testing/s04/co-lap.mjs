@@ -105,6 +105,11 @@ ${ra(gon(OUT['44-th']))}
 <li>One shared database ⇒ test files take turns (or one schema per worker).</li>
 <li>Factories keep data short, valid and collision-free.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-9-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — Lab 12: move device issues to PostgreSQL</span><span class="lc-sub">Integration tests of an API with two stores: npm test on the RAM store with no database, npm run test:pg rebuilds labflow_test from the migrations and refuses to wipe any database whose name does not end in _test; a grader then runs six reports at once on two instances (10/10).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -180,6 +185,11 @@ ${ra(gon(OUT['44-th']))}
 <li>Một cơ sở dữ liệu dùng chung ⇒ các file chạy lần lượt (hoặc mỗi worker một schema).</li>
 <li>Factory giữ dữ liệu gọn, hợp lệ và không đụng nhau.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-9-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — Lab 12: chuyển báo hỏng thiết bị lên PostgreSQL</span><span class="lc-sub">Test tích hợp cho một API hai kho dữ liệu: npm test trên kho RAM không cần CSDL, npm run test:pg dựng lại labflow_test từ migration và từ chối xoá mọi CSDL có tên không kết thúc bằng _test; rồi bộ chấm gửi sáu báo hỏng cùng lúc vào hai instance (10/10).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
 };

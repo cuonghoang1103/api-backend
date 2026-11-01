@@ -3,7 +3,8 @@
 //   lf_live_… ⇒ API key cho script (chỉ lưu bản băm)
 //   tok_…     ⇒ token giả của Chương 1–5, CHỈ còn khi chạy dev (LABFLOW_DEMO_TOKENS khác "0" và không phải production)
 import { createHmac, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
-import { tokens, users } from './db.js';
+import { tokens } from './db.js';
+import { store } from './store/index.js';
 import { HttpError } from './http.js';
 import { now } from './deprecation.js';
 import { VULN } from './vuln.js';
@@ -38,30 +39,35 @@ export function verifyJwt(token) {
 }
 
 // API key: hiện MỘT lần lúc tạo, server chỉ giữ sha256 + tiền tố để nhận diện
-export const apiKeys = new Map();                                  // sha256 ⇒ { userId, prefix, createdAt }
+// Chương 12: bảng api_keys (kho pg) thay Map trong RAM — khoá tạo ở instance A dùng được ở instance B
 const sha256 = (s) => createHash('sha256').update(s).digest('hex');
-export function createApiKey(userId) {
+export async function createApiKey(userId) {
   const key = `lf_live_${randomBytes(24).toString('base64url')}`;
   const meta = { userId, prefix: key.slice(0, 12), createdAt: new Date(now()).toISOString() };
-  apiKeys.set(sha256(key), meta);
+  await store.saveApiKey(sha256(key), meta);
   return { key, ...meta };
 }
 
 const demoTokens = process.env.NODE_ENV !== 'production' && process.env.LABFLOW_DEMO_TOKENS !== '0';
 
-export function requireAuth(req, res, next) {
+export async function requireAuth(req, res, next) {
   const [scheme, cred] = (req.get('Authorization') ?? '').split(' ');
   let userId;
   if (scheme?.toLowerCase() === 'bearer' && cred) {
     if (cred.startsWith('eyJ')) userId = (req.timing ? req.timing.time('auth', () => verifyJwt(cred)) : verifyJwt(cred)).sub;
-    else if (cred.startsWith('lf_')) userId = apiKeys.get(sha256(cred))?.userId;
+    else if (cred.startsWith('lf_')) userId = await store.userIdByKeyHash(sha256(cred));
     else if (demoTokens) userId = tokens[cred];
   }
   if (!userId) {
     res.set('WWW-Authenticate', 'Bearer realm="labflow"');
     throw new HttpError(401, 'UNAUTHENTICATED');
   }
-  req.user = users.find((u) => u.id === userId);
+  // Chương 12: một lần đọc theo khoá chính mỗi request (~0,1–0,3 ms) — đổi lại, người dùng bị xoá/đổi vai trò có hiệu lực NGAY
+  req.user = await (req.timing ? req.timing.timeAsync('user', () => store.getUser(userId)) : store.getUser(userId));
+  if (!req.user) {                                                // token còn hạn nhưng người dùng không còn
+    res.set('WWW-Authenticate', 'Bearer realm="labflow"');
+    throw new HttpError(401, 'UNAUTHENTICATED');
+  }
   next();
 }
 

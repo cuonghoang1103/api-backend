@@ -1,0 +1,573 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-1-5-bi-mat-ro-o-dau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-1-5-bi-mat-ro-o-dau"
+  },
+  "exercises": [
+    {
+      "title": "1.5-1 — Four leaks nobody attacked",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "secret leakage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real outputs of lesson 1.5. A pino deny-list logger:<pre>{\"level\":30,\"headers\":{\"host\":\"localhost:4800\",\"user-agent\":\"curl/8.7.1\",\"x-session\":\"lfid_ses_demo-session-of-an\",\"authorization\":\"[Redacted]\",\"content-type\":\"application/json\",\"accept\":\"application/json\",\"content-length\":\"91\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"[Redacted]\",\"newPassword\":\"an-lab-2027\"},\"msg\":\"sign-in\"}</pre>An axios error logged with <code>log.error({ err })</code>: the fake partner key appears <b>5</b> times in one log line. A Vite build:<pre>e/v1/charges`,{method:`POST`,headers:{Authorization:`Bearer sk_demo_payment_000`,\"content-type\":`ap\nlfid_key_demo_000 in bundle: 0</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật của bài 1.5. Logger pino theo danh sách cấm:<pre>{\"level\":30,\"headers\":{\"host\":\"localhost:4800\",\"user-agent\":\"curl/8.7.1\",\"x-session\":\"lfid_ses_demo-session-of-an\",\"authorization\":\"[Redacted]\",\"content-type\":\"application/json\",\"accept\":\"application/json\",\"content-length\":\"91\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"[Redacted]\",\"newPassword\":\"an-lab-2027\"},\"msg\":\"sign-in\"}</pre>Lỗi axios ghi bằng <code>log.error({ err })</code>: khoá đối tác giả xuất hiện <b>5</b> lần trong một dòng log. Một bản build Vite:<pre>e/v1/charges`,{method:`POST`,headers:{Authorization:`Bearer sk_demo_payment_000`,\"content-type\":`ap\nlfid_key_demo_000 in bundle: 0</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for names that are NOT in the redact list.|||Tìm những tên KHÔNG nằm trong danh sách che.",
+        "Ask what an error object remembers about the request.|||Hỏi object lỗi nhớ gì về request."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.5-1 — Four leaks nobody attacked\n\nAnswer in the answer panel (no code needed).\n\n1. The deny-list hid authorization and password. What leaked anyway?Danh sách cấm đã che authorization và password. Cái gì vẫn lộ?\n2. Why did one log.error({ err }) write the partner API key several times?Vì sao một lệnh log.error({ err }) ghi khoá API đối tác nhiều lần?\n3. VITE_PAYMENT_SECRET_KEY ended up in dist/assets/*.js. Whose fault is it?VITE_PAYMENT_SECRET_KEY nằm trong dist/assets/*.js. Lỗi của ai?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.5-1 — Four leaks nobody attacked — answer key\n\n1. The deny-list hid authorization and password. What leaked anyway?Danh sách cấm đã che authorization và password. Cái gì vẫn lộ?\n   Answer: d) The x-session header and the newPassword field — names nobody put on the list\n   A deny-list protects only the names someone thought of. An allow-list (log only what you decided is safe) hid both, and later the new otp field too, with no change.VI: Danh sách cấm chỉ che những tên ai đó đã nghĩ tới. Danh sách cho phép (chỉ ghi thứ đã quyết định là an toàn) che được cả hai, và sau này cả trường otp mới, mà không phải sửa gì.\n\n2. Why did one log.error({ err }) write the partner API key several times?Vì sao một lệnh log.error({ err }) ghi khoá API đối tác nhiều lần?\n   Answer: d) The error object carries the whole failed request\n   Log the error’s message, code and status — never the error object of an HTTP client.VI: Ghi message, code và status của lỗi — đừng bao giờ ghi nguyên object lỗi của một HTTP client.\n\n3. VITE_PAYMENT_SECRET_KEY ended up in dist/assets/*.js. Whose fault is it?VITE_PAYMENT_SECRET_KEY nằm trong dist/assets/*.js. Lỗi của ai?\n   Answer: a) The developer’s: VITE_* values ship to every visitor\n   Anything in the bundle is public. Third-party secrets stay on the server behind your own authenticated endpoint.VI: Mọi thứ trong bundle là công khai. Bí mật của bên thứ ba ở lại máy chủ, sau một endpoint có xác thực của chính bạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The x-session header and the newPassword field — names nobody put on the list</p><p>A deny-list protects only the names someone thought of. An allow-list (log only what you decided is safe) hid both, and later the new otp field too, with no change.</p><p><i>VI: Danh sách cấm chỉ che những tên ai đó đã nghĩ tới. Danh sách cho phép (chỉ ghi thứ đã quyết định là an toàn) che được cả hai, và sau này cả trường otp mới, mà không phải sửa gì.</i></p></li><li><p><b>d)</b> The error object carries the whole failed request</p><p>Log the error’s message, code and status — never the error object of an HTTP client.</p><p><i>VI: Ghi message, code và status của lỗi — đừng bao giờ ghi nguyên object lỗi của một HTTP client.</i></p></li><li><p><b>a)</b> The developer’s: VITE_* values ship to every visitor</p><p>Anything in the bundle is public. Third-party secrets stay on the server behind your own authenticated endpoint.</p><p><i>VI: Mọi thứ trong bundle là công khai. Bí mật của bên thứ ba ở lại máy chủ, sau một endpoint có xác thực của chính bạn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The deny-list hid authorization and password. What leaked anyway?</p><p style=\"opacity:.75;font-size:.92em\"><i>Danh sách cấm đã che authorization và password. Cái gì vẫn lộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — pino redacts every secret automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the email address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The whole request body, because redact failed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The x-session header and the newPassword field — names nobody put on the list"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A deny-list protects only the names someone thought of. An allow-list (log only what you decided is safe) hid both, and later the new otp field too, with no change.</p><p><i>VI: Danh sách cấm chỉ che những tên ai đó đã nghĩ tới. Danh sách cho phép (chỉ ghi thứ đã quyết định là an toàn) che được cả hai, và sau này cả trường otp mới, mà không phải sửa gì.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why did one log.error({ err }) write the partner API key several times?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một lệnh log.error({ err }) ghi khoá API đối tác nhiều lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "axios also logs the request by itself on failure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pino writes every field of an object twice by default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The key was part of the URL that axios requested"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The error object carries the whole failed request"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Log the error’s message, code and status — never the error object of an HTTP client.</p><p><i>VI: Ghi message, code và status của lỗi — đừng bao giờ ghi nguyên object lỗi của một HTTP client.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>VITE_PAYMENT_SECRET_KEY ended up in dist/assets/*.js. Whose fault is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>VITE_PAYMENT_SECRET_KEY nằm trong dist/assets/*.js. Lỗi của ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The developer’s: VITE_* values ship to every visitor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nobody’s: minified code cannot really be read"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The CDN’s: it should not serve built .js files"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Vite’s: it should have encrypted the value itself"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Anything in the bundle is public. Third-party secrets stay on the server behind your own authenticated endpoint.</p><p><i>VI: Mọi thứ trong bundle là công khai. Bí mật của bên thứ ba ở lại máy chủ, sau một endpoint có xác thực của chính bạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Logging whole req, res or err objects.|||Ghi nguyên object req, res hay err."
+        },
+        {
+          "loi": "Prefixing a secret with VITE_ / NEXT_PUBLIC_ “to make it work”.|||Đặt tiền tố VITE_ / NEXT_PUBLIC_ cho bí mật \"cho nó chạy\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deny-list",
+          "vi": "danh sách cấm"
+        },
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        }
+      ]
+    },
+    {
+      "title": "1.5-2 — Write redact(value, allow): an allow-list logger",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "allow-list logging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Write the function behind LabFlow ID’s request log. <code>redact(value, allow)</code> returns a <b>deep copy</b> where every object key that is NOT in <code>allow</code> becomes the string <code>\"[redacted]\"</code> (whatever its value — even a nested object). Allowed keys keep their value, walked recursively; arrays are walked element by element; strings, numbers, booleans and <code>null</code> are returned as they are. The input must not be changed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hàm đứng sau log request của LabFlow ID. <code>redact(value, allow)</code> trả về một <b>bản sao sâu</b>, trong đó mọi khoá của object KHÔNG nằm trong <code>allow</code> thành chuỗi <code>\"[redacted]\"</code> (bất kể giá trị — kể cả object lồng). Khoá được phép giữ giá trị, đi đệ quy vào trong; mảng đi từng phần tử; chuỗi, số, boolean và <code>null</code> trả về nguyên. Không được sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "redact({\"method\":\"POST\",\"path\":\"/sign-in\",\"headers\":{\"user-agent\":\"curl/8.7.1\",\"x-session\":\"lfid_ses_demo-session-of-an\",\"authorization\":\"Bearer lfid_key_demo-key-of-an\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\",\"newPassword\":\"an-lab-2027\"}}, [\"method\",\"path\",\"headers\",\"user-agent\",\"body\",\"email\"])",
+          "output": "{\"method\":\"POST\",\"path\":\"/sign-in\",\"headers\":{\"user-agent\":\"curl/8.7.1\",\"x-session\":\"[redacted]\",\"authorization\":\"[redacted]\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"[redacted]\",\"newPassword\":\"[redacted]\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "typeof null === \"object\" — check v truthy first.|||typeof null === \"object\" — kiểm v khác null trước.",
+        "Arrays are objects too: test Array.isArray before the object branch.|||Mảng cũng là object: kiểm Array.isArray trước nhánh object."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** deep copy; keys not in allow ⇒ \"[redacted]\" */\nfunction redact(value, allow) {\n  // Write your solution here\n  var copy = JSON.parse(JSON.stringify(value));\n  if (copy.body && copy.body.password) copy.body.password = '[redacted]';\n  if (copy.headers && copy.headers.authorization) copy.headers.authorization = '[redacted]';\n  return copy;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction redact(value, allow) {\n  function walk(v) {\n    if (Array.isArray(v)) return v.map(walk);\n    if (v && typeof v === 'object') {\n      var out = {};\n      Object.keys(v).forEach(function (k) { out[k] = allow.indexOf(k) >= 0 ? walk(v[k]) : '[redacted]'; });\n      return out;\n    }\n    return v;\n  }\n  return walk(value);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An allow-list fails closed: a field added next year is hidden until someone decides it is safe. That is why the otp field in the lesson’s practice was hidden by the allow-list and leaked by the deny-list without any code change.</p>",
+      "solutionExplanationHtmlVi": "<p>Danh sách cho phép hỏng theo hướng đóng: trường thêm vào năm sau bị che cho tới khi có người quyết định nó an toàn. Vì vậy trường otp trong bài thực hành bị che bởi danh sách cho phép và lộ ở danh sách cấm, mà không ai sửa dòng mã nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The sign-in request of lesson 1.5",
+              "vi": "Request đăng nhập của bài 1.5"
+            },
+            "goi": "redact({\"method\":\"POST\",\"path\":\"/sign-in\",\"headers\":{\"user-agent\":\"curl/8.7.1\",\"x-session\":\"lfid_ses_demo-session-of-an\",\"authorization\":\"Bearer lfid_key_demo-key-of-an\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\",\"newPassword\":\"an-lab-2027\"}}, [\"method\",\"path\",\"headers\",\"user-agent\",\"body\",\"email\"])",
+            "mongDoi": {
+              "method": "POST",
+              "path": "/sign-in",
+              "headers": {
+                "user-agent": "curl/8.7.1",
+                "x-session": "[redacted]",
+                "authorization": "[redacted]"
+              },
+              "body": {
+                "email": "an@student.labflow.example",
+                "password": "[redacted]",
+                "newPassword": "[redacted]"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: redact({\"a\":1,\"b\":{\"c\":2}}, [\"a\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "redact({\"a\":1,\"b\":{\"c\":2}}, [\"a\"])",
+            "mongDoi": {
+              "a": 1,
+              "b": "[redacted]"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "redact({\"items\":[{\"email\":\"b@x\",\"pwd\":\"p\"},3,null]}, [\"items\",\"email\"])",
+            "mongDoi": {
+              "items": [
+                {
+                  "email": "b@x",
+                  "pwd": "[redacted]"
+                },
+                3,
+                null
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "redact({\"body\":null,\"n\":0,\"ok\":false}, [\"body\",\"n\",\"ok\"])",
+            "mongDoi": {
+              "body": null,
+              "n": 0,
+              "ok": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "redact(\"just a string\", [])",
+            "mongDoi": "just a string",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input is not changed",
+              "vi": "Đầu vào không bị sửa"
+            },
+            "goi": "(function () { var x = {\"method\":\"POST\",\"path\":\"/sign-in\",\"headers\":{\"user-agent\":\"curl/8.7.1\",\"x-session\":\"lfid_ses_demo-session-of-an\",\"authorization\":\"Bearer lfid_key_demo-key-of-an\"},\"body\":{\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\",\"newPassword\":\"an-lab-2027\"}}; redact(x, ['method']); return x.body.password; })()",
+            "mongDoi": "an-lab-2026",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A deny-list (if key === \"password\") — misses newPassword, x-session, matKhau.|||Danh sách cấm (if key === \"password\") — sót newPassword, x-session, matKhau."
+        },
+        {
+          "loi": "Mutating the request object: the next middleware sees \"[redacted]\" as the password.|||Sửa thẳng object request: middleware sau thấy mật khẩu là \"[redacted]\"."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "1.5-3 — Write scanSecrets(text): a tiny gitleaks",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "secret scanning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson 1.5 taught gitleaks LabFlow ID’s prefixes; the default rules missed the test fixture, the custom rule found both:</p><pre>$ cd tmp/shop &amp;&amp; gitleaks git . --no-banner --redact -v --config ../../demo1/git/gitleaks-lfid.toml 2&gt;&amp;1 | grep -E 'Finding|RuleID|File:|leaks found'; echo \"exit ${PIPESTATUS[0]}\"\nFinding:     ...\": \"usr_1\", \"sid\": \"REDACTED\" }\nRuleID:      labflow-id-secret\nFile:        test/fixtures/session.json\nFinding:     LFID_SIGNING_KEY=REDACTED\nRuleID:      labflow-id-secret\nFile:        .env</pre><p>Write <code>scanSecrets(text)</code> returning findings <code>{ line, rule, preview }</code> in line order (lines numbered from 1):</p><ul>\n<li>rule <code>labflow-id-secret</code>: every match of <code>lfid_(key|ses|reset)_</code> followed by ≥ 20 characters from <code>A–Z a–z 0–9 _ -</code>; several per line are possible. preview = the prefix up to and including its second <code>_</code>, then the next 4 characters, then <code>…</code> (e.g. <code>lfid_key_00Hr…</code>) — never the whole secret;</li>\n<li>rule <code>generic-secret</code>: a line (that has no <code>lfid_</code> at all) where a word <code>secret</code>, <code>password</code>, <code>api_key</code>/<code>api-key</code>/<code>apikey</code> or <code>token</code> (any case) is followed by <code>=</code> or <code>:</code>, optional quote, and ≥ 16 characters from <code>A–Z a–z 0–9 _ - + / =</code>. preview = the trimmed line’s first 12 characters + <code>…</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.5 dạy gitleaks các tiền tố của LabFlow ID; luật mặc định sót tệp fixture, luật tự viết tìm được cả hai:</p><pre>$ cd tmp/shop &amp;&amp; gitleaks git . --no-banner --redact -v --config ../../demo1/git/gitleaks-lfid.toml 2&gt;&amp;1 | grep -E 'Finding|RuleID|File:|leaks found'; echo \"exit ${PIPESTATUS[0]}\"\nFinding:     ...\": \"usr_1\", \"sid\": \"REDACTED\" }\nRuleID:      labflow-id-secret\nFile:        test/fixtures/session.json\nFinding:     LFID_SIGNING_KEY=REDACTED\nRuleID:      labflow-id-secret\nFile:        .env</pre><p>Viết <code>scanSecrets(text)</code> trả về các phát hiện <code>{ line, rule, preview }</code> theo thứ tự dòng (đánh số từ 1):</p><ul>\n<li>luật <code>labflow-id-secret</code>: mọi chỗ khớp <code>lfid_(key|ses|reset)_</code> theo sau là ≥ 20 ký tự trong <code>A–Z a–z 0–9 _ -</code>; một dòng có thể có nhiều chỗ. preview = phần tiền tố tới hết dấu <code>_</code> thứ hai, rồi 4 ký tự tiếp theo, rồi <code>…</code> (vd <code>lfid_key_00Hr…</code>) — không bao giờ in cả bí mật;</li>\n<li>luật <code>generic-secret</code>: một dòng (không hề có <code>lfid_</code>) mà từ <code>secret</code>, <code>password</code>, <code>api_key</code>/<code>api-key</code>/<code>apikey</code> hoặc <code>token</code> (hoa thường tuỳ ý) đứng trước <code>=</code> hoặc <code>:</code>, có thể có dấu nháy, rồi ≥ 16 ký tự trong <code>A–Z a–z 0–9 _ - + / =</code>. preview = 12 ký tự đầu của dòng đã cắt khoảng trắng + <code>…</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "scanSecrets(\"PORT=4800\\nLFID_SIGNING_KEY=lfid_key_00Hrn21xnHuxfIBnCmJaeEyzvbN6Z1Ex0M6XM-NiWdk\\n\")",
+          "output": "[{\"line\":2,\"rule\":\"labflow-id-secret\",\"preview\":\"lfid_key_00Hr…\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regex with the g flag and a while (exec) loop finds several matches per line.|||Regex có cờ g và vòng while (exec) tìm nhiều chỗ khớp trên một dòng.",
+        "The second \"_\" of lfid_key_… is at indexOf(\"_\", 5).|||Dấu \"_\" thứ hai của lfid_key_… nằm ở indexOf(\"_\", 5)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ [{ line, rule, preview }] */\nfunction scanSecrets(text) {\n  // Write your solution here\n  var found = [];\n  text.split('\\n').forEach(function (line, i) {\n    var m = line.match(/lfid_key_\\w+/);\n    if (m) found.push({ line: i, rule: 'labflow-id-secret', preview: m[0] });\n  });\n  return found;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction scanSecrets(text) {\n  var found = [];\n  String(text).split('\\n').forEach(function (line, i) {\n    var re = /lfid_(?:key|ses|reset)_[A-Za-z0-9_-]{20,}/g;\n    var m;\n    while ((m = re.exec(line)) !== null) {\n      found.push({ line: i + 1, rule: 'labflow-id-secret', preview: m[0].slice(0, m[0].indexOf('_', 5) + 1) + m[0].slice(m[0].indexOf('_', 5) + 1, m[0].indexOf('_', 5) + 5) + '…' });\n    }\n    if (/(secret|password|api[_-]?key|token)\\s*[=:]\\s*[\"']?[A-Za-z0-9_\\-+/=]{16,}/i.test(line) && !/lfid_/.test(line)) {\n      found.push({ line: i + 1, rule: 'generic-secret', preview: line.trim().slice(0, 12) + '…' });\n    }\n  });\n  return found;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prefixes are what make your own secrets detectable — a random 43-character string with no prefix looks like any other base64. Redacted previews keep the scanner from leaking what it found (gitleaks --redact).</p>",
+      "solutionExplanationHtmlVi": "<p>Tiền tố là thứ làm bí mật của bạn bị phát hiện được — một chuỗi ngẫu nhiên 43 ký tự không tiền tố thì trông như mọi base64 khác. Preview đã che giữ cho chính máy quét không làm lộ thứ nó tìm thấy (gitleaks --redact).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The .env of lesson 1.5",
+              "vi": ".env của bài 1.5"
+            },
+            "goi": "scanSecrets(\"PORT=4800\\nLFID_SIGNING_KEY=lfid_key_00Hrn21xnHuxfIBnCmJaeEyzvbN6Z1Ex0M6XM-NiWdk\\n\")",
+            "mongDoi": [
+              {
+                "line": 2,
+                "rule": "labflow-id-secret",
+                "preview": "lfid_key_00Hr…"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The test fixture the default rules missed",
+              "vi": "Tệp fixture mà luật mặc định sót"
+            },
+            "goi": "scanSecrets(\"{ \\\"user\\\": \\\"usr_1\\\", \\\"sid\\\": \\\"lfid_ses_nrb_pw07YKkzbnfUYDsQUry01Yoi881il359Ma8gcGA\\\" }\")",
+            "mongDoi": [
+              {
+                "line": 1,
+                "rule": "labflow-id-secret",
+                "preview": "lfid_ses_nrb_…"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "scanSecrets(\"a=lfid_reset_AAAAAAAAAAAAAAAAAAAAAAAA b=lfid_key_BBBBBBBBBBBBBBBBBBBBBBBB\\nnothing here\\nlfid_ses_short\")",
+            "mongDoi": [
+              {
+                "line": 1,
+                "rule": "labflow-id-secret",
+                "preview": "lfid_reset_AAAA…"
+              },
+              {
+                "line": 1,
+                "rule": "labflow-id-secret",
+                "preview": "lfid_key_BBBB…"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "scanSecrets(\"DB_PASSWORD=\\\"Sup3rS3cretValue2026xx\\\"\\nPORT=4800\\napiKey: abcdefghijklmnopq\")",
+            "mongDoi": [
+              {
+                "line": 1,
+                "rule": "generic-secret",
+                "preview": "DB_PASSWORD=…"
+              },
+              {
+                "line": 3,
+                "rule": "generic-secret",
+                "preview": "apiKey: abcd…"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "scanSecrets(\"token = short\\nsecret_name=hello\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "scanSecrets(\"\")",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Printing the full secret in the report — the CI log becomes the next leak.|||In nguyên bí mật trong báo cáo — log CI thành chỗ rò tiếp theo."
+        },
+        {
+          "loi": "Using match() without g: only the first secret on the line is reported.|||Dùng match() không có g: chỉ báo bí mật đầu tiên của dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "secret scanning",
+          "vi": "quét bí mật"
+        },
+        {
+          "en": "fixture",
+          "vi": "dữ liệu mẫu cho test"
+        }
+      ]
+    },
+    {
+      "title": "1.5-4 — A key was pushed to GitHub: what now?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "incident response"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>git rm --cached .env</code> did not help — real output:<pre>$ cd tmp/shop &amp;&amp; git log --oneline -S lfid_key_ &amp;&amp; git show HEAD~1:.env\n6a10e85 remove .env, add .gitignore\n57dc980 add config and a test fixture\nPORT=4800\nLFID_SIGNING_KEY=lfid_key_00Hrn21xnHuxfIBnCmJaeEyzvbN6Z1Ex0M6XM-NiWdk</pre>Put the response in the right order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>git rm --cached .env</code> chẳng giúp gì — output thật:<pre>$ cd tmp/shop &amp;&amp; git log --oneline -S lfid_key_ &amp;&amp; git show HEAD~1:.env\n6a10e85 remove .env, add .gitignore\n57dc980 add config and a test fixture\nPORT=4800\nLFID_SIGNING_KEY=lfid_key_00Hrn21xnHuxfIBnCmJaeEyzvbN6Z1Ex0M6XM-NiWdk</pre>Sắp phản ứng theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What stops the attacker fastest?|||Điều gì chặn kẻ tấn công nhanh nhất?",
+        "History rewriting is cosmetic once a clone exists.|||Viết lại lịch sử chỉ là trang trí một khi đã có bản clone."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.5-4 — A key was pushed to GitHub: what now?\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.5-4 — A key was pushed to GitHub: what now? — answer key\n\n1. First to lastTrước tới sau\n   Answer: m4) Treat the key as public: revoke it at the provider and issue a new one  →  m3) Deploy the new key to the server’s runtime environment (never the repository)  →  m5) Search logs and the provider’s audit trail for use of the old key  →  m1) Optionally clean the history (filter-repo) — it does not un-leak clones and forks  →  m2) Add a scanner rule for your prefix in the pre-commit hook and in CI\n   Rotation first: history rewriting cannot reach clones, forks, CI caches or someone who already copied it. Then make sure the new key works, look for abuse, tidy up, and add the scanner so it does not happen again.VI: Xoay khoá trước tiên: viết lại lịch sử không với tới bản clone, fork, cache CI hay người đã chép mất. Rồi bảo đảm khoá mới chạy, tìm dấu hiệu lạm dụng, dọn dẹp, và thêm máy quét để chuyện này không lặp lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rotation first: history rewriting cannot reach clones, forks, CI caches or someone who already copied it. Then make sure the new key works, look for abuse, tidy up, and add the scanner so it does not happen again.</p><p><i>VI: Xoay khoá trước tiên: viết lại lịch sử không với tới bản clone, fork, cache CI hay người đã chép mất. Rồi bảo đảm khoá mới chạy, tìm dấu hiệu lạm dụng, dọn dẹp, và thêm máy quét để chuyện này không lặp lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Optionally clean the history (filter-repo) — it does not un-leak clones and forks"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Add a scanner rule for your prefix in the pre-commit hook and in CI"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Deploy the new key to the server’s runtime environment (never the repository)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Treat the key as public: revoke it at the provider and issue a new one"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Search logs and the provider’s audit trail for use of the old key"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m3",
+              "m5",
+              "m1",
+              "m2"
+            ],
+            "giaiThich": "<p>Rotation first: history rewriting cannot reach clones, forks, CI caches or someone who already copied it. Then make sure the new key works, look for abuse, tidy up, and add the scanner so it does not happen again.</p><p><i>VI: Xoay khoá trước tiên: viết lại lịch sử không với tới bản clone, fork, cache CI hay người đã chép mất. Rồi bảo đảm khoá mới chạy, tìm dấu hiệu lạm dụng, dọn dẹp, và thêm máy quét để chuyện này không lặp lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rewriting history first and keeping the old key.|||Viết lại lịch sử trước rồi giữ nguyên khoá cũ."
+        },
+        {
+          "loi": "Putting the new key in the repository “but private this time”.|||Đưa khoá mới vào kho \"nhưng lần này để private\"."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

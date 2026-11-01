@@ -1,0 +1,443 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-3-mo-rong",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-3-mo-rong"
+  },
+  "exercises": [
+    {
+      "title": "Scale 1 — Cache, outbox and email, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "messaging",
+        "caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.5: the labs cache, the outbox relay and email inside the request versus in a queue.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.5: cache danh sách phòng, relay outbox và email trong request so với qua hàng đợi.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what is committed when the side effect fails.|||Hỏi: cái gì đã commit khi việc phụ hỏng.",
+        "At-least-once means duplicates are possible.|||Ít nhất một lần nghĩa là có thể trùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scale 1 — Cache, outbox and email, measured\n\nAnswer in the answer panel (no code needed).\n\n1. Email sent inside POST /v2/bookings while the provider is down. What did the student see, and what was in the table?Gửi email ngay trong POST /v2/bookings khi nhà cung cấp sập. Sinh viên thấy gì, bảng có gì?\n2. From a 201 to the SSE event in the browser: p50 1.0 ms with LISTEN/NOTIFY. Without it (poll every second)?Từ câu 201 tới sự kiện SSE ở trình duyệt: p50 1,0 ms với LISTEN/NOTIFY. Không có nó (hỏi vòng mỗi giây)?\n3. The relay died after XADD but before marking the row published. What did the stream and the mailbox contain?Relay chết sau XADD nhưng trước khi đánh dấu đã phát. Stream và hộp thư có gì?\n4. On one laptop a Redis cache hit for /v2/labs took 1.96 ms and PostgreSQL 1.87 ms. What is the cache for, then?Trên một máy, trúng cache Redis cho /v2/labs mất 1,96 ms còn PostgreSQL 1,87 ms. Vậy cache để làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scale 1 — Cache, outbox and email, measured — answer key\n\n1. Email sent inside POST /v2/bookings while the provider is down. What did the student see, and what was in the table?Gửi email ngay trong POST /v2/bookings khi nhà cung cấp sập. Sinh viên thấy gì, bảng có gì?\n   Answer: b) 500 INTERNAL, while the table grew from 20 to 25 — the bookings were saved\n   The retry then got 409 against the student’s own booking. In a queue: 201 in ~6 ms and the email retried to delivery.VI: Bấm lại thì nhận 409 với chính lượt của mình. Qua hàng đợi: 201 trong ~6 ms và email được thử lại tới khi giao.\n\n2. From a 201 to the SSE event in the browser: p50 1.0 ms with LISTEN/NOTIFY. Without it (poll every second)?Từ câu 201 tới sự kiện SSE ở trình duyệt: p50 1,0 ms với LISTEN/NOTIFY. Không có nó (hỏi vòng mỗi giây)?\n   Answer: c) p50 946 ms — the relay noticed the row only at its next poll\n   NOTIFY is delivered at COMMIT (never on ROLLBACK); the 1 s poll stays as a safety net.VI: NOTIFY được giao lúc COMMIT (không bao giờ khi ROLLBACK); hỏi vòng 1 s giữ làm lưới an toàn.\n\n3. The relay died after XADD but before marking the row published. What did the stream and the mailbox contain?Relay chết sau XADD nhưng trước khi đánh dấu đã phát. Stream và hộp thư có gì?\n   Answer: c) 21 events for 20 bookings, and exactly 20 emails with no duplicates\n   Outbox is at-least-once; the job id ntf_bk_5_v1 makes BullMQ ignore the duplicate.VI: Outbox là ít nhất một lần; id job ntf_bk_5_v1 làm BullMQ bỏ qua bản trùng.\n\n4. On one laptop a Redis cache hit for /v2/labs took 1.96 ms and PostgreSQL 1.87 ms. What is the cache for, then?Trên một máy, trúng cache Redis cho /v2/labs mất 1,96 ms còn PostgreSQL 1,87 ms. Vậy cache để làm gì?\n   Answer: b) Taking repeated identical reads off the database at peak — a thousand app starts cost one query\n   Measure honestly: both are a localhost hop. And any Redis error is a miss, so the cache can never take the API down.VI: Đo trung thực: cả hai đều là một vòng localhost. Và lỗi Redis nào cũng là trượt, nên cache không bao giờ làm sập API.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 500 INTERNAL, while the table grew from 20 to 25 — the bookings were saved</p><p>The retry then got 409 against the student’s own booking. In a queue: 201 in ~6 ms and the email retried to delivery.</p><p><i>VI: Bấm lại thì nhận 409 với chính lượt của mình. Qua hàng đợi: 201 trong ~6 ms và email được thử lại tới khi giao.</i></p></li><li><p><b>c)</b> p50 946 ms — the relay noticed the row only at its next poll</p><p>NOTIFY is delivered at COMMIT (never on ROLLBACK); the 1 s poll stays as a safety net.</p><p><i>VI: NOTIFY được giao lúc COMMIT (không bao giờ khi ROLLBACK); hỏi vòng 1 s giữ làm lưới an toàn.</i></p></li><li><p><b>c)</b> 21 events for 20 bookings, and exactly 20 emails with no duplicates</p><p>Outbox is at-least-once; the job id ntf_bk_5_v1 makes BullMQ ignore the duplicate.</p><p><i>VI: Outbox là ít nhất một lần; id job ntf_bk_5_v1 làm BullMQ bỏ qua bản trùng.</i></p></li><li><p><b>b)</b> Taking repeated identical reads off the database at peak — a thousand app starts cost one query</p><p>Measure honestly: both are a localhost hop. And any Redis error is a miss, so the cache can never take the API down.</p><p><i>VI: Đo trung thực: cả hai đều là một vòng localhost. Và lỗi Redis nào cũng là trượt, nên cache không bao giờ làm sập API.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Email sent inside POST /v2/bookings while the provider is down. What did the student see, and what was in the table?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gửi email ngay trong POST /v2/bookings khi nhà cung cấp sập. Sinh viên thấy gì, bảng có gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "503 with Retry-After, and the bookings were rolled back with the email"
+              },
+              {
+                "ma": "b",
+                "noiDung": "500 INTERNAL, while the table grew from 20 to 25 — the bookings were saved"
+              },
+              {
+                "ma": "c",
+                "noiDung": "409 BOOKING_CONFLICT, because the outbox row already existed for that slot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "201, because Express ignores errors thrown after the database commit"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The retry then got 409 against the student’s own booking. In a queue: 201 in ~6 ms and the email retried to delivery.</p><p><i>VI: Bấm lại thì nhận 409 với chính lượt của mình. Qua hàng đợi: 201 trong ~6 ms và email được thử lại tới khi giao.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>From a 201 to the SSE event in the browser: p50 1.0 ms with LISTEN/NOTIFY. Without it (poll every second)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ câu 201 tới sự kiện SSE ở trình duyệt: p50 1,0 ms với LISTEN/NOTIFY. Không có nó (hỏi vòng mỗi giây)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "p50 about 50 ms — the SSE heartbeat sets the pace"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Events were lost, because NOTIFY is the only way the relay reads rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "p50 946 ms — the relay noticed the row only at its next poll"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p50 1.0 ms as well — the relay polls fast enough not to matter"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>NOTIFY is delivered at COMMIT (never on ROLLBACK); the 1 s poll stays as a safety net.</p><p><i>VI: NOTIFY được giao lúc COMMIT (không bao giờ khi ROLLBACK); hỏi vòng 1 s giữ làm lưới an toàn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The relay died after XADD but before marking the row published. What did the stream and the mailbox contain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Relay chết sau XADD nhưng trước khi đánh dấu đã phát. Stream và hộp thư có gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "20 events and 20 emails — the outbox transaction prevented the duplicate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "19 events, because the crashed batch was rolled back and never sent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "21 events for 20 bookings, and exactly 20 emails with no duplicates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "21 events and 21 emails, one booking notified twice"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Outbox is at-least-once; the job id ntf_bk_5_v1 makes BullMQ ignore the duplicate.</p><p><i>VI: Outbox là ít nhất một lần; id job ntf_bk_5_v1 làm BullMQ bỏ qua bản trùng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>On one laptop a Redis cache hit for /v2/labs took 1.96 ms and PostgreSQL 1.87 ms. What is the cache for, then?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên một máy, trúng cache Redis cho /v2/labs mất 1,96 ms còn PostgreSQL 1,87 ms. Vậy cache để làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keeping the labs list available when PostgreSQL loses data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Taking repeated identical reads off the database at peak — a thousand app starts cost one query"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Making every single request faster, which it does on production hardware only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Avoiding the HTTP ETag check, which is slower than Redis"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Measure honestly: both are a localhost hop. And any Redis error is a miss, so the cache can never take the API down.</p><p><i>VI: Đo trung thực: cả hai đều là một vòng localhost. Và lỗi Redis nào cũng là trượt, nên cache không bao giờ làm sập API.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending email inside the request.|||Gửi email trong request."
+        },
+        {
+          "loi": "Assuming the outbox gives exactly-once delivery.|||Tưởng outbox cho giao đúng một lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transactional outbox",
+          "vi": "hộp thư đi trong giao dịch"
+        },
+        {
+          "en": "relay",
+          "vi": "bộ chuyển tiếp"
+        },
+        {
+          "en": "at-least-once",
+          "vi": "ít nhất một lần"
+        }
+      ]
+    },
+    {
+      "title": "Scale 2 — Write claimBatch(outbox, locked, limit): FOR UPDATE SKIP LOCKED",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "messaging",
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Model the relay’s query <code>SELECT … WHERE published_at IS NULL ORDER BY id LIMIT n FOR UPDATE SKIP LOCKED</code>. <code>outbox</code> rows are <code>{ id, publishedAt }</code>; <code>locked</code> lists ids another relay is holding. Return the ids this relay takes: unpublished, not locked, ascending id, at most <code>limit</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng câu truy vấn của relay <code>SELECT … WHERE published_at IS NULL ORDER BY id LIMIT n FOR UPDATE SKIP LOCKED</code>. Các dòng <code>outbox</code> là <code>{ id, publishedAt }</code>; <code>locked</code> liệt kê id mà relay khác đang giữ. Trả các id relay này lấy: chưa phát, không bị khoá, id tăng dần, tối đa <code>limit</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "outbox — {id, publishedAt}[]; locked — number[]; limit — number|||outbox — {id, publishedAt}[]; locked — mảng số; limit — số",
+      "outputSpec": "number[]|||mảng số",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "claimBatch([{\"id\":4,\"publishedAt\":null},{\"id\":1,\"publishedAt\":\"2026-11-01T04:00:00Z\"},{\"id\":2,\"publishedAt\":null},{\"id\":3,\"publishedAt\":null},{\"id\":5,\"publishedAt\":null}], [], 2)",
+          "output": "[2,3]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Filter, then sort, then cut.|||Lọc, rồi sắp, rồi cắt.",
+        "A locked row is skipped, not waited for.|||Dòng bị khoá thì bỏ qua, không chờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rows this relay may publish */\nfunction claimBatch(outbox, locked, limit) {\n  // Write your solution here\n  return outbox.filter((r) => r.publishedAt === null).slice(0, limit).map((r) => r.id);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction claimBatch(outbox, locked, limit) {\n  return outbox.filter((r) => r.publishedAt === null && !locked.includes(r.id)).sort((a, b) => a.id - b.id).slice(0, limit).map((r) => r.id);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SKIP LOCKED lets several relays share one table without waiting on each other — the PostgreSQL docs describe it for “queue-like tables” (12.5).</p>",
+      "solutionExplanationHtmlVi": "<p>SKIP LOCKED cho nhiều relay dùng chung một bảng mà không chờ nhau — tài liệu PostgreSQL mô tả nó cho “bảng kiểu hàng đợi” (12.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Nothing locked",
+              "vi": "Không dòng nào bị khoá"
+            },
+            "goi": "claimBatch([{\"id\":4,\"publishedAt\":null},{\"id\":1,\"publishedAt\":\"2026-11-01T04:00:00Z\"},{\"id\":2,\"publishedAt\":null},{\"id\":3,\"publishedAt\":null},{\"id\":5,\"publishedAt\":null}], [], 2)",
+            "mongDoi": [
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Another relay holds 2 and 3",
+              "vi": "Relay khác giữ 2 và 3"
+            },
+            "goi": "claimBatch([{\"id\":4,\"publishedAt\":null},{\"id\":1,\"publishedAt\":\"2026-11-01T04:00:00Z\"},{\"id\":2,\"publishedAt\":null},{\"id\":3,\"publishedAt\":null},{\"id\":5,\"publishedAt\":null}], [2,3], 10)",
+            "mongDoi": [
+              4,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "claimBatch([{\"id\":4,\"publishedAt\":null},{\"id\":1,\"publishedAt\":\"2026-11-01T04:00:00Z\"},{\"id\":2,\"publishedAt\":null},{\"id\":3,\"publishedAt\":null},{\"id\":5,\"publishedAt\":null}], [2,3,4,5], 10)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "claimBatch([], [], 5)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking rows another relay holds (double publishing).|||Lấy dòng relay khác đang giữ (phát hai lần)."
+        },
+        {
+          "loi": "Keeping the input order instead of id order.|||Giữ thứ tự đầu vào thay vì thứ tự id."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SKIP LOCKED",
+          "vi": "bỏ qua dòng bị khoá"
+        }
+      ]
+    },
+    {
+      "title": "Scale 3 — Write mailJobs(events): one email per booking version",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "messaging",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The worker reads booking events (at least once — duplicates happen). Return the email jobs to enqueue, in order: only <code>labflow.booking.created.v1</code> and <code>…cancelled.v1</code>; job <code>{ id: 'ntf_&lt;bookingId&gt;_v&lt;version&gt;', kind: 'created' | 'cancelled' }</code>; skip any id already produced.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Worker đọc sự kiện lượt đặt (ít nhất một lần — có thể trùng). Trả các job email cần xếp hàng, đúng thứ tự: chỉ <code>labflow.booking.created.v1</code> và <code>…cancelled.v1</code>; job <code>{ id: 'ntf_&lt;bookingId&gt;_v&lt;version&gt;', kind: 'created' | 'cancelled' }</code>; bỏ qua id đã sinh rồi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "events — {type, data:{id, version}}[]",
+      "outputSpec": "{ id, kind }[]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "mailJobs([{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.checked_in.v1\",\"data\":{\"id\":\"bk_4\",\"version\":2}},{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_5\",\"version\":2}}])",
+          "output": "[{\"id\":\"ntf_bk_5_v1\",\"kind\":\"created\"},{\"id\":\"ntf_bk_5_v2\",\"kind\":\"cancelled\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The id is deterministic: same booking + version ⇒ same id.|||Id là tất định: cùng lượt + version ⇒ cùng id.",
+        "A Set remembers what you already produced.|||Một Set nhớ những gì đã sinh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** email jobs to enqueue */\nfunction mailJobs(events) {\n  // Write your solution here\n  return events.map((e) => ({ id: 'ntf_' + e.data.id + '_v' + e.data.version, kind: e.type.split('.')[2] }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction mailJobs(events) {\n  const seen = new Set();\n  const out = [];\n  for (const e of events) {\n    const m = /^labflow\\.booking\\.(created|cancelled)\\.v1$/.exec(e.type);\n    if (!m) continue;\n    const id = `ntf_${e.data.id}_v${e.data.version}`;\n    if (seen.has(id)) continue;\n    seen.add(id);\n    out.push({ id, kind: m[1] });\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>12.5: a relay crash produced 21 events for 20 bookings and still exactly 20 emails, because BullMQ ignores a job whose id already exists and the provider receives the same id as idempotency key.</p>",
+      "solutionExplanationHtmlVi": "<p>12.5: relay sập sinh 21 sự kiện cho 20 lượt đặt mà vẫn đúng 20 email, vì BullMQ bỏ qua job có id đã tồn tại và nhà cung cấp nhận cùng id làm khoá idempotency.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A duplicate and a check-in",
+              "vi": "Một bản trùng và một check-in"
+            },
+            "goi": "mailJobs([{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.checked_in.v1\",\"data\":{\"id\":\"bk_4\",\"version\":2}},{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_5\",\"version\":2}}])",
+            "mongDoi": [
+              {
+                "id": "ntf_bk_5_v1",
+                "kind": "created"
+              },
+              {
+                "id": "ntf_bk_5_v2",
+                "kind": "cancelled"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One event",
+              "vi": "Một sự kiện"
+            },
+            "goi": "mailJobs([{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}}])",
+            "mongDoi": [
+              {
+                "id": "ntf_bk_5_v1",
+                "kind": "created"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "mailJobs([{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.checked_in.v1\",\"data\":{\"id\":\"bk_4\",\"version\":2}},{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_5\",\"version\":1}},{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_5\",\"version\":2}},{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_5\",\"version\":2}},{\"type\":\"labflow.export.completed.v1\",\"data\":{\"id\":\"job_1\",\"version\":1}}])",
+            "mongDoi": [
+              {
+                "id": "ntf_bk_5_v1",
+                "kind": "created"
+              },
+              {
+                "id": "ntf_bk_5_v2",
+                "kind": "cancelled"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "mailJobs([])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the stream id as the job id — a re-published event gets a new stream id.|||Dùng id của stream làm id job — sự kiện phát lại có id stream mới."
+        },
+        {
+          "loi": "Emailing on checked_in.|||Gửi email cho checked_in."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deterministic id",
+          "vi": "id tất định"
+        },
+        {
+          "en": "deduplication",
+          "vi": "khử trùng"
+        }
+      ]
+    }
+  ]
+}

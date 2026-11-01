@@ -101,6 +101,11 @@ ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSE
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.1 — Why a database, and what one connection really costs</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: one process per connection (seen with ps), what opening a connection costs, and the server refusing connection 101. There you add: the same limits measured from a Node API: 8.36 ms vs 0.41 ms per query, 97 slots for a normal role vs 100 for a superuser, 12 PrismaClient × pool 10 failing with 53300, a client created per request, the slow first request. This lesson adds what that one does not: the database side: a backend's memory, the connection handshake, and the multiplication that exhausts connections in production.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-2-xay-dung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.3: one pool, transactions and rules the database enforces</span><span class="lc-sub">The same budget in an API running on two instances: 2 × 10 + a worker’s 10 + the relay + a migration runner = 32 of 97 slots; a pool that waits forever vs one that gives up after 500 ms and answers 503; one transaction per booking.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -174,6 +179,11 @@ ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSE
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.1 — Vì sao cần cơ sở dữ liệu, và một kết nối thật sự tốn gì</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: mỗi kết nối là một tiến trình (thấy bằng ps), mở một kết nối tốn gì, và máy chủ từ chối kết nối thứ 101. Ở đó học thêm: cùng các giới hạn đó đo từ một API Node: 8,36 ms vs 0,41 ms mỗi truy vấn, 97 chỗ cho vai thường vs 100 cho superuser, 12 PrismaClient × pool 10 hỏng với 53300, client tạo trong mỗi request, request đầu chậm. Bài này có thứ bài kia không có: phía cơ sở dữ liệu: bộ nhớ của một backend, màn bắt tay kết nối, và phép nhân làm cạn kết nối trên production.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-2-xay-dung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.3: một pool, transaction và luật do CSDL giữ</span><span class="lc-sub">Cùng ngân sách đó trong một API chạy hai instance: 2 × 10 + 10 của worker + relay + bộ chạy migration = 32 trên 97 chỗ; pool chờ mãi so với pool bỏ cuộc sau 500 ms và trả 503; mỗi lượt đặt một transaction.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

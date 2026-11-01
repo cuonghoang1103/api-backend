@@ -2,18 +2,21 @@
 // Việc GỬI nằm ở worker (src/worker.js): đọc stream sự kiện ⇒ xếp lượt giao vào hàng đợi ⇒ gửi, ký, thử lại lùi dần.
 import { Router } from 'express';
 import { z } from 'zod';
-import pg from 'pg';
 import { HttpError, onlyAllow } from '../http.js';
 import { requireAuth, requireRole } from '../auth.js';
 import { validate } from '../validate.js';
 import { assertPublicUrl } from '../safeFetch.js';
 import { newSecret } from '../webhooks.js';
 
-export const pool = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 3 });
-await pool.query(`CREATE TABLE IF NOT EXISTS webhook_subscriptions (
+import { pool } from '../pg.js';
+import { config } from '../config.js';
+
+export { pool };
+// Chương 12: kho pg ⇒ hai bảng này do migration 003 tạo; chế độ LABFLOW_PG=1 của Chương 10 vẫn tự tạo như cũ
+if (config.store !== 'pg') await pool.query(`CREATE TABLE IF NOT EXISTS webhook_subscriptions (
   id text PRIMARY KEY, owner_id text NOT NULL, url text NOT NULL, events text[] NOT NULL, secret text NOT NULL,
   status text NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now())`);
-await pool.query(`CREATE TABLE IF NOT EXISTS webhook_deliveries (
+if (config.store !== 'pg') await pool.query(`CREATE TABLE IF NOT EXISTS webhook_deliveries (
   id bigserial PRIMARY KEY, msg_id text NOT NULL, subscription_id text NOT NULL, event_type text NOT NULL,
   attempt int NOT NULL, status_code int, error text, duration_ms int, at timestamptz NOT NULL DEFAULT now())`);
 

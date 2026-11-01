@@ -1,0 +1,4 @@
+{
+  "extends": "../../../tsconfig.json",
+  "include": ["labs-fixed.ts"]
+}

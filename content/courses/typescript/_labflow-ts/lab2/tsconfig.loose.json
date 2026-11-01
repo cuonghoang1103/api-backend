@@ -1,0 +1,6 @@
+{
+  // The config the teammate wrote schedule.ts under: the course config with strict switched OFF.
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "strict": false, "noUncheckedIndexedAccess": false },
+  "include": ["src"]
+}

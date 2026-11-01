@@ -1,0 +1,545 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-0-1-giao-thuc-quen",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-0-1-giao-thuc-quen"
+  },
+  "exercises": [
+    {
+      "title": "0.1-1 — Three ways to remember, three real results",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HTTP is stateless"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>demo0/forget.js tries to remember An by IP, by TCP connection, and by a card the client carries. Each row is a real request of lesson 0.1; pick what the server answered (the raw output is in brackets).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>demo0/forget.js thử nhớ An theo IP, theo kết nối TCP, và theo một tấm thẻ client mang theo. Mỗi dòng là một request thật trong bài 0.1; chọn máy chủ đã trả lời gì (output thô nằm trong ngoặc).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Same machine ⇒ same IP.|||Cùng máy ⇒ cùng IP.",
+        "A new curl process opens a new TCP connection (different client port).|||Một tiến trình curl mới mở kết nối TCP mới (cổng client khác)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.1-1 — Three ways to remember, three real results\n\nAnswer in the answer panel (no code needed).\n\n1. Request → what the server concludedRequest → máy chủ kết luận gì\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.1-1 — Three ways to remember, three real results — answer key\n\n1. Request → what the server concludedRequest → máy chủ kết luận gì\n   - r1.k: Binh is treated as An\n   - r2.k: a stranger (null)\n   - r3.k: recognised as An\n   - r4.k: a stranger (null)\n   - r5.k: recognised as An\n   - r6.k: Binh is treated as An\n   IP and connection identify a network path, not a person: many people share one IP (NAT), one person changes IPs, and connections close. Only proof carried on every request survives — and whoever carries it IS the user (lesson 1.1).VI: IP và kết nối nhận diện một đường mạng, không phải một con người: nhiều người chung một IP (NAT), một người đổi IP, và kết nối thì đóng lại. Chỉ bằng chứng được mang theo mọi request mới trụ được — và ai mang nó thì LÀ người dùng (bài 1.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>IP and connection identify a network path, not a person: many people share one IP (NAT), one person changes IPs, and connections close. Only proof carried on every request survives — and whoever carries it IS the user (lesson 1.1).</p><p><i>VI: IP và kết nối nhận diện một đường mạng, không phải một con người: nhiều người chung một IP (NAT), một người đổi IP, và kết nối thì đóng lại. Chỉ bằng chứng được mang theo mọi request mới trụ được — và ai mang nó thì LÀ người dùng (bài 1.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → what the server concluded</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → máy chủ kết luận gì</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request (real output)"
+              },
+              {
+                "ma": "k",
+                "ten": "Result",
+                "luaChon": [
+                  "recognised as An",
+                  "a stranger (null)",
+                  "Binh is treated as An"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "By IP: Binh, on the same machine, asks /ip/me after An signed in ({\"you\":\"An\",\"ip\":\"::1\"})"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "By IP: An’s own laptop switches network, /ip/me from 127.0.0.1 ({\"you\":null,\"ip\":\"::ffff:127.0.0.1\"})"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "By connection: sign-in and /conn/me in ONE curl command ({\"remembered\":\"An\",\"clientPort\":60295} / {\"you\":\"An\",\"clientPort\":60295})"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "By connection: /conn/me from a NEW curl command ({\"you\":null,\"clientPort\":60296})"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "By card: /card/me with An’s card, from ::1 or from 127.0.0.1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "By card: Binh sends An’s card (practice 0.1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "Binh is treated as An",
+              "r2.k": "a stranger (null)",
+              "r3.k": "recognised as An",
+              "r4.k": "a stranger (null)",
+              "r5.k": "recognised as An",
+              "r6.k": "Binh is treated as An"
+            },
+            "giaiThich": "<p>IP and connection identify a network path, not a person: many people share one IP (NAT), one person changes IPs, and connections close. Only proof carried on every request survives — and whoever carries it IS the user (lesson 1.1).</p><p><i>VI: IP và kết nối nhận diện một đường mạng, không phải một con người: nhiều người chung một IP (NAT), một người đổi IP, và kết nối thì đóng lại. Chỉ bằng chứng được mang theo mọi request mới trụ được — và ai mang nó thì LÀ người dùng (bài 1.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the card method is “safe” — it is a bearer credential.|||Tưởng cách dùng thẻ là \"an toàn\" — nó là tín vật kiểu mang theo."
+        },
+        {
+          "loi": "Thinking keep-alive connections are tied to one user — proxies reuse them across users.|||Tưởng kết nối keep-alive gắn với một người — proxy dùng lại chúng cho nhiều người."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stateless",
+          "vi": "phi trạng thái"
+        },
+        {
+          "en": "NAT",
+          "vi": "nhiều máy dùng chung một IP công khai"
+        }
+      ]
+    },
+    {
+      "title": "0.1-2 — Write parseCookieHeader(header)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Cookie header"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Browsers send every cookie in one header: <code>Cookie: lfid_ses=abc; theme=dark</code>. Write <code>parseCookieHeader(header)</code> returning an object name ⇒ value:</p><ul>\n<li>pairs are separated by <code>;</code>, spaces around names and values are trimmed;</li>\n<li>split each pair at the <b>first</b> <code>=</code> only (values may contain <code>=</code>, e.g. base64 padding);</li>\n<li>a value wrapped in double quotes loses the quotes;</li>\n<li>pairs without <code>=</code> or with an empty name are ignored; if a name appears twice, the <b>first</b> wins;</li>\n<li>a missing header (<code>undefined</code>) gives <code>{}</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trình duyệt gửi mọi cookie trong một header: <code>Cookie: lfid_ses=abc; theme=dark</code>. Viết <code>parseCookieHeader(header)</code> trả về object tên ⇒ giá trị:</p><ul>\n<li>các cặp cách nhau bởi <code>;</code>, cắt khoảng trắng hai đầu tên và giá trị;</li>\n<li>tách mỗi cặp ở dấu <code>=</code> <b>đầu tiên</b> thôi (giá trị có thể chứa <code>=</code>, vd phần đệm base64);</li>\n<li>giá trị bọc trong ngoặc kép thì bỏ ngoặc;</li>\n<li>cặp không có <code>=</code> hoặc tên rỗng thì bỏ qua; tên xuất hiện hai lần thì cái <b>đầu</b> thắng;</li>\n<li>không có header (<code>undefined</code>) thì trả <code>{}</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseCookieHeader(\"lfid_ses=abc; theme=dark\")",
+          "output": "{\"lfid_ses\":\"abc\",\"theme\":\"dark\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "indexOf(\"=\") then slice — not split(\"=\").|||indexOf(\"=\") rồi slice — không phải split(\"=\").",
+        "Check hasOwnProperty before assigning to keep the first value.|||Kiểm hasOwnProperty trước khi gán để giữ giá trị đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"a=1; b=2\" ⇒ { a: '1', b: '2' } */\nfunction parseCookieHeader(header) {\n  // Write your solution here\n  var out = {};\n  header.split('; ').forEach(function (p) { var kv = p.split('='); out[kv[0]] = kv[1]; });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseCookieHeader(header) {\n  var out = {};\n  if (typeof header !== 'string') return out;\n  header.split(';').forEach(function (part) {\n    var i = part.indexOf('=');\n    if (i < 0) return;                                   // \"flag\" without a value: ignore\n    var name = part.slice(0, i).trim();\n    var value = part.slice(i + 1).trim();\n    if (!name) return;\n    if (value.length >= 2 && value[0] === '\"' && value[value.length - 1] === '\"') value = value.slice(1, -1);\n    if (!Object.prototype.hasOwnProperty.call(out, name)) out[name] = value;   // the FIRST one wins\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is what cookie-parser does before your route sees req.cookies. Chapter 3 shows why duplicate names matter: a sub-domain can plant a second cookie with the same name, and which one your parser keeps decides who you are.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là việc cookie-parser làm trước khi route của bạn thấy req.cookies. Chương 3 cho thấy vì sao trùng tên quan trọng: một tên miền con có thể cài cookie thứ hai cùng tên, và parser giữ cái nào quyết định bạn là ai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseCookieHeader(\"lfid_ses=abc; theme=dark\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parseCookieHeader(\"lfid_ses=abc; theme=dark\")",
+            "mongDoi": {
+              "lfid_ses": "abc",
+              "theme": "dark"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseCookieHeader(\"sig=YWJjZA==;  lang = vi \")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseCookieHeader(\"sig=YWJjZA==;  lang = vi \")",
+            "mongDoi": {
+              "sig": "YWJjZA==",
+              "lang": "vi"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Duplicate name: first wins",
+              "vi": "Trùng tên: cái đầu thắng"
+            },
+            "goi": "parseCookieHeader(\"lfid_ses=real; lfid_ses=planted\")",
+            "mongDoi": {
+              "lfid_ses": "real"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseCookieHeader(undefined)",
+            "mongDoi": {},
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseCookieHeader(\"flag; =nameless; a=\\\"quoted value\\\"\")",
+            "mongDoi": {
+              "a": "quoted value"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseCookieHeader(\"\")",
+            "mongDoi": {},
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split(\"=\") cuts \"a=b==\" into three pieces and loses the padding.|||split(\"=\") cắt \"a=b==\" thành ba mảnh và mất phần đệm."
+        },
+        {
+          "loi": "Letting a second, attacker-planted cookie with the same name override the real one.|||Để một cookie thứ hai cùng tên do kẻ tấn công cài đè lên cookie thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Cookie header",
+          "vi": "header chứa mọi cookie trình duyệt gửi lên"
+        }
+      ]
+    },
+    {
+      "title": "0.1-3 — Write readBearer(authorizationHeader)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Authorization header"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The other place a client carries proof is <code>Authorization: Bearer &lt;token&gt;</code> (RFC 6750). Return the token, or <code>null</code>. Rules: the scheme <code>Bearer</code> is case-insensitive; one or more spaces after it; the token uses only <code>A–Z a–z 0–9 - . _ ~ + /</code> optionally followed by <code>=</code> padding (RFC 6750 “b64token”); spaces around the whole header are ignored; anything else (Basic auth, missing token, a token with a space or a comma) ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỗ còn lại client mang bằng chứng là <code>Authorization: Bearer &lt;token&gt;</code> (RFC 6750). Trả về token, hoặc <code>null</code>. Luật: tên lược đồ <code>Bearer</code> không phân biệt hoa thường; sau nó là một hoặc nhiều dấu cách; token chỉ gồm <code>A–Z a–z 0–9 - . _ ~ + /</code>, có thể kết thúc bằng các dấu <code>=</code> (cú pháp \"b64token\" của RFC 6750); bỏ qua khoảng trắng hai đầu cả header; còn lại (Basic auth, thiếu token, token có dấu cách hay dấu phẩy) ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readBearer(\"Bearer tok_an\")",
+          "output": "\"tok_an\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One anchored regex with the i flag.|||Một regex có neo ^…$ và cờ i.",
+        "Do not use replace(\"Bearer \", \"\") — it accepts anything.|||Đừng dùng replace(\"Bearer \", \"\") — nó nhận mọi thứ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"Bearer abc\" ⇒ \"abc\", otherwise null */\nfunction readBearer(header) {\n  // Write your solution here\n  return header.split(' ')[1];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction readBearer(header) {\n  if (typeof header !== 'string') return null;\n  var m = /^Bearer +([A-Za-z0-9\\-._~+/]+=*)$/i.exec(header.trim());\n  return m ? m[1] : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A strict parser is part of authentication: “Basic abc” must not reach your token lookup as the token “abc”, and garbage must be rejected before it touches the database.</p>",
+      "solutionExplanationHtmlVi": "<p>Một parser chặt là một phần của xác thực: \"Basic abc\" không được đi tới chỗ tra token như thể token là \"abc\", và rác phải bị loại trước khi chạm vào cơ sở dữ liệu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: readBearer(\"Bearer tok_an\")",
+              "vi": "Ca 1"
+            },
+            "goi": "readBearer(\"Bearer tok_an\")",
+            "mongDoi": "tok_an"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: readBearer(\"Basic YW46YW4tbGFiLTIwMjY=\")",
+              "vi": "Ca 2"
+            },
+            "goi": "readBearer(\"Basic YW46YW4tbGFiLTIwMjY=\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "readBearer(\"bearer   lfid_ses_ab-c.d~e+f/g==\")",
+            "mongDoi": "lfid_ses_ab-c.d~e+f/g==",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "readBearer(undefined)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "readBearer(\"Bearer\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "readBearer(\"Bearer abc def\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "readBearer(\"  Bearer tok_lan  \")",
+            "mongDoi": "tok_lan",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "readBearer(\"Bearer a,b\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "header.split(\" \")[1] — returns \"abc\" for \"Basic abc\".|||header.split(\" \")[1] — trả \"abc\" cho \"Basic abc\"."
+        },
+        {
+          "loi": "Case-sensitive \"Bearer\": some clients send \"bearer\".|||\"Bearer\" phân biệt hoa thường: có client gửi \"bearer\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bearer token",
+          "vi": "tín vật kiểu \"ai cầm là người đó\""
+        }
+      ]
+    },
+    {
+      "title": "0.1-4 — Why the server forgets",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "HTTP is stateless"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>What the server actually received in lesson 0.1:<pre>$ curl -s localhost:4800/raw\nGET /raw HTTP/1.1\nHost: localhost:4800\nUser-Agent: curl/8.7.1\nAccept: */*</pre></p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thứ máy chủ thật sự nhận được trong bài 0.1:<pre>$ curl -s localhost:4800/raw\nGET /raw HTTP/1.1\nHost: localhost:4800\nUser-Agent: curl/8.7.1\nAccept: */*</pre></p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the header names: none is about the user.|||Nhìn tên các header: không cái nào nói về người dùng.",
+        "Think of two users behind one router.|||Nghĩ về hai người sau cùng một router."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.1-4 — Why the server forgets\n\nAnswer in the answer panel (no code needed).\n\n1. Why is there no “who” in this request?Vì sao request này không có \"ai\"?\n2. Which of these can identify a returning user?Cái nào nhận ra được người dùng quay lại?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.1-4 — Why the server forgets — answer key\n\n1. Why is there no “who” in this request?Vì sao request này không có \"ai\"?\n   Answer: c) HTTP is stateless by design: every request stands alone\n   Statelessness is a feature (scaling, caches). The price: the client must carry proof on every request.VI: Phi trạng thái là một tính năng (mở rộng, cache). Cái giá: client phải mang bằng chứng ở mọi request.\n\n2. Which of these can identify a returning user?Cái nào nhận ra được người dùng quay lại?\n   Answer: d) A credential the client presents on every request\n   Only something the client presents and the server can check survives NAT, network changes and closed connections.VI: Chỉ thứ client trình ra và máy chủ kiểm được mới trụ được qua NAT, đổi mạng và kết nối đóng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> HTTP is stateless by design: every request stands alone</p><p>Statelessness is a feature (scaling, caches). The price: the client must carry proof on every request.</p><p><i>VI: Phi trạng thái là một tính năng (mở rộng, cache). Cái giá: client phải mang bằng chứng ở mọi request.</i></p></li><li><p><b>d)</b> A credential the client presents on every request</p><p>Only something the client presents and the server can check survives NAT, network changes and closed connections.</p><p><i>VI: Chỉ thứ client trình ra và máy chủ kiểm được mới trụ được qua NAT, đổi mạng và kết nối đóng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is there no “who” in this request?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao request này không có \"ai\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The identity is hidden inside the User-Agent header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express removes identity headers before the route runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "HTTP is stateless by design: every request stands alone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl only sends a user name when you pass the -u flag"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Statelessness is a feature (scaling, caches). The price: the client must carry proof on every request.</p><p><i>VI: Phi trạng thái là một tính năng (mở rộng, cache). Cái giá: client phải mang bằng chứng ở mọi request.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which of these can identify a returning user?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào nhận ra được người dùng quay lại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The browser name in the User-Agent string"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The IP address the request arrived from"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The keep-alive TCP connection it reused"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A credential the client presents on every request"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Only something the client presents and the server can check survives NAT, network changes and closed connections.</p><p><i>VI: Chỉ thứ client trình ra và máy chủ kiểm được mới trụ được qua NAT, đổi mạng và kết nối đóng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using User-Agent or IP as identity.|||Dùng User-Agent hay IP làm danh tính."
+        },
+        {
+          "loi": "Assuming one connection = one user.|||Tưởng một kết nối = một người."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

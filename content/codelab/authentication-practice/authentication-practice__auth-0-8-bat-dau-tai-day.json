@@ -1,0 +1,580 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-0-8-bat-dau-tai-day",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-0-8-bat-dau-tai-day"
+  },
+  "exercises": [
+    {
+      "title": "Start 1 — The words people mix up",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "vocabulary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Every row describes one idea from the “Start here” lesson. Pick the word it describes.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng mô tả một ý trong bài \"Bắt đầu tại đây\". Chọn từ đúng với mô tả.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does this step need a key? Can it be reversed?|||Hỏi: bước này có cần khoá không? Có đảo ngược được không?",
+        "“Who are you?” vs “prove it” vs “may you?”|||\"Bạn là ai?\" — \"chứng minh đi\" — \"bạn có được phép?\""
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — The words people mix up\n\nAnswer in the answer panel (no code needed).\n\n1. Description → wordMô tả → từ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — The words people mix up — answer key\n\n1. Description → wordMô tả → từ\n   - r1.w: identification\n   - r2.w: authentication\n   - r3.w: authorization\n   - r4.w: encoding\n   - r5.w: encryption\n   - r6.w: hashing\n   - r7.w: session\n   - r8.w: token\n   Identification is a claim; authentication proves it; authorization decides what the proven user may do. Encoding hides nothing, encryption hides from everyone without the key, hashing cannot be reversed. A session is looked up; a (signed) token is verified.VI: Định danh là lời khai; xác thực là chứng minh lời khai; phân quyền quyết định người đã chứng minh được làm gì. Mã hoá dạng (encoding) không giấu gì, mã hoá (encryption) giấu với ai không có khoá, băm thì không đảo ngược được. Phiên thì phải tra; token (có ký) thì được kiểm chữ ký.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Identification is a claim; authentication proves it; authorization decides what the proven user may do. Encoding hides nothing, encryption hides from everyone without the key, hashing cannot be reversed. A session is looked up; a (signed) token is verified.</p><p><i>VI: Định danh là lời khai; xác thực là chứng minh lời khai; phân quyền quyết định người đã chứng minh được làm gì. Mã hoá dạng (encoding) không giấu gì, mã hoá (encryption) giấu với ai không có khoá, băm thì không đảo ngược được. Phiên thì phải tra; token (có ký) thì được kiểm chữ ký.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Description → word</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả → từ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Description"
+              },
+              {
+                "ma": "w",
+                "ten": "Word",
+                "luaChon": [
+                  "authentication",
+                  "authorization",
+                  "identification",
+                  "encoding",
+                  "encryption",
+                  "hashing",
+                  "session",
+                  "token"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Typing an email address into the login form: a claim, not yet a proof"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Checking the password (or passkey) that proves the claim"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Deciding whether An may cancel Binh’s booking"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "base64url: anyone can turn it back, no key involved"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "AES-GCM: only the key holder can read it back"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "SHA-256 / argon2: one-way, cannot be turned back at all"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "A random id the server looks up in its own table on every request"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "A signed string that carries its own claims and is checked without a lookup"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": "identification",
+              "r2.w": "authentication",
+              "r3.w": "authorization",
+              "r4.w": "encoding",
+              "r5.w": "encryption",
+              "r6.w": "hashing",
+              "r7.w": "session",
+              "r8.w": "token"
+            },
+            "giaiThich": "<p>Identification is a claim; authentication proves it; authorization decides what the proven user may do. Encoding hides nothing, encryption hides from everyone without the key, hashing cannot be reversed. A session is looked up; a (signed) token is verified.</p><p><i>VI: Định danh là lời khai; xác thực là chứng minh lời khai; phân quyền quyết định người đã chứng minh được làm gì. Mã hoá dạng (encoding) không giấu gì, mã hoá (encryption) giấu với ai không có khoá, băm thì không đảo ngược được. Phiên thì phải tra; token (có ký) thì được kiểm chữ ký.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling base64 “encryption”: a JWT payload is readable by anyone.|||Gọi base64 là \"mã hoá\": payload của JWT ai cũng đọc được."
+        },
+        {
+          "loi": "Treating “logged in” as “allowed”: that is the authentication/authorization mix-up behind IDOR.|||Coi \"đã đăng nhập\" là \"được phép\": đó chính là nhầm xác thực/phân quyền dẫn tới IDOR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "authentication",
+          "vi": "xác thực"
+        },
+        {
+          "en": "authorization",
+          "vi": "phân quyền"
+        },
+        {
+          "en": "encoding",
+          "vi": "mã hoá dạng (không bí mật)"
+        },
+        {
+          "en": "hashing",
+          "vi": "băm"
+        }
+      ]
+    },
+    {
+      "title": "Start 2 — A card the server stamped",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HMAC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The first program of the course (demo0/first-proof.mjs, 12 lines of HMAC) printed, for real:<pre>$ node demo0/first-proof.mjs\ncard issued to An  : user=An;role=STUDENT.Yn7qc3nYvQSstjZdGMBQp8iEXfTmyQvyjBaWNAHlECs\nAn shows it back   : user=An;role=STUDENT\nAn edits the role  : null\nBinh invents a card: null</pre>and the practice (demo0/th08.mjs):<pre>$ node demo0/th08.mjs\nBinh, same key       : user=Binh;role=STUDENT\nBinh renamed to An   : null\nold card, new key    : null</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chương trình đầu tiên của khoá (demo0/first-proof.mjs, 12 dòng HMAC) đã thật sự in ra:<pre>$ node demo0/first-proof.mjs\ncard issued to An  : user=An;role=STUDENT.Yn7qc3nYvQSstjZdGMBQp8iEXfTmyQvyjBaWNAHlECs\nAn shows it back   : user=An;role=STUDENT\nAn edits the role  : null\nBinh invents a card: null</pre>và bài thực hành (demo0/th08.mjs):<pre>$ node demo0/th08.mjs\nBinh, same key       : user=Binh;role=STUDENT\nBinh renamed to An   : null\nold card, new key    : null</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The stamp is a function of (key, text).|||Con dấu là hàm của (khoá, đoạn chữ).",
+        "Changing either input changes the stamp.|||Đổi bất kỳ đầu vào nào thì con dấu đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — A card the server stamped\n\nAnswer in the answer panel (no code needed).\n\n1. Why does “An edits the role” print null?Vì sao dòng \"An edits the role\" in null?\n2. “old card, new key: null”. What does that mean for real servers?\"old card, new key: null\". Điều đó nghĩa là gì với máy chủ thật?\n3. Can An READ what is inside her card?An có ĐỌC được bên trong thẻ của mình không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — A card the server stamped — answer key\n\n1. Why does “An edits the role” print null?Vì sao dòng \"An edits the role\" in null?\n   Answer: d) The edited text needs a new stamp, and only the key makes stamps\n   The server recomputes the stamp for the text it receives. Without the key, An cannot produce the stamp for “MANAGER”. Nothing is remembered — the check is pure computation.VI: Máy chủ tính lại con dấu cho đoạn chữ nó nhận. Không có khoá, An không tạo được con dấu cho \"MANAGER\". Máy chủ chẳng nhớ gì — phép kiểm chỉ là tính toán.\n\n2. “old card, new key: null”. What does that mean for real servers?\"old card, new key: null\". Điều đó nghĩa là gì với máy chủ thật?\n   Answer: d) Changing the signing key invalidates every card ever issued — useful after a leak, painful by accident\n   The stamp depends on the key. Rotate the key and all outstanding cards fail at once — which is why Chapter 11 keeps two keys alive during a rotation.VI: Con dấu phụ thuộc khoá. Đổi khoá thì mọi thẻ đang lưu hành hỏng cùng lúc — vì thế Chương 11 giữ hai khoá sống khi xoay khoá.\n\n3. Can An READ what is inside her card?An có ĐỌC được bên trong thẻ của mình không?\n   Answer: c) Yes: the stamp stops changes, not reading\n   A MAC gives integrity, not secrecy. Never put secrets inside a signed value (lesson 1.4).VI: MAC cho tính toàn vẹn, không cho bí mật. Đừng bao giờ để bí mật bên trong một giá trị có ký (bài 1.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The edited text needs a new stamp, and only the key makes stamps</p><p>The server recomputes the stamp for the text it receives. Without the key, An cannot produce the stamp for “MANAGER”. Nothing is remembered — the check is pure computation.</p><p><i>VI: Máy chủ tính lại con dấu cho đoạn chữ nó nhận. Không có khoá, An không tạo được con dấu cho \"MANAGER\". Máy chủ chẳng nhớ gì — phép kiểm chỉ là tính toán.</i></p></li><li><p><b>d)</b> Changing the signing key invalidates every card ever issued — useful after a leak, painful by accident</p><p>The stamp depends on the key. Rotate the key and all outstanding cards fail at once — which is why Chapter 11 keeps two keys alive during a rotation.</p><p><i>VI: Con dấu phụ thuộc khoá. Đổi khoá thì mọi thẻ đang lưu hành hỏng cùng lúc — vì thế Chương 11 giữ hai khoá sống khi xoay khoá.</i></p></li><li><p><b>c)</b> Yes: the stamp stops changes, not reading</p><p>A MAC gives integrity, not secrecy. Never put secrets inside a signed value (lesson 1.4).</p><p><i>VI: MAC cho tính toàn vẹn, không cho bí mật. Đừng bao giờ để bí mật bên trong một giá trị có ký (bài 1.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does “An edits the role” print null?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao dòng \"An edits the role\" in null?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server looked the card up in its list of issued cards"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Roles are frozen once the server has issued a card"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The card expired while An was busy editing it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The edited text needs a new stamp, and only the key makes stamps"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The server recomputes the stamp for the text it receives. Without the key, An cannot produce the stamp for “MANAGER”. Nothing is remembered — the check is pure computation.</p><p><i>VI: Máy chủ tính lại con dấu cho đoạn chữ nó nhận. Không có khoá, An không tạo được con dấu cho \"MANAGER\". Máy chủ chẳng nhớ gì — phép kiểm chỉ là tính toán.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>“old card, new key: null”. What does that mean for real servers?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"old card, new key: null\". Điều đó nghĩa là gì với máy chủ thật?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Old cards stay valid forever"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The new key can read the old cards but not write new ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only Binh’s card is affected"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Changing the signing key invalidates every card ever issued — useful after a leak, painful by accident"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The stamp depends on the key. Rotate the key and all outstanding cards fail at once — which is why Chapter 11 keeps two keys alive during a rotation.</p><p><i>VI: Con dấu phụ thuộc khoá. Đổi khoá thì mọi thẻ đang lưu hành hỏng cùng lúc — vì thế Chương 11 giữ hai khoá sống khi xoay khoá.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Can An READ what is inside her card?</p><p style=\"opacity:.75;font-size:.92em\"><i>An có ĐỌC được bên trong thẻ của mình không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No: the HMAC stamp encrypts the whole card"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only if she also knows the server key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes: the stamp stops changes, not reading"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only after decoding it with the server key"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A MAC gives integrity, not secrecy. Never put secrets inside a signed value (lesson 1.4).</p><p><i>VI: MAC cho tính toàn vẹn, không cho bí mật. Đừng bao giờ để bí mật bên trong một giá trị có ký (bài 1.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the server stores cards to compare them.|||Tưởng máy chủ lưu các thẻ để so."
+        },
+        {
+          "loi": "Thinking a signed value is secret.|||Tưởng giá trị có ký là bí mật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HMAC",
+          "vi": "mã xác thực thông điệp có khoá"
+        },
+        {
+          "en": "integrity",
+          "vi": "tính toàn vẹn"
+        }
+      ]
+    },
+    {
+      "title": "Start 3 — Put the history in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "history"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Six milestones of authentication on the web. Put them in the order they happened.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu mốc của xác thực trên web. Sắp chúng theo thứ tự thời gian.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mainframes came before browsers, browsers before tokens.|||Máy tính lớn có trước trình duyệt, trình duyệt có trước token.",
+        "RFC numbers grow with time: 6749 < 7519.|||Số RFC tăng theo thời gian: 6749 < 7519."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history in order\n\nAnswer in the answer panel (no code needed).\n\n1. Oldest firstCũ nhất trước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history in order — answer key\n\n1. Oldest firstCũ nhất trước\n   Answer: m2) MIT’s CTSS time-sharing system asks users for passwords (early 1960s)  →  m1) Morris and Thompson publish “Password Security: A Case History” about Unix password hashing (1979)  →  m6) Netscape adds cookies to the browser (1994)  →  m5) OAuth 2.0 is published as RFC 6749 (2012)  →  m3) JSON Web Token is published as RFC 7519 (2015)  →  m4) Web Authentication (WebAuthn) Level 1 becomes a W3C Recommendation (2019)\n   Passwords are older than the web; storing them as hashes came with Unix; cookies gave HTTP a memory; OAuth and JWT standardised tokens; WebAuthn (passkeys) is the first mainstream login without a shared secret.VI: Mật khẩu có trước cả web; lưu chúng dạng băm đến cùng Unix; cookie cho HTTP trí nhớ; OAuth và JWT chuẩn hoá token; WebAuthn (passkey) là cách đăng nhập phổ biến đầu tiên không cần bí mật dùng chung.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Passwords are older than the web; storing them as hashes came with Unix; cookies gave HTTP a memory; OAuth and JWT standardised tokens; WebAuthn (passkeys) is the first mainstream login without a shared secret.</p><p><i>VI: Mật khẩu có trước cả web; lưu chúng dạng băm đến cùng Unix; cookie cho HTTP trí nhớ; OAuth và JWT chuẩn hoá token; WebAuthn (passkey) là cách đăng nhập phổ biến đầu tiên không cần bí mật dùng chung.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Oldest first</p><p style=\"opacity:.75;font-size:.92em\"><i>Cũ nhất trước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Morris and Thompson publish “Password Security: A Case History” about Unix password hashing (1979)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "MIT’s CTSS time-sharing system asks users for passwords (early 1960s)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "JSON Web Token is published as RFC 7519 (2015)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Web Authentication (WebAuthn) Level 1 becomes a W3C Recommendation (2019)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "OAuth 2.0 is published as RFC 6749 (2012)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Netscape adds cookies to the browser (1994)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m6",
+              "m5",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Passwords are older than the web; storing them as hashes came with Unix; cookies gave HTTP a memory; OAuth and JWT standardised tokens; WebAuthn (passkeys) is the first mainstream login without a shared secret.</p><p><i>VI: Mật khẩu có trước cả web; lưu chúng dạng băm đến cùng Unix; cookie cho HTTP trí nhớ; OAuth và JWT chuẩn hoá token; WebAuthn (passkey) là cách đăng nhập phổ biến đầu tiên không cần bí mật dùng chung.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting JWT before OAuth 2.0 — OAuth 2.0 came first.|||Đặt JWT trước OAuth 2.0 — OAuth 2.0 ra trước."
+        },
+        {
+          "loi": "Thinking passkeys are older than cookies.|||Tưởng passkey có trước cookie."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RFC",
+          "vi": "tài liệu chuẩn của IETF"
+        }
+      ]
+    },
+    {
+      "title": "Start 4 — Write checkCard(card, stamp)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "signed value",
+        "constant-time comparison"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A card is <code>&lt;value&gt;.&lt;stamp&gt;</code>. The value itself may contain dots (<code>user=An;v=1.2</code>), so the stamp is what follows the <b>last</b> dot. <code>stamp(value)</code> is given to you (a toy function here; HMAC in the real server). Return the value if the stamp fits, otherwise <code>null</code>. Also return <code>null</code> for non-strings, cards without a dot, or an empty value.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một thẻ có dạng <code>&lt;giá trị&gt;.&lt;con dấu&gt;</code>. Bản thân giá trị có thể chứa dấu chấm (<code>user=An;v=1.2</code>), nên con dấu là phần sau dấu chấm <b>cuối cùng</b>. Hàm <code>stamp(value)</code> được cho sẵn (ở đây là hàm đồ chơi; máy chủ thật dùng HMAC). Trả về giá trị nếu con dấu khớp, ngược lại <code>null</code>. Cũng trả <code>null</code> khi không phải chuỗi, không có dấu chấm, hoặc giá trị rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "card — string (or anything); stamp — function(value) ⇒ string|||card — chuỗi (hoặc bất kỳ); stamp — hàm(value) ⇒ chuỗi",
+      "outputSpec": "the value, or null|||giá trị, hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; var v = 'user=An;role=STUDENT'; return checkCard(v + '.' + s(v), s); })()",
+          "output": "\"user=An;role=STUDENT\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "lastIndexOf, not indexOf or split.|||Dùng lastIndexOf, không phải indexOf hay split.",
+        "Compare lengths first, then every character (no early exit).|||So độ dài trước, rồi so mọi ký tự (không thoát sớm)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** card: \"<value>.<stamp>\", stamp: function(value) ⇒ string. Return value or null. */\nfunction checkCard(card, stamp) {\n  // Write your solution here\n  var parts = card.split('.');\n  return stamp(parts[0]) === parts[1] ? parts[0] : null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkCard(card, stamp) {\n  if (typeof card !== 'string') return null;\n  var i = card.lastIndexOf('.');            // the value itself may contain dots\n  if (i <= 0) return null;\n  var value = card.slice(0, i);\n  var given = card.slice(i + 1);\n  var expected = stamp(value);\n  if (given.length !== expected.length) return null;\n  var diff = 0;                             // compare every character (lesson 1.3)\n  for (var k = 0; k < expected.length; k++) diff |= given.charCodeAt(k) ^ expected.charCodeAt(k);\n  return diff === 0 ? value : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The server never stores cards: it recomputes the stamp for the value it receives and compares. lastIndexOf keeps dots inside the value; the XOR loop looks at every character so the time does not reveal how much of a forged stamp was right.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chủ không lưu thẻ: nó tính lại con dấu cho giá trị nhận được rồi so. lastIndexOf giữ được dấu chấm trong giá trị; vòng XOR xem hết mọi ký tự nên thời gian không khai ra con dấu giả đúng được bao nhiêu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An’s honest card",
+              "vi": "Thẻ trung thực của An"
+            },
+            "goi": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; var v = 'user=An;role=STUDENT'; return checkCard(v + '.' + s(v), s); })()",
+            "mongDoi": "user=An;role=STUDENT"
+          },
+          {
+            "moTa": {
+              "en": "An edits her role",
+              "vi": "An sửa vai trò"
+            },
+            "goi": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; var v = 'user=An;role=STUDENT'; return checkCard((v + '.' + s(v)).replace('STUDENT', 'MANAGER'), s); })()",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "A value that contains a dot",
+              "vi": "Giá trị có dấu chấm"
+            },
+            "goi": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; var v = 'user=An;v=1.2'; return checkCard(v + '.' + s(v), s); })()",
+            "mongDoi": "user=An;v=1.2",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkCard(\"user=Binh;role=MANAGER.sxyz\", function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); })",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkCard(\"no-dot-at-all\", function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); })",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Empty value",
+              "vi": "Giá trị rỗng"
+            },
+            "goi": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; return checkCard('.' + s(''), s); })()",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "checkCard(42, function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); })",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Missing stamp",
+              "vi": "Thiếu con dấu"
+            },
+            "goi": "(function () { var s = function (v) { var h = 7; for (var i = 0; i < v.length; i++) h = (h * 31 + v.charCodeAt(i)) % 1000003; return \"s\" + h.toString(36); }; return checkCard('user=An.', s); })()",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "card.split(\".\") — breaks when the value contains a dot.|||card.split(\".\") — hỏng khi giá trị có dấu chấm."
+        },
+        {
+          "loi": "Returning the value when the stamp is missing (stamp is \"\").|||Trả giá trị khi thiếu con dấu (con dấu rỗng)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stamp / tag",
+          "vi": "con dấu / thẻ xác thực"
+        }
+      ]
+    }
+  ]
+}

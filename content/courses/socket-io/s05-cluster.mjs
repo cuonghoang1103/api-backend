@@ -104,6 +104,11 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter — API, protocol, và caveats.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Redis — PUBSUB</span><span class="lc-sub">redis.io/docs/manual/pubsub — fire-and-forget, không persist — nếu subscriber down, message MẤT.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Lesson 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn${REF} — cả hai đều cần cho cluster.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.4: the bug that produces no error, reproduced</span><span class="lc-sub">The Node.js course runs two Socket.IO processes: without the adapter, process B emits in 0.34 ms to an empty room and the client on A gets nothing; with @socket.io/redis-adapter it arrives in 2.23 ms and fetchSockets() on B sees the socket on A. It also shows one shared Redis connection failing for pub + sub (ioredis and node-redis 4 both refuse GET after SUBSCRIBE).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -191,6 +196,11 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter — API, protocol, và caveats.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Redis — PUBSUB</span><span class="lc-sub">redis.io/docs/manual/pubsub — fire-and-forget, không persist — nếu subscriber down, message MẤT.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Bài 2.3 — sticky sessions</span><span class="lc-sub">/courses/socket-io/learn${REF} — cả hai đều cần cho cluster.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.4: con bug không sinh ra lỗi, dựng lại</span><span class="lc-sub">Khoá Node.js chạy hai tiến trình Socket.IO: không có adapter, tiến trình B phát trong 0,34 ms vào một room rỗng và client ở A không nhận gì; có @socket.io/redis-adapter thì tin tới sau 2,23 ms và fetchSockets() trên B thấy socket nằm ở A. Bài đó còn cho thấy một kết nối Redis dùng chung cho pub + sub hỏng thế nào (ioredis lẫn node-redis 4 đều từ chối GET sau SUBSCRIBE).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

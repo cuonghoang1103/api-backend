@@ -1,0 +1,6 @@
+{
+  // Emits JavaScript on purpose so you can see what type erasure leaves behind.
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": { "noEmit": false, "allowImportingTsExtensions": false, "outDir": "dist" },
+  "include": ["label.ts"]
+}

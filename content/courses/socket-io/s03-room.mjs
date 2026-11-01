@@ -32,12 +32,12 @@ socket.join('anything-you-want');
 // emit den moi socket co tag do
 io.to('thread:42').emit('new-message', msg);
 
-// emit den giao cua nhieu tag (INTERSECTION, khong PHU HOP)
+// emit den MOI socket co it nhat MOT trong hai tag (UNION — moi socket nhan dung 1 lan)
 io.to('thread:42').to('user:7').emit('personal', data);
 </code></pre>
 
 <div class="callout warn">
-<p><strong><code>io.to(A).to(B)</code> is an INTERSECTION, not a UNION.</strong> The client MUST be in BOTH A AND B. If you want a union, use <code>io.to([A, B])</code>. This is the number-one bug people hit when learning rooms.</p>
+<p><strong><code>io.to(A).to(B)</code> is a UNION, not an intersection.</strong> Every socket in A OR B receives the event — exactly once, even if it is in both. <code>io.to([A, B])</code> is the same union written as an array. Measured (socket.io 4.8.4): a socket only in A got it 1 time, only in B 1 time, in both 1 time, in neither 0. Socket.IO has no intersection operator: to reach "in A AND in B", emit to a room that already means both, or filter <code>await io.in(A).fetchSockets()</code> by <code>s.rooms.has(B)</code>. Assuming an intersection is how a "personal" message ends up in front of the whole thread.</p>
 </div>
 
 <h3>The four room patterns in this repo</h3>
@@ -83,11 +83,11 @@ socket.leave(&#96;user:\${userId}&#96;);      // roi room user cua chinh minh �
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> A room is a string tag for per-event routing, <code>io.to(A).to(B)</code> is an intersection (use <code>[A, B]</code> for a union), this repo uses 4 patterns (user, resource, feature-instance, device) — and every socket sits automatically in the room named after its sid (so <code>socket.rooms.size ≥ 1</code>).</p>
+<p><strong>One sentence.</strong> A room is a string tag for per-event routing, <code>io.to(A).to(B)</code> is a union, the same as <code>[A, B]</code> (there is no intersection operator), this repo uses 4 patterns (user, resource, feature-instance, device) — and every socket sits automatically in the room named after its sid (so <code>socket.rooms.size ≥ 1</code>).</p>
 </div>
 
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Rooms</span><span class="lc-sub">socket.io/docs/v4/rooms — API chuẩn, kèm ví dụ intersection vs union.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Rooms</span><span class="lc-sub">socket.io/docs/v4/rooms — API chuẩn; chuỗi to() nhiều room là phép hợp (union).</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 5 — the Redis adapter and clustering</span><span class="lc-sub">/courses/socket-io/learn${REF} — room state chia sẻ qua workers ra sao.</span></span></div>
 </div>
 <div class="ml-vi">
@@ -104,12 +104,12 @@ socket.join('anything-you-want');
 // emit den moi socket co tag do
 io.to('thread:42').emit('new-message', msg);
 
-// emit den giao cua nhieu tag (INTERSECTION, khong PHU HOP)
+// emit den MOI socket co it nhat MOT trong hai tag (UNION — moi socket nhan dung 1 lan)
 io.to('thread:42').to('user:7').emit('personal', data);
 </code></pre>
 
 <div class="callout warn">
-<p><strong><code>io.to(A).to(B)</code> là INTERSECTION, không UNION.</strong> Client PHẢI trong CẢ A VÀ B. Nếu bạn muốn union, dùng <code>io.to([A, B])</code>. Đây là bug số 1 khi mới học room.</p>
+<p><strong><code>io.to(A).to(B)</code> là UNION, không phải intersection.</strong> Mọi socket ở A HOẶC B đều nhận — đúng một lần, kể cả socket ở cả hai. <code>io.to([A, B])</code> là cùng phép hợp đó viết dạng mảng. Đo thật (socket.io 4.8.4): socket chỉ ở A nhận 1 lần, chỉ ở B 1 lần, ở cả hai 1 lần, không ở đâu 0. Socket.IO không có toán tử giao: muốn "ở A VÀ ở B" thì phát vào một room vốn đã mang nghĩa cả hai, hoặc lọc <code>await io.in(A).fetchSockets()</code> theo <code>s.rooms.has(B)</code>. Tưởng là phép giao chính là cách một tin "riêng" hiện ra trước cả thread.</p>
 </div>
 
 <h3>Bốn pattern room ở kho này</h3>
@@ -155,11 +155,11 @@ socket.leave(&#96;user:\${userId}&#96;);      // roi room user cua chinh minh �
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Room là tag chuỗi routing per-event, <code>io.to(A).to(B)</code> là intersection (dùng <code>[A, B]</code> cho union), kho này có 4 pattern (user, resource, feature-instance, device) — và mọi socket tự động ở room mang sid của nó (nên <code>socket.rooms.size ≥ 1</code>).</p>
+<p><strong>Một câu.</strong> Room là tag chuỗi routing per-event, <code>io.to(A).to(B)</code> là union, giống <code>[A, B]</code> (không có toán tử giao), kho này có 4 pattern (user, resource, feature-instance, device) — và mọi socket tự động ở room mang sid của nó (nên <code>socket.rooms.size ≥ 1</code>).</p>
 </div>
 
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Rooms</span><span class="lc-sub">socket.io/docs/v4/rooms — API chuẩn, kèm ví dụ intersection vs union.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Rooms</span><span class="lc-sub">socket.io/docs/v4/rooms — API chuẩn; chuỗi to() nhiều room là phép hợp (union).</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 5 — Redis adapter và cluster</span><span class="lc-sub">/courses/socket-io/learn${REF} — room state chia sẻ qua workers ra sao.</span></span></div>
 </div>
 `,
@@ -508,8 +508,8 @@ io.emit('global', data);                               // MOI socket, moi noi
 io.to('thread:42').emit('msg', data);                  // moi socket trong thread:42
 io.to(['A', 'B']).emit('x', ...);                      // UNION: A OR B
 
-// 3. io.to(A).to(B).emit — intersection
-io.to('thread:42').to('user:7').emit('personal', d);   // trong CA A VA B
+// 3. io.to(A).to(B).emit — UNION (giong to([A, B]))
+io.to('thread:42').to('user:7').emit('personal', d);   // o A HOAC B, moi socket 1 lan
 
 // 4. socket.emit — chi client dang giu socket nay
 socket.emit('reply', data);                            // dua nay, con moi tab khac cua cung user KHONG
@@ -576,12 +576,17 @@ try {
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> <code>io.emit</code> reaches everyone, <code>io.to(room)</code> reaches a room, <code>io.to(A).to(B)</code> is an intersection, <code>[A, B]</code> is a union, <code>socket.to</code> excludes the socket itself, <code>except(ids)</code> excludes a chosen set, <code>volatile</code> drops on slowness — and picking the wrong one always produces a bug that is very hard to spot in dev and blows up in production.</p>
+<p><strong>One sentence.</strong> <code>io.emit</code> reaches everyone, <code>io.to(room)</code> reaches a room, <code>io.to(A).to(B)</code> and <code>[A, B]</code> are both a union (no intersection operator), <code>socket.to</code> excludes the socket itself, <code>except(ids)</code> excludes a chosen set, <code>volatile</code> drops on slowness — and picking the wrong one always produces a bug that is very hard to spot in dev and blows up in production.</p>
 </div>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Emit cheatsheet</span><span class="lc-sub">socket.io/docs/v4/emit-cheatsheet — bảng đầy đủ mọi variant với ví dụ.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 6 — acks and delivery</span><span class="lc-sub">/courses/socket-io/learn${REF} — timeout() + emitWithAck() cho tin nhắn quan trọng.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-2-ws-vs-socketio-rooms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.2: rooms, measured</span><span class="lc-sub">The Node.js course measures the same semantics with real clients: io.to('thread:42') reached binh's own screen, socket.to did not; one "like" sent with io.emit woke 2,000 sockets and held the loop 12.40 ms, while io.to('post:7') woke 12 in 0.26 ms. It also found that a "max 500 rooms" cap counted per call, not per socket: one socket reached 100,000 rooms (+58.6 MB).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
@@ -597,8 +602,8 @@ io.emit('global', data);                               // MOI socket, moi noi
 io.to('thread:42').emit('msg', data);                  // moi socket trong thread:42
 io.to(['A', 'B']).emit('x', ...);                      // UNION: A OR B
 
-// 3. io.to(A).to(B).emit — intersection
-io.to('thread:42').to('user:7').emit('personal', d);   // trong CA A VA B
+// 3. io.to(A).to(B).emit — UNION (giong to([A, B]))
+io.to('thread:42').to('user:7').emit('personal', d);   // o A HOAC B, moi socket 1 lan
 
 // 4. socket.emit — chi client dang giu socket nay
 socket.emit('reply', data);                            // dua nay, con moi tab khac cua cung user KHONG
@@ -665,12 +670,17 @@ try {
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> <code>io.emit</code> đến tất, <code>io.to(room)</code> đến room, <code>io.to(A).to(B)</code> là intersection, <code>[A, B]</code> là union, <code>socket.to</code> loại trừ chính socket, <code>except(ids)</code> loại có chọn, <code>volatile</code> drop nếu chậm — chọn nhầm cái nào cũng là bug rất khó phát hiện ở dev nhưng bung ở production.</p>
+<p><strong>Một câu.</strong> <code>io.emit</code> đến tất, <code>io.to(room)</code> đến room, <code>io.to(A).to(B)</code> và <code>[A, B]</code> đều là union (không có toán tử giao), <code>socket.to</code> loại trừ chính socket, <code>except(ids)</code> loại có chọn, <code>volatile</code> drop nếu chậm — chọn nhầm cái nào cũng là bug rất khó phát hiện ở dev nhưng bung ở production.</p>
 </div>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Emit cheatsheet</span><span class="lc-sub">socket.io/docs/v4/emit-cheatsheet — bảng đầy đủ mọi variant với ví dụ.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 6 — acks và delivery</span><span class="lc-sub">/courses/socket-io/learn${REF} — timeout() + emitWithAck() cho tin nhắn quan trọng.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-2-ws-vs-socketio-rooms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.2: room, đo thật</span><span class="lc-sub">Khoá Node.js đo cùng ngữ nghĩa với client thật: io.to('thread:42') hiện cả trên màn hình của chính binh, socket.to thì không; một lượt thích phát bằng io.emit đánh thức 2.000 socket và giữ event loop 12,40 ms, còn io.to('post:7') đánh thức 12 socket trong 0,26 ms. Bài đó còn tìm ra một giới hạn "tối đa 500 room" đếm theo lần gọi chứ không theo socket: một socket vào tới 100.000 room (+58,6 MB).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -857,8 +867,8 @@ socket.on(EVT.THREAD_JOIN, handleThreadJoin);
           {
             question: 'What does <code>io.to(&quot;A&quot;).to(&quot;B&quot;).emit(&quot;x&quot;)</code> do?|||<code>io.to(&quot;A&quot;).to(&quot;B&quot;).emit(&quot;x&quot;)</code> làm gì?',
             options: [
-              'INTERSECTION — sends to sockets in BOTH A AND B. For UNION (A OR B), use <code>io.to([&quot;A&quot;, &quot;B&quot;])</code>|||INTERSECTION — gửi tới socket trong CẢ A VÀ B. Cho UNION (A HOẶC B), dùng <code>io.to([&quot;A&quot;, &quot;B&quot;])</code>',
-              'UNION — sends to sockets in A or B|||UNION — gửi tới socket trong A hoặc B',
+              'UNION — every socket in A OR B receives it once, the same as <code>io.to([&quot;A&quot;, &quot;B&quot;])</code>|||UNION — mọi socket ở A HOẶC B nhận đúng một lần, giống <code>io.to([&quot;A&quot;, &quot;B&quot;])</code>',
+              'INTERSECTION — only sockets in BOTH A AND B|||INTERSECTION — chỉ socket ở CẢ A VÀ B',
               'Only to A — B is ignored|||Chỉ đến A — B bị bỏ qua',
               'Only to B — chained call overrides|||Chỉ đến B — chain call ghi đè',
             ],

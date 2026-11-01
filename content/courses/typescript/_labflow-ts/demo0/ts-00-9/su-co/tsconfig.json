@@ -1,0 +1,5 @@
+{
+  // Like the website's main tsconfig: the seed script is NOT included, so nobody type-checks it.
+  "extends": "../../../tsconfig.json",
+  "include": ["types.ts", "db.ts", "app.ts"]
+}

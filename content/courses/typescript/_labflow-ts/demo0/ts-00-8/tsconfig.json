@@ -1,0 +1,5 @@
+{
+  // Demo for lesson 0.8: check only end.ts, with the course settings.
+  "extends": "../../tsconfig.json",
+  "include": ["end.ts"]
+}

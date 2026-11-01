@@ -9,7 +9,8 @@ import { requireAuth } from '../auth.js';
 import { validate } from '../validate.js';
 import { since, subscribe, latestId, cmpId } from '../events.js';
 import { issueTicket, redeemTicket } from '../tickets.js';
-import { users } from '../db.js';
+import { store } from '../store/index.js';
+import { lifecycle } from '../lifecycle.js';
 
 const HEARTBEAT_MS = Number(process.env.SSE_HEARTBEAT_MS ?? 15000);
 const RETRY_MS = Number(process.env.SSE_RETRY_MS ?? 3000);
@@ -17,16 +18,16 @@ const NO_FLUSH = process.env.LABFLOW_SSE_NOFLUSH === '1';         // CHỈ để
 export const realtimeRouter = Router();
 
 // Bearer như mọi route, HOẶC ?ticket= (trình duyệt: EventSource không đặt được header)
-function bearerOrTicket(req, res, next) {
+async function bearerOrTicket(req, res, next) {
   if (!req.query.ticket) return requireAuth(req, res, next);
-  const userId = redeemTicket(req.query.ticket);
+  const userId = await redeemTicket(req.query.ticket);            // Chương 12: vé nằm trong Redis ⇒ đổi được ở instance nào cũng được
   if (!userId) throw new HttpError(401, 'TICKET_INVALID');
-  req.user = users.find((u) => u.id === userId);
+  req.user = await store.getUser(userId);
   next();
 }
 
 realtimeRouter.route('/realtime/tickets')
-  .post(requireAuth, (req, res) => res.status(201).set('Cache-Control', 'no-store').json(issueTicket(req.user.id)))
+  .post(requireAuth, async (req, res) => res.status(201).set('Cache-Control', 'no-store').json(await issueTicket(req.user.id)))
   .all(onlyAllow('POST'));
 
 const PollQuery = z.strictObject({
@@ -73,6 +74,9 @@ realtimeRouter.route('/events/stream')
     for (const e of held) if (!last || cmpId(e.id, last) > 0) { send(e); last = e.id; }
     replaying = false; held = null;
     const ping = setInterval(() => write(': ping\n\n'), HEARTBEAT_MS);   // giữ kết nối qua proxy hay cắt kết nối im lặng
-    req.on('close', () => { clearInterval(ping); off(); });
+    // Bài 12.7: instance đang tắt ⇒ đóng luồng; EventSource tự nối lại (vào instance khác) bằng Last-Event-ID, không mất sự kiện
+    const bye = () => res.end();
+    lifecycle.once('shutdown', bye);
+    req.on('close', () => { clearInterval(ping); off(); lifecycle.off('shutdown', bye); });
   })
   .all(onlyAllow('GET'));

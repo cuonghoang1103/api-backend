@@ -138,6 +138,11 @@ app.get('/health/ready', async (_req, res) =&gt; {
   <span class="lc-body"><span class="lc-title">Docker — HEALTHCHECK</span><span class="lc-sub">The interval, timeout, retries and start_period options that lesson 8.2 does arithmetic on, and what Docker actually does when a check fails.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.7: health is not readiness</span><span class="lc-sub">Two probes on a real API: PostgreSQL stopped ⇒ /health 200, /ready 503, cached reads still 200, writes 503 + Retry-After; on shutdown /ready turns 503 first so the proxy drains the instance.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -260,6 +265,11 @@ app.get('/health/ready', async (_req, res) =&gt; {
   <span class="lc-body"><span class="lc-title">Docker — HEALTHCHECK</span><span class="lc-sub">Các tuỳ chọn interval, timeout, retries và start_period mà bài 8.2 đem ra tính toán, và Docker thật sự làm gì khi một phép kiểm trượt.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: sống khác sẵn sàng</span><span class="lc-sub">Hai probe trên một API thật: tắt PostgreSQL ⇒ /health 200, /ready 503, đọc từ cache vẫn 200, ghi 503 + Retry-After; khi tắt máy /ready chuyển 503 trước để proxy rút instance ra.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

@@ -129,6 +129,11 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — nơi latency &lt;100ms là bắt buộc, không chỉ nice-to-have.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.1: polling vs a socket, counted at the TCP socket</span><span class="lc-sub">This lesson shows the payload is identical; the Node.js course measures the layer below with real browser-like headers: 839 B per empty poll (cookie 213 B, body 26 B) versus 71 B on the wire for a 69-byte message, and 10 B for one Socket.IO ping + pong (counted at the socket, without TCP/IP headers).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -241,6 +246,11 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 7 — WebRTC signalling</span><span class="lc-sub">/courses/socket-io/learn${REF} — nơi latency &lt;100ms là bắt buộc, không chỉ nice-to-have.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.1: polling và socket, đếm ở socket TCP</span><span class="lc-sub">Bài này cho thấy payload như nhau; khoá Node.js đo lớp bên dưới với header giống trình duyệt thật: 839 B mỗi lần hỏi rỗng (cookie 213 B, thân 26 B) so với 71 B trên dây cho một tin 69 byte, và 10 B cho một cặp ping + pong của Socket.IO (đếm ở socket, chưa tính header TCP/IP).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -321,6 +331,11 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 3 — nginx as the proxy</span><span class="lc-sub">/courses/nginx/learn${REF} — <code>proxy_read_timeout 3600s;</code> cho WebSocket route là đủ.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.3: the connection that is dead and does not know it</span><span class="lc-sub">The Node.js course measures the numbers of this lesson: with a proxy that silently stops forwarding, the server noticed after 45,003 ms (defaults) and 85,003 ms (this site's 25,000 + 60,000) — and between pingTimeout and the sum depending on whether the last pong got through. A closed tab (TCP FIN) was noticed in 1 ms.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -391,6 +406,11 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 3 — nginx làm proxy</span><span class="lc-sub">/courses/nginx/learn${REF} — <code>proxy_read_timeout 3600s;</code> cho WebSocket route là đủ.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.3: kết nối đã chết mà không biết mình chết</span><span class="lc-sub">Khoá Node.js đo đúng các con số của bài này: với một proxy lặng lẽ ngừng chuyển byte, server phát hiện sau 45.003 ms (mặc định) và 85.003 ms (25.000 + 60.000 của website) — và nằm giữa pingTimeout với tổng hai số tuỳ pong cuối có qua được không. Đóng tab (TCP FIN) thì server biết sau 1 ms.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -462,6 +482,11 @@ done
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes/#sticky-sessions — giải thích chính thức tại sao cần và các option cấu hình cho từng proxy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — hash directive</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html#hash — <code>hash</code> hoạt động tốt hơn <code>ip_hash</code> khi client sau NAT.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 5 — the Redis adapter and clustering</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách Redis adapter làm broadcast cross-worker, và vì sao vẫn không thay thế sticky.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.4: sticky sessions, measured</span><span class="lc-sub">The Node.js course builds a round-robin TCP balancer in front of two processes: transport polling fails at connect (xhr post error; B answers 400 {"code":1,"message":"Session ID unknown"}), a client forcing transports: ['websocket'] works without stickiness, and polling with sticky routing works.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -523,6 +548,11 @@ done
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes/#sticky-sessions — giải thích chính thức tại sao cần và các option cấu hình cho từng proxy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — hash directive</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html#hash — <code>hash</code> hoạt động tốt hơn <code>ip_hash</code> khi client sau NAT.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 5 — Redis adapter và cluster</span><span class="lc-sub">/courses/socket-io/learn${REF} — cách Redis adapter làm broadcast cross-worker, và vì sao vẫn không thay thế sticky.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.4: sticky session, đo thật</span><span class="lc-sub">Khoá Node.js dựng một load balancer TCP luân phiên trước hai tiến trình: transport polling hỏng lúc kết nối (xhr post error; B trả 400 {"code":1,"message":"Session ID unknown"}), client ép transports: ['websocket'] chạy mà không cần sticky, và polling có định tuyến sticky thì chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

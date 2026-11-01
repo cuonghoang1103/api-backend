@@ -418,6 +418,7 @@ ${ra(M.tsOut)}
 <h3>📚 Sources</h3>
 ${NGUON}
 ${lienKet({ bai: 'swt301-junit-hands-on', title: 'Also in SWT301 — lesson 8.5: JUnit hands-on (JUnit 4.13.2 → JUnit 5 with Maven)', sub: 'Same: a runner discovers test methods, runs them, prints failures with expected vs actual, and returns exit code 1 when anything fails — which is what CI reads. Different: SWT301 does it in Java with Ant/Maven and @Test; here it is Vitest, npm scripts and it(). Seeing both makes the idea language-independent.', cta: 'OPEN SWT301 LESSON →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-0-4-mo-hinh', title: 'Go deeper in the TypeScript course — 0.4: compile time vs runtime', sub: 'Same: Vitest, like Node 22, strips the type annotations and runs the code. Different: that lesson shows, with real output, why nobody is checking the types at that moment, what cannot be stripped (enum), and how a separate tsc --noEmit step closes the gap.', cta: 'OPEN TYPESCRIPT LESSON →' })}
 </div>
 
 <div class="ml-vi">
@@ -562,6 +563,7 @@ ${ra(M.tsOut)}
 <h3>📚 Nguồn</h3>
 ${NGUON}
 ${lienKet({ bai: 'swt301-junit-hands-on', title: 'Đã gặp ở SWT301 — bài 8.5: Thực hành JUnit (JUnit 4.13.2 → JUnit 5 với Maven)', sub: 'Giống: bộ chạy tìm các phương thức test, chạy chúng, in lỗi kèm expected và actual, và trả mã thoát 1 khi có gì hỏng — đúng thứ CI đọc. Khác: SWT301 làm bằng Java với Ant/Maven và @Test; ở đây là Vitest, npm script và it(). Thấy cả hai thì ý tưởng không còn phụ thuộc ngôn ngữ.', cta: 'MỞ BÀI SWT301 →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-0-4-mo-hinh', title: 'Học sâu ở khoá TypeScript — 0.4: lúc biên dịch vs lúc chạy', sub: 'Giống: Vitest, cũng như Node 22, xoá chú thích kiểu rồi chạy code. Khác: bài đó cho thấy bằng output thật vì sao lúc ấy không ai kiểm kiểu, thứ gì không xoá được (enum), và một bước tsc --noEmit riêng lấp khoảng trống ra sao.', cta: 'MỞ BÀI TYPESCRIPT →' })}
 </div>
 `,
 };

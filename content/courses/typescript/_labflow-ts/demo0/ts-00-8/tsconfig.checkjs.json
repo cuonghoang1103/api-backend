@@ -1,0 +1,6 @@
+{
+  // Demo for lesson 0.8: let tsc read a .js file and check its JSDoc types.
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "allowJs": true, "checkJs": true },
+  "include": ["end-check.js"]
+}

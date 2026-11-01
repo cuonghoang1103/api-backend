@@ -1,0 +1,473 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-2-xay-dung",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-2-xay-dung"
+  },
+  "exercises": [
+    {
+      "title": "Build 1 — Pool, transaction, race: what was measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "databases",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 12.3: the store interface, one pool per instance, and the 50-booking race through two instances.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 12.3: giao diện store, mỗi instance một pool, và cuộc đua 50 lượt đặt qua hai instance.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A pool is a queue with a fixed number of seats.|||Pool là hàng đợi có số ghế cố định.",
+        "Ask what each instance can see.|||Hỏi: mỗi instance thấy được gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Build 1 — Pool, transaction, race: what was measured\n\nAnswer in the answer panel (no code needed).\n\n1. Pool max 2, wait timeout 500 ms, twenty 100 ms queries at once. What happened?Pool tối đa 2, chờ tối đa 500 ms, hai mươi truy vấn 100 ms cùng lúc. Chuyện gì xảy ra?\n2. Fifty managers book the same slot through two RAM instances. How many bookings did the lab end up with?Năm mươi quản lý đặt cùng khung giờ qua hai instance RAM. Phòng có bao nhiêu lượt đặt?\n3. Without SELECT … FOR UPDATE on the user’s row, An’s ten simultaneous bookings produced how many 201s?Không có SELECT … FOR UPDATE trên dòng của người dùng, mười lượt đặt cùng lúc của An ra bao nhiêu 201?\n4. Two API instances with pool max 10, a worker pool of 10, a relay listener and a migration runner. How many connections at most?Hai instance API pool tối đa 10, worker pool 10, một kết nối nghe của relay và một bộ chạy migration. Tối đa bao nhiêu kết nối?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Build 1 — Pool, transaction, race: what was measured — answer key\n\n1. Pool max 2, wait timeout 500 ms, twenty 100 ms queries at once. What happened?Pool tối đa 2, chờ tối đa 500 ms, hai mươi truy vấn 100 ms cùng lúc. Chuyện gì xảy ra?\n   Answer: a) 10 finished, 10 failed after ~502 ms with “timeout exceeded when trying to connect”\n   Without a timeout (pg’s default 0) all 20 finish but the last waits 1,028 ms; LabFlow maps the timeout to 503 + Retry-After.VI: Không có thời hạn (mặc định 0 của pg) cả 20 xong nhưng cái cuối chờ 1.028 ms; LabFlow đổi lỗi hết hạn thành 503 + Retry-After.\n\n2. Fifty managers book the same slot through two RAM instances. How many bookings did the lab end up with?Năm mươi quản lý đặt cùng khung giờ qua hai instance RAM. Phòng có bao nhiêu lượt đặt?\n   Answer: b) Two — one winner per instance, because each checked only its own array\n   On PostgreSQL the EXCLUDE constraint let exactly one through: 1 × 201, 49 × 409.VI: Trên PostgreSQL ràng buộc EXCLUDE cho đúng một lượt qua: 1 × 201, 49 × 409.\n\n3. Without SELECT … FOR UPDATE on the user’s row, An’s ten simultaneous bookings produced how many 201s?Không có SELECT … FOR UPDATE trên dòng của người dùng, mười lượt đặt cùng lúc của An ra bao nhiêu 201?\n   Answer: d) 5–8 over three runs, although the rule says at most 3 active bookings\n   Count-then-insert is a race even inside one database; locking her row makes her requests queue: 3, 3, 3.VI: Đếm-rồi-chèn là cuộc đua kể cả trong một CSDL; khoá dòng của An làm request của An xếp hàng: 3, 3, 3.\n\n4. Two API instances with pool max 10, a worker pool of 10, a relay listener and a migration runner. How many connections at most?Hai instance API pool tối đa 10, worker pool 10, một kết nối nghe của relay và một bộ chạy migration. Tối đa bao nhiêu kết nối?\n   Answer: c) 32 — well under the 97 non-superuser slots of max_connections 100\n   Size pools from max_connections; eight instances would need 82, time for PgBouncer.VI: Tính kích thước pool từ max_connections; tám instance cần 82, tới lúc dùng PgBouncer.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 10 finished, 10 failed after ~502 ms with “timeout exceeded when trying to connect”</p><p>Without a timeout (pg’s default 0) all 20 finish but the last waits 1,028 ms; LabFlow maps the timeout to 503 + Retry-After.</p><p><i>VI: Không có thời hạn (mặc định 0 của pg) cả 20 xong nhưng cái cuối chờ 1.028 ms; LabFlow đổi lỗi hết hạn thành 503 + Retry-After.</i></p></li><li><p><b>b)</b> Two — one winner per instance, because each checked only its own array</p><p>On PostgreSQL the EXCLUDE constraint let exactly one through: 1 × 201, 49 × 409.</p><p><i>VI: Trên PostgreSQL ràng buộc EXCLUDE cho đúng một lượt qua: 1 × 201, 49 × 409.</i></p></li><li><p><b>d)</b> 5–8 over three runs, although the rule says at most 3 active bookings</p><p>Count-then-insert is a race even inside one database; locking her row makes her requests queue: 3, 3, 3.</p><p><i>VI: Đếm-rồi-chèn là cuộc đua kể cả trong một CSDL; khoá dòng của An làm request của An xếp hàng: 3, 3, 3.</i></p></li><li><p><b>c)</b> 32 — well under the 97 non-superuser slots of max_connections 100</p><p>Size pools from max_connections; eight instances would need 82, time for PgBouncer.</p><p><i>VI: Tính kích thước pool từ max_connections; tám instance cần 82, tới lúc dùng PgBouncer.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Pool max 2, wait timeout 500 ms, twenty 100 ms queries at once. What happened?</p><p style=\"opacity:.75;font-size:.92em\"><i>Pool tối đa 2, chờ tối đa 500 ms, hai mươi truy vấn 100 ms cùng lúc. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10 finished, 10 failed after ~502 ms with “timeout exceeded when trying to connect”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All 20 finished after about 1 second, because the pool queues forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "All 20 failed immediately, because the pool was smaller than the load"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pool opened 18 extra connections and all 20 finished in 103 ms"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without a timeout (pg’s default 0) all 20 finish but the last waits 1,028 ms; LabFlow maps the timeout to 503 + Retry-After.</p><p><i>VI: Không có thời hạn (mặc định 0 của pg) cả 20 xong nhưng cái cuối chờ 1.028 ms; LabFlow đổi lỗi hết hạn thành 503 + Retry-After.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Fifty managers book the same slot through two RAM instances. How many bookings did the lab end up with?</p><p style=\"opacity:.75;font-size:.92em\"><i>Năm mươi quản lý đặt cùng khung giờ qua hai instance RAM. Phòng có bao nhiêu lượt đặt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Zero — both instances answered 409 to every request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two — one winner per instance, because each checked only its own array"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One — the second instance saw the first booking through the proxy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fifty — the RAM store has no overlap check at all under concurrency"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>On PostgreSQL the EXCLUDE constraint let exactly one through: 1 × 201, 49 × 409.</p><p><i>VI: Trên PostgreSQL ràng buộc EXCLUDE cho đúng một lượt qua: 1 × 201, 49 × 409.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Without SELECT … FOR UPDATE on the user’s row, An’s ten simultaneous bookings produced how many 201s?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không có SELECT … FOR UPDATE trên dòng của người dùng, mười lượt đặt cùng lúc của An ra bao nhiêu 201?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10, because count(*) never sees uncommitted rows of other users"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exactly 3 every time, because each request runs in its own transaction"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exactly 1, because the exclusion constraint applies to all of them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "5–8 over three runs, although the rule says at most 3 active bookings"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Count-then-insert is a race even inside one database; locking her row makes her requests queue: 3, 3, 3.</p><p><i>VI: Đếm-rồi-chèn là cuộc đua kể cả trong một CSDL; khoá dòng của An làm request của An xếp hàng: 3, 3, 3.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Two API instances with pool max 10, a worker pool of 10, a relay listener and a migration runner. How many connections at most?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai instance API pool tối đa 10, worker pool 10, một kết nối nghe của relay và một bộ chạy migration. Tối đa bao nhiêu kết nối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "20 — the worker and relay borrow from the API pools"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10 — node-postgres shares one pool between processes on a host"
+              },
+              {
+                "ma": "c",
+                "noiDung": "32 — well under the 97 non-superuser slots of max_connections 100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "100 — every pool reserves max_connections when it starts"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Size pools from max_connections; eight instances would need 82, time for PgBouncer.</p><p><i>VI: Tính kích thước pool từ max_connections; tám instance cần 82, tới lúc dùng PgBouncer.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving connectionTimeoutMillis at 0 (wait forever).|||Để connectionTimeoutMillis bằng 0 (chờ mãi)."
+        },
+        {
+          "loi": "Trusting a count-then-insert check under concurrency.|||Tin phép đếm-rồi-chèn khi có đồng thời."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connection pool",
+          "vi": "bể kết nối"
+        },
+        {
+          "en": "row lock",
+          "vi": "khoá dòng"
+        },
+        {
+          "en": "max_connections",
+          "vi": "số kết nối tối đa"
+        }
+      ]
+    },
+    {
+      "title": "Build 2 — Write asHttp(err): one place that knows SQLSTATE",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "errors",
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Map a database error <code>{ code, message }</code> to <code>{ status, code, retryAfter? }</code>: <code>23P01</code> ⇒ 409 BOOKING_CONFLICT; <code>23505</code> ⇒ 409 DUPLICATE_SERIAL; unreachable database (<code>ECONNREFUSED</code>, <code>ECONNRESET</code>, <code>ETIMEDOUT</code>, <code>57P01</code>, <code>57P02</code>, <code>57P03</code>, <code>08006</code>, or a message containing “timeout exceeded when trying to connect”) ⇒ 503 DEPENDENCY_DOWN with <code>retryAfter: 5</code>; <code>57014</code> (statement timeout) ⇒ 503 DEPENDENCY_DOWN with <code>retryAfter: 1</code>; anything else ⇒ 500 INTERNAL (no retryAfter key).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi lỗi CSDL <code>{ code, message }</code> thành <code>{ status, code, retryAfter? }</code>: <code>23P01</code> ⇒ 409 BOOKING_CONFLICT; <code>23505</code> ⇒ 409 DUPLICATE_SERIAL; CSDL không tới được (<code>ECONNREFUSED</code>, <code>ECONNRESET</code>, <code>ETIMEDOUT</code>, <code>57P01</code>, <code>57P02</code>, <code>57P03</code>, <code>08006</code>, hoặc thông điệp chứa “timeout exceeded when trying to connect”) ⇒ 503 DEPENDENCY_DOWN kèm <code>retryAfter: 5</code>; <code>57014</code> (statement timeout) ⇒ 503 DEPENDENCY_DOWN kèm <code>retryAfter: 1</code>; còn lại ⇒ 500 INTERNAL (không có khoá retryAfter).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "err — { code?, message? }",
+      "outputSpec": "{ status, code, retryAfter? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "asHttp({\"code\":\"23P01\",\"message\":\"conflicting key value violates exclusion constraint \\\"bookings_no_overlap\\\"\"})",
+          "output": "{\"status\":409,\"code\":\"BOOKING_CONFLICT\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The pool timeout has no code — check the message.|||Lỗi hết hạn của pool không có code — kiểm thông điệp.",
+        "Do not add retryAfter to the 409 and 500 answers.|||Đừng thêm retryAfter vào câu 409 và 500."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** database error ⇒ HTTP */\nfunction asHttp(err) {\n  // Write your solution here\n  if (err.code === '23P01') return { status: 409, code: 'BOOKING_CONFLICT' };\n  return { status: 500, code: 'INTERNAL' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction asHttp(err) {\n  const down = ['ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', '57P01', '57P02', '57P03', '08006'];\n  if (err.code === '23P01') return { status: 409, code: 'BOOKING_CONFLICT' };\n  if (err.code === '23505') return { status: 409, code: 'DUPLICATE_SERIAL' };\n  if (down.includes(err.code) || /timeout exceeded when trying to connect/.test(err.message || '')) return { status: 503, code: 'DEPENDENCY_DOWN', retryAfter: 5 };\n  if (err.code === '57014') return { status: 503, code: 'DEPENDENCY_DOWN', retryAfter: 1 };\n  return { status: 500, code: 'INTERNAL' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>src/pg.js asHttp(): a 503 with Retry-After tells clients to come back; a 500 says “our bug”. In 12.7 a stopped database produced exactly 503 DEPENDENCY_DOWN, Retry-After: 5.</p>",
+      "solutionExplanationHtmlVi": "<p>asHttp() trong src/pg.js: 503 kèm Retry-After bảo client quay lại; 500 nghĩa là “lỗi của chúng tôi”. Ở 12.7 CSDL bị tắt cho đúng 503 DEPENDENCY_DOWN, Retry-After: 5.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Overlap",
+              "vi": "Chồng giờ"
+            },
+            "goi": "asHttp({\"code\":\"23P01\",\"message\":\"conflicting key value violates exclusion constraint \\\"bookings_no_overlap\\\"\"})",
+            "mongDoi": {
+              "status": 409,
+              "code": "BOOKING_CONFLICT"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Database stopped",
+              "vi": "CSDL bị tắt"
+            },
+            "goi": "asHttp({\"code\":\"ECONNREFUSED\",\"message\":\"connect ECONNREFUSED 127.0.0.1:55432\"})",
+            "mongDoi": {
+              "status": 503,
+              "code": "DEPENDENCY_DOWN",
+              "retryAfter": 5
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "asHttp({\"message\":\"timeout exceeded when trying to connect\"})",
+            "mongDoi": {
+              "status": 503,
+              "code": "DEPENDENCY_DOWN",
+              "retryAfter": 5
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "asHttp({\"code\":\"57014\",\"message\":\"canceling statement due to statement timeout\"})",
+            "mongDoi": {
+              "status": 503,
+              "code": "DEPENDENCY_DOWN",
+              "retryAfter": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "asHttp({\"code\":\"23505\",\"message\":\"duplicate key value violates unique constraint \\\"devices_serial_no_key\\\"\"})",
+            "mongDoi": {
+              "status": 409,
+              "code": "DUPLICATE_SERIAL"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "asHttp({\"code\":\"42703\",\"message\":\"column \\\"nme\\\" does not exist\"})",
+            "mongDoi": {
+              "status": 500,
+              "code": "INTERNAL"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 500 when the database is restarting.|||Trả 500 khi CSDL đang khởi động lại."
+        },
+        {
+          "loi": "Treating a statement timeout like a bug.|||Coi statement timeout như một con bug."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SQLSTATE",
+          "vi": "mã lỗi SQL"
+        },
+        {
+          "en": "statement timeout",
+          "vi": "giới hạn thời gian câu lệnh"
+        }
+      ]
+    },
+    {
+      "title": "Build 3 — Write poolBudget(...): will the pools fit?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "databases",
+        "capacity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p><code>poolBudget(maxConnections, reserved, instances, poolMax, extra)</code> returns <code>{ total, usable, fits, maxInstances }</code>: <code>usable = maxConnections − reserved</code>; <code>total = instances × poolMax + extra</code> (extra = worker pool, relay, migration runner…); <code>fits = total ≤ usable</code>; <code>maxInstances</code> = how many API instances fit with the same extra, rounded down.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>poolBudget(maxConnections, reserved, instances, poolMax, extra)</code> trả <code>{ total, usable, fits, maxInstances }</code>: <code>usable = maxConnections − reserved</code>; <code>total = instances × poolMax + extra</code> (extra = pool của worker, relay, bộ chạy migration…); <code>fits = total ≤ usable</code>; <code>maxInstances</code> = số instance API tối đa lọt được với cùng extra, làm tròn xuống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "five numbers|||năm con số",
+      "outputSpec": "{ total, usable, fits, maxInstances }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "poolBudget(100, 3, 2, 10, 12)",
+          "output": "{\"total\":32,\"usable\":97,\"fits\":true,\"maxInstances\":8}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Superuser slots are not for your app.|||Chỗ dành cho superuser không phải của ứng dụng.",
+        "Math.floor for the instance count.|||Math.floor cho số instance."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** do the pools fit? */\nfunction poolBudget(maxConnections, reserved, instances, poolMax, extra) {\n  // Write your solution here\n  const total = instances * poolMax;\n  return { total, usable: maxConnections, fits: total <= maxConnections, maxInstances: Math.floor(maxConnections / poolMax) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction poolBudget(maxConnections, reserved, instances, poolMax, extra) {\n  const usable = maxConnections - reserved;\n  const total = instances * poolMax + extra;\n  return { total, usable, fits: total <= usable, maxInstances: Math.floor((usable - extra) / poolMax) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>12.3: SHOW max_connections ⇒ 100, superuser_reserved_connections ⇒ 3; 2 × 10 + 12 = 32 fits easily, and the ceiling is 8 instances before PgBouncer becomes the answer.</p>",
+      "solutionExplanationHtmlVi": "<p>12.3: SHOW max_connections ⇒ 100, superuser_reserved_connections ⇒ 3; 2 × 10 + 12 = 32 lọt thoải mái, trần là 8 instance trước khi PgBouncer thành lời giải.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "LabFlow today",
+              "vi": "LabFlow hôm nay"
+            },
+            "goi": "poolBudget(100, 3, 2, 10, 12)",
+            "mongDoi": {
+              "total": 32,
+              "usable": 97,
+              "fits": true,
+              "maxInstances": 8
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nine instances",
+              "vi": "Chín instance"
+            },
+            "goi": "poolBudget(100, 3, 9, 10, 12)",
+            "mongDoi": {
+              "total": 102,
+              "usable": 97,
+              "fits": false,
+              "maxInstances": 8
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "poolBudget(200, 3, 12, 15, 20)",
+            "mongDoi": {
+              "total": 200,
+              "usable": 197,
+              "fits": false,
+              "maxInstances": 11
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "poolBudget(50, 5, 1, 50, 0)",
+            "mongDoi": {
+              "total": 50,
+              "usable": 45,
+              "fits": false,
+              "maxInstances": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the worker and relay connections.|||Quên kết nối của worker và relay."
+        },
+        {
+          "loi": "Comparing against max_connections instead of usable slots.|||So với max_connections thay vì số chỗ dùng được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connection budget",
+          "vi": "ngân sách kết nối"
+        }
+      ]
+    }
+  ]
+}

@@ -15536,7 +15536,12 @@ c1 --&gt; d1
 <li>Two template versions exist; follow the one your supervisor hands out, never mix numbering.</li>
 <li>Checklists: data on context arrows, connected secondary actors, extend vs include, error branches in sequences, names that match code.</li>
 <li>Consistency beats beauty: one name from UC table to test case; keep .puml next to the code.</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-4-tong-ket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 12.8: Review, documentation and your interview story</span><span class="lc-sub">The same documents written for a technical reviewer instead of a council: a README read in two minutes (architecture, how to run, decisions, measured evidence), three STAR stories and a five-minute demo.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần nhớ từ slide 1–11</h2>
 <ul>
 <li>Hình của Report 3: 1.1 Context Diagram, 1.2 Main Workflows (swim-lane), 1.3.2 Use Cases (UC diagram theo actor), 1.4.1 Screens Flow, 1.5 ERD.</li>
@@ -15545,7 +15550,12 @@ c1 --&gt; d1
 <li>Có hai phiên bản mẫu; theo đúng bản giảng viên phát, không trộn cách đánh số.</li>
 <li>Checklist: mũi tên context ghi dữ liệu, secondary actor được nối, extend khác include, sequence có nhánh lỗi, tên khớp code.</li>
 <li>Nhất quán quan trọng hơn đẹp: một tên từ bảng UC tới test case; để file .puml cạnh code.</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-4-tong-ket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 12.8: Rà soát, tài liệu và câu chuyện kể khi phỏng vấn</span><span class="lc-sub">Cùng bộ tài liệu, viết cho người review kỹ thuật thay vì hội đồng: README đọc trong hai phút (kiến trúc, cách chạy, quyết định, bằng chứng đo được), ba câu chuyện STAR và buổi demo năm phút.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['gomaa', 'Chapter 6 (use case modelling), Chapter 7 §7.6 (static modeling of the system context), Chapter 9 (dynamic interaction), Chapter 10 (state machines) — the source of the Assignment templates', 'Chương 6 (mô hình use case), Chương 7 §7.6 (mô hình tĩnh của ngữ cảnh hệ thống), Chương 9 (tương tác động), Chương 10 (máy trạng thái) — gốc của các mẫu Assignment'],
       ['plantuml', '"Activity Diagram (new syntax)" — swim-lanes with |Lane|; "Use Case Diagram"; "Sequence Diagram" — alt/else and notes', 'mục "Activity Diagram (new syntax)" — swim-lane bằng |Làn|; "Use Case Diagram"; "Sequence Diagram" — alt/else và note'],

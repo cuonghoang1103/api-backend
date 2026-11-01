@@ -1,0 +1,446 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-12-8-hoc-tiep",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-12-8-hoc-tiep"
+  },
+  "exercises": [
+    {
+      "title": "Next 1 — Where each part goes deeper",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "career"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson 12.9: the course map and three roads for the next three months.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.9: bản đồ khoá học và ba con đường cho ba tháng tới.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Match each topic to the course that owns it.|||Ghép từng chủ đề với khoá phụ trách nó.",
+        "The contract comes before the code.|||Hợp đồng đi trước mã."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next 1 — Where each part goes deeper\n\nAnswer in the answer panel (no code needed).\n\n1. You want PgBouncer, WAL backups and lock internals — the parts of 12.3 and 12.7 this course only touched. Which course?Bạn muốn PgBouncer, sao lưu WAL và bên trong khoá — những phần 12.3 và 12.7 chỉ chạm tới. Khoá nào?\n2. You apply for internships next month. Which road does 12.9 suggest?Tháng sau bạn nộp đơn thực tập. Bài 12.9 gợi ý con đường nào?\n3. Before writing code for any LabFlow extension, what does 12.9 say to do first?Trước khi viết mã cho một hướng mở rộng LabFlow, bài 12.9 bảo làm gì trước?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next 1 — Where each part goes deeper — answer key\n\n1. You want PgBouncer, WAL backups and lock internals — the parts of 12.3 and 12.7 this course only touched. Which course?Bạn muốn PgBouncer, sao lưu WAL và bên trong khoá — những phần 12.3 và 12.7 chỉ chạm tới. Khoá nào?\n   Answer: b) PostgreSQL (start at 14.2, pooling with PgBouncer)\n   Each part of LabFlow has a deeper course; the map in 12.9 lists the starting lesson for each.VI: Mỗi phần của LabFlow có một khoá sâu hơn; bản đồ ở 12.9 ghi bài bắt đầu cho từng khoá.\n\n2. You apply for internships next month. Which road does 12.9 suggest?Tháng sau bạn nộp đơn thực tập. Bài 12.9 gợi ý con đường nào?\n   Answer: c) Interview season: Lab 11 again timed, System Design, your three STAR stories aloud\n   Pick the road that matches your deadline; each has a course order.VI: Chọn con đường hợp với hạn của bạn; mỗi đường có một thứ tự khoá học.\n\n3. Before writing code for any LabFlow extension, what does 12.9 say to do first?Trước khi viết mã cho một hướng mở rộng LabFlow, bài 12.9 bảo làm gì trước?\n   Answer: c) Add the operation to openapi.yaml and run the breaking-change diff\n   Contract first, then code, then one behaviour test and one measurement in the evidence sheet.VI: Hợp đồng trước, rồi mã, rồi một test hành vi và một số đo trong bảng bằng chứng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> PostgreSQL (start at 14.2, pooling with PgBouncer)</p><p>Each part of LabFlow has a deeper course; the map in 12.9 lists the starting lesson for each.</p><p><i>VI: Mỗi phần của LabFlow có một khoá sâu hơn; bản đồ ở 12.9 ghi bài bắt đầu cho từng khoá.</i></p></li><li><p><b>c)</b> Interview season: Lab 11 again timed, System Design, your three STAR stories aloud</p><p>Pick the road that matches your deadline; each has a course order.</p><p><i>VI: Chọn con đường hợp với hạn của bạn; mỗi đường có một thứ tự khoá học.</i></p></li><li><p><b>c)</b> Add the operation to openapi.yaml and run the breaking-change diff</p><p>Contract first, then code, then one behaviour test and one measurement in the evidence sheet.</p><p><i>VI: Hợp đồng trước, rồi mã, rồi một test hành vi và một số đo trong bảng bằng chứng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You want PgBouncer, WAL backups and lock internals — the parts of 12.3 and 12.7 this course only touched. Which course?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn muốn PgBouncer, sao lưu WAL và bên trong khoá — những phần 12.3 và 12.7 chỉ chạm tới. Khoá nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Docker (start at 16.2, Compose for production)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL (start at 14.2, pooling with PgBouncer)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Testing (start at 4.1, a real database in tests)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Redis (start at 7.3, Lua scripts)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each part of LabFlow has a deeper course; the map in 12.9 lists the starting lesson for each.</p><p><i>VI: Mỗi phần của LabFlow có một khoá sâu hơn; bản đồ ở 12.9 ghi bài bắt đầu cho từng khoá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>You apply for internships next month. Which road does 12.9 suggest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tháng sau bạn nộp đơn thực tập. Bài 12.9 gợi ý con đường nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Operations-minded: Docker, a VPS and Observability before anything else"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rewrite LabFlow in another language to show more technologies"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Interview season: Lab 11 again timed, System Design, your three STAR stories aloud"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Start the six extensions at once to have a bigger project"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Pick the road that matches your deadline; each has a course order.</p><p><i>VI: Chọn con đường hợp với hạn của bạn; mỗi đường có một thứ tự khoá học.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Before writing code for any LabFlow extension, what does 12.9 say to do first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi viết mã cho một hướng mở rộng LabFlow, bài 12.9 bảo làm gì trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Create the database table and seed it with sample data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Open a pull request so the team can discuss the idea"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Add the operation to openapi.yaml and run the breaking-change diff"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Write the React page that will call the new endpoint"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Contract first, then code, then one behaviour test and one measurement in the evidence sheet.</p><p><i>VI: Hợp đồng trước, rồi mã, rồi một test hành vi và một số đo trong bảng bằng chứng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Learning everything at once.|||Học mọi thứ cùng lúc."
+        },
+        {
+          "loi": "Coding an extension before designing its contract.|||Viết mã mở rộng trước khi thiết kế hợp đồng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "learning road",
+          "vi": "con đường học"
+        },
+        {
+          "en": "contract first",
+          "vi": "hợp đồng trước"
+        }
+      ]
+    },
+    {
+      "title": "Next 2 — Where each extension’s rule lives",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "architecture",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>For the six LabFlow extensions of 12.9, choose the place that must enforce the rule.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với sáu hướng mở rộng LabFlow của 12.9, chọn chỗ phải thi hành luật.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask which place every request must pass through.|||Hỏi: chỗ nào mọi request đều phải đi qua.",
+        "Shared and short-lived ⇒ Redis; truth ⇒ PostgreSQL.|||Dùng chung, sống ngắn ⇒ Redis; sự thật ⇒ PostgreSQL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next 2 — Where each extension’s rule lives\n\nAnswer in the answer panel (no code needed).\n\n1. Several campuses: one campus must never read another’s bookings, whatever the code path.Nhiều cơ sở: cơ sở này không bao giờ được đọc lượt đặt của cơ sở kia, dù mã đi đường nào.\n2. API-key plans: free 60 requests per minute, partner 600 — shared across instances.Gói API key: miễn phí 60 request/phút, đối tác 600 — dùng chung qua các instance.\n3. Audit log: every change to bookings must be recorded, even if the process crashes after COMMIT.Nhật ký thay đổi: mọi thay đổi lượt đặt phải được ghi, kể cả khi tiến trình sập sau COMMIT.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Next 2 — Where each extension’s rule lives — answer key\n\n1. Several campuses: one campus must never read another’s bookings, whatever the code path.Nhiều cơ sở: cơ sở này không bao giờ được đọc lượt đặt của cơ sở kia, dù mã đi đường nào.\n   Answer: a) PostgreSQL row-level security on campus_id\n   BOLA (6.2) enforced by the database: every path, every instance.VI: BOLA (6.2) do chính CSDL thi hành: mọi đường đi, mọi instance.\n\n2. API-key plans: free 60 requests per minute, partner 600 — shared across instances.Gói API key: miễn phí 60 request/phút, đối tác 600 — dùng chung qua các instance.\n   Answer: c) The Redis Lua bucket, with capacity read from the key’s plan\n   Same atomic script as 12.4; RateLimit-Policy announces the plan.VI: Cùng script nguyên tử như 12.4; RateLimit-Policy công bố gói.\n\n3. Audit log: every change to bookings must be recorded, even if the process crashes after COMMIT.Nhật ký thay đổi: mọi thay đổi lượt đặt phải được ghi, kể cả khi tiến trình sập sau COMMIT.\n   Answer: c) An append-only table written in the same transaction as the change\n   Same idea as the outbox: in the transaction, or it can be lost.VI: Cùng ý tưởng với outbox: nằm trong transaction, không thì có thể mất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> PostgreSQL row-level security on campus_id</p><p>BOLA (6.2) enforced by the database: every path, every instance.</p><p><i>VI: BOLA (6.2) do chính CSDL thi hành: mọi đường đi, mọi instance.</i></p></li><li><p><b>c)</b> The Redis Lua bucket, with capacity read from the key’s plan</p><p>Same atomic script as 12.4; RateLimit-Policy announces the plan.</p><p><i>VI: Cùng script nguyên tử như 12.4; RateLimit-Policy công bố gói.</i></p></li><li><p><b>c)</b> An append-only table written in the same transaction as the change</p><p>Same idea as the outbox: in the transaction, or it can be lost.</p><p><i>VI: Cùng ý tưởng với outbox: nằm trong transaction, không thì có thể mất.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Several campuses: one campus must never read another’s bookings, whatever the code path.</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhiều cơ sở: cơ sở này không bao giờ được đọc lượt đặt của cơ sở kia, dù mã đi đường nào.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PostgreSQL row-level security on campus_id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A Redis set of allowed campus ids per session"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A check in each route handler before the query"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A filter in the React app that hides other campuses"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>BOLA (6.2) enforced by the database: every path, every instance.</p><p><i>VI: BOLA (6.2) do chính CSDL thi hành: mọi đường đi, mọi instance.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>API-key plans: free 60 requests per minute, partner 600 — shared across instances.</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói API key: miễn phí 60 request/phút, đối tác 600 — dùng chung qua các instance.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A PostgreSQL row per key updated on every request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The client SDK, which promises to slow itself down"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The Redis Lua bucket, with capacity read from the key’s plan"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An in-memory Map per instance, multiplied by the instance count"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same atomic script as 12.4; RateLimit-Policy announces the plan.</p><p><i>VI: Cùng script nguyên tử như 12.4; RateLimit-Policy công bố gói.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Audit log: every change to bookings must be recorded, even if the process crashes after COMMIT.</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhật ký thay đổi: mọi thay đổi lượt đặt phải được ghi, kể cả khi tiến trình sập sau COMMIT.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A nightly diff between two pg_dump files"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An event published to Redis after the change commits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An append-only table written in the same transaction as the change"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A log line written after the response is sent"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same idea as the outbox: in the transaction, or it can be lost.</p><p><i>VI: Cùng ý tưởng với outbox: nằm trong transaction, không thì có thể mất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Enforcing security in the UI.|||Thi hành bảo mật ở giao diện."
+        },
+        {
+          "loi": "Writing the audit log outside the transaction.|||Ghi nhật ký ngoài transaction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row-level security",
+          "vi": "bảo mật mức dòng"
+        },
+        {
+          "en": "append-only",
+          "vi": "chỉ ghi thêm"
+        }
+      ]
+    },
+    {
+      "title": "Next 3 — Write weeklyPlan(start, items): a plan with dates",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "career",
+        "dates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>12.9 asks for a four-week plan with dates in your README. Given a Monday <code>start</code> (<code>YYYY-MM-DD</code>) and a list of deliverables, return <code>{ week, due, item }</code> per item: week <code>i</code> is due on its Sunday (start + 7·i − 1 days, UTC), as <code>YYYY-MM-DD</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 12.9 yêu cầu kế hoạch bốn tuần có ngày tháng trong README. Cho một thứ Hai <code>start</code> (<code>YYYY-MM-DD</code>) và danh sách sản phẩm, trả <code>{ week, due, item }</code> cho mỗi mục: tuần <code>i</code> có hạn vào Chủ nhật của nó (start + 7·i − 1 ngày, UTC), dạng <code>YYYY-MM-DD</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "start — string; items — string[]|||start — chuỗi; items — mảng chuỗi",
+      "outputSpec": "{ week, due, item }[]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "weeklyPlan(\"2026-11-02\", [\"Testing 4.1–4.4\",\"Lab 12 at 10/10\"])",
+          "output": "[{\"week\":1,\"due\":\"2026-11-08\",\"item\":\"Testing 4.1–4.4\"},{\"week\":2,\"due\":\"2026-11-15\",\"item\":\"Lab 12 at 10/10\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Work in UTC milliseconds: 86,400,000 per day.|||Tính bằng mili giây UTC: 86.400.000 mỗi ngày.",
+        "toISOString().slice(0, 10) gives YYYY-MM-DD.|||toISOString().slice(0, 10) cho YYYY-MM-DD."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** four weeks, with dates */\nfunction weeklyPlan(start, items) {\n  // Write your solution here\n  return items.map((item, i) => ({ week: i + 1, due: start, item }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction weeklyPlan(start, items) {\n  const t0 = Date.parse(`${start}T00:00:00Z`);\n  return items.map((it, i) => ({ week: i + 1, due: new Date(t0 + (i + 1) * 7 * 86400000 - 86400000).toISOString().slice(0, 10), item: it }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A plan with dates is a commitment you can check; the same UTC discipline as RFC 3339 times in LabFlow (1.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Kế hoạch có ngày là cam kết kiểm được; cùng kỷ luật UTC như thời gian RFC 3339 trong LabFlow (1.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two weeks",
+              "vi": "Hai tuần"
+            },
+            "goi": "weeklyPlan(\"2026-11-02\", [\"Testing 4.1–4.4\",\"Lab 12 at 10/10\"])",
+            "mongDoi": [
+              {
+                "week": 1,
+                "due": "2026-11-08",
+                "item": "Testing 4.1–4.4"
+              },
+              {
+                "week": 2,
+                "due": "2026-11-15",
+                "item": "Lab 12 at 10/10"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "weeklyPlan(\"2026-12-28\", [\"Deploy to a VPS 3.2\",\"README evidence sheet\",\"Three STAR stories\",\"Mock interview\"])",
+            "mongDoi": [
+              {
+                "week": 1,
+                "due": "2027-01-03",
+                "item": "Deploy to a VPS 3.2"
+              },
+              {
+                "week": 2,
+                "due": "2027-01-10",
+                "item": "README evidence sheet"
+              },
+              {
+                "week": 3,
+                "due": "2027-01-17",
+                "item": "Three STAR stories"
+              },
+              {
+                "week": 4,
+                "due": "2027-01-24",
+                "item": "Mock interview"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "weeklyPlan(\"2026-11-02\", [])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using local time, which shifts the date by one in some time zones.|||Dùng giờ địa phương, lệch một ngày ở vài múi giờ."
+        },
+        {
+          "loi": "Off by one: due on the next Monday.|||Lệch một: hạn vào thứ Hai tuần sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deliverable",
+          "vi": "sản phẩm bàn giao"
+        }
+      ]
+    }
+  ]
+}

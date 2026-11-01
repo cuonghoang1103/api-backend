@@ -1,6 +1,6 @@
-# Bàn giao khoá API & System Design (`api-design`) — 01/11/2026, sau Chương 11
+# Bàn giao khoá API & System Design (`api-design`) — 01/11/2026, KHOÁ TRỌN Chương 0–12
 
-Viết cho phiên/agent tiếp theo để làm Ch12 (capstone) **cùng chuẩn** với Ch5–11. Đọc cùng `_HOP-DONG.md` (luật nội dung, thoát ký tự, lộ trình mã).
+**Khoá đã soạn xong (Chương 0–12, 91 bài).** Tệp này giờ dành cho ai sửa/bổ sung sau: chạy lại số đo, thêm thẻ liên kết ngược, nâng slide lên v2. Đọc cùng `_HOP-DONG.md` (luật nội dung, thoát ký tự, lộ trình mã — mục 5 “Từ Chương 12 — BẢN CUỐI”).
 
 ## 1. Trạng thái từng chương
 
@@ -17,9 +17,12 @@ Viết cho phiên/agent tiếp theo để làm Ch12 (capstone) **cùng chuẩn**
 | 10 | `s10-bat-dong-bo.mjs` | 8 bài (mới: `api-10-1-worker` = 10.2, `api-10-4-nhan-webhook` = 10.6, `api-10-7-lab`, `api-10-8-quiz`) | commit chứa tệp này |
 | 10 · bản chụp | `_labflow-api/` cuối Ch10 | | 745e25e09 |
 | 11 | `s11-phong-van.mjs` | 8 bài: 11.1 `api-11-1-khung`, 11.2 `api-11-2-rut-gon-link`, 11.3 MỚI `api-11-2-chuyen-huong`, 11.4 `api-11-3-feed-chat` (chỉ feed), 11.5 MỚI `api-11-3-chat`, 11.6 `api-11-4-dat-lich`, `api-11-7-lab`, `api-11-8-quiz` | commit chứa tệp này |
-| 12 | còn là **khung** trong `api-design.mjs` (`khung('api', …)`, hiện `.slice(12)`) | 4 bài giữ chỗ | — |
+| 12 | `s12-du-an-cuoi-khoa.mjs` (manifest `.slice(13)` — khung không còn sinh bài) | 11 bài: 12.1 `api-12-1-thiet-ke`, 12.2 MỚI `api-12-11-migration`, 12.3 `api-12-2-xay-dung`, 12.4 MỚI `api-12-5-chia-se`, 12.5 `api-12-3-mo-rong`, 12.6 MỚI `api-12-6-do-tai`, 12.7 MỚI `api-12-7-trien-khai`, Lab MỚI `api-12-9-lab`, 12.8 `api-12-4-tong-ket`, 12.9 MỚI `api-12-8-hoc-tiep`, thi cuối khoá MỚI `api-12-10-thi-cuoi-khoa` (QUIZ 20 câu, 1800 s) | commit “content(api-design): Chương 12 trọn …” |
+| 12 · bản chụp | `_labflow-api/` = BẢN CUỐI (= `labflow-api-final.zip`) | | cùng commit Ch12 |
 
 Sau Ch11: 84 bài, ~3,0 triệu ký tự, sơ đồ 180, nguồn 270 (depth-audit đạt mọi sàn), content-check 0 lỗi; Code Lab 68 module, 213 đề, máy chấm 1227/1227 (Ch11 thêm 7 module, 22 đề). Bài dài nhất 11.1 = 39.879 ký tự (sát trần 40k — muốn thêm gì thì bớt chữ trước). Số liệu sau Ch9: 76 bài, 2,49 triệu ký tự, sơ đồ 144, nguồn 192. Sau Ch10: 80 bài, 2,76 triệu ký tự, sơ đồ 164, nguồn 224 (course-depth-audit “đạt mọi sàn”), content-check 0 lỗi; Code Lab `api-design-practice`: 61 module, 191 đề, máy chấm 1114/1114 (Ch10 thêm 7 module, 25 đề).
+
+**Sau Ch12 (cuối khoá):** 91 bài, 3.351.650 ký tự (TB 36.831/bài), sơ đồ 194, nguồn 326, bẫy 174 (depth-audit đạt mọi sàn), content-check 0 lỗi; bài Ch12 dài nhất 12.7 = 39.982 ký tự (kể cả giảng) — **sát trần 40k**, 12.4 = 39.728, 12.3 = 39.690, 12.2 = 39.565, 12.1 = 39.346: thêm gì vào các bài này thì phải bớt chữ trước. Code Lab 78 module, 243 đề, máy chấm 1346/1346 (Ch12 thêm 10 module, 30 đề). Slide Ch12: 10 deck × 6 = 60 ảnh trên R2 `API/v1` (đã đẩy ⇒ sửa deck nào thì lên v2 + VER).
 
 ## 2. Chương còn lại — nội dung dự kiến (theo khung trong manifest)
 
@@ -27,13 +30,13 @@ Sau Ch11: 84 bài, ~3,0 triệu ký tự, sơ đồ 180, nguồn 270 (depth-audi
 
 - **Ch10 Async & realtime:** XONG (01/11/2026) — xem `_HOP-DONG.md` mục 5 “Từ Chương 10”. Còn treo: cặp SWD392 `swd392-slide-swd25-2` ↔ `api-10-1-worker` (bài 10.2 sát trần 40k — muốn thêm thẻ thì bớt chữ trước); cặp `background-jobs` ↔ 10.2 và `software-architecture` Ch9 ↔ 10.3 khi hai khoá đó hết là khung (ghi ở `content/_LIEN-KET-CHEO/sdn302-api-design.md`).
 - **Ch11 Phỏng vấn:** XONG (01/11/2026) — xem `_HOP-DONG.md` mục 5 “Từ Chương 11”. Đã tách: rút gọn link thành 2 bài (11.2 hợp đồng + mã, 11.3 301/302 + đường nóng), feed và chat thành 2 bài (11.4, 11.5) vì trần 40k. Còn treo: thẻ ngược từ khoá `system-design` / `interview-prep` (còn KHUNG) — xem dòng “Không cặp (Ch11)” trong `content/_LIEN-KET-CHEO/sdn302-api-design.md`. Mô tả gốc của kế hoạch: khung trả lời 45 phút cho câu hỏi thiết kế API (làm rõ → tài nguyên/endpoint → lỗi/phân trang → auth/rate limit/phiên bản → quy mô), rồi ba đề: rút gọn link, news feed + chat, đặt lịch (LabFlow chính là đề này — dùng số đo Ch5–10 làm “bằng chứng” khi trả lời; đề feed + chat dùng thẳng số đo 10.4: polling p50 1,1 s vs SSE/WS ~1 ms, 1.500 vs 100 request khi ngồi chờ, Last-Event-ID, vé WebSocket, fan-out qua Redis). Mỗi bài có bản ghi một buổi phỏng vấn mẫu + thang chấm.
-- **Ch12 Capstone (VIỆC KẾ TIẾP):** gợi ý thêm từ Ch11 — bài 11.6 đã đo cuộc đua đặt lịch trên PostgreSQL (`interview/booking/race.mjs`, EXCLUDE USING gist + btree_gist, giữ chỗ hết hạn); Ch12 nên đưa đúng ràng buộc đó vào bảng bookings thật của LabFlow (thay kiểm chồng lịch trong RAM của `routes/bookings.js`) và nhắc lại số đo 50 → 1. Kế hoạch gốc: đưa LabFlow từ RAM sang PostgreSQL thật (Ch8 8.4, Ch9 và Ch10 đã hứa “dữ liệu chờ Chương 12” — Ch10: `emit` sự kiện lượt đặt đang là GHI KÉP, Ch12 phải đổi sang transactional outbox như `events/outbox.mjs`): migration, pool, idempotency + rate limit dùng chung, cache, hàng đợi thông báo, đo tải lại toàn bộ, OpenAPI cuối, checklist triển khai, kể dự án theo STAR. Gói zip cuối khoá.
+- **Ch12 Capstone:** XONG (01/11/2026) — xem `_HOP-DONG.md` mục 5 “Từ Chương 12 — BẢN CUỐI”, sổ liên kết `content/_LIEN-KET-CHEO/sdn302-api-design.md` dòng “Không cặp (Ch12)”. Nguồn bài: `apid/s12/*.{en,vi}.html` + `gen.py`; thẻ liên kết chéo + phần gọn bớt + thẻ tải về được áp lại bằng `apid/xl/build.sh` (nguồn gốc trong `apid/xl/bak/` — sửa bài thì sửa ở `bak/` rồi chạy build.sh). **Còn treo:** (1) thẻ ngược tới Testing `tst-11-5-du-an-cuoi-khoa` (→ 12.8) và `tst-11-7-hoc-tiep` (→ 12.1) — phiên Testing Ch11 đặt chiều đi, chiều về chờ Testing Ch11 xong (12.8 còn chỗ; 12.1 phải gọn bớt trước); (2) thẻ ngược từ khoá KHUNG `system-design` (sysd-5-2, sysd-6-4), `background-jobs` (job-6-2), `interview-prep` (pv-2-2) khi soạn các khoá đó; (3) cặp SWD392 `swd392-slide-swd25-2` ↔ 10.2 vẫn treo từ Ch10.
 
 Mỗi chương: mở đầu “Học xong Chương N bạn làm được / Vì sao đáng học” (bài đầu chương), mỗi bài 22–40k ký tự (**kể cả phần giảng slide**), ≥ 1 sơ đồ `lz-flow|lz-stack|lz-map`, ≥ 1–2 thẻ nguồn có “read 1 Nov 2026 / đọc ngày …”, 🧪 thực hành, 🗂 thuật ngữ, 📌 tóm tắt, mục phỏng vấn; Lab có thang chấm 10 điểm + lời giải đo thật + gói zip; quiz 10 câu (đáp án rải đều vị trí).
 
 ## 3. Thư mục làm việc ngoài repo, chạy LabFlow, PostgreSQL, Redis
 
-**BẢN BỀN TRONG REPO (từ 01/11/2026):** `content/courses/api-design/_labflow-api/` = mã LabFlow cuối chương mới nhất (hiện: cuối Ch10), phiên bản ghim chính xác, `.gitignore`, `README.md` (cách chạy + cách cập nhật), `docs/chay-theo-bai.txt` (lệnh từng bài). Bắt đầu chương mới: `rsync -a --exclude README.md --exclude .gitignore content/courses/api-design/_labflow-api/ <scratch>/labflow-chN/ && npm ci`; xong chương: rsync ngược lại (`--delete`), `npm ci && npm test` trên bản sao sạch, gitleaks, cập nhật bảng trong README.md.
+**BẢN BỀN TRONG REPO (từ 01/11/2026):** `content/courses/api-design/_labflow-api/` = mã LabFlow cuối chương mới nhất (hiện: BẢN CUỐI — cuối Ch12), phiên bản ghim chính xác, `.gitignore`, `README.md` (cách chạy + cách cập nhật), `docs/chay-theo-bai.txt` (lệnh từng bài). Bắt đầu chương mới: `rsync -a --exclude README.md --exclude .gitignore content/courses/api-design/_labflow-api/ <scratch>/labflow-chN/ && npm ci`; xong chương: rsync ngược lại (`--delete`), `npm ci && npm test` trên bản sao sạch, gitleaks, cập nhật bảng trong README.md.
 
 Scratch: `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/641f37e5-0c56-4501-9b67-2330c62e4b07/scratchpad/apid` (gọi tắt `apid/`). **Thư mục tạm của phiên — có thể mất.** Gói zip trên R2 `https://media.cuongthai.com/files/academy/API/v1/labflow-api-chN.zip` (N = 7, 8, 9, 10) — tải về, `npm install`, `npm test` (Ch10: 13 test).
 

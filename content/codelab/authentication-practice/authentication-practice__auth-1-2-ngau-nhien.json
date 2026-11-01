@@ -1,0 +1,581 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-1-2-ngau-nhien",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-1-2-ngau-nhien"
+  },
+  "exercises": [
+    {
+      "title": "1.2-1 — Length is not entropy (real output)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "entropy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>demo1/token-formats.mjs generates one value in each of six ways. Work out how many characters each has and how many of its bits are actually random (unpredictable to an attacker) — the real printed output appears in the explanation after Submit.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>demo1/token-formats.mjs sinh một giá trị theo mỗi cách trong sáu cách. Tính xem mỗi cái dài bao nhiêu ký tự và bao nhiêu bit thật sự ngẫu nhiên (kẻ tấn công không đoán trước được) — output thật được in trong phần giải thích sau khi Nộp.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "bytes × 2 = hex characters; ceil(bytes × 4 / 3) = base64url characters (no padding).|||byte × 2 = ký tự hex; ceil(byte × 4 / 3) = ký tự base64url (không đệm).",
+        "newToken adds the 9 characters \"lfid_ses_\".|||newToken thêm 9 ký tự \"lfid_ses_\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.2-1 — Length is not entropy (real output)\n\nAnswer in the answer panel (no code needed).\n\n1. Format → chars, random bitsĐịnh dạng → ký tự, bit ngẫu nhiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.2-1 — Length is not entropy (real output) — answer key\n\n1. Format → chars, random bitsĐịnh dạng → ký tự, bit ngẫu nhiên\n   - r1.c: 32\n   - r1.b: 128\n   - r2.c: 22\n   - r2.b: 128\n   - r3.c: 43\n   - r3.b: 256\n   - r4.c: 36\n   - r4.b: 122\n   - r5.c: 52\n   - r5.b: 256\n   - r6.c: 11\n   - r6.b: 0\n   Real output: randomBytes(16) hex 32 chars · 128 random bits | randomBytes(16) base64url 22 chars · 128 random bits | randomBytes(32) base64url 43 chars · 256 random bits | randomUUID() (v4) 36 chars · 122 random bits | newToken('lfid_ses') 52 chars · 256 random bits | Math.random().toString(36).slice(2) 11 chars · 0 random bits. hex = 4 bits per character, base64url = 6 bits per character, a UUIDv4 spends 6 of its 128 bits on version/variant, and Math.random() gives 0 bits of security because its state can be recovered (next question).VI: Output thật: randomBytes(16) hex 32 chars · 128 random bits | randomBytes(16) base64url 22 chars · 128 random bits | randomBytes(32) base64url 43 chars · 256 random bits | randomUUID() (v4) 36 chars · 122 random bits | newToken('lfid_ses') 52 chars · 256 random bits | Math.random().toString(36).slice(2) 11 chars · 0 random bits. hex = 4 bit mỗi ký tự, base64url = 6 bit mỗi ký tự, UUIDv4 tốn 6 trong 128 bit cho version/variant, còn Math.random() cho 0 bit an toàn vì trạng thái của nó khôi phục được (câu sau).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Real output: randomBytes(16) hex                  32 chars · 128 random bits | randomBytes(16) base64url            22 chars · 128 random bits | randomBytes(32) base64url            43 chars · 256 random bits | randomUUID() (v4)                    36 chars · 122 random bits | newToken('lfid_ses')                 52 chars · 256 random bits | Math.random().toString(36).slice(2)  11 chars ·   0 random bits. hex = 4 bits per character, base64url = 6 bits per character, a UUIDv4 spends 6 of its 128 bits on version/variant, and Math.random() gives 0 bits of security because its state can be recovered (next question).</p><p><i>VI: Output thật: randomBytes(16) hex                  32 chars · 128 random bits | randomBytes(16) base64url            22 chars · 128 random bits | randomBytes(32) base64url            43 chars · 256 random bits | randomUUID() (v4)                    36 chars · 122 random bits | newToken('lfid_ses')                 52 chars · 256 random bits | Math.random().toString(36).slice(2)  11 chars ·   0 random bits. hex = 4 bit mỗi ký tự, base64url = 6 bit mỗi ký tự, UUIDv4 tốn 6 trong 128 bit cho version/variant, còn Math.random() cho 0 bit an toàn vì trạng thái của nó khôi phục được (câu sau).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Format → chars, random bits</p><p style=\"opacity:.75;font-size:.92em\"><i>Định dạng → ký tự, bit ngẫu nhiên</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "How it was made"
+              },
+              {
+                "ma": "c",
+                "ten": "Characters"
+              },
+              {
+                "ma": "b",
+                "ten": "Random bits"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "randomBytes(16) hex"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "randomBytes(16) base64url"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "randomBytes(32) base64url"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "randomUUID() (v4)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "newToken('lfid_ses')"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "Math.random().toString(36).slice(2)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "32",
+              "r1.b": "128",
+              "r2.c": "22",
+              "r2.b": "128",
+              "r3.c": "43",
+              "r3.b": "256",
+              "r4.c": "36",
+              "r4.b": "122",
+              "r5.c": "52",
+              "r5.b": "256",
+              "r6.c": "11",
+              "r6.b": "0"
+            },
+            "giaiThich": "<p>Real output: randomBytes(16) hex                  32 chars · 128 random bits | randomBytes(16) base64url            22 chars · 128 random bits | randomBytes(32) base64url            43 chars · 256 random bits | randomUUID() (v4)                    36 chars · 122 random bits | newToken('lfid_ses')                 52 chars · 256 random bits | Math.random().toString(36).slice(2)  11 chars ·   0 random bits. hex = 4 bits per character, base64url = 6 bits per character, a UUIDv4 spends 6 of its 128 bits on version/variant, and Math.random() gives 0 bits of security because its state can be recovered (next question).</p><p><i>VI: Output thật: randomBytes(16) hex                  32 chars · 128 random bits | randomBytes(16) base64url            22 chars · 128 random bits | randomBytes(32) base64url            43 chars · 256 random bits | randomUUID() (v4)                    36 chars · 122 random bits | newToken('lfid_ses')                 52 chars · 256 random bits | Math.random().toString(36).slice(2)  11 chars ·   0 random bits. hex = 4 bit mỗi ký tự, base64url = 6 bit mỗi ký tự, UUIDv4 tốn 6 trong 128 bit cho version/variant, còn Math.random() cho 0 bit an toàn vì trạng thái của nó khôi phục được (câu sau).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "128 bits for a UUID: 6 bits are fixed.|||128 bit cho UUID: 6 bit là cố định."
+        },
+        {
+          "loi": "Counting the prefix as randomness.|||Tính cả tiền tố là ngẫu nhiên."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "1.2-2 — Math.random is a formula",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CSPRNG"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real runs of lesson 1.2:<pre>$ node --random-seed=42 -p 'Math.random()'; node --random-seed=42 -p 'Math.random()'; node --random-seed=42 -p 'require(\"node:crypto\").randomBytes(8).toString(\"hex\")'; node --random-seed=42 -p 'require(\"node:crypto\").randomBytes(8).toString(\"hex\")'\n0.7939112874678715\n0.7939112874678715\nd89be5dda68c0ee9\n91a26dd4daf13574</pre><pre>$ node demo1/predict-math-random.mjs 3\nsolved 116 of 128 state bits from 156 equations\n…</pre><pre>$ node demo1/predict-math-random.mjs 4\nsolved 128 of 128 state bits from 208 equations\n…\npredicted #8  0.3003555395543658  ✓ matches\npredicted #9  0.8369273864584925  ✓ matches</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các lần chạy thật của bài 1.2:<pre>$ node --random-seed=42 -p 'Math.random()'; node --random-seed=42 -p 'Math.random()'; node --random-seed=42 -p 'require(\"node:crypto\").randomBytes(8).toString(\"hex\")'; node --random-seed=42 -p 'require(\"node:crypto\").randomBytes(8).toString(\"hex\")'\n0.7939112874678715\n0.7939112874678715\nd89be5dda68c0ee9\n91a26dd4daf13574</pre><pre>$ node demo1/predict-math-random.mjs 3\nsolved 116 of 128 state bits from 156 equations\n…</pre><pre>$ node demo1/predict-math-random.mjs 4\nsolved 128 of 128 state bits from 208 equations\n…\npredicted #8  0.3003555395543658  ✓ matches\npredicted #9  0.8369273864584925  ✓ matches</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Deterministic = same input, same output.|||Tất định = cùng đầu vào, cùng đầu ra.",
+        "Count equations against unknowns.|||Đếm số phương trình so với số ẩn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.2-2 — Math.random is a formula\n\nAnswer in the answer panel (no code needed).\n\n1. Two processes with --random-seed=42 printed the same Math.random() but different randomBytes(). What does that show?Hai tiến trình với --random-seed=42 in ra cùng Math.random() nhưng randomBytes() khác nhau. Điều đó cho thấy gì?\n2. With 3 observed outputs the solver found 116 of 128 state bits; with 4 it found 128 and predicted the next 5 exactly. Why does 4 work?Với 3 số quan sát, bộ giải tìm được 116/128 bit trạng thái; với 4 số thì đủ 128 và đoán đúng 5 số tiếp theo. Vì sao 4 thì được?\n3. What should generate LabFlow ID session ids, reset tokens and API keys?Cái gì nên sinh id phiên, token đặt lại mật khẩu và API key của LabFlow ID?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.2-2 — Math.random is a formula — answer key\n\n1. Two processes with --random-seed=42 printed the same Math.random() but different randomBytes(). What does that show?Hai tiến trình với --random-seed=42 in ra cùng Math.random() nhưng randomBytes() khác nhau. Điều đó cho thấy gì?\n   Answer: c) Math.random is a seeded formula; randomBytes asks the OS\n   Same seed ⇒ same sequence: Math.random is a formula. crypto.randomBytes reads OS entropy every time.VI: Cùng hạt giống ⇒ cùng dãy: Math.random là một công thức. crypto.randomBytes đọc entropy của hệ điều hành mỗi lần.\n\n2. With 3 observed outputs the solver found 116 of 128 state bits; with 4 it found 128 and predicted the next 5 exactly. Why does 4 work?Với 3 số quan sát, bộ giải tìm được 116/128 bit trạng thái; với 4 số thì đủ 128 và đoán đúng 5 số tiếp theo. Vì sao 4 thì được?\n   Answer: d) Each output gives 52 linear equations; 4 give all 128 bits\n   The update is XOR and shifts — linear over bits — so outputs become equations; Gaussian elimination solves them. No brute force at all.VI: Phép cập nhật chỉ là XOR và dịch bit — tuyến tính trên bit — nên output thành phương trình; khử Gauss giải chúng. Không dò vét gì cả.\n\n3. What should generate LabFlow ID session ids, reset tokens and API keys?Cái gì nên sinh id phiên, token đặt lại mật khẩu và API key của LabFlow ID?\n   Answer: c) crypto.randomBytes / crypto.randomUUID / crypto.randomInt — the OS CSPRNG\n   Mixing a clock into Math.random adds a guessable value to a predictable one. A hashed counter is just as predictable as the counter.VI: Trộn đồng hồ vào Math.random là cộng một giá trị đoán được vào một giá trị dự đoán được. Băm một bộ đếm thì vẫn dự đoán được như bộ đếm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Math.random is a seeded formula; randomBytes asks the OS</p><p>Same seed ⇒ same sequence: Math.random is a formula. crypto.randomBytes reads OS entropy every time.</p><p><i>VI: Cùng hạt giống ⇒ cùng dãy: Math.random là một công thức. crypto.randomBytes đọc entropy của hệ điều hành mỗi lần.</i></p></li><li><p><b>d)</b> Each output gives 52 linear equations; 4 give all 128 bits</p><p>The update is XOR and shifts — linear over bits — so outputs become equations; Gaussian elimination solves them. No brute force at all.</p><p><i>VI: Phép cập nhật chỉ là XOR và dịch bit — tuyến tính trên bit — nên output thành phương trình; khử Gauss giải chúng. Không dò vét gì cả.</i></p></li><li><p><b>c)</b> crypto.randomBytes / crypto.randomUUID / crypto.randomInt — the OS CSPRNG</p><p>Mixing a clock into Math.random adds a guessable value to a predictable one. A hashed counter is just as predictable as the counter.</p><p><i>VI: Trộn đồng hồ vào Math.random là cộng một giá trị đoán được vào một giá trị dự đoán được. Băm một bộ đếm thì vẫn dự đoán được như bộ đếm.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Two processes with --random-seed=42 printed the same Math.random() but different randomBytes(). What does that show?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai tiến trình với --random-seed=42 in ra cùng Math.random() nhưng randomBytes() khác nhau. Điều đó cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both are equally random; the flag is simply broken"
+              },
+              {
+                "ma": "b",
+                "noiDung": "randomBytes is slower, and slower means more random"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Math.random is a seeded formula; randomBytes asks the OS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Math.random is deterministic only in debug builds"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same seed ⇒ same sequence: Math.random is a formula. crypto.randomBytes reads OS entropy every time.</p><p><i>VI: Cùng hạt giống ⇒ cùng dãy: Math.random là một công thức. crypto.randomBytes đọc entropy của hệ điều hành mỗi lần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With 3 observed outputs the solver found 116 of 128 state bits; with 4 it found 128 and predicted the next 5 exactly. Why does 4 work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với 3 số quan sát, bộ giải tìm được 116/128 bit trạng thái; với 4 số thì đủ 128 và đoán đúng 5 số tiếp theo. Vì sao 4 thì được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The fourth number happens to contain the original seed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Four numbers are enough to brute-force all 128 bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "V8 resets the generator after every fourth call"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Each output gives 52 linear equations; 4 give all 128 bits"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The update is XOR and shifts — linear over bits — so outputs become equations; Gaussian elimination solves them. No brute force at all.</p><p><i>VI: Phép cập nhật chỉ là XOR và dịch bit — tuyến tính trên bit — nên output thành phương trình; khử Gauss giải chúng. Không dò vét gì cả.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What should generate LabFlow ID session ids, reset tokens and API keys?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái gì nên sinh id phiên, token đặt lại mật khẩu và API key của LabFlow ID?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An incrementing counter, hashed with SHA-256"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Math.random() with Date.now() mixed in"
+              },
+              {
+                "ma": "c",
+                "noiDung": "crypto.randomBytes / crypto.randomUUID / crypto.randomInt — the OS CSPRNG"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A UUIDv1"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Mixing a clock into Math.random adds a guessable value to a predictable one. A hashed counter is just as predictable as the counter.</p><p><i>VI: Trộn đồng hồ vào Math.random là cộng một giá trị đoán được vào một giá trị dự đoán được. Băm một bộ đếm thì vẫn dự đoán được như bộ đếm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing more digits of Math.random() means more security.|||Tin rằng Math.random() nhiều chữ số hơn là an toàn hơn."
+        },
+        {
+          "loi": "Hashing a predictable value and calling it random.|||Băm một giá trị dự đoán được rồi gọi là ngẫu nhiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CSPRNG",
+          "vi": "bộ sinh số ngẫu nhiên an toàn mật mã"
+        },
+        {
+          "en": "seed",
+          "vi": "hạt giống của bộ sinh"
+        }
+      ]
+    },
+    {
+      "title": "1.2-3 — Write tokenMath(bits, encoding)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "entropy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Turn a security target into a token size. <code>tokenMath(bits, encoding)</code> returns <code>{ bytes, chars, averageYearsAt1e12 }</code>: <code>bytes = ceil(bits / 8)</code>; characters for <code>hex</code> (2 per byte), <code>base64url</code> (no padding: ceil(bytes × 4 / 3)) or <code>base64</code> (padded: ceil(bytes / 3) × 4); and the average time to guess at 10<sup>12</sup> guesses/s — half the space, 2<sup>bits−1</sup> / 10<sup>12</sup> seconds, in years of 365.25 days — rounded with <code>Number(x.toExponential(1))</code>. Unknown encoding ⇒ <code>null</code>. (demo1/bits.mjs printed 64 bits ⇒ 106.8 days, 128 bits ⇒ 5.4e+18 years.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến một mục tiêu an toàn thành kích thước token. <code>tokenMath(bits, encoding)</code> trả <code>{ bytes, chars, averageYearsAt1e12 }</code>: <code>bytes = ceil(bits / 8)</code>; số ký tự với <code>hex</code> (2 mỗi byte), <code>base64url</code> (không đệm: ceil(bytes × 4 / 3)) hoặc <code>base64</code> (có đệm: ceil(bytes / 3) × 4); và thời gian đoán trung bình ở tốc độ 10<sup>12</sup> lần/giây — một nửa không gian, 2<sup>bits−1</sup> / 10<sup>12</sup> giây, đổi ra năm 365,25 ngày — làm tròn bằng <code>Number(x.toExponential(1))</code>. Encoding lạ ⇒ <code>null</code>. (demo1/bits.mjs in ra 64 bit ⇒ 106,8 ngày, 128 bit ⇒ 5,4e+18 năm.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tokenMath(128, \"base64url\")",
+          "output": "{\"bytes\":16,\"chars\":22,\"averageYearsAt1e12\":5400000000000000000}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Math.pow(2, 255) is fine in a double (≈ 5.8e76).|||Math.pow(2, 255) vẫn nằm vừa một số double (≈ 5,8e76).",
+        "base64url drops the \"=\" padding; base64 keeps it.|||base64url bỏ dấu đệm \"=\"; base64 giữ nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { bytes, chars, averageYearsAt1e12 } or null */\nfunction tokenMath(bits, encoding) {\n  // Write your solution here\n  var bytes = bits / 8;\n  return { bytes: bytes, chars: encoding === 'hex' ? bytes * 2 : bytes * 4 / 3, averageYearsAt1e12: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tokenMath(bits, encoding) {\n  var bytes = Math.ceil(bits / 8);\n  var chars;\n  if (encoding === 'hex') chars = bytes * 2;\n  else if (encoding === 'base64url') chars = Math.ceil(bytes * 4 / 3);\n  else if (encoding === 'base64') chars = Math.ceil(bytes / 3) * 4;            // padded with \"=\"\n  else return null;\n  var guesses = Math.pow(2, bits - 1);                                       // on average, half of the space\n  var years = guesses / 1e12 / (365.25 * 24 * 3600);\n  return { bytes: bytes, chars: chars, averageYearsAt1e12: Number(years.toExponential(1)) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>16 bytes = 128 bits = 22 base64url characters is the default answer; 32 bytes = 43 characters costs nothing more. The time column is why: even at an absurd 10^12 guesses per second, 128 bits outlives the universe.</p>",
+      "solutionExplanationHtmlVi": "<p>16 byte = 128 bit = 22 ký tự base64url là câu trả lời mặc định; 32 byte = 43 ký tự cũng chẳng tốn thêm gì. Cột thời gian là lý do: kể cả 10^12 lần đoán mỗi giây phi lý, 128 bit vẫn sống lâu hơn vũ trụ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: tokenMath(128, \"base64url\")",
+              "vi": "Ca 1"
+            },
+            "goi": "tokenMath(128, \"base64url\")",
+            "mongDoi": {
+              "bytes": 16,
+              "chars": 22,
+              "averageYearsAt1e12": 5400000000000000000
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: tokenMath(128, \"hex\")",
+              "vi": "Ca 2"
+            },
+            "goi": "tokenMath(128, \"hex\")",
+            "mongDoi": {
+              "bytes": 16,
+              "chars": 32,
+              "averageYearsAt1e12": 5400000000000000000
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "tokenMath(256, \"base64url\")",
+            "mongDoi": {
+              "bytes": 32,
+              "chars": 43,
+              "averageYearsAt1e12": 1.8e+57
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "tokenMath(64, \"base64\")",
+            "mongDoi": {
+              "bytes": 8,
+              "chars": 12,
+              "averageYearsAt1e12": 0.29
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A recovery code (40 bits)",
+              "vi": "Mã khôi phục (40 bit)"
+            },
+            "goi": "tokenMath(40, \"hex\")",
+            "mongDoi": {
+              "bytes": 5,
+              "chars": 10,
+              "averageYearsAt1e12": 1.7e-8
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "tokenMath(122, \"base64url\")",
+            "mongDoi": {
+              "bytes": 16,
+              "chars": 22,
+              "averageYearsAt1e12": 84000000000000000
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "tokenMath(128, \"base36\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "bytes × 4 / 3 without ceil gives 21.33 characters.|||bytes × 4 / 3 mà không ceil ra 21,33 ký tự."
+        },
+        {
+          "loi": "Using the whole space instead of half for the average.|||Dùng cả không gian thay vì một nửa khi tính trung bình."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "1.2-4 — Write unbiasedDigits(bytes, count): a fair 6-digit code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "modulo bias",
+        "rejection sampling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson 1.2 measured the bias of <code>byte % 10</code> over 1,000,000 bytes:</p><pre>digit · byte % 10 · randomInt(10)   (1,000,000 draws each)\n  0   ·    101778 ·    100139\n  1   ·    101766 ·     99799\n…\nexpected with % 10: digits 0–5 → 26/256 = 10.16%, digits 6–9 → 25/256 = 9.77%</pre><p>Write <code>unbiasedDigits(bytes, count)</code> using <b>rejection sampling</b>: walk the random bytes (0–255) in order, <b>skip</b> any byte ≥ 250, turn the others into <code>byte % 10</code>, stop when you have <code>count</code> digits. Return the digit string, or <code>null</code> if the bytes ran out first. (This is what <code>crypto.randomInt</code> does for you.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.2 đo độ lệch của <code>byte % 10</code> trên 1.000.000 byte:</p><pre>digit · byte % 10 · randomInt(10)   (1,000,000 draws each)\n  0   ·    101778 ·    100139\n  1   ·    101766 ·     99799\n…\nexpected with % 10: digits 0–5 → 26/256 = 10.16%, digits 6–9 → 25/256 = 9.77%</pre><p>Viết <code>unbiasedDigits(bytes, count)</code> bằng <b>lấy mẫu loại bỏ</b> (rejection sampling): đi qua các byte ngẫu nhiên (0–255) theo thứ tự, <b>bỏ qua</b> byte ≥ 250, đổi các byte còn lại thành <code>byte % 10</code>, dừng khi đủ <code>count</code> chữ số. Trả chuỗi chữ số, hoặc <code>null</code> nếu hết byte trước. (Đây là việc <code>crypto.randomInt</code> làm giùm bạn.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "unbiasedDigits([12,255,47,250,3,199,88,61,7], 6)",
+          "output": "\"273981\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "250 is the largest multiple of 10 that is ≤ 256.|||250 là bội lớn nhất của 10 mà ≤ 256.",
+        "Skipping a byte does not count toward the digits.|||Byte bị bỏ qua không tính vào số chữ số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** bytes: array of 0..255, count: digits wanted ⇒ \"123456\" or null */\nfunction unbiasedDigits(bytes, count) {\n  // Write your solution here\n  return bytes.slice(0, count).map(function (b) { return b % 10; }).join('');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction unbiasedDigits(bytes, count) {\n  var out = '';\n  for (var i = 0; i < bytes.length && out.length < count; i++) {\n    if (bytes[i] >= 250) continue;            // 250 = 25 × 10: reject 250…255 so every digit has exactly 25 bytes\n    out += String(bytes[i] % 10);\n  }\n  return out.length === count ? out : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bytes 0–249 map to each digit exactly 25 times, so every digit is equally likely; the 6 rejected values cost about 2.3% of the bytes. A 6-digit login code with digits 0–5 more likely is easier to guess than it should be.</p>",
+      "solutionExplanationHtmlVi": "<p>Byte 0–249 ứng với mỗi chữ số đúng 25 lần nên mọi chữ số đều đồng khả năng; 6 giá trị bị loại tốn khoảng 2,3% số byte. Mã đăng nhập 6 chữ số mà 0–5 dễ ra hơn thì dễ đoán hơn mức đáng lẽ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: unbiasedDigits([12,255,47,250,3,199,88,61,7], 6)",
+              "vi": "Ca 1"
+            },
+            "goi": "unbiasedDigits([12,255,47,250,3,199,88,61,7], 6)",
+            "mongDoi": "273981"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: unbiasedDigits([249,250,251,0], 2)",
+              "vi": "Ca 2"
+            },
+            "goi": "unbiasedDigits([249,250,251,0], 2)",
+            "mongDoi": "90"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "unbiasedDigits([255,254,253,252,251,250], 1)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "unbiasedDigits([], 0)",
+            "mongDoi": "",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "unbiasedDigits([10,20,30], 6)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "unbiasedDigits([5,15,25,35,45,55,65,75], 6)",
+            "mongDoi": "555555",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rejecting ≥ 255 or > 250 — off by one, digits 0–5 still win.|||Loại ≥ 255 hay > 250 — lệch một, chữ số 0–5 vẫn thắng."
+        },
+        {
+          "loi": "Returning a shorter code when bytes run out instead of null.|||Trả mã ngắn hơn khi hết byte thay vì null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "modulo bias",
+          "vi": "độ lệch do phép chia lấy dư"
+        },
+        {
+          "en": "rejection sampling",
+          "vi": "lấy mẫu loại bỏ"
+        }
+      ]
+    }
+  ]
+}

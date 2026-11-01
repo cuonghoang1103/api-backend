@@ -8782,7 +8782,12 @@ Content-Length: 578
 <li>JdbcTemplate/JdbcClient: SQL + RowMapper; <code>update</code> returns the row count (0 ⇒ answer 404); <code>?</code> and <code>:name</code> are bound parameters.</li>
 <li><code>SQLException</code> ⇒ unchecked <code>DataAccessException</code> by SQLState: 23505 <code>DuplicateKeyException</code>, 23503/23514 <code>DataIntegrityViolationException</code>.</li>
 <li>Repository interface + derived queries (typos fail at startup), <code>@Query</code> JPQL/native, DTO projections, <code>Pageable</code> + count, return your own page record.</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-11-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 12.2: Migrations, constraints and seed data</span><span class="lc-sub">Same as slide 5: numbered migrations, a history table, a checksum that refuses an edited file. Different: on PostgreSQL 18 with a runner you write yourself — two runners at once (one waits on an advisory lock), and locks measured on 1 million rows: a plain CREATE INDEX held an INSERT for over 3 s, CONCURRENTLY for 1 ms; expand/contract on deploy day.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần mang theo gì từ slide 1–12</h2>
 <ul>
 <li>JDBC, JdbcTemplate/JdbcClient và Spring Data JPA dùng chung một DataSource; khác ở chỗ ai viết SQL và phần map.</li>
@@ -8791,7 +8796,12 @@ Content-Length: 578
 <li>JdbcTemplate/JdbcClient: SQL + RowMapper; <code>update</code> trả số dòng (0 ⇒ trả 404); <code>?</code> và <code>:ten</code> là tham số được gắn.</li>
 <li><code>SQLException</code> ⇒ <code>DataAccessException</code> unchecked theo SQLState: 23505 <code>DuplicateKeyException</code>, 23503/23514 <code>DataIntegrityViolationException</code>.</li>
 <li>Interface repository + derived query (gõ sai thì hỏng lúc khởi động), <code>@Query</code> JPQL/native, projection DTO, <code>Pageable</code> + count, trả record trang của riêng bạn.</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-11-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 12.2: Migration, ràng buộc và dữ liệu mẫu</span><span class="lc-sub">Giống slide 5: migration đánh số, bảng lịch sử, checksum từ chối file bị sửa. Khác: trên PostgreSQL 18 với bộ chạy tự viết — hai bộ chạy cùng lúc (một bộ chờ advisory lock), và khoá đo trên 1 triệu dòng: CREATE INDEX thường giữ một INSERT hơn 3 s, CONCURRENTLY chỉ 1 ms; mở rộng/thu gọn trong ngày deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['springBoot', '"Data — SQL Databases": "Configure a DataSource", "Connection Pools", "Using JdbcTemplate", "Using JdbcClient", "JPA and Spring Data JPA"', '"Data — SQL Databases": "Configure a DataSource", "Connection Pools", "Using JdbcTemplate", "Using JdbcClient", "JPA and Spring Data JPA"'],
       ['springData', '"JPA Query Methods" (query creation from method names, @Query, native queries), "Paging, Iterating Large Results, Sorting", "Projections"', '"JPA Query Methods" (tạo truy vấn từ tên phương thức, @Query, native query), "Paging, Iterating Large Results, Sorting", "Projections"'],

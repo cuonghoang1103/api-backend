@@ -752,6 +752,11 @@ OK
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A Lua script is a critical section you get for free — read, branch and write in one atomic unit with one round trip — which is why it beats <code>WATCH</code> on any contended key. Declare every key in <code>KEYS</code>, never build key names inside the script and never interpolate user input into the body: the first breaks Cluster routing, the last is injection. And the conversion rules are where scripts actually go wrong: floats truncate, <code>false</code> becomes nil, tables stop at the first nil, and a missing key reads as <code>false</code> — so return <code>tostring(x)</code> for anything fractional and <code>1</code>/<code>0</code> for anything boolean.</p>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.4: a Lua token bucket shared by two instances</span><span class="lc-sub">This lesson’s rules in a production script: the key passed in KEYS, the clock from Redis TIME instead of each server’s clock, tokens returned with tostring — measured on two API instances: 5 × 201, then 429.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.3</span>
@@ -914,6 +919,11 @@ OK
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một script Lua là một vùng tới hạn bạn có được miễn phí — đọc, rẽ nhánh và ghi trong một khối nguyên tử với một vòng đi-về — đó là lý do nó thắng <code>WATCH</code> trên mọi khoá bị tranh chấp. Hãy khai báo mọi khoá trong <code>KEYS</code>, đừng bao giờ ghép tên khoá bên trong script và đừng bao giờ nhét dữ liệu người dùng vào thân script: cái đầu phá vỡ định tuyến Cluster, cái cuối là tiêm mã. Và các luật chuyển đổi mới là chỗ script thật sự hỏng: số thực bị cắt cụt, <code>false</code> thành nil, bảng dừng ở nil đầu tiên, và một khoá vắng mặt đọc ra thành <code>false</code> — nên hãy trả về <code>tostring(x)</code> cho mọi thứ có phần lẻ và <code>1</code>/<code>0</code> cho mọi thứ mang tính đúng-sai.</p>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.4: token bucket Lua dùng chung cho hai instance</span><span class="lc-sub">Các luật của bài này trong một script chạy thật: khoá truyền qua KEYS, giờ lấy từ TIME của Redis thay vì đồng hồ từng máy, số token trả bằng tostring — đo trên hai instance API: 5 × 201, rồi 429.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

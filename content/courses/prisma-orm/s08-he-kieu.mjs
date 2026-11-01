@@ -770,6 +770,11 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-enums" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">Enums, and altering them</span><span class="lc-sub">prisma.io/docs · Adding a value versus removing one, and what each costs</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">CuongThai course — TypeScript, project configuration</span><span class="lc-sub">Project references and multiple tsconfigs — the tidy way to type-check scripts as well as src</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Find every file in a repository that tsc does not read, then reproduce this incident and fix it twice</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same discipline in plain TypeScript — TS 2.4: Literal types &amp; as const</span><span class="lc-sub">Same: a hand-copied list of allowed values drifts, only a derived one is safe. Different: no Prisma needed — write the list once with as const, derive the union with (typeof LABS)[number], and check query strings at runtime with a guard.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -904,6 +909,11 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-schema/data-model/models#defining-enums" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">Enum, và cách sửa chúng</span><span class="lc-sub">prisma.io/docs · Thêm một giá trị so với bỏ một giá trị, và mỗi việc tốn gì</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — TypeScript, phần cấu hình dự án</span><span class="lc-sub">Project reference và nhiều tsconfig — cách gọn gàng để kiểm kiểu cả script chứ không chỉ src</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Tìm mọi tệp trong một kho mà tsc không đọc, rồi dựng lại sự cố này và vá nó hai lần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng kỷ luật bằng TypeScript thuần — TS 2.4: Kiểu literal &amp; as const</span><span class="lc-sub">Giống: danh sách giá trị hợp lệ chép tay sẽ lệch, chỉ danh sách suy ra mới an toàn. Khác: không cần Prisma — viết danh sách một lần với as const, suy union bằng (typeof LABS)[number], và kiểm query string lúc chạy bằng guard.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

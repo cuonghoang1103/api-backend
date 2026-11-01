@@ -1,11 +1,16 @@
 openapi: 3.1.0
 info:
   title: LabFlow API
-  version: 2.3.0
+  version: 2.4.0
   summary: Book university labs, report broken devices.
   description: |
     LabFlow v2. Every error is `application/problem+json` (RFC 9457).
     Times are RFC 3339 with an offset; the server answers in UTC.
+
+    2.4.0 (Chapter 12 — PostgreSQL in production): same resources, same shapes. What changed is what
+    clients can rely on: every response carries `X-Request-Id` (quote it when reporting a problem), and any
+    operation that reads or writes data may answer `503 DEPENDENCY_DOWN` with `Retry-After` while the
+    database is unreachable — retry with the same `Idempotency-Key`.
   contact:
     name: LabFlow team
     email: api@labflow.example
@@ -76,6 +81,7 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Me' }
         '401': { $ref: '#/components/responses/Unauthenticated' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /labs:
     get:
       tags: [Labs]
@@ -118,6 +124,7 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Lab' }
         '404': { $ref: '#/components/responses/NotFound' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /labs/{labId}/waitlist:
     post:
       tags: [Waitlist]
@@ -149,6 +156,7 @@ paths:
               schema: { $ref: '#/components/schemas/Problem' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
         '422': { $ref: '#/components/responses/Unprocessable' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /me/waitlist:
     get:
       tags: [Waitlist]
@@ -166,6 +174,7 @@ paths:
                 properties:
                   data: { type: array, items: { $ref: '#/components/schemas/WaitlistEntry' } }
         '401': { $ref: '#/components/responses/Unauthenticated' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /reports/usage:
     get:
       tags: [Reports]
@@ -216,6 +225,7 @@ paths:
         '204': { description: Removed }
         '401': { $ref: '#/components/responses/Unauthenticated' }
         '404': { $ref: '#/components/responses/NotFound' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /bookings:
     get:
       tags: [Bookings]
@@ -242,6 +252,7 @@ paths:
               schema: { $ref: '#/components/schemas/BookingPage' }
         '400': { $ref: '#/components/responses/InvalidQuery' }
         '401': { $ref: '#/components/responses/Unauthenticated' }
+        '503': { $ref: '#/components/responses/Unavailable' }
     post:
       tags: [Bookings]
       operationId: createBooking
@@ -261,6 +272,7 @@ paths:
           description: Created
           headers:
             Location: { description: URL of the new booking, schema: { type: string } }
+            X-Request-Id: { $ref: '#/components/headers/X-Request-Id' }
             RateLimit: { $ref: '#/components/headers/RateLimit' }
             RateLimit-Policy: { $ref: '#/components/headers/RateLimitPolicy' }
           content:
@@ -289,6 +301,7 @@ paths:
         '401': { $ref: '#/components/responses/Unauthenticated' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /bookings/{id}/cancel:
     post:
       tags: [Bookings]
@@ -306,6 +319,7 @@ paths:
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
         '409': { $ref: '#/components/responses/Conflict' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /bookings/{id}/check-in:
     post:
       tags: [Bookings]
@@ -323,6 +337,7 @@ paths:
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
         '409': { $ref: '#/components/responses/Conflict' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /bookings/{id}/receipt:
     get:
       tags: [Bookings]
@@ -338,6 +353,7 @@ paths:
               schema: { $ref: '#/components/schemas/Receipt' }
         '401': { $ref: '#/components/responses/Unauthenticated' }
         '404': { $ref: '#/components/responses/NotFound' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /devices/{deviceId}/issues:
     post:
       tags: [Issues]
@@ -365,6 +381,7 @@ paths:
         '404': { $ref: '#/components/responses/NotFound' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
         '429': { $ref: '#/components/responses/TooManyRequests' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /issues/{id}/resolve:
     post:
       tags: [Issues]
@@ -394,6 +411,7 @@ paths:
         '409': { $ref: '#/components/responses/Conflict' }
         '412': { $ref: '#/components/responses/PreconditionFailed' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+        '503': { $ref: '#/components/responses/Unavailable' }
   /exports:
     post:
       tags: [Jobs]
@@ -697,6 +715,9 @@ components:
       description: Optional. Same key + same body within 24 h ⇒ the first answer is replayed.
       schema: { type: string, minLength: 1, maxLength: 255 }
   headers:
+    X-Request-Id:
+      description: Id of this request in the server logs. Sent on every response; a valid incoming X-Request-Id (1–64 of [A-Za-z0-9_.-]) is echoed back.
+      schema: { type: string, maxLength: 64 }
     Retry-After:
       description: Seconds to wait before retrying (503 overload or dependency down, 429 quota)
       schema: { type: integer, minimum: 1 }

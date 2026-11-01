@@ -1,0 +1,250 @@
+# Hợp đồng soạn khoá "TypeScript" (/courses/typescript)
+
+> Đọc HẾT file này trước khi soạn một chương. Viết 01/11/2026 cùng đợt mẫu **Mục 0 + Chương 1** (chép quy trình của hai khoá đã
+> soạn trọn: `content/courses/testing/_HOP-DONG.md`, `content/courses/api-design/_HOP-DONG.md` + `_BAN-GIAO.md`).
+> Chỗ nào file này không nói ⇒ bắt chước đúng các bài của đợt mẫu: `typescript/s00/*.mjs`, `typescript/s01/*.mjs`, deck `ts-00-*`,
+> `ts-01-*`, `ts-lab-1`.
+
+## 0. Khoá này là gì, dạy ai
+
+- Người học: SV SE FPT **kỳ 5, chuyên ngành hẹp Node.js** — đã học JavaScript qua FER202 (React) và/hoặc SDN302 (Node/Express),
+  muốn viết **backend + frontend TypeScript thật** khi đi làm. Tiếng Anh còn yếu ⇒ **giảng tiếng Việt, thuật ngữ Anh luôn kèm giải
+  nghĩa** lần đầu (`type annotation (chú thích kiểu)`), các lần sau dùng thẳng.
+- Khoá **tự đủ từ số 0** (luật chủ kênh 31/10): không bắt sang Academy/khoá khác học phần nền — chỗ nào cần JS nền (object, mảng,
+  import/export, async) thì nhắc lại ngắn ngay trong bài; link khoá khác chỉ là "đọc thêm".
+- **DỄ HIỂU là tiêu chí số 1.** Mở đầu khoá, chương, bài luôn nói: học xong làm được gì, vì sao có ích (đồ án, phỏng vấn, đi làm).
+- **Mọi output là output chạy thật** (tsc, node, grader) trên dự án xuyên khoá **LabFlow TS** (mục 3). Không bịa, không "khoảng chừng"
+  khi đo được. Số đo ngẫu nhiên/thời gian ⇒ đo thật ≥ 2 lần, ghi đúng số.
+- Thực chiến mỗi chương: một bug/bẫy THẬT chạy ra đỏ, một bảng "khi nào dùng gì", góc phỏng vấn, đối chiếu Java (PRO192/Spring) khi có ích,
+  sự cố thật của chính website này khi có (vd 08/08/2026 enum `CODE` → `CODE_REVIEW` qua hết checklist mà vỡ seed production — CLAUDE.md).
+
+## 1. Phiên bản ghim (đo 01/11/2026)
+
+| Thứ | Bản | Ghi chú đo được |
+|---|---|---|
+| Node.js | **22.23.3** (LTS "Jod") | Node ≥ 22.18 chạy `.ts` trực tiếp bằng **type stripping** (bật mặc định từ 22.18.0, 31/07/2025). `process.features.typescript` = `'strip'`. Không hỗ trợ `enum`/`namespace`/parameter property ⇒ `ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX`. |
+| TypeScript | **7.0.2** (npm `latest`, 08/07/2026) | Trình biên dịch **viết lại bằng Go** (gói `typescript` kéo binary `@typescript/typescript-<os>-<arch>`, 26 MB trên darwin-arm64 — đo `du`; `typescript` 3,5 MB; cả `node_modules` 33 MB). **Mặc định `strict: true`** kể cả khi gọi `tsc file.ts` không có tsconfig. KHÔNG có JS API (7.0 "does not ship with an API"). |
+| TypeScript 6 | 6.0.3 | Bản JS cuối cùng có API; **VS Code 1.124.2 dùng TypeScript 6.0.3 bên trong** để tô đỏ ⇒ editor và `npx tsc` có thể là hai bản khác nhau. Máy chấm web tương lai cần bản JS này (mục 7.3). |
+| @types/node | **22.20.5** | khớp Node 22. |
+| tsx | 4.23.15 | chỉ nhắc (chạy .ts ở Node cũ); khoá dùng Node chạy thẳng. |
+
+Chương sau thêm gói (Express 5, Zod 4, Prisma, React 19, Vitest…) ⇒ ghim bản chính xác (`npm i -E`) và thêm dòng vào bảng này.
+Dùng **đúng bản gói** mà khoá Node.js / API Design / Testing đã ghim nếu trùng (Express 5.3.0, Zod 4.6.7, Vitest 5.0.5, React 19.3.1).
+
+## 2. Cây file
+
+| File | Vai trò |
+|---|---|
+| `content/courses/typescript.mjs` | Khoá (`syncOrder: true` từ 01/11 ⇒ seed theo đúng thứ tự file). Import `sNN`. |
+| `typescript/sNN-<ten>.mjs` | Chương: `title` **GIỮ NGUYÊN** (seeder neo chương bằng tiêu đề), `description`, `lessons: [...]` (import từ `sNN/`). |
+| `typescript/sNN/<bai>.mjs` | Một bài (`slug`, `type`, `isFreePreview`, `title` EN\|\|\|VI, `description` tiếng Việt, `content`, `video` nếu có). |
+| `typescript/sNN/_ma-<deck>.mjs` | `CODE` (mã nguồn) + `OUT` (output chạy thật) của MỘT bài — **SINH TỰ ĐỘNG** bằng `scripts/ts/sinh-ma.mjs`, không sửa tay. Mỗi bài một tệp (soạn song song không giẫm nhau). |
+| `typescript/giang/<deck>.mjs` | Lời giảng EN/VI dưới từng slide: `walkTs(deck, tênEN, tênVI, [[n, 'Tiêu đề slide', '<p>EN</p>', '<p>VI</p>'], …])`. |
+| `typescript/_slides.mjs` | `walkTs`, `ma(lang, src)`, `ra(output)`, `lienKet({ khoa, bai, … })`, `nguon(...)`, bảng **`VER`**. Chỉ sửa `VER`. |
+| `typescript/_labflow-ts/` | **Ảnh chụp dự án LabFlow TS** ở cuối chương mới nhất đã soạn (không node_modules). |
+| `typescript/_de-codelab-ts.json` | Đề Code Lab kiểu **`ts`** (chờ máy chấm web, mục 7). |
+| `scripts/slides-src/_ts-chung.mjs` | Khuôn slide (chép `_tst-chung.mjs`): `ts()` mã TS, `tc()` terminal tsc/node + mọi helper của khuôn Testing. Đổi khuôn ⇒ deck đã đẩy phải lên prefix mới. |
+| `scripts/slides-src/ts-NN-M.mjs`, `ts-lab-N.mjs` | Deck từng bài / lab chương. |
+| `scripts/ts/` | `chay.sh` (chạy lệnh trong môi trường SẠCH `env -i`, chụp output), `sinh-ma.mjs` (sinh `_ma-<deck>.mjs`, chặn chuỗi bí mật/đường dẫn máy), `kiem-de-ts.mjs` (kiểm đề Code Lab `ts`). Kiểm slide dùng chung `scripts/tst/kiem-slide.mjs`, ghép ảnh `scripts/tst/ghep-anh.mjs`. |
+| `content/_LIEN-KET-CHEO/typescript.md` | Sổ liên kết chéo của khoá (mục 6). |
+
+## 3. LabFlow TS — dự án xuyên khoá
+
+**Vì sao chọn:** cùng hệ thống đặt phòng lab "LabFlow" của khoá Node.js → API Design → Testing. Chương 1 lấy **đúng hai tệp luật**
+`time.js` + `booking.js` của LabFlow Lite (khoá Testing, `testing/_labflow-lite/src/rules/`) và đổi sang TypeScript — người đã học
+Testing nhận ra ngay `checkSlot`, `needsApproval`, BR-04/05/06; người chưa học thì đây là code JS bình thường. Các chương sau lớn dần
+thành API Express có kiểu (Ch11), form React dùng chung kiểu (Ch12), Zod + Prisma ở biên (Ch13) — chính chồng công nghệ của các khoá kia.
+
+### 3.1 Cấu trúc (cuối Chương 1)
+```
+_labflow-ts/
+  package.json        # type: module, engines node >=22.18, devDeps typescript 7.0.2 + @types/node 22.20.5 (ghim -E)
+  tsconfig.json       # chuẩn của khoá (bài 0.3): target es2024, module nodenext, types [node], strict, noUncheckedIndexedAccess,
+                      #   noEmit, allowImportingTsExtensions, erasableSyntaxOnly, verbatimModuleSyntax, skipLibCheck; include ["src"]
+  js/time.js, js/booking.js        # bản GỐC LabFlow Lite (JavaScript) — chép nguyên từ khoá Testing, không sửa
+  src/rules/time.ts, booking.ts    # bản TypeScript (= lời giải Lab 1): Role, SlotCode, SlotResult, BookingInput, Booking
+  src/rules/*.test.ts              # node:test (10 test) — `npm test`
+  lab1/                            # Lab 1: src/ (khởi đầu = JS đổi đuôi), test/rules.test.ts (15 test), kiem/phai-dung.ts, kiem/sai.ts (8 lời gọi sai),
+                                   #   yeu/ (lần thử "any", 5.5/10), vua/ (lần thử string/number, 8/10)
+  scripts/cham-lab-1.mjs           # máy chấm Lab 1 — `node scripts/cham-lab-1.mjs [--from <thư mục>]`
+  demo0/<deck>/, demo1/<deck>/     # thí nghiệm từng bài (có tệp CỐ Ý đỏ). Mỗi thư mục có tsconfig riêng nếu cần (extends ../../tsconfig.json)
+```
+- `npm run typecheck` = `tsc --noEmit -p tsconfig.json` (chỉ `src/`, luôn xanh) · `npm test` = `node --test --test-reporter=spec "src/**/*.test.ts"`
+  (Node 22 cần glob; `node --test src/` báo `Cannot find module '…/src'` — đo 01/11) · `npm run lab1`.
+- `demo*/` có tệp CỐ Ý lỗi ⇒ KHÔNG nằm trong `include` của tsconfig gốc; chạy bằng `npx tsc -p demo1/<deck>` hoặc `npx tsc --noEmit <file>`.
+  ⚠️ `tsc --help` nói `tsc app.ts` "Ignoring tsconfig.json" nhưng đo thật (7.0.2): thư mục có tsconfig.json ⇒ `npx tsc file.ts` **lỗi TS5112**
+  ("tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig'…", exit 1). Muốn mặc định TS7
+  (strict, `types: []`) thì thêm `--ignoreConfig` — dạy ở 0.3.
+- Code mới của chương ⇒ thêm vào `src/` đúng chỗ; giữ nguyên tệp chương trước (máy chấm lab tìm đúng chuỗi). Chương N mới ⇒ `demoN/`, `labN/`,
+  `scripts/cham-lab-N.mjs`.
+- Xong chương ⇒ cập nhật ảnh chụp `_labflow-ts/` (rsync bỏ `node_modules`, `.cham-*`, `.kiem-de`), kiểm trên bản sao mới:
+  `npm ci && npm run typecheck && npm test && node scripts/cham-lab-1.mjs --from src/rules` (10/10).
+
+### 3.1b Chương 2 thêm gì (01/11/2026)
+- `src/rules/schedule.ts` + `schedule.test.ts` (13 test; `npm test` = 23 test) = lời giải Lab 2: `LABS as const`, `LabCode = (typeof LABS)[number]`,
+  `TimeRange = readonly [start: number, end: number]`, `ScheduleEntry` (`note: string | null`, `cancelledAt?: string`), `isLab` (guard bằng `some`,
+  không `as`), `toRange`, `findEntry` (`| undefined`), `noteOf` (`??`), `firstStart` (`| null`), `sortByStart` (`toSorted`), `labelOf`.
+- `lab2/` (khởi đầu viết khi `strict: false` + `tsconfig.loose.json`, test, `kiem/phai-dung.ts`, `kiem/sai.ts`, `yeu/`, `vua/`), `scripts/cham-lab-2.mjs`
+  (`npm run lab2`; phần C cấm thêm `as` trừ `as const` và `!` — bóc chú thích + chuỗi trước khi quét), `demo2/<deck>/`.
+- Số đo Lab 2: cùng tệp `strict: false` 0 lỗi / strict 10 lỗi · khởi đầu **1/10** (0/8) · `yeu/` "! và as" **4/10** (test xanh, E 0/8) ·
+  `vua/` "null thật, mảng thường" **7/10** (E 4/8: S5–S8 lọt) · tham khảo **10/10**. Mã đo được: S1 TS2532, S2 TS18047, S3 TS18048, S4 TS2531,
+  S5 TS2322, S6 TS2540, S7 TS2322 (tsc 7 in union đã sắp: `"AL-301" | "BE-201" | "BE-202"`), S8 TS2339.
+
+### 3.2 Số đo nền của Lab 1 (01/11/2026, chạy thật)
+| Bài nộp | A tsc src (2) | B gọi đúng (1) | C không any (1) | D 15 test (2) | E 8 lời gọi sai bị từ chối (4) | Tổng |
+|---|---|---|---|---|---|---|
+| Khởi đầu (JS đổi đuôi .ts, còn `./time.js`) | 0 (13 lỗi TS7006/TS7031) | 0 | 1 | 0 (`ERR_MODULE_NOT_FOUND` `./time.js`) | 3/8 | **2.5** |
+| `yeu/` — mọi chỗ `any` | 2 | 1 | 0 | 2 | **1/8** (tệ hơn không làm gì) | **5.5** |
+| `vua/` — string/number, không literal union | 2 | 0 (`minutes: number \| undefined`, `status: string`) | 1 | 2 | 6/8 | **8** |
+| Tham khảo `src/rules` | 2 | 1 | 1 | 2 | 8/8 | **10** |
+
+## 4. Chụp output thật
+
+```bash
+bash scripts/ts/chay.sh <SCRATCH>/ts/lab/labflow-ts "npx tsc -p demo1/ts-01-1" > <SCRATCH>/ts/out/ts-01-1/11-loi.txt
+```
+- `chay.sh` chạy trong `env -i PATH=<node 22.23.3>:/usr/bin:/bin HOME=<tạm> TZ=UTC NO_COLOR=1` (đổi bằng `TS_NODE_BIN`, `TS_HOME`, `TZ=…`),
+  in `$ lệnh`, output (đường dẫn tuyệt đối → `…/labflow-ts`), `[exit N]` (bị cắt khi sinh `_ma`).
+- `--pretty` vẫn in mã màu ANSI ⇒ `sinh-ma.mjs` tự bóc. Không có TTY ⇒ tsc in dạng một dòng `file(dòng,cột): error TSxxxx: …`.
+- Sinh `_ma`: viết `<SCRATCH>/ts/map-<deck>.json` rồi `node scripts/ts/sinh-ma.mjs <map>`:
+  ```json
+  { "duAn": "<SCRATCH>/ts/lab/labflow-ts", "out": "<SCRATCH>/ts/out/ts-01-1", "dich": "content/courses/typescript/s01/_ma-ts-01-1.mjs",
+    "bai": "1.1", "code": { "bookingJs": "js/booking.js", "bug1": "demo1/ts-01-1/typo.ts" } }
+  ```
+  `sinh-ma.mjs` DỪNG nếu thấy `TOKEN|SECRET|sk-|ctw_|/Users/|/private/|API_KEY|R2_` trong code/output.
+- Trích một đoạn tệp ⇒ hằng ở đầu tệp bài: `const DONG = CODE.bookingJs.split('\n'); const X = DONG.slice(9, 17).join('\n');`
+  (biểu thức có `'\n'` KHÔNG được nằm trong `${…}` của thân bài — bộ kiểm cấm gạch chéo ngược trong thân).
+
+## 5. Khung một chương
+
+- Bài dạy giữ **slug khung** `typescript-N-M-<ten>` (xem các `sNN-*.mjs` hiện có). Mục 0 thêm 2 bài "Bắt đầu tại đây" slug
+  `typescript-0-8-bat-dau-tai-day`, `typescript-0-9-bat-dau-tai-day-2` đứng ĐẦU.
+- **Lab chương** (bài MỚI, đứng TRƯỚC quiz): slug `typescript-N-6-lab-<ten>`, thang 10 điểm (đạt 7) + máy chấm `scripts/cham-lab-N.mjs`
+  chạy tsc + node thật. Lab có: Setup · nhiệm vụ · bảng "lời gọi sai phải bị từ chối" (đột biến ở TẦNG KIỂU — tsc phải báo đúng mã) ·
+  lần thử YẾU chạy thật + vì sao trượt · thang chấm · gợi ý nhẹ→mạnh · lời giải + output 10/10 · checklist.
+- **Quiz chương**: slug khung `typescript-N-5-quiz` (giữ), `type: 'QUIZ'`, **10 câu tình huống**, đáp án rải (mỗi chữ A–D 2–3 lần, ghi phân bố
+  ở chú thích đầu tệp), `explanation: 'EN: …|||VI: …'` nói vì sao đúng VÀ vì sao đáp án sai hấp dẫn nhất lại sai.
+- Bài (`type: 'LESSON'` hoặc `'VIDEO'` nếu đã có `video`, `isFreePreview: true`), `content` theo thứ tự:
+  1. `${G}` — "📑 Học theo slide" (import từ `giang/`).
+  2. `<div class="ml-en">`: `eyebrow` → `h2` → `p.lead` (học xong làm được gì) → các mục `h3` (mã `ma('typescript', …)`, output `ra()`,
+     bảng, `div.pitfall.co-tieu-de` cho bẫy, sơ đồ `lz-flow`/`lz-stack`) → **🧪 Practice** trong `div.callout.ok` (đề + **lời giải + output thật**
+     + "Done when") → **🗂 Key terms** (`div.kv-grid`) → **📌 Summary** → 📚 nguồn (thẻ `nguon(...)`, ghi "read 1 Nov 2026") → thẻ `lienKet(...)`. `</div>`
+  3. `<div class="ml-vi">` — bản tiếng Việt **đầy đủ tương đương** (không tóm tắt), cùng mã/output.
+- **Độ dài: 30–40k ký tự/bài kể cả phần giảng slide**; lời giảng ngắn (40–70 từ/slide). Chủ đề lớn ⇒ tách bài (slug mới chèn giữa).
+- Mỗi bài nên có: một bẫy THẬT chạy ra đỏ, một bảng "khi nào dùng gì", thuật ngữ EN–VI, câu phỏng vấn khi hợp.
+
+### Luật chữ trong template literal (bộ kiểm `scripts/course-content-check.mjs` bắt)
+- Trong thân `` `...` ``: **không backtick, không `\`**, `${` chỉ cho nội suy thật. Mã mẫu TS có template string ⇒ đưa vào `_ma` (sinh từ tệp
+  thật, tự thoát) hoặc viết bằng nối chuỗi `'a' + b`.
+- HTML: `<` `>` `&` trong chữ thường ⇒ `&lt;` `&gt;` `&amp;` (generic `Array&lt;string&gt;`, mũi tên `=&gt;`). `ma()`/`ra()` tự thoát.
+- Kiểm: `node scripts/course-content-check.mjs ./content/courses/typescript.mjs` ⇒ 0 lỗi; `node scripts/course-depth-audit.mjs ./content/courses/typescript.mjs`.
+
+## 6. Slide
+
+- Deck `scripts/slides-src/ts-NN-M.mjs` (NN 2 chữ số; M = số bài; Mục 0 "Bắt đầu" = 8, 9) và `ts-lab-N.mjs`.
+  `export const deck = { key, code: 'TS N.M', title, sub }`, `export const slides = lamDeck({ chuong: 'Chapter N — …', bai: 'N.M' | 'Lab N' }, [...])`.
+- Helper `_ts-chung.mjs`: `ts(src, { hl, sm })` mã TS · `js(src)` mã JS · `tc(text, { title })` terminal tsc/node (error TS đỏ, ✔ xanh) ·
+  `vt` (terminal test) · `two`, `three`, `box(h, html, 'lam'|'xanh'|'do2')`, `steps`, `cards`, `flow`, `tbl`, `vsd`, `kw`, `c('code')`, `zm(html, 1.2)`.
+- Luật (như Testing): **FULL TIẾNG ANH** (cả chú thích trong code), logo CuongThai.com, **không logo/tên FPT**, chữ thân 24–28px,
+  mã ≤ ~14 dòng/khối, output trên slide = output thật (được cắt bằng `…`), lấp đều khung. 10–12 slide/bài, deck lab 9 slide.
+- **Kiểm TỰ ĐỘNG trước khi render/upload:** `node scripts/tst/kiem-slide.mjs scripts/slides-src/ts-NN-M.mjs` ⇒ `0 slide có vấn đề`
+  (TRÀN ngang/dọc, dòng mã vượt mép, TRỐNG < 70%).
+- Render + soát bằng MẮT: `node scripts/_render-slides.mjs --deck scripts/slides-src/<deck>.mjs --out <SCRATCH>/ts/render` ⇒
+  `node scripts/tst/ghep-anh.mjs <SCRATCH>/ts/render/<deck> <SCRATCH>/ts/sheets` ⇒ mở TỪNG ảnh ghép, đối chiếu số trên slide với output thật.
+- **Upload** (chủ ý chạm R2 thật, chỉ khi đã soát): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/ts/render --prefix TS/v1 --decks <deck,…>`
+  ⇒ `images/academy/TS/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy.** Deck đã đẩy mà dựng lại ⇒ `TS/v2` + `VER`.
+- Lời giảng `giang/<deck>.mjs`: đúng một dòng/slide, đủ 1..N (walkTs ném lỗi nếu thiếu/trùng); tiêu đề cột 2 ≡ `t:` của slide (bỏ `<br>`).
+
+## 7. Code Lab
+
+### 7.1 Đề kiểu `ts` — `typescript/_de-codelab-ts.json` (chờ máy chấm web)
+Mỗi đề là một object:
+| Trường | Ý nghĩa |
+|---|---|
+| `id` | `ts-cl-<chương>-<bài>-<chữ>` (vd `ts-cl-1-1-a`), lab: `ts-cl-lab-1` |
+| `bai` | slug bài học gắn đề (nút "🏋️ Luyện tập") |
+| `tieuDe`, `moTa` | EN\|\|\|VI. `moTa` là HTML ngắn: việc phải làm + "Done when". |
+| `doKho`, `phut` | `EASY`/`MEDIUM`/`HARD`, phút ước lượng |
+| `khoiDau` | `{ "src/x.ts": "…" }` — tệp người học SỬA (máy chấm chỉ đọc những tệp này) |
+| `coDinh` | tệp của máy chấm (test, `kiem/sai.ts`, `kiem/dung.ts`) — người học thấy nhưng không sửa |
+| `kiem.sach` | tsc (tsconfig chuẩn của khoá) trên tệp người học + các tệp này: **0 lỗi** ("must compile") |
+| `kiem.phaiLoi` | tệp có dòng kết thúc `// expect TSxxxx` ⇒ dòng đó PHẢI có lỗi đúng mã (đột biến tầng kiểu); dòng khác: 0 lỗi |
+| `kiem.loiTsc` | đề "đọc/gây lỗi": tsc trên tệp người học phải ra ĐÚNG tập mã này (`[]` = sạch) |
+| `kiem.chay`, `kiem.ra` | lệnh Node 22 phải exit 0 (`node --test test/x.test.ts`, `node src/main.ts`); `ra` = chuỗi stdout phải chứa |
+| `kiem.cam` | regex cấm trong tệp người học (mặc định `\bany\b`, `@ts-ignore`, `@ts-nocheck`, `@ts-expect-error`) |
+| `loiGiai` | lời giải tham khảo (có chú thích tiếng Anh) |
+| `saiMau` | `[{ nhan, tep }]` — bài làm SAI hay gặp (any, string thay literal union, quên kiểu trả về…) — máy chấm PHẢI đánh trượt |
+
+Kiểm thật trên máy: `node scripts/ts/kiem-de-ts.mjs <SCRATCH>/ts/lab/labflow-ts content/courses/typescript/_de-codelab-ts.json [id…]`
+⇒ mỗi đề: lời giải QUA · khởi đầu TRƯỢT · mọi sai mẫu bị bắt. Kết quả đợt mẫu: xem mục 9.
+
+### 7.2 Đề chạy runtime thuần (dùng được máy chấm `module` hiện có)
+Bài chỉ kiểm hành vi (không kiểm kiểu) có thể viết bằng JS cho grader `module` theo định dạng `content/codelab/*-practice/` — nhưng phần lớn
+giá trị của khoá là **tầng kiểu**, nên đợt mẫu KHÔNG làm đề `module`. Nếu làm: track `typescript-practice`, cần dòng trong `PRACTICE_CATALOG` +
+`PRACTICE_TRACK_BY_COURSE` của `src/services/codeLab.practice.ts` — **đề xuất, chưa sửa `src/`** (cần chủ kênh duyệt):
+```ts
+// PRACTICE_CATALOG
+{ slug: 'typescript-practice', courseSlug: 'typescript', /* như các track khác */ },
+// PRACTICE_TRACK_BY_COURSE
+typescript: 'typescript-practice',
+```
+(Lưu ý: `fallbackTrackFor('web-foundations', 'wf-9-…')` đang trả `'typescript'` — một track TypeScript cũ trong CSDL; mô tả khoá cũ ghi "16 module,
+160 bài" — chưa kiểm được track đó còn sống, đừng hứa con số này trong bài.)
+
+### 7.3 Đề xuất máy chấm `ts` trên web (chưa làm — cần duyệt)
+- Chạy trong **Web Worker** như `sql`/`module`. TypeScript 7 là binary Go, **không chạy trong trình duyệt và không có JS API** ⇒ dùng
+  **`typescript@6.0.3`** (bản JS, cùng ngôn ngữ; VS Code cũng dùng nó) qua `ts.createProgram` + một `CompilerHost` bộ nhớ, hoặc `@typescript/vfs` (1.6.5).
+  Kích thước đo 01/11: `lib/typescript.js` **9,14 MB** (gzip -9: **1,64 MB**); `lib.es5…es2024 + decorators .d.ts` 537 KB (gzip 54 KB);
+  cả gói 23 MB (phần lớn là bản dịch thông báo + tsserver — không cần). Tải lười khi mở đề, cache Service Worker.
+- **Lệch 6.0.3 ↔ 7.0.2 đã đo** (`KIEM_TSC=<tsc 6.0.3> node scripts/ts/kiem-de-ts.mjs …`): 30/31 đề cho cùng kết quả; đề `ts-cl-1-2-d` lệch MÃ
+  lỗi (7.0.2 báo TS2739 ở dòng 6, 6.0.3 báo TS2345 bọc ngoài). Trên `lab1/kiem/sai.ts` hai bản cho 38 chẩn đoán giống hệt. ⇒ máy chấm web chỉ
+  nên so mã khi 6 và 7 khớp; đề nào lệch thì nhận một trong hai mã, hoặc chấm cuối bằng máy chủ (tsc 7).
+- Chấm: (1) `sach` ⇒ `getPreEmitDiagnostics` rỗng; (2) `phaiLoi` ⇒ map lỗi theo dòng + mã; (3) `chay` ⇒ `ts.transpileModule` (hoặc bỏ kiểu
+  như Node) rồi chạy test kiểu `module` hiện có (node:test ⇒ cần shim `test`/`assert` nhỏ trong Worker); (4) `cam` ⇒ regex.
+- `@types/node`: chỉ nạp phần cần (`console`, `process.env`) hoặc đề không dùng API Node.
+- Máy chủ chấm lại khi nộp: dùng chính `scripts/ts/kiem-de-ts.mjs` (tsc 7 thật) — bản trình duyệt (TS 6) chỉ để phản hồi nhanh; lệch giữa 6.0.3 và
+  7.0.2 phải được đo trên bộ đề trước khi bật.
+
+## 8. Liên kết chéo (hai chiều, đúng bài)
+- TS → bài khác: `${lienKet({ khoa: '<slug khoá>', bai: '<slug bài>', title, sub, cta })}` cuối **cả** ml-en và ml-vi. `sub` nói rõ **Giống** gì,
+  **Khác/sâu thêm** gì.
+- Bài khác → TS: thẻ `<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=…" …>` cùng mẫu, đặt cuối ml-en/ml-vi của bài kia.
+  **Trước khi sửa tệp dùng chung: `git status --short <file>` + `git diff HEAD <file>`** — có thay đổi của phiên khác ⇒ BỎ QUA, ghi vào sổ.
+  `content/academy/**` có dòng "FILE SINH TỰ ĐỘNG" ⇒ sửa nguồn ở `~/Documents/FLM-nguon/_repo/<MÔN>/gen/` rồi sinh lại (diff rỗng ngoài thẻ).
+- Mọi cặp ghi vào `content/_LIEN-KET-CHEO/typescript.md`.
+
+## 9. Kế hoạch toàn khoá (chương nào cũng: bài dạy + Lab + quiz 10 câu; dự án cuối khoá ở Ch16)
+
+| Ch | Tiêu đề (giữ) | LabFlow TS lớn thêm gì | Lab chương (máy chấm tsc + node) |
+|---|---|---|---|
+| 0 | Giới thiệu & cách học | dựng dự án, tsconfig chuẩn | — (quiz Mục 0) |
+| 1 | Vì sao TypeScript tồn tại | `js/` → `src/rules/*.ts` | **Lab 1** đổi luật LabFlow sang TS: 8 lời gọi sai bị từ chối |
+| 2 | Hệ thống kiểu cơ bản | hằng số, `null` trong dữ liệu lịch | Lab 2: `strictNullChecks` trên bảng lịch phòng (null/undefined, tuple giờ) |
+| 3 | Hàm | chuỗi validator `(input) => Problem[]` | Lab 3: bộ luật đặt phòng là mảng hàm; overload `parseTime` |
+| 4 | Object, interface & type alias | mô hình miền Lab/User/Booking | Lab 4: mô hình miền readonly/optional + `Record<LabCode, Lab>` |
+| 5 | Union, literal & thu hẹp | `SlotResult`, trạng thái lượt đặt | Lab 5: máy trạng thái Booking (union có nhãn + `never`); grader thêm trạng thái mới ⇒ phải đỏ |
+| 6 | Generics | `Result<T, E>`, repository | Lab 6: `Repo<T extends { id }>` + `groupBy` |
+| 7 | Kiểu nâng cao | tên sự kiện `booking:${Action}`, DTO ánh xạ | Lab 7: hệ sự kiện có kiểu |
+| 8 | Utility types | `CreateBooking = Omit<…>`, PATCH | Lab 8: tự dựng lại Partial/Pick/Omit + DTO API |
+| 9 | tsconfig & trình biên dịch | CI `tsc --noEmit`, tái hiện sự cố seed 08/08 | Lab 9: siết một dự án lỏng lên strict + cổng CI |
+| 10 | Module & .d.ts | `.d.ts` cho thư viện JS cũ, augmentation `Request.user` | Lab 10: viết khai báo kiểu cho gói JS |
+| 11 | Backend Node/Express | API LabFlow (Express 5.3.0) có kiểu | Lab 11: handler + lỗi có kiểu; test API (node:test/Supertest) |
+| 12 | React | form đặt phòng + client API dùng chung kiểu | Lab 12: component + hook có kiểu |
+| 13 | Zod & Prisma | Zod 4.6.7 ở biên, Prisma schema bookings | Lab 13: schema là nguồn sự thật duy nhất |
+| 14 | Class & decorator | `BookingService`, `#private`, decorator TC39 | Lab 14: service + abstract repo |
+| 15 | Hiệu năng build | đo tsc 6.0.3 vs 7.0.2, incremental, project references | Lab 15: tách check/transpile, đo lại |
+| 16 | Kiến trúc & type-driven | branded `Minutes`/`LabCode`, illegal states | **Dự án cuối khoá** (bài mới `typescript-16-6-du-an-cuoi-khoa`): LabFlow TS full-stack (API + React + Zod + Prisma + CI), máy chấm 100 điểm, kể dự án theo STAR |
+
+## 10. Trạng thái
+- 01/11/2026 — đợt mẫu **Mục 0 + Chương 1**: 7 + 6 bài (2 bài "Bắt đầu" + Lab 1 + quiz Mục 0 là bài MỚI), 11 deck / 130 slide đẩy `TS/v1`
+  (`VER` rỗng), 31 đề Code Lab `ts` / 66 bài sai mẫu (kiem-de-ts 31/31), 8 cặp liên kết chéo. Độ dài (nguồn bài + giảng): 38–42k ký tự/bài.
+  Các chương 3–16 (lúc viết dòng này) vẫn là bài cũ (chữ, video YouTube, chưa slide/lab/Code Lab) — soạn theo §5 + §9, bắt chước đợt mẫu.
+- 01/11/2026 — **Chương 2 trọn**: 4 bài (slug giữ) + Lab 2 (MỚI `typescript-2-6-lab-lich-phong`) + quiz 10 câu; 5 deck / 58 slide đẩy `TS/v1`
+  (ts-02-1..4 mỗi deck 12, ts-lab-2 10); 17 đề Code Lab `ts` mới (ts-cl-2-1..4 a–d + ts-cl-lab-2), 38 sai mẫu — kiem-de-ts 48/48 (tsc 7.0.2) và
+  17/17 với tsc 6.0.3; 4 cặp liên kết chéo (postgresql 4.2, react 2.3, api-design 4.1, prisma-orm 8.3). Độ dài nguồn bài + giảng 43–47k ký tự.
+  Cách làm: viết `$S/ts/BRIEF-CH2.md` rồi fork 4 tác tử soạn 4 bài song song (demo riêng `demo2/<deck>`, đề Code Lab ra tệp riêng rồi gộp),
+  phiên chính làm Lab, quiz, tệp chương, liên kết chiều ngược, upload, ảnh chụp dự án.
+- Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
+  (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
+- Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`
+  (TS5011/TS6059), và đừng emit vào `src/` (một lần đã để lại `src/rules/*.d.ts` — xoá trước khi chụp); `Array.isArray(unknown)` cho `any[]`.

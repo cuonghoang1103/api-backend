@@ -1,0 +1,6 @@
+{
+  // Lab 1 — show what tsc INFERS for attempt B (lab1/vua): emit only the .d.ts files, read them.
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "noEmit": false, "declaration": true, "emitDeclarationOnly": true, "rootDir": "../../lab1/vua", "outDir": "./d" },
+  "include": ["../../lab1/vua"]
+}

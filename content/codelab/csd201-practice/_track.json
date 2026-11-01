@@ -92,6 +92,36 @@
       "name": "2.6 🧪 Practice — round-robin, a patient queue (PE), monotonic stacks",
       "level": "INTERMEDIATE",
       "description": "Luyện: A round-robin CPU scheduler with a queue · PE style: a patient priority queue on a sorted linked list (f1–f4) · Next greater element with a monotonic stack · Largest rectangle in a histogram (stack, O(n))"
+    },
+    {
+      "slug": "csd201-de-quy",
+      "name": "3.1 Recursion & the call stack",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Sum, count and maximum of an array — recursively · Reverse a string and test a palindrome — recursively · Decimal to any base from 2 to 16 — the digits come out on the way back"
+    },
+    {
+      "slug": "csd201-de-quy-vi-du",
+      "name": "3.2 The four classic recursions",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Towers of Hanoi: the moves, and how many there are · Fibonacci: from exponential to linear with memoization · Fast power: aⁿ mod m with O(log n) multiplications"
+    },
+    {
+      "slug": "csd201-de-quy-phan-tich",
+      "name": "3.3 Analysing recursion: recursion trees & the Master theorem",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: How many calls does naive fib(n) make? Solve the recurrence, do not run it · Count inversions in O(n log n) — merge sort with a counter · Maximum subarray by divide and conquer (best crossing the middle)"
+    },
+    {
+      "slug": "csd201-de-quy-thiet-ke",
+      "name": "3.4 Designing recursion & eliminating tail calls",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Eliminate the tail call: three tail-recursive functions become loops · Flood fill with an explicit stack: regions of a 2000 × 2000 map · A recursive-descent calculator: expression → term → factor"
+    },
+    {
+      "slug": "csd201-on-ch3",
+      "name": "3.5 🧪 Practice — list recursion, backtracking, N queens, memoized grid paths",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE style: count, sum, max and print backwards on a linked list — recursively · Backtracking: subsets with a given sum, and permutations in order · N queens: count every placement and print the first one · Grid paths with obstacles: recursion + memo instead of 10¹⁶ calls"
     }
   ]
 }

@@ -134,7 +134,7 @@ export function deJava(s) {
   const DE = {
     id: s.id, title: hai(s.tieuDe).en, src, extra: Object.keys(harness).length ? ['cham'] : [], main: s.main || 'Main', javaMin,
     timeoutMs: s.timeoutMs ?? (s.hen ? 20000 : 10000), loose: !!s.loose, lab211: !!s.lab211, release: s.release ?? 8, ...(s.jvm ? { jvm: s.jvm } : {}), ...tuyChon,
-    rules: (s.quyTac || []).map((r) => ({ id: r.id, en: r.en, vi: r.vi, ...(r.same ? { same: r.same } : { re: r.re }), ...(r.flags ? { flags: r.flags } : {}), ...(r.file ? { file: r.file } : {}), ...(r.need ? { need: true } : {}), ...(r.raw ? { raw: true } : {}) })),
+    rules: (s.quyTac || []).map((r) => ({ id: r.id, en: r.en, vi: r.vi, ...(r.same ? { same: r.same } : r.rec ? { rec: r.rec, ...(r.fn ? { fn: r.fn } : {}) } : { re: r.re }), ...(r.flags ? { flags: r.flags } : {}), ...(r.file ? { file: r.file } : {}), ...(r.need ? { need: true } : {}), ...(r.raw ? { raw: true } : {}) })),
     cases,
     ...(Object.keys(shared).length ? { shared } : {}),
   };
@@ -209,6 +209,12 @@ function khoiHen(h) {
 /** Dấu vân tay tệp CHO SẴN (bỏ mọi khoảng trắng) — khớp sameRule trong _cham-mau.mjs. */
 export const vanTay = (t) => crypto.createHash('sha1').update(String(t).replace(/\s+/g, '')).digest('hex').slice(0, 12);
 /** Luật "không sửa tệp cho sẵn": giuNguyen({ 'Main.java': nội dung, … }). */
+/** Luật đệ quy: deQuy('no', 'Tail') = không hàm nào tự gọi chính nó; deQuy('yes', 'Fib', 'fib') = fib phải tự gọi chính nó. */
+export function deQuy(rec, file, fn, id = 'R1') {
+  return rec === 'no'
+    ? { id, rec, file, en: `no recursion in ${file} — no method calls itself`, vi: `không đệ quy trong ${file} — không hàm nào tự gọi chính nó` }
+    : { id, rec, file, fn, en: `${fn}() is recursive (it calls itself)`, vi: `${fn}() là đệ quy (tự gọi chính nó)` };
+}
 export function giuNguyen(tep, id = 'G1') {
   return {
     id, en: `the given files are unchanged (${Object.keys(tep).join(', ')})`, vi: `không sửa các tệp cho sẵn (${Object.keys(tep).join(', ')})`,

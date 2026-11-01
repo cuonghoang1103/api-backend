@@ -275,6 +275,34 @@ function sameRule(r) {
   }
   return hits;
 }
+// r.rec = 'no' | 'yes': methods that call THEMSELVES (bodies found by matching braces on the stripped code).
+// 'no' ⇒ a hit for every self-calling method; 'yes' + r.fn ⇒ a hit when method r.fn does not call itself.
+const KEYWORDS = new Set(['if', 'for', 'while', 'switch', 'catch', 'synchronized', 'return', 'new', 'else', 'do', 'try']);
+function methods(code) {
+  const out = [];
+  const re = /\b(\w+)\s*\(([^;{}()]|\([^()]*\))*\)\s*(throws\s+[\w.,\s]+)?\{/g;
+  for (const m of code.matchAll(re)) {
+    if (KEYWORDS.has(m[1])) continue;
+    const before = code.slice(Math.max(0, m.index - 40), m.index);
+    if (/(\bnew\s+|\.)\s*$/.test(before)) continue; // new Foo(...) { … } or a call
+    let depth = 0, k = m.index + m[0].length - 1;
+    for (; k < code.length; k++) { if (code[k] === '{') depth++; else if (code[k] === '}' && --depth === 0) break; }
+    out.push({ name: m[1], body: code.slice(m.index + m[0].length, k), at: m.index });
+  }
+  return out;
+}
+function recRule(r) {
+  const hits = [];
+  for (const f of files.filter((x) => !r.file || new RegExp(r.file).test(x.name))) {
+    for (const m of methods(f.code)) {
+      const self = new RegExp(`(^|[^.\\w])${m.name}\\s*\\(`).test(m.body);
+      if (r.rec === 'no' && self) hits.push(`${f.name}:${lineOf(f.code, m.at)} ${m.name}() calls itself`);
+      if (r.rec === 'yes' && m.name === r.fn && !self) hits.push(`${f.name}:${lineOf(f.code, m.at)} ${m.name}() is not recursive`);
+    }
+  }
+  if (r.rec === 'yes' && !files.some((x) => (!r.file || new RegExp(r.file).test(x.name)) && methods(x.code).some((m) => m.name === r.fn))) hits.push(`${r.fn}() not found`);
+  return hits;
+}
 function LAB211() {
   return [
     { id: 'L1', en: 'no System.exit — leave the menu loop with a flag or return', vi: 'không System.exit — thoát vòng menu bằng cờ hoặc return', re: String.raw`\bSystem\s*\.\s*exit\s*\(` },
@@ -328,7 +356,7 @@ function overrides() {
 const rules = [...DE.rules, ...(DE.lab211 ? LAB211() : [])];
 if (rules.length && !ONLY) ra(dim('── rules · luật ──'));
 for (const r of ONLY ? [] : rules) {
-  const hits = r.fn ? r.fn() : r.same ? sameRule(r) : regexRule(r);
+  const hits = r.rec ? recRule(r) : typeof r.fn === 'function' ? r.fn() : r.same ? sameRule(r) : regexRule(r);
   results.push(hits.length === 0);
   ra(`${hits.length ? bad('✘') : ok('✔')} rule ${r.id}: ${r.en} ${dim('· ' + r.vi)}`);
   if (hits.length) ra(bad(`    at / tại: ${hits.slice(0, 5).join(', ')}${hits.length > 5 ? ` (+${hits.length - 5})` : ''}`));

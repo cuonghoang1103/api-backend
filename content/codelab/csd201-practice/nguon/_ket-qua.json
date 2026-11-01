@@ -368,5 +368,123 @@
    "2 : P1 5 P2 2 P3 4 -> [P2@4 P3@10 P1@11]\n1 : P1 5 P2 2 P3 4 -> [P2@5 P3@10 P1@11]\n10 : P1 5 P2 2 P3 4 -> [P1@5 P2@7 P3@11]\n",
    "3 : A 0 B -2 C 7 -> [C@7]\n2 : X 0 -> []\n4 : A 4 B 4 C 4 -> [A@4 B@8 C@12]\n"
   ]
+ },
+ "csd201-3-1-array-recursion": {
+  "bam": "b4c264c61280ad57",
+  "ra": [
+   "0 : 3 8 -2 7 4 -> sum=20 even=3 max=8\n2 : 3 8 -2 7 4 -> sum=9 even=2 max=7\n4 : 3 8 -2 7 4 -> sum=4 even=1 max=4\n5 : 3 8 -2 7 4 -> sum=0 even=0 max=-\n",
+   "0 : -5 -2 -9 -> sum=-16 even=1 max=-2\n0 : 2000000000 2000000000 1 -> sum=4000000001 even=2 max=2000000000\n1 : -1 0 -3 -> sum=-3 even=1 max=0\n"
+  ]
+ },
+ "csd201-3-1-base-conversion": {
+  "bam": "d39ba55b7442737e",
+  "ra": [
+   "10 2 -> 1010\n255 16 -> FF\n0 7 -> 0\n7 8 -> 7\n",
+   "9223372036854775807 16 -> 7FFFFFFFFFFFFFFF\n9223372036854775807 2 -> 111111111111111111111111111111111111111111111111111111111111111\n1000000 3 -> 1212210202001\n35 16 -> 23\n16 16 -> 10\n1 2 -> 1\n"
+  ]
+ },
+ "csd201-3-1-reverse-palindrome": {
+  "bam": "357e29ebcb555b0b",
+  "ra": [
+   "abc -> reverse=\"cba\" palindrome=false\nracecar -> reverse=\"racecar\" palindrome=true\nA man, a plan, a canal: Panama -> reverse=\"amanaP :lanac a ,nalp a ,nam A\" palindrome=true\nhello -> reverse=\"olleh\" palindrome=false\n",
+   "- -> reverse=\"\" palindrome=true\nx -> reverse=\"x\" palindrome=true\n.,! -> reverse=\"!,.\" palindrome=true\n12321 -> reverse=\"12321\" palindrome=true\n0P -> reverse=\"P0\" palindrome=false\nab -> reverse=\"ba\" palindrome=false\n"
+  ]
+ },
+ "csd201-3-2-fast-power": {
+  "bam": "94ea1c29f5bec7b4",
+  "ra": [
+   "2 10 1000 -> 24\n3 0 7 -> 1\n5 3 1 -> 0\n7 1 10 -> 7\n0 0 5 -> 1\n",
+   "2 1000000006 1000000007 -> 1\n123456789 1000000000000000000 999999937 -> 499529199\n1000000000000000000 3 1000000000 -> 0\n0 5 13 -> 0\n",
+   "PERF -> 200,000 calls with n near 10^18: OK, checksum 13409106\n"
+  ]
+ },
+ "csd201-3-2-fibonacci-memo": {
+  "bam": "a81763ad8d57e166",
+  "ra": [
+   "0 -> fib(0): OK = 0\n1 -> fib(1): OK = 1\n2 -> fib(2): OK = 1\n10 -> fib(10): OK = 55\n20 -> fib(20): OK = 6765\n",
+   "50 -> fib(50): OK = 12586269025\n90 -> fib(90): OK = 2880067194370816120\n89 -> fib(89): OK = 1779979416004714189\n"
+  ]
+ },
+ "csd201-3-2-hanoi": {
+  "bam": "ba36a2e4edf87ad1",
+  "ra": [
+   "MOVES 1 -> \ndisk 1: A -> C\nMOVES 2 -> \ndisk 1: A -> B\ndisk 2: A -> C\ndisk 1: B -> C\nMOVES 3 -> \ndisk 1: A -> C\ndisk 2: A -> B\ndisk 1: C -> B\ndisk 3: A -> C\ndisk 1: B -> A\ndisk 2: B -> C\ndisk 1: A -> C\nCOUNT 3 -> count(3): OK = 7\nCOUNT 10 -> count(10): OK = 1023\n",
+   "MOVES 4 -> \ndisk 1: A -> B\ndisk 2: A -> C\ndisk 1: B -> C\ndisk 3: A -> B\ndisk 1: C -> A\ndisk 2: C -> B\ndisk 1: A -> B\ndisk 4: A -> C\ndisk 1: B -> C\ndisk 2: B -> A\ndisk 1: C -> A\ndisk 3: B -> C\ndisk 1: A -> B\ndisk 2: A -> C\ndisk 1: B -> C\nCOUNT 62 -> count(62): OK = 4611686018427387903\nCOUNT 0 -> count(0): OK = 0\nMOVES 0 -> \n\n"
+  ]
+ },
+ "csd201-3-3-count-calls": {
+  "bam": "192de0075b3b8523",
+  "ra": [
+   "CALLS 0 -> CALLS 0: OK = 1\nCALLS 1 -> CALLS 1: OK = 1\nCALLS 5 -> CALLS 5: OK = 15\nOF 5 5 -> OF 5 5: OK = 1\nOF 5 4 -> OF 5 4: OK = 1\nOF 5 3 -> OF 5 3: OK = 2\nOF 5 2 -> OF 5 2: OK = 3\nOF 5 1 -> OF 5 1: OK = 5\nOF 5 0 -> OF 5 0: OK = 3\n",
+   "CALLS 30 -> CALLS 30: OK = 2692537\nCALLS 85 -> CALLS 85: OK = 840392281454979345\nOF 85 1 -> OF 85 1: OK = 259695496911122585\nOF 85 0 -> OF 85 0: OK = 160500643816367088\nOF 40 20 -> OF 40 20: OK = 10946\nOF 2 0 -> OF 2 0: OK = 1\nOF 1 0 -> OF 1 0: OK = 0\n"
+  ]
+ },
+ "csd201-3-3-inversions": {
+  "bam": "176085d93331acf9",
+  "ra": [
+   "2 4 1 3 5 -> 3\n1 2 3 4 -> 0\n4 3 2 1 -> 6\n7 -> 0\n- -> 0\n",
+   "3 3 3 -> 0\n3 1 3 1 -> 3\n-1 -5 0 -5 -> 3\n5 5 4 4 3 3 -> 12\n",
+   "PERF -> n = 1,000,000 decreasing: OK, inversions 499999500000\n"
+  ]
+ },
+ "csd201-3-3-max-subarray-dc": {
+  "bam": "5361461a33487f34",
+  "ra": [
+   "-2 1 -3 4 -1 2 1 -5 4 -> 6\n-3 -1 -2 -> -1\n5 -> 5\n1 2 3 -> 6\n",
+   "5 -10 1 1 -> 5\n1 1 -10 5 -> 5\n2000000000 2000000000 -1 -> 4000000000\n0 0 0 -> 0\n",
+   "PERF -> n = 1,000,000: OK, best 832724\n"
+  ]
+ },
+ "csd201-3-4-flood-fill-stack": {
+  "bam": "ad0cc6ebe5ba2e48",
+  "ra": [
+   "4 row(s) -> [3, 4, 1, 1]\n3 row(s) -> [1, 1, 1, 1, 1]\n2 row(s) -> []\n",
+   "3 row(s) -> [9]\n5 row(s) -> [16, 1]\n",
+   "2000 x 2000 snake: OK, regions [2001000]\n"
+  ]
+ },
+ "csd201-3-4-recursive-descent": {
+  "bam": "dd799cc7c0f15e9b",
+  "ra": [
+   "1 + 2 * 3 -> 7\n(1 + 2) * 3 -> 9\n10 - 4 - 3 -> 3\n100 / 10 / 5 -> 2\n2 * (3 + 4) * 5 -> 70\n",
+   "-3 + 5 -> 2\n-(2 + 3) * -2 -> 10\n7/2 -> 3\n8 / (3 - 3) -> ERROR: division by zero\n--4 -> 4\n",
+   "((((((1)))))) -> 1\n1000000000 * 1000000000 -> 1000000000000000000\n(((2 + 3) * (4 - 1)) - ((6 / 2) * 3)) * 100 -> 600\n"
+  ]
+ },
+ "csd201-3-4-tail-to-loop": {
+  "bam": "11319fd71a8afd3e",
+  "ra": [
+   "SUM 10 -> sumTo(10): OK = 55\nSUM 0 -> sumTo(0): OK = 0\nGCD 48 18 -> 6\nGCD 7 0 -> 7\nFIND 10 27 -> 9\nFIND 10 28 -> -1\nFIND 0 5 -> -1\n",
+   "SUM 10000000 -> sumTo(10000000): OK = 50000005000000\nGCD 1000000000000 999999999999 -> 1\nFIND 1000000 2999997 -> 999999\n"
+  ]
+ },
+ "csd201-3-5-backtracking": {
+  "bam": "d79962afd867672c",
+  "ra": [
+   "SUB 10 : 1 2 3 4 5 6 -> 5 [1+2+3+4, 1+3+6, 1+4+5, 2+3+5, 4+6]\nSUB 7 : 2 3 5 -> 1 [2+5]\nPERM abc -> 6 [abc, acb, bac, bca, cab, cba]\nPERM ab -> 2 [ab, ba]\n",
+   "SUB 100 : 1 2 3 -> 0 []\nSUB 6 : 1 2 3 -> 1 [1+2+3]\nSUB 1 : 2 3 -> 0 []\nPERM x -> 1 [x]\nPERM abcdefgh -> 40320 [abcdefgh, abcdefhg, abcdegfh, abcdeghf, abcdehfg, abcdehgf, abcdfegh, abcdfehg, abcdfgeh, abcdfghe] ... hgfedcba\n"
+  ]
+ },
+ "csd201-3-5-grid-paths-memo": {
+  "bam": "1cf106089e8d95f9",
+  "ra": [
+   "[..., ..., ...] -> 6\n[..., .#., ...] -> 2\n[.] -> 1\nOPEN 10 -> empty 10 x 10: OK, paths 48620\n",
+   "[#.., ...] -> 0\n[..., ..#] -> 0\n[.#., .#., ...] -> 1\n[....., ####., .....] -> 1\n",
+   "OPEN 30 -> empty 30 x 30: OK, paths 30067266499541040\nOPEN 34 -> empty 34 x 34: OK, paths 7219428434016265740\n"
+  ]
+ },
+ "csd201-3-5-list-recursion": {
+  "bam": "5c41c73374e4b95e",
+  "ra": [
+   "3 8 -2 7 -> count=4 sum=16 max=8 backwards=[7 -2 8 3]\n5 -> count=1 sum=5 max=5 backwards=[5]\n- -> count=0 sum=0 max=- backwards=[]\n",
+   "-5 -2 -9 -> count=3 sum=-16 max=-2 backwards=[-9 -2 -5]\n4 4 4 -> count=3 sum=12 max=4 backwards=[4 4 4]\n1000000000 1000000000 1000000000 -> count=3 sum=3000000000 max=1000000000 backwards=[1000000000 1000000000 1000000000]\n"
+  ]
+ },
+ "csd201-3-5-n-queens": {
+  "bam": "d9597d34f795003a",
+  "ra": [
+   "1 -> n = 1: OK, count 1, first [0]\n4 -> n = 4: OK, count 2, first [1, 3, 0, 2]\n5 -> n = 5: OK, count 10, first [0, 2, 4, 1, 3]\n8 -> n = 8: OK, count 92, first [0, 4, 7, 5, 2, 6, 1, 3]\n",
+   "2 -> n = 2: OK, count 0, first null\n3 -> n = 3: OK, count 0, first null\n10 -> n = 10: OK, count 724, first [0, 2, 5, 7, 9, 4, 8, 1, 3, 6]\n12 -> n = 12: OK, count 14200, first [0, 2, 4, 7, 9, 11, 5, 10, 1, 6, 8, 3]\n"
+  ]
  }
 }

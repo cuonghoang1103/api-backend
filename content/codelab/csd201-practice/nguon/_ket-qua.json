@@ -1734,6 +1734,76 @@
    "PERF -> 1,000,000 elements (random) + 1,000,000 zeros: OK, answers 5645952 and 500000500000\n"
   ]
  },
+ "csd201-cs10-lfu-cache": {
+  "bam": "b91b7f1d08fb7665",
+  "ra": [
+   "PUT 1 1 -> ok\nPUT 2 2 -> ok\nGET 1 -> 1\nPUT 3 3 -> ok\nGET 2 -> -1\nGET 3 -> 3\nPUT 4 4 -> ok\nGET 1 -> -1\nGET 3 -> 3\nGET 4 -> 4\n",
+   "NEW 2 -> ok\nPUT 1 1 -> ok\nPUT 2 2 -> ok\nPUT 3 3 -> ok\nGET 1 -> -1\nGET 2 -> 2\nGET 3 -> 3\nNEW 0 -> ok\nPUT 0 0 -> ok\nGET 0 -> -1\n",
+   "RANDOM -> 300 random caches x 60 operations: all 18000 agree with the brute force\n",
+   "PERF -> 1,000,000 operations, capacity 50,000: OK, sum 107101355929\n"
+  ]
+ },
+ "csd201-cs10-lru-cache": {
+  "bam": "582789abbcaffbca",
+  "ra": [
+   "PUT 1 1 -> [1]\nPUT 2 2 -> [2 1]\nGET 1 -> 1 [1 2]\nPUT 3 3 -> [3 1]\nGET 2 -> -1 [3 1]\nPUT 4 4 -> [4 3]\nGET 1 -> -1 [4 3]\nGET 3 -> 3 [3 4]\nGET 4 -> 4 [4 3]\n",
+   "NEW 3 -> []\nPUT 1 10 -> [1]\nPUT 2 20 -> [2 1]\nPUT 3 30 -> [3 2 1]\nPUT 1 11 -> [1 3 2]\nPUT 4 40 -> [4 1 3]\nGET 2 -> -1 [4 1 3]\nGET 1 -> 11 [1 4 3]\nNEW 1 -> []\nPUT 5 5 -> [5]\nPUT 6 6 -> [6]\nGET 5 -> -1 [6]\nGET 6 -> 6 [6]\n",
+   "RANDOM -> 300 random caches x 40 operations: all 12000 agree with the brute force\n",
+   "PERF -> 1,000,000 operations, capacity 100,000: OK, sum 95200244494\n"
+  ]
+ },
+ "csd201-cs10-median-stream": {
+  "bam": "84dd92a96c3a7f6f",
+  "ra": [
+   "ADD 5 -> 5.0\nADD 15 -> 10.0\nADD 1 -> 5.0\nADD 3 -> 4.0\nADD 8 -> 5.0\nADD 7 -> 6.0\nMED -> 6.0\n",
+   "ADD 2147483647 -> 2.147483647E9\nADD 2147483647 -> 2.147483647E9\nADD -2147483648 -> 2.147483647E9\nADD -2147483648 -> -0.5\n",
+   "RANDOM -> 200 random streams x 30 numbers: all 6000 agree with the brute force\n",
+   "PERF -> 200,000 numbers, a median after each: OK, sum 9.9812845457E10\n"
+  ]
+ },
+ "csd201-cs10-merge-k-lists": {
+  "bam": "f78deb8ac426845e",
+  "ra": [
+   "RUN 1,4,5 1,3,4 - 2,6 -> [1, 1, 2, 3, 4, 4, 5, 6]\nRUN -> []\nRUN - - -> []\nRUN 5 -> [5]\nRUN 1,1,1 1,1 -> [1, 1, 1, 1, 1]\n",
+   "RANDOM -> 3000 random sets of sorted lists (empty lists, duplicates): all 3000 agree with the brute force\n",
+   "PERF -> 10,000 lists x 100 nodes: OK, nodes 1000000, out of order 0\n"
+  ]
+ },
+ "csd201-cs10-min-stack": {
+  "bam": "52aa4aeb48733133",
+  "ra": [
+   "PUSH 5 -> ok\nPUSH 3 -> ok\nPUSH 7 -> ok\nMIN -> 3\nPUSH 3 -> ok\nPOP -> 3\nMIN -> 3\nPOP -> 7\nMIN -> 3\nPOP -> 3\nMIN -> 5\nTOP -> 5\n",
+   "MIN -> THROWS RuntimeException: empty\nPUSH -1 -> ok\nPOP -> -1\nPOP -> THROWS RuntimeException: empty\nTOP -> THROWS RuntimeException: empty\n",
+   "RANDOM -> 200 random stacks x 50 operations: all 10000 agree with the brute force\n",
+   "PERF -> 1,000,000 operations + getMin after each: OK, sum 500066375029\n"
+  ]
+ },
+ "csd201-cs10-product-except-self": {
+  "bam": "fc1f797617848c25",
+  "ra": [
+   "RUN 1,2,3,4 -> [24, 12, 8, 6]\nRUN -1,1,0,-3,3 -> [0, 0, 9, 0, 0]\nRUN 0,0,5 -> [0, 0, 0]\nRUN 7 -> [1]\nRUN 2,-3 -> [-3, 2]\n",
+   "RANDOM -> 20000 random arrays (zeros, negatives): all 20000 agree with the brute force\n",
+   "PERF -> 1,000,000 elements: OK, sum -330518\n"
+  ]
+ },
+ "csd201-cs10-randomized-set": {
+  "bam": "a92a105f010db8ee",
+  "ra": [
+   "INS 10 -> true\nINS 20 -> true\nINS 30 -> true\nINS 40 -> true\nINS 20 -> false\nDEL 20 -> true\nDEL 99 -> false\nRND -> 10\nRND -> 40\nRND -> 40\nDEL 30 -> true\nRND -> 10\n",
+   "NEW 5 -> ok\nINS 1 -> true\nINS 2 -> true\nDEL 2 -> true\nRND -> 1\nDEL 1 -> true\nINS 7 -> true\nRND -> 7\nINS 1 -> true\nRND -> 7\n",
+   "RANDOM -> 200 random runs x 60 operations: all 12000 agree with the brute force\n",
+   "PERF -> 1,000,000 operations: OK, sum 38771045447\n"
+  ]
+ },
+ "csd201-cs10-time-map": {
+  "bam": "e8781e08797c7106",
+  "ra": [
+   "SET foo bar 1 -> ok\nSET foo bar2 4 -> ok\nGET foo 0 -> \"\"\nGET foo 1 -> \"bar\"\nGET foo 3 -> \"bar\"\nGET foo 4 -> \"bar2\"\nGET foo 9 -> \"bar2\"\nGET zzz 5 -> \"\"\n",
+   "SET a x 10 -> ok\nSET a y 5 -> ok\nGET a 7 -> \"y\"\nSET a z 5 -> ok\nGET a 9 -> \"z\"\nGET a 10 -> \"x\"\nGET a 4 -> \"\"\n",
+   "RANDOM -> 300 random runs x 40 operations (overwrites, unknown keys): all 12000 agree with the brute force\n",
+   "PERF -> 200,000 sets + 200,000 gets: OK, hash -179138130872194\n"
+  ]
+ },
  "csd201-pe-sp26-b5p4-q1-mylist": {
   "bam": "2182e62fb9c36da9",
   "ra": [

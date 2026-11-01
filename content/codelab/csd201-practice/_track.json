@@ -394,6 +394,12 @@
       "description": "Luyện: Equal values at most k apart — a HashMap of the last index · Count subarrays that sum to k — prefix sums + HashMap (negatives allowed) · The first non-repeating character — a counting array of 26 · Every number three times except one — add each bit position mod 3 · Count the 1-bits of every number 0…n — dp[i] = dp[i >> 1] + (i & 1) · Reverse the 32 bits of an int — shifts and the unsigned >>>"
     },
     {
+      "slug": "csd201-cs10-on",
+      "name": "10.10 ⭐ CS.10 Final set — design problems and mixed patterns",
+      "level": "ADVANCED",
+      "description": "Luyện: LRU cache — a HashMap plus your own doubly linked list with sentinels · LFU cache — evict the least FREQUENTLY used, ties by least recent, all in O(1) · A stack with getMin() in O(1) — a second stack of minimums · Median of a data stream — a max-heap and a min-heap · Insert, delete and getRandom in O(1) — ArrayList + HashMap, move the last into the hole · A time-based key-value store — TreeMap.floorEntry per key · Merge k sorted linked lists — a heap of the current heads, relinking the nodes · Product of everything except itself — prefix and suffix products, no division"
+    },
+    {
       "slug": "csd201-on-pe",
       "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
       "level": "ADVANCED",

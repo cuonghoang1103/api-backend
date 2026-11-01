@@ -99,7 +99,7 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
 <p>Note it shares the HTTP server. One port, one TLS certificate, one reverse-proxy rule. The upgrade only happens for requests carrying the <code>Upgrade</code> header; everything else is still Express.</p>
 
 <div class="pitfall">
-<p><strong>Five things that bite on day one.</strong> (1) <strong>The reverse proxy</strong>: nginx needs <code>proxy_http_version 1.1</code> plus <code>proxy_set_header Upgrade $http_upgrade;</code> and <code>Connection "upgrade"</code>, or the handshake dies with a 400 and your local dev works fine. (2) <code>ws.send()</code> takes strings/buffers, not objects — sending an object silently transmits <code>[object Object]</code>. (3) An idle proxy timeout (nginx default <code>proxy_read_timeout 60s</code>) kills a quiet socket; heartbeats are what keep it alive (lesson 11.3). (4) There is no built-in reconnect in raw <code>ws</code> — a laptop that sleeps comes back with a dead socket and no events. (5) A WebSocket does not send cookies on <em>frames</em>, only on the handshake, so authorization state must be captured at connect time.</p>
+<p><strong>Five things that bite on day one.</strong> (1) <strong>The reverse proxy</strong>: nginx needs <code>proxy_http_version 1.1</code> plus <code>proxy_set_header Upgrade $http_upgrade;</code> and <code>Connection "upgrade"</code>, or the handshake never gets its <code>101</code> — while your local dev works fine. Measured behind nginx 1.27 without those lines: Socket.IO answers <code>400 {"code":3,"message":"Bad request"}</code>, and a raw <code>ws</code> server attached to Express receives a plain GET, so the client gets Express's own <code>200</code> (or a <code>404</code>) instead of <code>101</code>. (2) Sending an object instead of a string: the <code>ws</code> library's <code>ws.send(obj)</code> throws a <code>TypeError</code> at once, but the browser-standard <code>WebSocket.send(obj)</code> (also built into Node 22) silently transmits the string <code>"[object Object]"</code> — always <code>JSON.stringify</code> first. (3) An idle proxy timeout (nginx default <code>proxy_read_timeout 60s</code>) kills a quiet socket; heartbeats are what keep it alive (lesson 11.3). (4) There is no built-in reconnect in raw <code>ws</code> — a laptop that sleeps comes back with a dead socket and no events. (5) A WebSocket does not send cookies on <em>frames</em>, only on the handshake, so authorization state must be captured at connect time.</p>
 </div>
 
 <div class="note-ct">
@@ -116,6 +116,16 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-614" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 614 — WebSocket and Real-Time Communication</span><span class="lc-sub">10 bài tập: WebSocket trong một API Express thật.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same flow in API Design — lesson 10.4: Polling, SSE or WebSocket — choosing the contract</span><span class="lc-sub">Same: four ways to get an event to a screen, and "pick the weakest that works". API Design measured the delay and the idle cost on one LabFlow flow (polling every 2 s: 1.1 s late on average; 100 idle clients × 30 s: 1,500 requests) plus SSE resume with Last-Event-ID. This lesson measures the bytes: 839 B per empty poll, 71 B per pushed message, and the handshake byte by byte.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-1-overhead" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 2.1: Where the overhead really is</span><span class="lc-sub">Same conclusion from the other side: at the Socket.IO layer polling and websocket carry the same payload; the real cost lives one layer below. That layer is what this lesson counts at the TCP socket — HTTP headers and the cookie on every poll versus a 2-byte frame header.</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -193,7 +203,7 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
 <p>Để ý nó dùng chung server HTTP. Một cổng, một chứng chỉ TLS, một luật reverse proxy. Việc nâng cấp giao thức chỉ xảy ra với những request mang header <code>Upgrade</code>; mọi thứ còn lại vẫn là Express.</p>
 
 <div class="pitfall">
-<p><strong>Năm thứ cắn bạn ngay ngày đầu.</strong> (1) <strong>Reverse proxy</strong>: nginx cần <code>proxy_http_version 1.1</code> cộng <code>proxy_set_header Upgrade $http_upgrade;</code> và <code>Connection "upgrade"</code>, nếu không cái bắt tay chết với lỗi 400 trong khi máy bạn chạy vẫn ngon. (2) <code>ws.send()</code> nhận chuỗi/buffer chứ không nhận object — gửi thẳng một object thì nó âm thầm truyền đi <code>[object Object]</code>. (3) Thời gian chờ nhàn rỗi của proxy (nginx mặc định <code>proxy_read_timeout 60s</code>) giết một socket đang im lặng; nhịp tim là thứ giữ nó sống (bài 11.3). (4) <code>ws</code> thuần KHÔNG có sẵn cơ chế kết nối lại — một chiếc laptop ngủ dậy sẽ mang theo một socket chết và không sự kiện nào cả. (5) WebSocket không gửi cookie theo <em>từng khung tin</em>, chỉ gửi lúc bắt tay, nên trạng thái phân quyền phải được chốt ngay lúc kết nối.</p>
+<p><strong>Năm thứ cắn bạn ngay ngày đầu.</strong> (1) <strong>Reverse proxy</strong>: nginx cần <code>proxy_http_version 1.1</code> cộng <code>proxy_set_header Upgrade $http_upgrade;</code> và <code>Connection "upgrade"</code>, nếu không cái bắt tay không bao giờ nhận được <code>101</code> — trong khi máy bạn chạy vẫn ngon. Đo thật sau nginx 1.27 thiếu ba dòng đó: Socket.IO trả <code>400 {"code":3,"message":"Bad request"}</code>, còn một server <code>ws</code> thô gắn chung Express nhận về một GET thường, nên client nhận <code>200</code> của chính Express (hoặc <code>404</code>) thay vì <code>101</code>. (2) Gửi object thay vì chuỗi: <code>ws.send(obj)</code> của thư viện <code>ws</code> ném <code>TypeError</code> ngay, nhưng <code>WebSocket.send(obj)</code> chuẩn của trình duyệt (Node 22 cũng có sẵn) âm thầm gửi chuỗi <code>"[object Object]"</code> — luôn <code>JSON.stringify</code> trước. (3) Thời gian chờ nhàn rỗi của proxy (nginx mặc định <code>proxy_read_timeout 60s</code>) giết một socket đang im lặng; nhịp tim là thứ giữ nó sống (bài 11.3). (4) <code>ws</code> thuần KHÔNG có sẵn cơ chế kết nối lại — một chiếc laptop ngủ dậy sẽ mang theo một socket chết và không sự kiện nào cả. (5) WebSocket không gửi cookie theo <em>từng khung tin</em>, chỉ gửi lúc bắt tay, nên trạng thái phân quyền phải được chốt ngay lúc kết nối.</p>
 </div>
 
 <div class="note-ct">
@@ -210,6 +220,16 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-614" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 614 — WebSocket and Real-Time Communication</span><span class="lc-sub">10 bài tập: WebSocket trong một API Express thật.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng luồng ở API Design — bài 10.4: Polling, SSE hay WebSocket — chọn hợp đồng</span><span class="lc-sub">Giống: bốn cách đưa một sự kiện lên màn hình, và "chọn cái yếu nhất mà vẫn đủ". API Design đã đo độ trễ và giá lúc rỗi trên một luồng LabFlow (polling 2 giây: trễ trung bình 1,1 s; 100 client rỗi × 30 s: 1.500 request) cùng cách nối lại SSE bằng Last-Event-ID. Bài này đo byte: 839 B mỗi lần hỏi rỗng, 71 B mỗi tin đẩy xuống, và cái bắt tay từng byte.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-1-overhead" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 2.1: Overhead thật sự nằm ở đâu</span><span class="lc-sub">Cùng kết luận nhìn từ phía kia: ở lớp Socket.IO, polling và websocket chở cùng một payload; giá thật nằm ở lớp bên dưới. Lớp đó chính là thứ bài này đếm ngay ở socket TCP — header HTTP và cookie đi theo mỗi lần hỏi so với 2 byte đầu khung.</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
 </div>
 `,
@@ -291,7 +311,7 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Socket.IO, with the room scheme above — <code>user:&lt;id&gt;</code>, <code>admin:&lt;id&gt;</code>, <code>thread:&lt;id&gt;</code>, <code>post:&lt;id&gt;</code> — and two decisions worth stealing. First, <strong>thread rooms are auto-joined at connect</strong>: on every connection the server queries the user's threads once and joins all of them. That was a bugfix, not a design flourish; the comment in <code>messaging.socket.ts</code> records the symptom — a user sitting on <code>/messages</code> who had not clicked into a conversation received nothing, so the unread badge froze until they refreshed. Second, <strong><code>post:reacted</code> used to be a global <code>io.emit</code></strong>: every like on any post woke up every connected socket on the site. It now goes only to <code>post:&lt;id&gt;</code>, which the feed subscribes to for the posts currently in view (capped at 500 rooms per socket so a malicious client cannot join unbounded rooms). The measurement above explains why that mattered: a global emit is an O(all sockets) loop on the event loop for every single click of a like button. Presence went the same way — instead of broadcasting "user X is online" to everybody, the server computes an <em>audience</em> (friends ∪ chat peers) and emits only to those user rooms, because the old version was an O(N²) storm every time a deploy made everyone reconnect at once.</p>
+<p><strong>How cuongthai.com does it.</strong> Socket.IO, with the room scheme above — <code>user:&lt;id&gt;</code>, <code>admin:&lt;id&gt;</code>, <code>thread:&lt;id&gt;</code>, <code>post:&lt;id&gt;</code> — and two decisions worth stealing. First, <strong>thread rooms are auto-joined at connect</strong>: on every connection the server queries the user's threads once and joins all of them. That was a bugfix, not a design flourish; the comment in <code>messaging.socket.ts</code> records the symptom — a user sitting on <code>/messages</code> who had not clicked into a conversation received nothing, so the unread badge froze until they refreshed. Second, <strong><code>post:reacted</code> used to be a global <code>io.emit</code></strong>: every like on any post woke up every connected socket on the site. It now goes only to <code>post:&lt;id&gt;</code>, which the feed subscribes to for the posts currently in view (capped at 500 ids per <code>post:subscribe</code> call — note: per CALL, not per socket. The counter resets on every call, so a client that simply calls again keeps joining: a copy of this handler, measured, let one socket sit in 100.000 rooms for +58,6MB of server RAM. A real per-socket cap counts what the socket holds: <code>if (socket.rooms.size &gt; 500) break;</code>). The measurement above explains why that mattered: a global emit is an O(all sockets) loop on the event loop for every single click of a like button. Presence went the same way — instead of broadcasting "user X is online" to everybody, the server computes an <em>audience</em> (friends ∪ chat peers) and emits only to those user rooms, because the old version was an O(N²) storm every time a deploy made everyone reconnect at once.</p>
 </div>
 
 <div class="pitfall">
@@ -308,6 +328,11 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-940" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 940 — Broadcasting &amp; Acknowledgements</span><span class="lc-sub">10 bài tập: phát tin đúng phạm vi và chờ xác nhận.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-3-4-broadcast" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 3.4: Broadcast semantics: to, in, except, volatile</span><span class="lc-sub">Same: io.to(room) includes the sender, socket.to(room) excludes it — the typing-indicator bug. Socket.IO goes further with except() and volatile emits. Measured while writing these lessons: chaining io.to(A).to(B) is a UNION (a socket only in A, only in B or in both each received it once).</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -380,7 +405,7 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Dùng Socket.IO, với đúng sơ đồ room ở trên — <code>user:&lt;id&gt;</code>, <code>admin:&lt;id&gt;</code>, <code>thread:&lt;id&gt;</code>, <code>post:&lt;id&gt;</code> — và hai quyết định đáng học lỏm. Thứ nhất, <strong>các phòng thread được tự động vào ngay lúc kết nối</strong>: mỗi lần có kết nối, máy chủ hỏi cơ sở dữ liệu một lần lấy danh sách thread của người dùng rồi vào hết. Đó là một bản vá lỗi chứ không phải nét vẽ cho đẹp; comment trong <code>messaging.socket.ts</code> ghi lại triệu chứng — một người đang ở <code>/messages</code> mà chưa bấm vào cuộc trò chuyện nào thì không nhận được gì cả, nên huy hiệu tin chưa đọc đứng hình cho tới khi họ tải lại trang. Thứ hai, <strong><code>post:reacted</code> trước đây là một lệnh <code>io.emit</code> toàn cục</strong>: mỗi lượt thả tim vào bất kỳ bài nào cũng đánh thức mọi socket đang nối trên toàn site. Giờ nó chỉ đi vào <code>post:&lt;id&gt;</code>, phòng mà feed đăng ký cho những bài đang hiển thị (giới hạn 500 phòng mỗi socket để một client xấu tính không vào phòng vô hạn được). Phép đo ở trên giải thích vì sao chuyện đó quan trọng: một lệnh phát toàn cục là một vòng lặp O(mọi socket) nằm trên event loop, cho từng cú bấm nút thích. Phần hiển thị đang-online cũng đi theo đúng con đường ấy — thay vì phát "người X vừa online" cho tất cả, máy chủ tính ra một <em>tập khán giả</em> (bạn bè ∪ người đang chat cùng) rồi chỉ phát vào các phòng user đó, vì bản cũ là một cơn bão O(N²) mỗi lần deploy khiến tất cả cùng kết nối lại một lúc.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Dùng Socket.IO, với đúng sơ đồ room ở trên — <code>user:&lt;id&gt;</code>, <code>admin:&lt;id&gt;</code>, <code>thread:&lt;id&gt;</code>, <code>post:&lt;id&gt;</code> — và hai quyết định đáng học lỏm. Thứ nhất, <strong>các phòng thread được tự động vào ngay lúc kết nối</strong>: mỗi lần có kết nối, máy chủ hỏi cơ sở dữ liệu một lần lấy danh sách thread của người dùng rồi vào hết. Đó là một bản vá lỗi chứ không phải nét vẽ cho đẹp; comment trong <code>messaging.socket.ts</code> ghi lại triệu chứng — một người đang ở <code>/messages</code> mà chưa bấm vào cuộc trò chuyện nào thì không nhận được gì cả, nên huy hiệu tin chưa đọc đứng hình cho tới khi họ tải lại trang. Thứ hai, <strong><code>post:reacted</code> trước đây là một lệnh <code>io.emit</code> toàn cục</strong>: mỗi lượt thả tim vào bất kỳ bài nào cũng đánh thức mọi socket đang nối trên toàn site. Giờ nó chỉ đi vào <code>post:&lt;id&gt;</code>, phòng mà feed đăng ký cho những bài đang hiển thị (giới hạn 500 id mỗi lần gọi <code>post:subscribe</code> — chú ý: theo LẦN GỌI, không theo socket. Bộ đếm về 0 sau mỗi lần gọi, nên client cứ gọi lại là vào tiếp: một bản sao đúng handler này, đo thật, cho một socket nằm trong 100.000 phòng, tốn thêm 58,6MB RAM máy chủ. Giới hạn thật theo socket phải đếm thứ socket đang giữ: <code>if (socket.rooms.size &gt; 500) break;</code>). Phép đo ở trên giải thích vì sao chuyện đó quan trọng: một lệnh phát toàn cục là một vòng lặp O(mọi socket) nằm trên event loop, cho từng cú bấm nút thích. Phần hiển thị đang-online cũng đi theo đúng con đường ấy — thay vì phát "người X vừa online" cho tất cả, máy chủ tính ra một <em>tập khán giả</em> (bạn bè ∪ người đang chat cùng) rồi chỉ phát vào các phòng user đó, vì bản cũ là một cơn bão O(N²) mỗi lần deploy khiến tất cả cùng kết nối lại một lúc.</p>
 </div>
 
 <div class="pitfall">
@@ -397,6 +422,11 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-940" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 940 — Broadcasting &amp; Acknowledgements</span><span class="lc-sub">10 bài tập: phát tin đúng phạm vi và chờ xác nhận.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-3-4-broadcast" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 3.4: Ngữ nghĩa broadcast: to, in, except, volatile</span><span class="lc-sub">Giống: io.to(room) gồm cả người gửi, socket.to(room) bỏ người gửi — con bug chỉ báo đang gõ. Socket.IO đi xa hơn với except() và emit volatile. Đo khi soạn các bài này: nối io.to(A).to(B) là phép HỢP (socket chỉ ở A, chỉ ở B hay ở cả hai đều nhận đúng một lần).</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
 </div>
 `,
@@ -460,7 +490,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>That is the whole attack. No stolen token, no XSS, no privilege escalation — a legitimately logged-in user emitted one event with a number they do not own. Thread ids are sequential integers, so "guessing" is a <code>for</code> loop. And because it happens over a socket, <strong>nothing appears in your REST access logs</strong>: no <code>GET /threads/99</code>, no 403, nothing to alert on.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it — and what was wrong until this lesson.</strong> The handshake middleware in <code>src/socket/messaging.socket.ts</code> was already careful: it reads the JWT with the same <code>extractToken</code> as the REST middleware (production path = the <code>httpOnly</code> <code>backend_token</code> cookie, never exposed to JS), verifies it, loads the user, refuses if the account is disabled or locked, and — the part most implementations skip — <strong>re-checks <code>roleVersion</code> against the database</strong>, so a token issued before a password change or a role edit is rejected even though its signature is still valid.</p>
+<p><strong>How cuongthai.com does it — and what was wrong until this lesson.</strong> The handshake middleware in <code>src/socket/messaging.socket.ts</code> was already careful: it reads the token with <code>tokenBatTay()</code>: first <code>socket.handshake.auth.token</code> (it travels inside the first packet on every transport and never lands in a URL — added after the site measured on 17/09/2026 that a client forcing <code>transports: ['websocket']</code> never sends an <code>Authorization</code> header, because the browser WebSocket API cannot set headers), then the same <code>extractToken</code> as the REST middleware (the web's path = the <code>httpOnly</code> <code>backend_token</code> cookie, never exposed to JS), verifies it, loads the user, refuses if the account is disabled or locked, and — the part most implementations skip — <strong>re-checks <code>roleVersion</code> against the database</strong>, so a token issued before a password change or a role edit is rejected even though its signature is still valid.</p>
 <p>The authorization side was not careful. The explicit opt-in handler read, in full: <code>socket.on('thread:join', (threadId) =&gt; { if (typeof threadId === 'number') socket.join(&#96;thread:\${threadId}&#96;); })</code> — a type check standing in for a permission check, exactly the <code>join:unsafe</code> above. Any logged-in account could join any conversation's room and receive its <code>thread:new-message</code> events live, message bodies included. It has been fixed: the handler now runs the same participation query the REST layer uses in <code>MessagesService.assertParticipant</code> (ADMIN threads: the user or the assigned admin; USER threads: the two sides), short-circuits when the room was already auto-joined at connect, <strong>fails closed</strong> if the database call throws, and answers a refusal with <code>thread:join-denied</code> plus a warning log. <code>thread:typing</code> had the same shape — anyone could push "… is typing" into a stranger's chat — and now requires the socket to already be a member of that room.</p>
 <p>The lesson generalises past this one bug: <strong>every socket event handler is an endpoint</strong>. It just does not look like one, because it has no URL, no route table, and no middleware chain to hang the check on.</p>
 </div>
@@ -468,7 +498,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <h3>Measurement 3 — the connection that is dead and does not know it</h3>
 <p>A closed tab sends a TCP FIN and the server sees <code>disconnect</code> instantly. A phone that walks into a lift sends nothing at all. To measure the second case honestly you have to simulate a black hole — a TCP proxy that stops forwarding without closing anything. With <code>pingInterval: 1000, pingTimeout: 2000</code>:</p>
 <div class="out">máy chủ phát hiện chết sau 3010ms (disconnect: ping timeout)</div>
-<p>Exactly <code>pingInterval + pingTimeout</code>: the server sends a ping on the interval, then waits the timeout for a pong. Socket.IO's defaults are <strong>25.000ms + 20.000ms = up to 45 seconds</strong> before a vanished client is noticed. Until then it counts as online, sits in every room, and receives messages into the void.</p>
+<p>That is <code>pingInterval + pingTimeout</code> — the worst case: the server sends a ping on the interval, then waits the timeout for a pong. (Re-measured: if the lift starts right after a pong, 3.003ms; if it also swallows the pong already on its way, only <code>pingTimeout</code>: 2.000ms. Socket.IO defaults, worst case: 45.003ms; this site's 25.000 + 60.000: 85.003ms.) Socket.IO's defaults are <strong>25.000ms + 20.000ms = up to 45 seconds</strong> before a vanished client is noticed. Until then it counts as online, sits in every room, and receives messages into the void.</p>
 
 <h3>Measurement 4 — what reconnecting does and does not restore</h3>
 <div class="out">kết nối, socket id: JBrWhg
@@ -476,7 +506,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 5 tin phát lúc offline → client nhận: 0 → MẤT TRẮNG
 ⇒ kết nối lại KHÔNG phát lại tin cũ, và id đổi ⇒ mọi room phải JOIN LẠI.</div>
-<p>Two facts that shape every realtime UI. <strong>The socket id changes</strong>, so anything you keyed by it is gone and every room must be re-joined inside the <code>connect</code> handler. And <strong>messages sent while the client was away are lost</strong> — Socket.IO does not buffer for a disconnected socket. The pattern that fixes it is not a bigger buffer, it is a different division of labour:</p>
+<p>Two facts that shape every realtime UI. <strong>The socket id changes</strong>, so anything you keyed by it is gone and every room must be re-joined inside the <code>connect</code> handler. And <strong>messages sent while the client was away are lost</strong> — by default Socket.IO does not buffer for a disconnected socket. (Since 4.6 it can: with <code>connectionStateRecovery</code> the same test kept the socket id and replayed 5/5 messages. But it lives in one process's memory — after a server restart it was 0/5 again — and it does not work behind the classic <code>@socket.io/redis-adapter</code>, which this site uses: measured <code>recovered = false</code>, 0/5.) The pattern that fixes it is not a bigger buffer, it is a different division of labour:</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-t">The socket is the signal</span><span class="lz-d">"something new exists, with an id above X" — fast, tiny, and allowed to be lost</span></div>
   <div class="lz-step"><span class="lz-t">REST is the truth</span><span class="lz-d">on reconnect, call <code>GET /messages?since=&lt;last id seen&gt;</code> to fetch exactly what was missed</span></div>
@@ -498,6 +528,16 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-944" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 944 — Reconnection &amp; Reliability</span><span class="lc-sub">10 bài tập: mất mạng, kết nối lại, và bù phần đã lỡ.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-3-reconnect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 1.3: Reconnect: what actually happens, and what does not</span><span class="lc-sub">Same: a reconnect brings a new sid, empty rooms, and the events sent meanwhile are lost. Socket.IO 1.3 times every step of the reconnect; this lesson adds the fix (rejoin + GET ?since=, 5/5 recovered) and measures connectionStateRecovery: same id and 5/5 on one process, 0/5 after a restart, and not supported behind the classic Redis adapter.</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-2-ping" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 2.2: pingInterval and pingTimeout: two numbers, four modes</span><span class="lc-sub">Same: this site runs 25,000 + 60,000 ms, so a vanished client can stay "online" up to 85 s. Socket.IO 2.2 compares four settings and the proxy-timeout trap; this lesson measures detection with a TCP black hole: 3,003 ms right after a pong, 2,000 ms if the pong is lost too, 45,003 ms with defaults, 85,003 ms with this site's values.</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -545,7 +585,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <p>Toàn bộ đòn tấn công chỉ có thế. Không trộm token, không XSS, không leo thang đặc quyền — một người dùng đăng nhập hợp pháp emit một sự kiện kèm một con số không thuộc về mình. Id của thread là số nguyên tuần tự, nên "đoán" ở đây là một vòng <code>for</code>. Và vì chuyện xảy ra qua socket nên <strong>không có gì hiện lên trong log truy cập REST</strong>: không <code>GET /threads/99</code>, không lỗi 403, không có gì để mà cảnh báo.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào — và chỗ đã sai cho tới đúng bài học này.</strong> Middleware bắt tay trong <code>src/socket/messaging.socket.ts</code> vốn đã cẩn thận: nó đọc JWT bằng đúng <code>extractToken</code> của middleware REST (đường production = cookie <code>backend_token</code> có <code>httpOnly</code>, không bao giờ lộ ra cho JS), xác minh chữ ký, nạp người dùng, từ chối nếu tài khoản bị tắt hoặc bị khoá, và — phần mà phần lớn nơi khác bỏ qua — <strong>kiểm lại <code>roleVersion</code> với cơ sở dữ liệu</strong>, nên một token phát trước lúc đổi mật khẩu hay đổi vai trò sẽ bị từ chối dù chữ ký vẫn còn đúng.</p>
+<p><strong>cuongthai.com làm thế nào — và chỗ đã sai cho tới đúng bài học này.</strong> Middleware bắt tay trong <code>src/socket/messaging.socket.ts</code> vốn đã cẩn thận: nó đọc token bằng <code>tokenBatTay()</code>: trước hết <code>socket.handshake.auth.token</code> (đi trong gói đầu tiên trên mọi transport và không bao giờ nằm trong URL — thêm vào sau khi website đo ngày 17/09/2026 rằng client ép <code>transports: ['websocket']</code> không bao giờ gửi header <code>Authorization</code>, vì API WebSocket của trình duyệt không đặt được header), rồi tới đúng <code>extractToken</code> của middleware REST (đường của trang web = cookie <code>backend_token</code> có <code>httpOnly</code>, không bao giờ lộ ra cho JS), xác minh chữ ký, nạp người dùng, từ chối nếu tài khoản bị tắt hoặc bị khoá, và — phần mà phần lớn nơi khác bỏ qua — <strong>kiểm lại <code>roleVersion</code> với cơ sở dữ liệu</strong>, nên một token phát trước lúc đổi mật khẩu hay đổi vai trò sẽ bị từ chối dù chữ ký vẫn còn đúng.</p>
 <p>Phía phân quyền thì không cẩn thận. Handler cho phép client chủ động vào phòng, nguyên văn, là: <code>socket.on('thread:join', (threadId) =&gt; { if (typeof threadId === 'number') socket.join(&#96;thread:\${threadId}&#96;); })</code> — một phép kiểm KIỂU DỮ LIỆU đứng thay cho một phép kiểm QUYỀN, đúng y <code>join:unsafe</code> ở trên. Bất kỳ tài khoản nào đã đăng nhập cũng có thể vào phòng của bất kỳ cuộc trò chuyện nào và nhận realtime các sự kiện <code>thread:new-message</code> của nó, kèm nguyên nội dung tin nhắn. Chỗ này đã được vá: handler giờ chạy đúng truy vấn kiểm người-trong-cuộc mà tầng REST dùng trong <code>MessagesService.assertParticipant</code> (thread ADMIN: người dùng hoặc admin được gán; thread USER: hai bên), đi đường tắt khi phòng đã được tự động vào lúc kết nối, <strong>fail closed</strong> nếu truy vấn cơ sở dữ liệu ném lỗi, và trả lời từ chối bằng <code>thread:join-denied</code> kèm một dòng log cảnh báo. <code>thread:typing</code> cùng hình dạng lỗi — ai cũng đẩy được "đang nhập…" vào khung chat của người lạ — nay bắt buộc socket phải ĐANG là thành viên của phòng đó.</p>
 <p>Bài học tổng quát hơn con bug này: <strong>mỗi handler sự kiện socket là một endpoint</strong>. Chỉ là nó không trông giống endpoint, vì không có URL, không có bảng route, và không có chuỗi middleware nào để treo phép kiểm lên.</p>
 </div>
@@ -553,7 +593,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 <h3>Phép đo 3 — kết nối đã chết mà không biết mình chết</h3>
 <p>Một cái tab đóng lại sẽ gửi gói TCP FIN và máy chủ thấy <code>disconnect</code> ngay lập tức. Một chiếc điện thoại đi vào thang máy thì không gửi gì cả. Muốn đo trường hợp thứ hai cho trung thực thì phải mô phỏng một hố đen — một proxy TCP ngừng chuyển tiếp mà không đóng gì hết. Với <code>pingInterval: 1000, pingTimeout: 2000</code>:</p>
 <div class="out">máy chủ phát hiện chết sau 3010ms (disconnect: ping timeout)</div>
-<p>Đúng bằng <code>pingInterval + pingTimeout</code>: máy chủ gửi ping theo chu kỳ, rồi chờ hết thời hạn để nhận pong. Mặc định của Socket.IO là <strong>25.000ms + 20.000ms = tối đa 45 giây</strong> trước khi một client biến mất bị phát hiện. Từ giờ tới lúc đó nó vẫn được tính là đang online, vẫn nằm trong mọi phòng, và vẫn nhận tin nhắn vào hư không.</p>
+<p>Đó là <code>pingInterval + pingTimeout</code> — trường hợp xấu nhất: máy chủ gửi ping theo chu kỳ, rồi chờ hết thời hạn để nhận pong. (Đo lại: thang máy bắt đầu ngay sau một pong thì 3.003ms; nuốt luôn cái pong đang trên đường thì chỉ còn <code>pingTimeout</code>: 2.000ms. Mặc định Socket.IO, xấu nhất: 45.003ms; cấu hình 25.000 + 60.000 của website này: 85.003ms.) Mặc định của Socket.IO là <strong>25.000ms + 20.000ms = tối đa 45 giây</strong> trước khi một client biến mất bị phát hiện. Từ giờ tới lúc đó nó vẫn được tính là đang online, vẫn nằm trong mọi phòng, và vẫn nhận tin nhắn vào hư không.</p>
 
 <h3>Phép đo 4 — kết nối lại khôi phục cái gì và KHÔNG khôi phục cái gì</h3>
 <div class="out">kết nối, socket id: JBrWhg
@@ -561,7 +601,7 @@ socket.on(<span class="tok-str">'join:safe'</span>, (threadId) =&gt; {
 tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 5 tin phát lúc offline → client nhận: 0 → MẤT TRẮNG
 ⇒ kết nối lại KHÔNG phát lại tin cũ, và id đổi ⇒ mọi room phải JOIN LẠI.</div>
-<p>Hai sự thật định hình mọi giao diện realtime. <strong>Id của socket đổi</strong>, nên mọi thứ bạn đánh khoá theo nó đều mất, và mọi phòng phải được vào lại bên trong handler <code>connect</code>. Và <strong>những tin phát trong lúc client vắng mặt thì mất luôn</strong> — Socket.IO không đệm cho một socket đã ngắt. Mẫu hình sửa chuyện này không phải là một cái đệm to hơn, mà là một cách chia việc khác:</p>
+<p>Hai sự thật định hình mọi giao diện realtime. <strong>Id của socket đổi</strong>, nên mọi thứ bạn đánh khoá theo nó đều mất, và mọi phòng phải được vào lại bên trong handler <code>connect</code>. Và <strong>những tin phát trong lúc client vắng mặt thì mất luôn</strong> — mặc định Socket.IO không đệm cho một socket đã ngắt. (Từ bản 4.6 thì có thể: bật <code>connectionStateRecovery</code>, cùng phép thử giữ nguyên id socket và phát bù 5/5 tin. Nhưng nó nằm trong RAM của một tiến trình — server khởi động lại là lại 0/5 — và không chạy sau <code>@socket.io/redis-adapter</code> cổ điển mà website này dùng: đo được <code>recovered = false</code>, 0/5.) Mẫu hình sửa chuyện này không phải là một cái đệm to hơn, mà là một cách chia việc khác:</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-t">Socket = tín hiệu</span><span class="lz-d">"có gì đó mới, id lớn hơn X" — nhanh, bé, và được phép mất</span></div>
   <div class="lz-step"><span class="lz-t">REST = sự thật</span><span class="lz-d">lúc kết nối lại, gọi <code>GET /messages?since=&lt;id cuối cùng thấy&gt;</code> để lấy đúng phần đã lỡ</span></div>
@@ -583,6 +623,16 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-944" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 944 — Reconnection &amp; Reliability</span><span class="lc-sub">10 bài tập: mất mạng, kết nối lại, và bù phần đã lỡ.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-3-reconnect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 1.3: Reconnect: cái thật sự xảy ra và cái KHÔNG</span><span class="lc-sub">Giống: kết nối lại mang sid mới, room rỗng, và sự kiện phát trong lúc đó mất. Socket.IO 1.3 đo thời gian từng bước kết nối lại; bài này thêm cách sửa (vào lại room + GET ?since=, lấy lại 5/5) và đo connectionStateRecovery: cùng id và 5/5 trên một tiến trình, 0/5 sau khi khởi động lại, và không chạy sau Redis adapter cổ điển.</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-2-ping" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 2.2: pingInterval và pingTimeout: hai số, bốn mode</span><span class="lc-sub">Giống: website này chạy 25.000 + 60.000 ms, nên một client biến mất có thể vẫn "online" tới 85 giây. Socket.IO 2.2 so bốn cấu hình và bẫy timeout của proxy; bài này đo thời gian phát hiện bằng một "hố đen" TCP: 3.003 ms nếu vừa nhận pong, 2.000 ms nếu pong cũng mất, 45.003 ms với mặc định, 85.003 ms với cấu hình của website.</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
 </a>
 </div>
 `,
@@ -660,7 +710,7 @@ ws.send(payload);</code></pre>
 <p>Every socket on a process shares one event loop. Chapter 2 measured a 3-second synchronous block; on an HTTP server that means slow requests, on a realtime server it means <strong>heartbeats stop being answered</strong>. Block for longer than <code>pingTimeout</code> and clients start disconnecting <em>themselves</em>, then all reconnect at once — a thundering herd caused by a single slow loop. This is also why the image work in chapter 10 is queued: CPU spent on one upload is latency added to every open socket.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> <code>attachRedisAdapter()</code> in <code>src/socket/messaging.socket.ts</code> duplicates the shared ioredis client twice (one publisher, one subscriber — a subscribed connection cannot run other commands) and attaches the adapter, wrapped in a try/catch that <strong>falls back to the in-memory adapter and logs a warning</strong> if Redis is unreachable. That is the right trade for this deployment: with a single backend container, in-memory rooms are correct and realtime keeps working through a Redis outage; the moment a second instance exists, the adapter is what stops measurement 1 from happening. The transports stay <code>['websocket', 'polling']</code> — the fallback is kept deliberately for users behind upgrade-stripping proxies — which is exactly the configuration that <em>requires</em> sticky sessions before scaling out, and is worth writing on the wall before the second container ships. Ping settings are <code>pingInterval: 25000, pingTimeout: 60000</code>, more forgiving than the defaults: it tolerates a phone on a bad connection, at the cost of a ghost showing as online for up to 85 seconds.</p>
+<p><strong>How cuongthai.com does it.</strong> <code>attachRedisAdapter()</code> in <code>src/socket/messaging.socket.ts</code> duplicates the shared node-redis client (the <code>redis</code> package, not ioredis) twice (one publisher, one subscriber — a subscribed connection cannot run other commands) and attaches the adapter, wrapped in a try/catch that <strong>falls back to the in-memory adapter and logs a warning</strong> if Redis is unreachable. That is the right trade for this deployment: with a single backend container, in-memory rooms are correct and realtime keeps working through a Redis outage; the moment a second instance exists, the adapter is what stops measurement 1 from happening. The transports stay <code>['websocket', 'polling']</code> — the fallback is kept deliberately for users behind upgrade-stripping proxies — which is exactly the configuration that <em>requires</em> sticky sessions before scaling out, and is worth writing on the wall before the second container ships. Ping settings are <code>pingInterval: 25000, pingTimeout: 60000</code>, more forgiving than the defaults: it tolerates a phone on a bad connection, at the cost of a ghost showing as online for up to 85 seconds.</p>
 </div>
 
 <div class="pitfall">
@@ -677,6 +727,21 @@ ws.send(payload);</code></pre>
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-947" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 947 — Production Patterns &amp; Security</span><span class="lc-sub">10 bài tập: chạy realtime thật trên nhiều tiến trình.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-5-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 5.1: Why Redis adapter: cross-worker broadcast</span><span class="lc-sub">Same: without an adapter a broadcast reaches only the sockets of the process that emits, silently; this site attaches the adapter best-effort. Socket.IO 5.1 adds the per-broadcast overhead and the channel layout; this lesson reproduces the silent bug with two processes (emit 0.34 ms, nothing delivered) and the fix (delivered in 2.23 ms), and shows why pub and sub need two connections.</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-3-sticky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Socket.IO — lesson 2.3: Sticky sessions: why one client goes to one worker</span><span class="lc-sub">Same: long-polling is many requests on one session, so request 2 landing on another worker gets 400 "Session ID unknown"; ip_hash or a cookie hash fixes it. Socket.IO 2.3 covers the nginx options and how to verify stickiness; this lesson measures it behind a round-robin balancer: polling failed, a client forcing transports: ['websocket'] worked, polling + sticky worked.</span></span>
+  <span class="lc-cta">OPEN SOCKET.IO LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same problem in API Design — lesson 10.4: More than one server</span><span class="lc-sub">Same: with events in process memory, a dashboard on the second LabFlow instance saw 0 of 10 bookings; with a Redis Stream every instance reads, 10 of 10 — and the stream doubles as the replay log for Last-Event-ID. This lesson solves the same problem for Socket.IO with Redis Pub/Sub (the adapter), which delivers to live sockets but keeps nothing.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -738,7 +803,7 @@ ws.send(payload);</code></pre>
 <p>Mọi socket trên một tiến trình đều dùng chung một event loop. Chương 2 đã đo một lần chặn đồng bộ 3 giây; trên một máy chủ HTTP điều đó nghĩa là request chậm, còn trên một máy chủ realtime thì nghĩa là <strong>nhịp tim không được trả lời</strong>. Chặn lâu hơn <code>pingTimeout</code> là các client bắt đầu TỰ ngắt kết nối, rồi cùng nối lại một lúc — một cơn bão do chính một vòng lặp chậm gây ra. Đó cũng là lý do phần xử lý ảnh ở chương 10 phải xếp hàng: CPU tiêu cho một lần upload là độ trễ cộng vào mọi socket đang mở.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> <code>attachRedisAdapter()</code> trong <code>src/socket/messaging.socket.ts</code> nhân đôi client ioredis dùng chung thành hai (một để công bố, một để lắng nghe — một kết nối đang subscribe thì không chạy lệnh khác được) rồi gắn adapter, bọc trong try/catch để <strong>quay về adapter trong bộ nhớ và ghi log cảnh báo</strong> nếu Redis không với tới được. Đó là đánh đổi đúng cho cách triển khai này: với một container backend duy nhất, room trong bộ nhớ là đúng và realtime vẫn chạy xuyên qua một sự cố Redis; nhưng ngay khi có instance thứ hai, adapter chính là thứ ngăn phép đo 1 xảy ra. Phần transport vẫn để <code>['websocket', 'polling']</code> — đường lui được giữ có chủ đích cho người dùng sau proxy bóc header upgrade — và đó đúng là cấu hình <em>đòi hỏi</em> sticky session trước khi mở rộng ra nhiều máy, một điều đáng viết lên tường trước khi container thứ hai ra đời. Cấu hình nhịp tim là <code>pingInterval: 25000, pingTimeout: 60000</code>, rộng lượng hơn mặc định: nó chịu đựng được chiếc điện thoại sóng yếu, đổi lại một người dùng ma có thể hiện là đang online tới 85 giây.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> <code>attachRedisAdapter()</code> trong <code>src/socket/messaging.socket.ts</code> nhân đôi client node-redis dùng chung (gói <code>redis</code>, không phải ioredis) thành hai (một để công bố, một để lắng nghe — một kết nối đang subscribe thì không chạy lệnh khác được) rồi gắn adapter, bọc trong try/catch để <strong>quay về adapter trong bộ nhớ và ghi log cảnh báo</strong> nếu Redis không với tới được. Đó là đánh đổi đúng cho cách triển khai này: với một container backend duy nhất, room trong bộ nhớ là đúng và realtime vẫn chạy xuyên qua một sự cố Redis; nhưng ngay khi có instance thứ hai, adapter chính là thứ ngăn phép đo 1 xảy ra. Phần transport vẫn để <code>['websocket', 'polling']</code> — đường lui được giữ có chủ đích cho người dùng sau proxy bóc header upgrade — và đó đúng là cấu hình <em>đòi hỏi</em> sticky session trước khi mở rộng ra nhiều máy, một điều đáng viết lên tường trước khi container thứ hai ra đời. Cấu hình nhịp tim là <code>pingInterval: 25000, pingTimeout: 60000</code>, rộng lượng hơn mặc định: nó chịu đựng được chiếc điện thoại sóng yếu, đổi lại một người dùng ma có thể hiện là đang online tới 85 giây.</p>
 </div>
 
 <div class="pitfall">
@@ -755,6 +820,21 @@ ws.send(payload);</code></pre>
 <a class="link-card codelab" href="/code-lab/socket-io${REF}#module-947" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 947 — Production Patterns &amp; Security</span><span class="lc-sub">10 bài tập: chạy realtime thật trên nhiều tiến trình.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-5-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 5.1: Vì sao Redis adapter: broadcast qua worker</span><span class="lc-sub">Giống: không có adapter thì một lần phát chỉ tới socket của tiến trình đang phát, im lặng; website này gắn adapter theo kiểu cố gắng hết sức. Socket.IO 5.1 thêm chi phí mỗi lần phát và cách đặt kênh; bài này dựng lại con bug im lặng bằng hai tiến trình (emit 0,34 ms, không ai nhận) và cách sửa (nhận sau 2,23 ms), và cho thấy vì sao pub với sub cần hai kết nối.</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-2-3-sticky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Socket.IO — bài 2.3: Sticky sessions: vì sao một client về một worker</span><span class="lc-sub">Giống: long-polling là nhiều request trên một phiên, nên request thứ hai rơi vào worker khác nhận 400 "Session ID unknown"; ip_hash hoặc băm cookie sửa được. Socket.IO 2.3 nói các lựa chọn nginx và cách kiểm sticky; bài này đo sau một load balancer luân phiên: polling hỏng, client ép transports: ['websocket'] chạy, polling + sticky chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI SOCKET.IO →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng bài toán ở API Design — bài 10.4: Nhiều hơn một server</span><span class="lc-sub">Giống: sự kiện nằm trong bộ nhớ tiến trình thì dashboard ở instance LabFlow thứ hai thấy 0/10 lượt đặt; dùng Redis Stream mọi instance cùng đọc, 10/10 — và stream kiêm luôn nhật ký phát bù cho Last-Event-ID. Bài này giải cùng bài toán cho Socket.IO bằng Redis Pub/Sub (adapter), giao tới socket đang sống nhưng không giữ lại gì.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
 </div>
 `,

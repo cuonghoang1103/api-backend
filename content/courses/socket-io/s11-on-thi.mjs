@@ -24,7 +24,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">The client always starts on polling</span><span class="lz-lnote">It then upgrades to WebSocket if the proxy allows. The order in <code>transports: [...]</code> is a permission list, not a sequence. Lesson 0.2</span></div>
 <div class="lz-layer"><span class="lz-lname">Two sids: engine.io ≠ socket.io</span><span class="lz-lnote">socket.id vs socket.conn.id. One engine.io connection carries several namespaces. Lesson 0.3</span></div>
 <div class="lz-layer"><span class="lz-lname">The default is at-most-once</span><span class="lz-lnote">Emit is fire-and-forget. No exception when a packet is lost. Lesson 6.1</span></div>
-<div class="lz-layer"><span class="lz-lname">io.to(A).to(B) is an intersection</span><span class="lz-lnote">You need both A AND B. Use <code>[A, B]</code> for a union. Lesson 3.1</span></div>
+<div class="lz-layer"><span class="lz-lname">io.to(A).to(B) is a union</span><span class="lz-lnote">A OR B, each socket once — the same as <code>[A, B]</code>; there is no intersection operator. Lesson 3.1</span></div>
 <div class="lz-layer"><span class="lz-lname">The sid changes on reconnect</span><span class="lz-lnote">Track state by userId, not socket.id. Lessons 1.3 and 1.5</span></div>
 <div class="lz-layer"><span class="lz-lname">Redis adapter ≠ sticky sessions</span><span class="lz-lnote">A cluster needs BOTH. The adapter broadcasts across workers; stickiness routes polling back to the same worker. Lessons 2.3 and 5.1</span></div>
 <div class="lz-layer"><span class="lz-lname">WebRTC media does NOT travel over socket.io</span><span class="lz-lnote">Socket.io carries only signalling (2 KB, 5-20 packets). The media goes peer-to-peer over RTP/UDP. Lesson 7.1</span></div>
@@ -89,7 +89,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">Client luôn bắt đầu bằng polling</span><span class="lz-lnote">Sau đó upgrade WebSocket nếu proxy cho phép. Thứ tự <code>transports: [...]</code> là permission, không thứ tự. Bài 0.2</span></div>
 <div class="lz-layer"><span class="lz-lname">Two sids: engine.io ≠ socket.io</span><span class="lz-lnote">socket.id vs socket.conn.id. Một engine.io connection nuôi nhiều namespace. Bài 0.3</span></div>
 <div class="lz-layer"><span class="lz-lname">Default là at-most-once</span><span class="lz-lnote">Emit fire-and-forget. Không exception khi packet mất. Bài 6.1</span></div>
-<div class="lz-layer"><span class="lz-lname">io.to(A).to(B) là intersection</span><span class="lz-lnote">Cần cả A VÀ B. Dùng <code>[A, B]</code> cho union. Bài 3.1</span></div>
+<div class="lz-layer"><span class="lz-lname">io.to(A).to(B) là union</span><span class="lz-lnote">A HOẶC B, mỗi socket một lần — giống <code>[A, B]</code>; không có toán tử giao. Bài 3.1</span></div>
 <div class="lz-layer"><span class="lz-lname">Sid đổi ở reconnect</span><span class="lz-lnote">Track state theo userId, không socket.id. Bài 1.3 + 1.5</span></div>
 <div class="lz-layer"><span class="lz-lname">Redis adapter ≠ sticky sessions</span><span class="lz-lnote">Cluster cần CẢ HAI. Adapter broadcast cross-worker, sticky routes polling to same worker. Bài 2.3 + 5.1</span></div>
 <div class="lz-layer"><span class="lz-lname">WebRTC media KHÔNG qua socket.io</span><span class="lz-lnote">Socket.io chỉ signalling (2 KB, 5-20 packets). Media qua RTP/UDP P2P. Bài 7.1</span></div>
@@ -225,8 +225,8 @@ export default {
           {
             question: '<code>io.to(&quot;A&quot;).to(&quot;B&quot;).emit(&quot;x&quot;)</code> semantics?|||<code>io.to(&quot;A&quot;).to(&quot;B&quot;).emit(&quot;x&quot;)</code> semantics?',
             options: [
-              'INTERSECTION — sockets in BOTH A AND B receive. For UNION (A OR B), use <code>io.to([A, B])</code>|||INTERSECTION — socket trong CẢ A VÀ B nhận. Cho UNION (A HOẶC B), dùng <code>io.to([A, B])</code>',
-              'UNION|||UNION',
+              'UNION — sockets in A OR B receive it once, the same as <code>io.to([A, B])</code>|||UNION — socket ở A HOẶC B nhận đúng một lần, giống <code>io.to([A, B])</code>',
+              'INTERSECTION — only sockets in BOTH A AND B|||INTERSECTION — chỉ socket ở CẢ A VÀ B',
               'Only A|||Chỉ A',
               'Only B|||Chỉ B',
             ],

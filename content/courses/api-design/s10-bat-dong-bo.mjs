@@ -1441,6 +1441,16 @@ dùng lại vé cũ ⇒ 401 {"type":"https://labflow.example/problems/ticket-inv
   <li>Compression without <code>res.flush()</code>: browsers see 0 of 8 events while curl works.</li>
   <li>One-time 30 s tickets for EventSource/WebSocket; Redis Stream fan-out: 0 → 10 of 10 across two instances.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.1: From asking repeatedly to being told: WebSocket</span><span class="lc-sub">The Node.js course counts the bytes this lesson does not: 20 empty polls with a real login cookie cost 16,780 B (839 B each, the cookie alone 213 B) against 2,089 B for 20 real messages over a socket; 10,000 open tabs polling every 3 s = 12 million requests and 10.07 GB an hour. It also prints the WebSocket handshake and one masked frame byte by byte, and reproduces nginx without the Upgrade lines (200/400 instead of 101).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 11.4: the same fan-out for Socket.IO</span><span class="lc-sub">The Node.js course reproduces the two-instance problem with Socket.IO: without an adapter the emit from process B reaches nobody and logs nothing; with @socket.io/redis-adapter (Redis Pub/Sub) the client on A receives it in 2.23 ms. Pub/Sub does not store events — that is why this lesson's Redis Stream also gives you replay.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1618,6 +1628,16 @@ dùng lại vé cũ ⇒ 401 {"type":"https://labflow.example/problems/ticket-inv
   <li>Nén mà không <code>res.flush()</code>: trình duyệt thấy 0/8 sự kiện trong khi curl vẫn chạy.</li>
   <li>Vé dùng một lần 30 s cho EventSource/WebSocket; phát tán qua Redis Stream: 0 → 10/10 trên hai instance.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.1: Từ hỏi đi hỏi lại tới được báo: WebSocket</span><span class="lc-sub">Khoá Node.js đếm phần byte mà bài này không đếm: 20 lần hỏi rỗng có cookie đăng nhập thật tốn 16.780 B (839 B mỗi lần, riêng cookie 213 B) so với 2.089 B cho 20 tin thật qua socket; 10.000 tab polling 3 giây = 12 triệu request và 10,07 GB mỗi giờ. Bài đó còn in cái bắt tay WebSocket và một khung có mặt nạ từng byte, và dựng lại nginx thiếu dòng Upgrade (200/400 thay vì 101).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 11.4: cùng phép fan-out cho Socket.IO</span><span class="lc-sub">Khoá Node.js dựng lại bài toán hai instance với Socket.IO: không có adapter thì emit từ tiến trình B không tới ai và không ghi log gì; có @socket.io/redis-adapter (Redis Pub/Sub) thì client ở A nhận sau 2,23 ms. Pub/Sub không lưu sự kiện — đó là lý do Redis Stream của bài này còn cho bạn phát bù.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

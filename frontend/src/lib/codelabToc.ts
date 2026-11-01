@@ -32,6 +32,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'cea201-practice': 'computer-organization-and-architecture',
   'nwc204-practice': 'nwc204-computer-networking',
   'mad101-practice': 'discrete-mathematics',
+  'pro192-practice': 'object-oriented-programming',
 });
 
 /**
@@ -177,6 +178,23 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
   'ky-nang-practice': {
     3: '📝 Báo cáo kỹ thuật (SSG105 Ch3)',
     4: '🎤 Thuyết trình & bảo vệ Q&A (SSG105 Ch4)',
+  },
+  // PRO192 (01/11/2026) — số chương theo khoá object-oriented-programming (content/academy/PRO192.mjs); 10–13 = LAB211, ⭐ Chuyên sâu,
+  // dự án cuối khoá, luyện PE (tên module "10.1 …" … "13.4 …" do content/codelab/pro192-practice đặt).
+  'pro192-practice': {
+    1: 'Tư duy OO & Java cơ bản',
+    2: 'Lớp & đối tượng',
+    3: 'Đóng gói & trừu tượng',
+    4: 'Kế thừa & đa hình',
+    5: 'Abstract class & interface',
+    6: 'Xử lý ngoại lệ',
+    7: 'Mảng đối tượng',
+    8: 'Java Collections',
+    9: 'Luồng & đọc/ghi tệp',
+    10: 'LAB211 thực chiến — qua review của thầy',
+    11: '⭐ Chuyên sâu: Java 17, JVM, thiết kế, đa luồng',
+    12: 'Dự án cuối khoá — CT Library 1.0',
+    13: 'Luyện PE — đề thi thực hành',
   },
 });
 

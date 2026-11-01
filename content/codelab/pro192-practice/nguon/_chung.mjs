@@ -24,6 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { rutThan } from './_rut-than.mjs';
 
 const DAY = path.dirname(fileURLToPath(import.meta.url));
 export const KHOA = 'object-oriented-programming';
@@ -287,5 +288,58 @@ export function deLab(lab, s) {
     tep: L.giai, khoiDau: khoiLab, ca, quyTac: [...(lab.startsWith('l211-') && s.luatThay !== false ? LUAT_THAY : []), ...(s.quyTac || [])], soViDu: 1,
     khoiDauLoi: s.khoiDauLoi,
     goiY: s.goiY, loiHayGap: s.loiHayGap, giaiThich: s.giaiThich, thuatNgu: s.thuatNgu,
+  });
+}
+
+/**
+ * 🎯 Luyện PE (Thi cuối kỳ): một câu của đề PE thật (prompt Exam Room, nguon/_pe/<Tên>.json do _lay-pe.mjs chép) với lời giải TỰ
+ * VIẾT của khoá, Main = bản thay Main.class của đề (dựng lại bằng javap), mỗi khối .in = một lần chạy như phần mềm chấm của trường.
+ * Khởi đầu = lớp của người học với trường giữ nguyên, mọi hàm/constructor rút thân (TODO), bỏ chú thích (chú thích là gợi ý/đáp án).
+ */
+const boChuThich = (code) => code.split('\n')
+  .filter((l) => !/^\s*\/\//.test(l))
+  .map((l) => { const i = l.indexOf('//'); return i > 0 && ((l.slice(0, i).match(/"/g) || []).length % 2 === 0) ? l.slice(0, i).replace(/\s+$/, '') : l; })
+  .join('\n');
+const LOI_PE = {
+  chung: [
+    { en: 'A method name, a parameter type or order, or a return type that differs from the box — the given Main.class was compiled against the box: compile error / NoSuchMethodError, 0 for that test case.', vi: 'Tên phương thức, kiểu hay thứ tự tham số, hoặc kiểu trả về lệch với hộp UML — Main.class đề cho được biên dịch theo hộp: lỗi biên dịch / NoSuchMethodError, 0 điểm ca đó.' },
+    { en: 'Printing inside your method instead of returning the value — Main prints the result after OUTPUT:, one extra line and the test case fails.', vi: 'In ra trong phương thức thay vì trả giá trị — Main in kết quả sau OUTPUT:, thừa một dòng là trượt ca.' },
+  ],
+  1: { en: 'Getting the twist of a getter wrong (upper-case the whole text vs only the first letter, > vs >=) — the marks are in the twists, not in the fields.', vi: 'Sai cú xoắn của getter (viết hoa cả chuỗi hay chỉ chữ đầu, > hay >=) — điểm nằm ở cú xoắn, không ở các trường.' },
+  2: { en: 'Re-declaring the parent’s fields in the child (or copying its logic) instead of super(...) and the parent’s getters/setters — the parent’s fields are private.', vi: 'Khai báo lại trường của cha trong con (hoặc chép logic) thay vì super(...) và getter/setter của cha — trường của cha là private.' },
+  3: { en: 'f2/f3 working on a copy of the list — the paper checks the list it passed in, which must change in place.', vi: 'f2/f3 làm trên bản sao của list — đề kiểm chính list đã truyền vào, list đó phải đổi tại chỗ.' },
+  4: { en: 'Off-by-one on the edges of a string (no dot, a single character, the first/last position) — the hidden test cases love edges.', vi: 'Lệch một ở mép chuỗi (không có dấu chấm, một ký tự, vị trí đầu/cuối) — ca ẩn rất thích các mép.' },
+};
+export function dePe(ten, s = {}) {
+  const P = JSON.parse(fs.readFileSync(path.join(DAY, '_pe', `${ten}.json`), 'utf8'));
+  const khoi = {};
+  for (const [f, t] of Object.entries(P.hoc)) khoi[f] = rutThan(boChuThich(t), () => true);
+  const tom = (x) => x.replace(/^(Đề )?PE\d+ \(\w+\) (question|câu) \d,? \d (marks?|điểm)? ?—\s*/, '').replace(/^(Đề )?PE\d+ \(\w+\) (question|câu) \d,? ?—?\s*/, '');
+  const caVi = (t) => t.replace('paper sample', 'mẫu của đề').replace('own test', 'ca tự thêm').replace(' again', ' lần nữa');
+  const tepHoc = Object.keys(P.hoc).map((f) => `<code>src/${f}</code>`).join(', ');
+  const tepCho = Object.keys(P.cho).map((f) => `<code>src/${f}</code>`).join(', ');
+  return deJava({
+    id: s.id || `pro192-pe-${ten.replace(/^PeQ/, 'q').toLowerCase()}`,
+    tieuDe: { en: `${P.pe} Q${P.cau} — ${tom(P.tieuDe.en)}`, vi: `${P.pe} câu ${P.cau} — ${tom(P.tieuDe.vi)}` },
+    doKho: P.cau === 1 ? 'EASY' : 'MEDIUM', phut: s.phut || [0, 15, 20, 25, 20][P.cau], dangBai: 'pe',
+    khaiNiem: s.khaiNiem || [],
+    the: ['pe', `pe-q${P.cau}`],
+    moTa: {
+      en: `<p><b>${P.pe} (${P.ky}) · question ${P.cau} · ${P.diem} marks</b> — the real paper of the PRO192 practical exam, as in the Exam Room. In the exam room the project contains the compiled <code>Main.class</code>${Object.keys(P.cho).length > 1 ? ' and the interface' : ''}; here ${tepCho} is a stand-in rebuilt from that byte code (same prompts, same reads, same <code>OUTPUT:</code>) — do not change it. You write ${tepHoc} (Java 8, default package).</p>\n${P.deBai.en}`,
+      vi: `<p><b>${P.pe} (${P.ky}) · câu ${P.cau} · ${P.diem} điểm</b> — đề thật của kỳ thi thực hành PRO192, như trong Exam Room. Ở phòng thi project có sẵn <code>Main.class</code> đã biên dịch${Object.keys(P.cho).length > 1 ? ' và interface' : ''}; ở đây ${tepCho} là bản thay dựng lại từ byte code đó (cùng lời nhắc, cùng cách đọc, cùng <code>OUTPUT:</code>) — không sửa. Bạn viết ${tepHoc} (Java 8, package mặc định).</p>\n${P.deBai.vi}`,
+    },
+    yeuCau: {
+      en: ['Names, parameter types and order, return types exactly as in the box — Main was compiled against them.', 'Do not change the given files; Java 8 only (the exam room compiles with JDK 8).', 'Each test case is one run of Main, as the marking software does; the sample test cases of the paper are visible, our own extra ones are hidden.'],
+      vi: ['Tên, kiểu và thứ tự tham số, kiểu trả về đúng như hộp UML — Main được biên dịch theo chúng.', 'Không sửa các tệp cho sẵn; chỉ Java 8 (phòng thi biên dịch bằng JDK 8).', 'Mỗi ca là một lần chạy Main, như phần mềm chấm; các ca mẫu của đề hiện ra, các ca tự thêm thì ẩn.'],
+    },
+    dauVao: { en: 'What the given Main asks for, then the test case number (see tests/N.in).', vi: 'Những gì Main cho sẵn hỏi, rồi số test case (xem tests/N.in).' },
+    dauRa: { en: 'The screen of Main; the part after OUTPUT: is what the paper’s samples show.', vi: 'Màn hình của Main; phần sau OUTPUT: là thứ các mẫu của đề cho thấy.' },
+    main: 'Main', java: 8, release: 8,
+    tep: { ...P.hoc, ...P.cho }, khoiDau: khoi,
+    ca: P.ca.map((x) => ({ ten: { en: x.ten, vi: caVi(x.ten) }, vao: x.vao, ...(/own/i.test(x.ten) ? { an: true } : {}) })),
+    soViDu: 2,
+    goiY: P.goiY.length >= 2 ? P.goiY : [...P.goiY, { en: 'Start from the box: fields, the two constructors, then one method per test case — run node cham.mjs --case N after each one.', vi: 'Bắt đầu từ hộp UML: trường, hai constructor, rồi mỗi test case một phương thức — chạy node cham.mjs --case N sau mỗi cái.' }],
+    loiHayGap: [...LOI_PE.chung, LOI_PE[P.cau]],
+    giaiThich: P.giaiThich.en ? P.giaiThich : { en: '<p>The reference is the course’s own solution, checked against every sample of the paper.</p>', vi: '<p>Lời giải là bản tự viết của khoá, đã đối chiếu mọi mẫu của đề.</p>' },
   });
 }

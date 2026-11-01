@@ -565,4 +565,4 @@ public class Main {
   giaiThich: { en: '<p>Each Java 9–17 convenience has a Java 8 spelling; the one that changes behaviour if forgotten is the record’s generated equals/hashCode/toString. --release 8 checks both the syntax and the API (List.of, isBlank, repeat do not exist in Java 8’s library).</p>', vi: '<p>Mỗi tiện ích Java 9–17 đều có cách viết Java 8; thứ đổi hành vi nếu quên là equals/hashCode/toString do record sinh ra. --release 8 kiểm cả cú pháp lẫn API (List.of, isBlank, repeat không có trong thư viện Java 8).</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs3-on', ten: '⭐ CS.3 Modern Java 17: records, enums, sealed, text blocks', de: [de1, de2, de3, de4, de5] });
+export default moDun({ slug: 'pro192-cs3-on', ten: '11.3 ⭐ CS.3 Modern Java 17: records, enums, sealed, text blocks', de: [de1, de2, de3, de4, de5] });

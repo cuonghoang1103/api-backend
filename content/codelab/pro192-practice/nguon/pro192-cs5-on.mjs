@@ -363,4 +363,4 @@ public final class PriceList {
   giaiThich: { en: '<p>Class initialisation is a single pass over the static initialisers in textual order. A static instance created at the top runs its constructor while later statics are still defaults. Put the instance last, or move it into a holder class whose initialisation is triggered by get().</p>', vi: '<p>Khởi tạo lớp là một lượt chạy qua các khởi tạo static theo thứ tự trong văn bản. Một thể hiện static tạo ở đầu chạy constructor khi các static phía sau còn mặc định. Đặt thể hiện xuống cuối, hoặc dời vào lớp holder mà get() mới kích hoạt khởi tạo.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs5-on', ten: '⭐ CS.5 The JVM seen from your code: leaks, the stack, caches, initialisation', de: [de1, de2, de3, de4] });
+export default moDun({ slug: 'pro192-cs5-on', ten: '11.5 ⭐ CS.5 The JVM seen from your code: leaks, the stack, caches, initialisation', de: [de1, de2, de3, de4] });

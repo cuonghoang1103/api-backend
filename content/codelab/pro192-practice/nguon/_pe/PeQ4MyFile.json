@@ -1,0 +1,66 @@
+{
+ "ten": "PeQ4MyFile",
+ "pe": "PE10",
+ "ky": "FA25",
+ "cau": 4,
+ "diem": 2,
+ "tieuDe": {
+  "en": "PE10 (FA25) question 4, 2 marks — MyFile implements the given IFile: the extension and a new name from a Windows path",
+  "vi": "Đề PE10 (FA25) câu 4, 2 điểm — MyFile hiện thực IFile cho sẵn: phần mở rộng và tên mới từ một đường dẫn Windows"
+ },
+ "deBai": {
+  "en": "<p><strong>(2 marks)</strong> The interface <strong>IFile</strong> below is already compiled and given in byte code format, thus <strong>you can use it without creating IFile.java file</strong>:</p>\n<pre>public interface IFile {\n    public String f1(String str);\n    public String f2(String str);\n}</pre>\n<p>Write a class named <strong>MyFile</strong>, which implements the interface <strong>IFile</strong>. The class MyFile implements methods f1 and f2 in IFile as below:</p>\n<ul>\n  <li><strong>f1</strong>: Returns the extension of the string which represent a path of file. If the string don't have the extension of file return \"wrong format\".</li>\n  <li><strong>f2</strong>: Return the new file name of the string which represent a path of file, with uppercase and add prefix \"New_\" at the begin of file name, in otherwise return \"wrong format\".</li>\n</ul>",
+  "vi": "<p><strong>(2 điểm)</strong> Interface <strong>IFile</strong> dưới đây đã biên dịch sẵn dạng byte code, bạn <strong>dùng thẳng không cần tạo file IFile.java</strong>:</p>\n<pre>public interface IFile {\n    public String f1(String str);\n    public String f2(String str);\n}</pre>\n<p>Viết lớp tên <strong>MyFile</strong>, implement interface <strong>IFile</strong>. Lớp MyFile cài đặt các hàm f1 và f2 trong IFile như sau:</p>\n<ul>\n  <li><strong>f1</strong>: Trả về phần mở rộng (extension) của chuỗi biểu diễn đường dẫn file. Nếu chuỗi không có phần mở rộng thì trả về \"wrong format\".</li>\n  <li><strong>f2</strong>: Trả về tên file mới của chuỗi biểu diễn đường dẫn file, viết hoa và thêm tiền tố \"New_\" vào đầu tên file, ngược lại trả về \"wrong format\".</li>\n</ul>"
+ },
+ "giaiThich": {
+  "en": "<p>The sample uses a Windows-style path <code>c:\\MyFile\\data.txt</code>. Both f1 and f2 first isolate the FILE NAME (the part after the last <code>\\</code> or <code>/</code>), then look for the last <code>.</code> in that file name only — a dot appearing earlier in a directory name must not be treated as an extension separator.</p>\n<p><strong>f2</strong>'s \"with uppercase\" applies only to the file's base name (without the extension) — the extension itself is left as-is, then \"New_\" is prepended: <code>data.txt</code> → base \"data\" → uppercase \"DATA\" → <code>New_DATA.txt</code> (note the \".txt\" stays lowercase). Verified against both given samples by compiling <code>MyFile.java</code> with the real given <code>Main.class</code>:</p>\n<pre>Enter file path: c:\\MyFile\\data.txt\n1. Test f1 → choice 1\nOUTPUT:\ntxt</pre>\n<pre>Enter file path: c:\\MyFile\\data.txt\n2. Test f2 → choice 2\nOUTPUT:\nNew_DATA.txt</pre>",
+  "vi": "<p>Mẫu dùng đường dẫn kiểu Windows <code>c:\\MyFile\\data.txt</code>. Cả f1 và f2 đều phải tách TÊN FILE (phần sau dấu <code>\\</code> hoặc <code>/</code> cuối cùng) trước, rồi mới tìm dấu <code>.</code> cuối cùng trong TÊN FILE đó thôi — dấu chấm xuất hiện sớm hơn trong tên thư mục không được tính là dấu phân tách extension.</p>\n<p>\"Viết hoa\" của <strong>f2</strong> chỉ áp dụng cho phần tên gốc của file (không gồm extension) — extension giữ nguyên, rồi thêm \"New_\" vào trước: <code>data.txt</code> → tên gốc \"data\" → viết hoa \"DATA\" → <code>New_DATA.txt</code> (chú ý \".txt\" vẫn giữ chữ thường). Đã đối chiếu với cả 2 mẫu trong đề bằng cách biên dịch <code>MyFile.java</code> cùng <code>Main.class</code> given thật:</p>\n<pre>Enter file path: c:\\MyFile\\data.txt\n1. Test f1 → choice 1\nOUTPUT:\ntxt</pre>\n<pre>Enter file path: c:\\MyFile\\data.txt\n2. Test f2 → choice 2\nOUTPUT:\nNew_DATA.txt</pre>"
+ },
+ "goiY": [
+  {
+   "en": "the file name = what follows the LAST \\ or / (a dot in a folder name must not count)",
+   "vi": "tên file = phần sau dấu \\ hoặc / CUỐI CÙNG (dấu chấm trong tên thư mục không được tính)"
+  },
+  {
+   "en": "index of the dot that starts the extension, or -1 when there is no usable extension",
+   "vi": "chỉ số của dấu chấm mở đầu phần mở rộng, hoặc -1 khi không có phần mở rộng dùng được"
+  },
+  {
+   "en": "f1: the extension, or \"wrong format\"",
+   "vi": "f1: phần mở rộng, hoặc \"wrong format\""
+  },
+  {
+   "en": "f2: \"New_\" + the base name in UPPER case + the extension as it was",
+   "vi": "f2: \"New_\" + tên gốc viết HOA + phần mở rộng giữ nguyên"
+  }
+ ],
+ "hoc": {
+  "MyFile.java": "import java.io.*;\nimport java.util.*;\n\nclass MyFile implements IFile {\n\n    // the file name = what follows the LAST \\ or / (a dot in a folder name must not count)\n    private String fileName(String path) {\n        int cut = Math.max(path.lastIndexOf('\\\\'), path.lastIndexOf('/'));\n        return path.substring(cut + 1);\n    }\n\n    // index of the dot that starts the extension, or -1 when there is no usable extension\n    private int dotOf(String name) {\n        int dot = name.lastIndexOf('.');\n        if (dot <= 0 || dot == name.length() - 1) {          // our rule: \"data\", \".txt\" and \"data.\" have no extension\n            return -1;\n        }\n        return dot;\n    }\n\n    // f1: the extension, or \"wrong format\"\n    @Override\n    public String f1(String str) {\n        String name = fileName(str);\n        int dot = dotOf(name);\n        return dot < 0 ? \"wrong format\" : name.substring(dot + 1);\n    }\n\n    // f2: \"New_\" + the base name in UPPER case + the extension as it was\n    @Override\n    public String f2(String str) {\n        String name = fileName(str);\n        int dot = dotOf(name);\n        if (dot < 0) {\n            return \"wrong format\";\n        }\n        return \"New_\" + name.substring(0, dot).toUpperCase() + name.substring(dot);\n    }\n}\n"
+ },
+ "cho": {
+  "IFile.java": "import java.io.*;\nimport java.util.*;\n\ninterface IFile {                                            // GIVEN as IFile.class\n    public String f1(String str);\n    public String f2(String str);\n}\n",
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (javap -c): it asks for the path FIRST, uses println for every prompt\nclass Main {\n    public static void main(String[] args) {\n        MyFile f = new MyFile();\n        Scanner sc = new Scanner(System.in);\n        System.out.println(\"Enter file path:\");\n        String path = sc.nextLine();\n        System.out.println(\"1. Test f1\");\n        System.out.println(\"2. Test f2\");\n        System.out.println(\"your choice:\");\n        int tc = sc.nextInt();\n        sc.nextLine();\n        System.out.println(\"OUTPUT:\");\n        switch (tc) {\n            case 1: System.out.println(f.f1(path)); break;\n            case 2: System.out.println(f.f2(path)); break;\n        }\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 f1 (paper sample 1)",
+   "vao": "c:\\MyFile\\data.txt\n1\n"
+  },
+  {
+   "ten": "TC2 f2 (paper sample 2)",
+   "vao": "c:\\MyFile\\data.txt\n2\n"
+  },
+  {
+   "ten": "TC1 again, own test: a dot in a folder name",
+   "vao": "D:\\work\\v1.2\\notes.docx\n1\n"
+  },
+  {
+   "ten": "TC1 again, own test: no extension",
+   "vao": "C:\\Users\\an\\README\n1\n"
+  },
+  {
+   "ten": "TC2 again, own test: two dots in the name",
+   "vao": "c:\\docs\\report.final.pdf\n2\n"
+  }
+ ]
+}

@@ -29,4 +29,4 @@ const de = deLab('l211-p0021', {
   giaiThich: { en: '<p>The reference is the course’s P0021 (lint.py clean, checklist 0 violations, real JDK 8). The controller is the only class that calls both the repository (find/save/delete a student) and the service (rules on enrollments), so each layer stays testable on its own.</p>', vi: '<p>Lời giải là P0021 của khoá (sạch lint.py, tờ checklist 0 vi phạm, JDK 8 thật). Controller là lớp duy nhất gọi cả repository (tìm/lưu/xoá sinh viên) lẫn service (luật trên các lần học), nên mỗi tầng đứng riêng được.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0021-student-management', ten: 'L.2 🎓 LAB211 J1.L.P0021 — Student Management', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0021-student-management', ten: '10.2 🎓 L.2 LAB211 J1.L.P0021 — Student Management', de: [de] });

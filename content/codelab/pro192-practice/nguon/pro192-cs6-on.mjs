@@ -453,4 +453,4 @@ public class Fee {
   giaiThich: { en: '<p>Bugs live on the edges: the first day, the day the cap starts, the first invalid value. A seven-line boundary table in main() is the exam-room version of a parameterised JUnit test, and it caught both bugs of the first draft.</p>', vi: '<p>Lỗi sống ở mép: ngày đầu, ngày trần bắt đầu, giá trị sai đầu tiên. Bảng biên bảy dòng trong main() là phiên bản phòng thi của một bài kiểm JUnit có tham số, và nó bắt được cả hai lỗi của bản nháp.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs6-on', ten: '⭐ CS.6 Testable code: composition, injection, exceptions, boundaries', de: [de1, de2, de3, de4] });
+export default moDun({ slug: 'pro192-cs6-on', ten: '11.6 ⭐ CS.6 Testable code: composition, injection, exceptions, boundaries', de: [de1, de2, de3, de4] });

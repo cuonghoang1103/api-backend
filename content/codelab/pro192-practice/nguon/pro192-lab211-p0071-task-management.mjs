@@ -29,4 +29,4 @@ const de = deLab('l211-p0071', {
   giaiThich: { en: '<p>The reference is the course’s P0071 after the 24/10 and 29/10 reviews (no service, ID checked in the repository, enum of constants, List declarations, every error in Vietnamese saying what to retype). It passed lint.py and runs the same on JDK 8.</p>', vi: '<p>Lời giải là P0071 của khoá sau hai buổi review 24/10 và 29/10 (không service, kiểm ID ở repository, enum chỉ hằng, khai báo List, mọi câu lỗi tiếng Việt nói rõ nhập lại thế nào). Sạch lint.py và chạy y hệt trên JDK 8.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0071-task-management', ten: 'L.5 🎓 LAB211 J1.S.P0071 — Task Management', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0071-task-management', ten: '10.5 🎓 L.5 LAB211 J1.S.P0071 — Task Management', de: [de] });

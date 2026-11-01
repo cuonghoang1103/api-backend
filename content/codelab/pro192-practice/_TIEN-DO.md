@@ -20,7 +20,11 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 🎓 LAB211 | `pro192-lab211-cach-qua-review` 4 (khung Note từ TODO + 3 đề "sửa lỗi thầy bắt": lỗi thường gặp, service giữ repo, Java 8) · `-p0011-change-base-number` 1 · `-p0021-student-management` 1 · `-p0056-worker-management` 1 · `-p0070-ebank-login` 1 · `-p0071-task-management` 1 · `-p0073-handy-expense` 1 | 10 |
 | ⭐ CS (Java 17) | `pro192-cs1-on` 5 (max generic, PECS, sắp 4 khoá, Repo<T,ID>, ẩn danh→lambda) · `cs2` 5 (groupingBy, top 3 từ, toMap gộp, câu 3 PE `java: 8`, Optional) · `cs3` 5 (record kiểm dữ liệu, enum + switch expression, sealed + instanceof pattern, text block, về JDK 8 `release: 8`) · `cs4` 4 (equals/hashCode, bất biến, VAT BigDecimal, builder) · `cs5` 4 (rò HashSet, đệ quy sâu, Integer cache, thứ tự static) · `cs6` 4 (bọc thay kế thừa, tiêm Clock, ngoại lệ có mã, bảng biên `java: 8`) · `cs7` 4 (registry Strategy, LSP Stack, Observer tự huỷ, Template Method) · `cs8` 4 (mất cập nhật, khoá chết, invokeAll, BlockingQueue) | 35 |
 | 🏁 Dự án cuối khoá | `pro192-du-an-ct-library` 1 đề lớn (8 TODO DA của starter khoá, 57 tệp, data 200/300/2000, 2 lần chạy; ca 1 = 557 dòng `expected.txt` của khoá + 3 ca ẩn: ngày 22/10, ngày 18/10 + báo cáo trước + cán bộ mới + mở lại, menu sai + mã sai + dời ngày cuối năm) | 1 |
-| **tổng** | 45 module | **131** |
+| 🎯 Luyện PE | `pro192-luyen-pe-1` 3 (câu 1: CoffeeShop PE1, Person PE14, Student PE10) · `-2` 3 (câu 2: Cala PE4, Ladder PE11, Professor PE8) · `-3` 3 (câu 3: Ladder PE11, Watch PE8, Wine PE6) · `-4` 2 (câu 4: MyFile PE10, MyString PE4) — đề thật (prompt Exam Room `content/exams/PRO192-PE*.mjs`), lời giải tự viết của khoá, Main = bản thay Main.class | 11 |
+| **tổng** | 49 module | **142** |
+
+Tên module đánh số chương để mục lục Code Lab nhóm được: 1.x–9.x như cũ, **10.x** LAB211 (10.0 = L.0), **11.x** ⭐ CS, **12.1** dự án,
+**13.x** luyện PE; `frontend/src/lib/codelabToc.ts` có `KHOA_CUA_TRACK['pro192-practice']` + `TEN_CHUONG['pro192-practice']` 1–13.
 
 Đăng ký track: `src/services/codeLab.practice.ts` (`'object-oriented-programming': 'pro192-practice'`; PRACTICE_CATALOG có sẵn dòng PRO192).
 
@@ -61,8 +65,12 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
    của cham.mjs (ca giữ `filesRef`) — JSON đề 1,27 MB (57 tệp nguồn + data 132 KB ×2 bản tải). Ca ẩn tự viết KHÔNG được có dòng
    trống ở lời nhắc "Ngay lam viec (Enter = hom nay)" (ra ngày thật ⇒ output không tất định) ⇒ không dùng `menuRac` của deLab.
    Đột biến "không ghi members.csv" trượt 3/4 ca.
-4. (tuỳ) 🎯 Luyện PE `pro192-luyen-pe-1..4` — đề kiểu PE câu 1–4 trên dữ liệu khác.
-5. Frontend (tuỳ, cùng commit riêng bằng index riêng vì tệp có thay đổi của phiên khác): `frontend/src/lib/codelabToc.ts` —
+4. ~~🎯 Luyện PE~~ — XONG 11 đề: `node nguon/_lay-pe.mjs` chép `gen/java/luyen-pe/PeQ*.java` (khúc `[given]`/`[given-if]` = tệp cho
+   sẵn, khúc khác = lớp người học, `[cham]` bỏ; chú thích "EN ||| VI" giữ EN) + `.in` (mỗi khối `#` một ca; khối có "own" = ca ẩn) +
+   prompt/explanation của đề trong `content/exams/PRO192-PE<n>.mjs` ⇒ `nguon/_pe/*.json`; `dePe(tên)` dựng đề (khởi đầu = bỏ chú
+   thích + rút thân mọi hàm/constructor, giữ trường; `release: 8`). Chưa làm: PeQ1Task (đề PE5 một câu 10 điểm input.txt → output.txt,
+   cấu trúc khác) và 5 đề PE-ADV.
+5. ~~Frontend~~ — XONG (commit riêng, blob dựng từ HEAD + thay đổi của phiên này): `frontend/src/lib/codelabToc.ts` —
    thêm `'pro192-practice': 'object-oriented-programming'` vào `KHOA_CUA_TRACK` (cờ `solved` trên trang bài học) và tên chương vào
    `TEN_CHUONG['pro192-practice']`.
 6. Nạp prod (sau deploy, trong container backend): `node scripts/codelab-create-track.mjs --file content/codelab/pro192-practice/_track.json --apply`

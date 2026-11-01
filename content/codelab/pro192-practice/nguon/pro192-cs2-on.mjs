@@ -524,4 +524,4 @@ public class Directory {
   giaiThich: { en: '<p>Optional was designed as a return type that forces the caller to think about "absent". As a field it costs memory and solves nothing; with get() it becomes a NoSuchElementException instead of a NullPointerException; and orElse(expensiveCall()) pays the expensive call every time.</p>', vi: '<p>Optional được thiết kế làm kiểu trả về buộc nơi gọi nghĩ tới "không có". Làm trường thì tốn bộ nhớ mà không giải quyết gì; với get() nó chỉ đổi NullPointerException thành NoSuchElementException; còn orElse(gọiĐắt()) thì trả giá lời gọi đắt mọi lần.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs2-on', ten: '⭐ CS.2 Stream API (Java 17)', de: [de1, de2, de3, de4, de5] });
+export default moDun({ slug: 'pro192-cs2-on', ten: '11.2 ⭐ CS.2 Stream API (Java 17)', de: [de1, de2, de3, de4, de5] });

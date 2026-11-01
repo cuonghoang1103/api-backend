@@ -471,4 +471,4 @@ public class PipeImport extends ImportJob {
   giaiThich: { en: '<p>The abstract class owns the algorithm and calls the subclasses for the parts that vary ("don’t call us, we’ll call you"). Only the format-specific pieces are overridable; the invariant parts are final or private.</p>', vi: '<p>Lớp trừu tượng nắm thuật toán và gọi lớp con cho những phần thay đổi ("đừng gọi chúng tôi, chúng tôi sẽ gọi bạn"). Chỉ phần riêng của định dạng được ghi đè; phần bất biến là final hoặc private.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs7-on', ten: '⭐ CS.7 SOLID & design patterns: Strategy, Liskov, Observer, Template Method', de: [de1, de2, de3, de4] });
+export default moDun({ slug: 'pro192-cs7-on', ten: '11.7 ⭐ CS.7 SOLID & design patterns: Strategy, Liskov, Observer, Template Method', de: [de1, de2, de3, de4] });

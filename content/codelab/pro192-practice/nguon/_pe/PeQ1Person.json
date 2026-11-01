@@ -1,0 +1,53 @@
+{
+ "ten": "PeQ1Person",
+ "pe": "PE14",
+ "ky": "SU26",
+ "cau": 1,
+ "diem": 2,
+ "tieuDe": {
+  "en": "PE14 (SU26) question 1, 2 marks — class Person: two views of one field, and a setter that ADDS",
+  "vi": "Đề PE14 (SU26) câu 1, 2 điểm — lớp Person: hai cách nhìn một trường, và một setter CỘNG THÊM"
+ },
+ "deBai": {
+  "en": "<p><strong>(2 marks)</strong> You should not pay attention to the real meaning of objects, variables and their values in the questions below.</p>\n<p>Create a class called <strong>Person</strong> described as follows:</p>\n<table class=\"uml-table\"><tbody><tr><td>-name: String<br/>-sickLeave: double</td></tr><tr><td>+Person()<br/>+Person(name: String, sickLeave: double)<br/>+setSickLeave(upValue: double): void<br/>+getName(): String<br/>+toString(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>Person()</code> — default constructor.</li>\n  <li><code>Person(name: String, sickLeave: double)</code> — constructor, which sets values for all attributes.</li>\n  <li><code>setSickLeave(upValue: double): void</code> — set sickLeave = sickLeave + upValue.</li>\n  <li><code>getName(): String</code> — return the name in uppercase.</li>\n  <li><code>toString(): String</code> — return String with format <strong>name,sickLeave</strong> (without a space after comma).</li>\n</ul>\n<p><em>Do not format the result.</em></p>",
+  "vi": "<p><strong>(2 điểm)</strong> Bỏ qua ý nghĩa thực tế của đối tượng, biến và giá trị của chúng trong các câu dưới đây.</p>\n<p>Tạo một lớp tên <strong>Person</strong> được mô tả như sau:</p>\n<table class=\"uml-table\"><tbody><tr><td>-name: String<br/>-sickLeave: double</td></tr><tr><td>+Person()<br/>+Person(name: String, sickLeave: double)<br/>+setSickLeave(upValue: double): void<br/>+getName(): String<br/>+toString(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>Person()</code> — constructor mặc định.</li>\n  <li><code>Person(name: String, sickLeave: double)</code> — constructor, gán giá trị cho mọi thuộc tính.</li>\n  <li><code>setSickLeave(upValue: double): void</code> — cập nhật sickLeave = sickLeave + upValue.</li>\n  <li><code>getName(): String</code> — trả về name viết HOA.</li>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng <strong>name,sickLeave</strong> (không có khoảng trắng sau dấu phẩy).</li>\n</ul>\n<p><em>Không định dạng lại kết quả.</em></p>"
+ },
+ "giaiThich": {
+  "en": "<p>Two easy traps: <code>getName()</code> uppercases the name (<code>name.toUpperCase()</code>) but <code>toString()</code> keeps the RAW lowercase field — they are two different views of the same field, not the same method reused. <code>setSickLeave(upValue)</code> adds to the existing value (<code>sickLeave += upValue</code>), it does not replace it.</p>\n<p>Verified by compiling <code>Person.java</code> with the real given <code>Main.class</code>:</p>\n<pre>Enter name: nguyen anh\nEnter sickLeave: 4.5\n1. Test getName(): 1\nOUTPUT:\nNGUYEN ANH</pre>\n<pre>Enter name: ly hung\nEnter sickLeave: 5.5\n2. Test setSickLeave(): 2\nEnter up value: 1.0\nOUTPUT:\nly hung,6.5</pre>\n<p>Sample 2 confirms both traps at once: the printed name is still lowercase \"ly hung\" (toString does not uppercase), and the number is 6.5 = 5.5 + 1.0 (setSickLeave adds, doesn't overwrite).</p>",
+  "vi": "<p>Hai bẫy dễ nhầm: <code>getName()</code> viết hoa name (<code>name.toUpperCase()</code>) nhưng <code>toString()</code> vẫn giữ field GỐC chữ thường — đây là hai cách nhìn khác nhau trên cùng một field, không phải dùng lại cùng một hàm. <code>setSickLeave(upValue)</code> CỘNG DỒN vào giá trị hiện có (<code>sickLeave += upValue</code>), không phải thay thế.</p>\n<p>Đã kiểm bằng cách biên dịch <code>Person.java</code> cùng <code>Main.class</code> given thật:</p>\n<pre>Enter name: nguyen anh\nEnter sickLeave: 4.5\n1. Test getName(): 1\nOUTPUT:\nNGUYEN ANH</pre>\n<pre>Enter name: ly hung\nEnter sickLeave: 5.5\n2. Test setSickLeave(): 2\nEnter up value: 1.0\nOUTPUT:\nly hung,6.5</pre>\n<p>Mẫu 2 xác nhận cả hai bẫy cùng lúc: tên in ra vẫn chữ thường \"ly hung\" (toString không viết hoa), và con số là 6.5 = 5.5 + 1.0 (setSickLeave cộng dồn, không ghi đè).</p>"
+ },
+ "goiY": [
+  {
+   "en": "\"set sickLeave = sickLeave + upValue\": the name says set, the rule says ADD",
+   "vi": "\"set sickLeave = sickLeave + upValue\": tên nói set, luật nói CỘNG"
+  },
+  {
+   "en": "upper case only in what getName() RETURNS — the field itself keeps what was typed",
+   "vi": "chỉ viết hoa trong thứ getName() TRẢ VỀ — bản thân trường giữ nguyên chữ đã nhập"
+  },
+  {
+   "en": "\"name,sickLeave (without a space after comma)\" and the RAW field, not getName()",
+   "vi": "\"name,sickLeave (không dấu cách sau dấu phẩy)\" và trường THÔ, không phải getName()"
+  }
+ ],
+ "hoc": {
+  "Person.java": "import java.io.*;\nimport java.util.*;\n\nclass Person {\n    private String name;\n    private double sickLeave;\n\n    public Person() {\n    }\n\n    public Person(String name, double sickLeave) {\n        this.name = name;\n        this.sickLeave = sickLeave;\n    }\n\n    // \"set sickLeave = sickLeave + upValue\": the name says set, the rule says ADD\n    public void setSickLeave(double upValue) {\n        sickLeave = sickLeave + upValue;\n    }\n\n    // upper case only in what getName() RETURNS — the field itself keeps what was typed\n    public String getName() {\n        return name.toUpperCase();\n    }\n\n    // \"name,sickLeave (without a space after comma)\" and the RAW field, not getName()\n    @Override\n    public String toString() {\n        return name + \",\" + sickLeave;\n    }\n}\n"
+ },
+ "cho": {
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (javap -c): nextLine() for the name, nextDouble() for numbers\nclass Main {\n    public static void main(String[] args) throws Exception {\n        Scanner sc = new Scanner(System.in);\n        System.out.print(\"Enter name: \");\n        String name = sc.nextLine();\n        System.out.print(\"Enter sickLeave: \");\n        double sickLeave = sc.nextDouble();\n        Person p = new Person(name, sickLeave);\n        System.out.println(\"1. Test getName():\");\n        System.out.println(\"2. Test setSickLeave():\");\n        System.out.print(\"Enter TC (1 or 2): \");\n        int tc = sc.nextInt();\n        switch (tc) {\n            case 1:\n                System.out.println(\"OUTPUT:\");\n                System.out.println(p.getName());\n                break;\n            case 2:\n                System.out.print(\"Enter up value: \");\n                double up = sc.nextDouble();\n                System.out.println(\"OUTPUT:\");\n                p.setSickLeave(up);\n                System.out.println(p.toString());\n                break;\n        }\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 getName (paper sample 1)",
+   "vao": "nguyen anh\n4.5\n1\n"
+  },
+  {
+   "ten": "TC2 setSickLeave (paper sample 2)",
+   "vao": "ly hung\n5.5\n2\n1.0\n"
+  },
+  {
+   "ten": "TC2 again, own test: 0.1 + 0.2",
+   "vao": "an\n0.1\n2\n0.2\n"
+  }
+ ]
+}

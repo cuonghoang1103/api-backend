@@ -34,4 +34,4 @@ const de = deLab('l211-p0070', {
   giaiThich: { en: '<p>The reference is the course’s P0070 after the 29/10 review (captcha checked in Main before the controller touches the repository, no pass-through service, the view prints once). Randomness is kept — the grader adapts to it instead of asking you to fake it.</p>', vi: '<p>Lời giải là P0070 của khoá sau buổi review 29/10 (captcha kiểm ở Main trước khi controller đụng repository, bỏ service chỉ chuyển tiếp, view in một lần). Tính ngẫu nhiên được giữ — máy chấm tự thích nghi chứ không bắt bạn làm giả.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0070-ebank-login', ten: 'L.4 🎓 LAB211 J1.S.P0070 — Ebank Login', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0070-ebank-login', ten: '10.4 🎓 L.4 LAB211 J1.S.P0070 — Ebank Login', de: [de] });

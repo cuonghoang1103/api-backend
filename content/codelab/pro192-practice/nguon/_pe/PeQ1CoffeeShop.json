@@ -1,0 +1,65 @@
+{
+ "ten": "PeQ1CoffeeShop",
+ "pe": "PE1",
+ "ky": "SP26",
+ "cau": 1,
+ "diem": 2,
+ "tieuDe": {
+  "en": "PE1 (SP26) question 1, 2 marks — class CoffeeShop from the UML box, checked by a stand-in for the given Main.class",
+  "vi": "Đề PE1 (SP26) câu 1, 2 điểm — lớp CoffeeShop theo hộp UML, kiểm bằng bản thay cho Main.class đề cho"
+ },
+ "deBai": {
+  "en": "<p><strong>(2 marks)</strong> Do not pay attention to the real meaning of objects, variables, and their values in the questions below.</p>\n<p>Write a class <strong>CoffeeShop</strong> (in the default package of the NetBean) with the following information:</p>\n<table class=\"uml-table\"><tbody><tr><td>-id: int<br/>-storeName: String<br/>-pricePerCup: double<br/>-numberOfCups: int</td></tr><tr><td>+CoffeeShop()<br/>+CoffeeShop(id, storeName, pricePerCup, numberOfCups)<br/>+getStoreName(): String<br/>+getTotalRevenue(): double<br/>+getProfitRevenue(costPerCup: double): double<br/>+toString(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>CoffeeShop()</code> — default constructor.</li>\n  <li><code>CoffeeShop(id, storeName, pricePerCup, numberOfCups)</code> — initializes all attributes.</li>\n  <li><code>getStoreName()</code>: String — returns store name with first letter capitalized, rest lowercase.</li>\n  <li><code>getTotalRevenue()</code>: double — returns total revenue: if numberOfCups &gt;= 100, return pricePerCup * numberOfCups * 1.2; if numberOfCups &lt; 100, return pricePerCup * numberOfCups.</li>\n  <li><code>getProfitRevenue(costPerCup: double)</code>: double — returns profit: getTotalRevenue() - (costPerCup * numberOfCups).</li>\n  <li><code>toString()</code>: String — returns storeName in uppercase, colon, and getTotalRevenue() formatted to 2 decimal places.</li>\n</ul>",
+  "vi": "<p><strong>(2 điểm)</strong> Bỏ qua ý nghĩa thực tế của đối tượng, biến và giá trị của chúng trong các câu dưới đây.</p>\n<p>Viết lớp <strong>CoffeeShop</strong> (trong package mặc định của NetBean) với thông tin sau:</p>\n<table class=\"uml-table\"><tbody><tr><td>-id: int<br/>-storeName: String<br/>-pricePerCup: double<br/>-numberOfCups: int</td></tr><tr><td>+CoffeeShop()<br/>+CoffeeShop(id, storeName, pricePerCup, numberOfCups)<br/>+getStoreName(): String<br/>+getTotalRevenue(): double<br/>+getProfitRevenue(costPerCup: double): double<br/>+toString(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>CoffeeShop()</code> — constructor mặc định.</li>\n  <li><code>CoffeeShop(id, storeName, pricePerCup, numberOfCups)</code> — khởi tạo mọi thuộc tính.</li>\n  <li><code>getStoreName()</code>: String — trả về tên cửa hàng với chữ đầu viết hoa, còn lại viết thường.</li>\n  <li><code>getTotalRevenue()</code>: double — trả về tổng doanh thu: nếu numberOfCups &gt;= 100, trả về pricePerCup * numberOfCups * 1.2; nếu numberOfCups &lt; 100, trả về pricePerCup * numberOfCups.</li>\n  <li><code>getProfitRevenue(costPerCup: double)</code>: double — trả về lợi nhuận: getTotalRevenue() - (costPerCup * numberOfCups).</li>\n  <li><code>toString()</code>: String — trả về storeName viết hoa, dấu hai chấm, rồi getTotalRevenue() định dạng 2 chữ số thập phân.</li>\n</ul>"
+ },
+ "giaiThich": {
+  "en": "<p>Two easy-to-miss details, both confirmed by compiling against the real given <code>Main.class</code> and running all 4 official sample TCs byte-for-byte: (1) <code>getStoreName()</code> is NOT <code>toUpperCase()</code>/<code>toLowerCase()</code> of the whole string — only the FIRST character is capitalized, the rest is lowercased (e.g. \"passio Coffee\" → \"Passio coffee\", NOT \"Passio Coffee\"). (2) The 100-cup threshold in <code>getTotalRevenue()</code> is inclusive (<code>&gt;= 100</code>, not <code>&gt; 100</code>) — confirmed because TC4 (200 cups) and TC3 (120 cups) both apply the ×1.2 multiplier.</p>\n<pre>TC1 (id=1, Coffee World, 3.5, 50 cups): OUTPUT: 175.00\nTC2 (id=2, passio Coffee, 4.0, 150 cups) — getStoreName(): OUTPUT: Passio coffee\nTC3 (id=3, orange bar bistro, 5.5, 120 cups, cost/cup=1.5) — getProfitRevenue(1.5): OUTPUT: 612.00\nTC4 (id=4, brew haven, 6.0, 200 cups) — toString(): OUTPUT: BREW HAVEN:1440.00</pre>",
+  "vi": "<p>Hai chi tiết dễ bỏ sót, cả hai đã kiểm bằng cách biên dịch cùng <code>Main.class</code> given thật và chạy đủ 4 TC chính thức khớp từng ký tự: (1) <code>getStoreName()</code> KHÔNG phải <code>toUpperCase()</code>/<code>toLowerCase()</code> cả chuỗi — chỉ chữ ĐẦU viết hoa, phần còn lại viết thường (vd \"passio Coffee\" → \"Passio coffee\", KHÔNG phải \"Passio Coffee\"). (2) Ngưỡng 100 cốc trong <code>getTotalRevenue()</code> là bao gồm (<code>&gt;= 100</code>, không phải <code>&gt; 100</code>) — xác nhận vì TC4 (200 cốc) và TC3 (120 cốc) đều nhân hệ số ×1.2.</p>\n<pre>TC1 (id=1, Coffee World, 3.5, 50 cốc): OUTPUT: 175.00\nTC2 (id=2, passio Coffee, 4.0, 150 cốc) — getStoreName(): OUTPUT: Passio coffee\nTC3 (id=3, orange bar bistro, 5.5, 120 cốc, cost/cup=1.5) — getProfitRevenue(1.5): OUTPUT: 612.00\nTC4 (id=4, brew haven, 6.0, 200 cốc) — toString(): OUTPUT: BREW HAVEN:1440.00</pre>"
+ },
+ "goiY": [
+  {
+   "en": "\"first letter capitalized, rest lowercase\" — ONE capital letter for the whole name, not one per word",
+   "vi": "\"chữ đầu viết hoa, còn lại viết thường\" — MỘT chữ hoa cho cả tên, không phải mỗi từ một chữ"
+  },
+  {
+   "en": "\">= 100\" is written in the paper: 100 cups already get the x1.2",
+   "vi": "đề ghi \">= 100\": đúng 100 cốc đã được nhân 1.2"
+  },
+  {
+   "en": "reuse getTotalRevenue() instead of copying its rule a second time",
+   "vi": "dùng lại getTotalRevenue(), không chép luật lần hai"
+  },
+  {
+   "en": "STORENAME:revenue — the WHOLE name upper-cased, a colon, no spaces, 2 decimals",
+   "vi": "TÊN:doanh thu — CẢ tên viết hoa, dấu hai chấm, không dấu cách, 2 chữ số thập phân"
+  }
+ ],
+ "hoc": {
+  "CoffeeShop.java": "import java.io.*;\nimport java.util.*;\n\nclass CoffeeShop {\n    private int id;\n    private String storeName;\n    private double pricePerCup;\n    private int numberOfCups;\n\n    public CoffeeShop() {                                    // +CoffeeShop(): the box lists it, so write it even if Main never calls it\n    }\n\n    public CoffeeShop(int id, String storeName, double pricePerCup, int numberOfCups) {\n        this.id = id;\n        this.storeName = storeName;\n        this.pricePerCup = pricePerCup;\n        this.numberOfCups = numberOfCups;\n    }\n\n    // \"first letter capitalized, rest lowercase\" — ONE capital letter for the whole name, not one per word\n    public String getStoreName() {\n        if (storeName == null || storeName.isEmpty()) {\n            return storeName;                                // never crash on an empty name\n        }\n        return Character.toUpperCase(storeName.charAt(0)) + storeName.substring(1).toLowerCase();\n    }\n\n    // \">= 100\" is written in the paper: 100 cups already get the x1.2\n    public double getTotalRevenue() {\n        double revenue = pricePerCup * numberOfCups;\n        if (numberOfCups >= 100) {\n            revenue = revenue * 1.2;\n        }\n        return revenue;\n    }\n\n    // reuse getTotalRevenue() instead of copying its rule a second time\n    public double getProfitRevenue(double costPerCup) {\n        return getTotalRevenue() - costPerCup * numberOfCups;\n    }\n\n    // STORENAME:revenue — the WHOLE name upper-cased, a colon, no spaces, 2 decimals\n    @Override\n    public String toString() {\n        return storeName.toUpperCase() + \":\" + String.format(\"%.2f\", getTotalRevenue());\n    }\n}\n"
+ },
+ "cho": {
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class, rebuilt from its byte code (javap -c): same prompts, same reads, same prints\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.print(\"Enter id: \");\n        int id = Integer.parseInt(sc.nextLine());\n        System.out.print(\"Enter store name: \");\n        String storeName = sc.nextLine();\n        System.out.print(\"Enter price per cup: \");\n        double price = Double.parseDouble(sc.nextLine());\n        System.out.print(\"Enter number of cups: \");\n        int cups = Integer.parseInt(sc.nextLine());\n        CoffeeShop shop = new CoffeeShop(id, storeName, price, cups);\n        System.out.println(\"1. Test getTotalRevenue()\");\n        System.out.println(\"2. Test getStoreName()\");\n        System.out.println(\"3. Test getProfitRevenue()\");\n        System.out.println(\"4. Test toString()\");\n        System.out.print(\"Enter TC(1|2|3|4): \");\n        int tc = Integer.parseInt(sc.nextLine());\n        switch (tc) {\n            case 1:\n                System.out.println(\"OUTPUT:\");\n                System.out.printf(\"%.2f\\n\", shop.getTotalRevenue());   // Main formats the double itself\n                break;\n            case 2:\n                System.out.println(\"OUTPUT:\");\n                System.out.println(shop.getStoreName());\n                break;\n            case 3:\n                System.out.print(\"Enter cost per cup: \");\n                double cost = Double.parseDouble(sc.nextLine());\n                System.out.println(\"OUTPUT:\");\n                System.out.printf(\"%.2f\\n\", shop.getProfitRevenue(cost));\n                break;\n            case 4:\n                System.out.println(\"OUTPUT:\");\n                System.out.println(shop);\n                break;\n            default:\n                System.out.println(\"Invalid choice\");\n        }\n        sc.close();\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 getTotalRevenue (paper sample 1)",
+   "vao": "1\nCoffee World\n3.5\n50\n1\n"
+  },
+  {
+   "ten": "TC2 getStoreName (paper sample 2)",
+   "vao": "2\npassio Coffee\n4.0\n150\n2\n"
+  },
+  {
+   "ten": "TC3 getProfitRevenue (paper sample 3)",
+   "vao": "3\norange bar bistro\n5.5\n120\n3\n1.5\n"
+  },
+  {
+   "ten": "TC4 toString (paper sample 4)",
+   "vao": "4\nbrew haven\n6.0\n200\n4\n"
+  },
+  {
+   "ten": "TC1 again, own boundary test: exactly 100 cups",
+   "vao": "5\nPhuc Long\n3.5\n100\n1\n"
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "ten": "PeQ2Cala",
+ "pe": "PE4",
+ "ky": "SU26",
+ "cau": 2,
+ "diem": 3,
+ "tieuDe": {
+  "en": "PE4 (SU26) question 2, 3 marks — Cala and SpecCala extends Cala: the constructor whose parameters come in a DIFFERENT order",
+  "vi": "Đề PE4 (SU26) câu 2, 3 điểm — Cala và SpecCala extends Cala: constructor có tham số theo thứ tự KHÁC"
+ },
+ "deBai": {
+  "en": "<p><strong>(3 marks)</strong> Write a class <strong>Cala</strong> and a class <strong>SpecCala</strong> extending from <strong>Cala</strong> (i.e. Cala is a superclass and SpecCala is a subclass) with the following information:</p>\n<table class=\"uml-table\"><tbody><tr><td>-owner: String<br/>-price: int</td></tr><tr><td>+Cala()<br/>+Cala(owner: String, price: int)<br/>+getOwner(): String<br/>+getPrice(): int<br/>+setOwner(owner: String): void<br/>+toString(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>Cala()</code> — default constructor.</li>\n  <li><code>Cala(owner: String, price: int)</code> — parameterized constructor which sets values to owner and price.</li>\n  <li><code>getOwner(): String</code> — return owner.</li>\n  <li><code>getPrice(): int</code> — return price.</li>\n  <li><code>setOwner(owner: String): void</code> — update owner.</li>\n  <li><code>toString(): String</code> — return the string of format: <strong>owner, price</strong>.</li>\n</ul>\n<table class=\"uml-table\"><tbody><tr><td>-color: int</td></tr><tr><td>+SpecCala()<br/>+SpecCala(color: int, owner: String, price: int)<br/>+toString(): String<br/>+setData(): void<br/>+getValue(): int</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>SpecCala()</code> — default constructor.</li>\n  <li><code>SpecCala(color: int, owner: String, price: int)</code> — parameterized constructor which sets values to color, owner and price.</li>\n  <li><code>toString(): String</code> — return the string of format: <strong>owner, price, color</strong>.</li>\n  <li><code>setData(): void</code> — Replace the 2nd character in owner with the string \"XX\".</li>\n  <li><code>getValue(): int</code> — Check if color is odd number then return price+3, otherwise return price+7.</li>\n</ul>",
+  "vi": "<p><strong>(3 điểm)</strong> Viết lớp <strong>Cala</strong> và lớp <strong>SpecCala</strong> kế thừa từ <strong>Cala</strong> (Cala là lớp cha, SpecCala là lớp con), thông tin như sau:</p>\n<table class=\"uml-table\"><tbody><tr><td>-owner: String<br/>-price: int</td></tr><tr><td>+Cala()<br/>+Cala(owner: String, price: int)<br/>+getOwner(): String<br/>+getPrice(): int<br/>+setOwner(owner: String): void<br/>+toString(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>Cala()</code> — constructor mặc định.</li>\n  <li><code>Cala(owner: String, price: int)</code> — constructor có tham số, gán giá trị cho owner và price.</li>\n  <li><code>getOwner(): String</code> — trả về owner.</li>\n  <li><code>getPrice(): int</code> — trả về price.</li>\n  <li><code>setOwner(owner: String): void</code> — cập nhật owner.</li>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng: <strong>owner, price</strong>.</li>\n</ul>\n<table class=\"uml-table\"><tbody><tr><td>-color: int</td></tr><tr><td>+SpecCala()<br/>+SpecCala(color: int, owner: String, price: int)<br/>+toString(): String<br/>+setData(): void<br/>+getValue(): int</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>SpecCala()</code> — constructor mặc định.</li>\n  <li><code>SpecCala(color: int, owner: String, price: int)</code> — constructor có tham số, gán giá trị cho color, owner và price.</li>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng: <strong>owner, price, color</strong>.</li>\n  <li><code>setData(): void</code> — Thay ký tự thứ 2 trong owner bằng chuỗi \"XX\".</li>\n  <li><code>getValue(): int</code> — Nếu color là số lẻ thì trả về price+3, ngược lại trả về price+7.</li>\n</ul>"
+ },
+ "giaiThich": {
+  "en": "<p>The exam paper's own reference project ships with two bugs worth noting (a real given-materials package we decompiled to verify the harness) — the fixed, spec-correct version here: <code>Cala</code> DOES need the default no-arg constructor (the paper's own sample project omits it and fails to compile <code>SpecCala()</code>'s implicit <code>super()</code> call). <code>setData()</code> only touches <strong>owner</strong> (2nd char → \"XX\", e.g. \"alan\" → \"aXXan\", since replacing 1 char with a 2-char string grows the string) — it never touches price or color.</p>\n<p>Decompiling the real given <code>Main.class</code> (bytecode, not guesswork) shows exactly what each test case prints: TC1 (toString) calls <code>cala.toString()</code> then <code>specCala.toString()</code> — two lines, in <strong>your own</strong> chosen format (\"owner, price\" / \"owner, price, color\" per spec). TC2 (setData) does NOT call toString() at all — it prints <code>getOwner()+\",\"+getPrice()</code> directly via a hardcoded <code>StringBuilder</code>, so this line has NO space after the comma regardless of how you write toString(). TC3 (getValue) just prints the int.</p>\n<p>Verified against all 4 given samples by compiling with the real given <code>Main.class</code>:</p>\n<pre>owner=alan price=3 color=4 → TC1 (toString)\nOUTPUT:\nalan, 3\nalan, 3, 4\n\nowner=alan price=3 color=4 → TC2 (setData)\nOUTPUT:\naXXan,3\n\nowner=alan price=3 color=5 → TC3 (getValue, odd color)\nOUTPUT:\n6\n\nowner=alan price=3 color=4 → TC3 (getValue, even color)\nOUTPUT:\n10</pre>",
+  "vi": "<p>Bản project mẫu đính kèm gốc trong đề (given materials thật đã giải nén để kiểm harness) có 2 lỗi đáng lưu ý — bản đã sửa đúng đặc tả dùng ở đây: <code>Cala</code> BẮT BUỘC phải có constructor mặc định không tham số (project mẫu của đề bỏ sót, khiến <code>SpecCala()</code> gọi <code>super()</code> ngầm định không biên dịch được). <code>setData()</code> chỉ đụng vào <strong>owner</strong> (ký tự thứ 2 → \"XX\", vd \"alan\" → \"aXXan\", vì thay 1 ký tự bằng chuỗi 2 ký tự nên chuỗi dài ra) — không đụng price hay color.</p>\n<p>Decompile trực tiếp <code>Main.class</code> given thật (đọc bytecode, không suy đoán) cho thấy chính xác mỗi test case in gì: TC1 (toString) gọi <code>cala.toString()</code> rồi <code>specCala.toString()</code> — 2 dòng, theo đúng định dạng BẠN viết (\"owner, price\" / \"owner, price, color\" theo đề). TC2 (setData) KHÔNG gọi toString() — nó in <code>getOwner()+\",\"+getPrice()</code> trực tiếp qua <code>StringBuilder</code> viết cứng trong harness, nên dòng này KHÔNG có khoảng trắng sau dấu phẩy bất kể bạn viết toString() thế nào. TC3 (getValue) chỉ in số nguyên.</p>\n<p>Đã đối chiếu với cả 4 mẫu trong đề bằng cách biên dịch cùng <code>Main.class</code> given thật:</p>\n<pre>owner=alan price=3 color=4 → TC1 (toString)\nOUTPUT:\nalan, 3\nalan, 3, 4\n\nowner=alan price=3 color=4 → TC2 (setData)\nOUTPUT:\naXXan,3\n\nowner=alan price=3 color=5 → TC3 (getValue, color lẻ)\nOUTPUT:\n6\n\nowner=alan price=3 color=4 → TC3 (getValue, color chẵn)\nOUTPUT:\n10</pre>"
+ },
+ "goiY": [
+  {
+   "en": "the box says SpecCala(color, owner, price): color FIRST, but super() takes (owner, price)",
+   "vi": "hộp ghi SpecCala(color, owner, price): color ĐỨNG ĐẦU, còn super() nhận (owner, price)"
+  },
+  {
+   "en": "\"Replace the 2nd character in owner with the string XX\" — position 2 = index 1",
+   "vi": "\"Thay ký tự thứ 2 của owner bằng chuỗi XX\" — vị trí 2 = chỉ số 1"
+  },
+  {
+   "en": "odd color ⇒ price + 3, otherwise price + 7; \"% 2 != 0\" is also right for negative numbers",
+   "vi": "color lẻ ⇒ price + 3, ngược lại price + 7; \"% 2 != 0\" đúng cả với số âm"
+  }
+ ],
+ "hoc": {
+  "Cala.java": "import java.io.*;\nimport java.util.*;\n\nclass Cala {\n    private String owner;\n    private int price;\n\n    public Cala() {                                          // needed: SpecCala() calls super() silently\n    }\n\n    public Cala(String owner, int price) {\n        this.owner = owner;\n        this.price = price;\n    }\n\n    public String getOwner() { return owner; }\n    public int getPrice() { return price; }\n    public void setOwner(String owner) { this.owner = owner; }\n\n    @Override\n    public String toString() {\n        return owner + \", \" + price;                         // \"owner, price\": comma AND space\n    }\n}\n",
+  "SpecCala.java": "import java.io.*;\nimport java.util.*;\n\nclass SpecCala extends Cala {\n    private int color;                                       // ONLY the new field — owner and price live in Cala\n\n    public SpecCala() {\n    }\n\n    // the box says SpecCala(color, owner, price): color FIRST, but super() takes (owner, price)\n    public SpecCala(int color, String owner, int price) {\n        super(owner, price);\n        this.color = color;\n    }\n\n    @Override\n    public String toString() {\n        return super.toString() + \", \" + color;              // reuse the parent's \"owner, price\"\n    }\n\n    // \"Replace the 2nd character in owner with the string XX\" — position 2 = index 1\n    public void setData() {\n        String o = getOwner();                               // owner is private in Cala: go through the getter/setter\n        if (o == null || o.length() < 2) {\n            return;                                          // no 2nd character, nothing to replace\n        }\n        setOwner(o.substring(0, 1) + \"XX\" + o.substring(2));\n    }\n\n    // odd color ⇒ price + 3, otherwise price + 7; \"% 2 != 0\" is also right for negative numbers\n    public int getValue() {\n        return color % 2 != 0 ? getPrice() + 3 : getPrice() + 7;\n    }\n}\n"
+ },
+ "cho": {
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (javap -c). TC2 prints getOwner() + \",\" + getPrice() itself — NO space\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.print(\"Enter owner: \");\n        String owner = sc.nextLine();\n        System.out.print(\"Enter price: \");\n        int price = sc.nextInt();\n        System.out.print(\"Enter color: \");\n        int color = sc.nextInt();\n        System.out.println(\"1.Test toString()\");\n        System.out.println(\"2.Test setData()\");\n        System.out.println(\"3.Test getValue()\");\n        System.out.print(\"Enter TC(1,2,3): \");\n        int tc = sc.nextInt();\n        Cala cala = new Cala(owner, price);\n        SpecCala spec = new SpecCala(color, owner, price);\n        switch (tc) {\n            case 1:\n                System.out.println(\"OUTPUT:\");\n                System.out.println(cala.toString());\n                System.out.println(spec.toString());\n                break;\n            case 2:\n                System.out.println(\"OUTPUT:\");\n                spec.setData();\n                System.out.println(spec.getOwner() + \",\" + spec.getPrice());\n                break;\n            case 3:\n                System.out.println(\"OUTPUT:\");\n                System.out.println(spec.getValue());\n                break;\n        }\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 toString (paper sample 1)",
+   "vao": "alan\n3\n4\n1\n"
+  },
+  {
+   "ten": "TC2 setData (paper sample 2)",
+   "vao": "alan\n3\n4\n2\n"
+  },
+  {
+   "ten": "TC3 getValue, odd color (paper sample 3)",
+   "vao": "alan\n3\n5\n3\n"
+  },
+  {
+   "ten": "TC3 getValue, even color (paper sample 4)",
+   "vao": "alan\n3\n4\n3\n"
+  },
+  {
+   "ten": "TC3 again, own test: negative odd color",
+   "vao": "binh\n5\n-3\n3\n"
+  }
+ ]
+}

@@ -29,4 +29,4 @@ const de = deLab('l211-p0011', {
   giaiThich: { en: '<p>The reference is the course’s P0011 after the 26/10 review (lint.py clean, checklist 0 violations, real JDK 8). Every road goes through decimal, so two algorithms cover all nine pairs and adding base 8 later is one line of the enum.</p>', vi: '<p>Lời giải là P0011 của khoá sau buổi review 26/10 (sạch lint.py, tờ checklist 0 vi phạm, JDK 8 thật). Mọi đường đều qua hệ thập phân, nên hai thuật toán phủ đủ chín cặp và thêm hệ 8 sau này chỉ là một dòng của enum.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0011-change-base-number', ten: 'L.1 🎓 LAB211 J1.S.P0011 — Change Base Number System', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0011-change-base-number', ten: '10.1 🎓 L.1 LAB211 J1.S.P0011 — Change Base Number System', de: [de] });

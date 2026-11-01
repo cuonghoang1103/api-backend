@@ -423,4 +423,4 @@ public class Shelving {
   giaiThich: { en: '<p>A bounded BlockingQueue gives back-pressure for free: a fast producer is slowed to the consumer’s pace instead of filling memory. A FIFO queue with one consumer keeps the order, and the poison pill ends the consumer cleanly after the last real item.</p>', vi: '<p>BlockingQueue có giới hạn cho sẵn "áp lực ngược": producer nhanh bị kéo chậm theo nhịp consumer thay vì làm đầy bộ nhớ. Hàng đợi FIFO với một consumer giữ nguyên thứ tự, và viên thuốc độc kết thúc consumer gọn gàng sau phần tử thật cuối cùng.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs8-on', ten: '⭐ CS.8 Concurrency with deterministic results', de: [de1, de2, de3, de4] });
+export default moDun({ slug: 'pro192-cs8-on', ten: '11.8 ⭐ CS.8 Concurrency with deterministic results', de: [de1, de2, de3, de4] });

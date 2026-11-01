@@ -501,4 +501,4 @@ public final class Slip {
   giaiThich: { en: '<p>A static factory names the common case; a builder handles the many optional fields without telescoping constructors; validation happens once, in build(), on the complete state — and the object that comes out is immutable and always valid.</p>', vi: '<p>Static factory đặt tên cho trường hợp hay gặp; builder lo nhiều trường tuỳ chọn mà không cần chuỗi constructor; kiểm dữ liệu diễn ra một lần, trong build(), trên trạng thái đầy đủ — và đối tượng tạo ra bất biến, luôn hợp lệ.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs4-on', ten: '⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders', de: [de1, de2, de3, de4] });
+export default moDun({ slug: 'pro192-cs4-on', ten: '11.4 ⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders', de: [de1, de2, de3, de4] });

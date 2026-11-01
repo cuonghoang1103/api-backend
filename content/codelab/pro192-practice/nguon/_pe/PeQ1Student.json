@@ -1,0 +1,53 @@
+{
+ "ten": "PeQ1Student",
+ "pe": "PE10",
+ "ky": "FA25",
+ "cau": 1,
+ "diem": 2,
+ "tieuDe": {
+  "en": "PE10 (FA25) question 1, 2 marks — class Student: the paper's text and its sample disagree, the sample decides",
+  "vi": "Đề PE10 (FA25) câu 1, 2 điểm — lớp Student: chữ của đề và mẫu chạy nói khác nhau, mẫu quyết định"
+ },
+ "deBai": {
+  "en": "<p><strong>(2 marks)</strong> Do not pay attention to real meaning of objects, variables and their values in the questions below.</p>\n<p>Write a class named <strong>Student</strong> with the following information:</p>\n<table class=\"uml-table\"><tbody><tr><td>-name: String<br/>-gpa: double</td></tr><tr><td>+Student()<br/>+Student(name: String, gpa: double)<br/>+getPass(): String<br/>+setName(lastname: String)<br/>+toString(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>Student()</code> — default constructor.</li>\n  <li><code>Student(name: String, gpa: double)</code> — constructor, which sets values for all attributes.</li>\n  <li><code>getPass(): String</code> — return \"pass\" if gpa&gt;=5.0 otherwise return \"fail\".</li>\n  <li><code>setName(lastname: String)</code> — return the name with the first letter in uppercase.</li>\n  <li><code>toString(): String</code> — return String with format <strong>name, gpa</strong>.</li>\n</ul>\n<p><em>Do not format the result.</em></p>",
+  "vi": "<p><strong>(2 điểm)</strong> Bỏ qua ý nghĩa thực tế của đối tượng, biến và giá trị của chúng trong các câu dưới đây.</p>\n<p>Viết lớp tên <strong>Student</strong> với thông tin sau:</p>\n<table class=\"uml-table\"><tbody><tr><td>-name: String<br/>-gpa: double</td></tr><tr><td>+Student()<br/>+Student(name: String, gpa: double)<br/>+getPass(): String<br/>+setName(lastname: String)<br/>+toString(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>Student()</code> — constructor mặc định.</li>\n  <li><code>Student(name: String, gpa: double)</code> — constructor, gán giá trị cho tất cả các thuộc tính.</li>\n  <li><code>getPass(): String</code> — trả về \"pass\" nếu gpa&gt;=5.0, ngược lại trả về \"fail\".</li>\n  <li><code>setName(lastname: String)</code> — trả về name kèm chữ cái đầu viết hoa.</li>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng <strong>name, gpa</strong>.</li>\n</ul>\n<p><em>Không định dạng lại kết quả.</em></p>"
+ },
+ "giaiThich": {
+  "en": "<p><strong>Trap in the source PDF itself:</strong> the written spec says <code>setName(lastname)</code> should \"return the name with the first letter in uppercase\", but the exam's own sample OUTPUT shows <code>name=\"hoa\"</code>, <code>setName(\"nguyen\")</code> → <code>toString()</code> prints exactly <strong>\"hoa nguyen, 5.4\"</strong> — no uppercase anywhere (not on \"hoa\", not on \"nguyen\", not on the combined string). Since <code>setName</code> is <code>void</code> (no return type in the UML box, confirmed by decompiling the real given <code>Main.class</code>: <code>invokevirtual Student.setName:(Ljava/lang/String;)V</code>) and grading is by exact output match, the sample output is ground truth: this method just concatenates <code>name + \" \" + lastname</code>, no case transform.</p>\n<p>Verified against both given samples by compiling <code>Student.java</code> with the real given <code>Main.class</code>:</p>\n<pre>Enter name: hoa\nEnter gpa: 5.4\nEnter TC (1 or 2): 1\nEnter lastname: nguyen\nOUTPUT:\nhoa nguyen, 5.4</pre>\n<pre>Enter name: lan\nEnter gpa: 4.5\nEnter TC (1 or 2): 2\nOUTPUT:\nfail</pre>",
+  "vi": "<p><strong>Bẫy nằm ngay trong đề PDF gốc:</strong> đặc tả chữ nói <code>setName(lastname)</code> \"trả về name kèm chữ cái đầu viết hoa\", nhưng OUTPUT mẫu THẬT trong đề với <code>name=\"hoa\"</code>, <code>setName(\"nguyen\")</code> → <code>toString()</code> in đúng <strong>\"hoa nguyen, 5.4\"</strong> — không viết hoa chỗ nào cả (không phải \"hoa\", không phải \"nguyen\", không phải chuỗi ghép). Vì <code>setName</code> là <code>void</code> (UML không ghi kiểu trả về, đã xác nhận bằng decompile <code>Main.class</code> given thật: <code>invokevirtual Student.setName:(Ljava/lang/String;)V</code>) và chấm điểm dựa vào khớp output chính xác, output mẫu là chuẩn: hàm này chỉ nối <code>name + \" \" + lastname</code>, không biến đổi hoa/thường gì cả.</p>\n<p>Đã đối chiếu với cả 2 mẫu trong đề bằng cách biên dịch <code>Student.java</code> cùng <code>Main.class</code> given thật:</p>\n<pre>Enter name: hoa\nEnter gpa: 5.4\nEnter TC (1 or 2): 1\nEnter lastname: nguyen\nOUTPUT:\nhoa nguyen, 5.4</pre>\n<pre>Enter name: lan\nEnter gpa: 4.5\nEnter TC (1 or 2): 2\nOUTPUT:\nfail</pre>"
+ },
+ "goiY": [
+  {
+   "en": "\">= 5.0\" ⇒ exactly 5.0 passes",
+   "vi": "\">= 5.0\" ⇒ đúng 5.0 là đỗ"
+  },
+  {
+   "en": "The UML box gives setName no return type (void), Main ignores any result: append the last name, change nothing else.",
+   "vi": "Hộp UML cho setName không có kiểu trả về (void), Main không lấy kết quả: nối họ vào, không đổi gì khác."
+  },
+  {
+   "en": "\"name, gpa\" with \", \" and the raw double — \"Do not format the result\"",
+   "vi": "\"name, gpa\" với \", \" và số double nguyên trạng — \"Do not format the result\""
+  }
+ ],
+ "hoc": {
+  "Student.java": "import java.io.*;\nimport java.util.*;\n\nclass Student {\n    private String name;\n    private double gpa;\n\n    public Student() {\n    }\n\n    public Student(String name, double gpa) {\n        this.name = name;\n        this.gpa = gpa;\n    }\n\n    // \">= 5.0\" ⇒ exactly 5.0 passes\n    public String getPass() {\n        return gpa >= 5.0 ? \"pass\" : \"fail\";\n    }\n\n    // The text says \"first letter in uppercase\", the sample prints \"hoa nguyen\" — no capital anywhere.\n    // The UML box gives setName no return type (void), Main ignores any result: append the last name, change nothing else.\n    public void setName(String lastname) {\n        this.name = this.name + \" \" + lastname;\n    }\n\n    // \"name, gpa\" with \", \" and the raw double — \"Do not format the result\"\n    @Override\n    public String toString() {\n        return name + \", \" + gpa;\n    }\n}\n"
+ },
+ "cho": {
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (rebuilt with javap -c): nextDouble()/nextInt() each followed by nextLine()\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String lastname = \"\";\n        System.out.print(\"Enter name: \");\n        String name = sc.nextLine();\n        System.out.print(\"Enter gpa: \");\n        double gpa = sc.nextDouble();\n        sc.nextLine();\n        System.out.println(\"1. Test setName()\");\n        System.out.println(\"2. Test getPass()\");\n        System.out.print(\"Enter TC (1 or 2): \");\n        int tc = sc.nextInt();\n        sc.nextLine();\n        Student st = new Student(name, gpa);\n        if (tc == 1) {\n            System.out.print(\"Enter lastname: \");\n            lastname = sc.nextLine();\n        }\n        System.out.println(\"OUTPUT:\");\n        switch (tc) {\n            case 1:\n                st.setName(lastname);\n                System.out.printf(\"%s\\r\\n\", st.toString());          // \\r\\n: the given Main prints Windows line ends\n                break;\n            case 2:\n                System.out.println(st.getPass());\n                break;\n        }\n        System.out.println();\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 setName (paper sample 1)",
+   "vao": "hoa\n5.4\n1\nnguyen\n"
+  },
+  {
+   "ten": "TC2 getPass (paper sample 2)",
+   "vao": "lan\n4.5\n2\n"
+  },
+  {
+   "ten": "TC2 again, own boundary test: gpa 5.0",
+   "vao": "minh\n5.0\n2\n"
+  }
+ ]
+}

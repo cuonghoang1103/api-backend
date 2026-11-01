@@ -30,4 +30,4 @@ const de = deLab('l211-p0056', {
   giaiThich: { en: '<p>The reference is the course’s P0056 rewritten to the checklist from a classmate’s passed version (controller holds the repository, the service none; lint.py clean; javac --release 8). The date is the only output that depends on the day, so it is the only thing the grader masks.</p>', vi: '<p>Lời giải là P0056 của khoá, viết lại theo tờ checklist từ bản bạn cùng lớp đã pass (controller giữ repository, service không giữ; sạch lint.py; javac --release 8). Ngày là output duy nhất phụ thuộc hôm chạy, nên là thứ duy nhất máy chấm che.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0056-worker-management', ten: 'L.3 🎓 LAB211 J1.S.P0056 — Worker Management', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0056-worker-management', ten: '10.3 🎓 L.3 LAB211 J1.S.P0056 — Worker Management', de: [de] });

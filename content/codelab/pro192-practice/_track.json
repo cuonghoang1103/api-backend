@@ -185,99 +185,123 @@
     },
     {
       "slug": "pro192-lab211-cach-qua-review",
-      "name": "L.0 🎓 LAB211 in practice — passing the lecturer’s review",
+      "name": "10.0 🎓 L.0 LAB211 in practice — passing the lecturer’s review",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.0 — The LAB211 frame: Note Management in 8 packages · L.0 — Fix the 5 review errors the lecturer catches first · L.0 — \"CRUD must not be in the service\": take the repository out · L.0 — It runs at home, not in the lab room: back to Java 8"
     },
     {
       "slug": "pro192-lab211-p0011-change-base-number",
-      "name": "L.1 🎓 LAB211 J1.S.P0011 — Change Base Number System",
+      "name": "10.1 🎓 L.1 LAB211 J1.S.P0011 — Change Base Number System",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.1 — LAB211 J1.S.P0011: Change Base Number System (BIN, DEC, HEX)"
     },
     {
       "slug": "pro192-lab211-p0021-student-management",
-      "name": "L.2 🎓 LAB211 J1.L.P0021 — Student Management",
+      "name": "10.2 🎓 L.2 LAB211 J1.L.P0021 — Student Management",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.2 — LAB211 J1.L.P0021: Student Management (Long Assignment)"
     },
     {
       "slug": "pro192-lab211-p0056-worker-management",
-      "name": "L.3 🎓 LAB211 J1.S.P0056 — Worker Management",
+      "name": "10.3 🎓 L.3 LAB211 J1.S.P0056 — Worker Management",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.3 — LAB211 J1.S.P0056: Worker Management (salary history with today’s date)"
     },
     {
       "slug": "pro192-lab211-p0070-ebank-login",
-      "name": "L.4 🎓 LAB211 J1.S.P0070 — Ebank Login",
+      "name": "10.4 🎓 L.4 LAB211 J1.S.P0070 — Ebank Login",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.4 — LAB211 J1.S.P0070: Ebank Login (two languages, random captcha)"
     },
     {
       "slug": "pro192-lab211-p0071-task-management",
-      "name": "L.5 🎓 LAB211 J1.S.P0071 — Task Management",
+      "name": "10.5 🎓 L.5 LAB211 J1.S.P0071 — Task Management",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.5 — LAB211 J1.S.P0071: Task Management"
     },
     {
       "slug": "pro192-lab211-p0073-handy-expense",
-      "name": "L.6 🎓 LAB211 J1.S.P0073 — Handy Expense",
+      "name": "10.6 🎓 L.6 LAB211 J1.S.P0073 — Handy Expense",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.6 — LAB211 J1.S.P0073: Handy Expense (saved to a file)"
     },
     {
       "slug": "pro192-cs1-on",
-      "name": "⭐ CS.1 Generics & lambdas (Java 17)",
+      "name": "11.1 ⭐ CS.1 Generics & lambdas (Java 17)",
       "level": "ADVANCED",
       "description": "Luyện: A generic max that accepts List<LocalDate>, any Collection and inherited ordering · A PECS utility: move the passing marks into one List<Number> · Sort a class list by four keys — and the TreeSet that drops students · A generic repository Repo<T, ID> — Spring Data’s shape in plain Java · From anonymous classes to lambdas and method references — same output"
     },
     {
       "slug": "pro192-cs2-on",
-      "name": "⭐ CS.2 Stream API (Java 17)",
+      "name": "11.2 ⭐ CS.2 Stream API (Java 17)",
       "level": "ADVANCED",
       "description": "Luyện: A grade report in three pipelines · The three most frequent words · A CSV with a repeated product code: toMap with a merge function · PE question 3 with streams — that still compiles on JDK 8 · Fix three Optional mistakes (and count the database calls)"
     },
     {
       "slug": "pro192-cs3-on",
-      "name": "⭐ CS.3 Modern Java 17: records, enums, sealed, text blocks",
+      "name": "11.3 ⭐ CS.3 Modern Java 17: records, enums, sealed, text blocks",
       "level": "ADVANCED",
       "description": "Luyện: The PE Student as a record that cannot hold bad data · Magic numbers to an enum, a fall-through bug to a switch expression · A sealed Payment and its fees with instanceof patterns · An SQL query and a JSON body as text blocks, checked character by character · Bring Java 17 code back to the JDK 8 exam room — identical output"
     },
     {
       "slug": "pro192-cs4-on",
-      "name": "⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders",
+      "name": "11.4 ⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders",
       "level": "ADVANCED",
       "description": "Luyện: Bug hunt: equals ignores case, hashCode does not · An immutable invoice, attacked four ways · VAT on a VND invoice: round each line or round the total? · A borrow slip: static factory plus a builder that reports every problem at once"
     },
     {
       "slug": "pro192-cs5-on",
-      "name": "⭐ CS.5 The JVM seen from your code: leaks, the stack, caches, initialisation",
+      "name": "11.5 ⭐ CS.5 The JVM seen from your code: leaks, the stack, caches, initialisation",
       "level": "ADVANCED",
       "description": "Luyện: A leak: tickets that can never leave a HashSet · StackOverflowError: walk a chain of a million links without recursion · Stock count reconciliation: Integer == works up to 127 · ExceptionInInitializerError: the order of static initialisation"
     },
     {
       "slug": "pro192-cs6-on",
-      "name": "⭐ CS.6 Testable code: composition, injection, exceptions, boundaries",
+      "name": "11.6 ⭐ CS.6 Testable code: composition, injection, exceptions, boundaries",
       "level": "ADVANCED",
       "description": "Luyện: A counting collection: inheritance breaks, a wrapper works for any Collection · An overdue report that read the clock by itself: inject Clock, repository and sink · Importing devices from CSV: one exception type with a code, a line number and the cause · No JUnit in the exam room: a late fee checked on its boundaries"
     },
     {
       "slug": "pro192-cs7-on",
-      "name": "⭐ CS.7 SOLID & design patterns: Strategy, Liskov, Observer, Template Method",
+      "name": "11.7 ⭐ CS.7 SOLID & design patterns: Strategy, Liskov, Observer, Template Method",
       "level": "ADVANCED",
       "description": "Luyện: A fee-policy registry: add VIP and HOLIDAY without touching old code · Liskov in the JDK: java.util.Stack extends Vector — write a pile that cannot be misused · A listener that unsubscribes itself while being notified · Template Method: one import job, two file formats"
     },
     {
       "slug": "pro192-cs8-on",
-      "name": "⭐ CS.8 Concurrency with deterministic results",
+      "name": "11.8 ⭐ CS.8 Concurrency with deterministic results",
       "level": "ADVANCED",
       "description": "Luyện: Two desks collect fines into one account: the lost update · A transfer that deadlocks, and a lock order that does not · Scan a million loans on four threads with invokeAll · Producer and consumer through a BlockingQueue"
     },
     {
       "slug": "pro192-du-an-ct-library",
-      "name": "🏁 Final project — CT Library 1.0",
+      "name": "12.1 🏁 Final project — CT Library 1.0",
       "level": "ADVANCED",
       "description": "Luyện: Final project — CT Library 1.0 (8 parts on 200 items, 300 members, 2,000 loans)"
+    },
+    {
+      "slug": "pro192-luyen-pe-1",
+      "name": "13.1 🎯 PE practice — question 1: one class from a UML box",
+      "level": "ADVANCED",
+      "description": "Luyện: PE1 Q1 — class CoffeeShop from the UML box, checked by a stand-in for the given Main.class · PE14 Q1 — class Person: two views of one field, and a setter that ADDS · PE10 Q1 — class Student: the paper's text and its sample disagree, the sample decides"
+    },
+    {
+      "slug": "pro192-luyen-pe-2",
+      "name": "13.2 🎯 PE practice — question 2: a parent and a child class",
+      "level": "ADVANCED",
+      "description": "Luyện: PE4 Q2 — Cala and SpecCala extends Cala: the constructor whose parameters come in a DIFFERENT order · PE11 Q2 — Ladder and SpecLadder: \"the last letter\", \"the last digit\", \"count the even digits\" · PE8 Q2 — Employee and Professor: the parent already upper-cases, the child REUSES it"
+    },
+    {
+      "slug": "pro192-luyen-pe-3",
+      "name": "13.3 🎯 PE practice — question 3: a given interface and a list",
+      "level": "ADVANCED",
+      "description": "Luyện: PE11 Q3 — MyLadder implements the given ILadder: three DIFFERENT ways of counting on one list · PE8 Q3 — Watch + WatchList extends ArrayList<Watch>: a list that IS an ArrayList, and a method that must return null · PE6 Q3 — Wine + MyWine implements the given IWine: f1 find, f2 replace, f3 remove IN PLACE"
+    },
+    {
+      "slug": "pro192-luyen-pe-4",
+      "name": "13.4 🎯 PE practice — question 4: strings behind a given interface",
+      "level": "ADVANCED",
+      "description": "Luyện: PE10 Q4 — MyFile implements the given IFile: the extension and a new name from a Windows path · PE4 Q4 — MyString implements the given IString: count words, replace the FIRST palindrome"
     }
   ]
 }

@@ -1037,5 +1037,106 @@
    "Loaded 0 student(s).\n1. Add  2. List  3. Delete  0. Exit\nChoice: No student.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: Name: Name cannot contain a comma.\nName: GPA (0-10): Added HE200002.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: ID must be 2 upper-case letters + 6 digits.\nID: Name: GPA (0-10): GPA must be a number.\nGPA (0-10): GPA must be between 0 and 10.\nGPA (0-10): Added HE100001.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: Student HE100001 already exists.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ===== RESTART: session 2 (same folder, files kept) =====\nLoaded 2 student(s).\n1. Add  2. List  3. Delete  0. Exit\nChoice: HE100001  Nguyen An             8.25\nHE200002  Tran Binh             7.50\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: Deleted HE200002.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: Student HE200002 does not exist.\n1. Add  2. List  3. Delete  0. Exit\nChoice: HE100001  Nguyen An             8.25\n1. Add  2. List  3. Delete  0. Exit\nChoice: ",
    "Skipped line 3 of students.csv.\nSkipped line 4 of students.csv.\nLoaded 1 student(s).\n1. Add  2. List  3. Delete  0. Exit\nChoice: SE000001  Pham Dung             9.00\n1. Add  2. List  3. Delete  0. Exit\nChoice: ID: Name: GPA (0-10): Added SE000003.\n1. Add  2. List  3. Delete  0. Exit\nChoice: ===== RESTART: session 2 (same folder, files kept) =====\nLoaded 2 student(s).\n1. Add  2. List  3. Delete  0. Exit\nChoice: SE000001  Pham Dung             9.00\nSE000003  Le Chi                6.00\n1. Add  2. List  3. Delete  0. Exit\nChoice: "
   ]
+ },
+ "pro192-pe-q1coffeeshop": {
+  "bam": "77fffc2adf94ef8c",
+  "ra": [
+   "Enter id: Enter store name: Enter price per cup: Enter number of cups: 1. Test getTotalRevenue()\n2. Test getStoreName()\n3. Test getProfitRevenue()\n4. Test toString()\nEnter TC(1|2|3|4): OUTPUT:\n175.00\n",
+   "Enter id: Enter store name: Enter price per cup: Enter number of cups: 1. Test getTotalRevenue()\n2. Test getStoreName()\n3. Test getProfitRevenue()\n4. Test toString()\nEnter TC(1|2|3|4): OUTPUT:\nPassio coffee\n",
+   "Enter id: Enter store name: Enter price per cup: Enter number of cups: 1. Test getTotalRevenue()\n2. Test getStoreName()\n3. Test getProfitRevenue()\n4. Test toString()\nEnter TC(1|2|3|4): Enter cost per cup: OUTPUT:\n612.00\n",
+   "Enter id: Enter store name: Enter price per cup: Enter number of cups: 1. Test getTotalRevenue()\n2. Test getStoreName()\n3. Test getProfitRevenue()\n4. Test toString()\nEnter TC(1|2|3|4): OUTPUT:\nBREW HAVEN:1440.00\n",
+   "Enter id: Enter store name: Enter price per cup: Enter number of cups: 1. Test getTotalRevenue()\n2. Test getStoreName()\n3. Test getProfitRevenue()\n4. Test toString()\nEnter TC(1|2|3|4): OUTPUT:\n420.00\n"
+  ]
+ },
+ "pro192-pe-q1person": {
+  "bam": "b752a5113eb68a7a",
+  "ra": [
+   "Enter name: Enter sickLeave: 1. Test getName():\n2. Test setSickLeave():\nEnter TC (1 or 2): OUTPUT:\nNGUYEN ANH\n",
+   "Enter name: Enter sickLeave: 1. Test getName():\n2. Test setSickLeave():\nEnter TC (1 or 2): Enter up value: OUTPUT:\nly hung,6.5\n",
+   "Enter name: Enter sickLeave: 1. Test getName():\n2. Test setSickLeave():\nEnter TC (1 or 2): Enter up value: OUTPUT:\nan,0.30000000000000004\n"
+  ]
+ },
+ "pro192-pe-q1student": {
+  "bam": "11287ed43bfaceab",
+  "ra": [
+   "Enter name: Enter gpa: 1. Test setName()\n2. Test getPass()\nEnter TC (1 or 2): Enter lastname: OUTPUT:\nhoa nguyen, 5.4\r\n\n",
+   "Enter name: Enter gpa: 1. Test setName()\n2. Test getPass()\nEnter TC (1 or 2): OUTPUT:\nfail\n\n",
+   "Enter name: Enter gpa: 1. Test setName()\n2. Test getPass()\nEnter TC (1 or 2): OUTPUT:\npass\n\n"
+  ]
+ },
+ "pro192-pe-q2cala": {
+  "bam": "41462c7a83d23ffc",
+  "ra": [
+   "Enter owner: Enter price: Enter color: 1.Test toString()\n2.Test setData()\n3.Test getValue()\nEnter TC(1,2,3): OUTPUT:\nalan, 3\nalan, 3, 4\n",
+   "Enter owner: Enter price: Enter color: 1.Test toString()\n2.Test setData()\n3.Test getValue()\nEnter TC(1,2,3): OUTPUT:\naXXan,3\n",
+   "Enter owner: Enter price: Enter color: 1.Test toString()\n2.Test setData()\n3.Test getValue()\nEnter TC(1,2,3): OUTPUT:\n6\n",
+   "Enter owner: Enter price: Enter color: 1.Test toString()\n2.Test setData()\n3.Test getValue()\nEnter TC(1,2,3): OUTPUT:\n10\n",
+   "Enter owner: Enter price: Enter color: 1.Test toString()\n2.Test setData()\n3.Test getValue()\nEnter TC(1,2,3): OUTPUT:\n8\n"
+  ]
+ },
+ "pro192-pe-q2ladder": {
+  "bam": "b6953d8f9dd55bae",
+  "ra": [
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\nstandard, 100\nstandard, 100, 50\n\n",
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\nstandar1, 21\n\n",
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\nstandard2\n\n",
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\nstandard3\n\n",
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\nType-91, 19\n\n",
+   "\nEnter type: Enter price: Enter weight: 1. Test toString()\n2. Test setData()\n3. Test getValue()\nEnter TC (1,2,3): OUTPUT:\npine1\n\n"
+  ]
+ },
+ "pro192-pe-q2professor": {
+  "bam": "549df9906e12c448",
+  "ra": [
+   "Enter id: Enter name: Enter standard salary: Enter department: 1.Test calculateActualSalary()\n2.Test toString()\nEnter TC(1/2): OUTPUT:\n10000.00\n",
+   "Enter id: Enter name: Enter standard salary: Enter department: 1.Test calculateActualSalary()\n2.Test toString()\nEnter TC(1/2): OUTPUT:\n5000.00\n",
+   "Enter id: Enter name: Enter standard salary: Enter department: 1.Test calculateActualSalary()\n2.Test toString()\nEnter TC(1/2): OUTPUT:\n1, DAVID, GD, 7500.00"
+  ]
+ },
+ "pro192-pe-q3ladder": {
+  "bam": "46155aedf7b9c8a6",
+  "ra": [
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f1:\n(AB1,11) (BC1,9) (de1,16) (ef2,14) \r\nOUTPUT:\r\n20\r\n\n",
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f2:\n(A1,6) (B1,9) (A12,2) (B12,5) \r\nOUTPUT:\r\n(A1,6) (B1,9) (A12,0) (B12,0) \r\n\n",
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f3:\n(AB123,10) (AC1,11) (A1234,12) (B1,13) \r\nOUTPUT:\r\n(A1234,12) (B1,13) \r\n\n",
+   "Add how many elements: Enter type: Enter price: Enter TC(1-f1;2-f2;3-f3): The list before running f3:\n(abc,1) (AB123,10) (AC1,11) (A1234,12) (B1,13) \r\nOUTPUT:\r\n(AB123,10) (AC1,11) (A1234,12) (B1,13) \r\n\n"
+  ]
+ },
+ "pro192-pe-q3watch": {
+  "bam": "22dc43b7fa77ed16",
+  "ra": [
+   "The watches have been added:\n1, Rolex, Submariner, 7500.00\n2, Omega, Speedmaster, 5000.00\n3, Seiko, Prospex, 300.00\n6, Rolex, Daytona, 13500.00\nAdd a new watch:\nEnter id: Enter brand: Enter model: Enter price: 1. Test filterByBrand\n2. Test findMostExpensive\nEnter TC (1/2): Enter brand: OUTPUT:\n1, Rolex, Submariner, 7500.00\n6, Rolex, Daytona, 13500.00\n5, rolex, Datejust, 10000.45\n",
+   "The watches have been added:\n1, Rolex, Submariner, 7500.00\n2, Omega, Speedmaster, 5000.00\n3, Seiko, Prospex, 300.00\n6, Rolex, Daytona, 13500.00\nAdd a new watch:\nEnter id: Enter brand: Enter model: Enter price: 1. Test filterByBrand\n2. Test findMostExpensive\nEnter TC (1/2): OUTPUT:\n5, casio, gshock, 20000.00\n",
+   "The watches have been added:\n1, Rolex, Submariner, 7500.00\n2, Omega, Speedmaster, 5000.00\n3, Seiko, Prospex, 300.00\n6, Rolex, Daytona, 13500.00\nAdd a new watch:\nEnter id: Enter brand: Enter model: Enter price: 1. Test filterByBrand\n2. Test findMostExpensive\nEnter TC (1/2): Enter brand: OUTPUT:\nN/A\n"
+  ]
+ },
+ "pro192-pe-q3wine": {
+  "bam": "dda37b1ebacd51fb",
+  "ra": [
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f1:\n(VNA,3) (VJA,9) (FR,6) (PJ,17) (DU,11) (ITA,13) \r\nOUTPUT:\r\nPJ\r\n\n",
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f2:\n(A,6) (B1X,9) (C345,2) (D2Y,29) (E678,3) (1F,19) (3G1A,12) (2H,25) \r\nOUTPUT:\r\n(PRE6,6) (B1X,9) (PRE2,2) (D2Y,29) (PRE3,3) (1F,19) (PRE1,12) (2H,25) \r\n\n",
+   "Add how many elements: Enter TC(1-f1;2-f2;3-f3): The list before running f3:\n(A2,60) (b2,11) (C3,10) (d6,47) (E6,69) (1F,15) (3G1,18) (2H,25) \r\nOUTPUT:\r\n(A2,60) (C3,10) (d6,47) (E6,69) (1F,15) (3G1,18) (2H,25) \r\n\n",
+   "Add how many elements: Enter brand: Enter year: Enter TC(1-f1;2-f2;3-f3): The list before running f1:\n(K,7) (VNA,3) (VJA,9) (FR,6) (PJ,17) (DU,11) (ITA,13) \r\nOUTPUT:\r\nK\r\n\n",
+   "Add how many elements: Enter brand: Enter year: Enter TC(1-f1;2-f2;3-f3): The list before running f3:\n(a9,3) (A2,60) (b2,11) (C3,10) (d6,47) (E6,69) (1F,15) (3G1,18) (2H,25) \r\nOUTPUT:\r\n(A2,60) (b2,11) (C3,10) (d6,47) (E6,69) (1F,15) (3G1,18) (2H,25) \r\n\n"
+  ]
+ },
+ "pro192-pe-q4myfile": {
+  "bam": "51a571d7600735d6",
+  "ra": [
+   "Enter file path:\n1. Test f1\n2. Test f2\nyour choice:\nOUTPUT:\ntxt\n",
+   "Enter file path:\n1. Test f1\n2. Test f2\nyour choice:\nOUTPUT:\nNew_DATA.txt\n",
+   "Enter file path:\n1. Test f1\n2. Test f2\nyour choice:\nOUTPUT:\ndocx\n",
+   "Enter file path:\n1. Test f1\n2. Test f2\nyour choice:\nOUTPUT:\nwrong format\n",
+   "Enter file path:\n1. Test f1\n2. Test f2\nyour choice:\nOUTPUT:\nNew_REPORT.FINAL.pdf\n"
+  ]
+ },
+ "pro192-pe-q4mystring": {
+  "bam": "664532db60db53ef",
+  "ra": [
+   "1. Test f1()\n2. Test f2()\nEnter TC (1 or 2): Enter a string:\nOUTPUT:\n2\r\n\n",
+   "1. Test f1()\n2. Test f2()\nEnter TC (1 or 2): Enter a string:\nOUTPUT:\nab XX uv 12321 xy\r\n\n",
+   "1. Test f1()\n2. Test f2()\nEnter TC (1 or 2): Enter a string:\nOUTPUT:\n2\r\n\n",
+   "1. Test f1()\n2. Test f2()\nEnter TC (1 or 2): Enter a string:\nOUTPUT:\nhi  XX   level\r\n\n"
+  ]
  }
 }

@@ -165,4 +165,4 @@ const javaMoi = deLab('l211-review', {
   giaiThich: { en: '<p>--release 8 checks both the syntax and the library against Java 8, which is what the lab machine will do. Setting the project to JDK 8 at home catches it before the review.</p>', vi: '<p>--release 8 kiểm cả cú pháp lẫn thư viện theo Java 8, đúng như máy phòng lab sẽ làm. Đặt dự án về JDK 8 ngay ở nhà là bắt được trước buổi review.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-cach-qua-review', ten: 'L.0 🎓 LAB211 in practice — passing the lecturer’s review', de: [khung, loiHayGap, serviceGiuRepo, javaMoi] });
+export default moDun({ slug: 'pro192-lab211-cach-qua-review', ten: '10.0 🎓 L.0 LAB211 in practice — passing the lecturer’s review', de: [khung, loiHayGap, serviceGiuRepo, javaMoi] });

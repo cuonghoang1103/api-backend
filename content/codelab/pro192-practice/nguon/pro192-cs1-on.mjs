@@ -604,4 +604,4 @@ public class Main {
   giaiThich: { en: '<p>A lambda is an instance of a functional interface written without the ceremony; a method reference is a lambda that only forwards to one method. Combining predicates with and/or/negate keeps each rule named and testable.</p>', vi: '<p>Lambda là một thể hiện của functional interface viết không cần nghi thức; method reference là lambda chỉ chuyển tiếp tới một hàm. Ghép predicate bằng and/or/negate giữ mỗi luật có tên và kiểm được riêng.</p>' },
 });
 
-export default moDun({ slug: 'pro192-cs1-on', ten: '⭐ CS.1 Generics & lambdas (Java 17)', de: [de1, de2, de3, de4, de5] });
+export default moDun({ slug: 'pro192-cs1-on', ten: '11.1 ⭐ CS.1 Generics & lambdas (Java 17)', de: [de1, de2, de3, de4, de5] });

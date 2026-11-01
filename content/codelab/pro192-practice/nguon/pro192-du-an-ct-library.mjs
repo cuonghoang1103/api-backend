@@ -56,4 +56,4 @@ const de = deLab('da', {
   giaiThich: { en: '<p>The reference is the course’s CT Library 1.0 solution (lint.py clean, javac --release 8, same 557 lines on JDK 8; declarations switched to List/Map per the 29/10 LAB211 rule). Two independent hierarchies meet in one line — the item says how much per day (polymorphism), the card picks the fee policy (Strategy) — so a new card type is one class, and a rule change is one constant.</p>', vi: '<p>Lời giải là đáp án CT Library 1.0 của khoá (sạch lint.py, javac --release 8, cùng 557 dòng trên JDK 8; khai báo đổi sang List/Map theo luật LAB211 29/10). Hai cây kế thừa độc lập gặp nhau ở một dòng — tài liệu nói phí mỗi ngày (đa hình), thẻ chọn chính sách phạt (Strategy) — nên thêm loại thẻ là thêm một lớp, đổi luật là đổi một hằng.</p>' },
 });
 
-export default moDun({ slug: 'pro192-du-an-ct-library', ten: '🏁 Final project — CT Library 1.0', de: [de] });
+export default moDun({ slug: 'pro192-du-an-ct-library', ten: '12.1 🏁 Final project — CT Library 1.0', de: [de] });

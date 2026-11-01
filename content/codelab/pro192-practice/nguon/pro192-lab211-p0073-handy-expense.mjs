@@ -34,4 +34,4 @@ const de = deLab('l211-p0073', {
   giaiThich: { en: '<p>The reference is the course’s P0073 (lint.py clean, checklist 0 violations, real JDK 8): FileUtils reads/writes lines, the repository turns them into expenses and saves after each change, the service computes the new ID, the rows and the total, the view prints.</p>', vi: '<p>Lời giải là P0073 của khoá (sạch lint.py, tờ checklist 0 vi phạm, JDK 8 thật): FileUtils đọc/ghi dòng, repository đổi dòng thành khoản chi và lưu sau mỗi lần đổi, service tính ID mới, dòng bảng và tổng tiền, view in.</p>' },
 });
 
-export default moDun({ slug: 'pro192-lab211-p0073-handy-expense', ten: 'L.6 🎓 LAB211 J1.S.P0073 — Handy Expense', de: [de] });
+export default moDun({ slug: 'pro192-lab211-p0073-handy-expense', ten: '10.6 🎓 L.6 LAB211 J1.S.P0073 — Handy Expense', de: [de] });

@@ -1,0 +1,62 @@
+{
+ "ten": "PeQ2Ladder",
+ "pe": "PE11",
+ "ky": "SU26",
+ "cau": 2,
+ "diem": 3,
+ "tieuDe": {
+  "en": "PE11 (SU26) question 2, 3 marks — Ladder and SpecLadder: \"the last letter\", \"the last digit\", \"count the even digits\"",
+  "vi": "Đề PE11 (SU26) câu 2, 3 điểm — Ladder và SpecLadder: \"chữ cái cuối\", \"chữ số cuối\", \"đếm chữ số chẵn\""
+ },
+ "deBai": {
+  "en": "<p><strong>(3 marks)</strong> Create a class <strong>Ladder</strong> and a class <strong>SpecLadder</strong> that extends <strong>Ladder</strong> (i.e., Ladder is the superclass and SpecLadder is the subclass) with the following details:</p>\n<table class=\"uml-table\"><tbody><tr><td>-type: String<br/>-price: int</td></tr><tr><td>+Ladder()<br/>+Ladder(type: String, price: int)<br/>+getType(): String<br/>+getPrice(): int<br/>+setType(type: String): void<br/>+toString(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>getType(): String</code> — return type.</li>\n  <li><code>getPrice(): int</code> — return price.</li>\n  <li><code>setType(type: String): void</code> — update type.</li>\n  <li><code>toString(): String</code> — return the string of format: <strong>type, price</strong></li>\n</ul>\n<table class=\"uml-table\"><tbody><tr><td>-weight: int</td></tr><tr><td>+SpecLadder()<br/>+SpecLadder(type: String, price: int, weight: int)<br/>+getWeight(): int<br/>+toString(): String<br/>+setData(): void<br/>+getValue(): String</td></tr></tbody></table>\n<p>Where:</p>\n<ul>\n  <li><code>toString(): String</code> — return the string of format: <strong>type, price, weight</strong></li>\n  <li><code>getWeight(): int</code> — return weight.</li>\n  <li><code>setData(): void</code> — replace the last alphabetic character in type with the last digit of price.</li>\n  <li><code>getValue(): String</code> — if the weight contains at least two even digits, return the concatenation of type and the number of even digits in the weight. Otherwise, return the concatenation of type and the total number of digits in the weight.</li>\n</ul>",
+  "vi": "<p><strong>(3 điểm)</strong> Tạo lớp <strong>Ladder</strong> và lớp <strong>SpecLadder</strong> kế thừa từ <strong>Ladder</strong> (Ladder là lớp cha, SpecLadder là lớp con) với chi tiết sau:</p>\n<table class=\"uml-table\"><tbody><tr><td>-type: String<br/>-price: int</td></tr><tr><td>+Ladder()<br/>+Ladder(type: String, price: int)<br/>+getType(): String<br/>+getPrice(): int<br/>+setType(type: String): void<br/>+toString(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>getType(): String</code> — trả về type.</li>\n  <li><code>getPrice(): int</code> — trả về price.</li>\n  <li><code>setType(type: String): void</code> — cập nhật type.</li>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng: <strong>type, price</strong></li>\n</ul>\n<table class=\"uml-table\"><tbody><tr><td>-weight: int</td></tr><tr><td>+SpecLadder()<br/>+SpecLadder(type: String, price: int, weight: int)<br/>+getWeight(): int<br/>+toString(): String<br/>+setData(): void<br/>+getValue(): String</td></tr></tbody></table>\n<p>Trong đó:</p>\n<ul>\n  <li><code>toString(): String</code> — trả về chuỗi định dạng: <strong>type, price, weight</strong></li>\n  <li><code>getWeight(): int</code> — trả về weight.</li>\n  <li><code>setData(): void</code> — thay ký tự chữ cái cuối cùng trong type bằng chữ số cuối cùng của price.</li>\n  <li><code>getValue(): String</code> — nếu weight chứa ít nhất 2 chữ số chẵn, trả về type nối với số lượng chữ số chẵn trong weight. Ngược lại, trả về type nối với tổng số chữ số trong weight.</li>\n</ul>"
+ },
+ "giaiThich": {
+  "en": "<p><strong>setData()</strong>: \"last alphabetic character in type\" is found by scanning from the end of the string for the first letter (<code>Character.isLetter</code>); \"last digit of price\" is <code>Math.abs(price) % 10</code>. Replace that one character in place, e.g. type=\"standard\", price=21 → last digit '1' replaces the trailing 'd' → \"standar1\".</p>\n<p><strong>getValue()</strong>: count how many of weight's digits (as a string, ignoring sign) are even (0,2,4,6,8). If ≥ 2, return <code>type + evenCount</code>; otherwise return <code>type + totalDigitCount</code>. Verified against BOTH given samples: weight=24 → digits {2,4} both even → 2 even digits ≥ 2 → \"standard2\". weight=135 → digits {1,3,5} none even → 0 even digits &lt; 2 → fall back to total digit count 3 → \"standard3\".</p>\n<p>The sample run for TC1 prints <strong>two</strong> lines: the superclass's own <code>toString()</code> (\"type, price\") then the subclass's overridden one (\"type, price, weight\") — this is because the harness keeps a separate <code>Ladder</code> object (built from type+price only) alongside the <code>SpecLadder</code> object (built from type+price+weight), and prints both. For TC2 the harness prints only <code>getType() + \", \" + getPrice()</code> after calling the void <code>setData()</code> — not the 3-field <code>toString()</code> — confirmed empirically by compiling both classes with the real given <code>Main.class</code> and running all 4 sample TCs:</p>\n<pre>Enter type: standard / price: 100 / weight: 50 → TC1\nOUTPUT:\nstandard, 100\nstandard, 100, 50\n\nEnter type: standard / price: 21 / weight: 20 → TC2\nOUTPUT:\nstandar1, 21\n\nEnter type: standard / price: 123 / weight: 24 → TC3\nOUTPUT:\nstandard2\n\nEnter type: standard / price: 12 / weight: 135 → TC3\nOUTPUT:\nstandard3</pre>",
+  "vi": "<p><strong>setData()</strong>: \"ký tự chữ cái cuối cùng trong type\" tìm bằng cách quét từ cuối chuỗi tới chữ cái đầu tiên gặp được (<code>Character.isLetter</code>); \"chữ số cuối cùng của price\" là <code>Math.abs(price) % 10</code>. Thay đúng 1 ký tự đó, ví dụ type=\"standard\", price=21 → chữ số cuối '1' thay cho 'd' cuối → \"standar1\".</p>\n<p><strong>getValue()</strong>: đếm trong các chữ số của weight (chuyển thành chuỗi, bỏ dấu âm) có bao nhiêu chữ số chẵn (0,2,4,6,8). Nếu ≥ 2, trả về <code>type + số_chữ_số_chẵn</code>; ngược lại trả về <code>type + tổng_số_chữ_số</code>. Đã đối chiếu với CẢ HAI mẫu trong đề: weight=24 → chữ số {2,4} đều chẵn → 2 chữ số chẵn ≥ 2 → \"standard2\". weight=135 → chữ số {1,3,5} không chữ số nào chẵn → 0 &lt; 2 → dùng tổng số chữ số = 3 → \"standard3\".</p>\n<p>Mẫu chạy TC1 in <strong>hai</strong> dòng: dòng <code>toString()</code> của lớp cha (\"type, price\") rồi tới dòng đã override của lớp con (\"type, price, weight\") — vì harness giữ MỘT object <code>Ladder</code> riêng (dựng từ type+price) song song với object <code>SpecLadder</code> (dựng từ type+price+weight), rồi in cả hai. Với TC2, harness chỉ in <code>getType() + \", \" + getPrice()</code> sau khi gọi <code>setData()</code> (hàm void) — không phải <code>toString()</code> 3 trường — đã xác nhận bằng thực nghiệm: biên dịch cả 2 lớp cùng <code>Main.class</code> given thật và chạy đủ 4 test case mẫu:</p>\n<pre>Enter type: standard / price: 100 / weight: 50 → TC1\nOUTPUT:\nstandard, 100\nstandard, 100, 50\n\nEnter type: standard / price: 21 / weight: 20 → TC2\nOUTPUT:\nstandar1, 21\n\nEnter type: standard / price: 123 / weight: 24 → TC3\nOUTPUT:\nstandard2\n\nEnter type: standard / price: 12 / weight: 135 → TC3\nOUTPUT:\nstandard3</pre>"
+ },
+ "goiY": [
+  {
+   "en": "replace the LAST alphabetic character of type by the LAST digit of price",
+   "vi": "thay chữ cái CUỐI của type bằng chữ số CUỐI của price"
+  },
+  {
+   "en": ">= 2 even digits in weight ⇒ type + evenCount, otherwise type + number of digits",
+   "vi": "weight có >= 2 chữ số chẵn ⇒ type + số chữ số chẵn, ngược lại type + số chữ số"
+  }
+ ],
+ "hoc": {
+  "Ladder.java": "import java.io.*;\nimport java.util.*;\n\nclass Ladder {\n    private String type;\n    private int price;\n\n    public Ladder() {\n    }\n\n    public Ladder(String type, int price) {\n        this.type = type;\n        this.price = price;\n    }\n\n    public String getType() { return type; }\n    public int getPrice() { return price; }\n    public void setType(String type) { this.type = type; }\n\n    @Override\n    public String toString() {\n        return type + \", \" + price;\n    }\n}\n",
+  "SpecLadder.java": "import java.io.*;\nimport java.util.*;\n\nclass SpecLadder extends Ladder {\n    private int weight;\n\n    public SpecLadder() {\n    }\n\n    public SpecLadder(String type, int price, int weight) {\n        super(type, price);\n        this.weight = weight;\n    }\n\n    public int getWeight() { return weight; }\n\n    @Override\n    public String toString() {\n        return super.toString() + \", \" + weight;\n    }\n\n    // replace the LAST alphabetic character of type by the LAST digit of price\n    public void setData() {\n        String t = getType();\n        char lastDigit = (char) ('0' + Math.abs(getPrice() % 10));   // 21 % 10 = 1 ⇒ '1'; abs() for a negative price\n        for (int i = t.length() - 1; i >= 0; i--) {                    // walk from the END: the first letter met is the last one\n            if (Character.isLetter(t.charAt(i))) {\n                setType(t.substring(0, i) + lastDigit + t.substring(i + 1));\n                return;                                                // ONE character only\n            }\n        }\n    }\n\n    // >= 2 even digits in weight ⇒ type + evenCount, otherwise type + number of digits\n    public String getValue() {\n        String digits = String.valueOf(Math.abs(weight));             // as text: weight 0 still has ONE digit\n        int even = 0;\n        for (int i = 0; i < digits.length(); i++) {\n            if ((digits.charAt(i) - '0') % 2 == 0) {\n                even++;\n            }\n        }\n        return getType() + (even >= 2 ? even : digits.length());\n    }\n}\n"
+ },
+ "cho": {
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (javap -c): TC2 prints \"%s, %d\" from getType()/getPrice(), not toString()\nclass Main {\n    public static void main(String[] args) throws Exception {\n        Scanner sc = new Scanner(System.in);\n        System.out.println();\n        System.out.print(\"Enter type: \");\n        String type = sc.nextLine();\n        System.out.print(\"Enter price: \");\n        int price = sc.nextInt();\n        sc.nextLine();\n        System.out.print(\"Enter weight: \");\n        int weight = sc.nextInt();\n        sc.nextLine();\n        System.out.println(\"1. Test toString()\");\n        System.out.println(\"2. Test setData()\");\n        System.out.println(\"3. Test getValue()\");\n        System.out.print(\"Enter TC (1,2,3): \");\n        int tc = sc.nextInt();\n        sc.nextLine();\n        System.out.println(\"OUTPUT:\");\n        switch (tc) {\n            case 1:\n                System.out.println(new Ladder(type, price));\n                System.out.println(new SpecLadder(type, price, weight));\n                break;\n            case 2:\n                SpecLadder s = new SpecLadder(type, price, weight);\n                s.setData();\n                System.out.printf(\"%s, %d\\n\", s.getType(), s.getPrice());\n                break;\n            case 3:\n                System.out.printf(\"%s\\n\", new SpecLadder(type, price, weight).getValue());\n                break;\n        }\n        System.out.println();\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 toString (paper sample 1)",
+   "vao": "standard\n100\n50\n1\n"
+  },
+  {
+   "ten": "TC2 setData (paper sample 2)",
+   "vao": "standard\n21\n20\n2\n"
+  },
+  {
+   "ten": "TC3 getValue, weight 24 (paper sample 3)",
+   "vao": "standard\n123\n24\n3\n"
+  },
+  {
+   "ten": "TC3 getValue, weight 135 (paper sample 4)",
+   "vao": "standard\n12\n135\n3\n"
+  },
+  {
+   "ten": "TC2 again, own test: type with a digit at the end",
+   "vao": "Type-A1\n19\n7\n2\n"
+  },
+  {
+   "ten": "TC3 again, own test: weight 0",
+   "vao": "pine\n5\n0\n3\n"
+  }
+ ]
+}

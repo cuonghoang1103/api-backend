@@ -1,0 +1,54 @@
+{
+ "ten": "PeQ4MyString",
+ "pe": "PE4",
+ "ky": "SU26",
+ "cau": 4,
+ "diem": 3,
+ "tieuDe": {
+  "en": "PE4 (SU26) question 4, 3 marks — MyString implements the given IString: count words, replace the FIRST palindrome",
+  "vi": "Đề PE4 (SU26) câu 4, 3 điểm — MyString hiện thực IString cho sẵn: đếm từ, thay từ đối xứng ĐẦU TIÊN"
+ },
+ "deBai": {
+  "en": "<p><strong>(3 marks)</strong> The interface <strong>IString</strong> below is already compiled and given in byte code format, thus you can use it without creating the IString.java file:</p>\n<pre>public interface IString {\n    public int f1(String str);\n    public String f2(String str);\n}</pre>\n<p>Write a class named <strong>MyString</strong>, which implements the interface <strong>IString</strong>. The class MyString implements methods f1 and f2 in IString as below:</p>\n<ul>\n  <li><strong>f1</strong>: Count and return number of words containing at least 1 odd digit.</li>\n  <li><strong>f2</strong>: Return the string s, which is obtained by replacing the (first) palindrome word in str with the string \"XX\" (word = a string without space(s), a word is called palindrom if it and its reverse are the same).</li>\n</ul>",
+  "vi": "<p><strong>(3 điểm)</strong> Interface <strong>IString</strong> dưới đây đã được biên dịch sẵn dạng byte code, bạn dùng thẳng không cần tạo file IString.java:</p>\n<pre>public interface IString {\n    public int f1(String str);\n    public String f2(String str);\n}</pre>\n<p>Viết lớp tên <strong>MyString</strong>, implement interface <strong>IString</strong>. Lớp MyString cài đặt các hàm f1 và f2 trong IString như sau:</p>\n<ul>\n  <li><strong>f1</strong>: Đếm và trả về số từ chứa ít nhất 1 chữ số lẻ.</li>\n  <li><strong>f2</strong>: Trả về chuỗi s, thu được bằng cách thay từ palindrome (đối xứng) ĐẦU TIÊN trong str bằng chuỗi \"XX\" (từ = chuỗi không chứa khoảng trắng, một từ là palindrome nếu nó và chuỗi đảo ngược của nó giống nhau).</li>\n</ul>"
+ },
+ "giaiThich": {
+  "en": "<p><strong>f1</strong> counts WORDS (not digits) — a word counts once if ANY of its digit characters is odd, e.g. \"c34\" has digits 3 (odd) and 4 (even), it still counts once because it has at least one odd digit. Pure-letter words like \"a\" or \"b2\"'s only digit \"2\" (even) don't count.</p>\n<p><strong>f2</strong> only replaces the <em>first</em> palindrome word found (scanning left to right), leaving every other word — including later palindromes — untouched. A single character or a purely numeric word can be a palindrome too (e.g. \"12321\" reversed is still \"12321\").</p>\n<p>Verified against both given samples by compiling <code>MyString.java</code> with the real given <code>Main.class</code>:</p>\n<pre>f1(\"a a1 b2 c34 d6\") → 2   (a1 has odd digit 1; c34 has odd digit 3; a/b2/d6 don't)\nf2(\"ab 12321 uv 12321 xy\") → \"ab XX uv 12321 xy\"   (only the FIRST \"12321\" replaced)</pre>",
+  "vi": "<p><strong>f1</strong> đếm THEO TỪ (không đếm chữ số) — một từ được tính 1 lần nếu CÓ BẤT KỲ chữ số lẻ nào trong đó, vd \"c34\" có chữ số 3 (lẻ) và 4 (chẵn), vẫn tính 1 lần vì có ít nhất 1 chữ số lẻ. Từ toàn chữ cái như \"a\", hay \"b2\" (chữ số duy nhất \"2\" chẵn) thì không tính.</p>\n<p><strong>f2</strong> chỉ thay từ palindrome <em>đầu tiên</em> tìm thấy (quét trái sang phải), giữ nguyên mọi từ khác — kể cả palindrome xuất hiện sau đó. Một ký tự đơn hoặc từ toàn số cũng có thể là palindrome (vd \"12321\" đảo ngược vẫn là \"12321\").</p>\n<p>Đã đối chiếu với cả 2 mẫu trong đề bằng cách biên dịch <code>MyString.java</code> cùng <code>Main.class</code> given thật:</p>\n<pre>f1(\"a a1 b2 c34 d6\") → 2   (a1 có chữ số lẻ 1; c34 có chữ số lẻ 3; a/b2/d6 thì không)\nf2(\"ab 12321 uv 12321 xy\") → \"ab XX uv 12321 xy\"   (chỉ thay \"12321\" ĐẦU TIÊN)</pre>"
+ },
+ "goiY": [
+  {
+   "en": "f1: how many WORDS contain at least one odd digit — a word counts once, however many odd digits it has",
+   "vi": "f1: có bao nhiêu TỪ chứa ít nhất một chữ số lẻ — mỗi từ tính một lần, dù có bao nhiêu chữ số lẻ"
+  },
+  {
+   "en": "f2: replace the FIRST palindrome word by \"XX\", every other character stays exactly where it was",
+   "vi": "f2: thay từ đối xứng ĐẦU TIÊN bằng \"XX\", mọi ký tự khác giữ nguyên vị trí"
+  }
+ ],
+ "hoc": {
+  "MyString.java": "import java.io.*;\nimport java.util.*;\n\nclass MyString implements IString {\n\n    // f1: how many WORDS contain at least one odd digit — a word counts once, however many odd digits it has\n    @Override\n    public int f1(String str) {\n        int count = 0;\n        for (String w : str.trim().split(\"\\\\s+\")) {          // trim + \\\\s+: no empty \"words\" from extra spaces\n            for (char c : w.toCharArray()) {\n                if (Character.isDigit(c) && (c - '0') % 2 == 1) {\n                    count++;\n                    break;                                   // this word is counted: go to the next word\n                }\n            }\n        }\n        return count;\n    }\n\n    // f2: replace the FIRST palindrome word by \"XX\", every other character stays exactly where it was\n    @Override\n    public String f2(String str) {\n        int i = 0;\n        while (i < str.length()) {\n            if (str.charAt(i) == ' ') {\n                i++;\n                continue;\n            }\n            int start = i;                                   // a word runs from start to the next space\n            while (i < str.length() && str.charAt(i) != ' ') i++;\n            String w = str.substring(start, i);\n            if (new StringBuilder(w).reverse().toString().equals(w)) {     // equals, never ==\n                return str.substring(0, start) + \"XX\" + str.substring(i);\n            }\n        }\n        return str;                                          // no palindrome: unchanged\n    }\n}\n"
+ },
+ "cho": {
+  "IString.java": "import java.io.*;\nimport java.util.*;\n\ninterface IString {                                          // GIVEN as IString.class\n    public int f1(String str);\n    public String f2(String str);\n}\n",
+  "Main.java": "import java.io.*;\nimport java.util.*;\n\n// Stand-in for the given Main.class (javap -c): the TC first, then the string; results printed with printf + \\r\\n\nclass Main {\n    public static void main(String[] args) throws Exception {\n        Scanner sc = new Scanner(System.in);\n        System.out.println(\"1. Test f1()\");\n        System.out.println(\"2. Test f2()\");\n        System.out.print(\"Enter TC (1 or 2): \");\n        int tc = sc.nextInt();\n        sc.nextLine();\n        System.out.println(\"Enter a string:\");\n        String s = sc.nextLine();\n        IString t = new MyString();\n        System.out.println(\"OUTPUT:\");\n        switch (tc) {\n            case 1: System.out.printf(\"%d\\r\\n\", t.f1(s)); break;\n            case 2: System.out.printf(\"%s\\r\\n\", t.f2(s)); break;\n        }\n        System.out.println();\n    }\n}\n"
+ },
+ "ca": [
+  {
+   "ten": "TC1 f1 (paper sample 1)",
+   "vao": "1\na a1 b2 c34 d6\n"
+  },
+  {
+   "ten": "TC2 f2 (paper sample 2)",
+   "vao": "2\nab 12321 uv 12321 xy\n"
+  },
+  {
+   "ten": "TC1 again, own test: two odd digits in one word",
+   "vao": "1\nx13 579 b2\n"
+  },
+  {
+   "ten": "TC2 again, own test: a one-letter word, double spaces",
+   "vao": "2\nhi  a   level\n"
+  }
+ ]
+}

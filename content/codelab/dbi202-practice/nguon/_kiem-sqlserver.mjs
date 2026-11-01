@@ -64,7 +64,7 @@ const chuan = (v) => {
   if (v === null || v === undefined) return 'NULL';
   if (v instanceof Date) { const iso = v.toISOString(); return iso.endsWith('T00:00:00.000Z') ? iso.slice(0, 10) : iso.replace('T', ' ').replace(/\.000Z$/, '').replace(/Z$/, ''); }
   if (typeof v === 'boolean') return v ? '1' : '0';
-  const s = String(v).trim();
+  const s = String(v).trim().replace(/^(\d{4}-\d{2}-\d{2})[ T]00:00:00(\.0+)?$/, '$1');   // DATETIME at midnight ≡ its date (PGlite prints the time, tedious a Date)
   if (/^-?\d+(\.\d+)?$/.test(s)) return String(Math.round(Number(s) * 10000) / 10000);
   return s.toLowerCase();
 };

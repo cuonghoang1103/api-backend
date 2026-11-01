@@ -45,7 +45,8 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | ⭐ CS.6 | slide-cs6-1/6-2, cs6-on | 0 → 15 | ✅ (7 SQL trình duyệt: xoá mềm + UNIQUE lọc, luật đặt phòng thành CHECK/UNIQUE, LMS từ mô tả, mã giảm giá theo shop, giá theo khoảng hiệu lực, chọn ON DELETE cho blog; 1 đề tay: thêm cột NOT NULL UNIQUE theo lô WHILE + UPDATE TOP; còn lại tĩnh) |
 | ⭐ CS.7 | slide-cs7-1/7-2, cs7-on | 0 → 11 | ✅ (4 đề tay SQL Server: vá SQL injection, role quyền tối thiểu thử bằng EXECUTE AS (lỗi 229), Row-Level Security theo SESSION_CONTEXT (lỗi 33504), phân vùng theo tháng + TRUNCATE … WITH (PARTITIONS); còn lại tĩnh) |
 | ⭐ CS.8 + cầu nối | slide-cs8-1/8-2, cs8-on, cau-noi-di-lam | 0 → 21 | ✅ (14 SQL trình duyệt: lương cao thứ hai khi hoà, đếm cả phòng 0 người, NOT IN gặp NULL, chia nguyên (kiểm 100.0 trong mã vì PG trả numeric cho SUM(bigint)), đổi M/F, tìm/xoá trùng, hơn sếp, fan-out, phép chia, đặt phòng chồng lấn, trạng thái mới nhất, tỉ lệ huỷ chuyến; 3 sql-pg: lịch generate_series, RETURNING, ON CONFLICT; còn lại tĩnh. 33 bài của deck: phần trùng CS.5 không làm lại) |
-| Ôn thi | on-pe, ngan-hang-cau-hoi, PE 1–3 chữa đề, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
+| Chữa đề PE thật | pe1/pe2/pe3-sp26-chua-tron-de | 0 → 6 | ✅ (mỗi đề 2 bài: trình duyệt Q2–Q7 + Q10 trên đúng DBscript.sql của đề (nguon/_pe-sp26.mjs, làm gọn bằng scratch sach.mjs) + kiểm ẩn đổi dữ liệu; SQL Server của người học: Q1 (ERD nvarchar), Q8 (procedure / TVF), Q9 (trigger) — lời giải = sampleSolution của content/exams/DBI202-PE1..3; Q4 nhạc không chấm thứ tự vì NULL xếp khác nhau giữa hai hệ) |
+| Ôn thi | on-pe, ngan-hang-cau-hoi, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
 
 Bài KHÔNG có đề (định hướng, không có gì để luyện): dbi202-bat-dau-tai-day, dbi202-slide-dbi1-1, dbi202-gioi-thieu,
 dbi202-dieu-kien-qua-mon, dbi202-cai-dat (trùng nội dung cai-dat-ket-noi — đề cài đặt nằm ở đó), các bài QUIZ (đã là bài kiểm tra).

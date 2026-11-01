@@ -572,6 +572,24 @@
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",
       "description": "Luyện PE số 1 — CT Rent (cho thuê xe): 10 câu × 1 điểm theo dạng đề SP26 (ERD→bảng, LIKE, JOIN, outer join, COUNT DISTINCT, lớn nhất theo nhóm, max kép, VIEW, UPDATE, INSERT…SELECT)."
+    },
+    {
+      "slug": "dbi202-pe1-sp26-chua-tron-de",
+      "name": "PE review · Exam 1 (SP26-1 · HR database) — all 10 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: PE SP26-1 (HR database) — Q2–Q7 and Q10, graded in the browser · PE SP26-1 — Q1, Q8, Q9: ERD → tables (nvarchar), procedure with OUTPUT, AFTER INSERT trigger"
+    },
+    {
+      "slug": "dbi202-pe2-sp26-chua-tron-de",
+      "name": "PE review · Exam 2 (SP26 · Paper 1 · music DB) — all 10 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: PE SP26 Paper 1 (music database) — Q2–Q7 and Q10, graded in the browser · PE SP26 Paper 1 — Q1, Q8, Q9: ERD → tables, procedure listTopArtistByYear, INSTEAD OF INSERT trigger"
+    },
+    {
+      "slug": "dbi202-pe3-sp26-chua-tron-de",
+      "name": "PE review · Exam 3 (SP26 · Paper 8 · music DB) — all 10 questions",
+      "level": "ADVANCED",
+      "description": "Luyện: PE SP26 Paper 8 (music database) — Q2–Q7 and Q10, graded in the browser · PE SP26 Paper 8 — Q1, Q8, Q9: ERD → tables, table-valued function returnTopArtistByYear, INSTEAD OF INSERT trigger"
     }
   ]
 }

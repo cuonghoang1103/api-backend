@@ -1,74 +1,63 @@
 /**
- * PostgreSQL · 7.4 — CTE đệ quy: đi xuống cây danh mục, dựng đường dẫn, chống vòng lặp. Loại 'sql-pg'.
- * Bài 3 có dữ liệu VÒNG (category 2 ↔ 5): câu đệ quy không chặn vòng chạy mãi ⇒ máy chấm trình duyệt dừng worker
- * sau `timeoutMs` (4 s) và báo "Quá … giây". Không đưa câu vô hạn vào saiMau (bộ xuất Node không có giới hạn giờ).
- * CSDL: CT Shop thu gọn. Bài giảng: postgresql-7-4-recursive-cte.
+ * PostgreSQL · 7.4 — CTE đệ quy: đi xuống cây danh mục, dựng breadcrumb, chống vòng lặp (CYCLE), gộp theo cây.
+ * Viết lại 01/11/2026 trên CT Shop mini + một nhánh "Điện tử" 3 tầng (CT Shop mở thêm ngành hàng) — giữ tiêu đề 3 đề cũ.
+ * Đề vòng lặp: câu đệ quy ngây thơ chạy mãi ⇒ máy chấm trình duyệt dừng worker sau timeoutMs (4 s). Không đưa câu vô hạn
+ * vào saiMau (bộ xuất Node không có giới hạn giờ).
  */
-import { doiDau, KHOA, CT_SHOP, sqlPg, kq, kqAn, ma, TN } from './_chung.mjs';
+import { mod, pg, kq, kqAn, ma, CT_SHOP, LUOC_DO_CT_SHOP, pre, TN } from './_chung.mjs';
 
-const VONG = `${CT_SHOP}
+const CAY = `${CT_SHOP}
 
--- data bug: someone moved "Điện thoại" (2) under "iPhone" (5), which is itself under "Điện thoại" ⇒ a cycle 2 → 5 → 2
-UPDATE category SET parent_id = 5 WHERE id = 2;`;
+-- CT Shop opens an electronics department: a three-level branch under a new root
+INSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES
+  (13, 'Điện tử', NULL), (14, 'Tai nghe', 13), (15, 'Bàn phím & chuột', 13),
+  (16, 'Bàn phím cơ', 15), (17, 'Chuột không dây', 15);
+SELECT setval(pg_get_serial_sequence('category', 'id'), 17);`;
+const VONG = `${CAY}
 
-export default doiDau({
-  slug: 'postgresql-7-4-recursive-cte',
-  ten: '7.4 Recursive CTEs: walking a hierarchy',
-  khoa: KHOA,
-  baiHoc: 'postgresql-7-4-recursive-cte',
-  de: [
-    sqlPg({
-      tieuDe: 'Everything under "Điện tử", with its depth',
-      doKho: 'MEDIUM', phut: 10,
-      khaiNiem: ['WITH RECURSIVE', 'anchor + recursive member', 'UNION ALL', 'depth counter'], the: ['cte', 'recursive', 'hierarchy', 'ctshop'],
-      moTa: {
-        en: '<p>The menu "Điện tử" must show every category below it, at any depth. Return <code>id, name, depth</code> for category 1 (<b>Điện tử</b>, depth 0) and all its descendants (children depth 1, grandchildren depth 2, …). Row order does not matter.</p>',
-        vi: '<p>Menu "Điện tử" phải hiện mọi danh mục bên dưới nó, ở bất kỳ độ sâu nào. Trả về <code>id, name, depth</code> cho danh mục 1 (<b>Điện tử</b>, depth 0) và mọi hậu duệ (con depth 1, cháu depth 2, …). Thứ tự dòng không quan trọng.</p>',
-      },
-      yeuCau: {
-        en: ['One <code>WITH RECURSIVE</code> query.', 'Anchor: category 1 with depth 0. Recursive member: children of the rows found so far, depth + 1.', 'It must work for ANY depth — no fixed number of self-joins.'],
-        vi: ['Một truy vấn <code>WITH RECURSIVE</code>.', 'Neo: danh mục 1 với depth 0. Phần đệ quy: con của các dòng đã tìm được, depth + 1.', 'Phải đúng với MỌI độ sâu — không nối cứng một số lần.'],
-      },
-      giai: `WITH RECURSIVE sub AS (
+-- data bug: someone moved "Bàn phím & chuột" (15) under "Bàn phím cơ" (16), which is its own child ⇒ a cycle 15 → 16 → 15
+UPDATE category SET parent_id = 16 WHERE id = 15;`;
+const LD_CAY = {
+  en: LUOC_DO_CT_SHOP.en + `<p>This module adds an electronics branch to the category tree:</p>${pre('13 Điện tử (root)\n├── 14 Tai nghe\n└── 15 Bàn phím & chuột\n    ├── 16 Bàn phím cơ\n    └── 17 Chuột không dây')}`,
+  vi: LUOC_DO_CT_SHOP.vi + `<p>Module này thêm một nhánh điện tử vào cây danh mục:</p>${pre('13 Điện tử (gốc)\n├── 14 Tai nghe\n└── 15 Bàn phím & chuột\n    ├── 16 Bàn phím cơ\n    └── 17 Chuột không dây')}`,
+};
+const O = { csdl: CAY, tenCsdl: 'ctshop-tree', ld: LD_CAY };
+const T = { thuTu: true };
+
+export default mod('postgresql-7-4-recursive-cte', '7.4 Recursive CTEs: walking a hierarchy', [
+  pg({
+    ...O, t: 'Everything under "Điện tử", with its depth', k: 'MEDIUM', p: 10, kn: ['WITH RECURSIVE', 'anchor + recursive member', 'UNION ALL', 'depth counter'], tag: ['cte', 'recursive', 'hierarchy', 'ctshop'],
+    en: '<p>The menu "Điện tử" must show every category below it, at any depth. Return <code>id, name, depth</code> for category 13 (<b>Điện tử</b>, depth 0) and all its descendants (children depth 1, grandchildren depth 2, …). Row order does not matter.</p>',
+    vi: '<p>Menu "Điện tử" phải hiện mọi danh mục bên dưới nó, ở bất kỳ độ sâu nào. Trả về <code>id, name, depth</code> cho danh mục 13 (<b>Điện tử</b>, depth 0) và mọi hậu duệ (con depth 1, cháu depth 2, …). Thứ tự dòng không quan trọng.</p>',
+    yc: [['One <code>WITH RECURSIVE</code> query.', 'Một truy vấn <code>WITH RECURSIVE</code>.'], ['Anchor: category 13 with depth 0. Recursive member: children of the rows found so far, depth + 1.', 'Neo: danh mục 13 với depth 0. Phần đệ quy: con của các dòng đã tìm được, depth + 1.'], ['It must work for ANY depth — no fixed number of self-joins.', 'Phải đúng với MỌI độ sâu — không nối cứng một số lần.']],
+    giai: `WITH RECURSIVE sub AS (
     SELECT id, name, 0 AS depth          -- anchor: where the walk starts
     FROM category
-    WHERE id = 1
+    WHERE id = 13
   UNION ALL
     SELECT c.id, c.name, s.depth + 1     -- recursive member: one level further down
     FROM category c
     JOIN sub s ON c.parent_id = s.id
 )
 SELECT id, name, depth FROM sub;`,
-      kiem: [
-        kq('Điện tử and its 4 descendants with the right depth'),
-        kqAn('A new third level appears (Laptop → Laptop gaming → Phụ kiện gaming)', "INSERT INTO category (name, parent_id) VALUES ('Laptop gaming', 3); INSERT INTO category (name, parent_id) VALUES ('Phụ kiện gaming', 9)"),
-        ma('Uses WITH RECURSIVE', '\\bWITH\\s+RECURSIVE\\b'),
-      ],
-      saiMau: [
-        'SELECT c.id, c.name, 1 AS depth FROM category c WHERE c.parent_id = 1',
-        'WITH RECURSIVE sub AS (SELECT id, name, 1 AS depth FROM category WHERE id = 1 UNION ALL SELECT c.id, c.name, s.depth + 1 FROM category c JOIN sub s ON c.parent_id = s.id) SELECT id, name, depth FROM sub',
-      ],
-      goiY: ['WITH RECURSIVE sub AS ( anchor UNION ALL recursive ) SELECT … FROM sub.', 'The recursive member joins category to sub: c.parent_id = s.id ("children of what I already have").'],
-      loiHayGap: [
-        { en: 'Joining the wrong way round (c.id = s.parent_id) — the walk goes UP to the parents instead of down to the children.', vi: 'Nối ngược chiều (c.id = s.parent_id) — đi LÊN cha thay vì đi xuống con.' },
-        { en: 'Two or three fixed LEFT JOINs instead of recursion — correct today, silently wrong the day the tree gets one level deeper.', vi: 'Hai, ba LEFT JOIN cố định thay cho đệ quy — hôm nay đúng, ngày cây sâu thêm một tầng là sai âm thầm.' },
-      ],
-      giaiThich: { en: '<p>PostgreSQL runs the anchor once, then repeats the recursive member on the rows produced by the previous round until a round returns nothing. Each round is one level deeper, so <code>depth + 1</code> counts levels.</p>', vi: '<p>PostgreSQL chạy phần neo một lần, rồi lặp phần đệ quy trên các dòng vòng trước sinh ra cho tới khi một vòng không còn dòng nào. Mỗi vòng sâu thêm một tầng nên <code>depth + 1</code> đếm được tầng.</p>' },
-      thuatNgu: [TN.cte, TN.recursive],
-    }),
-    sqlPg({
-      tieuDe: 'Breadcrumbs for every category',
-      doKho: 'MEDIUM', phut: 10,
-      khaiNiem: ['WITH RECURSIVE from the roots', 'string concatenation ||'], the: ['cte', 'recursive', 'string', 'ctshop'],
-      moTa: {
-        en: '<p>Every product page shows a breadcrumb such as <code>Điện tử &gt; Điện thoại &gt; Android</code>. Return <code>id, path</code> for <b>every</b> category, where <code>path</code> is the chain of names from its root down to it, joined by <code>" &gt; "</code>. Order by <code>id</code>.</p>',
-        vi: '<p>Mỗi trang sản phẩm hiện đường dẫn kiểu <code>Điện tử &gt; Điện thoại &gt; Android</code>. Trả về <code>id, path</code> cho <b>mọi</b> danh mục, trong đó <code>path</code> là chuỗi tên từ gốc xuống tới nó, nối bằng <code>" &gt; "</code>. Sắp theo <code>id</code>.</p>',
-      },
-      yeuCau: {
-        en: ['Start from the roots (<code>parent_id IS NULL</code>) and walk down.', 'Separator: space, &gt;, space.', 'Order by id.'],
-        vi: ['Bắt đầu từ các gốc (<code>parent_id IS NULL</code>) rồi đi xuống.', 'Dấu nối: dấu cách, &gt;, dấu cách.', 'Sắp theo id.'],
-      },
-      giai: `WITH RECURSIVE tree AS (
+    kiem: [
+      kq(['Điện tử and its 4 descendants with the right depth', 'Điện tử và 4 hậu duệ với đúng độ sâu']),
+      kqAn(['A fourth level appears (Bàn phím cơ → Keycap)', 'Xuất hiện tầng thứ tư (Bàn phím cơ → Keycap)'], "INSERT INTO category (name, parent_id) VALUES ('Keycap', 16)"),
+      ma(['Uses WITH RECURSIVE', 'Dùng WITH RECURSIVE'], '\\bWITH\\s+RECURSIVE\\b'),
+    ],
+    sai: ['SELECT c.id, c.name, 1 AS depth FROM category c WHERE c.parent_id = 13', 'WITH RECURSIVE sub AS (SELECT id, name, 1 AS depth FROM category WHERE id = 13 UNION ALL SELECT c.id, c.name, s.depth + 1 FROM category c JOIN sub s ON c.parent_id = s.id) SELECT id, name, depth FROM sub'],
+    gy: [['WITH RECURSIVE sub AS ( anchor UNION ALL recursive ) SELECT … FROM sub.', 'WITH RECURSIVE sub AS ( neo UNION ALL đệ quy ) SELECT … FROM sub.'], ['The recursive member joins category to sub: c.parent_id = s.id ("children of what I already have").', 'Phần đệ quy nối category với sub: c.parent_id = s.id ("con của những gì đã có").']],
+    lhg: [['Joining the wrong way round (c.id = s.parent_id) — the walk goes UP to the parents instead of down to the children.', 'Nối ngược chiều (c.id = s.parent_id) — đi LÊN cha thay vì đi xuống con.'], ['Two or three fixed LEFT JOINs instead of recursion — correct today, silently wrong the day the tree gets one level deeper.', 'Hai, ba LEFT JOIN cố định thay cho đệ quy — hôm nay đúng, ngày cây sâu thêm một tầng là sai âm thầm.']],
+    gt: ['<p>PostgreSQL runs the anchor once, then repeats the recursive member on the rows produced by the previous round until a round returns nothing. Each round is one level deeper, so <code>depth + 1</code> counts levels.</p>', '<p>PostgreSQL chạy phần neo một lần, rồi lặp phần đệ quy trên các dòng vòng trước sinh ra cho tới khi một vòng không trả gì. Mỗi vòng sâu thêm một tầng, nên <code>depth + 1</code> đếm tầng.</p>'],
+    tn: [TN.cte, TN.recursive],
+  }),
+
+  pg({
+    ...O, t: 'Breadcrumbs for every category', k: 'MEDIUM', p: 10, kn: ['WITH RECURSIVE from the roots', 'string concatenation ||'], tag: ['cte', 'recursive', 'string', 'ctshop'],
+    en: '<p>Every product page shows a breadcrumb such as <code>Điện tử &gt; Bàn phím &amp; chuột &gt; Bàn phím cơ</code>. Return <code>id, path</code> for <b>every</b> category, where <code>path</code> is the chain of names from its root down to it, joined by <code>" &gt; "</code>. Order by <code>id</code>.</p>',
+    vi: '<p>Mỗi trang sản phẩm hiện đường dẫn kiểu <code>Điện tử &gt; Bàn phím &amp; chuột &gt; Bàn phím cơ</code>. Trả về <code>id, path</code> cho <b>mọi</b> danh mục, trong đó <code>path</code> là chuỗi tên từ gốc xuống tới nó, nối bằng <code>" &gt; "</code>. Sắp theo <code>id</code>.</p>',
+    yc: [['Start from the roots (<code>parent_id IS NULL</code>) and walk down.', 'Bắt đầu từ các gốc (<code>parent_id IS NULL</code>) rồi đi xuống.'], ['Separator: space, &gt;, space.', 'Dấu nối: dấu cách, &gt;, dấu cách.'], ['Order by id.', 'Sắp theo id.']],
+    giai: `WITH RECURSIVE tree AS (
     SELECT id, name::text AS path
     FROM category
     WHERE parent_id IS NULL
@@ -80,66 +69,78 @@ SELECT id, name, depth FROM sub;`,
 SELECT id, path
 FROM tree
 ORDER BY id;`,
-      kiem: [
-        kq('Every category with its full path, by id', { thuTu: true }),
-        kqAn('A renamed root and a new deep leaf', "UPDATE category SET name = 'Đồ điện tử' WHERE id = 1; INSERT INTO category (name, parent_id) VALUES ('Android Go', 4)", { thuTu: true }),
-        ma('Uses WITH RECURSIVE', '\\bWITH\\s+RECURSIVE\\b'),
-      ],
-      saiMau: [
-        "WITH RECURSIVE tree AS (SELECT id, name::text AS path FROM category WHERE parent_id IS NULL UNION ALL SELECT c.id, c.name || ' > ' || t.path FROM category c JOIN tree t ON c.parent_id = t.id) SELECT id, path FROM tree ORDER BY id",
-        "WITH RECURSIVE tree AS (SELECT id, name::text AS path FROM category WHERE id = 1 UNION ALL SELECT c.id, t.path || ' > ' || c.name FROM category c JOIN tree t ON c.parent_id = t.id) SELECT id, path FROM tree ORDER BY id",
-      ],
-      goiY: ['Anchor: the roots, with path = their own name.', 'Recursive member: path = parent\'s path || \' > \' || child name.'],
-      loiHayGap: [
-        { en: 'Starting only from "Điện tử" — the other roots (Gia dụng, Sách) and their children disappear.', vi: 'Chỉ bắt đầu từ "Điện tử" — các gốc khác (Gia dụng, Sách) và con của chúng biến mất.' },
-        { en: 'Concatenating child || parent — the breadcrumb comes out backwards.', vi: 'Nối con || cha — đường dẫn bị ngược.' },
-      ],
-      giaiThich: { en: '<p>Walking from the roots carries the path down: each level appends its own name to the parent\'s path. <code>name::text</code> in the anchor fixes the column type so the longer strings of later rounds fit (in a recursive CTE the anchor decides the column types).</p>', vi: '<p>Đi từ gốc xuống mang theo đường dẫn: mỗi tầng nối tên mình vào đường dẫn của cha. <code>name::text</code> ở phần neo cố định kiểu cột để chuỗi dài hơn ở các vòng sau vẫn vừa (trong CTE đệ quy, phần neo quyết định kiểu cột).</p>' },
-      thuatNgu: [TN.recursive, { en: 'breadcrumb', vi: 'đường dẫn phân cấp' }],
-    }),
-    sqlPg({
-      tieuDe: 'Walk a tree that contains a cycle',
-      doKho: 'HARD', phut: 15,
-      khaiNiem: ['cycle detection', 'CYCLE clause', 'path array', 'statement timeout'], the: ['cte', 'recursive', 'cycle', 'ctshop'],
-      csdl: VONG,
-      moTa: {
-        en: '<p>A bad admin edit set the parent of <b>Điện thoại</b> (2) to <b>iPhone</b> (5) — which is itself a child of Điện thoại. The category tree now contains a <b>cycle</b> 2 → 5 → 2, and the naive recursive query from the previous exercise never ends (the grader stops it after 4 seconds).</p><p>Return <code>id, depth</code> of category <b>2</b> (depth 0) and every category reachable by following child links, <b>visiting each category once</b>. Row order does not matter.</p>',
-        vi: '<p>Một lần sửa sai của admin đặt cha của <b>Điện thoại</b> (2) thành <b>iPhone</b> (5) — mà iPhone lại là con của Điện thoại. Cây danh mục giờ có <b>vòng</b> 2 → 5 → 2, và câu đệ quy ngây thơ của bài trước chạy mãi không dừng (máy chấm dừng nó sau 4 giây).</p><p>Trả về <code>id, depth</code> của danh mục <b>2</b> (depth 0) và mọi danh mục đi tới được theo liên kết con, <b>mỗi danh mục một lần</b>. Thứ tự dòng không quan trọng.</p>',
-      },
-      yeuCau: {
-        en: ['A <code>WITH RECURSIVE</code> query that terminates on this data.', 'Stop when the walk comes back to a category already on the path — PostgreSQL 14+ <code>CYCLE id SET is_cycle USING path</code>, or carry an <code>int[]</code> path yourself.', 'Do not return the repeated row.'],
-        vi: ['Một truy vấn <code>WITH RECURSIVE</code> kết thúc được trên dữ liệu này.', 'Dừng khi đường đi quay lại danh mục đã có trên đường — PostgreSQL 14+ <code>CYCLE id SET is_cycle USING path</code>, hoặc tự mang một mảng <code>int[]</code> đường đi.', 'Không trả dòng bị lặp.'],
-      },
-      giai: `WITH RECURSIVE sub AS (
-    SELECT id, 0 AS depth
+    kiem: [
+      kq(['17 categories with their full path', '17 danh mục với đường dẫn đầy đủ'], T),
+      kqAn(['A new fourth-level category gets a 4-part path', 'Danh mục tầng bốn mới có đường dẫn 4 phần'], "INSERT INTO category (name, parent_id) VALUES ('Keycap', 16)", T),
+      ma(['Uses WITH RECURSIVE', 'Dùng WITH RECURSIVE'], '\\bWITH\\s+RECURSIVE\\b'),
+    ],
+    sai: ["SELECT c.id, COALESCE(p.name || ' > ', '') || c.name AS path FROM category c LEFT JOIN category p ON p.id = c.parent_id ORDER BY c.id", "WITH RECURSIVE tree AS (SELECT id, name::text AS path FROM category WHERE parent_id IS NULL UNION ALL SELECT c.id, c.name || ' > ' || t.path FROM category c JOIN tree t ON c.parent_id = t.id) SELECT id, path FROM tree ORDER BY id"],
+    gy: [['The anchor rows are the roots, their path is just their name.', 'Dòng neo là các gốc, đường dẫn của chúng chỉ là tên.'], ['Each recursive step appends: <code>t.path || \' &gt; \' || c.name</code>.', 'Mỗi bước đệ quy nối thêm: <code>t.path || \' &gt; \' || c.name</code>.']],
+    lhg: [['One self-join (parent + name) — the third level loses its grandparent.', 'Một lần tự nối (cha + tên) — tầng ba mất ông.'], ['Prepending instead of appending — the breadcrumb reads backwards.', 'Nối vào đầu thay vì vào cuối — đường dẫn đọc ngược.']],
+    gt: ['<p>Walking top-down lets every row inherit its parent\'s path. The cast <code>name::text</code> in the anchor fixes the column type for the whole recursion.</p>', '<p>Đi từ trên xuống cho mỗi dòng thừa hưởng đường dẫn của cha. Phép ép <code>name::text</code> ở phần neo cố định kiểu cột cho cả vòng đệ quy.</p>'],
+    tn: [TN.recursive],
+  }),
+
+  pg({
+    csdl: VONG, tenCsdl: 'ctshop-tree-bug', ld: { en: LD_CAY.en + '<p><b>Data bug in this task:</b> category 15 now points to 16 as its parent, and 16 points to 15 — a cycle.</p>', vi: LD_CAY.vi + '<p><b>Lỗi dữ liệu trong bài này:</b> danh mục 15 giờ trỏ cha là 16, mà 16 trỏ cha là 15 — một vòng lặp.</p>' },
+    t: 'Walk a tree that contains a cycle', k: 'HARD', p: 14, kn: ['CYCLE … SET … USING', 'runaway recursion'], tag: ['cte', 'recursive', 'cycle', 'ctshop'],
+    tuy: { timeoutMs: 4000 },
+    en: '<p>A data bug created a cycle 15 → 16 → 15. A naive walk down from <b>Bàn phím &amp; chuột</b> (15) never stops (the grader kills it after 4 s). Return <code>id, name, depth</code> of category 15 (depth 0) and everything reachable below it, each category <b>once</b>, stopping when the walk comes back to a category it already visited. Use PostgreSQL\'s <code>CYCLE</code> clause.</p>',
+    vi: '<p>Một lỗi dữ liệu tạo vòng 15 → 16 → 15. Đi xuống ngây thơ từ <b>Bàn phím &amp; chuột</b> (15) không bao giờ dừng (máy chấm diệt nó sau 4 giây). Trả về <code>id, name, depth</code> của danh mục 15 (depth 0) và mọi thứ đi tới được bên dưới, mỗi danh mục <b>một lần</b>, dừng khi đường đi quay lại danh mục đã qua. Dùng mệnh đề <code>CYCLE</code> của PostgreSQL.</p>',
+    yc: [['<code>WITH RECURSIVE … ( … ) CYCLE id SET is_cycle USING path</code>.', '<code>WITH RECURSIVE … ( … ) CYCLE id SET is_cycle USING path</code>.'], ['Keep only the rows where <code>NOT is_cycle</code>.', 'Chỉ giữ các dòng có <code>NOT is_cycle</code>.']],
+    giai: `WITH RECURSIVE sub AS (
+    SELECT id, name, 0 AS depth
     FROM category
-    WHERE id = 2
+    WHERE id = 15
   UNION ALL
-    SELECT c.id, s.depth + 1
+    SELECT c.id, c.name, s.depth + 1
     FROM category c
     JOIN sub s ON c.parent_id = s.id
-) CYCLE id SET is_cycle USING path      -- PostgreSQL 14+: marks the row that closes a loop
-SELECT id, depth
+) CYCLE id SET is_cycle USING path      -- marks a row whose id is already on its path, and stops there
+SELECT id, name, depth
 FROM sub
 WHERE NOT is_cycle;`,
-      tuy: { timeoutMs: 4000 },
-      kiem: [
-        kq('Điện thoại, Android and iPhone — each once, the loop cut'),
-        kqAn('A new child under Android is still found (depth 2)', "INSERT INTO category (name, parent_id) VALUES ('Android Go', 4)"),
-        kqAn('Also correct when the loop is longer (2 → 4 → 9 → 2)', "INSERT INTO category (name, parent_id) VALUES ('Android Go', 4); UPDATE category SET parent_id = 9 WHERE id = 2"),
-      ],
-      saiMau: [
-        'WITH RECURSIVE sub AS (SELECT id, 0 AS depth FROM category WHERE id = 2 UNION ALL SELECT c.id, s.depth + 1 FROM category c JOIN sub s ON c.parent_id = s.id) CYCLE id SET is_cycle USING path SELECT id, depth FROM sub',
-        'WITH RECURSIVE sub AS (SELECT id, 1 AS depth FROM category WHERE id = 2 UNION ALL SELECT c.id, s.depth + 1 FROM category c JOIN sub s ON c.parent_id = s.id AND s.depth < 3) SELECT id, depth FROM sub',
-      ],
-      goiY: ['Without protection the recursion revisits 2, then 5, then 2… forever. UNION (instead of UNION ALL) does not help here: depth makes every row different.', 'Add after the CTE body: CYCLE id SET is_cycle USING path — then filter WHERE NOT is_cycle. Or carry ARRAY[id] AS path and only follow c.id <> ALL(s.path).'],
-      loiHayGap: [
-        { en: 'Capping the depth (s.depth < 10) — stops the loop but returns the cycle rows several times, and silently cuts real trees deeper than the cap.', vi: 'Chặn độ sâu (s.depth < 10) — dừng được vòng nhưng trả các dòng vòng nhiều lần, và cắt âm thầm cây thật sâu hơn mức chặn.' },
-        { en: 'Using CYCLE but forgetting WHERE NOT is_cycle — the row that closes the loop (id 2 again, depth 2) stays in the result.', vi: 'Dùng CYCLE mà quên WHERE NOT is_cycle — dòng khép vòng (id 2 lần nữa, depth 2) vẫn nằm trong kết quả.' },
-        { en: 'Running an unprotected recursive query on production data — it holds a backend at 100% CPU until statement_timeout (if any) kills it. Set statement_timeout for ad-hoc sessions.', vi: 'Chạy câu đệ quy không phòng vòng trên dữ liệu production — nó giữ một tiến trình ở 100% CPU tới khi statement_timeout (nếu có) giết nó. Hãy đặt statement_timeout cho phiên chạy tay.' },
-      ],
-      giaiThich: { en: '<p><code>CYCLE id SET is_cycle USING path</code> makes PostgreSQL keep, for every row, the array of ids visited so far; when a new row\'s id is already in that array the row is flagged <code>is_cycle = true</code> and not expanded further. Filtering it out leaves each reachable category exactly once. Before PostgreSQL 14 you write the same thing by hand: <code>ARRAY[id] AS path</code> in the anchor, <code>s.path || c.id</code> and <code>WHERE c.id &lt;&gt; ALL(s.path)</code> in the recursive member.</p>', vi: '<p><code>CYCLE id SET is_cycle USING path</code> bảo PostgreSQL giữ, cho mỗi dòng, mảng các id đã đi qua; khi id của dòng mới đã có trong mảng thì dòng đó bị đánh dấu <code>is_cycle = true</code> và không đi tiếp. Lọc bỏ nó thì mỗi danh mục đi tới được xuất hiện đúng một lần. Trước PostgreSQL 14 bạn tự viết điều đó: <code>ARRAY[id] AS path</code> ở phần neo, <code>s.path || c.id</code> và <code>WHERE c.id &lt;&gt; ALL(s.path)</code> ở phần đệ quy.</p>' },
-      thuatNgu: [TN.recursive, TN.cycle],
-    }),
-  ],
-});
+    kiem: [
+      kq(['15, 16, 17 once each', '15, 16, 17 mỗi cái một lần']),
+      kqAn(['A longer cycle (17 → 15) is also stopped', 'Vòng dài hơn (17 → 15) cũng bị chặn'], 'UPDATE category SET parent_id = 17 WHERE id = 15'),
+      ma(['Uses CYCLE (or a visited-path array)', 'Dùng CYCLE (hoặc mảng đường đã đi)'], '\\bCYCLE\\s+\\w+\\s+SET\\b|<>\\s*ALL\\s*\\(|NOT\\s+\\w+\\s*=\\s*ANY\\s*\\('),
+    ],
+    sai: ['WITH RECURSIVE sub AS (SELECT id, name, 0 AS depth FROM category WHERE id = 15 UNION ALL SELECT c.id, c.name, s.depth + 1 FROM category c JOIN sub s ON c.parent_id = s.id) CYCLE id SET is_cycle USING path SELECT id, name, depth FROM sub', 'SELECT id, name, 0 AS depth FROM category WHERE id = 15'],
+    gy: [['Without protection the recursive member keeps finding 15 again under 16.', 'Không có bảo vệ, phần đệ quy cứ tìm lại 15 dưới 16.'], ['CYCLE id SET is_cycle USING path adds two columns: is_cycle (true on the repeating row) and path (the ids so far).', 'CYCLE id SET is_cycle USING path thêm hai cột: is_cycle (true ở dòng lặp lại) và path (các id đã đi).']],
+    lhg: [['UNION instead of UNION ALL "to remove duplicates" — rows differ by depth, so the loop goes on forever.', 'UNION thay UNION ALL "để bỏ trùng" — các dòng khác nhau ở depth nên vòng lặp vẫn chạy mãi.'], ['Using CYCLE but not filtering <code>NOT is_cycle</code> — the repeated category appears twice.', 'Dùng CYCLE mà không lọc <code>NOT is_cycle</code> — danh mục lặp lại xuất hiện hai lần.']],
+    gt: ['<p>CYCLE (PostgreSQL 14+) tracks the path of each row; when a row\'s id is already on its path it is flagged and not expanded further. Real trees get corrupted by imports and admin tools — production recursive queries should always be cycle-safe.</p>', '<p>CYCLE (PostgreSQL 14+) theo dõi đường đi của từng dòng; khi id của dòng đã nằm trên đường đi, nó bị đánh dấu và không mở rộng tiếp. Cây thật bị hỏng vì nhập liệu và công cụ quản trị — truy vấn đệ quy trên production luôn phải chống vòng.</p>'],
+    tn: [TN.recursive, TN.cycle],
+  }),
+
+  pg({
+    ...O, t: 'Products under each root, at any depth', k: 'HARD', p: 15, kn: ['recursive CTE carrying the root', 'join + aggregate on a hierarchy'], tag: ['cte', 'recursive', 'aggregate', 'ctshop'],
+    en: '<p>The category page of each <b>root</b> shows how many active products live anywhere below it. Return <code>root_id, root, products</code> for every root (0 when none), ordered by root_id.</p>',
+    vi: '<p>Trang danh mục của mỗi <b>gốc</b> hiện có bao nhiêu sản phẩm đang bán nằm ở bất kỳ đâu bên dưới nó. Trả về <code>root_id, root, products</code> cho mọi gốc (0 nếu không có), sắp theo root_id.</p>',
+    yc: [['The recursion carries the root id down: anchor <code>SELECT id, id AS root_id …</code>, recursive member keeps <code>t.root_id</code>.', 'Đệ quy mang id gốc xuống dưới: neo <code>SELECT id, id AS root_id …</code>, phần đệ quy giữ <code>t.root_id</code>.'], ['LEFT JOIN products so an empty root shows 0.', 'LEFT JOIN sản phẩm để gốc rỗng hiện 0.']],
+    giai: `WITH RECURSIVE tree AS (
+    SELECT id, id AS root_id                 -- every root is its own root
+    FROM category WHERE parent_id IS NULL
+  UNION ALL
+    SELECT c.id, t.root_id                   -- children inherit the root of their parent
+    FROM category c JOIN tree t ON c.parent_id = t.id
+)
+SELECT r.id AS root_id, r.name AS root,
+       count(p.id) AS products
+FROM category r
+JOIN tree t           ON t.root_id = r.id
+LEFT JOIN product p   ON p.category_id = t.id AND p.is_active
+WHERE r.parent_id IS NULL
+GROUP BY r.id, r.name
+ORDER BY r.id;`,
+    kiem: [
+      kq(['Five roots, Điện tử with 0', 'Năm gốc, Điện tử có 0'], T),
+      kqAn(['Products arrive on level 3 of Điện tử', 'Sản phẩm về ở tầng 3 của Điện tử'], "INSERT INTO product (sku, name, category_id, price) VALUES ('CT1601', 'Bàn phím cơ AKKO', 16, 890000), ('CT1701', 'Chuột Logitech M331', 17, 350000), ('CT1401', 'Tai nghe Sony', 14, 490000)", T),
+      ma(['Uses WITH RECURSIVE', 'Dùng WITH RECURSIVE'], '\\bWITH\\s+RECURSIVE\\b'),
+    ],
+    sai: ['SELECT r.id AS root_id, r.name AS root, count(p.id) AS products FROM category r LEFT JOIN category c ON c.parent_id = r.id LEFT JOIN product p ON p.category_id = c.id AND p.is_active WHERE r.parent_id IS NULL GROUP BY r.id, r.name ORDER BY r.id', 'WITH RECURSIVE tree AS (SELECT id, id AS root_id FROM category WHERE parent_id IS NULL UNION ALL SELECT c.id, t.root_id FROM category c JOIN tree t ON c.parent_id = t.id) SELECT r.id AS root_id, r.name AS root, count(*) AS products FROM category r JOIN tree t ON t.root_id = r.id LEFT JOIN product p ON p.category_id = t.id AND p.is_active WHERE r.parent_id IS NULL GROUP BY r.id, r.name ORDER BY r.id'],
+    gy: [['Carry the information you need (the root) along the recursion.', 'Mang theo thông tin cần (gốc) dọc đường đệ quy.'], ['count(p.id), not count(*), after the LEFT JOIN.', 'count(p.id), không phải count(*), sau LEFT JOIN.']],
+    lhg: [['One self-join (root → child): products two levels down are missed.', 'Một lần tự nối (gốc → con): sản phẩm sâu hai tầng bị bỏ sót.'], ['count(*) counts every category of the subtree, product or not.', 'count(*) đếm mọi danh mục trong cây con, có sản phẩm hay không.']],
+    gt: ['<p>Recursive CTEs can carry columns along the walk (here the root id), turning a hierarchy into a flat (category, root) map you can join and aggregate normally.</p>', '<p>CTE đệ quy mang được cột dọc đường đi (ở đây là id gốc), biến cây thành bảng phẳng (danh mục, gốc) để nối và tổng hợp như bình thường.</p>'],
+    tn: [TN.recursive],
+  }),
+]);

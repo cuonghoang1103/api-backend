@@ -13,7 +13,8 @@ Dựng: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` → `node
 | Ch4 (4.1–4.4) + Lab 2 | ✅ 19 đề (4.1/4.3 viết lại theo CT Shop mini, giữ tiêu đề cũ) + Lab 2 |
 | Ch5 (5.1–5.4) | ✅ 16 đề (bảng app ghi chú của bài + CT Shop mini) |
 | Ch6 (6.1–6.4) + Lab 3 | ✅ 16 đề + Lab 3 (R1/R2/R3b/R4/R6) |
-| Ch7–Ch17, Lab 4–9 | ⏳ đang làm |
-| 7.4 (cũ, dữ liệu điện tử) | ⏳ viết lại theo CT Shop mini cùng đợt Ch7 |
+| Ch7 (7.1–7.4) | ✅ 16 đề (7.4 viết lại: CT Shop mini + nhánh Điện tử 3 tầng, giữ tiêu đề cũ) |
+| Ch8 (8.1–8.4) + Lab 4 | ✅ 16 đề (bảng sale của bài + CT Shop mini) + Lab 4 (W1/W1b/W3/W4/W5) |
+| Ch9–Ch17, Lab 5–9 | ⏳ đang làm |
 
 Ghi chú: xem đầu `nguon/_chung.mjs` (giới hạn PGlite đo thật, cách soạn pg()/cs()/tay()/deLonPg()).

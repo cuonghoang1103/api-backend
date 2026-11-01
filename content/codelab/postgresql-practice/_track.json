@@ -190,10 +190,58 @@
       "description": "Luyện: Lab 3 — CT Shop: the two-month revenue report"
     },
     {
+      "slug": "postgresql-7-1-subquery",
+      "name": "7.1 Subqueries: a query inside a query",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Notes above the average · Notes written in Hanoi (IN subquery) · Each note against the overall average · Orders bigger than the average order (derived table)"
+    },
+    {
+      "slug": "postgresql-7-2-correlated-exists",
+      "name": "7.2 Correlated subqueries, EXISTS & the NOT IN trap",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Comment count per note (correlated) · Users who have a pinned note (EXISTS) · The NOT IN trap: who wrote nothing? · Products priced above their category average"
+    },
+    {
+      "slug": "postgresql-7-3-cte",
+      "name": "7.3 CTEs (WITH): queries in readable steps",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Author statistics as a named step · Fix the fan-out sum with a CTE · Top spenders in three readable steps · Archive old cancelled orders in one statement"
+    },
+    {
       "slug": "postgresql-7-4-recursive-cte",
       "name": "7.4 Recursive CTEs: walking a hierarchy",
       "level": "INTERMEDIATE",
-      "description": "Luyện: Everything under \"Điện tử\", with its depth · Breadcrumbs for every category · Walk a tree that contains a cycle"
+      "description": "Luyện: Everything under \"Điện tử\", with its depth · Breadcrumbs for every category · Walk a tree that contains a cycle · Products under each root, at any depth"
+    },
+    {
+      "slug": "postgresql-8-1-window-la-gi",
+      "name": "8.1 What a window function is: aggregate without collapsing",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A grand total on every row: OVER () · One window per region: PARTITION BY · Sales above their region average (window, then filter) · Each product next to its category: price gap and stock share"
+    },
+    {
+      "slug": "postgresql-8-2-ranking",
+      "name": "8.2 Ranking: ROW_NUMBER, RANK & DENSE_RANK",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Three ranking functions side by side · Top 2 sales per region · Latest sale per seller with ROW_NUMBER · Best seller of every root category — ties included"
+    },
+    {
+      "slug": "postgresql-8-3-lag-running-total",
+      "name": "8.3 LAG, LEAD & running totals",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Running total per seller · Change since the previous sale: LAG · Days until the next sale: LEAD · September, day by day: revenue, month-to-date and change"
+    },
+    {
+      "slug": "postgresql-8-4-frame-ntile",
+      "name": "8.4 Window frames, FIRST_VALUE & NTILE",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Two-sale moving average · Top and bottom of the region: the LAST_VALUE trap · Split sales into halves with NTILE · Each order inside its customer's history"
+    },
+    {
+      "slug": "postgresql-lab-4-cte-ham-cua-so-ct-shop",
+      "name": "8.5 Lab 4 — CT Shop: the growth dashboard (CTE + window functions)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 4 — CT Shop: the growth dashboard"
     }
   ]
 }

@@ -1,0 +1,910 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-8-3-lag-running-total",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-8-3-lag-running-total"
+  },
+  "exercises": [
+    {
+      "title": "Running total per seller",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "sum() OVER (PARTITION BY … ORDER BY …)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "window",
+        "running-total"
+      ],
+      "problemHtml": "<p>For every sale return <code>seller, sold_on, amount, running_total</code> — the seller's cumulative sales up to and including that day. Order by seller, sold_on.</p>\n<h4>Sample table (chapter 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>An ORDER BY inside OVER turns sum() into a running sum.</li>\n  <li>Restart for each seller: PARTITION BY seller.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi giao dịch trả về <code>seller, sold_on, amount, running_total</code> — doanh số cộng dồn của người bán tới hết ngày đó. Sắp theo seller, sold_on.</p>\n<h4>Bảng mẫu (chương 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>ORDER BY bên trong OVER biến sum() thành tổng cộng dồn.</li>\n  <li>Bắt đầu lại cho mỗi người bán: PARTITION BY seller.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "seller | sold_on    | amount | running_total\n-------+------------+--------+--------------\nAlice  | 2026-01-05 | 100    | 100          \nAlice  | 2026-02-10 | 150    | 250          \nBob    | 2026-01-20 | 200    | 200          \nBob    | 2026-03-01 | 150    | 350          \nCarol  | 2026-01-15 | 300    | 300          \nCarol  | 2026-02-20 | 250    | 550          \nDave   | 2026-02-05 | 180    | 180          \nDave   | 2026-03-10 | 220    | 400          ",
+          "explanation": "Expected result of check \"Alice 100 → 250, Bob 200 → 350, …\" (row order matters).|||Kết quả mong đợi của kiểm \"Alice 100 → 250, Bob 200 → 350, …\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Without ORDER BY the window is the whole partition (a total, not a running total).|||Không có ORDER BY thì cửa sổ là cả phần (một tổng, không phải tổng dồn).",
+        "With ORDER BY the default frame is \"from the start up to the current row\".|||Có ORDER BY thì khung mặc định là \"từ đầu tới dòng hiện tại\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT seller, sold_on, amount,\n       sum(amount) OVER (PARTITION BY seller ORDER BY sold_on) AS running_total\nFROM sale\nORDER BY seller, sold_on;\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ORDER BY inside a window changes the frame from \"all rows of the partition\" to \"rows up to the current one\" — that is a running total.</p>",
+      "solutionExplanationHtmlVi": "<p>ORDER BY bên trong cửa sổ đổi khung từ \"mọi dòng của phần\" thành \"các dòng tới dòng hiện tại\" — đó là tổng dồn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Alice 100 → 250, Bob 200 → 350, …|||Alice 100 → 250, Bob 200 → 350, …",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "amount",
+                "running_total"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  100,
+                  100
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  150,
+                  250
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  200,
+                  200
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  150,
+                  350
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  300,
+                  300
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  250,
+                  550
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  180,
+                  180
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  220,
+                  400
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A third sale of Carol|||Giao dịch thứ ba của Carol",
+            "an": true,
+            "themCsdl": "INSERT INTO sale VALUES (9, 'South', 'Carol', 75, '2026-03-28')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "amount",
+                "running_total"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  100,
+                  100
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  150,
+                  250
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  200,
+                  200
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  150,
+                  350
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  300,
+                  300
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  250,
+                  550
+                ],
+                [
+                  "Carol",
+                  "2026-03-28",
+                  75,
+                  625
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  180,
+                  180
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  220,
+                  400
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "ORDER BY inside OVER|||ORDER BY bên trong OVER",
+            "khop": "OVER\\s*\\([^)]*ORDER\\s+BY",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No ORDER BY in OVER: every row shows the seller's grand total.|||Không có ORDER BY trong OVER: mọi dòng hiện tổng của người bán."
+        },
+        {
+          "loi": "No PARTITION BY: one running total across all sellers.|||Không có PARTITION BY: một tổng dồn chung cho mọi người bán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "running total",
+          "vi": "tổng luỹ tiến"
+        }
+      ]
+    },
+    {
+      "title": "Change since the previous sale: LAG",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "lag()",
+        "NULL on the first row"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "window",
+        "lag"
+      ],
+      "problemHtml": "<p>For every sale return <code>seller, sold_on, amount, prev_amount, change</code> — the seller's previous sale amount and the difference (NULL for the first sale of each seller). Order by seller, sold_on.</p>\n<h4>Sample table (chapter 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>lag(amount) OVER (PARTITION BY seller ORDER BY sold_on)</code>.</li>\n  <li>change = amount − prev_amount.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi giao dịch trả về <code>seller, sold_on, amount, prev_amount, change</code> — số tiền giao dịch trước đó của người bán và chênh lệch (NULL ở giao dịch đầu của mỗi người). Sắp theo seller, sold_on.</p>\n<h4>Bảng mẫu (chương 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>lag(amount) OVER (PARTITION BY seller ORDER BY sold_on)</code>.</li>\n  <li>change = amount − prev_amount.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "seller | sold_on    | amount | prev_amount | change\n-------+------------+--------+-------------+-------\nAlice  | 2026-01-05 | 100    | NULL        | NULL  \nAlice  | 2026-02-10 | 150    | 100         | 50    \nBob    | 2026-01-20 | 200    | NULL        | NULL  \nBob    | 2026-03-01 | 150    | 200         | -50   \nCarol  | 2026-01-15 | 300    | NULL        | NULL  \nCarol  | 2026-02-20 | 250    | 300         | -50   \nDave   | 2026-02-05 | 180    | NULL        | NULL  \nDave   | 2026-03-10 | 220    | 180         | 40    ",
+          "explanation": "Expected result of check \"Alice +50, Bob −50, Carol −50, Dave +40\" (row order matters).|||Kết quả mong đợi của kiểm \"Alice +50, Bob −50, Carol −50, Dave +40\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "lag(x) = x of the previous row in the window order; lead(x) = the next row.|||lag(x) = x của dòng trước theo thứ tự cửa sổ; lead(x) = dòng sau.",
+        "The first row has no previous one ⇒ NULL.|||Dòng đầu không có dòng trước ⇒ NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT seller, sold_on, amount,\n       lag(amount) OVER w          AS prev_amount,\n       amount - lag(amount) OVER w AS change\nFROM sale\nWINDOW w AS (PARTITION BY seller ORDER BY sold_on)\nORDER BY seller, sold_on;\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>lag/lead look sideways at neighbouring rows of the same window — no self-join needed. The partition keeps each seller's timeline separate.</p>",
+      "solutionExplanationHtmlVi": "<p>lag/lead nhìn ngang sang dòng kề trong cùng cửa sổ — không cần tự nối. Việc chia phần giữ dòng thời gian của từng người bán tách riêng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Alice +50, Bob −50, Carol −50, Dave +40|||Alice +50, Bob −50, Carol −50, Dave +40",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "amount",
+                "prev_amount",
+                "change"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  100,
+                  null,
+                  null
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  150,
+                  100,
+                  50
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  200,
+                  null,
+                  null
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  150,
+                  200,
+                  -50
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  300,
+                  null,
+                  null
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  250,
+                  300,
+                  -50
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  180,
+                  null,
+                  null
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  220,
+                  180,
+                  40
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More sales|||Thêm giao dịch",
+            "an": true,
+            "themCsdl": "INSERT INTO sale VALUES (9, 'North', 'Alice', 60, '2026-03-30'), (10, 'South', 'Dave', 220, '2026-03-31')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "amount",
+                "prev_amount",
+                "change"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  100,
+                  null,
+                  null
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  150,
+                  100,
+                  50
+                ],
+                [
+                  "Alice",
+                  "2026-03-30",
+                  60,
+                  150,
+                  -90
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  200,
+                  null,
+                  null
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  150,
+                  200,
+                  -50
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  300,
+                  null,
+                  null
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  250,
+                  300,
+                  -50
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  180,
+                  null,
+                  null
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  220,
+                  180,
+                  40
+                ],
+                [
+                  "Dave",
+                  "2026-03-31",
+                  220,
+                  220,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses lag()|||Dùng lag()",
+            "khop": "\\blag\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No PARTITION BY: Alice's first sale is compared with somebody else's sale.|||Không PARTITION BY: giao dịch đầu của Alice bị so với giao dịch của người khác."
+        },
+        {
+          "loi": "lead instead of lag — compares with the NEXT sale.|||lead thay vì lag — so với giao dịch SAU."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lag / lead",
+          "vi": "dòng trước / dòng sau"
+        }
+      ]
+    },
+    {
+      "title": "Days until the next sale: LEAD",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "lead()",
+        "date − date"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "window",
+        "lead"
+      ],
+      "problemHtml": "<p>For every sale return <code>seller, sold_on, next_sold_on, gap_days</code>: the date of the seller's next sale and the number of days between (NULL for the last one). Order by seller, sold_on.</p>\n<h4>Sample table (chapter 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>lead(sold_on) OVER (PARTITION BY seller ORDER BY sold_on)</code>.</li>\n  <li>date − date gives an integer number of days.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi giao dịch trả về <code>seller, sold_on, next_sold_on, gap_days</code>: ngày của giao dịch kế tiếp của người bán và số ngày giữa hai lần (NULL ở lần cuối). Sắp theo seller, sold_on.</p>\n<h4>Bảng mẫu (chương 8)</h4><pre>sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1\n 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01\n 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>lead(sold_on) OVER (PARTITION BY seller ORDER BY sold_on)</code>.</li>\n  <li>date − date cho số nguyên ngày.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "seller | sold_on    | next_sold_on | gap_days\n-------+------------+--------------+---------\nAlice  | 2026-01-05 | 2026-02-10   | 36      \nAlice  | 2026-02-10 | NULL         | NULL    \nBob    | 2026-01-20 | 2026-03-01   | 40      \nBob    | 2026-03-01 | NULL         | NULL    \nCarol  | 2026-01-15 | 2026-02-20   | 36      \nCarol  | 2026-02-20 | NULL         | NULL    \nDave   | 2026-02-05 | 2026-03-10   | 33      \nDave   | 2026-03-10 | NULL         | NULL    ",
+          "explanation": "Expected result of check \"Alice 36 days, Bob 40, Carol 36, Dave 33\" (row order matters).|||Kết quả mong đợi của kiểm \"Alice 36 ngày, Bob 40, Carol 36, Dave 33\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "lead is the mirror of lag.|||lead là ảnh gương của lag.",
+        "Subtract two dates directly.|||Trừ thẳng hai ngày."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT seller, sold_on,\n       lead(sold_on) OVER w           AS next_sold_on,\n       lead(sold_on) OVER w - sold_on AS gap_days\nFROM sale\nWINDOW w AS (PARTITION BY seller ORDER BY sold_on)\nORDER BY seller, sold_on;\n"
+        },
+        {
+          "name": "sale.sql",
+          "language": "sql",
+          "code": "-- sale.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- sale.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Gaps between events are a classic lead/lag use: churn detection, delivery delays, sessionization. The last event of each partition has no next one, so the gap is NULL.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoảng cách giữa các sự kiện là ứng dụng kinh điển của lead/lag: phát hiện khách rời bỏ, trễ giao hàng, chia phiên. Sự kiện cuối của mỗi phần không có sự kiện kế tiếp nên khoảng cách là NULL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE sale (\n  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,\n  amount numeric(10,2) NOT NULL, sold_on date NOT NULL\n);\nINSERT INTO sale VALUES\n (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),\n (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),\n (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),\n (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Alice 36 days, Bob 40, Carol 36, Dave 33|||Alice 36 ngày, Bob 40, Carol 36, Dave 33",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "next_sold_on",
+                "gap_days"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  "2026-02-10",
+                  36
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  null,
+                  null
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  "2026-03-01",
+                  40
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  null,
+                  null
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  "2026-02-20",
+                  36
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  null,
+                  null
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  "2026-03-10",
+                  33
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  null,
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new sale between two others|||Giao dịch mới chen giữa hai lần khác",
+            "an": true,
+            "themCsdl": "INSERT INTO sale VALUES (9, 'North', 'Bob', 90, '2026-02-01')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "seller",
+                "sold_on",
+                "next_sold_on",
+                "gap_days"
+              ],
+              "hang": [
+                [
+                  "Alice",
+                  "2026-01-05",
+                  "2026-02-10",
+                  36
+                ],
+                [
+                  "Alice",
+                  "2026-02-10",
+                  null,
+                  null
+                ],
+                [
+                  "Bob",
+                  "2026-01-20",
+                  "2026-02-01",
+                  12
+                ],
+                [
+                  "Bob",
+                  "2026-02-01",
+                  "2026-03-01",
+                  28
+                ],
+                [
+                  "Bob",
+                  "2026-03-01",
+                  null,
+                  null
+                ],
+                [
+                  "Carol",
+                  "2026-01-15",
+                  "2026-02-20",
+                  36
+                ],
+                [
+                  "Carol",
+                  "2026-02-20",
+                  null,
+                  null
+                ],
+                [
+                  "Dave",
+                  "2026-02-05",
+                  "2026-03-10",
+                  33
+                ],
+                [
+                  "Dave",
+                  "2026-03-10",
+                  null,
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses lead()|||Dùng lead()",
+            "khop": "\\blead\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the partition: the \"next sale\" belongs to another seller.|||Quên chia phần: \"giao dịch kế tiếp\" thuộc người bán khác."
+        },
+        {
+          "loi": "Casting to timestamp and getting an interval like \"36 days\" instead of 36.|||Ép sang timestamp rồi nhận khoảng \"36 days\" thay vì 36."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lead",
+          "vi": "dòng sau"
+        }
+      ]
+    },
+    {
+      "title": "September, day by day: revenue, month-to-date and change",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 14,
+      "points": 30,
+      "concepts": [
+        "aggregate per day, then window",
+        "running total",
+        "lag on aggregated rows"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "window",
+        "running-total",
+        "ctshop"
+      ],
+      "problemHtml": "<p>For every day of September 2026 that had at least one payment return <code>day, payments, revenue, month_to_date, change</code>: number of payments, revenue of the day, cumulative revenue since 1 September, and the difference with the previous paying day (NULL on the first). Order by day.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Aggregate payments to one row per day (CTE), then apply the windows.</li>\n  <li>Day = <code>paid_at::date</code> (Vietnam time); half-open September.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi ngày của tháng 9/2026 có ít nhất một thanh toán trả về <code>day, payments, revenue, month_to_date, change</code>: số thanh toán, doanh thu trong ngày, doanh thu cộng dồn từ 1/9, và chênh lệch với ngày có thanh toán trước đó (NULL ở ngày đầu). Sắp theo ngày.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tổng hợp thanh toán về một dòng mỗi ngày (CTE), rồi mới áp cửa sổ.</li>\n  <li>Ngày = <code>paid_at::date</code> (giờ Việt Nam); tháng 9 nửa mở.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "day        | payments | revenue | month_to_date | change \n-----------+----------+---------+---------------+--------\n2026-09-05 | 1        | 162000  | 162000        | NULL   \n2026-09-08 | 1        | 705000  | 867000        | 543000 \n2026-09-12 | 1        | 749000  | 1616000       | 44000  \n2026-09-20 | 1        | 207000  | 1823000       | -542000\n2026-09-30 | 1        | 158000  | 1981000       | -49000 ",
+          "explanation": "Expected result of check \"Five paying days\" (row order matters).|||Kết quả mong đợi của kiểm \"Năm ngày có thanh toán\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Windows run after GROUP BY: aggregate per day first, then the running total over those rows.|||Cửa sổ chạy sau GROUP BY: tổng hợp theo ngày trước, rồi tổng dồn trên các dòng đó.",
+        "A September payment at 21:20 on the 30th must be included.|||Thanh toán 21:20 ngày 30/9 phải được tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH d AS (\n  SELECT paid_at::date AS day, count(*) AS payments, sum(amount) AS revenue\n  FROM payment\n  WHERE paid_at >= '2026-09-01' AND paid_at < '2026-10-01'\n  GROUP BY 1\n)\nSELECT day, payments, revenue,\n       sum(revenue) OVER (ORDER BY day)            AS month_to_date,\n       revenue - lag(revenue) OVER (ORDER BY day)  AS change\nFROM d\nORDER BY day;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A chart needs one point per day, so the grain must be the day before the window runs. With one row per day, ROWS and RANGE frames agree and the running total is unambiguous (Lab 4 W3).</p>",
+      "solutionExplanationHtmlVi": "<p>Biểu đồ cần một điểm mỗi ngày, nên hạt phải là ngày trước khi cửa sổ chạy. Mỗi ngày một dòng thì khung ROWS và RANGE trùng nhau và tổng dồn không mơ hồ (Lab 4 W3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Five paying days|||Năm ngày có thanh toán",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "day",
+                "payments",
+                "revenue",
+                "month_to_date",
+                "change"
+              ],
+              "hang": [
+                [
+                  "2026-09-05",
+                  1,
+                  162000,
+                  162000,
+                  null
+                ],
+                [
+                  "2026-09-08",
+                  1,
+                  705000,
+                  867000,
+                  543000
+                ],
+                [
+                  "2026-09-12",
+                  1,
+                  749000,
+                  1616000,
+                  44000
+                ],
+                [
+                  "2026-09-20",
+                  1,
+                  207000,
+                  1823000,
+                  -542000
+                ],
+                [
+                  "2026-09-30",
+                  1,
+                  158000,
+                  1981000,
+                  -49000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Two payments on the same day are one row|||Hai thanh toán cùng ngày là một dòng",
+            "an": true,
+            "themCsdl": "INSERT INTO payment (order_id, amount, method, paid_at) VALUES (7, 95000, 'cod', '2026-09-12 08:00+07'), (11, 78000, 'card', '2026-09-03 10:00+07')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "day",
+                "payments",
+                "revenue",
+                "month_to_date",
+                "change"
+              ],
+              "hang": [
+                [
+                  "2026-09-03",
+                  1,
+                  78000,
+                  78000,
+                  null
+                ],
+                [
+                  "2026-09-05",
+                  1,
+                  162000,
+                  240000,
+                  84000
+                ],
+                [
+                  "2026-09-08",
+                  1,
+                  705000,
+                  945000,
+                  543000
+                ],
+                [
+                  "2026-09-12",
+                  2,
+                  844000,
+                  1789000,
+                  139000
+                ],
+                [
+                  "2026-09-20",
+                  1,
+                  207000,
+                  1996000,
+                  -637000
+                ],
+                [
+                  "2026-09-30",
+                  1,
+                  158000,
+                  2154000,
+                  -49000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A window over the daily rows|||Cửa sổ trên các dòng theo ngày",
+            "khop": "OVER\\s*\\(\\s*ORDER\\s+BY\\s+day",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Windowing raw payments: two payments on one day become two rows, and with ORDER BY a repeated date the default RANGE frame gives both the same running total.|||Áp cửa sổ trên thanh toán thô: hai thanh toán một ngày thành hai dòng, và ORDER BY một ngày lặp lại thì khung RANGE mặc định cho cả hai cùng một tổng dồn."
+        },
+        {
+          "loi": "<code>paid_at &lt;= '2026-09-30'</code> stops at midnight — the evening of the 30th is lost.|||<code>paid_at &lt;= '2026-09-30'</code> dừng ở nửa đêm — mất buổi tối ngày 30."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "month-to-date",
+          "vi": "luỹ kế từ đầu tháng"
+        }
+      ]
+    }
+  ]
+}

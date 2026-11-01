@@ -80,3 +80,18 @@ export const LD_APP = {
   vi: `<h4>Bảng mẫu: app ghi chú của chương 5–6</h4>${pre(LD_APP_TXT)}<p>Script đầy đủ: tab <code>notes-app.sql</code>.</p>`,
 };
 export const O_APP = { csdl: APP, tenCsdl: 'notes-app', ld: LD_APP };
+
+/** Bảng `sale` của Chương 8 (giang/pg-08-1.mjs — đúng 8 dòng của bài). */
+export const SALE = `CREATE TABLE sale (
+  id int PRIMARY KEY, region text NOT NULL, seller text NOT NULL,
+  amount numeric(10,2) NOT NULL, sold_on date NOT NULL
+);
+INSERT INTO sale VALUES
+ (1, 'North', 'Alice', 100, '2026-01-05'), (2, 'North', 'Alice', 150, '2026-02-10'),
+ (3, 'North', 'Bob',   200, '2026-01-20'), (4, 'North', 'Bob',   150, '2026-03-01'),
+ (5, 'South', 'Carol', 300, '2026-01-15'), (6, 'South', 'Carol', 250, '2026-02-20'),
+ (7, 'South', 'Dave',  180, '2026-02-05'), (8, 'South', 'Dave',  220, '2026-03-10');`;
+const LD_SALE_TXT = `sale (id PK, region, seller, amount numeric(10,2), sold_on date) — the 8 rows of lesson 8.1
+ 1 North Alice 100 2026-01-05 · 2 North Alice 150 2026-02-10 · 3 North Bob 200 2026-01-20 · 4 North Bob 150 2026-03-01
+ 5 South Carol 300 2026-01-15 · 6 South Carol 250 2026-02-20 · 7 South Dave 180 2026-02-05 · 8 South Dave 220 2026-03-10`;
+export const O_SALE = { csdl: SALE, tenCsdl: 'sale', ld: { en: `<h4>Sample table (chapter 8)</h4>${pre(LD_SALE_TXT)}`, vi: `<h4>Bảng mẫu (chương 8)</h4>${pre(LD_SALE_TXT)}` } };

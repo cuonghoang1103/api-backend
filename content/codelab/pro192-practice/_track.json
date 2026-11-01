@@ -68,6 +68,66 @@
       "name": "3.3 Lab 3 — CT Library: encapsulation and data rules",
       "level": "BEGINNER",
       "description": "Luyện: Lab 3 — CT Library: encapsulation and data rules"
+    },
+    {
+      "slug": "pro192-4-1-ke-thua",
+      "name": "4.1 Inheritance",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Person → Student: extends and super(...) · Employee → Manager: override and call the parent · Three levels: Vehicle → Car → ElectricCar"
+    },
+    {
+      "slug": "pro192-4-2-da-hinh",
+      "name": "4.2 Polymorphism",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: One loop, three behaviours: payment fees · Late fees without instanceof · Overloading vs overriding: which method runs?"
+    },
+    {
+      "slug": "pro192-on-ch4",
+      "name": "4.3 🧪 Practice — inheritance the PE way: Spec classes, fixing overrides, composition",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE question 2: Laptop and SpecLaptop · Fix a classmate’s SpecCar: four inheritance compile errors · PE question 2 with numbers: Ticket and VipTicket · Is-a or has-a? Replace inheritance with composition"
+    },
+    {
+      "slug": "pro192-lab-4-ke-thua-va-da-hinh",
+      "name": "4.4 Lab 4 — CT Library: inheritance and polymorphism",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 4 — CT Library: inheritance and polymorphism"
+    },
+    {
+      "slug": "pro192-5-1-abstract-interface",
+      "name": "5.1 Abstract classes & interfaces",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: An abstract Shape: one abstract method, one concrete · Comparable<Student>: a natural order for Arrays.sort · An interface with a default method: Discountable · Swap the behaviour, keep the code: a FeePolicy interface"
+    },
+    {
+      "slug": "pro192-on-ch5",
+      "name": "5.2 🧪 Practice — interfaces and abstract classes the PE way",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A 10-mark PE paper: IEmployee, Staff, FullTime, PartTime · PE question 4: implement the given IWord · Sorting with interfaces you did not write: Comparator classes · Interface or abstract class? A payroll that also pays invoices"
+    },
+    {
+      "slug": "pro192-lab-5-truu-tuong-va-interface",
+      "name": "5.3 Lab 5 — CT Library: abstract classes and interfaces",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 5 — CT Library: abstract classes and interfaces"
+    },
+    {
+      "slug": "pro192-6-1-ngoai-le",
+      "name": "6.1 try, catch, finally & throw",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: try/catch: a calculator that never crashes · throw with a reason: a constructor that refuses bad data · A custom checked exception: InsufficientFundsException · finally and try-with-resources: close it no matter what"
+    },
+    {
+      "slug": "pro192-on-ch6",
+      "name": "6.2 🧪 Practice — exceptions the PE way: custom exceptions, safe input, causes, layers",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE-ADV style: InvalidStudentException, Student, StudentManager · An Inputter for every LAB211 program · Wrap and rethrow with a cause: parsing order lines · Exceptions through the layers: throw low, catch high"
+    },
+    {
+      "slug": "pro192-lab-6-ngoai-le-muon-tra",
+      "name": "6.3 Lab 6 — CT Library: business exceptions, borrowing and returning",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 6 — CT Library: business exceptions, borrowing and returning"
     }
   ]
 }

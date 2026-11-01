@@ -53,7 +53,7 @@ export function tachDau(src) {
     if (m) {
       if (trong) throw new Error('//>> lồng nhau');
       trong = true;
-      for (const x of m[2].split(' ⏎ ')) khoi.push(m[1] + x);
+      for (const x of m[2].split('⏎')) khoi.push((m[1] + x.replace(/^ /, '').replace(/ $/, '')).replace(/\s+$/, ''));
       continue;
     }
     if (/^\s*\/\/<<\s*$/.test(l)) {
@@ -181,9 +181,9 @@ function catDong(t, i) {
   const d = String(t).split('\n');
   return d.length <= 41 ? t : `${d.slice(0, 40).join('\n')}\n… (+${d.length - 40} lines — full expected output: tests/${i + 1}.out)`;
 }
-/** stdin của một ca: bỏ dòng đầu trống của template literal, luôn kết thúc bằng \n. */
+/** stdin của một ca: giữ NGUYÊN (dòng trống đầu là cố ý — kiểm "bắt buộc nhập"), luôn kết thúc bằng \n. */
 function chuanVao(v) {
-  const t = String(v).replace(/^\n/, '');
+  const t = String(v);
   return t.endsWith('\n') ? t : t + '\n';
 }
 

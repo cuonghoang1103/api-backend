@@ -674,5 +674,186 @@
    "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (A,2) (C,1) (D,3) \n  (A,2) (C,1) (D,3) \n\n",
    "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (A,8) (C,4) (E,2) (F,6) (G,5) (D,12) \n  (A,8) (C,4) (E,2) (G,5) (F,6) (D,12) \n\n"
   ]
+ },
+ "csd201-5-1-bfs-dfs-all": {
+  "bam": "5b8c1a25511ea2c1",
+  "ra": [
+   "graph with 9 vertices\nBFS B -> B A E C D H G I F\nDFS B -> B A C H E I D G F\nBFS A -> A B C D E H G I F\nDFS F -> F C A B E H I D G\n",
+   "graph with 6 vertices\nBFS D -> D C E A B F\nDFS D -> D C E A B F\nBFS F -> F A B C D E\nDFS A -> A B C D E F\n"
+  ]
+ },
+ "csd201-5-1-components": {
+  "bam": "46a0680951696db3",
+  "ra": [
+   "components [ABE, CD, F] connected=false\nSAME A E -> true\nSAME A C -> false\nSAME F F -> true\n",
+   "components [ABCD] connected=true\nSAME A D -> true\ncomponents [A] connected=true\nSAME A A -> true\n"
+  ]
+ },
+ "csd201-5-1-degrees": {
+  "bam": "e730a69ae860ec0c",
+  "ra": [
+   "n=5 degrees=[2, 2, 3, 1, 0] edges=4 isolated=[E] odd=[CD]\n",
+   "n=4 degrees=[5, 3, 3, 3] edges=7 isolated=[] odd=[ABCD]\nn=3 degrees=[3, 1, 0] edges=2 isolated=[C] odd=[AB]\n"
+  ]
+ },
+ "csd201-5-2-edge-list-to-structures": {
+  "bam": "fb9b8c88c6b3de7c",
+  "ra": [
+   "4 D -> ok\n0 1 -> ok\n0 2 -> ok\n2 1 -> ok\n3 0 -> ok\n1 3 -> ok\nSHOW -> \n  [0, 1, 1, 0]\n  [0, 0, 0, 1]\n  [0, 1, 0, 0]\n  [1, 0, 0, 0]\n  lists [[1, 2], [3], [1], [0]]\n  0: out 2, in 1\n  1: out 1, in 2\n  2: out 1, in 1\n  3: out 1, in 1\n4 U -> ok\n0 1 -> ok\n0 2 -> ok\n2 1 -> ok\n3 0 -> ok\n1 3 -> ok\nSHOW -> \n  [0, 1, 1, 1]\n  [1, 0, 1, 1]\n  [1, 1, 0, 0]\n  [1, 1, 0, 0]\n  lists [[1, 2, 3], [0, 2, 3], [0, 1], [0, 1]]\n  0: out 3, in 3\n  1: out 3, in 3\n  2: out 2, in 2\n  3: out 2, in 2\n",
+   "3 D -> ok\n0 1 -> ok\n0 1 -> ok\n2 2 -> ok\n1 0 -> ok\nSHOW -> \n  [0, 2, 0]\n  [1, 0, 0]\n  [0, 0, 1]\n  lists [[1, 1], [0], [2]]\n  0: out 2, in 1\n  1: out 1, in 2\n  2: out 1, in 1\n3 U -> ok\n2 0 -> ok\n0 2 -> ok\n1 1 -> ok\nSHOW -> \n  [0, 0, 2]\n  [0, 2, 0]\n  [2, 0, 0]\n  lists [[2, 2], [1, 1], [0, 0]]\n  0: out 2, in 2\n  1: out 2, in 2\n  2: out 2, in 2\n"
+  ]
+ },
+ "csd201-5-2-sparse-bfs": {
+  "bam": "21d16a880d9e661f",
+  "ra": [
+   "7 0 -> ok\n0 1 -> ok\n0 2 -> ok\n1 3 -> ok\n2 3 -> ok\n3 4 -> ok\n5 6 -> ok\nGO -> [0, 1, 1, 2, 3, -1, -1]\n",
+   "6 2 -> ok\n0 1 -> ok\n1 2 -> ok\n2 3 -> ok\n3 4 -> ok\n4 5 -> ok\n5 0 -> ok\nGO -> [2, 1, 0, 1, 2, 3]\n",
+   "PERF -> n = 1,000,000, m = 2,000,000: OK, reachable 980065, farthest 15\n"
+  ]
+ },
+ "csd201-5-2-walks-matrix-power": {
+  "bam": "c686f8a37d4cdae4",
+  "ra": [
+   "3 -> graph of 3\nWALKS 0 0 0 -> 1\nWALKS 1 0 1 -> 1\nWALKS 2 0 0 -> 2\nWALKS 3 0 0 -> 2\nWALKS 10 1 2 -> 341\n3 -> graph of 3\nWALKS 2 0 2 -> 1\nWALKS 3 0 2 -> 0\nWALKS 4 1 1 -> 4\n",
+   "4 -> graph of 4\nWALKS 4 0 0 -> 1\nWALKS 5 0 0 -> 0\nWALKS 7 0 3 -> 1\n2 -> graph of 2\nWALKS 60 0 0 -> 2504730781961\nWALKS 50 1 0 -> 12586269025\n"
+  ]
+ },
+ "csd201-5-3-components-iterative": {
+  "bam": "e26c753825c129ce",
+  "ra": [
+   "7 -> ok\n0 1 -> ok\n1 2 -> ok\n3 4 -> ok\n2 0 -> ok\nGO -> [3, 2, 1, 1]\n",
+   "3 -> ok\nGO -> [1, 1, 1]\n4 -> ok\n0 1 -> ok\n1 2 -> ok\n2 3 -> ok\n3 0 -> ok\n0 1 -> ok\nGO -> [4]\n",
+   "PERF -> a path of 1,000,000 vertices + 100,000 isolated: OK, components 100001, largest 1000000\n"
+  ]
+ },
+ "csd201-5-3-cycle-topo-dfs": {
+  "bam": "6bbfa9d25cd0cf1f",
+  "ra": [
+   "4 -> ok\n0 1 -> ok\n0 2 -> ok\n1 3 -> ok\n2 3 -> ok\nTOPO -> 0 2 1 3\n3 -> ok\n0 1 -> ok\n1 2 -> ok\n2 0 -> ok\nTOPO -> CYCLE\n",
+   "2 -> ok\n1 1 -> ok\nTOPO -> CYCLE\n5 -> ok\n0 2 -> ok\n1 2 -> ok\n3 1 -> ok\n3 0 -> ok\nTOPO -> 4 3 1 0 2\n6 -> ok\n5 0 -> ok\n4 0 -> ok\n5 2 -> ok\n2 3 -> ok\n3 1 -> ok\n4 1 -> ok\nTOPO -> 5 4 2 3 1 0\n"
+  ]
+ },
+ "csd201-5-3-kahn": {
+  "bam": "512eb02c749c50d2",
+  "ra": [
+   "6 -> ok\n5 2 -> ok\n5 0 -> ok\n4 0 -> ok\n4 1 -> ok\n2 3 -> ok\n3 1 -> ok\nGO -> [4, 5, 0, 2, 3, 1]\n4 -> ok\n1 0 -> ok\n2 0 -> ok\n3 1 -> ok\n3 2 -> ok\nGO -> [3, 1, 2, 0]\n",
+   "3 -> ok\n0 1 -> ok\n1 2 -> ok\n2 1 -> ok\nGO -> []\n3 -> ok\nGO -> [0, 1, 2]\n3 -> ok\n0 2 -> ok\n0 2 -> ok\n1 2 -> ok\nGO -> [0, 1, 2]\n",
+   "PERF -> n = 200,000, m = 1,000,000 (acyclic): OK, length 200000, first 0 1 2\n"
+  ]
+ },
+ "csd201-5-4-maze": {
+  "bam": "114c488863a90afd",
+  "ra": [
+   "..... -> row\n.###. -> row\n...#. -> row\n##.#. -> row\n..... -> row\nGO 0 0 4 0 -> 8\n..# -> row\n.## -> row\n... -> row\nGO 0 0 0 1 -> 1\n",
+   ".#. -> row\n.#. -> row\n.#. -> row\nGO 0 0 0 2 -> -1\n... -> row\n... -> row\nGO 1 0 1 0 -> 0\n#.. -> row\nGO 0 0 0 2 -> -1\n",
+   "PERF -> 2000 x 2000 serpentine: OK, moves 2000998\n"
+  ]
+ },
+ "csd201-5-4-multi-source": {
+  "bam": "b5f892b7b31bcb30",
+  "ra": [
+   "H.... -> row\n.##.. -> row\n....H -> row\nGO -> \n    0  1  2  3  2\n    1 -1 -1  2  1\n    2  3  2  1  0\n",
+   "H.#.. -> row\n..#.. -> row\n..#.. -> row\nGO -> \n    0  1 -1 -1 -1\n    1  2 -1 -1 -1\n    2  3 -1 -1 -1\n... -> row\n.#. -> row\nGO -> \n   -1 -1 -1\n   -1 -1 -1\n",
+   "PERF -> 1500 x 1500, 1,000 hospitals: OK, sum 66575466, farthest 123\n"
+  ]
+ },
+ "csd201-5-4-shortest-path-unweighted": {
+  "bam": "3ac24949f1bcde92",
+  "ra": [
+   "9 -> graph of 9\nPATH A I -> A -> C -> H -> I\nPATH F G -> F -> C -> A -> D -> G\nPATH B B -> B\nPATH G F -> G -> D -> A -> C -> F\n",
+   "5 -> graph of 5\nPATH A D -> A -> B -> D\nPATH D A -> D -> B -> A\nPATH A E -> no path\n"
+  ]
+ },
+ "csd201-5-5-dijkstra-matrix": {
+  "bam": "76f968021a4a84c7",
+  "ra": [
+   "7 -> graph of 7\nPATH A G -> A B C E D G | 29\nORDER A G -> A|0 B|10 C|12 E|15 D|19 F|24 G|29\nPATH B F -> B C E D F | 14\nORDER B F -> B|0 C|2 E|5 D|9 F|14\nPATH G A -> G A | 8\n",
+   "5 -> graph of 5\nPATH A D -> A B D | 2\nORDER A D -> A|0 B|1 C|1 D|2\nPATH A E -> no path\nPATH E A -> no path\nPATH C C -> C | 0\n"
+  ]
+ },
+ "csd201-5-5-dijkstra-pq": {
+  "bam": "a503b88427a0d813",
+  "ra": [
+   "5 0 -> ok\n0 1 4 -> ok\n0 2 1 -> ok\n2 1 2 -> ok\n1 3 1 -> ok\n2 3 5 -> ok\nGO -> [0, 3, 1, 4, -1]\n",
+   "4 0 -> ok\n0 1 0 -> ok\n1 2 0 -> ok\n0 2 7 -> ok\n0 2 3 -> ok\n2 3 1000000000 -> ok\n3 0 1 -> ok\nGO -> [0, 0, 0, 1000000000]\n3 2 -> ok\n0 1 5 -> ok\n1 0 5 -> ok\nGO -> [-1, -1, 0]\n",
+   "PERF -> n = 200,000, m = 1,000,000: OK, reachable 198580, checksum 373593595812471\n"
+  ]
+ },
+ "csd201-5-5-grid-cost": {
+  "bam": "378ca5e8dbd6b44e",
+  "ra": [
+   "131 -> row\n151 -> row\n111 -> row\nGO -> 5\n19111 -> row\n11191 -> row\n99991 -> row\nGO -> 9\n",
+   "7 -> row\nGO -> 7\n1111 -> row\n9991 -> row\n1111 -> row\n1999 -> row\n1111 -> row\nGO -> 14\n",
+   "PERF -> 700 x 700 tolls: OK, cheapest 3978\n"
+  ]
+ },
+ "csd201-5-6-connect-cities": {
+  "bam": "e9287ab19e32cd15",
+  "ra": [
+   "5 -> ok\nE 0 1 -> ok\nE 1 2 -> ok\nC 2 3 4 -> ok\nC 0 3 2 -> ok\nC 3 4 7 -> ok\nC 2 4 3 -> ok\nGO -> 5\n4 -> ok\nE 0 1 -> ok\nE 2 3 -> ok\nE 1 2 -> ok\nC 0 3 100 -> ok\nGO -> 0\n",
+   "4 -> ok\nE 0 1 -> ok\nC 2 3 1 -> ok\nGO -> -1\n3 -> ok\nC 0 1 5 -> ok\nC 1 2 6 -> ok\nC 0 2 4 -> ok\nGO -> 9\n1 -> ok\nGO -> 0\n"
+  ]
+ },
+ "csd201-5-6-kruskal": {
+  "bam": "63af2f533d4e7f12",
+  "ra": [
+   "7 -> ok\n0 1 7 -> ok\n0 3 5 -> ok\n1 2 8 -> ok\n1 3 9 -> ok\n1 4 7 -> ok\n2 4 5 -> ok\n3 4 15 -> ok\n3 5 6 -> ok\n4 5 8 -> ok\n4 6 9 -> ok\n5 6 11 -> ok\nGO -> [0-3 2-4 3-5 0-1 1-4 4-6] total 39\n",
+   "4 -> ok\n0 1 1 -> ok\n1 2 1 -> ok\n2 3 1 -> ok\n3 0 1 -> ok\n0 0 0 -> ok\n0 2 1 -> ok\nGO -> [0-1 0-2 2-3] total 3\n3 -> ok\n0 1 5 -> ok\n0 1 2 -> ok\nGO -> [0-1] total -1\n1 -> ok\nGO -> [] total 0\n",
+   "PERF -> n = 200,000, m = 1,000,000: OK, total 30011947\n"
+  ]
+ },
+ "csd201-5-6-prim-matrix": {
+  "bam": "7b99a9046c347722",
+  "ra": [
+   "7 -> graph of 7\nPRIM A -> A-D(5) D-F(6) A-B(7) B-E(7) E-C(5) E-G(9) | total 39\nPRIM D -> D-A(5) D-F(6) A-B(7) B-E(7) E-C(5) E-G(9) | total 39\n",
+   "4 -> graph of 4\nPRIM C -> C-A(1) C-B(1) C-D(1) | total 3\n4 -> graph of 4\nPRIM A -> A-B(3) | disconnected\n"
+  ]
+ },
+ "csd201-5-7-euler-check": {
+  "bam": "d06d16d404a52e80",
+  "ra": [
+   "4 -> ok\n0 1 -> ok\n0 1 -> ok\n0 2 -> ok\n0 2 -> ok\n0 3 -> ok\n1 3 -> ok\n2 3 -> ok\nGO -> NONE\n4 -> ok\n0 1 -> ok\n1 2 -> ok\n2 3 -> ok\n3 0 -> ok\nGO -> CYCLE\n4 -> ok\n0 1 -> ok\n1 2 -> ok\n2 3 -> ok\n3 0 -> ok\n0 2 -> ok\nGO -> PATH 0 2\n",
+   "6 -> ok\n0 1 -> ok\n1 2 -> ok\n2 0 -> ok\n3 4 -> ok\n4 5 -> ok\n5 3 -> ok\nGO -> NONE\n5 -> ok\n1 2 -> ok\n2 3 -> ok\n3 1 -> ok\nGO -> CYCLE\n3 -> ok\n0 0 -> ok\n0 1 -> ok\nGO -> PATH 0 1\n3 -> ok\nGO -> CYCLE\n"
+  ]
+ },
+ "csd201-5-7-hamilton": {
+  "bam": "ee24c48cc81feb9e",
+  "ra": [
+   "4 -> count 2, first A B C D A\n4 -> count 6, first A B C D A\n5 -> count 2, first A B D E C A\n",
+   "4 -> count 0, first none\n2 -> count 0, first none\n3 -> count 2, first A B C A\n10 -> count 0, first none\n"
+  ]
+ },
+ "csd201-5-7-hierholzer": {
+  "bam": "4ba562ccc3b2e703",
+  "ra": [
+   "5 0 -> ok\n0 1 -> ok\n1 2 -> ok\n2 0 -> ok\n2 3 -> ok\n3 4 -> ok\n4 2 -> ok\nGO -> 0 1 2 3 4 2 0\n6 0 -> ok\n0 1 -> ok\n1 2 -> ok\n2 0 -> ok\n0 3 -> ok\n3 4 -> ok\n4 0 -> ok\n1 5 -> ok\n5 2 -> ok\nGO -> 0 1 2 5 1 0 3 4 0\n",
+   "3 1 -> ok\n0 1 -> ok\n1 0 -> ok\n1 1 -> ok\n1 2 -> ok\n2 1 -> ok\nGO -> 1 0 1 1 2 1\n4 3 -> ok\n0 1 -> ok\n1 2 -> ok\n2 3 -> ok\n3 0 -> ok\nGO -> 3 0 1 2 3\n",
+   "PERF -> 1,000 vertices, 1,000,000 edges: OK, length 1000001, ends 0/0, hash -1401504764\n"
+  ]
+ },
+ "csd201-5-8-floyd": {
+  "bam": "5480a0ecbe8b0289",
+  "ra": [
+   "distances:\n      0   -1   -2    0\n      4    0    2    4\n      5    1    0    2\n      3   -1    1    0\nPATH A B -> A C D B\nPATH B D -> B A C D\nPATH D A -> D B A\nPATH C A -> C D B A\n",
+   "distances:\n      0    3    1  INF\n    INF    0  INF  INF\n    INF    2    0  INF\n    INF  INF  INF    0\nPATH A B -> A C B\nPATH B A -> none\nPATH D D -> D\nPATH A D -> none\n"
+  ]
+ },
+ "csd201-5-8-pe-graph": {
+  "bam": "c0a4feb26e617ea5",
+  "ra": [
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f1.txt:\n    C  A  B  E  H  I  D  G  F\n    A(3)  B(2)  E(2)  H(3)  I(1)\n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f2.txt:\n  \n    A  B  C  A  D  E  C  F  E  A\n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f1.txt:\n    C  B  A  I  D  E  F  G  H\n    B(2)  A(2)  I(1)  D(1)  E(3)\n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f2.txt:\n  \n    A  B  C  D  E  D  B  A\n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f1.txt:\n    C  B  D  A  E  F  G  H  I\n    B(1)  D(1)  A(0)  E(1)  F(2)\n\n",
+   "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 0. Exit\n    Your selection (0 -> 2): Your output:\n Content of the file f2.txt:\n  \n    A  B  C  A\n\n"
+  ]
+ },
+ "csd201-5-8-sequential-coloring": {
+  "bam": "22285701083b4982",
+  "ra": [
+   "natural [1, 2, 1, 3, 2, 4] -> 4 colours | largest first [1, 2, 2, 1, 1, 2] -> 2 colours\nnatural [1, 2, 1, 2, 3] -> 3 colours | largest first [1, 2, 1, 2, 3] -> 3 colours\n",
+   "natural [1, 2, 3, 4] -> 4 colours | largest first [1, 2, 3, 4] -> 4 colours\nnatural [1, 1, 1] -> 1 colours | largest first [1, 1, 1] -> 1 colours\nnatural [1, 2, 2, 2, 2] -> 2 colours | largest first [1, 2, 2, 2, 2] -> 2 colours\n"
+  ]
  }
 }

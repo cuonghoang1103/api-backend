@@ -170,6 +170,54 @@
       "name": "4.8 🧪 Practice — BST statistics, k-th smallest & LCA, and a 🎯 PE-format BSTree paper",
       "level": "INTERMEDIATE",
       "description": "Luyện: PE style: leaves, one-child nodes, height, a price range and the maximum of a BST · k-th smallest key and the lowest common ancestor in a BST · 🎯 PE format — BSTree of Cars: f1 insert + breadth/inorder, f2 filtered preorder, f3 delete by copying, f4 rotate right"
+    },
+    {
+      "slug": "csd201-do-thi",
+      "name": "5.1 Graph representation & traversal",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Degrees, edges, isolated and odd vertices from an adjacency matrix · Breadth-first and depth-first traversal that reaches every vertex · Connected components: how many, which vertices, is it connected?"
+    },
+    {
+      "slug": "csd201-do-thi-bieu-dien",
+      "name": "5.2 Three ways to store a graph",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: From an edge list to an adjacency matrix and adjacency lists (directed or not) · A million vertices: BFS on adjacency lists (a matrix would need 4 TB) · Count walks of length k with powers of the adjacency matrix"
+    },
+    {
+      "slug": "csd201-dfs",
+      "name": "5.3 DFS: cycles, components, topological order",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Directed cycle detection and a topological order from DFS finishing times · Kahn’s algorithm: the smallest available course first · Component sizes of a million-vertex graph with an iterative DFS"
+    },
+    {
+      "slug": "csd201-bfs",
+      "name": "5.4 BFS & shortest paths in unweighted graphs",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The path with the fewest edges, rebuilt from BFS parents · Shortest way out of a 2000 × 2000 maze · Multi-source BFS: distance from every house to the nearest hospital"
+    },
+    {
+      "slug": "csd201-dijkstra",
+      "name": "5.5 Dijkstra step by step",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE style Dijkstra on a matrix: the path, its length and the order of the set S · Dijkstra with a PriorityQueue on 200,000 vertices and a million edges · The cheapest route across a grid of tolls (Dijkstra on cells)"
+    },
+    {
+      "slug": "csd201-mst",
+      "name": "5.6 Minimum spanning trees: Prim & Kruskal",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Prim’s algorithm on a matrix: the edges in the order they are chosen · Kruskal with union-find: a million edges · Connect every city: some roads already exist (cost 0)"
+    },
+    {
+      "slug": "csd201-euler",
+      "name": "5.7 Euler tours, Euler cycles & Hamilton",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Euler cycle, Euler path or neither? Degrees and connectivity · Find the Euler cycle: Hierholzer with an explicit stack · Hamilton cycles by backtracking: count them and print the first"
+    },
+    {
+      "slug": "csd201-on-ch5",
+      "name": "5.8 🧪 Practice — sequential colouring, Floyd–Warshall, and a 🎯 PE-format Graph paper",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Sequential colouring: natural order versus largest degree first · Floyd–Warshall: every pair, a negative edge, and the paths · 🎯 PE format — Graph: f1 depth-first from C with the degrees of the 2nd–6th vertices, f2 an Euler cycle from A"
     }
   ]
 }

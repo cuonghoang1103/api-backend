@@ -99,3 +99,5 @@ ${dsCau('vi')}
   });
 }
 export { esc };
+/** Phần (1) THẬT của Graph.java (đề SP26 B5 P4, câu 3) — tới hết dòng khung "(2)". */
+export const GRAPH_P1 = doc('GraphPart1.java');

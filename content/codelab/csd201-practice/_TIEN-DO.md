@@ -14,7 +14,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 2 | `csd201-stack-queue` 3 (stack liên kết, queue liên kết ⏱, đảo k phần tử đầu) · `csd201-stack-queue-cai-dat` 3 (stack mảng ⏱, queue mảng vòng first/last như slide, queue bằng 2 stack ⏱) · `csd201-stack-ung-dung` 4 (ngoặc + vị trí lỗi, hậu tố, shunting-yard, undo/redo) · `csd201-deque` 3 (deque mảng vòng, max cửa sổ trượt ⏱, số âm đầu mỗi cửa sổ ⏱) · `csd201-priority-queue-heap` 3 (min-heap kiểm bất biến ⏱, top-k heap cỡ k ⏱, cấp cứu Comparator) · `csd201-on-ch2` 4 (round-robin, hàng bệnh nhân f1–f4 kiểu PE, phần tử lớn hơn kế tiếp ⏱, hình chữ nhật lớn nhất ⏱) | 20 |
 | 3 | `csd201-de-quy` 3 (tổng/đếm/max đoạn mảng, đảo chuỗi + palindrome, đổi cơ số — cấm vòng lặp) · `csd201-de-quy-vi-du` 3 (Hà Nội + đếm bước, Fibonacci có nhớ ⏱, luỹ thừa nhanh mod m ⏱) · `csd201-de-quy-phan-tich` 3 (đếm lời gọi fib bằng hệ thức ⏱, nghịch thế chia để trị ⏱, đoạn con max chia để trị ⏱) · `csd201-de-quy-thiet-ke` 3 (đệ quy đuôi → vòng lặp ⏱, loang vùng ngăn xếp tường minh ⏱, máy tính đệ quy xuống) · `csd201-on-ch3` 4 (đệ quy trên danh sách kiểu PE, quay lui tập con/hoán vị, N quân hậu ⏱, đường đi lưới có nhớ ⏱) | 16 |
 | 4 | `csd201-cay-duyet` 3 (size/height/depth cây tổng quát, dung lượng thư mục hậu thứ tự, in theo tầng) · `csd201-cay-nhi-phan` 3 (proper/perfect, cây trong mảng + complete, dựng từ pre+in ⏱) · `csd201-duyet-cay` 3 (bốn phép duyệt, trung thứ tự ngăn xếp tường minh ⏱, cây biểu thức) · `csd201-bst` 3 (chèn/tìm lặp ⏱, floor/ceiling/đếm khoảng tỉa nhánh ⏱, isBST) · `csd201-bst-chen-xoa` 3 (xoá sao chép, xoá hợp nhất, cắt về [lo,hi]) · `csd201-avl` 3 (quay trái/phải, chèn AVL 4 trường hợp ⏱, hệ số cân bằng ⏱) · `csd201-heap-cai-dat` 3 (heap trên xuống vs Floyd ⏱, heap sort ⏱, trộn k dãy ⏱) · `csd201-on-ch4` 3 (thống kê BST kiểu PE, k-nhỏ-nhất + LCA, 🎯 **PE BSTree Car f1–f4**) | 24 |
-| **tổng** | 27 module | **86** |
+| 5 | `csd201-do-thi` 3 (bậc/cạnh/đỉnh lẻ trên ma trận, BFS+DFS duyệt hết đỉnh như Graph của PE — ca 1 trùng đáp án đề thật, thành phần liên thông) · `csd201-do-thi-bieu-dien` 3 (danh sách cạnh → ma trận + danh sách kề, BFS CSR 10⁶ đỉnh ⏱, đếm walk bằng luỹ thừa ma trận) · `csd201-dfs` 3 (chu trình + topo theo thời điểm kết thúc, Kahn nhỏ nhất trước ⏱, thành phần bằng DFS lặp ⏱) · `csd201-bfs` 3 (đường ít cạnh nhất, mê cung 2000² ⏱, BFS nhiều nguồn ⏱) · `csd201-dijkstra` 3 (ma trận 99=∞ kiểu PE — ca 1 trùng đáp án đề SP26 B5 P4, PQ 200k đỉnh ⏱, lưới phí ⏱) · `csd201-mst` 3 (Prim ma trận, Kruskal + union-find ⏱, nối thành phố có đường sẵn) · `csd201-euler` 3 (kiểm Euler, Hierholzer lặp ⏱, Hamilton quay lui) · `csd201-on-ch5` 3 (tô màu tuần tự 2 thứ tự, Floyd cạnh âm + truy vết, 🎯 **PE Graph f1/f2** với phần (1) Graph.java THẬT) | 24 |
+| **tổng** | 35 module | **110** |
 
 ⏱ = có ca kiểm độ phức tạp. 🎯 = đề đúng khuôn PE của trường.
 
@@ -44,7 +45,7 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 
 ## Còn thiếu (làm tiếp theo đúng khuôn)
 
-Ch5 (đồ thị + 🎯 PE Graph) · Ch6 (sắp xếp) ·
+Ch6 (sắp xếp) ·
 Ch7 (băm) · Ch8 (KMP, Huffman, LZW/RLE) · Nâng cao (A.1, A.2) · ⭐ CS.1–CS.10 · 🎯 Luyện PE (`csd201-on-pe`: đề thật SP26 B5 P4).
 Nguồn ý đề + code thật: `~/Documents/FLM-nguon/_repo/CSD201/gen/src/practice/chN.txt` + `gen/java/chN/Pe*.java`,
 `gen/src/extra/csN-on.txt` + `gen/java/csN/Ex*.java` (CHỈ ĐỌC — không sửa flm-nguon).

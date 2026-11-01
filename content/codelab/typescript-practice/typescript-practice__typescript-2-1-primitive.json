@@ -1,0 +1,604 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-2-1-primitive",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-2-1-primitive"
+  },
+  "exercises": [
+    {
+      "title": "Say which schedule fields may be missing",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-1-primitive"
+      ],
+      "problemHtml": "<p>In src/schedule.ts, <code>note</code> is NULL in the database when there is no note, and <code>cancelledAt</code> is absent until a booking is cancelled. Fix the type so the real rows in kiem/dung.ts compile and each line of kiem/sai.ts is refused with its code.</p><p><strong>Done when:</strong> tsc is clean on kiem/dung.ts and kiem/sai.ts gets TS18047, TS18048 and TS2741 on the marked lines. No any.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/schedule.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS18047, TS18048, TS2741); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong src/schedule.ts, <code>note</code> là NULL trong CSDL khi không có ghi chú, còn <code>cancelledAt</code> vắng mặt cho tới khi lượt đặt bị huỷ. Sửa kiểu để các dòng thật trong kiem/dung.ts biên dịch được và mỗi dòng của kiem/sai.ts bị từ chối đúng mã.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts, kiem/sai.ts có TS18047, TS18048 và TS2741 ở các dòng đánh dấu. Không any.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/schedule.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS18047, TS18048, TS2741); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/schedule.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/schedule.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: entry.note.toUpperCase();|||kiem/sai.ts, dòng 4: entry.note.toUpperCase();",
+          "output": "error TS18047",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// One row of a lab's schedule. Some fields may be missing — say which ones.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string;\n  cancelledAt: string;\n};\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { ScheduleEntry } from '../src/schedule.ts';\n\n// Real rows from the database: these must compile.\nexport const rows: ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', bookedBy: 'an.nv', note: 'Bring an HDMI cable' },\n  { id: 2, lab: 'BE-201', bookedBy: 'binh.tt', note: null },\n  { id: 3, lab: 'AL-301', bookedBy: 'chi.lm', note: null, cancelledAt: '2026-11-01T07:15:00Z' },\n];\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { ScheduleEntry } from '../src/schedule.ts';\n\ndeclare const entry: ScheduleEntry;\nentry.note.toUpperCase(); // expect TS18047\nentry.cancelledAt.slice(0, 10); // expect TS18048\nexport const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' }; // expect TS2741\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// One row of a lab's schedule.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: \"no note\" (the key is always there)\n  cancelledAt?: string;     // the key is absent until the booking is cancelled\n};\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { ScheduleEntry } from '../src/schedule.ts';\n\n// Real rows from the database: these must compile.\nexport const rows: ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', bookedBy: 'an.nv', note: 'Bring an HDMI cable' },\n  { id: 2, lab: 'BE-201', bookedBy: 'binh.tt', note: null },\n  { id: 3, lab: 'AL-301', bookedBy: 'chi.lm', note: null, cancelledAt: '2026-11-01T07:15:00Z' },\n];\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { ScheduleEntry } from '../src/schedule.ts';\n\ndeclare const entry: ScheduleEntry;\nentry.note.toUpperCase(); // expect TS18047\nentry.cancelledAt.slice(0, 10); // expect TS18048\nexport const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' }; // expect TS2741\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — note as string | undefined — a NULL from the database no longer fits; cancelledAt: string | undefined — the key becomes required, real rows break; note typed as any — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — note as string | undefined — a NULL from the database no longer fits; cancelledAt: string | undefined — the key becomes required, real rows break; note typed as any — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import type { ScheduleEntry } from '../src/schedule.ts';\n\n// Real rows from the database: these must compile.\nexport const rows: ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', bookedBy: 'an.nv', note: 'Bring an HDMI cable' },\n  { id: 2, lab: 'BE-201', bookedBy: 'binh.tt', note: null },\n  { id: 3, lab: 'AL-301', bookedBy: 'chi.lm', note: null, cancelledAt: '2026-11-01T07:15:00Z' },\n];\n",
+          "kiem/sai.ts": "import type { ScheduleEntry } from '../src/schedule.ts';\n\ndeclare const entry: ScheduleEntry;\nentry.note.toUpperCase(); // expect TS18047\nentry.cancelledAt.slice(0, 10); // expect TS18048\nexport const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' }; // expect TS2741\n"
+        },
+        "tepHoc": [
+          "src/schedule.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/schedule.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS18047"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS18047 — entry.note.toUpperCase(); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS18048"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS18048 — entry.cancelledAt.slice(0, 10); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2741 — export const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "note as string | undefined — a NULL from the database no longer fits — caught by: tsc (strict): src/schedule.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS18047 — entry.note.toUpperCase();|||note as string | undefined — a NULL from the database no longer fits — máy chấm bắt ở: tsc (strict): src/schedule.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS18047 — entry.note.toUpperCase();"
+        },
+        {
+          "loi": "cancelledAt: string | undefined — the key becomes required, real rows break — caught by: tsc (strict): src/schedule.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:6 is refused with TS2741 — export const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' };|||cancelledAt: string | undefined — the key becomes required, real rows break — máy chấm bắt ở: tsc (strict): src/schedule.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:6 is refused with TS2741 — export const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' };"
+        },
+        {
+          "loi": "note typed as any — caught by: kiem/sai.ts:4 is refused with TS18047 — entry.note.toUpperCase();; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)|||note typed as any — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS18047 — entry.note.toUpperCase();; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)"
+        }
+      ]
+    },
+    {
+      "title": "An honest findEntry — no as, no !",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-1-primitive"
+      ],
+      "problemHtml": "<p><code>findEntry</code> claims it always returns an entry, using <code>as</code> to silence tsc; <code>bookerOf(S, 9)</code> crashes. Give <code>findEntry</code> its honest return type and make <code>bookerOf</code> return <code>\"(unknown)\"</code> for a missing id. Do not use <code>as</code> (except <code>as const</code>) or the <code>!</code> assertion.</p><p><strong>Done when:</strong> the 3 tests pass and kiem/sai.ts gets TS2532 on the marked line.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/find.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/find.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2532); its other lines still compile.</li>\n  <li><code>node --test test/find.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)</code>, <code>[\\w)\\]]!(?!=)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>findEntry</code> tự nhận luôn trả về một lượt đặt, dùng <code>as</code> để bịt miệng tsc; <code>bookerOf(S, 9)</code> sập. Cho <code>findEntry</code> kiểu trả về trung thực và để <code>bookerOf</code> trả <code>\"(unknown)\"</code> khi không có id đó. Không dùng <code>as</code> (trừ <code>as const</code>) hay khẳng định <code>!</code>.</p><p><strong>Đạt khi:</strong> 3 test xanh và kiem/sai.ts có TS2532 ở dòng đánh dấu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/find.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/find.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2532); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/find.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)</code>, <code>[\\w)\\]]!(?!=)</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/find.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/find.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: findEntry(S, 1).bookedBy;|||kiem/sai.ts, dòng 4: findEntry(S, 1).bookedBy;",
+          "output": "error TS2532",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/find.ts",
+          "language": "typescript",
+          "code": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Returns the entry with this id.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id) as ScheduleEntry;\n}\n\n// Who booked entry \"id\"? \"(unknown)\" when there is no such entry.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id).bookedBy;\n}\n"
+        },
+        {
+          "name": "test/find.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { findEntry, bookerOf } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }, { id: 2, lab: 'AL-301', bookedBy: 'binh.tt' }];\n\ntest('finds an existing entry', () => assert.equal(bookerOf(S, 2), 'binh.tt'));\ntest('a missing id gives undefined, not a crash', () => assert.equal(findEntry(S, 9), undefined));\ntest('the booker of a missing entry is (unknown)', () => assert.equal(bookerOf(S, 9), '(unknown)'));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { findEntry } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }];\nfindEntry(S, 1).bookedBy; // expect TS2532\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/find.ts",
+          "language": "typescript",
+          "code": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Honest return type: find() gives undefined when nothing matches, so the type says so.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\n// ?. stops at undefined, ?? supplies the default only for null/undefined.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id)?.bookedBy ?? '(unknown)';\n}\n"
+        },
+        {
+          "name": "test/find.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { findEntry, bookerOf } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }, { id: 2, lab: 'AL-301', bookedBy: 'binh.tt' }];\n\ntest('finds an existing entry', () => assert.equal(bookerOf(S, 2), 'binh.tt'));\ntest('a missing id gives undefined, not a crash', () => assert.equal(findEntry(S, 9), undefined));\ntest('the booker of a missing entry is (unknown)', () => assert.equal(bookerOf(S, 9), '(unknown)'));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { findEntry } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }];\nfindEntry(S, 1).bookedBy; // expect TS2532\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — find(...)! — the assertion still lies, and bookerOf still crashes; honest return type, but bookerOf silences it with !; returns null instead of undefined — callers expecting undefined break — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — find(...)! — the assertion still lies, and bookerOf still crashes; honest return type, but bookerOf silences it with !; returns null instead of undefined — callers expecting undefined break — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/find.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { findEntry, bookerOf } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }, { id: 2, lab: 'AL-301', bookedBy: 'binh.tt' }];\n\ntest('finds an existing entry', () => assert.equal(bookerOf(S, 2), 'binh.tt'));\ntest('a missing id gives undefined, not a crash', () => assert.equal(findEntry(S, 9), undefined));\ntest('the booker of a missing entry is (unknown)', () => assert.equal(bookerOf(S, 9), '(unknown)'));\n",
+          "kiem/sai.ts": "import { findEntry } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }];\nfindEntry(S, 1).bookedBy; // expect TS2532\n"
+        },
+        "tepHoc": [
+          "src/find.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/find.test.ts"
+            ],
+            "moTa": "tsc (strict): src/find.ts + test/find.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2532"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2532 — findEntry(S, 1).bookedBy; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/find.test.ts",
+            "moTa": "node --test test/find.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)",
+              "[\\w)\\]]!(?!=)"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "find(...)! — the assertion still lies, and bookerOf still crashes — caught by: kiem/sai.ts:4 is refused with TS2532 — findEntry(S, 1).bookedBy;; node --test test/find.test.ts exits 0 (+1)|||find(...)! — the assertion still lies, and bookerOf still crashes — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2532 — findEntry(S, 1).bookedBy;; node --test test/find.test.ts exits 0 (+1)"
+        },
+        {
+          "loi": "honest return type, but bookerOf silences it with ! — caught by: node --test test/find.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||honest return type, but bookerOf silences it with ! — máy chấm bắt ở: node --test test/find.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "returns null instead of undefined — callers expecting undefined break — caught by: kiem/sai.ts:4 is refused with TS2532 — findEntry(S, 1).bookedBy;; node --test test/find.test.ts exits 0|||returns null instead of undefined — callers expecting undefined break — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2532 — findEntry(S, 1).bookedBy;; node --test test/find.test.ts exits 0"
+        }
+      ]
+    },
+    {
+      "title": "|| or ?? — a closed lab must have 0 seats",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-1-primitive"
+      ],
+      "problemHtml": "<p>src/lab.ts compiles cleanly — tsc has nothing to say — yet two of the five tests fail: a lab closed for maintenance (capacity 0) gets 40 seats, and an empty note becomes \"(no note)\". Fix the two defaults so that only a missing value (null) is replaced.</p><p><strong>Done when:</strong> all 5 tests in test/lab.test.ts pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/lab.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/lab.test.ts</code>.</li>\n  <li><code>node --test test/lab.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/lab.ts biên dịch sạch — tsc không có gì để nói — vậy mà hai trong năm test đỏ: phòng đang bảo trì (capacity 0) được 40 chỗ, và ghi chú rỗng biến thành \"(no note)\". Sửa hai giá trị mặc định để chỉ giá trị vắng (null) mới bị thay.</p><p><strong>Đạt khi:</strong> cả 5 test trong test/lab.test.ts xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/lab.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/lab.test.ts</code>.</li>\n  <li><code>node --test test/lab.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/lab.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/lab.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/lab.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/lab.ts",
+          "language": "typescript",
+          "code": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  return lab.capacity || DEFAULT_CAPACITY;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note || '(no note)';\n}\n"
+        },
+        {
+          "name": "test/lab.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf, noteOf } from '../src/lab.ts';\n\ntest('a lab with no recorded capacity gets the default 40', () => assert.equal(capacityOf({ code: 'BE-202', capacity: null }), 40));\ntest('a lab closed for maintenance has 0 seats', () => assert.equal(capacityOf({ code: 'AL-301', capacity: 0 }), 0));\ntest('a normal lab keeps its capacity', () => assert.equal(capacityOf({ code: 'BE-201', capacity: 35 }), 35));\ntest('no note shows (no note)', () => assert.equal(noteOf(null), '(no note)'));\ntest('an empty note stays empty', () => assert.equal(noteOf(''), ''));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/lab.ts",
+          "language": "typescript",
+          "code": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  return lab.capacity ?? DEFAULT_CAPACITY // ?? replaces ONLY null/undefined; 0 stays 0;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note ?? '(no note)' // '' is kept;\n}\n"
+        },
+        {
+          "name": "test/lab.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf, noteOf } from '../src/lab.ts';\n\ntest('a lab with no recorded capacity gets the default 40', () => assert.equal(capacityOf({ code: 'BE-202', capacity: null }), 40));\ntest('a lab closed for maintenance has 0 seats', () => assert.equal(capacityOf({ code: 'AL-301', capacity: 0 }), 0));\ntest('a normal lab keeps its capacity', () => assert.equal(capacityOf({ code: 'BE-201', capacity: 35 }), 35));\ntest('no note shows (no note)', () => assert.equal(noteOf(null), '(no note)'));\ntest('an empty note stays empty', () => assert.equal(noteOf(''), ''));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — if (!lab.capacity) — the same falsy check as ||, 0 still becomes 40; fixes capacity with ?? but keeps || for the note — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — if (!lab.capacity) — the same falsy check as ||, 0 still becomes 40; fixes capacity with ?? but keeps || for the note — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/lab.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf, noteOf } from '../src/lab.ts';\n\ntest('a lab with no recorded capacity gets the default 40', () => assert.equal(capacityOf({ code: 'BE-202', capacity: null }), 40));\ntest('a lab closed for maintenance has 0 seats', () => assert.equal(capacityOf({ code: 'AL-301', capacity: 0 }), 0));\ntest('a normal lab keeps its capacity', () => assert.equal(capacityOf({ code: 'BE-201', capacity: 35 }), 35));\ntest('no note shows (no note)', () => assert.equal(noteOf(null), '(no note)'));\ntest('an empty note stays empty', () => assert.equal(noteOf(''), ''));\n"
+        },
+        "tepHoc": [
+          "src/lab.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/lab.test.ts"
+            ],
+            "moTa": "tsc (strict): src/lab.ts + test/lab.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/lab.test.ts",
+            "moTa": "node --test test/lab.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "if (!lab.capacity) — the same falsy check as ||, 0 still becomes 40 — caught by: node --test test/lab.test.ts exits 0|||if (!lab.capacity) — the same falsy check as ||, 0 still becomes 40 — máy chấm bắt ở: node --test test/lab.test.ts exits 0"
+        },
+        {
+          "loi": "fixes capacity with ?? but keeps || for the note — caught by: node --test test/lab.test.ts exits 0|||fixes capacity with ?? but keeps || for the note — máy chấm bắt ở: node --test test/lab.test.ts exits 0"
+        }
+      ]
+    },
+    {
+      "title": "Send a bigint booking id as JSON without losing a digit",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-1-primitive"
+      ],
+      "problemHtml": "<p>Booking ids come from a PostgreSQL <code>bigint</code> column. <code>toJson</code> calls <code>JSON.stringify</code> on an entry with a bigint id — it compiles, and throws at runtime. Make <code>toJson</code> send the id as a string with every digit; keep <code>parseId</code> returning a <code>bigint</code>.</p><p><strong>Done when:</strong> the 2 tests pass and kiem/sai.ts gets TS2322 and TS2365.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/id.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/id.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2365); its other lines still compile.</li>\n  <li><code>node --test test/id.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Id lượt đặt lấy từ cột <code>bigint</code> của PostgreSQL. <code>toJson</code> gọi <code>JSON.stringify</code> trên một lượt đặt có id bigint — biên dịch được, và ném lỗi lúc chạy. Sửa <code>toJson</code> để gửi id dạng chuỗi đủ mọi chữ số; giữ <code>parseId</code> trả về <code>bigint</code>.</p><p><strong>Đạt khi:</strong> 2 test xanh và kiem/sai.ts có TS2322 và TS2365.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/id.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/id.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2365); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/id.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/id.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/id.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const asNumber: number = parseId('7');|||kiem/sai.ts, dòng 3: const asNumber: number = parseId('7');",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/id.ts",
+          "language": "typescript",
+          "code": "export type Entry = { id: bigint; lab: string };\n\n// Booking ids come from a PostgreSQL bigint column and can be larger than 2^53.\nexport function parseId(text: string): bigint {\n  return BigInt(text);\n}\n\n// The JSON the API sends. The id must keep every digit (send it as a string).\nexport function toJson(e: Entry): string {\n  return JSON.stringify(e);\n}\n"
+        },
+        {
+          "name": "test/id.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseId, toJson } from '../src/id.ts';\n\ntest('a big id keeps every digit in JSON', () =>\n  assert.equal(toJson({ id: 9007199254740993n, lab: 'BE-201' }), '{\"id\":\"9007199254740993\",\"lab\":\"BE-201\"}'));\ntest('parseId gives a bigint you can do bigint maths with', () => assert.equal(parseId('9007199254740993') + 1n, 9007199254740994n));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { parseId } from '../src/id.ts';\n\nconst asNumber: number = parseId('7'); // expect TS2322\nparseId('7') + 1; // expect TS2365\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/id.ts",
+          "language": "typescript",
+          "code": "export type Entry = { id: bigint; lab: string };\n\n// Booking ids come from a PostgreSQL bigint column and can be larger than 2^53.\nexport function parseId(text: string): bigint {\n  return BigInt(text);\n}\n\n// The JSON the API sends. The id must keep every digit (send it as a string).\nexport function toJson(e: Entry): string {\n  // JSON has no bigint: JSON.stringify throws on one, and Number() would round it.\n  return JSON.stringify({ id: e.id.toString(), lab: e.lab });\n}\n"
+        },
+        {
+          "name": "test/id.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseId, toJson } from '../src/id.ts';\n\ntest('a big id keeps every digit in JSON', () =>\n  assert.equal(toJson({ id: 9007199254740993n, lab: 'BE-201' }), '{\"id\":\"9007199254740993\",\"lab\":\"BE-201\"}'));\ntest('parseId gives a bigint you can do bigint maths with', () => assert.equal(parseId('9007199254740993') + 1n, 9007199254740994n));\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { parseId } from '../src/id.ts';\n\nconst asNumber: number = parseId('7'); // expect TS2322\nparseId('7') + 1; // expect TS2365\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — Number(e.id) — 9007199254740993 becomes 9007199254740992; parseId returns a number — the bigint maths and the tsc checks are gone — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — Number(e.id) — 9007199254740993 becomes 9007199254740992; parseId returns a number — the bigint maths and the tsc checks are gone — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/id.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseId, toJson } from '../src/id.ts';\n\ntest('a big id keeps every digit in JSON', () =>\n  assert.equal(toJson({ id: 9007199254740993n, lab: 'BE-201' }), '{\"id\":\"9007199254740993\",\"lab\":\"BE-201\"}'));\ntest('parseId gives a bigint you can do bigint maths with', () => assert.equal(parseId('9007199254740993') + 1n, 9007199254740994n));\n",
+          "kiem/sai.ts": "import { parseId } from '../src/id.ts';\n\nconst asNumber: number = parseId('7'); // expect TS2322\nparseId('7') + 1; // expect TS2365\n"
+        },
+        "tepHoc": [
+          "src/id.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/id.test.ts"
+            ],
+            "moTa": "tsc (strict): src/id.ts + test/id.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const asNumber: number = parseId('7'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2365"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2365 — parseId('7') + 1; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/id.test.ts",
+            "moTa": "node --test test/id.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Number(e.id) — 9007199254740993 becomes 9007199254740992 — caught by: node --test test/id.test.ts exits 0|||Number(e.id) — 9007199254740993 becomes 9007199254740992 — máy chấm bắt ở: node --test test/id.test.ts exits 0"
+        },
+        {
+          "loi": "parseId returns a number — the bigint maths and the tsc checks are gone — caught by: tsc (strict): src/id.ts + test/id.test.ts compile with 0 errors; kiem/sai.ts:3 is refused with TS2322 — const asNumber: number = parseId('7'); (+2)|||parseId returns a number — the bigint maths and the tsc checks are gone — máy chấm bắt ở: tsc (strict): src/id.ts + test/id.test.ts compile with 0 errors; kiem/sai.ts:3 is refused with TS2322 — const asNumber: number = parseId('7'); (+2)"
+        }
+      ]
+    }
+  ]
+}

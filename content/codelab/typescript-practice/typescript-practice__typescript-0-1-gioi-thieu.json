@@ -1,0 +1,284 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-0-1-gioi-thieu",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-0-1-gioi-thieu"
+  },
+  "exercises": [
+    {
+      "title": "Fix the four bugs in one LabFlow day",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-1-gioi-thieu"
+      ],
+      "problemHtml": "<p><code>src/day.ts</code> simulates one working day and hides four bugs: a typo, a misspelled property, a lower-case role and a status that does not exist. Run <code>npx tsc --noEmit</code>, read each error, fix the line it points at. Do not use <code>any</code> or <code>@ts-ignore</code>.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node src/day.ts</code> prints a usage of 0.42857142857142855 and 2 confirmed bookings.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/day.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files.</li>\n  <li><code>node src/day.ts</code> exits with code 0 and prints <code>BE-201 08:00 STUDENT -&gt; needs approval: false</code> (and the following lines) — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/day.ts</code> mô phỏng một ngày làm việc và giấu bốn con bug: gõ nhầm tên trường, viết sai tên thuộc tính, vai trò viết thường và một trạng thái không tồn tại. Chạy <code>npx tsc --noEmit</code>, đọc từng lỗi, sửa đúng dòng nó chỉ. Không dùng <code>any</code> hay <code>@ts-ignore</code>.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node src/day.ts</code> in tỉ lệ sử dụng 0.42857142857142855 và 2 lượt đặt đã xác nhận.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/day.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn.</li>\n  <li><code>node src/day.ts</code> thoát với mã 0 và in <code>BE-201 08:00 STUDENT -&gt; needs approval: false</code> (cùng các dòng sau) — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/day.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/day.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node src/day.ts",
+          "output": "BE-201 08:00 STUDENT -> needs approval: false\nBE-201 13:00 LECTURER -> needs approval: false\nBE-305 15:00 STUDENT -> needs approval: true\nusage today: 0.42857142857142855\nconfirmed bookings: 2",
+          "explanation": "The program must still print exactly this once the types are fixed — types are erased when Node runs the file, so they cannot change the output, only refuse wrong code.|||Chương trình vẫn phải in đúng như vậy sau khi sửa kiểu — kiểu bị xoá khi Node chạy tệp nên không đổi được output, chỉ từ chối code sai."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/day.ts",
+          "language": "typescript",
+          "code": "// One working day at LabFlow. Four bugs are hidden here — tsc finds all of them.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'lecturer', start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minute / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seat: r.seats, role: r.role })\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => b.status === 'APPROVED').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "lib/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/day.ts",
+          "language": "typescript",
+          "code": "// One working day at LabFlow — all four bugs fixed, each one pointed out by tsc.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'LECTURER', start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\n// TS2551: the field is minutes · TS2561: seats · TS2820: roles are upper-case · TS2367: only PENDING | CONFIRMED\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seats: r.seats, role: r.role })\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => b.status === 'CONFIRMED').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "lib/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — silence every red line with as any; compiles, but 'fixes' the lecturer into a STUDENT and counts PENDING — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — silence every red line with as any; compiles, but 'fixes' the lecturer into a STUDENT and counts PENDING — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "lib/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        "tepHoc": [
+          "src/day.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [],
+            "moTa": "tsc (strict): src/day.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node src/day.ts",
+            "ra": "BE-201 08:00 STUDENT -> needs approval: false\nBE-201 13:00 LECTURER -> needs approval: false\nBE-305 15:00 STUDENT -> needs approval: true\nusage today: 0.42857142857142855\nconfirmed bookings: 2",
+            "moTa": "node src/day.ts exits 0 and prints \"BE-201 08:00 STUDENT -> needs approval: false…\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "silence every red line with as any — caught by: node src/day.ts exits 0 and prints \"BE-201 08:00 STUDENT -> needs approval: false…\"; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)|||silence every red line with as any — máy chấm bắt ở: node src/day.ts exits 0 and prints \"BE-201 08:00 STUDENT -> needs approval: false…\"; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)"
+        },
+        {
+          "loi": "compiles, but 'fixes' the lecturer into a STUDENT and counts PENDING — caught by: node src/day.ts exits 0 and prints \"BE-201 08:00 STUDENT -> needs approval: false…\"|||compiles, but 'fixes' the lecturer into a STUDENT and counts PENDING — máy chấm bắt ở: node src/day.ts exits 0 and prints \"BE-201 08:00 STUDENT -> needs approval: false…\""
+        }
+      ]
+    },
+    {
+      "title": "Finish a rename the compiler started",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-1-gioi-thieu"
+      ],
+      "problemHtml": "<p>The rules in <code>lib/booking.ts</code> renamed the field <code>seats</code> to <code>seatCount</code>. In plain JavaScript the old calls would load fine and throw <code>RangeError … got undefined</code> only when they run. Here tsc lists every one. Update <code>src/calls.ts</code> so it compiles and the three behaviour tests pass. No <code>any</code>, no <code>@ts-ignore</code>.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node --test test/calls.test.ts</code> shows 3 passing tests.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/calls.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/calls.test.ts</code>.</li>\n  <li><code>node --test test/calls.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ luật trong <code>lib/booking.ts</code> đã đổi tên trường <code>seats</code> thành <code>seatCount</code>. Với JavaScript thuần, các lời gọi cũ vẫn nạp bình thường và chỉ ném <code>RangeError … got undefined</code> khi chạy tới. Ở đây tsc liệt kê từng chỗ. Sửa <code>src/calls.ts</code> cho biên dịch được và ba test hành vi qua. Không <code>any</code>, không <code>@ts-ignore</code>.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node --test test/calls.test.ts</code> hiện 3 test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/calls.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/calls.test.ts</code>.</li>\n  <li><code>node --test test/calls.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/calls.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/calls.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/calls.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/calls.ts",
+          "language": "typescript",
+          "code": "// Finish the refactor: lib/booking.ts renamed seats -> seatCount. tsc lists every call below that still says seats.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  return needsApproval({ seats: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  return needsApproval({ seats: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  return createBooking({ lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "lib/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seatCount: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seatCount, role }: { seatCount: number; role: Role }): boolean {\n  if (!Number.isInteger(seatCount) || seatCount < 1) {\n    throw new RangeError('seatCount must be a positive integer, got ' + seatCount);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seatCount > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seatCount, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seatCount, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "test/calls.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { bigClassWaits, lecturerWaits, morningBooking } from '../src/calls.ts';\n\ntest('a 40-seat student class waits for approval', () => assert.equal(bigClassWaits(), true));\ntest('a lecturer never waits', () => assert.equal(lecturerWaits(), false));\ntest('a 20-seat morning booking is CONFIRMED', () => assert.equal(morningBooking().status, 'CONFIRMED'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/calls.ts",
+          "language": "typescript",
+          "code": "// Refactor finished: every call now uses seatCount — tsc listed each one, we fixed each one.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  return needsApproval({ seatCount: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  return needsApproval({ seatCount: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  return createBooking({ lab: 'BE-201', seatCount: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "lib/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seatCount: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seatCount, role }: { seatCount: number; role: Role }): boolean {\n  if (!Number.isInteger(seatCount) || seatCount < 1) {\n    throw new RangeError('seatCount must be a positive integer, got ' + seatCount);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seatCount > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seatCount, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seatCount, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "test/calls.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { bigClassWaits, lecturerWaits, morningBooking } from '../src/calls.ts';\n\ntest('a 40-seat student class waits for approval', () => assert.equal(bigClassWaits(), true));\ntest('a lecturer never waits', () => assert.equal(lecturerWaits(), false));\ntest('a 20-seat morning booking is CONFIRMED', () => assert.equal(morningBooking().status, 'CONFIRMED'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — // @ts-ignore above each red call; renames only the first call — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — // @ts-ignore above each red call; renames only the first call — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "lib/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seatCount: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seatCount, role }: { seatCount: number; role: Role }): boolean {\n  if (!Number.isInteger(seatCount) || seatCount < 1) {\n    throw new RangeError('seatCount must be a positive integer, got ' + seatCount);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seatCount > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seatCount, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seatCount, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n",
+          "test/calls.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { bigClassWaits, lecturerWaits, morningBooking } from '../src/calls.ts';\n\ntest('a 40-seat student class waits for approval', () => assert.equal(bigClassWaits(), true));\ntest('a lecturer never waits', () => assert.equal(lecturerWaits(), false));\ntest('a 20-seat morning booking is CONFIRMED', () => assert.equal(morningBooking().status, 'CONFIRMED'));\n"
+        },
+        "tepHoc": [
+          "src/calls.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/calls.test.ts"
+            ],
+            "moTa": "tsc (strict): src/calls.ts + test/calls.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/calls.test.ts",
+            "moTa": "node --test test/calls.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "// @ts-ignore above each red call — caught by: node --test test/calls.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)|||// @ts-ignore above each red call — máy chấm bắt ở: node --test test/calls.test.ts exits 0; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)"
+        },
+        {
+          "loi": "renames only the first call — caught by: tsc (strict): src/calls.ts + test/calls.test.ts compile with 0 errors; node --test test/calls.test.ts exits 0|||renames only the first call — máy chấm bắt ở: tsc (strict): src/calls.ts + test/calls.test.ts compile with 0 errors; node --test test/calls.test.ts exits 0"
+        }
+      ]
+    }
+  ]
+}

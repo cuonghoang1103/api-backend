@@ -1,0 +1,331 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "testing-practice",
+  "name": "Testing — Luyện viết test, chấm bằng đột biến",
+  "language": "javascript",
+  "color": "#15803d",
+  "docsUrl": "https://vitest.dev/api/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá Testing (dự án xuyên khoá LabFlow Lite — luật đặt phòng lab): ở đây bạn KHÔNG viết code, bạn viết TEST. Máy chấm đột biến (mutation testing) chạy ngay trong trình duyệt: bộ test của bạn phải xanh với code đúng, rồi đỏ với từng bản code cài sẵn một lỗi (biên sai một đơn vị, nhánh vai trò bị bỏ, đổi loại lỗi, làm tròn sai giờ…). Đột biến còn sống = chỗ bộ test của bạn chưa nhìn tới. Vitest thu gọn: describe/it/it.each, toBe/toEqual/toStrictEqual/toThrow/toBeCloseTo, .not, requireAssertions như cấu hình khoá.",
+  "modules": [
+    {
+      "slug": "tst-1-1-cau-truc",
+      "name": "1.1 Anatomy of a test — approval & booking status",
+      "level": "BEGINNER",
+      "description": "Viết test Arrange–Act–Assert cho needsApproval và createBooking (BR-06, Lite-2) — diệt 5 đột biến: biên 30 chỗ, ADMIN, đảo trạng thái, 0 chỗ, khung giờ sai không ném lỗi."
+    },
+    {
+      "slug": "tst-1-2-matcher",
+      "name": "1.2 Matchers that say what you mean — time & usage rate",
+      "level": "BEGINNER",
+      "description": "Chọn đúng matcher cho parseTime/formatTime/usageRate — toThrow(TypeError) thay vì toThrow(), toBe('07:00') thay vì toBeTruthy, toBeCloseTo cho số thực — diệt 6 đột biến."
+    },
+    {
+      "slug": "tst-1-3-ten-test",
+      "name": "1.3 checkSlot as an it.each table",
+      "level": "BEGINNER",
+      "description": "checkSlot thành bảng it.each — 5 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-1-4-ham-thuan",
+      "name": "1.4 Pure functions & edge cases — booking window and limits",
+      "level": "INTERMEDIATE",
+      "description": "Phân vùng tương đương + giá trị biên thành bảng it.each cho isWithinBookingWindow, checkSlot, needsApproval — diệt các đột biến lệch biên (14 ngày, hôm nay, đúng 4 giờ) và đầu vào không nguyên."
+    },
+    {
+      "slug": "tst-1-5-lab-quy-tac",
+      "name": "1.5 Lab — rules suite, 8 mutants",
+      "level": "BEGINNER",
+      "description": "Lab 1 — bộ test luật, 8 đột biến — 8 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-2-1-async",
+      "name": "2.1 bookLab: async results and overlaps",
+      "level": "BEGINNER",
+      "description": "bookLab: kết quả bất đồng bộ và trùng lịch — 5 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-2-2-thoi-gian",
+      "name": "2.2 Time rules: cancel, lock-out, retry, Viet Nam days",
+      "level": "BEGINNER",
+      "description": "Luật thời gian: huỷ, khoá, retry, ngày theo giờ VN — 6 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-2-3-loi",
+      "name": "2.3 Failure paths of bookLab",
+      "level": "BEGINNER",
+      "description": "Các nhánh thất bại của bookLab — 5 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-2-4-ngau-nhien",
+      "name": "2.4 Booking codes and records",
+      "level": "BEGINNER",
+      "description": "Mã đặt chỗ và bản ghi — 5 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-2-5-lab-bat-dong-bo",
+      "name": "2.5 Lab — async, time and errors, 8 mutants",
+      "level": "BEGINNER",
+      "description": "Lab 2 — bất đồng bộ, thời gian, lỗi, 8 đột biến — 8 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-3-1-phan-loai",
+      "name": "3.1 bookAndNotify with the right double for each job",
+      "level": "INTERMEDIATE",
+      "description": "bookAndNotify với đúng loại đồ đóng thế — 5 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-3-2-mock-module",
+      "name": "3.2 HTTP mailer adapter with MSW (+ vi.mock for the reminder)",
+      "level": "INTERMEDIATE",
+      "description": "Adapter gửi thư HTTP với MSW (+ vi.mock cho nhắc lịch) — 6 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-3-3-qua-da",
+      "name": "3.3 Tests that catch bugs and survive refactoring",
+      "level": "INTERMEDIATE",
+      "description": "Test bắt được bug và sống qua refactor — 3 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-3-4-thiet-ke",
+      "name": "3.4 Pure core and injected reminder",
+      "level": "INTERMEDIATE",
+      "description": "Lõi thuần và nhắc lịch được tiêm — 4 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-3-5-lab-test-double",
+      "name": "3.5 Lab — e-mail flow, 8 mutants",
+      "level": "INTERMEDIATE",
+      "description": "Lab 3 — luồng gửi thư, 8 đột biến — 8 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-4-1-vi-sao",
+      "name": "4.1 PostgreSQL adapter: error mapping and the race",
+      "level": "INTERMEDIATE",
+      "description": "Adapter PostgreSQL: đổi mã lỗi và lỗi tranh chấp — 4 đột biến. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-4-3-testcontainers",
+      "name": "4.3 The test database must match production",
+      "level": "INTERMEDIATE",
+      "description": "CSDL test phải khớp production — 3 đột biến. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-4-4-co-lap",
+      "name": "4.4 What is really stored — read back with SQL, tests isolated",
+      "level": "INTERMEDIATE",
+      "description": "Thứ thật sự được lưu — đọc lại bằng SQL, test được cô lập — 3 đột biến. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-4-5-lab-tich-hop",
+      "name": "4.5 Lab — PostgreSQL adapter, 8 mutants",
+      "level": "INTERMEDIATE",
+      "description": "Lab 4 — adapter PostgreSQL, 8 đột biến — 8 đột biến. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-5-1-supertest",
+      "name": "5.1 The booking API through HTTP: status, headers and the full body",
+      "level": "INTERMEDIATE",
+      "description": "API đặt phòng qua HTTP: mã trạng thái, header và cả body — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-5-2-xac-thuc",
+      "name": "5.2 Who are you, and what may you see — 401, 403, 404 with real tokens",
+      "level": "INTERMEDIATE",
+      "description": "Bạn là ai, được xem gì — 401, 403, 404 với token thật — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-5-3-validation",
+      "name": "5.3 Validation at the door: 400 on the right field, 422 for rules",
+      "level": "INTERMEDIATE",
+      "description": "Kiểm dữ liệu ở cửa: 400 đúng trường, 422 cho luật — 7 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-5-4-hop-dong",
+      "name": "5.4 Every real response against openapi.json",
+      "level": "INTERMEDIATE",
+      "description": "Mọi phản hồi thật theo openapi.json — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-5-5-lab-api",
+      "name": "5.5 Lab — the LabFlow Lite HTTP API: kill 8 mutants",
+      "level": "INTERMEDIATE",
+      "description": "Lab 5 — API HTTP của LabFlow Lite: diệt 8 đột biến — 8 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-6-1-testing-library",
+      "name": "6.1 Find the form and the list the way users do",
+      "level": "INTERMEDIATE",
+      "description": "Tìm form và danh sách theo cách người dùng tìm — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-6-2-tuong-tac",
+      "name": "6.2 Type, submit, wait: the booking form in use",
+      "level": "INTERMEDIATE",
+      "description": "Gõ, gửi, chờ: form đặt phòng khi được dùng — 6 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-6-3-api-gia",
+      "name": "6.3 A screen that fetches: every state through MSW",
+      "level": "INTERMEDIATE",
+      "description": "Màn hình gọi API: mọi trạng thái qua MSW — 6 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-6-4-nextjs",
+      "name": "6.4 Next.js: free slots, a route handler and its data",
+      "level": "INTERMEDIATE",
+      "description": "Next.js: khung trống, một route handler và dữ liệu của nó — 6 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-6-5-lab-react",
+      "name": "6.5 Lab — the booking form and the admin list: kill 8 mutants",
+      "level": "INTERMEDIATE",
+      "description": "Lab 6 — form đặt phòng và danh sách admin: diệt 8 đột biến — 8 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-7-1-playwright",
+      "name": "7.1 Your first browser tests: the sign-in page",
+      "level": "INTERMEDIATE",
+      "description": "Test trình duyệt đầu tiên: trang đăng nhập — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-7-2-luong",
+      "name": "7.2 User journeys: a saved session, two users, one booking",
+      "level": "INTERMEDIATE",
+      "description": "Hành trình người dùng: phiên lưu sẵn, hai người, một lượt đặt — 6 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-7-3-on-dinh",
+      "name": "7.3 Stable journeys: own data, retrying assertions, a slow server",
+      "level": "INTERMEDIATE",
+      "description": "Hành trình ổn định: dữ liệu riêng, assertion biết thử lại, server chậm — 4 đột biến + 2 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-7-4-da-trinh-duyet",
+      "name": "7.4 Five projects: the header on desktops and phones",
+      "level": "INTERMEDIATE",
+      "description": "Năm project: header trên máy tính và điện thoại — 4 đột biến. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-7-5-lab-e2e",
+      "name": "7.5 Lab — end-to-end journeys: kill 8 mutants",
+      "level": "INTERMEDIATE",
+      "description": "Lab 7 — hành trình đầu-cuối: diệt 8 đột biến — 8 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-8-1-do-phu",
+      "name": "8.1 The lines coverage showed red: the API's error paths",
+      "level": "ADVANCED",
+      "description": "Những dòng độ phủ báo đỏ: nhánh lỗi của API — 5 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-8-2-mutation",
+      "name": "8.2 Kill what Stryker found alive",
+      "level": "ADVANCED",
+      "description": "Diệt những đột biến Stryker thấy còn sống — 8 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-8-3-flaky",
+      "name": "8.3 Deterministic tests for clock, numbers, state and a race",
+      "level": "ADVANCED",
+      "description": "Test tất định cho đồng hồ, con số, trạng thái và tranh chấp — 5 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-8-4-toc-do",
+      "name": "8.4 The same checks, without sleeping",
+      "level": "ADVANCED",
+      "description": "Cùng những phép kiểm, không ngủ — 4 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-8-5-lab-chat-luong",
+      "name": "8.5 Lab 8: check-in and no-shows — strong and stable",
+      "level": "ADVANCED",
+      "description": "Lab 8: check-in và vắng mặt — mạnh và ổn định — 9 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-9-1-github-actions",
+      "name": "9.1 Tests for the CI workflow itself",
+      "level": "ADVANCED",
+      "description": "Test cho chính workflow CI — 8 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-9-2-bao-cao",
+      "name": "9.2 A job summary that tells the truth",
+      "level": "ADVANCED",
+      "description": "Bản tóm tắt job nói đúng sự thật — 7 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-9-3-bat-buoc",
+      "name": "9.3 The gate that decides a merge",
+      "level": "ADVANCED",
+      "description": "Cổng quyết định có được merge — 5 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-9-4-ma-tran",
+      "name": "9.4 Shards that take the same time",
+      "level": "ADVANCED",
+      "description": "Các shard chạy lâu như nhau — 6 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-9-5-lab-ci",
+      "name": "9.5 Lab — rules that keep a workflow safe",
+      "level": "ADVANCED",
+      "description": "Lab 9 — luật giữ một workflow an toàn — 8 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-10-1-tdd",
+      "name": "10.1 Waitlist, built test-first",
+      "level": "ADVANCED",
+      "description": "Danh sách chờ, viết test trước — 7 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-10-2-code-cu",
+      "name": "10.2 Characterize a legacy report before anyone touches it",
+      "level": "ADVANCED",
+      "description": "Đặc tả hành vi một báo cáo cũ trước khi ai đụng vào — 8 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-10-3-review",
+      "name": "10.3 Rewrite the tests of pull request #57",
+      "level": "ADVANCED",
+      "description": "Viết lại test của pull request #57 — 5 đột biến + 2 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-10-4-phong-van",
+      "name": "10.4 Live coding: test mergeBusy in 20 minutes",
+      "level": "ADVANCED",
+      "description": "Code trực tiếp: test mergeBusy trong 20 phút — 6 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-10-5-lab-tdd-code-cu",
+      "name": "10.5 Lab 10: weekly bookings test-first, the club fee pinned and refactored",
+      "level": "ADVANCED",
+      "description": "Lab 10: đặt lịch hằng tuần viết test trước, phí câu lạc bộ được ghim rồi refactor — 9 đột biến. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-11-1-ke-hoach",
+      "name": "11.1 A traceability matrix that tells the truth",
+      "level": "ADVANCED",
+      "description": "Ma trận truy vết nói thật — 8 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    },
+    {
+      "slug": "tst-11-2-backend",
+      "name": "11.2 US-11 on the backend: rule, service and API",
+      "level": "ADVANCED",
+      "description": "US-11 ở backend: luật, service và API · US-11 trên PostgreSQL thật — 8 đột biến + 1 vô hại · 6 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-11-3-frontend",
+      "name": "11.3 The My bookings screen, as a user sees it",
+      "level": "ADVANCED",
+      "description": "Màn hình My bookings, như người dùng thấy · Một hành trình đầu-cuối cho US-11 — 8 đột biến + 1 vô hại · 4 đột biến + 1 vô hại. Chạy trên máy bằng cham-tai-may.mjs (web không chấm) rồi tự đánh dấu."
+    },
+    {
+      "slug": "tst-11-4-ci",
+      "name": "11.4 The quality report and the gate",
+      "level": "ADVANCED",
+      "description": "Báo cáo chất lượng và cổng chặn — 8 đột biến + 1 vô hại. Chấm đột biến ngay trong trình duyệt."
+    }
+  ]
+}

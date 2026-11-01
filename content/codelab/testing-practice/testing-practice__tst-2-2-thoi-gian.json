@@ -1,0 +1,214 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-2-2-thoi-gian",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-2-2-thoi-gian"
+  },
+  "exercises": [
+    {
+      "title": "Time rules: cancel, lock-out, retry, Viet Nam days",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest"
+      ],
+      "prerequisites": [
+        "tst-2-2-thoi-gian"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/rules/cancel.js</code>, <code>src/auth/login-guard.js</code>, <code>src/lib/retry.js</code>, <code>src/rules/days.js</code> — canCancel, createLoginGuard, retry, daysAheadVN. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no real waiting: injected clock or fake timers, restored in afterEach; green under TZ=UTC.</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>6 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>demo2/th22.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 6</b> mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/rules/cancel.js</code>, <code>src/auth/login-guard.js</code>, <code>src/lib/retry.js</code>, <code>src/rules/days.js</code> — canCancel, createLoginGuard, retry, daysAheadVN. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không chờ thật: tiêm đồng hồ hoặc fake timers, trả lại trong afterEach; xanh dưới TZ=UTC.</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>6 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>demo2/th22.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 6</b> đột biến.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo2/th22.test.js.|||Tệp test của bạn, bắt đầu từ demo2/th22.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 6.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: cancel exactly 60 minutes before refused|||Đột biến M1: cancel exactly 60 minutes before refused",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-2-2-thoi-gian shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo2/th22.test.js, src/lib/retry.test.js, src/rules/days.test.js, src/auth/login-guard.test.js.|||Bài tst-2-2-thoi-gian dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo2/th22.test.js, src/lib/retry.test.js, src/rules/days.test.js, src/auth/login-guard.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo2/th22.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { canCancel } from '../src/rules/cancel.js';\nimport { createLoginGuard } from '../src/auth/login-guard.js';\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(canCancel).toBeDefined();\n    expect(createLoginGuard).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/auth/login-guard.js",
+          "language": "javascript",
+          "code": "// BR-02: 5 wrong passwords in a row lock the account for 15 minutes.\nexport const MAX_FAILURES = 5;\nexport const LOCK_MINUTES = 15;\n\nexport function createLoginGuard(now = () => Date.now()) {\n  const state = new Map(); // email -> { failures, lockedUntil }\n  return {\n    isLocked(email) {\n      const s = state.get(email);\n      return Boolean(s && s.lockedUntil > now());\n    },\n    recordFailure(email) {\n      const s = state.get(email) ?? { failures: 0, lockedUntil: 0 };\n      s.failures += 1;\n      if (s.failures >= MAX_FAILURES) {\n        s.lockedUntil = now() + LOCK_MINUTES * 60000;\n        s.failures = 0;\n      }\n      state.set(email, s);\n    },\n    recordSuccess(email) {\n      state.delete(email);\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/lib/retry.js",
+          "language": "javascript",
+          "code": "// Call fn up to `attempts` times; wait delayMs, then 2 × delayMs, … between attempts.\nexport async function retry(fn, { attempts = 3, delayMs = 1000 } = {}) {\n  let lastError;\n  for (let i = 1; i <= attempts; i++) {\n    try {\n      return await fn(i);\n    } catch (err) {\n      lastError = err;\n      if (i < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs * i));\n    }\n  }\n  throw lastError;\n}\n"
+        },
+        {
+          "name": "src/rules/cancel.js",
+          "language": "javascript",
+          "code": "// Lite-3: a booking can be cancelled until 60 minutes before it starts.\nexport const CANCEL_LIMIT_MINUTES = 60;\n\nexport function canCancel(startsAt, now = new Date()) {\n  const minutesLeft = (startsAt.getTime() - now.getTime()) / 60000;\n  return minutesLeft >= CANCEL_LIMIT_MINUTES;\n}\n\n// Chapter 11 (US-11 \"My bookings\"): when does a booking start, and may this user cancel it now?\n// A booking's date and start are Viet Nam wall-clock time (UTC+7), whatever the server's time zone.\nexport function startsAtVN(date, start) {\n  return new Date(date + 'T' + start + ':00+07:00');\n}\n\n// booking: { userId, status, date, start } or null · user: { id, role } · now: a Date.\nexport function cancelDecision(booking, user, now) {\n  const isAdmin = user.role === 'ADMIN';\n  if (!booking || (booking.userId !== user.id && !isAdmin)) return { ok: false, code: 'NOT_FOUND' };\n  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n  if (!isAdmin && !canCancel(startsAtVN(booking.date, booking.start), now)) return { ok: false, code: 'TOO_LATE_TO_CANCEL' };\n  return { ok: true };\n}\n"
+        },
+        {
+          "name": "src/rules/days.js",
+          "language": "javascript",
+          "code": "// BR-05 needs \"days ahead\" counted in Viet Nam's calendar (UTC+7), whatever the server's time zone.\nconst VN_OFFSET_MS = 7 * 60 * 60 * 1000;\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nexport function daysAheadVN(dateText, now = new Date()) {\n  const todayVN = new Date(now.getTime() + VN_OFFSET_MS).toISOString().slice(0, 10);\n  return Math.round((Date.parse(dateText + 'T00:00:00Z') - Date.parse(todayVN + 'T00:00:00Z')) / DAY_MS);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo2/th22.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { canCancel } from '../src/rules/cancel.js';\nimport { createLoginGuard } from '../src/auth/login-guard.js';\n\ndescribe('practice 2.2', () => {\n  beforeEach(() => {\n    vi.useFakeTimers();\n    vi.setSystemTime(new Date('2026-11-16T08:00:00+07:00'));\n  });\n  afterEach(() => {\n    vi.useRealTimers();\n  });\n\n  it.each([\n    [59, false],\n    [60, true],\n    [61, true],\n  ])('a booking %i minutes from now can be cancelled → %s', (minutes, expected) => {\n    const startsAt = new Date(Date.now() + minutes * 60000);\n    expect(canCancel(startsAt)).toBe(expected);\n  });\n\n  it('after the lock expires, 5 new failures lock the account again', () => {\n    const guard = createLoginGuard();\n    for (let i = 0; i < 5; i++) guard.recordFailure('an@fpt.edu.vn');\n    vi.advanceTimersByTime(15 * 60 * 1000);\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(false);\n    for (let i = 0; i < 4; i++) guard.recordFailure('an@fpt.edu.vn');\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(false);\n    guard.recordFailure('an@fpt.edu.vn');\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(true);\n  });\n});\n"
+        },
+        {
+          "name": "src/lib/retry.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { retry } from './retry.js';\n\ndescribe('retry', () => {\n  beforeEach(() => { vi.useFakeTimers(); });\n  afterEach(() => { vi.useRealTimers(); });\n\n  it('returns at once when the first attempt works', async () => {\n    const fn = vi.fn().mockResolvedValue('sent');\n    await expect(retry(fn)).resolves.toBe('sent');\n    expect(fn).toHaveBeenCalledTimes(1);\n  });\n\n  it('waits 1 s then 2 s between attempts', async () => {\n    const fn = vi.fn()\n      .mockRejectedValueOnce(new Error('timeout'))\n      .mockRejectedValueOnce(new Error('timeout'))\n      .mockResolvedValue('sent');\n    const result = retry(fn);\n    await vi.advanceTimersByTimeAsync(999);\n    expect(fn).toHaveBeenCalledTimes(1);\n    await vi.advanceTimersByTimeAsync(1);\n    expect(fn).toHaveBeenCalledTimes(2);\n    await vi.advanceTimersByTimeAsync(1999);\n    expect(fn).toHaveBeenCalledTimes(2);\n    await vi.advanceTimersByTimeAsync(1);\n    expect(fn).toHaveBeenCalledTimes(3);\n    await expect(result).resolves.toBe('sent');\n  });\n\n  it('gives up after 3 attempts and rethrows the last error', async () => {\n    const fn = vi.fn().mockRejectedValue(new Error('SMTP down'));\n    const check = expect(retry(fn)).rejects.toThrow('SMTP down');\n    await vi.runAllTimersAsync();\n    await check;\n    expect(fn).toHaveBeenCalledTimes(3);\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/days.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { daysAheadVN } from './days.js';\n\ndescribe('daysAheadVN (BR-05 counted in Viet Nam time)', () => {\n  it.each([\n    ['2026-11-02T06:30:00+07:00', '2026-11-16', 14], // early morning in VN = previous day in UTC\n    ['2026-11-02T23:59:00+07:00', '2026-11-16', 14],\n    ['2026-11-03T00:00:00+07:00', '2026-11-16', 13], // midnight in VN starts a new day\n    ['2026-11-02T06:30:00+07:00', '2026-11-02', 0],\n  ])('now %s → %s is %i days ahead', (now, date, expected) => {\n    expect(daysAheadVN(date, new Date(now))).toBe(expected);\n  });\n});\n"
+        },
+        {
+          "name": "src/auth/login-guard.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, beforeEach } from 'vitest';\nimport { createLoginGuard } from './login-guard.js';\n\ndescribe('createLoginGuard (BR-02: 5 failures → locked 15 minutes)', () => {\n  let clock;\n  let guard;\n  beforeEach(() => {\n    clock = 1_000_000;                  // a fake clock we move by hand\n    guard = createLoginGuard(() => clock);\n  });\n  const fail = (n) => { for (let i = 0; i < n; i++) guard.recordFailure('an@fpt.edu.vn'); };\n\n  it('4 failures do not lock', () => {\n    fail(4);\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(false);\n  });\n\n  it('the 5th failure locks', () => {\n    fail(5);\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(true);\n  });\n\n  it('still locked at 14:59.999, unlocked at exactly 15:00', () => {\n    fail(5);\n    clock += 15 * 60 * 1000 - 1;\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(true);\n    clock += 1;\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(false);\n  });\n\n  it('a successful login resets the counter', () => {\n    fail(4);\n    guard.recordSuccess('an@fpt.edu.vn');\n    fail(1);\n    expect(guard.isLocked('an@fpt.edu.vn')).toBe(false);\n  });\n\n  it('locks only the account that failed', () => {\n    fail(5);\n    expect(guard.isLocked('binh@fpt.edu.vn')).toBe(false);\n  });\n});\n"
+        },
+        {
+          "name": "src/auth/login-guard.js",
+          "language": "javascript",
+          "code": "// BR-02: 5 wrong passwords in a row lock the account for 15 minutes.\nexport const MAX_FAILURES = 5;\nexport const LOCK_MINUTES = 15;\n\nexport function createLoginGuard(now = () => Date.now()) {\n  const state = new Map(); // email -> { failures, lockedUntil }\n  return {\n    isLocked(email) {\n      const s = state.get(email);\n      return Boolean(s && s.lockedUntil > now());\n    },\n    recordFailure(email) {\n      const s = state.get(email) ?? { failures: 0, lockedUntil: 0 };\n      s.failures += 1;\n      if (s.failures >= MAX_FAILURES) {\n        s.lockedUntil = now() + LOCK_MINUTES * 60000;\n        s.failures = 0;\n      }\n      state.set(email, s);\n    },\n    recordSuccess(email) {\n      state.delete(email);\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/lib/retry.js",
+          "language": "javascript",
+          "code": "// Call fn up to `attempts` times; wait delayMs, then 2 × delayMs, … between attempts.\nexport async function retry(fn, { attempts = 3, delayMs = 1000 } = {}) {\n  let lastError;\n  for (let i = 1; i <= attempts; i++) {\n    try {\n      return await fn(i);\n    } catch (err) {\n      lastError = err;\n      if (i < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs * i));\n    }\n  }\n  throw lastError;\n}\n"
+        },
+        {
+          "name": "src/rules/cancel.js",
+          "language": "javascript",
+          "code": "// Lite-3: a booking can be cancelled until 60 minutes before it starts.\nexport const CANCEL_LIMIT_MINUTES = 60;\n\nexport function canCancel(startsAt, now = new Date()) {\n  const minutesLeft = (startsAt.getTime() - now.getTime()) / 60000;\n  return minutesLeft >= CANCEL_LIMIT_MINUTES;\n}\n\n// Chapter 11 (US-11 \"My bookings\"): when does a booking start, and may this user cancel it now?\n// A booking's date and start are Viet Nam wall-clock time (UTC+7), whatever the server's time zone.\nexport function startsAtVN(date, start) {\n  return new Date(date + 'T' + start + ':00+07:00');\n}\n\n// booking: { userId, status, date, start } or null · user: { id, role } · now: a Date.\nexport function cancelDecision(booking, user, now) {\n  const isAdmin = user.role === 'ADMIN';\n  if (!booking || (booking.userId !== user.id && !isAdmin)) return { ok: false, code: 'NOT_FOUND' };\n  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n  if (!isAdmin && !canCancel(startsAtVN(booking.date, booking.start), now)) return { ok: false, code: 'TOO_LATE_TO_CANCEL' };\n  return { ok: true };\n}\n"
+        },
+        {
+          "name": "src/rules/days.js",
+          "language": "javascript",
+          "code": "// BR-05 needs \"days ahead\" counted in Viet Nam's calendar (UTC+7), whatever the server's time zone.\nconst VN_OFFSET_MS = 7 * 60 * 60 * 1000;\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nexport function daysAheadVN(dateText, now = new Date()) {\n  const todayVN = new Date(now.getTime() + VN_OFFSET_MS).toISOString().slice(0, 10);\n  return Math.round((Date.parse(dateText + 'T00:00:00Z') - Date.parse(todayVN + 'T00:00:00Z')) / DAY_MS);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo2/th22.test.js</code>, <code>src/lib/retry.test.js</code>, <code>src/rules/days.test.js</code>, <code>src/auth/login-guard.test.js</code>), checked to kill every mutant. Each mutant changes exactly one decision:</p><ul><li>M1 — cancel exactly 60 minutes before refused</li><li>M2 — minutes computed as seconds</li><li>M3 — lock lasts 15 seconds, not 15 minutes</li><li>M4 — counter not reset when the lock starts</li><li>M5 — no back-off</li><li>M6 — days counted in UTC</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo2/th22.test.js</code>, <code>src/lib/retry.test.js</code>, <code>src/rules/days.test.js</code>, <code>src/auth/login-guard.test.js</code>), đã kiểm diệt mọi đột biến. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — cancel exactly 60 minutes before refused</li><li>M2 — minutes computed as seconds</li><li>M3 — lock lasts 15 seconds, not 15 minutes</li><li>M4 — counter not reset when the lock starts</li><li>M5 — no back-off</li><li>M6 — days counted in UTC</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/auth/login-guard.js": "// BR-02: 5 wrong passwords in a row lock the account for 15 minutes.\nexport const MAX_FAILURES = 5;\nexport const LOCK_MINUTES = 15;\n\nexport function createLoginGuard(now = () => Date.now()) {\n  const state = new Map(); // email -> { failures, lockedUntil }\n  return {\n    isLocked(email) {\n      const s = state.get(email);\n      return Boolean(s && s.lockedUntil > now());\n    },\n    recordFailure(email) {\n      const s = state.get(email) ?? { failures: 0, lockedUntil: 0 };\n      s.failures += 1;\n      if (s.failures >= MAX_FAILURES) {\n        s.lockedUntil = now() + LOCK_MINUTES * 60000;\n        s.failures = 0;\n      }\n      state.set(email, s);\n    },\n    recordSuccess(email) {\n      state.delete(email);\n    },\n  };\n}\n",
+          "src/lib/retry.js": "// Call fn up to `attempts` times; wait delayMs, then 2 × delayMs, … between attempts.\nexport async function retry(fn, { attempts = 3, delayMs = 1000 } = {}) {\n  let lastError;\n  for (let i = 1; i <= attempts; i++) {\n    try {\n      return await fn(i);\n    } catch (err) {\n      lastError = err;\n      if (i < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs * i));\n    }\n  }\n  throw lastError;\n}\n",
+          "src/rules/cancel.js": "// Lite-3: a booking can be cancelled until 60 minutes before it starts.\nexport const CANCEL_LIMIT_MINUTES = 60;\n\nexport function canCancel(startsAt, now = new Date()) {\n  const minutesLeft = (startsAt.getTime() - now.getTime()) / 60000;\n  return minutesLeft >= CANCEL_LIMIT_MINUTES;\n}\n\n// Chapter 11 (US-11 \"My bookings\"): when does a booking start, and may this user cancel it now?\n// A booking's date and start are Viet Nam wall-clock time (UTC+7), whatever the server's time zone.\nexport function startsAtVN(date, start) {\n  return new Date(date + 'T' + start + ':00+07:00');\n}\n\n// booking: { userId, status, date, start } or null · user: { id, role } · now: a Date.\nexport function cancelDecision(booking, user, now) {\n  const isAdmin = user.role === 'ADMIN';\n  if (!booking || (booking.userId !== user.id && !isAdmin)) return { ok: false, code: 'NOT_FOUND' };\n  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n  if (!isAdmin && !canCancel(startsAtVN(booking.date, booking.start), now)) return { ok: false, code: 'TOO_LATE_TO_CANCEL' };\n  return { ok: true };\n}\n",
+          "src/rules/days.js": "// BR-05 needs \"days ahead\" counted in Viet Nam's calendar (UTC+7), whatever the server's time zone.\nconst VN_OFFSET_MS = 7 * 60 * 60 * 1000;\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nexport function daysAheadVN(dateText, now = new Date()) {\n  const todayVN = new Date(now.getTime() + VN_OFFSET_MS).toISOString().slice(0, 10);\n  return Math.round((Date.parse(dateText + 'T00:00:00Z') - Date.parse(todayVN + 'T00:00:00Z')) / DAY_MS);\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: cancel exactly 60 minutes before refused",
+            "goiY": "write a test whose result would change if this happened: “cancel exactly 60 minutes before refused” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “cancel exactly 60 minutes before refused” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/cancel.js": "// Lite-3: a booking can be cancelled until 60 minutes before it starts.\nexport const CANCEL_LIMIT_MINUTES = 60;\n\nexport function canCancel(startsAt, now = new Date()) {\n  const minutesLeft = (startsAt.getTime() - now.getTime()) / 60000;\n  return minutesLeft > CANCEL_LIMIT_MINUTES;\n}\n\n// Chapter 11 (US-11 \"My bookings\"): when does a booking start, and may this user cancel it now?\n// A booking's date and start are Viet Nam wall-clock time (UTC+7), whatever the server's time zone.\nexport function startsAtVN(date, start) {\n  return new Date(date + 'T' + start + ':00+07:00');\n}\n\n// booking: { userId, status, date, start } or null · user: { id, role } · now: a Date.\nexport function cancelDecision(booking, user, now) {\n  const isAdmin = user.role === 'ADMIN';\n  if (!booking || (booking.userId !== user.id && !isAdmin)) return { ok: false, code: 'NOT_FOUND' };\n  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n  if (!isAdmin && !canCancel(startsAtVN(booking.date, booking.start), now)) return { ok: false, code: 'TOO_LATE_TO_CANCEL' };\n  return { ok: true };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: minutes computed as seconds",
+            "goiY": "write a test whose result would change if this happened: “minutes computed as seconds” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “minutes computed as seconds” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/cancel.js": "// Lite-3: a booking can be cancelled until 60 minutes before it starts.\nexport const CANCEL_LIMIT_MINUTES = 60;\n\nexport function canCancel(startsAt, now = new Date()) {\n  const minutesLeft = (startsAt.getTime() - now.getTime()) / 1000;\n  return minutesLeft >= CANCEL_LIMIT_MINUTES;\n}\n\n// Chapter 11 (US-11 \"My bookings\"): when does a booking start, and may this user cancel it now?\n// A booking's date and start are Viet Nam wall-clock time (UTC+7), whatever the server's time zone.\nexport function startsAtVN(date, start) {\n  return new Date(date + 'T' + start + ':00+07:00');\n}\n\n// booking: { userId, status, date, start } or null · user: { id, role } · now: a Date.\nexport function cancelDecision(booking, user, now) {\n  const isAdmin = user.role === 'ADMIN';\n  if (!booking || (booking.userId !== user.id && !isAdmin)) return { ok: false, code: 'NOT_FOUND' };\n  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n  if (!isAdmin && !canCancel(startsAtVN(booking.date, booking.start), now)) return { ok: false, code: 'TOO_LATE_TO_CANCEL' };\n  return { ok: true };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: lock lasts 15 seconds, not 15 minutes",
+            "goiY": "write a test whose result would change if this happened: “lock lasts 15 seconds, not 15 minutes” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “lock lasts 15 seconds, not 15 minutes” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/auth/login-guard.js": "// BR-02: 5 wrong passwords in a row lock the account for 15 minutes.\nexport const MAX_FAILURES = 5;\nexport const LOCK_MINUTES = 15;\n\nexport function createLoginGuard(now = () => Date.now()) {\n  const state = new Map(); // email -> { failures, lockedUntil }\n  return {\n    isLocked(email) {\n      const s = state.get(email);\n      return Boolean(s && s.lockedUntil > now());\n    },\n    recordFailure(email) {\n      const s = state.get(email) ?? { failures: 0, lockedUntil: 0 };\n      s.failures += 1;\n      if (s.failures >= MAX_FAILURES) {\n        s.lockedUntil = now() + LOCK_MINUTES * 1000;\n        s.failures = 0;\n      }\n      state.set(email, s);\n    },\n    recordSuccess(email) {\n      state.delete(email);\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: counter not reset when the lock starts",
+            "goiY": "write a test whose result would change if this happened: “counter not reset when the lock starts” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “counter not reset when the lock starts” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/auth/login-guard.js": "// BR-02: 5 wrong passwords in a row lock the account for 15 minutes.\nexport const MAX_FAILURES = 5;\nexport const LOCK_MINUTES = 15;\n\nexport function createLoginGuard(now = () => Date.now()) {\n  const state = new Map(); // email -> { failures, lockedUntil }\n  return {\n    isLocked(email) {\n      const s = state.get(email);\n      return Boolean(s && s.lockedUntil > now());\n    },\n    recordFailure(email) {\n      const s = state.get(email) ?? { failures: 0, lockedUntil: 0 };\n      s.failures += 1;\n      if (s.failures >= MAX_FAILURES) {\n        s.lockedUntil = now() + LOCK_MINUTES * 60000;\n      }\n      state.set(email, s);\n    },\n    recordSuccess(email) {\n      state.delete(email);\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: no back-off",
+            "goiY": "write a test whose result would change if this happened: “no back-off” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “no back-off” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/retry.js": "// Call fn up to `attempts` times; wait delayMs, then 2 × delayMs, … between attempts.\nexport async function retry(fn, { attempts = 3, delayMs = 1000 } = {}) {\n  let lastError;\n  for (let i = 1; i <= attempts; i++) {\n    try {\n      return await fn(i);\n    } catch (err) {\n      lastError = err;\n      if (i < attempts) await new Promise((resolve) => setTimeout(resolve, delayMs));\n    }\n  }\n  throw lastError;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: days counted in UTC",
+            "goiY": "write a test whose result would change if this happened: “days counted in UTC” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “days counted in UTC” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/days.js": "// BR-05 needs \"days ahead\" counted in Viet Nam's calendar (UTC+7), whatever the server's time zone.\nconst VN_OFFSET_MS = 7 * 60 * 60 * 1000;\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nexport function daysAheadVN(dateText, now = new Date()) {\n  const todayVN = new Date(now.getTime()).toISOString().slice(0, 10);\n  return Math.round((Date.parse(dateText + 'T00:00:00Z') - Date.parse(todayVN + 'T00:00:00Z')) / DAY_MS);\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

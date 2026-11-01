@@ -71,12 +71,15 @@ function dapAnTuDe(tj) {
 }
 
 const de = [];
+const taiMay = [];
 let soId = 1;
 for (const f of tepDe.sort()) {
   const p = JSON.parse(fs.readFileSync(f, 'utf8'));
   if (CHI && p.moduleSlug !== CHI) continue;
   for (const ex of p.exercises) {
     if (!ex.testsJson) continue;
+    // 'manual' (Testing 01/11/2026): đề chạy TRÊN MÁY người học (PostgreSQL/Playwright/HTTP thật) — web không chấm, đếm riêng
+    if (ex.testsJson.loai === 'manual') { taiMay.push(`${p.moduleSlug} · ${ex.title}`); continue; }
     const id = soId++;
     const tj = testsDayDu(ex.testsJson, id);
     const tep = (b) => Object.fromEntries((b || []).map((x) => [x.name, x.code]));
@@ -109,6 +112,15 @@ function cspTuTep(ten) {
   // eslint-disable-next-line no-new-func
   return new Function(`return [${m[1]}].join('; ')`)();
 }
+// ts (01/11/2026): TypeScript 6.0.3 tự lưu ở frontend/public/vendor/ — phục vụ như Next (+ CORS * như nginx cho app)
+function vendor(u, res) {
+  if (!u.pathname.startsWith('/vendor/')) return false;
+  const f = path.join(GOC, 'frontend/public', path.normalize(u.pathname).replace(/^(\.\.[/\\])+/, ''));
+  if (!f.startsWith(path.join(GOC, 'frontend/public/vendor/')) || !fs.existsSync(f)) { res.writeHead(404); res.end(); return true; }
+  res.writeHead(200, { 'content-type': f.endsWith('.json') ? 'application/json' : 'text/javascript', 'cache-control': 'public, max-age=31536000, immutable', 'access-control-allow-origin': '*' });
+  fs.createReadStream(f).pipe(res);
+  return true;
+}
 let sv;
 if (APP) {
   const cspWorker = cspTuTep('CSP_HOP_CAT_WORKER');
@@ -117,6 +129,7 @@ if (APP) {
   sv = http.createServer((req, res) => {
     const u = new URL(req.url, 'http://x');
     const goc = `http://${req.headers.host}`;
+    if (vendor(u, res)) return;
     if (u.pathname === '/goi.js') { res.writeHead(200, { 'content-type': 'text/javascript' }); return res.end(maGoi); }
     if (u.pathname === '/hop-cat-worker.js') { res.writeHead(200, { 'content-type': 'text/javascript', 'content-security-policy': cspWorker }); return res.end(tepPub('hop-cat-worker.js')); }
     if (u.pathname === '/hop-cat-khung.html') { res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': cspKhung }); return res.end(tepPub('hop-cat-khung.html')); }
@@ -126,6 +139,7 @@ if (APP) {
   });
 } else {
   sv = http.createServer((req, res) => {
+    if (vendor(new URL(req.url, 'http://x'), res)) return;
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': csp });
     res.end(trang);
   });
@@ -142,6 +156,8 @@ if (APP) {
   await page.evaluate((goc) => {
     globalThis.__CT_HOP_CAT_WORKER__ = `${goc}hop-cat-worker.js`;
     globalThis.__CT_HOP_CAT_KHUNG__ = `${goc}hop-cat-khung.html`;
+    // ts: app thật tải từ https://cuongthai.com/vendor/… — ở đây là máy thử (cùng tệp, cùng đường)
+    globalThis.__CT_TS_VENDOR__ = `${goc}vendor/typescript-6.0.3/`;
   }, url);
   console.log('Chế độ APP: trang mẹ cấm inline/eval · worker + khung hộp cát CSP riêng');
 }
@@ -174,6 +190,13 @@ for (const d of de) {
   const loi = [];
   if (truotGiai.length) loi.push(`lời giải TRƯỢT ${truotGiai.length}/${g.tong}`);
   if (truotDau === 0) loi.push('code khởi đầu ĐẠT hết — bộ kiểm không phân biệt được');
+  // mutation (01/11/2026): bộ test khởi đầu phải YẾU nhưng ĐÚNG (xanh với code đúng) và chưa đạt ngưỡng diệt
+  if (loai === 'mutation') {
+    const m = await page.evaluate(({ tj, kq }) => ({ dat: window.ClCham.chapNhan(tj, kq), dem: window.ClCham.demDotBien(tj, kq) }), { tj: d.tj, kq: s.ketQua.map((k) => ({ ...k, nhom: d.tj.kiem[k.i]?.nhom })) });
+    if (!m.dem.xanh) loi.push(`code khởi đầu KHÔNG xanh với code đúng: ${s.ketQua[0]?.thay}`);
+    if (m.dat) loi.push(`code khởi đầu đã đạt ngưỡng (diệt ${m.dem.diet}/${m.dem.tong})`);
+    if (CHI_TIET) console.log(`      mutation: khởi đầu diệt ${m.dem.diet}/${m.dem.tong} (ngưỡng ${m.dem.nguong})`);
+  }
   if (loi.length) {
     hong++; theoLoai[loai].hong++;
     console.log(`  ✗ [${d.module}] ${loai} "${d.title}" — ${loi.join(' · ')}`);
@@ -202,6 +225,50 @@ for (const loai of coLoaiSql) {
   const ok = r.a.length === 2 && r.a.every((k) => !k.dat && /Quá 3 giây/.test(k.thay ?? '')) && r.msA < 3000 + 2500 && r.b[0]?.dat === true;
   console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm ${loai}] truy vấn vô hạn bị dừng sau ~${r.a[0]?.ms ?? '?'} ms (cả 2 kiểm: ${r.msA} ms) · máy dựng lại chấm tiếp: ${r.b[0]?.dat ? 'đạt' : `TRƯỢT — ${r.b[0]?.thay}`}`);
   if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 400)}`); }
+}
+
+// ─── MUTATION (01/11/2026): tự kiểm đường QUÁ GIỜ — vòng lặp vô hạn trong test (code đúng) ⇒ trượt, worker bị huỷ;
+//     đột biến gây vòng lặp vô hạn ⇒ tính là DIỆT; lượt sau vẫn chấm bình thường ───
+if (de.some((d) => d.tj.loai === 'mutation')) {
+  const impl = { 'src/a.js': 'export function f(n) { if (n < 0) throw new RangeError("n"); return n > 30; }\n' };
+  const tj = { loai: 'mutation', impl, toiThieuTest: 1, timeoutMs: 1500, kiem: [
+    { i: 0, kiem: 'xanh', nhom: 'xanh', moTa: 'xanh' },
+    { i: 1, kiem: 'diet', nhom: 'dot-bien', moTa: 'vòng lặp', ma: { 'src/a.js': 'export function f(n) { while (true) {} }\n' } },
+    { i: 2, kiem: 'diet', nhom: 'dot-bien', moTa: '>=', ma: { 'src/a.js': impl['src/a.js'].replace('n > 30', 'n >= 30') } },
+  ] };
+  const test = (than) => ({ 'src/a.test.js': `import { it, expect } from 'vitest';\nimport { f } from './a.js';\n${than}` });
+  const r = await page.evaluate(async ({ tj, a, b }) => {
+    const t0 = performance.now();
+    const x = await window.ClCham.chamBai({ exerciseId: 0, tj, files: a });
+    const t1 = performance.now();
+    const y = await window.ClCham.chamBai({ exerciseId: 0, tj, files: b });
+    return { x: x.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })), msX: Math.round(t1 - t0), y: y.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })) };
+  }, { tj, a: test("it('treo', () => { while (true) {} });"), b: test("it('30', () => { expect(f(30)).toBe(false); });\nit('31', () => { expect(f(31)).toBe(true); });") });
+  const ok = !r.x[0].dat && /Quá 1.5s/.test(r.x[0].thay) && r.msX < 1500 + 2500
+    && r.y.every((k) => k.dat) && /quá giờ/.test(r.y[1].thay);
+  console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm mutation] test treo bị dừng (${r.msX} ms) · đột biến vòng lặp vô hạn = diệt · lượt sau chấm tiếp: ${r.y.map((k) => (k.dat ? '✓' : '✗')).join('')}`);
+  if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 500)}`); }
+}
+
+// ─── TS (01/11/2026): tự kiểm đường QUÁ GIỜ — vòng lặp vô hạn trong code người học ⇒ kiểm 'chay' trượt "still running",
+//     worker chạy bị huỷ; trình biên dịch (worker riêng) KHÔNG phải nạp lại ⇒ lượt sau chấm ngay ───
+if (de.some((d) => d.tj.loai === 'ts')) {
+  const tj = { loai: 'ts', tsconfig: { strict: true, target: 'es2024', module: 'nodenext', types: ['node'], noEmit: true, allowImportingTsExtensions: true }, coDinh: {
+    'test/a.test.ts': "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { f } from '../src/a.ts';\ntest('f(2) = 4', () => assert.equal(f(2), 4));\n",
+  }, timeoutMs: 1500, kiem: [
+    { i: 0, kiem: 'sach', tep: ['test/a.test.ts'], moTa: 'sạch' },
+    { i: 1, kiem: 'chay', lenh: 'node --test test/a.test.ts', moTa: 'chạy' },
+  ] };
+  const r = await page.evaluate(async ({ tj }) => {
+    const t0 = performance.now();
+    const x = await window.ClCham.chamBai({ exerciseId: 0, tj, files: { 'src/a.ts': 'export function f(n: number): number { while (true) {} }\n' } });
+    const t1 = performance.now();
+    const y = await window.ClCham.chamBai({ exerciseId: 0, tj, files: { 'src/a.ts': 'export function f(n: number): number { return n * 2; }\n' } });
+    return { x: x.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })), msX: Math.round(t1 - t0), y: y.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })), msY: Math.round(performance.now() - t1) };
+  }, { tj });
+  const ok = r.x[0].dat && !r.x[1].dat && /still running after 1.5s/.test(r.x[1].thay) && r.y.every((k) => k.dat) && r.msY < 1500;
+  console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm ts] vòng lặp vô hạn bị dừng (${r.msX} ms gồm cả kiểm kiểu) · lượt sau chấm ngay (${r.msY} ms, không nạp lại tsc): ${r.y.map((k) => (k.dat ? '✓' : '✗')).join('')}`);
+  if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 500)}`); }
 }
 
 // ─── --do-sql: đo PGlite (tải nén + khởi động lần đầu / lần sau) cho từng chế độ ───
@@ -249,6 +316,7 @@ sv.close();
 console.log('\n loại       đề  hỏng');
 for (const [k, v] of Object.entries(theoLoai)) console.log(` ${k.padEnd(9)} ${String(v.de).padStart(4)} ${String(v.hong).padStart(5)}`);
 console.log(`\nLời giải: ${datKiem}/${tongKiem} kiểm đạt · ${de.length} đề · ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+if (taiMay.length) console.log(`Bỏ qua ${taiMay.length} đề 'manual' — chạy trên máy người học (cham-tai-may.mjs), KHÔNG chấm trong trình duyệt.`);
 if (cspLoi.length) { console.log(`⚠ ${cspLoi.length} cảnh báo CSP, vd: ${cspLoi[0].slice(0, 200)}`); }
 console.log(hong ? `\n✗ ${hong} đề hỏng` : '\n✓ máy chấm trình duyệt: mọi lời giải đạt, mọi code khởi đầu trượt');
 process.exit(hong ? 1 : 0);

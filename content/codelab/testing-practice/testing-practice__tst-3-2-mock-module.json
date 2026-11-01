@@ -1,0 +1,182 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-3-2-mock-module",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-3-2-mock-module"
+  },
+  "exercises": [
+    {
+      "title": "HTTP mailer adapter with MSW (+ vi.mock for the reminder)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest"
+      ],
+      "prerequisites": [
+        "tst-3-2-mock-module"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/lib/mailer.js</code>, <code>src/notify/reminder.js</code> — createHttpMailer, sendReminder. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Write a test file that is green on the correct code and red for every mutant; requireAssertions on; MSW with onUnhandledFrame: 'error' for the adapter; vi.mock with vi.hoisted only for reminder.js.</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>6 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>demo3/msw.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 6</b> mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/lib/mailer.js</code>, <code>src/notify/reminder.js</code> — createHttpMailer, sendReminder. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; MSW với onUnhandledFrame: 'error' cho adapter; vi.mock với vi.hoisted chỉ cho reminder.js.</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>6 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>demo3/msw.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 6</b> đột biến.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo3/msw.test.js.|||Tệp test của bạn, bắt đầu từ demo3/msw.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 6.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: wrong endpoint path|||Đột biến M1: wrong endpoint path",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-3-2-mock-module shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo3/msw.test.js, demo3/vi-mock.test.js.|||Bài tst-3-2-mock-module dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo3/msw.test.js, demo3/vi-mock.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo3/msw.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';\nimport { setupServer } from 'msw/node';\nimport { http, HttpResponse } from 'msw/http';\nimport { createHttpMailer } from '../src/lib/mailer.js';\n\nconst API = 'https://mail.provider.example';\nconst sent = [];\nconst server = setupServer(\n  http.post(API + '/v1/messages', async ({ request }) => {\n    sent.push({ auth: request.headers.get('authorization'), body: await request.json() });\n    return HttpResponse.json({ id: 'msg-42' }, { status: 202 });\n  }),\n);\n\nbeforeAll(() => server.listen({ onUnhandledFrame: 'error' })); // any other request fails the test\nafterEach(() => { server.resetHandlers(); sent.length = 0; });\nafterAll(() => server.close());\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(createHttpMailer).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/lib/mailer.js",
+          "language": "javascript",
+          "code": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/notify/reminder.js",
+          "language": "javascript",
+          "code": "// Written the \"quick\" way: it builds its own mailer from environment variables at import time.\n// Lesson 3.2 tests it with vi.mock; lesson 3.4 shows why the injected version is easier.\nimport { createHttpMailer } from '../lib/mailer.js';\n\nconst mailer = createHttpMailer({ baseUrl: process.env.MAIL_API_URL, apiKey: process.env.MAIL_API_KEY });\n\nexport async function sendReminder(booking) {\n  return mailer.send({ to: booking.email, subject: 'Reminder: ' + booking.lab + ' at ' + booking.start + ' tomorrow' });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo3/msw.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';\nimport { setupServer } from 'msw/node';\nimport { http, HttpResponse } from 'msw/http';\nimport { createHttpMailer } from '../src/lib/mailer.js';\n\nconst API = 'https://mail.provider.example';\nconst sent = [];\nconst server = setupServer(\n  http.post(API + '/v1/messages', async ({ request }) => {\n    sent.push({ auth: request.headers.get('authorization'), body: await request.json() });\n    return HttpResponse.json({ id: 'msg-42' }, { status: 202 });\n  }),\n);\n\nbeforeAll(() => server.listen({ onUnhandledFrame: 'error' })); // any other request fails the test\nafterEach(() => { server.resetHandlers(); sent.length = 0; });\nafterAll(() => server.close());\n\ndescribe('createHttpMailer (real fetch, fake network)', () => {\n  const mailer = createHttpMailer({ baseUrl: API, apiKey: 'test-key' });\n\n  it('posts JSON with the API key and returns the message id', async () => {\n    await expect(mailer.send({ to: 'an@fpt.edu.vn', subject: 'Hi' })).resolves.toBe('msg-42');\n    expect(sent).toEqual([{ auth: 'Bearer test-key', body: { to: 'an@fpt.edu.vn', subject: 'Hi' } }]);\n  });\n\n  it('429 from the provider becomes RATE_LIMITED', async () => {\n    server.use(http.post(API + '/v1/messages', () => new HttpResponse(null, { status: 429 })));\n    await expect(mailer.send({ to: 'an@fpt.edu.vn', subject: 'Hi' })).rejects.toMatchObject({ code: 'RATE_LIMITED' });\n  });\n\n  it('500 becomes MAIL_FAILED and keeps the status as the cause', async () => {\n    server.use(http.post(API + '/v1/messages', () => new HttpResponse(null, { status: 500 })));\n    const error = await mailer.send({ to: 'an@fpt.edu.vn', subject: 'Hi' }).catch((e) => e);\n    expect(error).toMatchObject({ code: 'MAIL_FAILED', cause: { message: 'HTTP 500' } });\n  });\n});\n"
+        },
+        {
+          "name": "demo3/vi-mock.test.js",
+          "language": "javascript",
+          "code": "import { it, expect, vi } from 'vitest';\nimport { sendReminder } from '../src/notify/reminder.js';\n\n// vi.mock is hoisted to the top of the file, above the imports, so the factory runs first.\n// Anything the factory uses must be created with vi.hoisted.\nconst { send } = vi.hoisted(() => ({ send: vi.fn() }));\nvi.mock('../src/lib/mailer.js', () => ({\n  createHttpMailer: () => ({ send }),\n}));\n\nit('sends a reminder through the (mocked) mailer module', async () => {\n  send.mockResolvedValue('msg-7');\n  const id = await sendReminder({ email: 'an@fpt.edu.vn', lab: 'BE-201', start: '08:00' });\n  expect(id).toBe('msg-7');\n  expect(send).toHaveBeenCalledWith({ to: 'an@fpt.edu.vn', subject: 'Reminder: BE-201 at 08:00 tomorrow' });\n});\n"
+        },
+        {
+          "name": "src/lib/mailer.js",
+          "language": "javascript",
+          "code": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+        },
+        {
+          "name": "src/notify/reminder.js",
+          "language": "javascript",
+          "code": "// Written the \"quick\" way: it builds its own mailer from environment variables at import time.\n// Lesson 3.2 tests it with vi.mock; lesson 3.4 shows why the injected version is easier.\nimport { createHttpMailer } from '../lib/mailer.js';\n\nconst mailer = createHttpMailer({ baseUrl: process.env.MAIL_API_URL, apiKey: process.env.MAIL_API_KEY });\n\nexport async function sendReminder(booking) {\n  return mailer.send({ to: booking.email, subject: 'Reminder: ' + booking.lab + ' at ' + booking.start + ' tomorrow' });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo3/msw.test.js</code>, <code>demo3/vi-mock.test.js</code>), checked to kill every mutant. Each mutant changes exactly one decision:</p><ul><li>M1 — wrong endpoint path</li><li>M2 — wrong HTTP method</li><li>M3 — subject missing from the JSON body</li><li>M4 — returns the whole body instead of the id</li><li>M5 — 429 reported as a generic failure</li><li>M6 — reminder subject loses “tomorrow”</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo3/msw.test.js</code>, <code>demo3/vi-mock.test.js</code>), đã kiểm diệt mọi đột biến. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — wrong endpoint path</li><li>M2 — wrong HTTP method</li><li>M3 — subject missing from the JSON body</li><li>M4 — returns the whole body instead of the id</li><li>M5 — 429 reported as a generic failure</li><li>M6 — reminder subject loses “tomorrow”</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n",
+          "src/notify/reminder.js": "// Written the \"quick\" way: it builds its own mailer from environment variables at import time.\n// Lesson 3.2 tests it with vi.mock; lesson 3.4 shows why the injected version is easier.\nimport { createHttpMailer } from '../lib/mailer.js';\n\nconst mailer = createHttpMailer({ baseUrl: process.env.MAIL_API_URL, apiKey: process.env.MAIL_API_KEY });\n\nexport async function sendReminder(booking) {\n  return mailer.send({ to: booking.email, subject: 'Reminder: ' + booking.lab + ' at ' + booking.start + ' tomorrow' });\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: wrong endpoint path",
+            "goiY": "write a test whose result would change if this happened: “wrong endpoint path” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “wrong endpoint path” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/message', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: wrong HTTP method",
+            "goiY": "write a test whose result would change if this happened: “wrong HTTP method” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “wrong HTTP method” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'PUT',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: subject missing from the JSON body",
+            "goiY": "write a test whose result would change if this happened: “subject missing from the JSON body” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “subject missing from the JSON body” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: returns the whole body instead of the id",
+            "goiY": "write a test whose result would change if this happened: “returns the whole body instead of the id” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “returns the whole body instead of the id” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('RATE_LIMITED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body;\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: 429 reported as a generic failure",
+            "goiY": "write a test whose result would change if this happened: “429 reported as a generic failure” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “429 reported as a generic failure” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/lib/mailer.js": "// Adapter around the e-mail provider's HTTP API. The rest of LabFlow Lite only sees mailer.send({ to, subject }).\nexport class MailError extends Error {\n  constructor(code, options) {\n    super(code, options);\n    this.name = 'MailError';\n    this.code = code;\n  }\n}\n\nexport function createHttpMailer({ baseUrl, apiKey }) {\n  return {\n    async send({ to, subject }) {\n      const res = await fetch(baseUrl + '/v1/messages', {\n        method: 'POST',\n        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + apiKey },\n        body: JSON.stringify({ to, subject }),\n      });\n      if (res.status === 429) throw new MailError('MAIL_FAILED');\n      if (!res.ok) throw new MailError('MAIL_FAILED', { cause: new Error('HTTP ' + res.status) });\n      const body = await res.json();\n      return body.id;\n    },\n  };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: reminder subject loses “tomorrow”",
+            "goiY": "write a test whose result would change if this happened: “reminder subject loses “tomorrow”” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “reminder subject loses “tomorrow”” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/notify/reminder.js": "// Written the \"quick\" way: it builds its own mailer from environment variables at import time.\n// Lesson 3.2 tests it with vi.mock; lesson 3.4 shows why the injected version is easier.\nimport { createHttpMailer } from '../lib/mailer.js';\n\nconst mailer = createHttpMailer({ baseUrl: process.env.MAIL_API_URL, apiKey: process.env.MAIL_API_KEY });\n\nexport async function sendReminder(booking) {\n  return mailer.send({ to: booking.email, subject: 'Reminder: ' + booking.lab + ' at ' + booking.start + '' });\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

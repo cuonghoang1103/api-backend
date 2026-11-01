@@ -1,0 +1,231 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-10-5-lab-tdd-code-cu",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-10-5-lab-tdd-code-cu"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10: weekly bookings test-first, the club fee pinned and refactored",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 30,
+      "concepts": [
+        "mutation testing",
+        "Vitest"
+      ],
+      "prerequisites": [
+        "tst-10-5-lab-tdd-code-cu"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/rules/recurring.js</code>, <code>src/rules/clubFee.js</code>, <code>src/legacy/clubFee.js</code> — weeklyDates (BR-10), clubFee / quoteClubFee. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Test weeklyDates (BR-10: same weekday each week, 1–15 weeks, a holiday is skipped without adding a week, the last day of term still gets its class, later weeks are AFTER_TERM, BAD_WEEKS, STARTS_AFTER_TERM) and pin the club fee quote exactly as v0 computed it (40/41 seats, 4 hours, rounding to the nearest 1,000, Saturday and Sunday rate, the LF-212 bug, NaN for an unknown building) with a fixed clock..</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>9 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>src/legacy/clubFee.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 9</b> mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/rules/recurring.js</code>, <code>src/rules/clubFee.js</code>, <code>src/legacy/clubFee.js</code> — weeklyDates (BR-10), clubFee / quoteClubFee. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Test weeklyDates (BR-10: cùng thứ mỗi tuần, 1–15 tuần, ngày lễ bị bỏ qua mà không thêm tuần, ngày cuối kỳ vẫn có buổi, các tuần sau là AFTER_TERM, BAD_WEEKS, STARTS_AFTER_TERM) và ghim phí báo giá câu lạc bộ đúng như v0 tính (40/41 chỗ, 4 giờ, làm tròn tới 1.000 gần nhất, giá thứ Bảy và Chủ nhật, bug LF-212, NaN cho toà nhà không có giá) bằng đồng hồ cố định..</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>9 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>src/legacy/clubFee.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 9</b> đột biến.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with src/legacy/clubFee.test.js.|||Tệp test của bạn, bắt đầu từ src/legacy/clubFee.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 9 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 9.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: the series starts one week late|||Đột biến M1: the series starts one week late",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-10-5-lab-tdd-code-cu shows the techniques this exercise needs; the reference solution is the course’s own test file(s): src/legacy/clubFee.test.js, src/rules/recurring.test.js.|||Bài tst-10-5-lab-tdd-code-cu dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: src/legacy/clubFee.test.js, src/rules/recurring.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/legacy/clubFee.test.js",
+          "language": "javascript",
+          "code": "// Lab 10 — characterization tests of the club fee quote. They pin what v0 returns TODAY, bugs included,\n// and must stay green, unchanged, on v0 and on the refactored code.\nimport { describe, it, expect, vi, beforeEach } from 'vitest';\nimport { clubFee } from './clubFee.js';\n\nconst DAYS = { WED: '2026-11-18T10:00:00+07:00', SAT: '2026-11-21T10:00:00+07:00', SUN: '2026-11-22T10:00:00+07:00' };\nconst EVENT = '2026-12-02'; // a Wednesday; v0 never reads it (issue LF-212)\n\nfunction quote(day, member, lab, start, end, seats) {\n  vi.setSystemTime(new Date(DAYS[day]));\n  return clubFee({ member }, lab, EVENT, start, end, seats);\n}\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(clubFee).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/legacy/club-prices.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 — price per hour (VND) by building, for student clubs renting a lab. Read by clubFee (Lab 10).\nexport const PRICES = { BE: 200000, AL: 350000 };\n"
+        },
+        {
+          "name": "src/legacy/clubFee.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 entry point, kept for its callers (Lab 10). The logic now lives in src/rules/clubFee.js.\nimport { quoteClubFee } from '../rules/clubFee.js';\n\nexport function clubFee(club, lab, date, start, end, seats) {\n  // v0 compared with == true: only true (or 1) is a member — keep that, do not \"simplify\" to !!club.member\n  return quoteClubFee({ member: club.member == true, lab, start, end, seats, today: new Date() });\n}\n"
+        },
+        {
+          "name": "src/rules/clubFee.js",
+          "language": "javascript",
+          "code": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n"
+        },
+        {
+          "name": "src/rules/recurring.js",
+          "language": "javascript",
+          "code": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/legacy/clubFee.test.js",
+          "language": "javascript",
+          "code": "// Lab 10 — characterization tests of the club fee quote. They pin what v0 returns TODAY, bugs included,\n// and must stay green, unchanged, on v0 and on the refactored code.\nimport { describe, it, expect, vi, beforeEach } from 'vitest';\nimport { clubFee } from './clubFee.js';\n\nconst DAYS = { WED: '2026-11-18T10:00:00+07:00', SAT: '2026-11-21T10:00:00+07:00', SUN: '2026-11-22T10:00:00+07:00' };\nconst EVENT = '2026-12-02'; // a Wednesday; v0 never reads it (issue LF-212)\n\nfunction quote(day, member, lab, start, end, seats) {\n  vi.setSystemTime(new Date(DAYS[day]));\n  return clubFee({ member }, lab, EVENT, start, end, seats);\n}\n\ndescribe('clubFee (characterization of v0)', () => {\n  beforeEach(() => {\n    vi.useFakeTimers({ toFake: ['Date'] });\n    return () => vi.useRealTimers();\n  });\n\n  it.each([\n    ['WED', false, 'BE-201', '08:00', '10:00', 30, 400000],\n    ['WED', true, 'BE-201', '08:00', '10:00', 30, 320000],\n    ['WED', false, 'BE-201', '08:00', '10:00', 40, 400000],\n    ['WED', false, 'BE-201', '08:00', '10:00', 41, 500000],\n    ['WED', false, 'BE-201', '08:00', '11:30', 30, 700000],\n    ['WED', false, 'BE-201', '08:00', '12:00', 30, 750000],\n    ['WED', true, 'AL-105', '08:00', '08:30', 30, 140000],\n    ['SAT', true, 'AL-105', '08:00', '08:30', 30, 210000],\n    ['SUN', false, 'AL-105', '08:00', '08:30', 30, 263000],\n    ['WED', false, 'BE-201', '10:00', '08:00', 30, 0],\n    ['WED', 1, 'BE-201', '08:00', '10:00', 30, 320000],\n    ['WED', 'yes', 'BE-201', '08:00', '10:00', 30, 400000],\n  ])('quoted on %s: member %s, %s %s–%s, %i seats ⇒ %i VND', (day, member, lab, start, end, seats, expected) => {\n    expect(quote(day, member, lab, start, end, seats)).toBe(expected);\n  });\n\n  it('charges the weekend rate when the QUOTE is made on a weekend, whatever the event date (LF-212, pinned)', () => {\n    expect(quote('SAT', false, 'BE-201', '08:00', '10:00', 30)).toBe(600000);\n  });\n\n  it('returns NaN for a building it has no price for', () => {\n    expect(quote('WED', false, 'XX-001', '08:00', '10:00', 30)).toBeNaN();\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/recurring.test.js",
+          "language": "javascript",
+          "code": "// Lab 10 — BR-10 weekly repeating bookings, written test-first (the order of the tests is the order they were written).\nimport { describe, it, expect } from 'vitest';\nimport { weeklyDates, MAX_WEEKS } from './recurring.js';\n\nconst TERM_END = '2026-12-31';\n\ndescribe('weeklyDates', () => {\n  it('books the first date and the same weekday in each following week', () => {\n    expect(weeklyDates({ firstDate: '2026-11-02', weeks: 3, until: TERM_END })).toEqual({\n      ok: true, dates: ['2026-11-02', '2026-11-09', '2026-11-16'], skipped: [],\n    });\n  });\n\n  it('skips a holiday without adding an extra week', () => {\n    expect(weeklyDates({ firstDate: '2026-11-02', weeks: 3, until: TERM_END, holidays: ['2026-11-09'] })).toEqual({\n      ok: true, dates: ['2026-11-02', '2026-11-16'], skipped: [{ date: '2026-11-09', reason: 'HOLIDAY' }],\n    });\n  });\n\n  it('keeps a class on the last day of term and drops the weeks after it', () => {\n    expect(weeklyDates({ firstDate: '2026-12-17', weeks: 3, until: TERM_END })).toEqual({\n      ok: true, dates: ['2026-12-17', '2026-12-24', '2026-12-31'], skipped: [],\n    });\n    expect(weeklyDates({ firstDate: '2026-12-17', weeks: 4, until: TERM_END }).skipped).toEqual([{ date: '2027-01-07', reason: 'AFTER_TERM' }]);\n  });\n\n  it('reports HOLIDAY inside the term, but AFTER_TERM for a holiday after it', () => {\n    expect(weeklyDates({ firstDate: '2026-12-24', weeks: 2, until: TERM_END, holidays: ['2026-12-31'] }).skipped).toEqual([{ date: '2026-12-31', reason: 'HOLIDAY' }]);\n    expect(weeklyDates({ firstDate: '2026-12-31', weeks: 2, until: TERM_END, holidays: ['2027-01-07'] }).skipped).toEqual([{ date: '2027-01-07', reason: 'AFTER_TERM' }]);\n  });\n\n  it('crosses a month and a year correctly', () => {\n    expect(weeklyDates({ firstDate: '2026-12-28', weeks: 2, until: '2027-06-30' }).dates).toEqual(['2026-12-28', '2027-01-04']);\n  });\n\n  it.each([1, MAX_WEEKS])('accepts %i week(s)', (weeks) => {\n    expect(weeklyDates({ firstDate: '2026-01-05', weeks, until: TERM_END }).dates).toHaveLength(weeks);\n  });\n\n  it.each([0, MAX_WEEKS + 1, 2.5])('refuses %s weeks with BAD_WEEKS', (weeks) => {\n    expect(weeklyDates({ firstDate: '2026-11-02', weeks, until: TERM_END })).toEqual({ ok: false, code: 'BAD_WEEKS' });\n  });\n\n  it('refuses a series that starts after the term, and accepts one that starts on its last day', () => {\n    expect(weeklyDates({ firstDate: '2027-01-04', weeks: 1, until: TERM_END })).toEqual({ ok: false, code: 'STARTS_AFTER_TERM' });\n    expect(weeklyDates({ firstDate: TERM_END, weeks: 1, until: TERM_END }).dates).toEqual([TERM_END]);\n  });\n});\n"
+        },
+        {
+          "name": "src/legacy/club-prices.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 — price per hour (VND) by building, for student clubs renting a lab. Read by clubFee (Lab 10).\nexport const PRICES = { BE: 200000, AL: 350000 };\n"
+        },
+        {
+          "name": "src/legacy/clubFee.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 entry point, kept for its callers (Lab 10). The logic now lives in src/rules/clubFee.js.\nimport { quoteClubFee } from '../rules/clubFee.js';\n\nexport function clubFee(club, lab, date, start, end, seats) {\n  // v0 compared with == true: only true (or 1) is a member — keep that, do not \"simplify\" to !!club.member\n  return quoteClubFee({ member: club.member == true, lab, start, end, seats, today: new Date() });\n}\n"
+        },
+        {
+          "name": "src/rules/clubFee.js",
+          "language": "javascript",
+          "code": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n"
+        },
+        {
+          "name": "src/rules/recurring.js",
+          "language": "javascript",
+          "code": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>src/legacy/clubFee.test.js</code>, <code>src/rules/recurring.test.js</code>), checked to kill every mutant. Each mutant changes exactly one decision:</p><ul><li>M1 — the series starts one week late</li><li>M2 — a 15-week series is refused</li><li>M3 — a class on the last day of term is dropped</li><li>M4 — a class is booked on a holiday</li><li>M5 — an event for exactly 40 seats pays the big-event fee</li><li>M6 — a 4-hour event loses its long-event discount</li><li>M7 — prices are rounded down instead of to the nearest 1,000</li><li>M8 — Sunday is no longer charged the weekend rate</li><li>M9 — a club with member: 'yes' gets the discount v0 never gave</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>src/legacy/clubFee.test.js</code>, <code>src/rules/recurring.test.js</code>), đã kiểm diệt mọi đột biến. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — the series starts one week late</li><li>M2 — a 15-week series is refused</li><li>M3 — a class on the last day of term is dropped</li><li>M4 — a class is booked on a holiday</li><li>M5 — an event for exactly 40 seats pays the big-event fee</li><li>M6 — a 4-hour event loses its long-event discount</li><li>M7 — prices are rounded down instead of to the nearest 1,000</li><li>M8 — Sunday is no longer charged the weekend rate</li><li>M9 — a club with member: 'yes' gets the discount v0 never gave</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/legacy/club-prices.js": "// LabFlow v0 — price per hour (VND) by building, for student clubs renting a lab. Read by clubFee (Lab 10).\nexport const PRICES = { BE: 200000, AL: 350000 };\n",
+          "src/legacy/clubFee.js": "// LabFlow v0 entry point, kept for its callers (Lab 10). The logic now lives in src/rules/clubFee.js.\nimport { quoteClubFee } from '../rules/clubFee.js';\n\nexport function clubFee(club, lab, date, start, end, seats) {\n  // v0 compared with == true: only true (or 1) is a member — keep that, do not \"simplify\" to !!club.member\n  return quoteClubFee({ member: club.member == true, lab, start, end, seats, today: new Date() });\n}\n",
+          "src/rules/clubFee.js": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n",
+          "src/rules/recurring.js": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: the series starts one week late",
+            "goiY": "write a test whose result would change if this happened: “the series starts one week late” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the series starts one week late” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/recurring.js": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * (i + 1));\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: a 15-week series is refused",
+            "goiY": "write a test whose result would change if this happened: “a 15-week series is refused” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a 15-week series is refused” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/recurring.js": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks >= MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: a class on the last day of term is dropped",
+            "goiY": "write a test whose result would change if this happened: “a class on the last day of term is dropped” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a class on the last day of term is dropped” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/recurring.js": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) >= toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (holidays.includes(date)) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: a class is booked on a holiday",
+            "goiY": "write a test whose result would change if this happened: “a class is booked on a holiday” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a class is booked on a holiday” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/recurring.js": "// BR-10 — a lecturer books the same slot every week for a class (Lab 10, built test-first).\nexport const MAX_WEEKS = 15;\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst toDay = (iso) => Date.UTC(Number(iso.slice(0, 4)), Number(iso.slice(5, 7)) - 1, Number(iso.slice(8, 10))) / DAY;\nconst toIso = (day) => new Date(day * DAY).toISOString().slice(0, 10);\n\n// firstDate, until: \"YYYY-MM-DD\" (until = last day of the term, inclusive); holidays: [\"YYYY-MM-DD\", …]\nexport function weeklyDates({ firstDate, weeks, until, holidays = [] }) {\n  if (!Number.isInteger(weeks) || weeks < 1 || weeks > MAX_WEEKS) return { ok: false, code: 'BAD_WEEKS' };\n  if (toDay(firstDate) > toDay(until)) return { ok: false, code: 'STARTS_AFTER_TERM' };\n  const dates = [];\n  const skipped = [];\n  for (let i = 0; i < weeks; i++) {\n    const date = toIso(toDay(firstDate) + 7 * i);\n    if (toDay(date) > toDay(until)) skipped.push({ date, reason: 'AFTER_TERM' });\n    else if (false) skipped.push({ date, reason: 'HOLIDAY' });\n    else dates.push(date);\n  }\n  return { ok: true, dates, skipped };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: an event for exactly 40 seats pays the big-event fee",
+            "goiY": "write a test whose result would change if this happened: “an event for exactly 40 seats pays the big-event fee” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “an event for exactly 40 seats pays the big-event fee” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/clubFee.js": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats >= BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: a 4-hour event loses its long-event discount",
+            "goiY": "write a test whose result would change if this happened: “a 4-hour event loses its long-event discount” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a 4-hour event loses its long-event discount” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/clubFee.js": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours > LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M7: prices are rounded down instead of to the nearest 1,000",
+            "goiY": "write a test whose result would change if this happened: “prices are rounded down instead of to the nearest 1,000” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “prices are rounded down instead of to the nearest 1,000” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/clubFee.js": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 0 || day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.floor(Math.max(price, 0) / 1000) * 1000;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M8: Sunday is no longer charged the weekend rate",
+            "goiY": "write a test whose result would change if this happened: “Sunday is no longer charged the weekend rate” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “Sunday is no longer charged the weekend rate” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/clubFee.js": "// Price quote for a student club renting a lab — refactored from LabFlow v0 in Lab 10, under characterization tests.\n// Same results as v0, its bug included: the weekend rate depends on the day the quote is MADE, not on the event\n// (issue LF-212 — to be fixed in its own pull request, agreed with the finance office, not hidden in a refactor).\nimport { PRICES } from '../legacy/club-prices.js';\n\nexport const WEEKEND_RATE = 1.5;\nexport const MEMBER_RATE = 0.8;\nexport const BIG_EVENT_SEATS = 40;\nexport const BIG_EVENT_FEE = 100000;\nexport const LONG_EVENT_HOURS = 4;\nexport const LONG_EVENT_DISCOUNT = 50000;\n\nconst minutesOf = (hhmm) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));\nconst isWeekend = (day) => day.getDay() === 6;\n\nexport function quoteClubFee({ member, lab, start, end, seats, today }) {\n  const hours = (minutesOf(end) - minutesOf(start)) / 60;\n  let price = hours * PRICES[lab.slice(0, 2)];\n  if (isWeekend(today)) price *= WEEKEND_RATE;\n  if (member) price *= MEMBER_RATE;\n  if (seats > BIG_EVENT_SEATS) price += BIG_EVENT_FEE;\n  if (hours >= LONG_EVENT_HOURS) price -= LONG_EVENT_DISCOUNT;\n  return Math.round(Math.max(price, 0) / 1000) * 1000;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M9: a club with member: 'yes' gets the discount v0 never gave",
+            "goiY": "write a test whose result would change if this happened: “a club with member: 'yes' gets the discount v0 never gave” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a club with member: 'yes' gets the discount v0 never gave” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/legacy/clubFee.js": "// LabFlow v0 entry point, kept for its callers (Lab 10). The logic now lives in src/rules/clubFee.js.\nimport { quoteClubFee } from '../rules/clubFee.js';\n\nexport function clubFee(club, lab, date, start, end, seats) {\n  // v0 compared with == true: only true (or 1) is a member — keep that, do not \"simplify\" to !!club.member\n  return quoteClubFee({ member: !!club.member, lab, start, end, seats, today: new Date() });\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

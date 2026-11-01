@@ -1,0 +1,424 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-0-2-cach-hoc",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-0-2-cach-hoc"
+  },
+  "exercises": [
+    {
+      "title": "Read two errors, fix two lines",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-2-cach-hoc"
+      ],
+      "problemHtml": "<p>Run <code>npx tsc</code> on <code>src/opening.ts</code>. Read each line <code>file(line,col): error TSxxxx: …</code> and fix the code it points at — do not silence it. <code>lib/time.ts</code> is given and must not change.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node src/opening.ts</code> prints <code>Opens at 07:30 (450 minutes)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/opening.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>lib/time.ts</code>.</li>\n  <li><code>node src/opening.ts</code> exits with code 0 and prints <code>Opens at 07:30 (450 minutes)</code> — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy <code>npx tsc</code> trên <code>src/opening.ts</code>. Đọc từng dòng <code>tệp(dòng,cột): error TSxxxx: …</code> rồi sửa đúng chỗ nó chỉ — không bịt lỗi. <code>lib/time.ts</code> cho sẵn, không được sửa.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node src/opening.ts</code> in <code>Opens at 07:30 (450 minutes)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/opening.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>lib/time.ts</code>.</li>\n  <li><code>node src/opening.ts</code> thoát với mã 0 và in <code>Opens at 07:30 (450 minutes)</code> — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/opening.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/opening.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node src/opening.ts",
+          "output": "Opens at 07:30 (450 minutes)",
+          "explanation": "The program must still print exactly this once the types are fixed — types are erased when Node runs the file, so they cannot change the output, only refuse wrong code.|||Chương trình vẫn phải in đúng như vậy sau khi sửa kiểu — kiểu bị xoá khi Node chạy tệp nên không đổi được output, chỉ từ chối code sai."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/opening.ts",
+          "language": "typescript",
+          "code": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes = parseTime('07:30');\nconst label = formatTime('07:30');\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixd(0) + ' minutes)');\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Grader-owned helper (same as LabFlow src/rules/time.ts).\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/opening.ts",
+          "language": "typescript",
+          "code": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes = parseTime('07:30');\n// TS2345: formatTime takes minutes (a number), so pass the number we already have.\nconst label = formatTime(openMinutes);\n// TS2551: \"Did you mean 'toFixed'?\" — the compiler already wrote the fix for us.\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixed(0) + ' minutes)');\n"
+        },
+        {
+          "name": "lib/time.ts",
+          "language": "typescript",
+          "code": "// Grader-owned helper (same as LabFlow src/rules/time.ts).\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — silence with any; compiles but converts the wrong value — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — silence with any; compiles but converts the wrong value — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/time.ts": "// Grader-owned helper (same as LabFlow src/rules/time.ts).\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        "tepHoc": [
+          "src/opening.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "lib/time.ts"
+            ],
+            "moTa": "tsc (strict): src/opening.ts + lib/time.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node src/opening.ts",
+            "ra": "Opens at 07:30 (450 minutes)",
+            "moTa": "node src/opening.ts exits 0 and prints \"Opens at 07:30 (450 minutes)\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "silence with any — caught by: node src/opening.ts exits 0 and prints \"Opens at 07:30 (450 minutes)\"; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)|||silence with any — máy chấm bắt ở: node src/opening.ts exits 0 and prints \"Opens at 07:30 (450 minutes)\"; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)"
+        },
+        {
+          "loi": "compiles but converts the wrong value — caught by: node src/opening.ts exits 0 and prints \"Opens at 07:30 (450 minutes)\"|||compiles but converts the wrong value — máy chấm bắt ở: node src/opening.ts exits 0 and prints \"Opens at 07:30 (450 minutes)\""
+        }
+      ]
+    },
+    {
+      "title": "Make tsc refuse the wrong calls",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-2-cach-hoc"
+      ],
+      "problemHtml": "<p>Add types to <code>seatsLeft</code> in <code>src/seats.ts</code>. The grader file <code>kiem/sai.ts</code> marks each wrong call with <code>// expect TSxxxx</code>: your types must make tsc report exactly that code on that line. <code>kiem/dung.ts</code> holds correct calls that must keep compiling. No <code>any</code>, no <code>@ts-…</code> comments.</p><p><strong>Done when:</strong> every marked line fails with its code, <code>kiem/dung.ts</code> compiles, and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/seats.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/seats.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345, TS2554, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/seats.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thêm kiểu cho <code>seatsLeft</code> trong <code>src/seats.ts</code>. Tệp chấm <code>kiem/sai.ts</code> đánh dấu mỗi lời gọi sai bằng <code>// expect TSxxxx</code>: kiểu của bạn phải làm tsc báo đúng mã đó ở đúng dòng đó. <code>kiem/dung.ts</code> chứa lời gọi đúng phải tiếp tục biên dịch được. Không <code>any</code>, không chú thích <code>@ts-…</code>.</p><p><strong>Đạt khi:</strong> mọi dòng đánh dấu báo đúng mã, <code>kiem/dung.ts</code> biên dịch được và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/seats.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/seats.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345, TS2554, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/seats.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/seats.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/seats.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: seatsLeft('40', 12);|||kiem/sai.ts, dòng 3: seatsLeft('40', 12);",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/seats.ts",
+          "language": "typescript",
+          "code": "// Seats still free in a lab after some are booked (never below 0).\nexport function seatsLeft(capacity, booked) {\n  return Math.max(0, capacity - booked);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { seatsLeft } from '../src/seats.ts';\n\nseatsLeft('40', 12); // expect TS2345\nseatsLeft(40); // expect TS2554\nconst label: string = seatsLeft(40, 12); // expect TS2322\nconsole.log(label);\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { seatsLeft } from '../src/seats.ts';\n\nconst free: number = seatsLeft(40, 12);\nconsole.log(free, seatsLeft(30, 45));\n"
+        },
+        {
+          "name": "test/seats.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsLeft } from '../src/seats.ts';\n\ntest('40 seats, 12 booked: 28 left', () => assert.equal(seatsLeft(40, 12), 28));\ntest('never below zero', () => assert.equal(seatsLeft(30, 45), 0));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/seats.ts",
+          "language": "typescript",
+          "code": "// Seats still free in a lab after some are booked (never below 0).\n// Typing both parameters gives TS2345 (wrong type) and TS2554 (missing argument);\n// the return type number gives TS2322 when someone stores it in a string.\nexport function seatsLeft(capacity: number, booked: number): number {\n  return Math.max(0, capacity - booked);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { seatsLeft } from '../src/seats.ts';\n\nseatsLeft('40', 12); // expect TS2345\nseatsLeft(40); // expect TS2554\nconst label: string = seatsLeft(40, 12); // expect TS2322\nconsole.log(label);\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { seatsLeft } from '../src/seats.ts';\n\nconst free: number = seatsLeft(40, 12);\nconsole.log(free, seatsLeft(30, 45));\n"
+        },
+        {
+          "name": "test/seats.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsLeft } from '../src/seats.ts';\n\ntest('40 seats, 12 booked: 28 left', () => assert.equal(seatsLeft(40, 12), 28));\ntest('never below zero', () => assert.equal(seatsLeft(30, 45), 0));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — parameters typed any; booked made optional — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — parameters typed any; booked made optional — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/sai.ts": "import { seatsLeft } from '../src/seats.ts';\n\nseatsLeft('40', 12); // expect TS2345\nseatsLeft(40); // expect TS2554\nconst label: string = seatsLeft(40, 12); // expect TS2322\nconsole.log(label);\n",
+          "kiem/dung.ts": "import { seatsLeft } from '../src/seats.ts';\n\nconst free: number = seatsLeft(40, 12);\nconsole.log(free, seatsLeft(30, 45));\n",
+          "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsLeft } from '../src/seats.ts';\n\ntest('40 seats, 12 booked: 28 left', () => assert.equal(seatsLeft(40, 12), 28));\ntest('never below zero', () => assert.equal(seatsLeft(30, 45), 0));\n"
+        },
+        "tepHoc": [
+          "src/seats.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/seats.test.ts"
+            ],
+            "moTa": "tsc (strict): src/seats.ts + kiem/dung.ts, test/seats.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2345 — seatsLeft('40', 12); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2554"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2554 — seatsLeft(40); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2322 — const label: string = seatsLeft(40, 12); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/seats.test.ts",
+            "moTa": "node --test test/seats.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "parameters typed any — caught by: kiem/sai.ts:3 is refused with TS2345 — seatsLeft('40', 12);; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)|||parameters typed any — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2345 — seatsLeft('40', 12);; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error)"
+        },
+        {
+          "loi": "booked made optional — caught by: kiem/sai.ts:4 is refused with TS2554 — seatsLeft(40);|||booked made optional — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2554 — seatsLeft(40);"
+        }
+      ]
+    },
+    {
+      "title": "Produce two exact error codes",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-2-cach-hoc"
+      ],
+      "problemHtml": "<p>Reverse exercise: knowing a code means you can cause it on purpose. Edit <code>src/codes.ts</code> so that tsc reports <strong>exactly</strong> these two codes and nothing else: <code>TS2551</code> (a property that does not exist, with a \"Did you mean…?\" suggestion) and <code>TS18048</code> (a value that is possibly <code>undefined</code>). No <code>any</code>, no <code>@ts-…</code> comments.</p><p><strong>Done when:</strong> the set of codes tsc prints is exactly {TS18048, TS2551}.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/codes.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> on your file reports exactly the codes <code>TS2551</code> and <code>TS18048</code> — no other code.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài làm ngược: hiểu một mã lỗi nghĩa là cố ý gây ra được nó. Sửa <code>src/codes.ts</code> để tsc báo <strong>đúng</strong> hai mã này và không gì khác: <code>TS2551</code> (thuộc tính không tồn tại, kèm gợi ý \"Did you mean…?\") và <code>TS18048</code> (giá trị có thể là <code>undefined</code>). Không <code>any</code>, không chú thích <code>@ts-…</code>.</p><p><strong>Đạt khi:</strong> tập mã lỗi tsc in ra đúng bằng {TS18048, TS2551}.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/codes.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> trên tệp của bạn báo đúng các mã <code>TS2551</code> và <code>TS18048</code> — không mã nào khác.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/codes.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/codes.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "tsc on src/codes.ts|||tsc trên src/codes.ts",
+          "output": "error TS2551\nerror TS18048",
+          "explanation": "Exactly these codes — one more or one fewer and the check fails.|||Đúng các mã này — thừa hay thiếu một mã là kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "This one is the other way round: write code that makes tsc report exactly the listed codes. Look each code up in lesson 0.2 (reading tsc errors).|||Bài này ngược lại: viết code để tsc báo ĐÚNG các mã đã cho. Tra từng mã ở bài 0.2 (đọc lỗi tsc)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "type Booking = { lab: string; minutes: number };\n\nconst bookings: Booking[] = [{ lab: 'BE-201', minutes: 120 }];\nconsole.log(bookings.length);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/codes.ts",
+          "language": "typescript",
+          "code": "type Booking = { lab: string; minutes: number };\n\nconst bookings: Booking[] = [{ lab: 'BE-201', minutes: 120 }];\n// TS18048: with noUncheckedIndexedAccess, bookings[0] is Booking | undefined.\nconst first = bookings[0];\nconsole.log(first.lab);\n// TS2551: \"minute\" is one letter away from \"minutes\", so tsc suggests it.\nconst b: Booking = { lab: 'BE-202', minutes: 60 };\nconsole.log(b.minute);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — TS2339 instead of TS2551 (no near name); only one of the two codes — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — TS2339 instead of TS2551 (no near name); only one of the two codes — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {},
+        "tepHoc": [
+          "src/codes.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "co-ma",
+            "ma": "TS2551",
+            "moTa": "tsc reports TS2551 on src/codes.ts · tsc báo đúng TS2551"
+          },
+          {
+            "kiem": "co-ma",
+            "ma": "TS18048",
+            "moTa": "tsc reports TS18048 on src/codes.ts · tsc báo đúng TS18048"
+          },
+          {
+            "kiem": "chi-ma",
+            "ma": [
+              "TS2551",
+              "TS18048"
+            ],
+            "moTa": "no error code other than TS2551 and TS18048 · không có mã lỗi nào khác"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "TS2339 instead of TS2551 (no near name) — caught by: tsc reports TS2551 on src/codes.ts; no error code other than TS2551 and TS18048|||TS2339 instead of TS2551 (no near name) — máy chấm bắt ở: tsc reports TS2551 on src/codes.ts; no error code other than TS2551 and TS18048"
+        },
+        {
+          "loi": "only one of the two codes — caught by: tsc reports TS18048 on src/codes.ts|||only one of the two codes — máy chấm bắt ở: tsc reports TS18048 on src/codes.ts"
+        }
+      ]
+    }
+  ]
+}

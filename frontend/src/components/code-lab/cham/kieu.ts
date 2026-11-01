@@ -58,7 +58,7 @@ export interface DiemNhom { ma: string; ten: string; diem: number; dat: number; 
 export interface Diem { score: number; maxScore: number; nhom: DiemNhom[] }
 
 /** Loại chấm chạy được trong trình duyệt hôm nay. */
-export const LOAI_TRINH_DUYET = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg']);
+export const LOAI_TRINH_DUYET = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg', 'mutation', 'ts']);
 export const LOAI_TINH = new Set(['choice', 'order', 'table']);
 /** Loại chờ máy chấm máy chủ (máy Linux nhà) — giao diện ghi "sắp có". */
 export const LOAI_MAY_CHU = new Set(['java', 'tsql', 'bash', 'python', 'text-ai']);
@@ -77,6 +77,8 @@ export const TEN_LOAI: Record<string, string> = {
   java: 'Java',
   tsql: 'T-SQL',
   'sql-pg': 'SQL · PostgreSQL 18 (WASM)',
+  mutation: 'Viết test · diệt đột biến',
+  ts: 'TypeScript · tsc + chạy test',
   bash: 'Bash',
   'text-ai': 'Tự luận · AI chấm',
   manual: 'Tự đánh dấu',

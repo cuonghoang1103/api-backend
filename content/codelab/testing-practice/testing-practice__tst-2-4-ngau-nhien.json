@@ -1,0 +1,157 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-2-4-ngau-nhien",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-2-4-ngau-nhien"
+  },
+  "exercises": [
+    {
+      "title": "Booking codes and records",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest"
+      ],
+      "prerequisites": [
+        "tst-2-4-ngau-nhien"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/rules/code.js</code> — makeBookingCode, seededRandom, newBookingRecord. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Write a test file that is green on the correct code and red for every mutant; requireAssertions on; repeatable: injected or seeded randomness, spies restored.</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>5 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>demo2/ngau-nhien.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 5</b> mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/rules/code.js</code> — makeBookingCode, seededRandom, newBookingRecord. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; lặp lại được: tiêm hoặc seed ngẫu nhiên, spy được trả lại.</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>5 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>demo2/ngau-nhien.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 5</b> đột biến.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo2/ngau-nhien.test.js.|||Tệp test của bạn, bắt đầu từ demo2/ngau-nhien.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 5 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 5.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: last character of the alphabet never used|||Đột biến M1: last character of the alphabet never used",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-2-4-ngau-nhien shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo2/ngau-nhien.test.js.|||Bài tst-2-4-ngau-nhien dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo2/ngau-nhien.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo2/ngau-nhien.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, afterEach } from 'vitest';\nimport { makeBookingCode, seededRandom, newBookingRecord, ALPHABET } from '../src/rules/code.js';\n\nafterEach(() => {\n  vi.restoreAllMocks();\n});\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(makeBookingCode).toBeDefined();\n    expect(seededRandom).toBeDefined();\n    expect(newBookingRecord).toBeDefined();\n    expect(ALPHABET).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/code.js",
+          "language": "javascript",
+          "code": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo2/ngau-nhien.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect, vi, afterEach } from 'vitest';\nimport { makeBookingCode, seededRandom, newBookingRecord, ALPHABET } from '../src/rules/code.js';\n\nafterEach(() => {\n  vi.restoreAllMocks();\n});\n\ndescribe('makeBookingCode', () => {\n  it('inject the randomness: first and last letter of the alphabet', () => {\n    expect(makeBookingCode(() => 0)).toBe('LF-AAAAAA');\n    expect(makeBookingCode(() => 0.999999)).toBe('LF-999999');\n  });\n\n  it('a seeded generator gives the same codes on every run', () => {\n    const random = seededRandom(42);\n    expect([makeBookingCode(random), makeBookingCode(random)]).toEqual(['LF-VQ5XFS', 'LF-JV5RH6']);\n  });\n\n  it('spy on Math.random when the code does not take a parameter', () => {\n    vi.spyOn(Math, 'random').mockReturnValue(0.5);\n    expect(makeBookingCode()).toBe('LF-' + ALPHABET[16].repeat(6));\n  });\n\n  it('assert the shape when the value is truly random', () => {\n    expect(makeBookingCode()).toMatch(/^LF-[A-HJ-NP-Z2-9]{6}$/);\n  });\n});\n\ndescribe('newBookingRecord', () => {\n  it('fixed id and clock make the whole record predictable', () => {\n    const record = newBookingRecord(\n      { lab: 'BE-201', start: '08:00' },\n      { newId: () => 'id-1', now: () => new Date('2026-11-16T01:00:00Z') },\n    );\n    expect(record).toEqual({\n      id: 'id-1',\n      code: expect.stringMatching(/^LF-/),\n      createdAt: '2026-11-16T01:00:00.000Z',\n      lab: 'BE-201',\n      start: '08:00',\n    });\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/code.js",
+          "language": "javascript",
+          "code": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo2/ngau-nhien.test.js</code>), checked to kill every mutant. Each mutant changes exactly one decision:</p><ul><li>M1 — last character of the alphabet never used</li><li>M2 — prefix without the dash</li><li>M3 — codes one character short</li><li>M4 — injected clock ignored</li><li>M5 — injected id generator ignored</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo2/ngau-nhien.test.js</code>), đã kiểm diệt mọi đột biến. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — last character of the alphabet never used</li><li>M2 — prefix without the dash</li><li>M3 — codes one character short</li><li>M4 — injected clock ignored</li><li>M5 — injected id generator ignored</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: last character of the alphabet never used",
+            "goiY": "write a test whose result would change if this happened: “last character of the alphabet never used” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “last character of the alphabet never used” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * (ALPHABET.length - 1))];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: prefix without the dash",
+            "goiY": "write a test whose result would change if this happened: “prefix without the dash” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “prefix without the dash” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: codes one character short",
+            "goiY": "write a test whose result would change if this happened: “codes one character short” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “codes one character short” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length - 1; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: injected clock ignored",
+            "goiY": "write a test whose result would change if this happened: “injected clock ignored” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “injected clock ignored” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: newId(), code: makeBookingCode(), createdAt: new Date().toISOString(), ...input };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: injected id generator ignored",
+            "goiY": "write a test whose result would change if this happened: “injected id generator ignored” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “injected id generator ignored” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/code.js": "// Short booking codes students can read aloud: no 0/O and no 1/I to confuse.\nexport const ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';\n\nexport function makeBookingCode(random = Math.random, length = 6) {\n  let code = '';\n  for (let i = 0; i < length; i++) code += ALPHABET[Math.floor(random() * ALPHABET.length)];\n  return 'LF-' + code;\n}\n\n// A tiny seeded random generator (mulberry32): same seed → same sequence, every run.\nexport function seededRandom(seed) {\n  return function () {\n    seed = (seed + 0x6d2b79f5) | 0;\n    let t = seed;\n    t = Math.imul(t ^ (t >>> 15), t | 1);\n    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);\n    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;\n  };\n}\n\n// Builds the stored booking; id and clock are parameters so tests can control them.\nexport function newBookingRecord(input, { newId = () => crypto.randomUUID(), now = () => new Date() } = {}) {\n  return { id: crypto.randomUUID(), code: makeBookingCode(), createdAt: now().toISOString(), ...input };\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

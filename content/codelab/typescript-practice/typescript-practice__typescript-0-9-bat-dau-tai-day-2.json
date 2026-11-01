@@ -1,0 +1,303 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-0-9-bat-dau-tai-day-2",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-0-9-bat-dau-tai-day-2"
+  },
+  "exercises": [
+    {
+      "title": "Fix the stale copy in the seed",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-9-bat-dau-tai-day-2"
+      ],
+      "problemHtml": "<p>The seed script keeps its own hand-written copy of <code>ContentType</code> — the incident of 8 Aug 2026. Remove the copy, use the real type from <code>src/types.ts</code>, and fix the data. Keep exporting <code>SeedPost</code>.</p><p><strong>Done when:</strong> <code>node src/seed.ts</code> prints <code>seeded 3 posts</code>, and a <code>SeedPost</code> with <code>type: 'CODE'</code> or <code>'Quiz'</code> no longer compiles.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/seed.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/types.ts</code>, <code>src/db.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2820); its other lines still compile.</li>\n  <li><code>node src/seed.ts</code> exits with code 0 and prints <code>seeded 3 posts</code> — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>type ContentType\\s*=</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Script seed giữ bản chép tay riêng của <code>ContentType</code> — đúng sự cố 08/08/2026. Xoá bản sao, dùng kiểu thật từ <code>src/types.ts</code>, và sửa dữ liệu. Vẫn export <code>SeedPost</code>.</p><p><strong>Đạt khi:</strong> <code>node src/seed.ts</code> in <code>seeded 3 posts</code>, và một <code>SeedPost</code> có <code>type: 'CODE'</code> hay <code>'Quiz'</code> không còn biên dịch được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/seed.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/types.ts</code>, <code>src/db.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2820); các dòng khác vẫn biên dịch.</li>\n  <li><code>node src/seed.ts</code> thoát với mã 0 và in <code>seeded 3 posts</code> — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>type ContentType\\s*=</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/seed.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/seed.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const old: SeedPost = { title: 'Old review', type: 'CODE' };|||kiem/sai.ts, dòng 3: const old: SeedPost = { title: 'Old review', type: 'CODE' };",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · a second hand-written type ContentType = — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · a second hand-written type ContentType = — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/seed.ts",
+          "language": "typescript",
+          "code": "// TODO: this seed keeps its own copy of the union — the bug of 8 Aug 2026.\nimport { insertPost } from './db.ts';\n\ntype ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'QUIZ';\n\nexport type SeedPost = { title: string; type: ContentType };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p);\nconsole.log('seeded', posts.length, 'posts');\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// The single source of truth (do not edit): CODE was renamed to CODE_REVIEW.\nexport type ContentType = 'VLOG' | 'ARTICLE' | 'CODE_REVIEW' | 'QUIZ';\n"
+        },
+        {
+          "name": "src/db.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from './types.ts';\n\nconst ALLOWED: readonly ContentType[] = ['VLOG', 'ARTICLE', 'CODE_REVIEW', 'QUIZ'];\n\nexport function insertPost(post: { title: string; type: ContentType }): void {\n  if (!ALLOWED.includes(post.type)) {\n    throw new Error('invalid input value for enum \"ContentType\": \"' + post.type + '\"');\n  }\n  console.log('inserted', post.type, '-', post.title);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { SeedPost } from '../src/seed.ts';\n\nconst old: SeedPost = { title: 'Old review', type: 'CODE' }; // expect TS2322\nconst typo: SeedPost = { title: 'Typo', type: 'Quiz' }; // expect TS2820\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/seed.ts",
+          "language": "typescript",
+          "code": "// One definition, imported: a rename in types.ts now reaches this file.\nimport type { ContentType } from './types.ts';\nimport { insertPost } from './db.ts';\n\nexport type SeedPost = { title: string; type: ContentType };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE_REVIEW' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p);\nconsole.log('seeded', posts.length, 'posts');\n"
+        },
+        {
+          "name": "src/types.ts",
+          "language": "typescript",
+          "code": "// The single source of truth (do not edit): CODE was renamed to CODE_REVIEW.\nexport type ContentType = 'VLOG' | 'ARTICLE' | 'CODE_REVIEW' | 'QUIZ';\n"
+        },
+        {
+          "name": "src/db.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from './types.ts';\n\nconst ALLOWED: readonly ContentType[] = ['VLOG', 'ARTICLE', 'CODE_REVIEW', 'QUIZ'];\n\nexport function insertPost(post: { title: string; type: ContentType }): void {\n  if (!ALLOWED.includes(post.type)) {\n    throw new Error('invalid input value for enum \"ContentType\": \"' + post.type + '\"');\n  }\n  console.log('inserted', post.type, '-', post.title);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { SeedPost } from '../src/seed.ts';\n\nconst old: SeedPost = { title: 'Old review', type: 'CODE' }; // expect TS2322\nconst typo: SeedPost = { title: 'Typo', type: 'Quiz' }; // expect TS2820\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — copy updated by hand (still a second truth); type: string + a cast to silence the call — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — chép tay lại bản mới (vẫn là sự thật thứ hai); type: string + ép kiểu cho lời gọi im lặng — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/types.ts": "// The single source of truth (do not edit): CODE was renamed to CODE_REVIEW.\nexport type ContentType = 'VLOG' | 'ARTICLE' | 'CODE_REVIEW' | 'QUIZ';\n",
+          "src/db.ts": "import type { ContentType } from './types.ts';\n\nconst ALLOWED: readonly ContentType[] = ['VLOG', 'ARTICLE', 'CODE_REVIEW', 'QUIZ'];\n\nexport function insertPost(post: { title: string; type: ContentType }): void {\n  if (!ALLOWED.includes(post.type)) {\n    throw new Error('invalid input value for enum \"ContentType\": \"' + post.type + '\"');\n  }\n  console.log('inserted', post.type, '-', post.title);\n}\n",
+          "kiem/sai.ts": "import type { SeedPost } from '../src/seed.ts';\n\nconst old: SeedPost = { title: 'Old review', type: 'CODE' }; // expect TS2322\nconst typo: SeedPost = { title: 'Typo', type: 'Quiz' }; // expect TS2820\n"
+        },
+        "tepHoc": [
+          "src/seed.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/types.ts",
+              "src/db.ts"
+            ],
+            "moTa": "tsc (strict): src/seed.ts + src/types.ts, src/db.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const old: SeedPost = { title: 'Old review', type: 'CODE' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2820"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2820 — const typo: SeedPost = { title: 'Typo', type: 'Quiz' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node src/seed.ts",
+            "ra": "seeded 3 posts",
+            "moTa": "node src/seed.ts exits 0 and prints \"seeded 3 posts\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "type ContentType\\s*="
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "copy updated by hand (still a second truth) — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||chép tay lại bản mới (vẫn là sự thật thứ hai) — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "type: string + a cast to silence the call — caught by: kiem/sai.ts:3 is refused with TS2322 — const old: SeedPost = { title: 'Old review', type: 'CODE' };; kiem/sai.ts:4 is refused with TS2820 — const typo: SeedPost = { title: 'Typo', type: 'Quiz' };|||type: string + ép kiểu cho lời gọi im lặng — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const old: SeedPost = { title: 'Old review', type: 'CODE' };; kiem/sai.ts:4 is refused with TS2820 — const typo: SeedPost = { title: 'Typo', type: 'Quiz' };"
+        }
+      ]
+    },
+    {
+      "title": "Handle the lab that does not exist",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-0-9-bat-dau-tai-day-2"
+      ],
+      "problemHtml": "<p><code>seatsOf</code> reads <code>.seats</code> from <code>find()</code>, which can return <code>undefined</code>: tsc says <code>TS2532</code>, and Node crashes with <code>Cannot read properties of undefined</code>. Make it compile under strict mode and throw <code>Error('Unknown lab ' + code)</code> for an unknown lab. No <code>!</code>, no <code>any</code>, no casts.</p><p><strong>Done when:</strong> tsc is clean and the three tests in <code>test/labs.test.ts</code> pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/labs.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/labs.test.ts</code>.</li>\n  <li><code>node --test test/labs.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>seatsOf</code> đọc <code>.seats</code> từ <code>find()</code>, mà <code>find()</code> có thể trả <code>undefined</code>: tsc báo <code>TS2532</code>, Node sập với <code>Cannot read properties of undefined</code>. Hãy làm nó biên dịch được ở chế độ strict và ném <code>Error('Unknown lab ' + code)</code> khi phòng không tồn tại. Không <code>!</code>, không <code>any</code>, không ép kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch và ba test trong <code>test/labs.test.ts</code> đều qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/labs.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/labs.test.ts</code>.</li>\n  <li><code>node --test test/labs.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/labs.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/labs.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/labs.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/labs.ts",
+          "language": "typescript",
+          "code": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  return LABS.find((lab) => lab.code === code).seats;\n}\n"
+        },
+        {
+          "name": "test/labs.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsOf } from '../src/labs.ts';\n\ntest('BE-201 has 40 seats', () => assert.equal(seatsOf('BE-201'), 40));\ntest('BE-202 has 30 seats', () => assert.equal(seatsOf('BE-202'), 30));\ntest('an unknown lab is a clear error, not a crash', () => {\n  assert.throws(() => seatsOf('BE-209'), { message: 'Unknown lab BE-209' });\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/labs.ts",
+          "language": "typescript",
+          "code": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  const lab = LABS.find((l) => l.code === code);\n  // find() returns undefined when no lab matches: decide what happens, explicitly.\n  if (lab === undefined) throw new Error('Unknown lab ' + code);\n  return lab.seats; // narrowed: lab is defined here\n}\n"
+        },
+        {
+          "name": "test/labs.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsOf } from '../src/labs.ts';\n\ntest('BE-201 has 40 seats', () => assert.equal(seatsOf('BE-201'), 40));\ntest('BE-202 has 30 seats', () => assert.equal(seatsOf('BE-202'), 30));\ntest('an unknown lab is a clear error, not a crash', () => {\n  assert.throws(() => seatsOf('BE-209'), { message: 'Unknown lab BE-209' });\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — non-null assertion ! (compiles, still crashes); ?. ?? 0 — an unknown lab silently has 0 seats — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — khẳng định non-null ! (biên dịch được, vẫn sập); ?. ?? 0 — phòng lạ âm thầm có 0 chỗ — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/labs.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsOf } from '../src/labs.ts';\n\ntest('BE-201 has 40 seats', () => assert.equal(seatsOf('BE-201'), 40));\ntest('BE-202 has 30 seats', () => assert.equal(seatsOf('BE-202'), 30));\ntest('an unknown lab is a clear error, not a crash', () => {\n  assert.throws(() => seatsOf('BE-209'), { message: 'Unknown lab BE-209' });\n});\n"
+        },
+        "tepHoc": [
+          "src/labs.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/labs.test.ts"
+            ],
+            "moTa": "tsc (strict): src/labs.ts + test/labs.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/labs.test.ts",
+            "moTa": "node --test test/labs.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "non-null assertion ! (compiles, still crashes) — caught by: node --test test/labs.test.ts exits 0|||khẳng định non-null ! (biên dịch được, vẫn sập) — máy chấm bắt ở: node --test test/labs.test.ts exits 0"
+        },
+        {
+          "loi": "?. ?? 0 — an unknown lab silently has 0 seats — caught by: node --test test/labs.test.ts exits 0|||?. ?? 0 — phòng lạ âm thầm có 0 chỗ — máy chấm bắt ở: node --test test/labs.test.ts exits 0"
+        }
+      ]
+    }
+  ]
+}

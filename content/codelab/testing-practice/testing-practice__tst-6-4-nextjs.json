@@ -1,0 +1,227 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-6-4-nextjs",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-6-4-nextjs"
+  },
+  "exercises": [
+    {
+      "title": "Next.js: free slots, a route handler and its data",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest",
+        "harmless refactor (stay green)"
+      ],
+      "prerequisites": [
+        "tst-6-4-nextjs"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>web/next/lib/slots.js</code>, <code>web/next/app/api/slots/route.js</code>, <code>web/next/lib/bookings.js</code> — freeSlots, GET /api/slots, listBookings. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> freeSlots at its edges (empty day, touching bookings); the route called with a real Request in the node environment, MSW as the LabFlow API; 400 and 502.</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>6 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. It also applies <b>1 harmless change</b> (a refactor that keeps the behaviour): your tests must stay <b>green</b> on it, otherwise they are testing the implementation instead of the behaviour.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>demo6/route.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 6</b> mutants and stay green on the 1 harmless change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>web/next/lib/slots.js</code>, <code>web/next/app/api/slots/route.js</code>, <code>web/next/lib/bookings.js</code> — freeSlots, GET /api/slots, listBookings. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> freeSlots tại các biên (ngày trống, lượt đặt chạm nhau); route gọi với Request thật trong môi trường node, MSW đóng vai API LabFlow; 400 và 502.</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>6 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Nó còn áp <b>1 thay đổi vô hại</b> (refactor giữ nguyên hành vi): test phải VẪN XANH, nếu không là bạn đang test cách cài đặt chứ không phải hành vi.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>demo6/route.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 6</b> đột biến và vẫn xanh với 1 thay đổi vô hại.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo6/route.test.js.|||Tệp test của bạn, bắt đầu từ demo6/route.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants; green on the 1 harmless change(s).|||Xanh với code đúng; đỏ với từng đột biến trong 6; xanh với 1 thay đổi vô hại.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: the slot right after a booking counts as taken|||Đột biến M1: the slot right after a booking counts as taken",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-6-4-nextjs shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo6/route.test.js.|||Bài tst-6-4-nextjs dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo6/route.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo6/route.test.js",
+          "language": "javascript",
+          "code": "// @vitest-environment node\nimport { describe, it, expect, beforeAll, afterEach, afterAll, vi } from 'vitest';\nimport { setupServer } from 'msw/node';\nimport { http, HttpResponse } from 'msw/http';\nimport { GET } from '../web/next/app/api/slots/route.js';\n\nconst API = 'http://labflow-api.test';\nconst ALL = [\n  { id: 1, lab: 'BE-201', date: '2026-11-16', start: '07:00', end: '09:00', seats: 20, status: 'CONFIRMED', minutes: 120 },\n  { id: 2, lab: 'BE-201', date: '2026-11-16', start: '10:00', end: '20:30', seats: 20, status: 'CONFIRMED', minutes: 630 },\n  { id: 3, lab: 'BE-305', date: '2026-11-16', start: '09:00', end: '10:00', seats: 20, status: 'CONFIRMED', minutes: 60 },\n];\nconst server = setupServer(http.get(API + '/api/admin/bookings', () => HttpResponse.json(ALL)));\nbeforeAll(() => server.listen({ onUnhandledFrame: 'error' }));\nafterEach(() => server.resetHandlers());\nafterAll(() => server.close());\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(GET).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/booking.js",
+          "language": "javascript",
+          "code": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "web/next/app/api/slots/route.js",
+          "language": "javascript",
+          "code": "// GET /api/slots?lab=BE-201&date=2026-11-16 — a Next.js route handler is a function from Request to Response.\nimport { listBookings } from '../../../lib/bookings.js';\nimport { freeSlots } from '../../../lib/slots.js';\n\nexport async function GET(request) {\n  const { searchParams } = new URL(request.url);\n  const lab = searchParams.get('lab');\n  const date = searchParams.get('date');\n  if (!lab || !date) return Response.json({ error: { code: 'VALIDATION' } }, { status: 400 });\n  try {\n    return Response.json({ lab, date, free: freeSlots(await listBookings({ lab, date })) });\n  } catch {\n    return Response.json({ error: { code: 'UPSTREAM_DOWN' } }, { status: 502 });\n  }\n}\n"
+        },
+        {
+          "name": "web/next/lib/bookings.js",
+          "language": "javascript",
+          "code": "// Server-side data access for the Next.js app: it calls the LabFlow Lite API with a service token.\nconst api = (path) => fetch(process.env.LABFLOW_API_URL + path, {\n  headers: { Authorization: 'Bearer ' + process.env.LABFLOW_SERVICE_TOKEN },\n});\n\nexport async function listBookings({ lab, date }) {\n  const res = await api('/api/admin/bookings');\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return (await res.json()).filter((b) => b.lab === lab && b.date === date);\n}\n\nexport async function getBooking(id) {\n  const res = await api('/api/bookings/' + encodeURIComponent(id));\n  if (res.status === 404) return null;\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return res.json();\n}\n"
+        },
+        {
+          "name": "web/next/lib/slots.js",
+          "language": "javascript",
+          "code": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t < end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo6/route.test.js",
+          "language": "javascript",
+          "code": "// @vitest-environment node\nimport { describe, it, expect, beforeAll, afterEach, afterAll, vi } from 'vitest';\nimport { setupServer } from 'msw/node';\nimport { http, HttpResponse } from 'msw/http';\nimport { GET } from '../web/next/app/api/slots/route.js';\n\nconst API = 'http://labflow-api.test';\nconst ALL = [\n  { id: 1, lab: 'BE-201', date: '2026-11-16', start: '07:00', end: '09:00', seats: 20, status: 'CONFIRMED', minutes: 120 },\n  { id: 2, lab: 'BE-201', date: '2026-11-16', start: '10:00', end: '20:30', seats: 20, status: 'CONFIRMED', minutes: 630 },\n  { id: 3, lab: 'BE-305', date: '2026-11-16', start: '09:00', end: '10:00', seats: 20, status: 'CONFIRMED', minutes: 60 },\n];\nconst server = setupServer(http.get(API + '/api/admin/bookings', () => HttpResponse.json(ALL)));\nbeforeAll(() => server.listen({ onUnhandledFrame: 'error' }));\nafterEach(() => server.resetHandlers());\nafterAll(() => server.close());\n\ndescribe('route handler: a function from Request to Response', () => {\n  it('free slots of BE-201 on one day', async () => {\n    vi.stubEnv('LABFLOW_API_URL', API);\n    const res = await GET(new Request('http://localhost/api/slots?lab=BE-201&date=2026-11-16'));\n    expect(res.status).toBe(200);\n    expect(await res.json()).toEqual({ lab: 'BE-201', date: '2026-11-16', free: ['09:00', '09:30', '20:30'] });\n  });\n\n  it('400 without a date', async () => {\n    const res = await GET(new Request('http://localhost/api/slots?lab=BE-201'));\n    expect(res.status).toBe(400);\n  });\n\n  it('502 when the LabFlow API is down', async () => {\n    vi.stubEnv('LABFLOW_API_URL', API);\n    server.use(http.get(API + '/api/admin/bookings', () => HttpResponse.json({ error: { code: 'INTERNAL' } }, { status: 500 })));\n    const res = await GET(new Request('http://localhost/api/slots?lab=BE-201&date=2026-11-16'));\n    expect(res.status).toBe(502);\n    expect(await res.json()).toEqual({ error: { code: 'UPSTREAM_DOWN' } });\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/booking.js",
+          "language": "javascript",
+          "code": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "web/next/app/api/slots/route.js",
+          "language": "javascript",
+          "code": "// GET /api/slots?lab=BE-201&date=2026-11-16 — a Next.js route handler is a function from Request to Response.\nimport { listBookings } from '../../../lib/bookings.js';\nimport { freeSlots } from '../../../lib/slots.js';\n\nexport async function GET(request) {\n  const { searchParams } = new URL(request.url);\n  const lab = searchParams.get('lab');\n  const date = searchParams.get('date');\n  if (!lab || !date) return Response.json({ error: { code: 'VALIDATION' } }, { status: 400 });\n  try {\n    return Response.json({ lab, date, free: freeSlots(await listBookings({ lab, date })) });\n  } catch {\n    return Response.json({ error: { code: 'UPSTREAM_DOWN' } }, { status: 502 });\n  }\n}\n"
+        },
+        {
+          "name": "web/next/lib/bookings.js",
+          "language": "javascript",
+          "code": "// Server-side data access for the Next.js app: it calls the LabFlow Lite API with a service token.\nconst api = (path) => fetch(process.env.LABFLOW_API_URL + path, {\n  headers: { Authorization: 'Bearer ' + process.env.LABFLOW_SERVICE_TOKEN },\n});\n\nexport async function listBookings({ lab, date }) {\n  const res = await api('/api/admin/bookings');\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return (await res.json()).filter((b) => b.lab === lab && b.date === date);\n}\n\nexport async function getBooking(id) {\n  const res = await api('/api/bookings/' + encodeURIComponent(id));\n  if (res.status === 404) return null;\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return res.json();\n}\n"
+        },
+        {
+          "name": "web/next/lib/slots.js",
+          "language": "javascript",
+          "code": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t < end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo6/route.test.js</code>), checked to kill every mutant and to stay green on the harmless change(s). Each mutant changes exactly one decision:</p><ul><li>M1 — the slot right after a booking counts as taken</li><li>M2 — the slot right before a booking counts as taken</li><li>M3 — a 21:00 slot after closing time</li><li>M4 — a missing date is not refused</li><li>M5 — upstream failure answered as 500</li><li>M6 — other labs' bookings block this lab</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo6/route.test.js</code>), đã kiểm diệt mọi đột biến và vẫn xanh với thay đổi vô hại. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — the slot right after a booking counts as taken</li><li>M2 — the slot right before a booking counts as taken</li><li>M3 — a 21:00 slot after closing time</li><li>M4 — a missing date is not refused</li><li>M5 — upstream failure answered as 500</li><li>M6 — other labs' bookings block this lab</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/rules/booking.js": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n",
+          "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "web/next/app/api/slots/route.js": "// GET /api/slots?lab=BE-201&date=2026-11-16 — a Next.js route handler is a function from Request to Response.\nimport { listBookings } from '../../../lib/bookings.js';\nimport { freeSlots } from '../../../lib/slots.js';\n\nexport async function GET(request) {\n  const { searchParams } = new URL(request.url);\n  const lab = searchParams.get('lab');\n  const date = searchParams.get('date');\n  if (!lab || !date) return Response.json({ error: { code: 'VALIDATION' } }, { status: 400 });\n  try {\n    return Response.json({ lab, date, free: freeSlots(await listBookings({ lab, date })) });\n  } catch {\n    return Response.json({ error: { code: 'UPSTREAM_DOWN' } }, { status: 502 });\n  }\n}\n",
+          "web/next/lib/bookings.js": "// Server-side data access for the Next.js app: it calls the LabFlow Lite API with a service token.\nconst api = (path) => fetch(process.env.LABFLOW_API_URL + path, {\n  headers: { Authorization: 'Bearer ' + process.env.LABFLOW_SERVICE_TOKEN },\n});\n\nexport async function listBookings({ lab, date }) {\n  const res = await api('/api/admin/bookings');\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return (await res.json()).filter((b) => b.lab === lab && b.date === date);\n}\n\nexport async function getBooking(id) {\n  const res = await api('/api/bookings/' + encodeURIComponent(id));\n  if (res.status === 404) return null;\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return res.json();\n}\n",
+          "web/next/lib/slots.js": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t < end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: the slot right after a booking counts as taken",
+            "goiY": "write a test whose result would change if this happened: “the slot right after a booking counts as taken” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the slot right after a booking counts as taken” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/lib/slots.js": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t <= end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: the slot right before a booking counts as taken",
+            "goiY": "write a test whose result would change if this happened: “the slot right before a booking counts as taken” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the slot right before a booking counts as taken” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/lib/slots.js": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t < end && t + STEP >= start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: a 21:00 slot after closing time",
+            "goiY": "write a test whose result would change if this happened: “a 21:00 slot after closing time” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a 21:00 slot after closing time” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/lib/slots.js": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t <= CLOSE; t += STEP) {\n    const busy = taken.some(([start, end]) => t < end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: a missing date is not refused",
+            "goiY": "write a test whose result would change if this happened: “a missing date is not refused” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a missing date is not refused” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/app/api/slots/route.js": "// GET /api/slots?lab=BE-201&date=2026-11-16 — a Next.js route handler is a function from Request to Response.\nimport { listBookings } from '../../../lib/bookings.js';\nimport { freeSlots } from '../../../lib/slots.js';\n\nexport async function GET(request) {\n  const { searchParams } = new URL(request.url);\n  const lab = searchParams.get('lab');\n  const date = searchParams.get('date');\n  if (!lab) return Response.json({ error: { code: 'VALIDATION' } }, { status: 400 });\n  try {\n    return Response.json({ lab, date, free: freeSlots(await listBookings({ lab, date })) });\n  } catch {\n    return Response.json({ error: { code: 'UPSTREAM_DOWN' } }, { status: 502 });\n  }\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: upstream failure answered as 500",
+            "goiY": "write a test whose result would change if this happened: “upstream failure answered as 500” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “upstream failure answered as 500” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/app/api/slots/route.js": "// GET /api/slots?lab=BE-201&date=2026-11-16 — a Next.js route handler is a function from Request to Response.\nimport { listBookings } from '../../../lib/bookings.js';\nimport { freeSlots } from '../../../lib/slots.js';\n\nexport async function GET(request) {\n  const { searchParams } = new URL(request.url);\n  const lab = searchParams.get('lab');\n  const date = searchParams.get('date');\n  if (!lab || !date) return Response.json({ error: { code: 'VALIDATION' } }, { status: 400 });\n  try {\n    return Response.json({ lab, date, free: freeSlots(await listBookings({ lab, date })) });\n  } catch {\n    return Response.json({ error: { code: 'UPSTREAM_DOWN' } }, { status: 500 });\n  }\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: other labs' bookings block this lab",
+            "goiY": "write a test whose result would change if this happened: “other labs' bookings block this lab” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “other labs' bookings block this lab” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "web/next/lib/bookings.js": "// Server-side data access for the Next.js app: it calls the LabFlow Lite API with a service token.\nconst api = (path) => fetch(process.env.LABFLOW_API_URL + path, {\n  headers: { Authorization: 'Bearer ' + process.env.LABFLOW_SERVICE_TOKEN },\n});\n\nexport async function listBookings({ lab, date }) {\n  const res = await api('/api/admin/bookings');\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return (await res.json()).filter((b) => b.date === date);\n}\n\nexport async function getBooking(id) {\n  const res = await api('/api/bookings/' + encodeURIComponent(id));\n  if (res.status === 404) return null;\n  if (!res.ok) throw new Error('LabFlow API answered ' + res.status);\n  return res.json();\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: refactor: find instead of some (same truthiness) — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "web/next/lib/slots.js": "// Free half-hour slots of one lab on one day, given that day's bookings. A pure function: unit-test it.\nimport { OPEN, CLOSE, STEP } from '../../../src/rules/booking.js';\nimport { parseTime, formatTime } from '../../../src/rules/time.js';\n\nexport function freeSlots(bookings) {\n  const taken = bookings.map((b) => [parseTime(b.start), parseTime(b.end)]);\n  const free = [];\n  for (let t = OPEN; t < CLOSE; t += STEP) {\n    const busy = taken.find(([start, end]) => t < end && t + STEP > start);\n    if (!busy) free.push(formatTime(t));\n  }\n  return free;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Asserting HOW the code does it (call order, internal fields, exact implementation) — a harmless refactor turns such a test red.|||Khẳng định CÁCH code làm (thứ tự gọi, trường nội bộ, cài đặt cụ thể) — một refactor vô hại làm test như vậy đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "harmless change",
+          "vi": "thay đổi vô hại",
+          "giaiThich": "refactor giữ nguyên hành vi — bộ test tốt phải VẪN XANH"
+        }
+      ]
+    }
+  ]
+}

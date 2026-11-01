@@ -1,0 +1,623 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-2-2-mang-tuple",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-2-2-mang-tuple"
+  },
+  "exercises": [
+    {
+      "title": "Sort the schedule without reordering the caller's list",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-2-mang-tuple"
+      ],
+      "problemHtml": "<p>src/sort.ts sorts the day's bookings with <code>sort()</code>, which reorders the array it receives — the page that passed it in now shows the wrong \"latest booking\". Change the parameter type so the function promises not to modify the list, and return a sorted copy.</p><p><strong>Done when:</strong> tsc is clean on src/, test/ and kiem/dung.ts (a caller that only holds a <code>readonly Entry[]</code>), and both tests pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/sort.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/sort.test.ts</code>, <code>kiem/dung.ts</code>.</li>\n  <li><code>node --test test/sort.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>src/sort.ts sắp các lượt đặt trong ngày bằng <code>sort()</code> — hàm này xếp lại chính mảng nó nhận, nên trang đã truyền mảng vào giờ hiện sai \"lượt đặt mới nhất\". Đổi kiểu tham số để hàm hứa không sửa danh sách, và trả về một bản sao đã sắp.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test/ và kiem/dung.ts (người gọi chỉ có <code>readonly Entry[]</code>), và cả hai test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/sort.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/sort.test.ts</code>, <code>kiem/dung.ts</code>.</li>\n  <li><code>node --test test/sort.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/sort.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/sort.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/sort.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/sort.ts",
+          "language": "typescript",
+          "code": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\nexport function sortByStart(list: Entry[]): Entry[] {\n  return list.sort((a, b) => a.start - b.start);\n}\n"
+        },
+        {
+          "name": "test/sort.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { sortByStart } from '../src/sort.ts';\n\nconst day = () => [{ id: 1, start: 780 }, { id: 2, start: 480 }, { id: 3, start: 600 }];\n\ntest('returns the bookings ordered by start', () => {\n  assert.deepEqual(sortByStart(day()).map((e) => e.id), [2, 3, 1]);\n});\ntest('leaves the caller\\'s list in booking order (id 1, 2, 3)', () => {\n  const mine = day();\n  sortByStart(mine);\n  assert.deepEqual(mine.map((e) => e.id), [1, 2, 3]);\n});\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "// Correct callers: a page that only has a READ-ONLY view of the schedule must be able to call sortByStart.\nimport { sortByStart, type Entry } from '../src/sort.ts';\n\nconst shared: readonly Entry[] = [{ id: 1, start: 780 }, { id: 2, start: 480 }];\nconst timeline: Entry[] = sortByStart(shared);\nconsole.log(timeline.length);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/sort.ts",
+          "language": "typescript",
+          "code": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\n// readonly: this function promises not to change the caller's array, and tsc holds it to that.\n// toSorted (ES2023) returns a sorted COPY; sort() would reorder the caller's list in place.\nexport function sortByStart(list: readonly Entry[]): Entry[] {\n  return list.toSorted((a, b) => a.start - b.start);\n}\n"
+        },
+        {
+          "name": "test/sort.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { sortByStart } from '../src/sort.ts';\n\nconst day = () => [{ id: 1, start: 780 }, { id: 2, start: 480 }, { id: 3, start: 600 }];\n\ntest('returns the bookings ordered by start', () => {\n  assert.deepEqual(sortByStart(day()).map((e) => e.id), [2, 3, 1]);\n});\ntest('leaves the caller\\'s list in booking order (id 1, 2, 3)', () => {\n  const mine = day();\n  sortByStart(mine);\n  assert.deepEqual(mine.map((e) => e.id), [1, 2, 3]);\n});\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "// Correct callers: a page that only has a READ-ONLY view of the schedule must be able to call sortByStart.\nimport { sortByStart, type Entry } from '../src/sort.ts';\n\nconst shared: readonly Entry[] = [{ id: 1, start: 780 }, { id: 2, start: 480 }];\nconst timeline: Entry[] = sortByStart(shared);\nconsole.log(timeline.length);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — readonly on the parameter, then cast it away and sort() anyway — compiles, but the caller's list is reordered; toSorted() but the parameter stays Entry[] — a caller with a readonly list is refused (TS4104) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — readonly on the parameter, then cast it away and sort() anyway — compiles, but the caller's list is reordered; toSorted() but the parameter stays Entry[] — a caller with a readonly list is refused (TS4104) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/sort.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { sortByStart } from '../src/sort.ts';\n\nconst day = () => [{ id: 1, start: 780 }, { id: 2, start: 480 }, { id: 3, start: 600 }];\n\ntest('returns the bookings ordered by start', () => {\n  assert.deepEqual(sortByStart(day()).map((e) => e.id), [2, 3, 1]);\n});\ntest('leaves the caller\\'s list in booking order (id 1, 2, 3)', () => {\n  const mine = day();\n  sortByStart(mine);\n  assert.deepEqual(mine.map((e) => e.id), [1, 2, 3]);\n});\n",
+          "kiem/dung.ts": "// Correct callers: a page that only has a READ-ONLY view of the schedule must be able to call sortByStart.\nimport { sortByStart, type Entry } from '../src/sort.ts';\n\nconst shared: readonly Entry[] = [{ id: 1, start: 780 }, { id: 2, start: 480 }];\nconst timeline: Entry[] = sortByStart(shared);\nconsole.log(timeline.length);\n"
+        },
+        "tepHoc": [
+          "src/sort.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/sort.test.ts",
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/sort.ts + test/sort.test.ts, kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/sort.test.ts",
+            "moTa": "node --test test/sort.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "readonly on the parameter, then cast it away and sort() anyway — compiles, but the caller's list is reordered — caught by: node --test test/sort.test.ts exits 0|||readonly on the parameter, then cast it away and sort() anyway — compiles, but the caller's list is reordered — máy chấm bắt ở: node --test test/sort.test.ts exits 0"
+        },
+        {
+          "loi": "toSorted() but the parameter stays Entry[] — a caller with a readonly list is refused (TS4104) — caught by: tsc (strict): src/sort.ts + test/sort.test.ts, kiem/dung.ts compile with 0 errors|||toSorted() but the parameter stays Entry[] — a caller with a readonly list is refused (TS4104) — máy chấm bắt ở: tsc (strict): src/sort.ts + test/sort.test.ts, kiem/dung.ts compile with 0 errors"
+        }
+      ]
+    },
+    {
+      "title": "A time range is exactly two numbers",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-2-mang-tuple"
+      ],
+      "problemHtml": "<p>In src/range.ts a <code>TimeRange</code> is a plain <code>number[]</code>, so a range with three numbers or one number is accepted, and under the course tsconfig (noUncheckedIndexedAccess) <code>r[0]</code> may be <code>undefined</code>. Turn <code>TimeRange</code> into a tuple <code>[start, end]</code> and simplify <code>minutesOf</code>.</p><p><strong>Done when:</strong> each marked line of kiem/sai.ts gets its expected error (TS2322, TS2493, TS2345), the unmarked line <code>const start: number = toRange(…)[0]</code> compiles, and the tests pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/range.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/range.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2493, TS2345); its other lines still compile.</li>\n  <li><code>node --test test/range.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong src/range.ts, <code>TimeRange</code> là một <code>number[]</code> thường, nên khoảng giờ có ba số hay một số vẫn được nhận, và với tsconfig của khoá (noUncheckedIndexedAccess) <code>r[0]</code> có thể là <code>undefined</code>. Đổi <code>TimeRange</code> thành tuple <code>[start, end]</code> và viết gọn <code>minutesOf</code>.</p><p><strong>Đạt khi:</strong> mỗi dòng đánh dấu trong kiem/sai.ts có đúng lỗi mong đợi (TS2322, TS2493, TS2345), dòng không đánh dấu <code>const start: number = toRange(…)[0]</code> biên dịch được, và test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/range.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/range.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2493, TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/range.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/range.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/range.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const three: TimeRange = [480, 600, 660];|||kiem/sai.ts, dòng 3: const three: TimeRange = [480, 600, 660];",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/range.ts",
+          "language": "typescript",
+          "code": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\nexport type TimeRange = number[];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  const [start = 0, end = 0] = r;\n  return end - start;\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { toRange, minutesOf, type TimeRange } from '../src/range.ts';\n\nconst three: TimeRange = [480, 600, 660]; // expect TS2322\ntoRange('08:00-10:00')[2]; // expect TS2493\nminutesOf([600]); // expect TS2345\nconst start: number = toRange('08:00-10:00')[0];\nconsole.log(three, start);\n"
+        },
+        {
+          "name": "test/range.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toRange, minutesOf } from '../src/range.ts';\n\ntest(\"'08:00-10:00' becomes [480, 600]\", () => assert.deepEqual(toRange('08:00-10:00'), [480, 600]));\ntest('a two-hour range lasts 120 minutes', () => assert.equal(minutesOf(toRange('08:00-10:00')), 120));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/range.ts",
+          "language": "typescript",
+          "code": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\n// A tuple: exactly two numbers, and each position has a meaning (labels show up in the editor).\nexport type TimeRange = readonly [start: number, end: number];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  return r[1] - r[0];     // a tuple knows positions 0 and 1 exist: no undefined here\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { toRange, minutesOf, type TimeRange } from '../src/range.ts';\n\nconst three: TimeRange = [480, 600, 660]; // expect TS2322\ntoRange('08:00-10:00')[2]; // expect TS2493\nminutesOf([600]); // expect TS2345\nconst start: number = toRange('08:00-10:00')[0];\nconsole.log(three, start);\n"
+        },
+        {
+          "name": "test/range.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toRange, minutesOf } from '../src/range.ts';\n\ntest(\"'08:00-10:00' becomes [480, 600]\", () => assert.deepEqual(toRange('08:00-10:00'), [480, 600]));\ntest('a two-hour range lasts 120 minutes', () => assert.equal(minutesOf(toRange('08:00-10:00')), 120));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — tuple with a rest element [number, number, ...number[]] — three numbers are still accepted; optional elements [start?: number, end?: number] — r[0] may be undefined again — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — tuple with a rest element [number, number, ...number[]] — three numbers are still accepted; optional elements [start?: number, end?: number] — r[0] may be undefined again — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/sai.ts": "import { toRange, minutesOf, type TimeRange } from '../src/range.ts';\n\nconst three: TimeRange = [480, 600, 660]; // expect TS2322\ntoRange('08:00-10:00')[2]; // expect TS2493\nminutesOf([600]); // expect TS2345\nconst start: number = toRange('08:00-10:00')[0];\nconsole.log(three, start);\n",
+          "test/range.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toRange, minutesOf } from '../src/range.ts';\n\ntest(\"'08:00-10:00' becomes [480, 600]\", () => assert.deepEqual(toRange('08:00-10:00'), [480, 600]));\ntest('a two-hour range lasts 120 minutes', () => assert.equal(minutesOf(toRange('08:00-10:00')), 120));\n"
+        },
+        "tepHoc": [
+          "src/range.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/range.test.ts"
+            ],
+            "moTa": "tsc (strict): src/range.ts + test/range.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — const three: TimeRange = [480, 600, 660]; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2493"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2493 — toRange('08:00-10:00')[2]; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2345 — minutesOf([600]); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/range.test.ts",
+            "moTa": "node --test test/range.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "tuple with a rest element [number, number, ...number[]] — three numbers are still accepted — caught by: kiem/sai.ts:3 is refused with TS2322 — const three: TimeRange = [480, 600, 660];; kiem/sai.ts:4 is refused with TS2493 — toRange('08:00-10:00')[2];|||tuple with a rest element [number, number, ...number[]] — three numbers are still accepted — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — const three: TimeRange = [480, 600, 660];; kiem/sai.ts:4 is refused with TS2493 — toRange('08:00-10:00')[2];"
+        },
+        {
+          "loi": "optional elements [start?: number, end?: number] — r[0] may be undefined again — caught by: kiem/sai.ts:5 is refused with TS2345 — minutesOf([600]);; every other line of kiem/sai.ts still compiles|||optional elements [start?: number, end?: number] — r[0] may be undefined again — máy chấm bắt ở: kiem/sai.ts:5 is refused with TS2345 — minutesOf([600]);; every other line of kiem/sai.ts still compiles"
+        }
+      ]
+    },
+    {
+      "title": "Close the push hole: a range that cannot grow or be edited",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-2-mang-tuple"
+      ],
+      "problemHtml": "<p>A mutable tuple <code>[start: number, end: number]</code> still has <code>push</code>, and <code>shift</code> edits the caller's range in place. Make <code>TimeRange</code> read-only and rewrite <code>shift</code> so it returns a new range.</p><p><strong>Done when:</strong> in kiem/sai.ts <code>r.push(660)</code> is refused with TS2339 and <code>r[0] = 0</code> with TS2540, the other lines compile, and the tests (including \"the original range is unchanged\") pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/range.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/range.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2339, TS2540); its other lines still compile.</li>\n  <li><code>node --test test/range.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tuple thường <code>[start: number, end: number]</code> vẫn còn <code>push</code>, và <code>shift</code> sửa thẳng khoảng giờ của người gọi. Đổi <code>TimeRange</code> thành chỉ đọc và viết lại <code>shift</code> để trả về khoảng giờ mới.</p><p><strong>Đạt khi:</strong> trong kiem/sai.ts, <code>r.push(660)</code> bị từ chối với TS2339 và <code>r[0] = 0</code> với TS2540, các dòng khác biên dịch được, và test (kể cả \"khoảng gốc không đổi\") xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/range.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/range.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2339, TS2540); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/range.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/range.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/range.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: r.push(660);|||kiem/sai.ts, dòng 4: r.push(660);",
+          "output": "error TS2339",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/range.ts",
+          "language": "typescript",
+          "code": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\nexport type TimeRange = [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  r[0] += by;\n  r[1] += by;\n  return r;\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { shift, type TimeRange } from '../src/range.ts';\n\nconst r: TimeRange = [480, 600];\nr.push(660); // expect TS2339\nr[0] = 0; // expect TS2540\nconst later: TimeRange = shift(r, 30);\nconsole.log(later);\n"
+        },
+        {
+          "name": "test/range.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { shift } from '../src/range.ts';\n\ntest('08:00-10:00 shifted by 30 is 08:30-10:30', () => assert.deepEqual(shift([480, 600], 30), [510, 630]));\ntest('the original range is unchanged', () => {\n  const r: [number, number] = [480, 600];\n  shift(r, 30);\n  assert.deepEqual(r, [480, 600]);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/range.ts",
+          "language": "typescript",
+          "code": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\n// readonly tuple: no push (a \"pair\" can never grow to 3), no assigning to a position.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  return [r[0] + by, r[1] + by];   // a NEW range; the caller's stays as it was\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { shift, type TimeRange } from '../src/range.ts';\n\nconst r: TimeRange = [480, 600];\nr.push(660); // expect TS2339\nr[0] = 0; // expect TS2540\nconst later: TimeRange = shift(r, 30);\nconsole.log(later);\n"
+        },
+        {
+          "name": "test/range.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { shift } from '../src/range.ts';\n\ntest('08:00-10:00 shifted by 30 is 08:30-10:30', () => assert.deepEqual(shift([480, 600], 30), [510, 630]));\ntest('the original range is unchanged', () => {\n  const r: [number, number] = [480, 600];\n  shift(r, 30);\n  assert.deepEqual(r, [480, 600]);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — readonly type, but shift casts it away and still edits the caller's range; shift returns a new range, but TimeRange is still a mutable tuple — push and r[0] = 0 compile — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — readonly type, but shift casts it away and still edits the caller's range; shift returns a new range, but TimeRange is still a mutable tuple — push and r[0] = 0 compile — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/sai.ts": "import { shift, type TimeRange } from '../src/range.ts';\n\nconst r: TimeRange = [480, 600];\nr.push(660); // expect TS2339\nr[0] = 0; // expect TS2540\nconst later: TimeRange = shift(r, 30);\nconsole.log(later);\n",
+          "test/range.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { shift } from '../src/range.ts';\n\ntest('08:00-10:00 shifted by 30 is 08:30-10:30', () => assert.deepEqual(shift([480, 600], 30), [510, 630]));\ntest('the original range is unchanged', () => {\n  const r: [number, number] = [480, 600];\n  shift(r, 30);\n  assert.deepEqual(r, [480, 600]);\n});\n"
+        },
+        "tepHoc": [
+          "src/range.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/range.test.ts"
+            ],
+            "moTa": "tsc (strict): src/range.ts + test/range.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2339"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2339 — r.push(660); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2540"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2540 — r[0] = 0; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/range.test.ts",
+            "moTa": "node --test test/range.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "readonly type, but shift casts it away and still edits the caller's range — caught by: node --test test/range.test.ts exits 0|||readonly type, but shift casts it away and still edits the caller's range — máy chấm bắt ở: node --test test/range.test.ts exits 0"
+        },
+        {
+          "loi": "shift returns a new range, but TimeRange is still a mutable tuple — push and r[0] = 0 compile — caught by: kiem/sai.ts:4 is refused with TS2339 — r.push(660);; kiem/sai.ts:5 is refused with TS2540 — r[0] = 0;|||shift returns a new range, but TimeRange is still a mutable tuple — push and r[0] = 0 compile — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2339 — r.push(660);; kiem/sai.ts:5 is refused with TS2540 — r[0] = 0;"
+        }
+      ]
+    },
+    {
+      "title": "Free gaps of the day, typed with tuples",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-2-mang-tuple"
+      ],
+      "problemHtml": "<p>Write <code>freeGaps(booked)</code>: given the booked ranges of one lab (any order, never overlapping), return the free ranges between 07:00 (420) and 21:00 (1260), in order. Type it with a read-only tuple <code>TimeRange</code>; the function must not reorder the caller's list.</p><p><strong>Done when:</strong> the 4 tests pass, kiem/sai.ts refuses a 3-number range and a text range (TS2322 each), and passing an <code>as const</code> list compiles.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/gaps.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/gaps.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322, TS2322); its other lines still compile.</li>\n  <li><code>node --test test/gaps.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>freeGaps(booked)</code>: nhận các khoảng đã đặt của một phòng (thứ tự bất kỳ, không chồng nhau), trả về các khoảng trống giữa 07:00 (420) và 21:00 (1260), theo thứ tự. Gõ kiểu bằng tuple chỉ đọc <code>TimeRange</code>; hàm không được xáo danh sách của người gọi.</p><p><strong>Đạt khi:</strong> 4 test xanh, kiem/sai.ts từ chối khoảng có ba số và khoảng dạng chữ (mỗi dòng TS2322), và truyền một danh sách <code>as const</code> biên dịch được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/gaps.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/gaps.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322, TS2322); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/gaps.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/gaps.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/gaps.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: freeGaps([[480, 600, 700]]);|||kiem/sai.ts, dòng 3: freeGaps([[480, 600, 700]]);",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/gaps.ts",
+          "language": "typescript",
+          "code": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport function freeGaps(booked) {\n  return [];\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { freeGaps } from '../src/gaps.ts';\n\nfreeGaps([[480, 600, 700]]); // expect TS2322\nfreeGaps(['08:00-10:00']); // expect TS2322\nconst shared = [[480, 600]] as const;\nconsole.log(freeGaps(shared).length);\n"
+        },
+        {
+          "name": "test/gaps.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { freeGaps } from '../src/gaps.ts';\n\ntest('three bookings leave three gaps', () => {\n  assert.deepEqual(freeGaps([[780, 900], [480, 600], [600, 720]]), [[420, 480], [720, 780], [900, 1260]]);\n});\ntest('an empty day is one big gap', () => assert.deepEqual(freeGaps([]), [[420, 1260]]));\ntest('a booking until closing time leaves no gap at the end', () => assert.deepEqual(freeGaps([[420, 1260]]), []));\ntest(\"the caller's list is not reordered\", () => {\n  const mine: [number, number][] = [[780, 900], [480, 600]];\n  freeGaps(mine);\n  assert.deepEqual(mine, [[780, 900], [480, 600]]);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/gaps.ts",
+          "language": "typescript",
+          "code": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport type TimeRange = readonly [start: number, end: number];\n\n// readonly TimeRange[]: we only read the caller's list (it may be shared with the page).\nexport function freeGaps(booked: readonly TimeRange[]): TimeRange[] {\n  const gaps: TimeRange[] = [];\n  let cursor = OPEN;\n  for (const [start, end] of booked.toSorted((a, b) => a[0] - b[0])) {   // a sorted COPY\n    if (start > cursor) gaps.push([cursor, start]);\n    cursor = Math.max(cursor, end);\n  }\n  if (cursor < CLOSE) gaps.push([cursor, CLOSE]);\n  return gaps;\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { freeGaps } from '../src/gaps.ts';\n\nfreeGaps([[480, 600, 700]]); // expect TS2322\nfreeGaps(['08:00-10:00']); // expect TS2322\nconst shared = [[480, 600]] as const;\nconsole.log(freeGaps(shared).length);\n"
+        },
+        {
+          "name": "test/gaps.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { freeGaps } from '../src/gaps.ts';\n\ntest('three bookings leave three gaps', () => {\n  assert.deepEqual(freeGaps([[780, 900], [480, 600], [600, 720]]), [[420, 480], [720, 780], [900, 1260]]);\n});\ntest('an empty day is one big gap', () => assert.deepEqual(freeGaps([]), [[420, 1260]]));\ntest('a booking until closing time leaves no gap at the end', () => assert.deepEqual(freeGaps([[420, 1260]]), []));\ntest(\"the caller's list is not reordered\", () => {\n  const mine: [number, number][] = [[780, 900], [480, 600]];\n  freeGaps(mine);\n  assert.deepEqual(mine, [[780, 900], [480, 600]]);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — sorts the caller's array in place (booked: TimeRange[] + sort) — the as const caller is refused and the order test fails; number[][] instead of a tuple — a 3-number range is accepted — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — sorts the caller's array in place (booked: TimeRange[] + sort) — the as const caller is refused and the order test fails; number[][] instead of a tuple — a 3-number range is accepted — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/sai.ts": "import { freeGaps } from '../src/gaps.ts';\n\nfreeGaps([[480, 600, 700]]); // expect TS2322\nfreeGaps(['08:00-10:00']); // expect TS2322\nconst shared = [[480, 600]] as const;\nconsole.log(freeGaps(shared).length);\n",
+          "test/gaps.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { freeGaps } from '../src/gaps.ts';\n\ntest('three bookings leave three gaps', () => {\n  assert.deepEqual(freeGaps([[780, 900], [480, 600], [600, 720]]), [[420, 480], [720, 780], [900, 1260]]);\n});\ntest('an empty day is one big gap', () => assert.deepEqual(freeGaps([]), [[420, 1260]]));\ntest('a booking until closing time leaves no gap at the end', () => assert.deepEqual(freeGaps([[420, 1260]]), []));\ntest(\"the caller's list is not reordered\", () => {\n  const mine: [number, number][] = [[780, 900], [480, 600]];\n  freeGaps(mine);\n  assert.deepEqual(mine, [[780, 900], [480, 600]]);\n});\n"
+        },
+        "tepHoc": [
+          "src/gaps.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/gaps.test.ts"
+            ],
+            "moTa": "tsc (strict): src/gaps.ts + test/gaps.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2322 — freeGaps([[480, 600, 700]]); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2322 — freeGaps(['08:00-10:00']); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/gaps.test.ts",
+            "moTa": "node --test test/gaps.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "sorts the caller's array in place (booked: TimeRange[] + sort) — the as const caller is refused and the order test fails — caught by: every other line of kiem/sai.ts still compiles; node --test test/gaps.test.ts exits 0|||sorts the caller's array in place (booked: TimeRange[] + sort) — the as const caller is refused and the order test fails — máy chấm bắt ở: every other line of kiem/sai.ts still compiles; node --test test/gaps.test.ts exits 0"
+        },
+        {
+          "loi": "number[][] instead of a tuple — a 3-number range is accepted — caught by: kiem/sai.ts:3 is refused with TS2322 — freeGaps([[480, 600, 700]]);|||number[][] instead of a tuple — a 3-number range is accepted — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2322 — freeGaps([[480, 600, 700]]);"
+        }
+      ]
+    }
+  ]
+}

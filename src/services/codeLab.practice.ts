@@ -43,6 +43,12 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   // Courses (01/11/2026): networking-for-developers (mô phỏng /net-lab, js/choice) · api-design (LabFlow API, js/module/choice).
   'networking-for-developers': 'networking-practice',
   'api-design': 'api-design-practice',
+  // Courses (01/11/2026): testing — người học viết TEST, máy chấm 'mutation' (content/codelab/testing-practice).
+  testing: 'testing-practice',
+  // Courses (01/11/2026): typescript — máy chấm 'ts' (TypeScript 6.0.3 trong trình duyệt, content/codelab/typescript-practice).
+  typescript: 'typescript-practice',
+  // Courses (01/11/2026): authentication — LabFlow ID (content/codelab/authentication-practice).
+  authentication: 'authentication-practice',
 });
 
 /**
@@ -76,6 +82,9 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
   { loai: 'course', ten: 'Networking for Developers', courseSlug: 'networking-for-developers', trackSlug: 'networking-practice' },
   { loai: 'course', ten: 'API & System Design', courseSlug: 'api-design', trackSlug: 'api-design-practice' },
+  { loai: 'course', ten: 'Testing', courseSlug: 'testing', trackSlug: 'testing-practice' },
+  { loai: 'course', ten: 'TypeScript', courseSlug: 'typescript', trackSlug: 'typescript-practice' },
+  { loai: 'course', ten: 'Authentication', courseSlug: 'authentication', trackSlug: 'authentication-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

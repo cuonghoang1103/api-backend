@@ -7,14 +7,17 @@ import assert from 'node:assert/strict';
 import {
   bam,
   chamTinh,
+  chapNhan,
   chuanHoaKetQuaClient,
   coMayChamTrinhDuyet,
   dapAnChuan,
   demKiem,
+  GRADE_KINDS,
   gradeKindOf,
   testsCongKhai,
   testsDayDu,
   tinhDiem,
+  type KetQuaKiem as KetQuaKiemT,
 } from './codeLab.cham.js';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -181,5 +184,66 @@ describe('băm đáp án: trình duyệt ↔ máy chủ', () => {
     const pt = testsCongKhai(table, 3)!;
     assert.deepEqual((await fe.chamTinh(3, pt, { 'b.r.x': ' hợp  lệ ', 'b.r.y': 'ABC' })).map((k) => k.dat), [true, true]);
     assert.deepEqual((await fe.chamTinh(3, pt, { 'b.r.x': 'x', 'b.r.y': 'abc' })).map((k) => k.dat), [false, false]);
+  });
+});
+
+describe('mutation (01/11/2026): điểm + ngưỡng — máy chủ ↔ trình duyệt', async () => {
+  const { chapNhan: chapNhanFe } = (await import(tepFe)) as { chapNhan: typeof chapNhan };
+  const tj = {
+    loai: 'mutation', nguong: 2, impl: { 'a.js': 'x' },
+    kiem: [
+      { kiem: 'xanh', nhom: 'xanh', moTa: 'xanh' },
+      { kiem: 'diet', nhom: 'dot-bien', moTa: 'M1', ma: { 'a.js': 'y' } },
+      { kiem: 'diet', nhom: 'dot-bien', moTa: 'M2', ma: { 'a.js': 'z' } },
+      { kiem: 'diet', nhom: 'dot-bien', moTa: 'M3', ma: { 'a.js': 'w' }, an: true },
+    ],
+  };
+  it('có máy chấm trình duyệt; công khai giấu đột biến ẩn (cả mã của nó)', () => {
+    assert.equal(coMayChamTrinhDuyet(tj, 'mutation'), true);
+    const c = testsCongKhai(tj, 1)!;
+    assert.equal((c.kiem as unknown[]).length, 3);
+    assert.equal(JSON.stringify(c).includes('"w"'), false);
+  });
+  it('điểm = tỉ lệ diệt; test chưa xanh ⇒ 0; ngưỡng k/n quyết định ĐÃ GIẢI; hai bản giống nhau', () => {
+    const r = chuanHoaKetQuaClient(tj, [{ dat: true }, { dat: true }, { dat: false }, { dat: true }]);
+    assert.ok('ketQua' in r);
+    const kq = (r as { ketQua: KetQuaKiemT[] }).ketQua;
+    assert.deepEqual(tinhDiem(tj, kq), { score: 67, maxScore: 100, nhom: [] });
+    assert.equal(chapNhan(tj, kq), true);
+    assert.equal(chapNhan({ ...tj, nguong: undefined }, kq), false);
+    const doHet = kq.map((k, i) => (i === 0 ? { ...k, dat: false } : k));
+    assert.equal(tinhDiem(tj, doHet).score, 0);
+    assert.equal(chapNhan(tj, doHet), false);
+    for (const x of [kq, doHet]) {
+      assert.deepEqual(tinhDiemFe(tj, x), tinhDiem(tj, x));
+      assert.equal(chapNhanFe(tj, x), chapNhan(tj, x));
+      assert.equal(chapNhanFe({ ...tj, nguong: undefined }, x), chapNhan({ ...tj, nguong: undefined }, x));
+    }
+    // loại khác: luật cũ (mọi kiểm đạt)
+    assert.equal(chapNhan(dom, [{ dat: true }, { dat: true }, { dat: true }]), true);
+    assert.equal(chapNhan(dom, [{ dat: true }, { dat: false }, { dat: true }]), false);
+  });
+});
+
+describe('ts (01/11/2026): máy chấm TypeScript trong trình duyệt — máy chủ chỉ kiểm hình dạng', () => {
+  const tj = {
+    loai: 'ts', tsconfig: { strict: true }, coDinh: { 'kiem/sai.ts': "f('1'); // expect TS2345\n" }, tepHoc: ['src/f.ts'],
+    kiem: [
+      { kiem: 'sach', tep: [], moTa: 'sạch' },
+      { kiem: 'phai-loi', tep: 'kiem/sai.ts', dong: 1, ma: ['TS2345'], moTa: 'từ chối' },
+      { kiem: 'chay', lenh: 'node src/f.ts', moTa: 'chạy' },
+    ],
+  };
+  it('là loại chấm trình duyệt; mọi kiểm đạt mới ĐÃ GIẢI; điểm = phần trăm kiểm đạt', () => {
+    assert.ok((GRADE_KINDS as readonly string[]).includes('ts'));
+    assert.equal(gradeKindOf(tj), 'ts');
+    assert.equal(coMayChamTrinhDuyet(tj), true);
+    const r = chuanHoaKetQuaClient(tj, [{ dat: true }, { dat: false }, { dat: true }]);
+    assert.ok('ketQua' in r);
+    const kq = (r as { ketQua: KetQuaKiemT[] }).ketQua;
+    assert.equal(chapNhan(tj, kq), false);
+    assert.equal(tinhDiem(tj, kq).score, 67);
+    assert.equal(chapNhan(tj, kq.map((k) => ({ ...k, dat: true }))), true);
+    assert.ok('loi' in chuanHoaKetQuaClient(tj, [{ dat: true }]));
   });
 });

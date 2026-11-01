@@ -1,0 +1,194 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-10-4-phong-van",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-10-4-phong-van"
+  },
+  "exercises": [
+    {
+      "title": "Live coding: test mergeBusy in 20 minutes",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest",
+        "harmless refactor (stay green)"
+      ],
+      "prerequisites": [
+        "tst-10-4-phong-van"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/rules/busy.js</code> — mergeBusy. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> In 20 minutes, test mergeBusy(ranges): an empty day; separate bookings stay apart and come back sorted by start; overlapping, touching (10:00 ends, 10:00 starts) and nested bookings merge — also when the outer one is listed second; the input array is not changed; a time that is not HH:MM is rejected with TypeError..</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>6 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. It also applies <b>1 harmless change</b> (a refactor that keeps the behaviour): your tests must stay <b>green</b> on it, otherwise they are testing the implementation instead of the behaviour.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>src/rules/busy.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 6</b> mutants and stay green on the 1 harmless change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/rules/busy.js</code> — mergeBusy. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Trong 20 phút, test mergeBusy(ranges): ngày không có lượt đặt; các lượt rời nhau giữ riêng và trả về theo giờ bắt đầu; lượt chồng nhau, chạm nhau (10:00 kết thúc, 10:00 bắt đầu) và lồng nhau được gộp — kể cả khi lượt bao ngoài đứng sau; mảng đầu vào không bị đổi; giờ không đúng HH:MM bị từ chối bằng TypeError..</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>6 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Nó còn áp <b>1 thay đổi vô hại</b> (refactor giữ nguyên hành vi): test phải VẪN XANH, nếu không là bạn đang test cách cài đặt chứ không phải hành vi.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>src/rules/busy.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 6</b> đột biến và vẫn xanh với 1 thay đổi vô hại.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with src/rules/busy.test.js.|||Tệp test của bạn, bắt đầu từ src/rules/busy.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants; green on the 1 harmless change(s).|||Xanh với code đúng; đỏ với từng đột biến trong 6; xanh với 1 thay đổi vô hại.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: touching bookings stay apart|||Đột biến M1: touching bookings stay apart",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-10-4-phong-van shows the techniques this exercise needs; the reference solution is the course’s own test file(s): src/rules/busy.test.js.|||Bài tst-10-4-phong-van dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: src/rules/busy.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/rules/busy.test.js",
+          "language": "javascript",
+          "code": "// Model answer of the 20-minute live-coding exercise (lesson 10.4).\nimport { describe, it, expect } from 'vitest';\nimport { mergeBusy } from './busy.js';\n\nconst r = (start, end) => ({ start, end });\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(mergeBusy).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/busy.js",
+          "language": "javascript",
+          "code": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/rules/busy.test.js",
+          "language": "javascript",
+          "code": "// Model answer of the 20-minute live-coding exercise (lesson 10.4).\nimport { describe, it, expect } from 'vitest';\nimport { mergeBusy } from './busy.js';\n\nconst r = (start, end) => ({ start, end });\n\ndescribe('mergeBusy', () => {\n  it('returns no blocks for a day without bookings', () => {\n    expect(mergeBusy([])).toEqual([]);\n  });\n\n  it('keeps separate bookings apart, sorted by start', () => {\n    expect(mergeBusy([r('13:00', '14:00'), r('08:00', '09:00')])).toEqual([r('08:00', '09:00'), r('13:00', '14:00')]);\n  });\n\n  it.each([\n    ['overlapping', [r('08:00', '10:00'), r('09:00', '11:00')], [r('08:00', '11:00')]],\n    ['touching (10:00 ends, 10:00 starts)', [r('08:00', '10:00'), r('10:00', '11:00')], [r('08:00', '11:00')]],\n    ['one inside the other', [r('08:00', '12:00'), r('09:00', '10:00')], [r('08:00', '12:00')]],\n    ['inside, listed first', [r('09:00', '10:00'), r('08:00', '12:00')], [r('08:00', '12:00')]],\n  ])('merges %s bookings into one block', (_, input, expected) => {\n    expect(mergeBusy(input)).toEqual(expected);\n  });\n\n  it('does not change the array it was given', () => {\n    const input = [r('10:00', '11:00'), r('08:00', '09:00')];\n    mergeBusy(input);\n    expect(input).toEqual([r('10:00', '11:00'), r('08:00', '09:00')]);\n  });\n\n  it('rejects a time that is not HH:MM', () => {\n    expect(() => mergeBusy([r('8:00', '09:00')])).toThrow(TypeError);\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/busy.js",
+          "language": "javascript",
+          "code": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>src/rules/busy.test.js</code>), checked to kill every mutant and to stay green on the harmless change(s). Each mutant changes exactly one decision:</p><ul><li>M1 — touching bookings stay apart</li><li>M2 — a booking inside another one cuts the block short</li><li>M3 — input order is trusted (no sort)</li><li>M4 — sorted by end time instead of start</li><li>M5 — the caller's array is reordered</li><li>M6 — a booking inside another one becomes its own block</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>src/rules/busy.test.js</code>), đã kiểm diệt mọi đột biến và vẫn xanh với thay đổi vô hại. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — touching bookings stay apart</li><li>M2 — a booking inside another one cuts the block short</li><li>M3 — input order is trusted (no sort)</li><li>M4 — sorted by end time instead of start</li><li>M5 — the caller's array is reordered</li><li>M6 — a booking inside another one becomes its own block</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n",
+          "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: touching bookings stay apart",
+            "goiY": "write a test whose result would change if this happened: “touching bookings stay apart” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “touching bookings stay apart” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start < last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: a booking inside another one cuts the block short",
+            "goiY": "write a test whose result would change if this happened: “a booking inside another one cuts the block short” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a booking inside another one cuts the block short” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = end;\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: input order is trusted (no sort)",
+            "goiY": "write a test whose result would change if this happened: “input order is trusted (no sort)” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “input order is trusted (no sort)” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: sorted by end time instead of start",
+            "goiY": "write a test whose result would change if this happened: “sorted by end time instead of start” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “sorted by end time instead of start” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[1] - b[1]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: the caller's array is reordered",
+            "goiY": "write a test whose result would change if this happened: “the caller's array is reordered” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the caller's array is reordered” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.sort((a, b) => a.start.localeCompare(b.start)).map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: a booking inside another one becomes its own block",
+            "goiY": "write a test whose result would change if this happened: “a booking inside another one becomes its own block” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a booking inside another one becomes its own block” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks[blocks.length - 1];\n    if (last && start <= last[1] && end > last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: blocks.at(-1) instead of an index — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "src/rules/busy.js": "// Live-coding exercise of lesson 10.4: the busy blocks of one lab on one day.\n// ranges: [{ start: \"HH:MM\", end: \"HH:MM\" }] in any order. Returns merged blocks, sorted; touching blocks merge.\nimport { parseTime, formatTime } from './time.js';\n\nexport function mergeBusy(ranges) {\n  const sorted = ranges.map((r) => [parseTime(r.start), parseTime(r.end)]).sort((a, b) => a[0] - b[0]);\n  const blocks = [];\n  for (const [start, end] of sorted) {\n    const last = blocks.at(-1);\n    if (last && start <= last[1]) last[1] = Math.max(last[1], end);\n    else blocks.push([start, end]);\n  }\n  return blocks.map(([start, end]) => ({ start: formatTime(start), end: formatTime(end) }));\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Asserting HOW the code does it (call order, internal fields, exact implementation) — a harmless refactor turns such a test red.|||Khẳng định CÁCH code làm (thứ tự gọi, trường nội bộ, cài đặt cụ thể) — một refactor vô hại làm test như vậy đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "harmless change",
+          "vi": "thay đổi vô hại",
+          "giaiThich": "refactor giữ nguyên hành vi — bộ test tốt phải VẪN XANH"
+        }
+      ]
+    }
+  ]
+}

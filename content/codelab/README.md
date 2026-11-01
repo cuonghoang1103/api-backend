@@ -78,6 +78,7 @@ duLieuMau, chucNang: [{ ten, diem, moTa, yeuCau[], hook[], khoa?, viDu? }], idBa
 `table` | thuần JS | `bang: [{ ma, de, cot:[{ma,ten,luaChon?,phanBietHoa?}], hang:[{ma,o:{cot:'giá trị cho sẵn'}}], dapAn:{'<hàng>.<cột>': 'đáp án' \| ['các','đáp án']}, giaiThich?, nhom? }]` — mỗi ô đáp án là một kiểm (SWT301: phân vùng, giá trị biên, bảng quyết định…)
 `sql` (29/10/2026) | Worker (PGlite) | SQL chạy thật trên PostgreSQL 18 (WASM) ở **chế độ SQL Server** — mục 3b
 `sql-pg` (31/10/2026) | Worker (PGlite) | cùng bộ chạy, **PostgreSQL nguyên bản** (khoá PostgreSQL) — mục 3b′
+`mutation` (01/11/2026) | Worker | chấm BỘ TEST người học viết: xanh với code đúng, đỏ với từng đột biến cài sẵn (khoá Testing) — mục 3d
 `java` `tsql` `bash` `python` `text-ai` | — | **chưa chấm** (máy chủ nhà / AI — đợt sau); giao diện ghi "sắp có", người học tự đánh dấu
 
 Kiểm chung: `{ moTa, kiem, an?: true (kiểm ẩn — chỉ khi Nộp), nhom?: 'f1', truoc?: [bước], choToiDa?: ms }`.
@@ -181,6 +182,45 @@ Cùng mã, cùng lược đồ kiểm với mục 3b; khác ở **chế độ** 
 - Phương án sai phải đồng dạng với đáp án: cùng độ dài, cùng kiểu câu, không gắn thêm "(checked …)" chỉ cho đáp án.
 - Sau khi xuất, chạy `node scripts/codelab-kiem-noi-dung.mjs --track <bộ>` (đáp án lặp, lời giải giữ chỗ, nhắc chữ cái, `<` chưa escape,
   đáp án dài hơn hẳn, số vô lý ở cột đếm). CEA201 thêm `python3 content/codelab/cea201-practice/nguon/_kiem-doc-lap.py`: tính lại độc lập, không dùng `_sim.mjs`.
+
+## 3d. Máy chấm đột biến (`loai: 'mutation'`, 01/11/2026) — người học viết TEST
+
+Mã: `frontend/src/components/code-lab/cham/` — `mutationRunner.ts` (Vitest thu gọn, JS thuần trong chuỗi — chạy ở Worker
+web, worker hộp cát app, `vm` của Node) · `chamMutation.ts` (điều phối) · `diem.ts › chapNhan/demDotBien` (+ bản sao máy chủ
+trong `codeLab.cham.ts`). Test: `npx tsx --test frontend/src/components/code-lab/cham/mutation.test.ts`. Mẫu: `testing-practice/`.
+
+Nguồn đề (đúng dạng `content/courses/testing/_de-codelab-mutation.json` của khoá — chép đột biến nguyên văn được):
+
+```js
+tests: {
+  loai: 'mutation',
+  impl: { 'src/rules/booking.js': '…code ĐÚNG…', 'src/rules/time.js': '…' },  // tệp nó import cũng phải có
+  toiThieuTest: 4,          // ≥ N test (mỗi hàng it.each = 1 test; test không expect bị tính ĐỎ — requireAssertions)
+  nguong: 4,                // tuỳ chọn: diệt ≥ k đột biến là ĐẠT (mặc định: tất cả)
+  timeoutMs: 4000,          // giờ THẬT mỗi lượt (một Worker mới mỗi lượt), tranTestMs: trần một test async (mặc định 2000)
+  tepTest: 'src/rules/booking.test.js',   // tuỳ chọn — mặc định mọi *.test.js / *.spec.js trong bài
+  dotBien: [{ file: 'src/rules/booking.js', from: 'return seats > APPROVAL_SEATS;', to: 'return seats >= APPROVAL_SEATS;',
+              label: 'exactly 30 student seats needs approval', goiY: 'test đúng biên 30 chỗ…', an?: true }],
+}
+```
+
+- Bộ xuất biến `dotBien` thành `kiem`: #0 `{ kiem: 'xanh', nhom: 'xanh' }` + mỗi đột biến `{ kiem: 'diet', nhom: 'dot-bien', moTa:
+  'Mutant Mi: <label>', goiY, ma: { file: <tệp đã cài lỗi> }, an? }` (`from` phải khớp ĐÚNG 1 chỗ), rồi chạy LỜI GIẢI (xanh + diệt
+  hết) và CODE KHỞI ĐẦU (bộ test YẾU nhưng ĐÚNG: xanh, ≥ N test, diệt < ngưỡng) qua bộ chạy thật trong `vm` — in "lời giải 8 test
+  diệt 5/5 · khởi đầu 4 test diệt 1/5". Script Chromium kiểm lại dưới CSP web/app + tự kiểm đường quá giờ.
+- Chấm: test với `impl` phải xanh hết (sai ⇒ "Test của bạn SAI với code đúng", đột biến "chưa chấm", điểm 0) → từng đột biến:
+  có test đỏ / lỗi nạp / QUÁ GIỜ ⇒ **diệt**; xanh hết ⇒ **còn sống** + `goiY`. Điểm = % diệt; ĐÃ GIẢI = xanh + diệt ≥ `nguong`.
+  Đột biến `an: true` chỉ chạy khi Nộp (mã của nó không nằm trong payload trang bài).
+- Máy chấm luôn dùng `impl` của ĐỀ: tệp cùng tên trong bài làm (bản sao để đọc) bị bỏ qua; tệp phụ khác của người học vẫn nạp.
+- Có sẵn: `describe/it/test` (+ `.each` mảng/object với `%s %i %d %j %#`/`$key`, `.skip`, `.only`, `.todo`, `it.fails`), hook
+  before/after Each/All, `expect` (toBe toEqual toStrictEqual toMatchObject toThrow toBeCloseTo toBeTruthy/Falsy toBeNull/Undefined/
+  Defined/NaN toContain(Equal) toHaveLength toHaveProperty toMatch toBeGreaterThan… toBeInstanceOf toBeTypeOf + mock matchers,
+  `.not/.resolves/.rejects`, `expect.soft/assertions/hasAssertions`, `expect.any/anything/stringContaining/stringMatching/
+  objectContaining/arrayContaining/closeTo`), `vi` (fn, spyOn, *AllMocks, useFakeTimers/useRealTimers, setSystemTime,
+  advanceTimersByTime(Async), runAllTimers(Async)…), `fast-check` thu gọn (hạt giống cố định, biên trước, không thu nhỏ).
+  Import chỉ `'vitest'`, `'fast-check'` và đường tương đối. Không có: snapshot, `vi.mock` (giả module), `test.each` dạng template.
+- Không đổi CSP: web đã có `'unsafe-eval'` + `worker-src blob:`; app dùng worker hộp cát sẵn có (bộ chạy tự đổi import/export ⇒
+  không cần `import(blob:)`). Toàn vẹn như loại code: trình duyệt báo, máy chủ kiểm hình dạng ⇒ tiến độ cá nhân.
 
 ## 4. Lệnh
 

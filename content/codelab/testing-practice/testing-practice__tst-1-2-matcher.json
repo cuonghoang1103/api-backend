@@ -1,0 +1,187 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-1-2-matcher",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-1-2-matcher"
+  },
+  "exercises": [
+    {
+      "title": "Time parsing, formatting and usage rate",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "toBe vs toEqual",
+        "toThrow(ErrorClass)",
+        "toBeCloseTo",
+        "mutation testing"
+      ],
+      "prerequisites": [
+        "tst-1-1-cau-truc"
+      ],
+      "tags": [
+        "vitest",
+        "matchers",
+        "mutation",
+        "labflow-lite"
+      ],
+      "problemHtml": "<p>Two small modules of LabFlow Lite. In <code>src/rules/time.js</code>: <code>parseTime('HH:MM')</code> returns minutes since midnight, throws a <b><code>TypeError</code></b> when the text is not in <code>HH:MM</code> format (message ends with <code>expected HH:MM</code>) and a <b><code>RangeError</code></b> when the hour is above 23 or the minute above 59; <code>formatTime(minutes)</code> turns minutes back into a zero-padded <code>\"HH:MM\"</code>. In <code>src/rules/booking.js</code>: <code>usageRate(bookings)</code> adds up <code>b.minutes / 840</code> (the 14 opening hours) for every booking.</p>\n<p>The starter file <code>src/rules/time.test.js</code> has five tests that are all green — and kill <b>none</b> of the 6 mutants, because their matchers are too loose: <code>toThrow()</code> accepts any error, <code>toBeTruthy()</code> accepts any non-empty string, <code>toBeDefined()</code> accepts any number. Rewrite and extend it until every mutant dies.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>At least <b>5</b> tests, all green on the correct code, each with at least one <code>expect</code>.</li>\n  <li>Use the matcher that says exactly what you mean: <code>toBe</code> for exact strings/numbers, <code>toThrow(ErrorClass)</code> / <code>toThrow(/message/)</code> for errors, <code>toBeCloseTo(value, digits)</code> for fractions.</li>\n  <li>Kill <b>all 6</b> mutants.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai module nhỏ của LabFlow Lite. Trong <code>src/rules/time.js</code>: <code>parseTime('HH:MM')</code> trả số phút tính từ nửa đêm, ném <b><code>TypeError</code></b> khi chuỗi sai dạng <code>HH:MM</code> (thông báo kết thúc bằng <code>expected HH:MM</code>) và <b><code>RangeError</code></b> khi giờ lớn hơn 23 hoặc phút lớn hơn 59; <code>formatTime(minutes)</code> đổi số phút về <code>\"HH:MM\"</code> có số 0 đứng đầu. Trong <code>src/rules/booking.js</code>: <code>usageRate(bookings)</code> cộng <code>b.minutes / 840</code> (14 giờ mở cửa) của từng lượt đặt.</p>\n<p>Tệp khởi đầu <code>src/rules/time.test.js</code> có năm test đều xanh — mà <b>không diệt</b> được đột biến nào trong 6 con, vì matcher quá lỏng: <code>toThrow()</code> chấp nhận mọi lỗi, <code>toBeTruthy()</code> chấp nhận mọi chuỗi khác rỗng, <code>toBeDefined()</code> chấp nhận mọi số. Viết lại và bổ sung tới khi mọi đột biến chết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ít nhất <b>5</b> test, đều xanh với code đúng, mỗi test có ít nhất một <code>expect</code>.</li>\n  <li>Dùng matcher nói đúng ý: <code>toBe</code> cho chuỗi/số chính xác, <code>toThrow(LớpLỗi)</code> / <code>toThrow(/thông báo/)</code> cho lỗi, <code>toBeCloseTo(giá trị, số chữ số)</code> cho số thực.</li>\n  <li>Diệt <b>cả 6</b> đột biến.</li>\n</ul>",
+      "inputSpec": "Your test file src/rules/time.test.js (Vitest syntax).|||Tệp test src/rules/time.test.js của bạn (cú pháp Vitest).",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 6 đột biến.",
+      "constraints": "Imports: only \"vitest\", ./time.js and ./booking.js.|||Import: chỉ \"vitest\", ./time.js và ./booking.js.",
+      "examplesJson": [
+        {
+          "input": "Mutant: throw new RangeError('Invalid time …')  (bad format now throws the wrong class)|||Đột biến: throw new RangeError('Invalid time …')  (sai dạng nay ném nhầm lớp lỗi)",
+          "output": "Survives expect(() => parseTime('7h')).toThrow() · killed by .toThrow(TypeError)|||Sống qua expect(() => parseTime('7h')).toThrow() · bị diệt bởi .toThrow(TypeError)",
+          "explanation": "A bare toThrow() only asks \"did something throw?\" — both versions throw. Naming the class asks the question the code answers.|||toThrow() trần chỉ hỏi \"có ném gì không?\" — cả hai bản đều ném. Ghi rõ lớp lỗi mới hỏi đúng câu mà code trả lời."
+        }
+      ],
+      "hintsJson": [
+        "Replace every loose matcher in the starter with an exact one: what string exactly should formatTime(600) return?|||Thay mọi matcher lỏng trong bộ khởi đầu bằng matcher chính xác: formatTime(600) phải trả ĐÚNG chuỗi nào?",
+        "Pick inputs where the bug shows: 7.5 hours (450 min) separates Math.floor from Math.round; 07:00 needs the leading zero; two bookings separate \"+=\" from \"=\".|||Chọn đầu vào làm lỗi lộ ra: 7,5 giờ (450 phút) tách Math.floor khỏi Math.round; 07:00 cần số 0 đứng đầu; hai lượt đặt tách \"+=\" khỏi \"=\".",
+        "Boundaries of parseTime: '24:00' and '07:60' must throw RangeError; '7h' must throw TypeError.|||Biên của parseTime: '24:00' và '07:60' phải ném RangeError; '7h' phải ném TypeError."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/rules/time.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { parseTime, formatTime } from './time.js';\nimport { usageRate } from './booking.js';\n\n// Five green tests that kill NOTHING: every matcher here is too loose.\n// Năm test xanh mà không diệt được đột biến nào: matcher nào cũng quá lỏng.\n\ndescribe('parseTime', () => {\n  it('reads 07:30', () => {\n    expect(parseTime('07:30')).toBe(450);\n  });\n\n  it('reads 23:59', () => {\n    expect(parseTime('23:59')).toBeDefined();\n  });\n\n  it('rejects a bad format', () => {\n    expect(() => parseTime('7h')).toThrow();\n  });\n});\n\ndescribe('formatTime', () => {\n  it('formats 600 minutes', () => {\n    expect(formatTime(600)).toBeTruthy();\n  });\n});\n\ndescribe('usageRate', () => {\n  it('a full day is 100%', () => {\n    expect(usageRate([{ minutes: 840 }])).toBeCloseTo(1);\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/rules/booking.js",
+          "language": "javascript",
+          "code": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/rules/time.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { parseTime, formatTime } from './time.js';\nimport { usageRate } from './booking.js';\n\ndescribe('parseTime', () => {\n  it.each([\n    ['00:00', 0],\n    ['07:30', 450],\n    ['23:59', 1439],   // the last valid minute\n  ])('reads %s as %i minutes', (text, minutes) => {\n    expect(parseTime(text)).toBe(minutes);\n  });\n\n  // out of range ⇒ RangeError, one test per field (kills h > 24 and min > 60)\n  it('rejects hour 24 with a RangeError', () => {\n    expect(() => parseTime('24:00')).toThrow(RangeError);\n  });\n\n  it('rejects minute 60 with a RangeError', () => {\n    expect(() => parseTime('07:60')).toThrow(RangeError);\n  });\n\n  // bad FORMAT is a different error class than bad RANGE — name it (kills TypeError → RangeError)\n  it('rejects a bad format with a TypeError that explains the expected format', () => {\n    expect(() => parseTime('7h')).toThrow(TypeError);\n    expect(() => parseTime('7h')).toThrow(/expected HH:MM/);\n  });\n});\n\ndescribe('formatTime', () => {\n  // exact strings, not toBeTruthy: 450 = 7.5 h catches Math.round, \"07\" catches the missing padStart\n  it('formats 450 minutes as \"07:30\"', () => {\n    expect(formatTime(450)).toBe('07:30');\n  });\n\n  it('formats midnight as \"00:00\"', () => {\n    expect(formatTime(0)).toBe('00:00');\n  });\n});\n\ndescribe('usageRate', () => {\n  it('is 0 with no bookings', () => {\n    expect(usageRate([])).toBe(0);\n  });\n\n  // TWO bookings, so \"only the last one counts\" gives a different answer; floats ⇒ toBeCloseTo with 4 digits\n  it('adds 120 + 30 minutes up to about 17.86% of the day', () => {\n    expect(usageRate([{ minutes: 120 }, { minutes: 30 }])).toBeCloseTo(0.1786, 4);\n  });\n});\n"
+        },
+        {
+          "name": "src/rules/time.js",
+          "language": "javascript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/rules/booking.js",
+          "language": "javascript",
+          "code": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A matcher is the question your test asks. <code>toBeTruthy()</code> asks \"is it anything at all?\", which \"7:00\", \"08:30\" and \"07:30\" all answer yes; <code>toBe('07:30')</code> asks the real question. The same goes for errors: <code>toThrow(TypeError)</code> separates \"wrong format\" from \"out of range\", which the code deliberately reports with two different classes. For fractions, <code>toBeCloseTo(0.1786, 4)</code> both survives floating-point noise on the correct code and rejects the \"last booking only\" result (0.0357).</p>",
+      "solutionExplanationHtmlVi": "<p>Matcher là câu hỏi mà test đặt ra. <code>toBeTruthy()</code> hỏi \"có gì không?\", mà \"7:00\", \"08:30\" hay \"07:30\" đều trả lời có; <code>toBe('07:30')</code> mới hỏi đúng câu. Lỗi cũng vậy: <code>toThrow(TypeError)</code> tách \"sai dạng\" khỏi \"ngoài khoảng\" — hai trường hợp code cố ý báo bằng hai lớp lỗi khác nhau. Với số thực, <code>toBeCloseTo(0.1786, 4)</code> vừa chịu được sai số dấu phẩy động của code đúng, vừa loại kết quả \"chỉ lượt cuối\" (0,0357).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "src/rules/booking.js": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        "toiThieuTest": 5,
+        "timeoutMs": 4000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 5 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: \"24:00\" accepted",
+            "goiY": "test the hour boundary: parseTime('24:00') must throw RangeError · test biên giờ: parseTime('24:00') phải ném RangeError",
+            "ma": {
+              "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 24 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: \"07:60\" accepted",
+            "goiY": "test the minute boundary: parseTime('07:60') must throw RangeError · test biên phút: parseTime('07:60') phải ném RangeError",
+            "ma": {
+              "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 60) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: bad format throws the wrong error class",
+            "goiY": "name the error class: toThrow(TypeError), not a bare toThrow() · ghi rõ lớp lỗi: toThrow(TypeError), không dùng toThrow() trần",
+            "ma": {
+              "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new RangeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: formatTime rounds the hour",
+            "goiY": "use a half hour: formatTime(450) must be exactly \"07:30\" · dùng nửa giờ: formatTime(450) phải đúng \"07:30\"",
+            "ma": {
+              "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.round(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: \"7:00\" instead of \"07:00\"",
+            "goiY": "compare the exact string of a morning time (toBe(\"07:00\")), not toBeTruthy · so đúng chuỗi của một giờ buổi sáng (toBe(\"07:00\")), không toBeTruthy",
+            "ma": {
+              "src/rules/time.js": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h) + ':' + String(m).padStart(2, '0');\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: usageRate counts only the last booking",
+            "goiY": "give usageRate TWO bookings and check the sum with toBeCloseTo(…, 4) · cho usageRate HAI lượt đặt và kiểm tổng bằng toBeCloseTo(…, 4)",
+            "ma": {
+              "src/rules/booking.js": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate = b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "expect(0.1 + 0.2).toBe(0.3) style: comparing a computed fraction with toBe fails on the CORRECT code (floating point). Use toBeCloseTo(value, 4).|||Kiểu expect(0.1 + 0.2).toBe(0.3): so số thực vừa tính bằng toBe là đỏ ngay với code ĐÚNG (dấu phẩy động). Dùng toBeCloseTo(giá trị, 4)."
+        },
+        {
+          "loi": "toBeCloseTo with the default 2 digits is loose: 0.18 is \"close to\" 0.1786. Say how close you need.|||toBeCloseTo với mặc định 2 chữ số là lỏng: 0,18 vẫn \"gần\" 0,1786. Hãy nói cần gần tới đâu."
+        },
+        {
+          "loi": "expect(parseTime('7h')).toThrow() without a wrapper function: the error escapes before expect runs.|||expect(parseTime('7h')).toThrow() không có hàm bọc: lỗi bật ra trước khi expect kịp chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "matcher",
+          "vi": "hàm so khớp",
+          "giaiThich": "phần .toBe/.toEqual/.toThrow… quyết định thế nào là \"đúng\""
+        },
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

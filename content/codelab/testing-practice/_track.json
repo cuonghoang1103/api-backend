@@ -1,0 +1,31 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "testing-practice",
+  "name": "Testing — Luyện viết test, chấm bằng đột biến",
+  "language": "javascript",
+  "color": "#15803d",
+  "docsUrl": "https://vitest.dev/api/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá Testing (dự án xuyên khoá LabFlow Lite — luật đặt phòng lab): ở đây bạn KHÔNG viết code, bạn viết TEST. Máy chấm đột biến (mutation testing) chạy ngay trong trình duyệt: bộ test của bạn phải xanh với code đúng, rồi đỏ với từng bản code cài sẵn một lỗi (biên sai một đơn vị, nhánh vai trò bị bỏ, đổi loại lỗi, làm tròn sai giờ…). Đột biến còn sống = chỗ bộ test của bạn chưa nhìn tới. Vitest thu gọn: describe/it/it.each, toBe/toEqual/toStrictEqual/toThrow/toBeCloseTo, .not, requireAssertions như cấu hình khoá.",
+  "modules": [
+    {
+      "slug": "tst-1-1-cau-truc",
+      "name": "1.1 Anatomy of a test — approval & booking status",
+      "level": "BEGINNER",
+      "description": "Viết test Arrange–Act–Assert cho needsApproval và createBooking (BR-06, Lite-2) — diệt 5 đột biến: biên 30 chỗ, ADMIN, đảo trạng thái, 0 chỗ, khung giờ sai không ném lỗi."
+    },
+    {
+      "slug": "tst-1-2-matcher",
+      "name": "1.2 Matchers that say what you mean — time & usage rate",
+      "level": "BEGINNER",
+      "description": "Chọn đúng matcher cho parseTime/formatTime/usageRate — toThrow(TypeError) thay vì toThrow(), toBe('07:00') thay vì toBeTruthy, toBeCloseTo cho số thực — diệt 6 đột biến."
+    },
+    {
+      "slug": "tst-1-4-ham-thuan",
+      "name": "1.4 Pure functions & edge cases — booking window and limits",
+      "level": "INTERMEDIATE",
+      "description": "Phân vùng tương đương + giá trị biên thành bảng it.each cho isWithinBookingWindow, checkSlot, needsApproval — diệt các đột biến lệch biên (14 ngày, hôm nay, đúng 4 giờ) và đầu vào không nguyên."
+    }
+  ]
+}

@@ -205,11 +205,23 @@ for (const f of tepNguon) {
       }
     }
   }
+  // MUTATION (01/11/2026): `dotBien` [{ file, from, to, label, goiY?, an? }] ⇒ kiểm 'xanh' + một kiểm 'diet' mỗi đột biến
+  // (scripts/codelab-mutation-node.mjs), rồi chạy LỜI GIẢI (phải diệt hết) + KHỞI ĐẦU (xanh, diệt < ngưỡng) bằng bộ chạy thật trong vm.
+  const tomTatMut = new Map();
+  for (const ex of payload.exercises) {
+    if (ex.testsJson?.loai !== 'mutation') continue;
+    const mutNode = await import('./codelab-mutation-node.mjs');
+    const { tests, loi } = mutNode.dungKiemMutation(ex.testsJson);
+    ex.testsJson = tests;
+    const kq = loi.length ? { loi, tomTat: '' } : await mutNode.kiemMutationNode(ex);
+    loiSql.set(ex, [...(loiSql.get(ex) ?? []), ...kq.loi]);
+    tomTatMut.set(ex, kq.tomTat);
+  }
   for (const ex of payload.exercises) {
     soDe++;
     const l = [...kiemTruong(ex), ...(loiSql.get(ex) ?? [])];
     if (l.length) { soLoi += l.length; console.log(`  ✗ [${m.slug}] "${ex.title}"`); for (const x of l) console.log(`      - ${x}`); }
-    else console.log(`  ✓ [${m.slug}] ${ex.kind} ${ex.difficulty} "${ex.title}" — ${ex.testsJson.kiem?.length ?? '?'} kiểm${ex.demoHtml ? ` · demo ${(ex.demoHtml.length / 1024).toFixed(0)} KB` : ''}`);
+    else console.log(`  ✓ [${m.slug}] ${ex.kind} ${ex.difficulty} "${ex.title}" — ${ex.testsJson.kiem?.length ?? '?'} kiểm${ex.demoHtml ? ` · demo ${(ex.demoHtml.length / 1024).toFixed(0)} KB` : ''}${tomTatMut.get(ex) ? ` · ${tomTatMut.get(ex)}` : ''}`);
   }
   const tep = path.join(THU_MUC, `${TRACK}__${m.slug}.json`);
   const moi = `${JSON.stringify(payload, null, 2)}\n`;

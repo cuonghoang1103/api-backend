@@ -49,7 +49,7 @@ import { TestPanel, CHAM_RONG, type TrangThaiCham } from '@/components/code-lab/
 import { TraLoiTinh } from '@/components/code-lab/TraLoiTinh';
 import { KhungAnToan } from '@/components/code-lab/KhungAnToan';
 import { chayJs } from '@/components/code-lab/chayJs';
-import { chamBai, chamDuoc, tinhDiem, LOAI_MAY_CHU, LOAI_TINH, TEN_LOAI, type TestsJson } from '@/components/code-lab/cham';
+import { chamBai, chamDuoc, chapNhan, tinhDiem, LOAI_MAY_CHU, LOAI_TINH, TEN_LOAI, type TestsJson } from '@/components/code-lab/cham';
 import { bienDichReact, dungTrangDom, dungTrangReact } from '@/components/code-lab/cham/chamKhung';
 
 function defaultFileName(ex: { language: string; track?: { slug?: string } | null }): string {
@@ -401,7 +401,8 @@ export default function ExerciseDetailPage() {
     ? `/courses/${ex.videoRef.courseSlug}/learn?lessonSlug=${encodeURIComponent(ex.videoRef.lessonSlug)}${ex.videoRef.giay ? `&t=${ex.videoRef.giay}` : ''}`
     : null;
   const daGiai = status === 'SOLVED';
-  const daDat = cham.cheDo === 'nop' && !!cham.ketQua && cham.tong > 0 && cham.dat === cham.tong;
+  // mutation (01/11/2026): đạt = test xanh với code đúng + diệt ≥ ngưỡng đột biến (chapNhan); loại khác: mọi kiểm đạt
+  const daDat = cham.cheDo === 'nop' && !!cham.ketQua && cham.tong > 0 && chapNhan(tj, cham.ketQua);
 
   const TABS: Array<{ id: LeftTab; label: string; icon: React.ReactNode; badge?: number }> = [
     { id: 'de', label: deLon ? 'Đề (bản in)' : 'Đề bài', icon: <FileText size={14} /> },
@@ -675,6 +676,14 @@ export default function ExerciseDetailPage() {
               <summary>🐘 <b>Chạy trên PostgreSQL 18 (WASM) trong trình duyệt</b> · PostgreSQL nguyên bản</summary>
               <p className="mt-1">Mọi cú pháp PostgreSQL đều chạy: LIMIT, ILIKE, <code>::</code>, RETURNING, ON CONFLICT, DISTINCT ON, CTE đệ quy, hàm cửa sổ, PL/pgSQL. Chuỗi so sánh <b>phân biệt hoa thường</b>, AVG trả số thập phân — đúng như máy chủ PostgreSQL thật. Mỗi kiểm chạy trên CSDL mẫu sạch rồi huỷ; truy vấn chạy quá giờ bị dừng. Lần chạy đầu tải ~5 MB (rồi trình duyệt giữ lại).</p>
               <p className="mt-1 opacity-80">Native PostgreSQL 18 (WASM): every PostgreSQL feature works; strings are case-sensitive and AVG returns numeric, exactly like a real server. Each check runs on a fresh sample database and is rolled back; runaway queries are stopped.</p>
+            </details>
+          )}
+
+          {loai === 'mutation' && (
+            <details className="cl-note-sql">
+              <summary>🧬 <b>Bài viết TEST — chấm bằng đột biến (mutation testing)</b> · Vitest thu gọn chạy ngay trong trình duyệt</summary>
+              <p className="mt-1">Bạn chỉ sửa tệp <code>*.test.js</code>. Máy chấm luôn dùng bản code đúng của đề (sửa tệp code trong editor không có tác dụng), chạy bộ test của bạn — phải <b>xanh hết</b> — rồi chạy lại với từng bản cài sẵn một lỗi: test đỏ ⇒ đột biến bị <b>diệt</b>. Có sẵn <code>describe / it / test / it.each / beforeEach</code> và <code>expect</code> với <code>toBe, toEqual, toStrictEqual, toMatchObject, toThrow, toBeCloseTo, toBeTruthy/Falsy, toContain, toHaveLength, toHaveProperty, toMatch, toBeGreaterThan…</code>, <code>.not</code>, <code>.resolves/.rejects</code>. Test không có <code>expect</code> bị tính đỏ (requireAssertions, như cấu hình khoá).</p>
+              <p className="mt-1 opacity-80">Edit only the <code>*.test.js</code> file. The grader runs your suite against the correct code (must be all green), then against each planted bug: a red suite kills the mutant. A test without any expect() fails (requireAssertions).</p>
             </details>
           )}
 

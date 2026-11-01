@@ -9,13 +9,14 @@
  */
 import { chamJs } from './chamJs';
 import { chamKhung } from './chamKhung';
+import { chamMutation } from './chamMutation';
 import { chamSql } from './chamSql';
 import { chamTinh, type TraLoiTinh } from './chamTinh';
 import { tinhDiem } from './diem';
 import { LOAI_TRINH_DUYET, type Diem, type KetQuaKiem, type TepMap, type TestsJson } from './kieu';
 
 export * from './kieu';
-export { tinhDiem } from './diem';
+export { tinhDiem, chapNhan, demDotBien } from './diem';
 export type { TraLoiTinh } from './chamTinh';
 
 export interface ChamVao {
@@ -55,6 +56,9 @@ export async function chamBai({ exerciseId, tj, files, traLoi, onTung }: ChamVao
     case 'sql':
     case 'sql-pg': // 31/10/2026: PostgreSQL nguyên bản (chamSql chọn chế độ theo tj.loai)
       ketQua = await chamSql(tj, kiem, files, onTung);
+      break;
+    case 'mutation': // 01/11/2026: chấm BỘ TEST người học — chạy với code đúng rồi với từng đột biến
+      ketQua = await chamMutation(tj, kiem, files, onTung);
       break;
     case 'choice':
     case 'order':

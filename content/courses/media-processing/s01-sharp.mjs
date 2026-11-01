@@ -512,6 +512,11 @@ exif            header only     Timestamps, GPS, camera model
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — limitInputPixels</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — the option and its default of 0x3FFF².</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CWE-409 — Decompression bomb</span><span class="lc-sub">cwe.mitre.org/data/definitions/409.html — the vulnerability class.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/imageOptimizer.ts</span><span class="lc-sub">MAX_INPUT_PIXELS = 100_000_000 và MAX_CONCURRENT_DECODES = 4, kèm số đo 758 KB → 99 MB RSS.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.3: Never trust the file</span><span class="lc-sub">The Node.js course runs the same bomb on sharp 0.35.5 in a fresh process per measurement: +190 MB for one, +889 MB for eight at once versus +112 MB for eight real 6.5 MB photos, and limitInputPixels: 50e6 refuses it in 1.4 ms. Numbers differ from this lesson because the machine and sharp version differ — the shape of the problem does not.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -549,6 +554,11 @@ exif            header only     Timestamps, GPS, camera model
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Format là cái bạn thực sự hỗ trợ</span><span class="lz-d">Sharp decode HEIC được chỉ khi libvips được dựng với libheif. Trên nhiều Docker base image thì không, nên <code>format: 'heif'</code> là một decode sẽ fail — tốt hơn là loại nó với thông điệp rõ hơn là đốt lần thử.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Pages, cho input animated</span><span class="lz-d"><code>pages &gt; 1</code> nghĩa là GIF hoặc WebP animated. Sharp chỉ xử mọi frame nếu bạn truyền <code>{ animated: true }</code> vào constructor; không thì bạn âm thầm chỉ được frame 1. Nếu sản phẩm hứa &quot;GIF animated chạy được&quot;, phép kiểm này là cái giữ lời hứa đó.</span></div>
 <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Orientation, để biết cần gọi <code>.rotate()</code></span><span class="lz-d">Giá trị 2-8 nghĩa là pixel được lưu xoay/lật so với cách nó phải hiển thị. Bài 1.4 nói toàn bộ về bẫy này.</span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.3: Đừng tin file người dùng</span><span class="lc-sub">Khoá Node.js chạy cùng quả bom trên sharp 0.35.5, mỗi phép đo một tiến trình mới: +190 MB cho một quả, +889 MB cho tám quả cùng lúc so với +112 MB của tám ảnh thật 6,5 MB, và limitInputPixels: 50e6 từ chối nó trong 1,4 ms. Con số khác bài này vì máy và phiên bản sharp khác — còn hình dạng của vấn đề thì không.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 
 <h3>Decompression bomb — đo thật, không phải lý thuyết</h3>

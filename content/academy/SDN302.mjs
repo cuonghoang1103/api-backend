@@ -1467,6 +1467,11 @@ https.<span class="tok-function">createServer</span>({
   <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 6.4: CORS, CSRF and browsers</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: let your own front-end call the API from the browser. Different: Courses writes the CORS middleware itself (an allow-list, never *, Vary: Origin, Expose-Headers) instead of installing the cors package. It also adds: a measurement in a real Chromium showing that a stranger’s GET still reaches the server while a JSON POST stops at the preflight, the reflect-origin-with-credentials mistake, and CSRF versus bearer tokens.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 10.3: Never trust the file</span><span class="lc-sub">Once your upload works, this is the next question. Same as this lesson: Multer uploads and file download. Different: Courses checks what is really inside the file. It adds: filename, extension and Content-Type are client claims; magic bytes and their limit (a GIF/HTML polyglot); re-encoding with sharp; a 758 KB decompression bomb; EXIF/GPS in phone photos; why the original file name must never reach a path.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1554,6 +1559,11 @@ https.<span class="tok-function">createServer</span>({
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 6.4: CORS, CSRF và trình duyệt</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: cho front-end của mình gọi API từ trình duyệt. Khác: Courses tự viết middleware CORS (danh sách cho phép, không bao giờ *, Vary: Origin, Expose-Headers) thay vì cài gói cors. Ở đó có thêm: phép đo trong Chromium thật cho thấy GET của người lạ vẫn tới server còn POST JSON dừng ở preflight, lỗi phản chiếu origin kèm credentials, và CSRF so với token bearer.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 10.3: Đừng tin file người dùng</span><span class="lc-sub">Upload chạy rồi thì đây là câu hỏi tiếp theo. Giống bài này: upload bằng Multer và tải file về. Khác: Courses kiểm thứ thật sự nằm trong file. Ở đó có thêm: filename, đuôi và Content-Type là lời khai của client; magic bytes và giới hạn của nó (file lai GIF/HTML); mã hoá lại bằng sharp; bom giải nén 758 KB; EXIF/GPS trong ảnh điện thoại; vì sao tên file gốc không bao giờ được vào đường dẫn.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>`,
         },

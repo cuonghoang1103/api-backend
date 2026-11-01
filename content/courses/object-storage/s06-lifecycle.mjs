@@ -649,6 +649,11 @@ async function findMissingObjects() {
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — ListObjectsV2</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html — pagination and 1000-key limit.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — HeadObject</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html — 404 vs 403 distinction matters.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Prisma — findMany with <code>in</code></span><span class="lc-sub">prisma.io/docs — batch lookup pattern.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.4: Serving media back</span><span class="lc-sub">The Node.js course reproduces the three everyday leaks in a local MinIO — a deleted post, an abandoned upload, a replaced avatar — finds them with "everything in the bucket minus everything a row points at" (5 objects, 2 referenced, 3 orphans, 2.21 MB) and sweeps them, then shows why the object must be deleted before the row.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
@@ -802,6 +807,11 @@ async function findMissingObjects() {
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — ListObjectsV2</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html — pagination và giới hạn 1000-key.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — HeadObject</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html — 404 vs 403 quan trọng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Prisma — findMany với <code>in</code></span><span class="lc-sub">prisma.io/docs — pattern batch lookup.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.4: Phục vụ media trở lại</span><span class="lc-sub">Khoá Node.js dựng lại ba chỗ rò thường gặp trong MinIO cục bộ — bài bị xoá, upload bỏ dở, avatar bị thay — tìm chúng bằng "mọi thứ trong bucket trừ mọi thứ có dòng trỏ tới" (5 object, 2 được tham chiếu, 3 mồ côi, 2,21 MB) rồi quét sạch, và chỉ ra vì sao phải xoá object trước khi xoá dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

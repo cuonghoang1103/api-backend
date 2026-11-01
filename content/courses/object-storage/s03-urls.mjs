@@ -275,6 +275,11 @@ Combo cho private user data:
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">web.dev — HTTP caching</span><span class="lc-sub">web.dev/http-cache — Cache-Control guide.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.4: Serving media back</span><span class="lc-sub">The Node.js course checks these headers on production: curl -I reports cf-cache-status: DYNAMIC because it sends HEAD, while a real GET reports HIT with age 26 → 33 seven seconds later; If-None-Match returns 304 with 0 bytes and Range 0-99 returns exactly 100 bytes. It also measures what resizing and WebP/AVIF are worth and what proxying media through an API costs.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -364,6 +369,11 @@ Combo cho private user data:
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">web.dev — HTTP caching</span><span class="lc-sub">web.dev/http-cache — Cache-Control guide.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.4: Phục vụ media trở lại</span><span class="lc-sub">Khoá Node.js kiểm các header này trên production: curl -I báo cf-cache-status: DYNAMIC vì nó gửi HEAD, còn một GET thật báo HIT với age 26 → 33 sau bảy giây; If-None-Match trả 304 với 0 byte, Range 0-99 trả đúng 100 byte. Bài đó còn đo thu nhỏ và WebP/AVIF đáng giá bao nhiêu, và proxy media qua API tốn gì.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

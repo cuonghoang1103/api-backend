@@ -1280,6 +1280,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a counter kept in one process's memory stops being a limit once there are two instances. There you add: the login limiter itself (a Map keyed on IP + email, 429 + Retry-After, trust proxy), and revocation with tokenVersion. This lesson adds what that one does not: two instances behind round-robin measured: 8 bookings out of 8 got past a limit of 5, and the fix with shared counters.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.2: Object storage and presigned URLs</span><span class="lc-sub">Your checklist says files belong in object storage. The Node.js course does it end to end: the S3 API measured on MinIO, key layout, a presigned upload that keeps 120 MB away from the API (it received 41 bytes in total), and the Content-Type and size the signature does not cover.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1461,6 +1466,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: bộ đếm nằm trong RAM của một tiến trình thôi là giới hạn khi có hai bản chạy. Ở đó học thêm: chính bộ chặn đăng nhập (một Map khoá theo IP + email, 429 + Retry-After, trust proxy), và thu hồi bằng tokenVersion. Bài này có thứ bài kia không có: hai bản chạy sau round-robin, đo thật: 8 trên 8 lượt đặt vượt giới hạn 5, và cách sửa bằng bộ đếm dùng chung.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.2: Object storage và URL ký sẵn</span><span class="lc-sub">Bảng kiểm của bài này nói file thuộc về object storage. Khoá Node.js làm trọn: API S3 đo trên MinIO, bố trí key, upload ký sẵn giữ 120 MB tránh xa API (API chỉ nhận 41 byte), và Content-Type cùng kích thước mà chữ ký không phủ.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>

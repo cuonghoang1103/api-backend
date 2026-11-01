@@ -123,6 +123,11 @@ serverside via <code>heif-convert</code>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Video codecs and formats</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/Media/Formats/Video_codecs — container vs codec distinction.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — WebP performance</span><span class="lc-sub">blog.cloudflare.com/webp-vs-jpeg — real byte reductions across a million images.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/services/makerlab/audio.ts</span><span class="lc-sub">Comment MP3 vs PCM tradeoff cho ESP32 robot — nguồn cho ví dụ audio.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.4: Serving media back</span><span class="lc-sub">The Node.js course measures the trade-off inside an upload pipeline: on a smooth and a grainy 4032×3024 source, resizing to 1200 px removes 88–98% of the bytes, WebP beats JPEG by 2.8× and 1.17× respectively, and AVIF is smallest but 4–7× slower to encode — a background job, not a request handler. Then it serves the result with immutable caching.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Section 0 · Bài 0.1</span>
@@ -235,6 +240,11 @@ serverside qua <code>heif-convert</code>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Video codecs and formats</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/Media/Formats/Video_codecs — khác biệt container vs codec.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — WebP performance</span><span class="lc-sub">blog.cloudflare.com/webp-vs-jpeg — giảm byte thật trên triệu ảnh.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/services/makerlab/audio.ts</span><span class="lc-sub">Comment tradeoff MP3 vs PCM cho robot ESP32 — nguồn ví dụ audio.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.4: Phục vụ media trở lại</span><span class="lc-sub">Khoá Node.js đo đánh đổi đó ngay trong đường ống upload: với một ảnh mượt và một ảnh nhiễu 4032×3024, thu nhỏ về 1200 px bỏ 88–98 % số byte, WebP thắng JPEG lần lượt 2,8× và 1,17×, còn AVIF nhỏ nhất nhưng mã hoá chậm hơn 4–7 lần — việc của job nền, không phải handler request. Rồi bài đó phục vụ kết quả với cache immutable.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

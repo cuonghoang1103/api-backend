@@ -184,6 +184,11 @@ raw                                           Content-Disposition:
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">DOMPurify — SVG profile</span><span class="lc-sub">github.com/cure53/DOMPurify — <code>USE_PROFILES: { svg: true }</code> and its bypass history.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Content-Security-Policy</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy — <code>default-src 'none'</code> on a media origin.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/uploadService.ts</span><span class="lc-sub"><code>DANGEROUS_MIME</code> / <code>DANGEROUS_EXT</code> / <code>assertSafeUploadType()</code> — hai cổng độc lập.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.3: Never trust the file</span><span class="lc-sub">The Node.js course uploads the same kind of weaponised SVG through a real multer server: the extension and client-MIME checks pass it, file-type says "not recognised" (blocked by luck, not by design), and sharp decodes it into an 80×80 WebP with no onload. It also measures a GIF/HTML polyglot, a JPEG with a script tail, a 758 KB decompression bomb and EXIF/GPS.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -357,6 +362,11 @@ hiển thị thô                                  Content-Disposition:
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">DOMPurify — SVG profile</span><span class="lc-sub">github.com/cure53/DOMPurify — <code>USE_PROFILES: { svg: true }</code> và lịch sử bypass.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Content-Security-Policy</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy — <code>default-src 'none'</code> trên origin media.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/uploadService.ts</span><span class="lc-sub"><code>DANGEROUS_MIME</code> / <code>DANGEROUS_EXT</code> / <code>assertSafeUploadType()</code> — hai cổng độc lập.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-3-kiem-file-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.3: Đừng tin file người dùng</span><span class="lc-sub">Khoá Node.js gửi cùng kiểu SVG độc qua một server multer thật: lớp kiểm đuôi và MIME của client cho qua, file-type nói "không nhận ra" (chặn do tình cờ, không do thiết kế), và sharp giải mã nó thành WebP 80×80 không còn onload. Bài đó còn đo file lai GIF/HTML, ảnh JPEG mang đuôi script, bom giải nén 758 KB và EXIF/GPS.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

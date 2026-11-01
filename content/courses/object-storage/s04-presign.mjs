@@ -281,6 +281,11 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (this repo)</span><span class="lc-sub">Real comment documenting the vulnerability, fix, and verification against real S3.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.2: Object storage and presigned URLs</span><span class="lc-sub">The Node.js course measures this exact bug on a local MinIO: SignedHeaders = host → a text/html PUT returns 200 and is stored as text/html; with signableHeaders → 403. It also measures what the signature never covers: 120 MB into a URL declared for 5 MB (accepted), the presigned POST content-length-range fix (400 EntityTooLarge), key tampering (SignatureDoesNotMatch) and a 5-second expiry.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -392,6 +397,11 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (kho này)</span><span class="lc-sub">Comment thật tài liệu vulnerability, fix, và verify với S3 thật.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.2: Object storage và URL ký sẵn</span><span class="lc-sub">Khoá Node.js đo đúng bug này trên MinIO cục bộ: SignedHeaders = host → PUT text/html trả 200 và lưu thành text/html; có signableHeaders → 403. Bài đó còn đo thứ chữ ký không bao giờ phủ: 120 MB vào URL khai 5 MB (vẫn nhận), cách sửa bằng presigned POST content-length-range (400 EntityTooLarge), sửa key (SignatureDoesNotMatch) và hạn 5 giây.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

@@ -59,7 +59,7 @@ xin chao\\r\\n
 <div class="out">gốc          : 7.183.099 byte
 base64       : 9.577.468 byte (+33,33%)
 thân JSON    : 9.577.521 byte (+33,33%)</div>
-<p>Base64 turns every 3 bytes into 4 characters, so the increase is exactly one third — not an implementation detail, arithmetic. On a 5 Mbps mobile uplink that is 11,5 seconds instead of 8,6 for one photo. And the cost does not stop at bandwidth: the server has to hold the text, parse it as JSON, then allocate a second buffer for the decoded bytes.</p>
+<p>Base64 turns every 3 bytes into 4 characters, so the increase is exactly one third — not an implementation detail, arithmetic. On a 5 Mbps mobile uplink that is 15,3 seconds instead of 11,5 for one photo (7.183.099 bytes × 8 ÷ 5.000.000 = 11,5 s raw; the 9.577.521-byte JSON body takes 15,3 s). And the cost does not stop at bandwidth: the server has to hold the text, parse it as JSON, then allocate a second buffer for the decoded bytes.</p>
 
 <h3>Measurement 2 — the same upload, four ways, measured by RSS</h3>
 <p>One Express server per strategy, one 6,85MB photo, resident memory sampled every 10ms. <code>rssDelta</code> is peak minus baseline for a single request:</p>
@@ -102,7 +102,7 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
 <p>The rejection works — and the client still uploaded all 7,18MB before hearing about it. A size limit protects your <em>memory and disk</em>, never your <em>bandwidth</em>. If you want to reject early you must check <code>Content-Length</code> before reading the body, and even that is a hint the client controls. The other half of the same lesson: <code>MulterError</code> is thrown into the middleware chain, so if you write <code>app.post('/u', upload.single('file'), handler)</code> with no error handler, an oversized upload becomes a 500 with a stack trace instead of a 413.</p>
 
 <div class="pitfall">
-<p><strong>Five ways upload handling goes wrong in real code.</strong> (1) <code>multer()</code> with no options at all uses <code>memoryStorage</code> and <strong>no size limit</strong> — one 2GB upload ends the process. (2) Reading <code>req.body.category</code> inside <code>fileFilter</code>: the text field may not have been parsed yet, so it is <code>undefined</code> — decide with fields that arrive in the URL or in headers instead. (3) Forgetting that <code>upload.array('files', 10)</code> multiplies your memory by ten. (4) <code>diskStorage</code> without cleanup: every failed request leaves a temp file, and containers do not sweep <code>/tmp</code> for you. (5) Putting the upload route behind a body-parsing middleware — <code>express.json()</code> will not touch multipart, but a global <code>express.raw()</code> or a logger that buffers bodies will quietly double your memory.</p>
+<p><strong>Five ways upload handling goes wrong in real code.</strong> (1) <code>multer()</code> with no options at all uses <code>memoryStorage</code> and <strong>no size limit</strong> — one 2GB upload ends the process. (2) Reading <code>req.body.category</code> inside <code>fileFilter</code>: the text field may not have been parsed yet, so it is <code>undefined</code> — decide with fields that arrive in the URL or in headers instead. (3) Forgetting that <code>upload.array('files', 10)</code> multiplies your memory by ten. (4) <code>diskStorage</code> without cleanup: every failed request leaves a temp file, and containers do not sweep <code>/tmp</code> for you. (5) Putting the upload route behind a body-parsing middleware — <code>express.json()</code> will not touch multipart, but a global <code>express.raw()</code> reads the <strong>whole</strong> body into RAM first — even multipart — and multer then finds an empty stream: measured, 6.959.889 bytes already held, then <code>500 "Unexpected end of form"</code>. A logger that buffers bodies and re-emits them doubles your memory instead.</p>
 </div>
 
 <div class="note-ct">
@@ -165,7 +165,7 @@ xin chao\\r\\n
 <div class="out">gốc          : 7.183.099 byte
 base64       : 9.577.468 byte (+33,33%)
 thân JSON    : 9.577.521 byte (+33,33%)</div>
-<p>Base64 biến mỗi 3 byte thành 4 ký tự, nên mức phình đúng bằng một phần ba — không phải chi tiết cài đặt, mà là số học. Trên đường lên 5 Mbps của mạng di động, đó là 11,5 giây thay vì 8,6 giây cho một tấm ảnh. Và cái giá không dừng ở băng thông: máy chủ phải giữ đoạn chữ đó, phân tích nó thành JSON, rồi cấp phát thêm một buffer thứ hai cho phần byte đã giải mã.</p>
+<p>Base64 biến mỗi 3 byte thành 4 ký tự, nên mức phình đúng bằng một phần ba — không phải chi tiết cài đặt, mà là số học. Trên đường lên 5 Mbps của mạng di động, đó là 15,3 giây thay vì 11,5 giây cho một tấm ảnh (7.183.099 byte × 8 ÷ 5.000.000 = 11,5 giây cho bản gốc; thân JSON 9.577.521 byte mất 15,3 giây). Và cái giá không dừng ở băng thông: máy chủ phải giữ đoạn chữ đó, phân tích nó thành JSON, rồi cấp phát thêm một buffer thứ hai cho phần byte đã giải mã.</p>
 
 <h3>Phép đo 2 — cùng một lần upload, bốn cách, đo bằng RSS</h3>
 <p>Mỗi chiến lược một server Express, một tấm ảnh 6,85MB, bộ nhớ thường trú lấy mẫu mỗi 10ms. <code>tăng thêm</code> là đỉnh trừ nền cho MỘT request:</p>
@@ -208,7 +208,7 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
 <p>Việc từ chối có hiệu lực — và client vẫn upload đủ 7,18MB trước khi được nghe điều đó. Giới hạn kích thước bảo vệ <em>bộ nhớ và đĩa</em> của bạn, không bao giờ bảo vệ <em>băng thông</em>. Muốn từ chối sớm thì phải xem <code>Content-Length</code> trước khi đọc thân, mà ngay cả nó cũng chỉ là lời khai do client kiểm soát. Nửa còn lại của cùng bài học: <code>MulterError</code> được ném vào chuỗi middleware, nên nếu bạn viết <code>app.post('/u', upload.single('file'), handler)</code> mà không có error handler, một file quá cỡ sẽ thành lỗi 500 kèm stack trace thay vì 413.</p>
 
 <div class="pitfall">
-<p><strong>Năm cách xử lý upload đi sai trong code thật.</strong> (1) <code>multer()</code> không truyền tuỳ chọn gì dùng <code>memoryStorage</code> và <strong>không giới hạn kích thước</strong> — một lần upload 2GB kết liễu tiến trình. (2) Đọc <code>req.body.category</code> bên trong <code>fileFilter</code>: trường chữ có thể chưa được phân tích, nên nó là <code>undefined</code> — hãy quyết định bằng thứ nằm trong URL hoặc header. (3) Quên rằng <code>upload.array('files', 10)</code> nhân bộ nhớ của bạn lên mười. (4) <code>diskStorage</code> mà không dọn: mỗi request hỏng để lại một file tạm, và container không quét <code>/tmp</code> giùm bạn. (5) Đặt route upload sau một middleware đọc thân — <code>express.json()</code> không đụng multipart, nhưng một <code>express.raw()</code> toàn cục hay một logger đệm thân request sẽ lặng lẽ nhân đôi bộ nhớ.</p>
+<p><strong>Năm cách xử lý upload đi sai trong code thật.</strong> (1) <code>multer()</code> không truyền tuỳ chọn gì dùng <code>memoryStorage</code> và <strong>không giới hạn kích thước</strong> — một lần upload 2GB kết liễu tiến trình. (2) Đọc <code>req.body.category</code> bên trong <code>fileFilter</code>: trường chữ có thể chưa được phân tích, nên nó là <code>undefined</code> — hãy quyết định bằng thứ nằm trong URL hoặc header. (3) Quên rằng <code>upload.array('files', 10)</code> nhân bộ nhớ của bạn lên mười. (4) <code>diskStorage</code> mà không dọn: mỗi request hỏng để lại một file tạm, và container không quét <code>/tmp</code> giùm bạn. (5) Đặt route upload sau một middleware đọc thân — <code>express.json()</code> không đụng multipart, nhưng một <code>express.raw()</code> toàn cục đọc <strong>trọn</strong> thân request vào RAM trước — kể cả multipart — rồi multer nhận một stream đã cạn: đo thật, 6.959.889 byte đã nằm trong RAM, sau đó <code>500 "Unexpected end of form"</code>. Còn một logger đệm thân rồi phát lại thì nhân đôi bộ nhớ.</p>
 </div>
 
 <div class="note-ct">
@@ -376,7 +376,7 @@ sau 7 giây    → HTTP 403
 <p>Same result in storage, 2,6× less memory, and slightly faster because the first parts start uploading while the last bytes are still arriving. The 15 parts come from 120MB ÷ 8MB; <code>queueSize: 4</code> means four parts in flight at once.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Both paths exist, split by size. Images, audio and documents go through the normal multipart route and are put with <code>PutObjectCommand</code>. Videos use the presigned path in <code>src/routes/upload.routes.ts</code>: <code>POST /upload/presign-r2</code> authenticates, refuses anything whose declared <code>contentType</code> is not <code>video/*</code>, builds the key with <code>buildKey('video', filename, { userId })</code> and signs a one-hour PUT. Then <code>POST /upload/presign-r2/complete</code> does exactly what measurement 5 says you must: it validates the key against <code>/^video\\/[\\w./-]+$/</code>, refuses any key containing <code>..</code>, calls <code>headObject(key)</code> and 404s if the object is not there, then <strong>re-checks the real size against <code>maxFileSizeVideo</code></strong> — "guard against a client uploading more than it declared at presign", says the comment, which is this lesson written a year earlier. It also writes a <code>PendingUpload</code> row with a 24-hour TTL so a nightly cron can delete objects from posts that were never finished. The bucket needs a CORS rule allowing <code>PUT</code> from the site origin, which is the one piece of configuration that lives outside the code.</p>
+<p><strong>How cuongthai.com does it.</strong> Both paths exist, split by size. Images, audio and documents go through the normal multipart route and are put with <code>PutObjectCommand</code>. Videos use the presigned path in <code>src/routes/upload.routes.ts</code>: <code>POST /upload/presign-r2</code> authenticates, refuses anything whose declared <code>contentType</code> is not <code>video/*</code>, builds the key with <code>buildKey('video', filename, { userId })</code> and signs a one-hour PUT with <code>signableHeaders: new Set(['content-type'])</code> (<code>src/config/r2.ts</code>) — so measurement 4 cannot happen here: a <code>text/html</code> PUT to that URL gets 403. Then <code>POST /upload/presign-r2/complete</code> does exactly what measurement 5 says you must: it validates the key against <code>/^video\\/[\\w./-]+$/</code>, refuses any key containing <code>..</code>, calls <code>headObject(key)</code> and 404s if the object is not there, then <strong>re-checks the real size against <code>maxFileSizeVideo</code></strong> — "guard against a client uploading more than it declared at presign", says the comment, which is this lesson written a year earlier. It also writes a <code>PendingUpload</code> row with a 24-hour TTL so a nightly cron can delete objects from posts that were never finished. The bucket needs a CORS rule allowing <code>PUT</code> from the site origin, which is the one piece of configuration that lives outside the code.</p>
 </div>
 
 <div class="pitfall">
@@ -398,6 +398,16 @@ sau 7 giây    → HTTP 403
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 9.1: File upload with @MultipartConfig</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: the question "where do uploads live so they survive a redeploy". Different: Academy stops at a folder outside the project; Courses moves files to object storage. In this lesson we add: object storage is not a file system, key layout is a design decision, anatomy of a signed URL, the file bypasses your server, Content-Type and size are not bound by default. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-4-2-sigv4-bug" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in Object Storage — lesson 4.2: The SigV4 signableHeaders XSS bug</span><span class="lc-sub">Same: a presigned PUT signs only host, so a client can upload text/html under a video key, and signableHeaders pins the Content-Type. Object Storage tells the story of the real bug in this repo and its regression test; this lesson measures it on a local MinIO (200 → 403) and adds what no signature covers: size, a POST policy, key tampering and expiry.</span></span>
+  <span class="lc-cta">OPEN OBJECT STORAGE LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same rule in API Design — lesson 8.4: Designing APIs that scale out</span><span class="lc-sub">Same: once there are two instances, anything kept inside one instance breaks. API Design measures it for idempotency keys and limits on LabFlow; here the same rule applies to files — uploads go to object storage, never to one container&#39;s disk.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -435,7 +445,7 @@ GET Range 0-15   :  3,7ms   16 byte, hex=ffd8ffdb004300030202020202030202
 HEAD key không có → NotFound | HTTP 404
 List prefix "images/"          → 1 object
 List prefix "images/post/u7/"  → 1 object</div>
-<p>Bốn thứ đáng bỏ túi từ khối đó. <strong><code>HeadObject</code> rẻ (3,9ms) và trả về kích thước + content type mà không chuyển thân</strong> — đó là cách bạn xác nhận một lần upload đã đáp đất. <strong>Request Range chạy được</strong>, và 16 byte về trong 3,7ms: đó là cách một bộ trích thumbnail đọc phần đầu của video mà không tải 120MB. ETag là MD5 của nội dung với các lần put một phần — một phép kiểm toàn vẹn rẻ tiền. Và một key không tồn tại ném <code>NotFound</code> kèm HTTP 404 chứ không trả kết quả rỗng, nên <code>try/catch</code> quanh <code>HeadObject</code> là bắt buộc.</p>
+<p>Bốn thứ đáng bỏ túi từ khối đó. <strong><code>HeadObject</code> rẻ (3,9ms) và trả về kích thước + content type mà không chuyển thân</strong> — đó là cách bạn xác nhận một lần upload đã đáp đất. <strong>Request Range chạy được</strong>, và 16 byte về trong 3,7ms: đó là cách một bộ trích thumbnail đọc phần đầu của video mà không tải 120MB. ETag là MD5 của nội dung với các lần put một lượt (không chia phần — upload nhiều phần thì ETag có dạng khác) — một phép kiểm toàn vẹn rẻ tiền. Và một key không tồn tại ném <code>NotFound</code> kèm HTTP 404 chứ không trả kết quả rỗng, nên <code>try/catch</code> quanh <code>HeadObject</code> là bắt buộc.</p>
 
 <h3>Bố trí key là một quyết định thiết kế, không phải một cái tên file</h3>
 <p>Key là chỉ mục duy nhất mà hệ thống này cho bạn. Luật của dự án này, trong <code>src/storage/keys.ts</code>:</p>
@@ -523,7 +533,7 @@ sau 7 giây    → HTTP 403
 <p>Kết quả trong storage y hệt, bộ nhớ ít hơn 2,6 lần, và còn nhanh hơn chút vì các phần đầu đã bắt đầu đi lên trong khi những byte cuối còn đang tới. Con số 15 phần đến từ 120MB ÷ 8MB; <code>queueSize: 4</code> nghĩa là bốn phần bay cùng lúc.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Cả hai đường đều tồn tại, chia theo kích thước. Ảnh, âm thanh và tài liệu đi đường multipart bình thường rồi được put bằng <code>PutObjectCommand</code>. Video đi đường ký sẵn trong <code>src/routes/upload.routes.ts</code>: <code>POST /upload/presign-r2</code> xác thực, từ chối mọi thứ có <code>contentType</code> khai không phải <code>video/*</code>, dựng key bằng <code>buildKey('video', filename, { userId })</code> rồi ký một PUT hạn một giờ. Sau đó <code>POST /upload/presign-r2/complete</code> làm đúng điều mà phép đo 5 nói là bắt buộc: kiểm key theo <code>/^video\\/[\\w./-]+$/</code>, từ chối mọi key chứa <code>..</code>, gọi <code>headObject(key)</code> và trả 404 nếu object không có, rồi <strong>kiểm lại kích thước THẬT với <code>maxFileSizeVideo</code></strong> — "chặn trường hợp client upload nhiều hơn mức đã khai lúc xin ký", comment trong code viết vậy, tức là chính bài học này được viết trước đó một năm. Nó còn ghi một dòng <code>PendingUpload</code> hạn 24 giờ để một cron chạy đêm xoá được các object của những bài đăng không bao giờ hoàn tất. Bucket cần một quy tắc CORS cho phép <code>PUT</code> từ origin của site — đó là mảnh cấu hình duy nhất nằm ngoài code.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Cả hai đường đều tồn tại, chia theo kích thước. Ảnh, âm thanh và tài liệu đi đường multipart bình thường rồi được put bằng <code>PutObjectCommand</code>. Video đi đường ký sẵn trong <code>src/routes/upload.routes.ts</code>: <code>POST /upload/presign-r2</code> xác thực, từ chối mọi thứ có <code>contentType</code> khai không phải <code>video/*</code>, dựng key bằng <code>buildKey('video', filename, { userId })</code> rồi ký một PUT hạn một giờ với <code>signableHeaders: new Set(['content-type'])</code> (<code>src/config/r2.ts</code>) — nên phép đo 4 không xảy ra ở đây: PUT <code>text/html</code> vào URL đó nhận 403. Sau đó <code>POST /upload/presign-r2/complete</code> làm đúng điều mà phép đo 5 nói là bắt buộc: kiểm key theo <code>/^video\\/[\\w./-]+$/</code>, từ chối mọi key chứa <code>..</code>, gọi <code>headObject(key)</code> và trả 404 nếu object không có, rồi <strong>kiểm lại kích thước THẬT với <code>maxFileSizeVideo</code></strong> — "chặn trường hợp client upload nhiều hơn mức đã khai lúc xin ký", comment trong code viết vậy, tức là chính bài học này được viết trước đó một năm. Nó còn ghi một dòng <code>PendingUpload</code> hạn 24 giờ để một cron chạy đêm xoá được các object của những bài đăng không bao giờ hoàn tất. Bucket cần một quy tắc CORS cho phép <code>PUT</code> từ origin của site — đó là mảnh cấu hình duy nhất nằm ngoài code.</p>
 </div>
 
 <div class="pitfall">
@@ -545,6 +555,16 @@ sau 7 giây    → HTTP 403
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 9.1: Tải file lên với @MultipartConfig</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: câu hỏi "lưu file ở đâu cho khỏi mất khi deploy lại". Khác: Academy dừng ở một thư mục ngoài dự án; Courses chuyển file sang object storage. Ở bài này mình học thêm: object storage không phải hệ thống file, bố trí key là quyết định thiết kế, giải phẫu URL ký sẵn, file đi thẳng lên mà không qua máy chủ, Content-Type và kích thước không bị ràng buộc theo mặc định. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-4-2-sigv4-bug" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở Object Storage — bài 4.2: Bug SigV4 signableHeaders XSS</span><span class="lc-sub">Giống: PUT ký sẵn chỉ ký host, nên client upload được text/html dưới một key video, và signableHeaders ràng buộc Content-Type. Object Storage kể lại bug thật của kho này và test đối chứng; bài này đo nó trên MinIO cục bộ (200 → 403) và thêm thứ không chữ ký nào phủ: kích thước, POST policy, sửa key và hết hạn.</span></span>
+  <span class="lc-cta">MỞ BÀI OBJECT STORAGE →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng quy tắc ở API Design — bài 8.4: Thiết kế API để mở rộng ngang</span><span class="lc-sub">Giống: khi có hai instance, thứ gì nằm trong một instance đều hỏng. API Design đo điều đó với khoá idempotency và giới hạn trên LabFlow; ở đây cùng quy tắc áp cho file — upload vào object storage, không bao giờ vào đĩa của một container.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
 </div>
 `,
@@ -652,7 +672,7 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
 <p>Notice the SVG in measurement 1 was blocked by sniffing only because <code>file-type</code> does not recognise SVG at all (it is text, not a binary format with magic bytes). Do not rely on that accident: refuse SVG explicitly, or run it through DOMPurify with an SVG profile.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Three layers, in order. First <code>assertSafeUploadType(mimetype, originalName, bucket)</code> in <code>src/storage/uploadService.ts</code> rejects active content by MIME <em>and</em> by extension — <code>DANGEROUS_MIME</code> covers <code>text/html</code>, <code>image/svg+xml</code>, <code>application/javascript</code> and friends, while <code>DANGEROUS_EXT</code> is <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code>, on purpose a second gate because the client controls the MIME. It then checks the declared family matches the bucket family, with a deliberate exception: an empty or <code>application/octet-stream</code> MIME (common from drag-drop and some mobile browsers) skips the family check rather than rejecting a real photo — the dangerous-extension gate already stopped the bad cases. Second, every image goes through <code>optimizeImage()</code>: sharp, max width 1200, re-encoded to WebP q80, which is simultaneously the format conversion, the payload strip and the "is this really an image" test — and a failure there is mapped to HTTP 400, not 500, because it is the user's file that is wrong. Third, the stored key is rebuilt with a <code>.webp</code> extension so the served <code>Content-Type</code> can never disagree with the bytes. The one honest gap: <code>limitInputPixels</code> is left at sharp's default, so bomb 1 above would still cost this server 99MB — a fix worth making.</p>
+<p><strong>How cuongthai.com does it.</strong> Three layers, in order. First <code>assertSafeUploadType(mimetype, originalName, bucket)</code> in <code>src/storage/uploadService.ts</code> rejects active content by MIME <em>and</em> by extension — <code>DANGEROUS_MIME</code> covers <code>text/html</code>, <code>image/svg+xml</code>, <code>application/javascript</code> and friends, while <code>DANGEROUS_EXT</code> is <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code>, on purpose a second gate because the client controls the MIME. It then checks the declared family matches the bucket family, with a deliberate exception: an empty or <code>application/octet-stream</code> MIME (common from drag-drop and some mobile browsers) skips the family check rather than rejecting a real photo — the dangerous-extension gate already stopped the bad cases. Second, every image goes through <code>optimizeImage()</code>: sharp, max width 1200, re-encoded to WebP q80, which is simultaneously the format conversion, the payload strip and the "is this really an image" test — and a failure there is mapped to HTTP 400, not 500, because it is the user's file that is wrong. Third, the stored key is rebuilt with a <code>.webp</code> extension so the served <code>Content-Type</code> can never disagree with the bytes. And the bombs are handled: <code>src/storage/imageOptimizer.ts</code> passes <code>limitInputPixels: 100_000_000</code> (100 MP, above any phone or DSLR) and checks the pixel count from the header before decoding, so bomb 1 is refused as <code>TOO_MANY_PIXELS</code>; a small gate (<code>MAX_CONCURRENT_DECODES = 4</code>) bounds how many images decode at once.</p>
 </div>
 
 <div class="pitfall">
@@ -669,6 +689,21 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
 <a class="link-card codelab" href="/code-lab/media-processing${REF}#module-973" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 973 — Image Processing with Sharp</span><span class="lc-sub">10 bài tập: giải mã, đổi kích thước, đổi định dạng, và giới hạn tài nguyên.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-2-1-svg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Media Processing — lesson 2.1: SVG, the image format that executes JavaScript</span><span class="lc-sub">Same: SVG is XML that can carry &lt;script&gt; and onload, and this website rejects it at two gates. Media Processing covers when the script really runs and why rasterising has risks of its own (entity expansion, remote references); here the same SVG goes through three checks next to four other files, and sharp turns it into an 80×80 WebP with the onload gone.</span></span>
+  <span class="lc-cta">OPEN MEDIA PROCESSING LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-1-2-metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Media Processing — lesson 1.2: metadata() first</span><span class="lc-sub">Same: the 758 KB PNG that describes 256 million pixels, and why the guard is a pixel budget plus bounded concurrency (this website: 100 MP and 4 decodes at once). Media Processing walks every metadata() field and the checks worth running on each upload; here the bomb is measured on sharp 0.35.5 — eight at once cost +889 MB against +112 MB for eight real photos.</span></span>
+  <span class="lc-cta">OPEN MEDIA PROCESSING LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, the upload part will feel familiar. Same: receiving files with Multer and serving them back. Different: here we stop trusting the file — the client&#39;s filename, extension and Content-Type are claims, so we read magic bytes, decode and re-encode with sharp, cap pixels, strip EXIF, and never put the original name in a path. If you have not taken SDN302, no problem — this lesson stands on its own.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
 </div>
 <div class="ml-vi">
@@ -760,7 +795,7 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
 <p>Để ý rằng file SVG ở phép đo 1 bị chặn chỉ vì <code>file-type</code> không nhận ra SVG (nó là chữ, không phải định dạng nhị phân có magic bytes). Đừng dựa vào sự tình cờ đó: hãy từ chối SVG một cách tường minh, hoặc cho nó qua DOMPurify với hồ sơ dành cho SVG.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Ba lớp, theo thứ tự. Đầu tiên <code>assertSafeUploadType(mimetype, originalName, bucket)</code> trong <code>src/storage/uploadService.ts</code> từ chối nội dung sống theo MIME <em>và</em> theo đuôi — <code>DANGEROUS_MIME</code> phủ <code>text/html</code>, <code>image/svg+xml</code>, <code>application/javascript</code> và họ hàng, còn <code>DANGEROUS_EXT</code> là <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code>, cố ý làm cổng thứ hai vì MIME do client kiểm soát. Sau đó nó kiểm họ khai báo có khớp họ của bucket không, với một ngoại lệ có chủ đích: MIME rỗng hoặc <code>application/octet-stream</code> (rất hay gặp khi kéo-thả và ở vài trình duyệt di động) thì bỏ qua phép kiểm họ thay vì từ chối một tấm ảnh thật — cổng chặn đuôi nguy hiểm ở trên đã chặn các ca xấu rồi. Thứ hai, mọi ảnh đều đi qua <code>optimizeImage()</code>: sharp, rộng tối đa 1200, mã hoá lại thành WebP q80 — đồng thời là bước đổi định dạng, bước bóc payload, và bài kiểm "đây có thật là ảnh không"; lỗi ở đó được ánh xạ thành HTTP 400 chứ không phải 500, vì thứ sai là file của người dùng. Thứ ba, key lưu trữ được dựng lại với đuôi <code>.webp</code> để <code>Content-Type</code> phục vụ ra không bao giờ mâu thuẫn với byte bên trong. Một lỗ hổng thành thật: <code>limitInputPixels</code> vẫn đang để mặc định của sharp, nên quả bom 1 ở trên vẫn sẽ tiêu của máy chủ này 99MB — một chỗ đáng sửa.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Ba lớp, theo thứ tự. Đầu tiên <code>assertSafeUploadType(mimetype, originalName, bucket)</code> trong <code>src/storage/uploadService.ts</code> từ chối nội dung sống theo MIME <em>và</em> theo đuôi — <code>DANGEROUS_MIME</code> phủ <code>text/html</code>, <code>image/svg+xml</code>, <code>application/javascript</code> và họ hàng, còn <code>DANGEROUS_EXT</code> là <code>/\\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i</code>, cố ý làm cổng thứ hai vì MIME do client kiểm soát. Sau đó nó kiểm họ khai báo có khớp họ của bucket không, với một ngoại lệ có chủ đích: MIME rỗng hoặc <code>application/octet-stream</code> (rất hay gặp khi kéo-thả và ở vài trình duyệt di động) thì bỏ qua phép kiểm họ thay vì từ chối một tấm ảnh thật — cổng chặn đuôi nguy hiểm ở trên đã chặn các ca xấu rồi. Thứ hai, mọi ảnh đều đi qua <code>optimizeImage()</code>: sharp, rộng tối đa 1200, mã hoá lại thành WebP q80 — đồng thời là bước đổi định dạng, bước bóc payload, và bài kiểm "đây có thật là ảnh không"; lỗi ở đó được ánh xạ thành HTTP 400 chứ không phải 500, vì thứ sai là file của người dùng. Thứ ba, key lưu trữ được dựng lại với đuôi <code>.webp</code> để <code>Content-Type</code> phục vụ ra không bao giờ mâu thuẫn với byte bên trong. Và bom giải nén đã được chặn: <code>src/storage/imageOptimizer.ts</code> truyền <code>limitInputPixels: 100_000_000</code> (100 triệu điểm ảnh, trên mọi điện thoại và máy ảnh) và kiểm số điểm ảnh từ header trước khi giải mã, nên quả bom 1 bị từ chối với mã <code>TOO_MANY_PIXELS</code>; một cổng nhỏ (<code>MAX_CONCURRENT_DECODES = 4</code>) giới hạn số ảnh giải mã cùng lúc.</p>
 </div>
 
 <div class="pitfall">
@@ -777,6 +812,21 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
 <a class="link-card codelab" href="/code-lab/media-processing${REF}#module-973" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 973 — Image Processing with Sharp</span><span class="lc-sub">10 bài tập: giải mã, đổi kích thước, đổi định dạng, và giới hạn tài nguyên.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-2-1-svg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Media Processing — bài 2.1: SVG, định dạng ảnh chạy được JavaScript</span><span class="lc-sub">Giống: SVG là XML mang được &lt;script&gt; và onload, và website này từ chối nó ở hai cổng. Media Processing nói khi nào script thật sự chạy và vì sao vẽ ra điểm ảnh cũng có rủi ro riêng (nở entity, tham chiếu từ xa); ở đây cùng file SVG đi qua ba lớp kiểm cạnh bốn file khác, và sharp vẽ nó thành WebP 80×80, onload biến mất.</span></span>
+  <span class="lc-cta">MỞ BÀI MEDIA PROCESSING →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-1-2-metadata" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Media Processing — bài 1.2: metadata() trước</span><span class="lc-sub">Giống: tấm PNG 758 KB mô tả 256 triệu điểm ảnh, và vì sao lớp phòng là hạn mức điểm ảnh cộng giới hạn đồng thời (website này: 100 MP, tối đa 4 ảnh giải mã cùng lúc). Media Processing đi qua mọi trường của metadata() và các phép kiểm nên chạy với mỗi upload; ở đây quả bom được đo trên sharp 0.35.5 — tám quả cùng lúc tốn +889 MB so với +112 MB của tám ảnh thật.</span></span>
+  <span class="lc-cta">MỞ BÀI MEDIA PROCESSING →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần upload không còn lạ. Giống: nhận file bằng Multer và trả file về. Khác: ở đây ta thôi tin file — filename, phần đuôi và Content-Type của client chỉ là lời khai, nên ta đọc magic bytes, giải mã rồi mã hoá lại bằng sharp, giới hạn điểm ảnh, bỏ EXIF, và không bao giờ đưa tên gốc vào đường dẫn. Chưa học SDN302 cũng không sao — bài này tự đủ.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,
@@ -884,6 +934,21 @@ proxy stream thẳng (Body.pipe)   : 481ms cho 20 lần</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 978 — Thumbnails &amp; Poster Frames</span><span class="lc-sub">10 bài tập: sinh nhiều cỡ ảnh và ảnh bìa cho video.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-3-2-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Object Storage — lesson 3.2: Cache-Control per content type</span><span class="lc-sub">Same: images get public, max-age=31536000, immutable, set once at upload, and versioned keys beat cache tuning. Object Storage tunes it per content type in this repo; here we read the headers production really serves, show the curl -I trap (HEAD says DYNAMIC, GET says HIT with a growing age) and measure 304 = 0 bytes and 206 = exactly the range.</span></span>
+  <span class="lc-cta">OPEN OBJECT STORAGE LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-6-3-orphans" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Object Storage — lesson 6.3: Orphans, rows without objects and objects without rows</span><span class="lc-sub">Same: storage has no foreign keys, so rows and objects drift apart and a reconciliation job — not a lifecycle rule — brings them back. Object Storage covers both directions and real cleanup numbers; here the three leaks are reproduced in MinIO (deleted post, abandoned upload, replaced avatar) and swept, plus deleteByUrl that skips foreign URLs.</span></span>
+  <span class="lc-cta">OPEN OBJECT STORAGE LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-0-1-formats" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Media Processing — lesson 0.1: The formats, and what each is good at</span><span class="lc-sub">Same: JPEG, WebP and AVIF trade size against encode time, and the answer depends on the image. Media Processing compares every format on one real photo; here a smooth and a grainy 4032×3024 source go through sharp (median of 3 runs): resizing removes 88–98% of the bytes before the format matters, WebP wins 2.8× on the smooth image but only 1.17× on the grainy one.</span></span>
+  <span class="lc-cta">OPEN MEDIA PROCESSING LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.4</span>
@@ -973,6 +1038,21 @@ proxy stream thẳng (Body.pipe)   : 481ms cho 20 lần</div>
 <a class="link-card codelab" href="/code-lab/media-processing${REF}#module-978" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 978 — Thumbnails &amp; Poster Frames</span><span class="lc-sub">10 bài tập: sinh nhiều cỡ ảnh và ảnh bìa cho video.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-3-2-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Object Storage — bài 3.2: Cache-Control theo content type</span><span class="lc-sub">Giống: ảnh nhận public, max-age=31536000, immutable, đặt một lần lúc upload, và key có phiên bản thắng mọi cách chỉnh cache. Object Storage chỉnh theo từng loại nội dung trong kho này; ở đây ta đọc header production thật sự phục vụ, chỉ ra bẫy curl -I (HEAD báo DYNAMIC, GET báo HIT với age tăng dần) và đo 304 = 0 byte, 206 = đúng dải byte.</span></span>
+  <span class="lc-cta">MỞ BÀI OBJECT STORAGE →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-6-3-orphans" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Object Storage — bài 6.3: Object mồ côi, dòng không có object và object không có dòng</span><span class="lc-sub">Giống: storage không có khoá ngoại, nên dòng và object trôi lệch nhau, và một job đối soát — không phải luật vòng đời — kéo chúng về. Object Storage nói cả hai chiều và số liệu dọn dẹp thật; ở đây ba chỗ rò được dựng lại trong MinIO (bài bị xoá, upload bỏ dở, avatar bị thay) rồi quét, cùng deleteByUrl bỏ qua URL không phải của mình.</span></span>
+  <span class="lc-cta">MỞ BÀI OBJECT STORAGE →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/media-processing/learn?lessonSlug=mp-0-1-formats" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Media Processing — bài 0.1: Các format, và mỗi cái làm gì tốt</span><span class="lc-sub">Giống: JPEG, WebP và AVIF đánh đổi kích thước với thời gian mã hoá, và câu trả lời tuỳ ảnh. Media Processing so mọi định dạng trên một ảnh thật; ở đây một ảnh mượt và một ảnh nhiễu 4032×3024 đi qua sharp (trung vị 3 lần): thu nhỏ bỏ 88–98 % số byte trước khi định dạng kịp có ý nghĩa, WebP thắng 2,8× ở ảnh mượt nhưng chỉ 1,17× ở ảnh nhiễu.</span></span>
+  <span class="lc-cta">MỞ BÀI MEDIA PROCESSING →</span>
 </a>
 </div>
 `,

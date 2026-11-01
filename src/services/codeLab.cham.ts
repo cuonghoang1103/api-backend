@@ -19,6 +19,10 @@
  *   mutation (01/11/2026)               ⇒ chấm BỘ TEST người học viết (khoá Testing): Web Worker chạy test với code
  *                                         ĐÚNG (`impl`) rồi với từng ĐỘT BIẾN; điểm = tỉ lệ diệt, đạt khi test xanh +
  *                                         diệt ≥ `nguong` (`chapNhan`). Toàn vẹn như loại code: KHÔNG chạy lại trên VPS.
+ *   ts (01/11/2026)                     ⇒ TypeScript (khoá TypeScript): TypeScript 6.0.3 tự lưu (/vendor/, tải lười) trong
+ *                                         Web Worker — tsc với tsconfig của khoá (biên dịch sạch / dòng `// expect TSxxxx`
+ *                                         phải bị từ chối / đúng mã lỗi) + chạy test như Node 22 bỏ kiểu (worker nhẹ riêng,
+ *                                         có giờ thật). Toàn vẹn như loại code: KHÔNG chạy lại trên VPS.
  *   python                              ⇒ Pyodide (đợt sau)
  *   java · tsql · bash                  ⇒ máy chấm máy chủ ở máy Linux nhà (đợt sau) — "sắp có"
  *   text-ai                             ⇒ AI chấm theo rubric (đợt sau)
@@ -45,12 +49,12 @@ export const GRADE_KINDS = [
   'sql',
   'python', 'java', 'tsql', 'bash', 'sql-pg',
   'text-ai', 'manual',
-  'mutation',
+  'mutation', 'ts',
 ] as const;
 export type GradeKind = (typeof GRADE_KINDS)[number];
 
 /** Chấm được ngay trong trình duyệt hôm nay. */
-export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg', 'mutation']);
+export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg', 'mutation', 'ts']);
 /** Chấm thuần dữ liệu — máy chủ chấm lại được từ đáp án người học gửi. */
 export const STATIC_GRADE_KINDS: ReadonlySet<string> = new Set(['choice', 'order', 'table']);
 

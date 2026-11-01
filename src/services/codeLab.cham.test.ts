@@ -12,6 +12,7 @@ import {
   coMayChamTrinhDuyet,
   dapAnChuan,
   demKiem,
+  GRADE_KINDS,
   gradeKindOf,
   testsCongKhai,
   testsDayDu,
@@ -221,5 +222,28 @@ describe('mutation (01/11/2026): điểm + ngưỡng — máy chủ ↔ trình d
     // loại khác: luật cũ (mọi kiểm đạt)
     assert.equal(chapNhan(dom, [{ dat: true }, { dat: true }, { dat: true }]), true);
     assert.equal(chapNhan(dom, [{ dat: true }, { dat: false }, { dat: true }]), false);
+  });
+});
+
+describe('ts (01/11/2026): máy chấm TypeScript trong trình duyệt — máy chủ chỉ kiểm hình dạng', () => {
+  const tj = {
+    loai: 'ts', tsconfig: { strict: true }, coDinh: { 'kiem/sai.ts': "f('1'); // expect TS2345\n" }, tepHoc: ['src/f.ts'],
+    kiem: [
+      { kiem: 'sach', tep: [], moTa: 'sạch' },
+      { kiem: 'phai-loi', tep: 'kiem/sai.ts', dong: 1, ma: ['TS2345'], moTa: 'từ chối' },
+      { kiem: 'chay', lenh: 'node src/f.ts', moTa: 'chạy' },
+    ],
+  };
+  it('là loại chấm trình duyệt; mọi kiểm đạt mới ĐÃ GIẢI; điểm = phần trăm kiểm đạt', () => {
+    assert.ok((GRADE_KINDS as readonly string[]).includes('ts'));
+    assert.equal(gradeKindOf(tj), 'ts');
+    assert.equal(coMayChamTrinhDuyet(tj), true);
+    const r = chuanHoaKetQuaClient(tj, [{ dat: true }, { dat: false }, { dat: true }]);
+    assert.ok('ketQua' in r);
+    const kq = (r as { ketQua: KetQuaKiemT[] }).ketQua;
+    assert.equal(chapNhan(tj, kq), false);
+    assert.equal(tinhDiem(tj, kq).score, 67);
+    assert.equal(chapNhan(tj, kq.map((k) => ({ ...k, dat: true }))), true);
+    assert.ok('loi' in chuanHoaKetQuaClient(tj, [{ dat: true }]));
   });
 });

@@ -154,7 +154,8 @@ function kiemTruong(ex) {
   const tj = ex.testsJson;
   if (!tj?.loai) loi.push('thiếu bộ kiểm (tests.loai)');
   const n = tj ? (tj.kiem?.length ?? tj.cauHoi?.length ?? (tj.bang ? tj.bang.length : 0)) : 0;
-  if (tj && n < 3 && !['choice', 'order', 'table'].includes(tj.loai)) loi.push('bộ kiểm cần ≥ 3 kiểm');
+  // 'manual' (01/11/2026, Testing — đề chạy trên máy người học: PostgreSQL/Playwright/HTTP thật) ⇒ web không chấm, không có kiểm
+  if (tj && n < 3 && !['choice', 'order', 'table', 'manual'].includes(tj.loai)) loi.push('bộ kiểm cần ≥ 3 kiểm');
   if (tj?.thangDiem) {
     const ma = new Set(tj.thangDiem.map((t) => t.ma));
     for (const t of tj.thangDiem) if (!tj.kiem.some((k) => k.nhom === t.ma)) loi.push(`chức năng ${t.ma} không có kiểm nào`);
@@ -216,6 +217,25 @@ for (const f of tepNguon) {
     const kq = loi.length ? { loi, tomTat: '' } : await mutNode.kiemMutationNode(ex);
     loiSql.set(ex, [...(loiSql.get(ex) ?? []), ...kq.loi]);
     tomTatMut.set(ex, kq.tomTat);
+  }
+  // TS (01/11/2026): máy chấm 'ts' (TypeScript 6.0.3 tự lưu, scripts/codelab-ts-node.mjs — cùng mã với trình duyệt): LỜI GIẢI
+  // phải đạt mọi kiểm, KHỞI ĐẦU trượt ≥ 1, mỗi bài SAI MẪU (`saiMau` của đề, không ghi vào JSON) trượt ≥ 1. "Lỗi hay gặp"
+  // viết từ chính các sai mẫu + những kiểm đã bắt chúng (thêm một mục chung nếu đề chỉ có 1 sai mẫu).
+  for (const ex of payload.exercises) {
+    if (ex.testsJson?.loai !== 'ts') continue;
+    const tsNode = await import('./codelab-ts-node.mjs');
+    const saiMau = ex.__saiMau || [];
+    delete ex.__saiMau;
+    const kq = await tsNode.kiemTsNode(ex, saiMau);
+    loiSql.set(ex, [...(loiSql.get(ex) ?? []), ...kq.loi]);
+    tomTatMut.set(ex, kq.tomTat);
+    const enCua = (s) => String(s).split(' · ')[0];
+    ex.mistakesJson = (kq.batBoi || []).map((b) => {
+      const [en, vi] = String(b.nhan).split('|||');
+      const ds = b.kiem.slice(0, 2).map(enCua).join('; ') + (b.kiem.length > 2 ? ` (+${b.kiem.length - 2})` : '');
+      return { loi: `${en} — caught by: ${ds}|||${vi ?? en} — máy chấm bắt ở: ${ds}` };
+    });
+    if (ex.mistakesJson.length < 2) ex.mistakesJson.push({ loi: 'Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the "no forbidden shortcut" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm "không dùng lối tắt bị cấm" trượt.' });
   }
   for (const ex of payload.exercises) {
     soDe++;

@@ -79,6 +79,7 @@ duLieuMau, chucNang: [{ ten, diem, moTa, yeuCau[], hook[], khoa?, viDu? }], idBa
 `sql` (29/10/2026) | Worker (PGlite) | SQL chạy thật trên PostgreSQL 18 (WASM) ở **chế độ SQL Server** — mục 3b
 `sql-pg` (31/10/2026) | Worker (PGlite) | cùng bộ chạy, **PostgreSQL nguyên bản** (khoá PostgreSQL) — mục 3b′
 `mutation` (01/11/2026) | Worker | chấm BỘ TEST người học viết: xanh với code đúng, đỏ với từng đột biến cài sẵn (khoá Testing) — mục 3d
+`ts` (01/11/2026) | Worker (TypeScript 6.0.3 tự lưu) | TypeScript: tsc với tsconfig khoá (sạch / dòng `// expect TSxxxx` phải bị từ chối / đúng mã lỗi) + chạy test như Node 22 bỏ kiểu (khoá TypeScript) — mục 3e
 `java` `tsql` `bash` `python` `text-ai` | — | **chưa chấm** (máy chủ nhà / AI — đợt sau); giao diện ghi "sắp có", người học tự đánh dấu
 
 Kiểm chung: `{ moTa, kiem, an?: true (kiểm ẩn — chỉ khi Nộp), nhom?: 'f1', truoc?: [bước], choToiDa?: ms }`.
@@ -218,9 +219,56 @@ tests: {
   `.not/.resolves/.rejects`, `expect.soft/assertions/hasAssertions`, `expect.any/anything/stringContaining/stringMatching/
   objectContaining/arrayContaining/closeTo`), `vi` (fn, spyOn, *AllMocks, useFakeTimers/useRealTimers, setSystemTime,
   advanceTimersByTime(Async), runAllTimers(Async)…), `fast-check` thu gọn (hạt giống cố định, biên trước, không thu nhỏ).
-  Import chỉ `'vitest'`, `'fast-check'` và đường tương đối. Không có: snapshot, `vi.mock` (giả module), `test.each` dạng template.
+  Không có: `toMatchSnapshot`/inline snapshot, `vi.mock` không factory (automock), factory async, `test.each` dạng template.
+- **Mở rộng 01/11/2026 (52 đề tự động của khoá — mục dưới):** `vi.mock(path, factory)` + `vi.hoisted` (đưa lên TRÊN import như Vitest;
+  biến không hoisted dùng trong factory ⇒ lỗi TDZ như thật), `vi.mocked`, `vi.importActual`, `vi.stubGlobal/unstubAllGlobals`,
+  `vi.stubEnv/unstubAllEnvs` (`process.env` giả), `useFakeTimers({ toFake: ['Date'] })`; hook trả HÀM DỌN; `afterEach` chạy cả khi
+  test đỏ; `restoreMocks` (spy của test trước được trả lại — cấu hình khoá; `restoreMocks: false` để tắt); `toMatchFileSnapshot`
+  (chưa có ⇒ GHI ở lượt code đúng, các lượt đột biến so với bản đó); `msw` thu gọn (`setupServer` thay `fetch`, `http.get/post/…`
+  có `:param`, `server.use/resetHandlers/close`, `HttpResponse.json/text/error`; không handler ⇒ fetch từ chối TypeError);
+  `node:fs` (`readFileSync/existsSync` đọc TỆP CỦA ĐỀ, kể cả `new URL('../x', import.meta.url)`); `thuVien: { yaml: '<CommonJS>' }`
+  = gói npm ĐI KÈM ĐỀ (chỉ đề cần mới mang — `nguon/_thu-vien/yaml-2.9.1.cjs`, 104 KB); `xaoTron` (hạt giống `--sequence.shuffle`),
+  `lapLai` (`--repeats`), `tranTestMs` (`--testTimeout`).
+- **Thay đổi vô hại** `voHai: [{ file, from, to, label }]` ⇒ kiểm `{ kiem: 'vo-hai', nhom: 'xanh' }`: bộ test phải VẪN XANH với refactor
+  (bắt test quá chi tiết). Cùng nhóm 'xanh' ⇒ trượt là chưa đạt (không cần sửa `chapNhan`/bản sao máy chủ).
 - Không đổi CSP: web đã có `'unsafe-eval'` + `worker-src blob:`; app dùng worker hộp cát sẵn có (bộ chạy tự đổi import/export ⇒
   không cần `import(blob:)`). Toàn vẹn như loại code: trình duyệt báo, máy chủ kiểm hình dạng ⇒ tiến độ cá nhân.
+
+### 3d′. Track `testing-practice` — 55 đề của khoá (01/11/2026)
+- 3 đề viết tay (1.1, 1.2, 1.4 — `deTuKhoa`) + 52 đề dựng TỰ ĐỘNG (`nguon/_tu-dong.mjs › deTuDong`) từ
+  `content/courses/testing/_de-codelab-mutation.json`: lời giải = tệp test tham khảo CỦA KHOÁ (`tests: [...]` khai cứng trong
+  `nguon/<bài>.mjs` — các tệp chạy được trong bộ chạy trình duyệt và đủ diệt mọi đột biến, chọn bằng phép phủ tham lam), khởi đầu
+  = phần đầu tệp test chính + MỘT test khói (không diệt gì), chữ đề EN/VI theo khuôn. Một module = một bài học (`baiHoc`).
+- **32 đề chấm trong trình duyệt** (Ch1–3, 6.4, 8.2–8.5, Ch9, Ch10, 11.1, 11.4). **23 đề `loai: 'manual'` chạy TRÊN MÁY người học**:
+  PostgreSQL thật (4.1, 4.3, 4.4, Lab 4, 11.2b — Testcontainers/Docker), Playwright (7.1–7.4, Lab 7, 11.3b), Express + Supertest
+  (Ch5, 8.1, 11.2), React Testing Library/jsdom (6.1–6.3, Lab 6, 11.3). Web KHÔNG chấm (không giả đạt): `tests = { loai: 'manual',
+  chayTaiMay: { lenh, lyDo, runner, config?, args?, tep, dotBien: [nhãn], voHai: [nhãn] } }` ⇒ trang hiện "Tự đánh dấu đã giải";
+  code khởi đầu có `cham-tai-may.mjs` (đột biến chép nguyên văn, cùng thuật toán `scripts/tst/kiem-de-mutation.mjs`, luôn trả tệp
+  về kể cả Ctrl+C) + bản code của khoá. `codelab-kiem-cham-trinh-duyet.mjs` đếm riêng và bỏ qua chúng.
+- Đổi đề của khoá ⇒ `node scripts/codelab-xuat-de.mjs --track testing-practice` (kiểm lời giải/khởi đầu trong `vm`) rồi
+  `npx tsx scripts/codelab-kiem-cham-trinh-duyet.mjs --track testing-practice [--app]`. Đề `manual`: kiểm thật `cham-tai-may.mjs` trên một
+  bản sao `_labflow-lite` đã `npm ci` (lời giải N/N exit 0, khởi đầu xanh nhưng exit 1).
+
+## 3e. Máy chấm TypeScript (`loai: 'ts'`, 01/11/2026) — khoá TypeScript
+
+- Nguồn đề = của KHOÁ: `content/courses/typescript/_de-codelab-ts.json` (máy chấm mẫu của khoá: `scripts/ts/kiem-de-ts.mjs`, tsc 7.0.2 + Node 22).
+  `typescript-practice/nguon/<slug-bài>.mjs` chỉ gọi `moduleTuBai(slug)` (`nguon/_chung.mjs`) ⇒ sửa đề ở tệp của khoá rồi xuất lại.
+- Bộ kiểm: `{ loai: 'ts', tsconfig, coDinh: {tệp của đề}, tepHoc, timeoutMs, kiem: [...] }`, mỗi phép của khoá thành kiểm riêng:
+  `sach {tep}` · `phai-loi {tep, dong, ma: [mã, mã thay thế…]}` (mỗi dòng `// expect TSxxxx`) · `khong-loi-la {tep}` · `co-ma {ma}` / `chi-ma {ma}`
+  (đề "đọc lỗi") · `chay {lenh, ra?}` · `cam {mau}`. Tệp người học = editor trừ `coDinh` (máy chấm luôn dùng bản gốc của đề).
+- Chạy: worker biên dịch (TypeScript 6.0.3 + `lib-ts.json`: lib.es2024.full + @types/node 22.20.5 + undici-types, đúng bộ tsc của khoá nạp)
+  sống suốt phiên; mã người học chạy trong worker NHẸ mới cho mỗi lệnh (`transpileModule` ⇒ CommonJS, bộ nạp module đường tương đối có
+  đuôi .ts, shim `node:test` + `node:assert/strict`), trang giữ giờ thật ⇒ vòng lặp vô hạn chỉ giết worker chạy. Cú pháp Node strip-only
+  từ chối (enum, namespace có mã, tham số thuộc tính, `import =`, `export =`) ⇒ tệp ném ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX như Node.
+- Tải LƯỜI: chỉ khi mở một đề `ts` (`moTruocTs`) — typescript.js 8,9 MB (gzip 1,6 MB) + lib-ts.json 3,1 MB (gzip 0,44 MB; chú thích JSDoc đã bỏ, giữ `///` + giấy phép `/*!`) ở
+  `frontend/public/vendor/typescript-6.0.3/` (dựng/kiểm: `node scripts/codelab-ts-vendor.mjs [--kiem]`, ghim băm sha512 từng gói).
+  nginx `location ^~ /vendor/`: cache 1 năm (đường có số phiên bản) + CORS `*` (app desktop tải bằng fetch rồi đưa vào worker hộp cát).
+- TS 6 ↔ TS 7: 47/48 đề cùng kết quả; `ts-cl-1-2-d` kiem/sai.ts:6 (7: TS2739, 6: TS2345) ⇒ `MA_THEM_TS6` trong `_chung.mjs` nhận cả hai.
+  Đối chiếu TỪNG KIỂM với tsc 7.0.2 + Node 22 thật trên lời giải, khởi đầu và mọi sai mẫu: `node scripts/codelab-ts-doi-chieu.mjs <labflow-ts đã npm ci>`.
+- Bộ xuất (`codelab-xuat-de.mjs`) chạy máy chấm trong Node (`scripts/codelab-ts-node.mjs`, cùng mã + cùng tệp vendor): lời giải đạt hết,
+  khởi đầu trượt ≥ 1, MỖI `saiMau` trượt ≥ 1 — "Lỗi hay gặp" viết từ chính sai mẫu + các kiểm đã bắt nó. Test: `npx tsx --test frontend/src/components/code-lab/cham/ts.test.ts`.
+- Không đổi CSP web (`worker-src 'self' blob:`, `script-src 'self'` ⇒ worker blob `importScripts` tệp cùng nguồn). App desktop: CSP không đổi;
+  cần PHÁT HÀNH app mới để có mã máy chấm `ts` (app cũ coi loại lạ là chưa chấm được).
 
 ## 4. Lệnh
 

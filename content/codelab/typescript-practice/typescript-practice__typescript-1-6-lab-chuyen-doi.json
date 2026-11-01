@@ -1,0 +1,247 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-1-6-lab-chuyen-doi",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-1-6-lab-chuyen-doi"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1 — Convert LabFlow's rules to TypeScript",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-1-6-lab-chuyen-doi"
+      ],
+      "problemHtml": "<p>The two files in <code>src/</code> are LabFlow's JavaScript rules, only renamed to <code>.ts</code>. Add types so that (1) they compile under the course's strict tsconfig with no <code>any</code> and no <code>@ts-</code> directive, (2) the correct calls in <code>kiem/phai-dung.ts</code> still compile, (3) the 15 behaviour tests in <code>test/rules.test.ts</code> pass under Node 22, and (4) every one of the 8 wrong calls in <code>kiem/sai.ts</code> is refused by tsc with the marked error code. Start from the rules (roles, statuses, slot results), not from the list of wrong calls.</p><p><strong>Done when:</strong> all four checks pass — the same checks as <code>node scripts/cham-lab-1.mjs</code> (10/10).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/time.ts</code>, <code>src/booking.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/rules.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345, TS2345, TS2554, TS2561, TS2820, TS2551, TS2367, TS2561); its other lines still compile.</li>\n  <li><code>node --test test/rules.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai tệp trong <code>src/</code> là luật JavaScript của LabFlow, mới chỉ đổi đuôi sang <code>.ts</code>. Thêm kiểu sao cho (1) chúng biên dịch được với tsconfig strict của khoá, không <code>any</code>, không chỉ thị <code>@ts-</code>, (2) các lời gọi đúng trong <code>kiem/phai-dung.ts</code> vẫn biên dịch được, (3) 15 test hành vi trong <code>test/rules.test.ts</code> qua trên Node 22, và (4) cả 8 lời gọi sai trong <code>kiem/sai.ts</code> đều bị tsc từ chối đúng mã lỗi đã đánh dấu. Bắt đầu từ luật (vai trò, trạng thái, kết quả khung giờ), đừng bắt đầu từ danh sách lời gọi sai.</p><p><strong>Đạt khi:</strong> cả bốn phép kiểm đều qua — đúng các phép của <code>node scripts/cham-lab-1.mjs</code> (10/10).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/time.ts</code>, <code>src/booking.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/rules.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345, TS2345, TS2554, TS2561, TS2820, TS2551, TS2367, TS2561); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/rules.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/time.ts, src/booking.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/time.ts, src/booking.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 8: parseTime(420);                                              // S1: a number is not \"HH:MM\" ·|||kiem/sai.ts, dòng 8: parseTime(420);                                              // S1: a number is not \"HH:MM\" ·",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "test/rules.test.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — behaviour must not change while you add types. Run: node --test --test-reporter=spec lab1/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, isWithinBookingWindow } from '../src/booking.ts';\n\ntest('parseTime: 07:00 is minute 420', () => assert.equal(parseTime('07:00'), 420));\ntest('parseTime: rejects 7:00', () => assert.throws(() => parseTime('7:00'), TypeError));\ntest('parseTime: rejects 23:60', () => assert.throws(() => parseTime('23:60'), RangeError));\ntest('formatTime: 1290 is 21:30', () => assert.equal(formatTime(1290), '21:30'));\ntest('checkSlot: 08:00–10:00 lasts 120 minutes', () =>\n  assert.deepEqual(checkSlot('08:00', '10:00'), { ok: true, minutes: 120 }));\ntest('checkSlot: 06:30 starts before opening', () =>\n  assert.deepEqual(checkSlot('06:30', '08:00'), { ok: false, code: 'OUTSIDE_HOURS' }));\ntest('checkSlot: 08:00–12:30 is too long', () =>\n  assert.deepEqual(checkSlot('08:00', '12:30'), { ok: false, code: 'TOO_LONG' }));\ntest('needsApproval: 31 student seats', () => assert.equal(needsApproval({ seats: 31, role: 'STUDENT' }), true));\ntest('needsApproval: 30 student seats', () => assert.equal(needsApproval({ seats: 30, role: 'STUDENT' }), false));\ntest('needsApproval: admins never wait', () => assert.equal(needsApproval({ seats: 200, role: 'ADMIN' }), false));\ntest('needsApproval: 0 seats is a RangeError', () =>\n  assert.throws(() => needsApproval({ seats: 0, role: 'STUDENT' }), RangeError));\ntest('createBooking: off-grid slot throws OFF_GRID', () =>\n  assert.throws(() => createBooking({ lab: 'BE-201', seats: 5, role: 'STUDENT', start: '08:15', end: '09:00' }), /OFF_GRID/));\ntest('createBooking: a lecturer with 31 seats is CONFIRMED', () =>\n  assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'LECTURER', start: '13:00', end: '15:30' }).status, 'CONFIRMED'));\ntest('usageRate: 210 + 210 minutes is half a day', () => assert.equal(usageRate([{ minutes: 210 }, { minutes: 210 }]), 0.5));\ntest('isWithinBookingWindow: 14 days ahead is allowed, 15 is not', () => {\n  assert.equal(isWithinBookingWindow(14), true);\n  assert.equal(isWithinBookingWindow(15), false);\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — correct calls that must KEEP compiling. Types that are too strict break these.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, OPEN } from '../src/booking.ts';\n\nconst start: number = parseTime('08:00');\nconst label: string = formatTime(start + 90);\nconst slot = checkSlot('08:00', '10:00');\nif (slot.ok) {\n  const minutes: number = slot.minutes;\n  console.log(label, minutes);\n}\nconst wait: boolean = needsApproval({ seats: 31, role: 'STUDENT' });\nconst booking = createBooking({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '18:00', end: '21:00' });\nconst status: 'PENDING' | 'CONFIRMED' = booking.status;\nconst rate: number = usageRate([booking, { minutes: 30 }]);\nconst opensAt: number = OPEN;\nconsole.log(wait, status, rate, opensAt);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — eight calls that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects an error with the marked code on each marked line.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate } from '../src/booking.ts';\n\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\n\nparseTime(420);                                              // S1: a number is not \"HH:MM\" · // expect TS2345\nformatTime('07:30');                                         // S2: formatTime takes minutes · // expect TS2345\ncheckSlot('08:00');                                          // S3: the end time is missing · // expect TS2554\nneedsApproval({ seat: 31, role: 'STUDENT' });                // S4: typo: seat instead of seats · // expect TS2561\nneedsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case · // expect TS2820\ncreateBooking(input).minute;                                 // S6: typo: minute instead of minutes · // expect TS2551\nif (createBooking(input).status === 'APPROVED') {}           // S7: there is no APPROVED status · // expect TS2367\nusageRate([{ minute: 60 }]);                                 // S8: typo inside a list of bookings · // expect TS2561\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "src/booking.ts",
+          "language": "typescript",
+          "code": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        },
+        {
+          "name": "test/rules.test.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — behaviour must not change while you add types. Run: node --test --test-reporter=spec lab1/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, isWithinBookingWindow } from '../src/booking.ts';\n\ntest('parseTime: 07:00 is minute 420', () => assert.equal(parseTime('07:00'), 420));\ntest('parseTime: rejects 7:00', () => assert.throws(() => parseTime('7:00'), TypeError));\ntest('parseTime: rejects 23:60', () => assert.throws(() => parseTime('23:60'), RangeError));\ntest('formatTime: 1290 is 21:30', () => assert.equal(formatTime(1290), '21:30'));\ntest('checkSlot: 08:00–10:00 lasts 120 minutes', () =>\n  assert.deepEqual(checkSlot('08:00', '10:00'), { ok: true, minutes: 120 }));\ntest('checkSlot: 06:30 starts before opening', () =>\n  assert.deepEqual(checkSlot('06:30', '08:00'), { ok: false, code: 'OUTSIDE_HOURS' }));\ntest('checkSlot: 08:00–12:30 is too long', () =>\n  assert.deepEqual(checkSlot('08:00', '12:30'), { ok: false, code: 'TOO_LONG' }));\ntest('needsApproval: 31 student seats', () => assert.equal(needsApproval({ seats: 31, role: 'STUDENT' }), true));\ntest('needsApproval: 30 student seats', () => assert.equal(needsApproval({ seats: 30, role: 'STUDENT' }), false));\ntest('needsApproval: admins never wait', () => assert.equal(needsApproval({ seats: 200, role: 'ADMIN' }), false));\ntest('needsApproval: 0 seats is a RangeError', () =>\n  assert.throws(() => needsApproval({ seats: 0, role: 'STUDENT' }), RangeError));\ntest('createBooking: off-grid slot throws OFF_GRID', () =>\n  assert.throws(() => createBooking({ lab: 'BE-201', seats: 5, role: 'STUDENT', start: '08:15', end: '09:00' }), /OFF_GRID/));\ntest('createBooking: a lecturer with 31 seats is CONFIRMED', () =>\n  assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'LECTURER', start: '13:00', end: '15:30' }).status, 'CONFIRMED'));\ntest('usageRate: 210 + 210 minutes is half a day', () => assert.equal(usageRate([{ minutes: 210 }, { minutes: 210 }]), 0.5));\ntest('isWithinBookingWindow: 14 days ahead is allowed, 15 is not', () => {\n  assert.equal(isWithinBookingWindow(14), true);\n  assert.equal(isWithinBookingWindow(15), false);\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — correct calls that must KEEP compiling. Types that are too strict break these.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, OPEN } from '../src/booking.ts';\n\nconst start: number = parseTime('08:00');\nconst label: string = formatTime(start + 90);\nconst slot = checkSlot('08:00', '10:00');\nif (slot.ok) {\n  const minutes: number = slot.minutes;\n  console.log(label, minutes);\n}\nconst wait: boolean = needsApproval({ seats: 31, role: 'STUDENT' });\nconst booking = createBooking({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '18:00', end: '21:00' });\nconst status: 'PENDING' | 'CONFIRMED' = booking.status;\nconst rate: number = usageRate([booking, { minutes: 30 }]);\nconst opensAt: number = OPEN;\nconsole.log(wait, status, rate, opensAt);\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 1 — eight calls that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects an error with the marked code on each marked line.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate } from '../src/booking.ts';\n\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\n\nparseTime(420);                                              // S1: a number is not \"HH:MM\" · // expect TS2345\nformatTime('07:30');                                         // S2: formatTime takes minutes · // expect TS2345\ncheckSlot('08:00');                                          // S3: the end time is missing · // expect TS2554\nneedsApproval({ seat: 31, role: 'STUDENT' });                // S4: typo: seat instead of seats · // expect TS2561\nneedsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case · // expect TS2820\ncreateBooking(input).minute;                                 // S6: typo: minute instead of minutes · // expect TS2551\nif (createBooking(input).status === 'APPROVED') {}           // S7: there is no APPROVED status · // expect TS2367\nusageRate([{ minute: 60 }]);                                 // S8: typo inside a list of bookings · // expect TS2561\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — every red line silenced with any (lab1/yeu — 5.5/10 in the lab grader); string/number only, no literal unions, return types inferred (lab1/vua — 8/10); types right but import still './time.js' (Node cannot find time.js at runtime) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — every red line silenced with any (lab1/yeu — 5.5/10 in the lab grader); string/number only, no literal unions, return types inferred (lab1/vua — 8/10); types right but import still './time.js' (Node cannot find time.js at runtime) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/rules.test.ts": "// Lab 1 — behaviour must not change while you add types. Run: node --test --test-reporter=spec lab1/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, isWithinBookingWindow } from '../src/booking.ts';\n\ntest('parseTime: 07:00 is minute 420', () => assert.equal(parseTime('07:00'), 420));\ntest('parseTime: rejects 7:00', () => assert.throws(() => parseTime('7:00'), TypeError));\ntest('parseTime: rejects 23:60', () => assert.throws(() => parseTime('23:60'), RangeError));\ntest('formatTime: 1290 is 21:30', () => assert.equal(formatTime(1290), '21:30'));\ntest('checkSlot: 08:00–10:00 lasts 120 minutes', () =>\n  assert.deepEqual(checkSlot('08:00', '10:00'), { ok: true, minutes: 120 }));\ntest('checkSlot: 06:30 starts before opening', () =>\n  assert.deepEqual(checkSlot('06:30', '08:00'), { ok: false, code: 'OUTSIDE_HOURS' }));\ntest('checkSlot: 08:00–12:30 is too long', () =>\n  assert.deepEqual(checkSlot('08:00', '12:30'), { ok: false, code: 'TOO_LONG' }));\ntest('needsApproval: 31 student seats', () => assert.equal(needsApproval({ seats: 31, role: 'STUDENT' }), true));\ntest('needsApproval: 30 student seats', () => assert.equal(needsApproval({ seats: 30, role: 'STUDENT' }), false));\ntest('needsApproval: admins never wait', () => assert.equal(needsApproval({ seats: 200, role: 'ADMIN' }), false));\ntest('needsApproval: 0 seats is a RangeError', () =>\n  assert.throws(() => needsApproval({ seats: 0, role: 'STUDENT' }), RangeError));\ntest('createBooking: off-grid slot throws OFF_GRID', () =>\n  assert.throws(() => createBooking({ lab: 'BE-201', seats: 5, role: 'STUDENT', start: '08:15', end: '09:00' }), /OFF_GRID/));\ntest('createBooking: a lecturer with 31 seats is CONFIRMED', () =>\n  assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'LECTURER', start: '13:00', end: '15:30' }).status, 'CONFIRMED'));\ntest('usageRate: 210 + 210 minutes is half a day', () => assert.equal(usageRate([{ minutes: 210 }, { minutes: 210 }]), 0.5));\ntest('isWithinBookingWindow: 14 days ahead is allowed, 15 is not', () => {\n  assert.equal(isWithinBookingWindow(14), true);\n  assert.equal(isWithinBookingWindow(15), false);\n});\n",
+          "kiem/phai-dung.ts": "// Lab 1 — correct calls that must KEEP compiling. Types that are too strict break these.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, OPEN } from '../src/booking.ts';\n\nconst start: number = parseTime('08:00');\nconst label: string = formatTime(start + 90);\nconst slot = checkSlot('08:00', '10:00');\nif (slot.ok) {\n  const minutes: number = slot.minutes;\n  console.log(label, minutes);\n}\nconst wait: boolean = needsApproval({ seats: 31, role: 'STUDENT' });\nconst booking = createBooking({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '18:00', end: '21:00' });\nconst status: 'PENDING' | 'CONFIRMED' = booking.status;\nconst rate: number = usageRate([booking, { minutes: 30 }]);\nconst opensAt: number = OPEN;\nconsole.log(wait, status, rate, opensAt);\n",
+          "kiem/sai.ts": "// Lab 1 — eight calls that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects an error with the marked code on each marked line.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate } from '../src/booking.ts';\n\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\n\nparseTime(420);                                              // S1: a number is not \"HH:MM\" · // expect TS2345\nformatTime('07:30');                                         // S2: formatTime takes minutes · // expect TS2345\ncheckSlot('08:00');                                          // S3: the end time is missing · // expect TS2554\nneedsApproval({ seat: 31, role: 'STUDENT' });                // S4: typo: seat instead of seats · // expect TS2561\nneedsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case · // expect TS2820\ncreateBooking(input).minute;                                 // S6: typo: minute instead of minutes · // expect TS2551\nif (createBooking(input).status === 'APPROVED') {}           // S7: there is no APPROVED status · // expect TS2367\nusageRate([{ minute: 60 }]);                                 // S8: typo inside a list of bookings · // expect TS2561\n"
+        },
+        "tepHoc": [
+          "src/time.ts",
+          "src/booking.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/rules.test.ts",
+              "kiem/phai-dung.ts"
+            ],
+            "moTa": "tsc (strict): src/time.ts, src/booking.ts + test/rules.test.ts, kiem/phai-dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 8,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:8 is refused with TS2345 — parseTime(420);                                              // S1: a number is not \"HH:MM\" · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 9,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:9 is refused with TS2345 — formatTime('07:30');                                         // S2: formatTime takes minutes · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 10,
+            "ma": [
+              "TS2554"
+            ],
+            "moTa": "kiem/sai.ts:10 is refused with TS2554 — checkSlot('08:00');                                          // S3: the end time is missing · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 11,
+            "ma": [
+              "TS2561"
+            ],
+            "moTa": "kiem/sai.ts:11 is refused with TS2561 — needsApproval({ seat: 31, role: 'STUDENT' });                // S4: typo: seat instead of seats · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 12,
+            "ma": [
+              "TS2820"
+            ],
+            "moTa": "kiem/sai.ts:12 is refused with TS2820 — needsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 13,
+            "ma": [
+              "TS2551"
+            ],
+            "moTa": "kiem/sai.ts:13 is refused with TS2551 — createBooking(input).minute;                                 // S6: typo: minute instead of minutes · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 14,
+            "ma": [
+              "TS2367"
+            ],
+            "moTa": "kiem/sai.ts:14 is refused with TS2367 — if (createBooking(input).status === 'APPROVED') {}           // S7: there is no APPROVED status · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 15,
+            "ma": [
+              "TS2561"
+            ],
+            "moTa": "kiem/sai.ts:15 is refused with TS2561 — usageRate([{ minute: 60 }]);                                 // S8: typo inside a list of bookings · · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/rules.test.ts",
+            "moTa": "node --test test/rules.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "every red line silenced with any (lab1/yeu — 5.5/10 in the lab grader) — caught by: kiem/sai.ts:8 is refused with TS2345 — parseTime(420);                                              // S1: a number is not \"HH:MM\"; kiem/sai.ts:9 is refused with TS2345 — formatTime('07:30');                                         // S2: formatTime takes minutes (+6)|||every red line silenced with any (lab1/yeu — 5.5/10 in the lab grader) — máy chấm bắt ở: kiem/sai.ts:8 is refused with TS2345 — parseTime(420);                                              // S1: a number is not \"HH:MM\"; kiem/sai.ts:9 is refused with TS2345 — formatTime('07:30');                                         // S2: formatTime takes minutes (+6)"
+        },
+        {
+          "loi": "string/number only, no literal unions, return types inferred (lab1/vua — 8/10) — caught by: tsc (strict): src/time.ts, src/booking.ts + test/rules.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:12 is refused with TS2820 — needsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case (+1)|||string/number only, no literal unions, return types inferred (lab1/vua — 8/10) — máy chấm bắt ở: tsc (strict): src/time.ts, src/booking.ts + test/rules.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:12 is refused with TS2820 — needsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case (+1)"
+        },
+        {
+          "loi": "types right but import still './time.js' (Node cannot find time.js at runtime) — caught by: node --test test/rules.test.ts exits 0|||types right but import still './time.js' (Node cannot find time.js at runtime) — máy chấm bắt ở: node --test test/rules.test.ts exits 0"
+        }
+      ]
+    }
+  ]
+}

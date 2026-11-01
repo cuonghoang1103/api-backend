@@ -1,0 +1,247 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-2-6-lab-lich-phong",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-2-6-lab-lich-phong"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2 — Strict null on the lab schedule",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-2-6-lab-lich-phong"
+      ],
+      "problemHtml": "<p><code>src/schedule.ts</code> was written while the project had <code>strict: false</code>. Make it honest under the course's strict tsconfig: (1) it compiles, (2) the correct uses in <code>kiem/phai-dung.ts</code> still compile, (3) the 13 tests pass, (4) each line of <code>kiem/sai.ts</code> is refused with its expected code. No <code>any</code>, no <code>as</code> cast except <code>as const</code>, no <code>!</code>, no <code>@ts-</code> directive.</p><p><strong>Done when:</strong> tsc is clean on src/, test/ and kiem/phai-dung.ts, all 8 lines of kiem/sai.ts get their error, node --test is green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/schedule.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/schedule.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2532, TS18047, TS18048, TS2531, TS2322, TS2540, TS2322, TS2339); its other lines still compile.</li>\n  <li><code>node --test test/schedule.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$]+!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>src/schedule.ts</code> được viết khi dự án còn <code>strict: false</code>. Làm nó trung thực dưới tsconfig strict của khoá: (1) biên dịch được, (2) các cách dùng đúng trong <code>kiem/phai-dung.ts</code> vẫn biên dịch được, (3) 13 test qua, (4) mỗi dòng của <code>kiem/sai.ts</code> bị từ chối đúng mã mong đợi. Không <code>any</code>, không ép kiểu <code>as</code> trừ <code>as const</code>, không <code>!</code>, không chỉ thị <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test/ và kiem/phai-dung.ts, cả 8 dòng của kiem/sai.ts có đúng lỗi, node --test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/schedule.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/schedule.test.ts</code>, <code>kiem/phai-dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2532, TS18047, TS18048, TS2531, TS2322, TS2540, TS2322, TS2339); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/schedule.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(?!const\\b)\\w+</code>, <code>[\\w$]+!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/schedule.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/schedule.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 9: findEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist|||kiem/sai.ts, dòng 9: findEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist",
+          "output": "error TS2532",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as casts (as const is fine) · the non-null assertion ! — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// LabFlow — one lab's schedule for a day.\n// A teammate wrote this file while the project still had \"strict\": false (lab2/tsconfig.loose.json).\n// Lab 2: make it honest under the course's strict tsconfig.\nimport { parseTime, formatTime } from './time.ts';\n\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = string;\nexport type TimeRange = number[];   // [start, end] in minutes since 00:00\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string;          // the database column is NULL when the booker wrote no note\n  cancelledAt: string;   // only cancelled bookings have it\n};\n\nexport function isLab(text: string): boolean {\n  return LABS.includes(text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to] = text.split('-');\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note || '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings.\nexport function firstStart(schedule: ScheduleEntry[], lab: LabCode): number {\n  let best: number = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\nexport function sortByStart(schedule: ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.sort((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt ? ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')' : '';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+        },
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "test/schedule.test.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — behaviour of the schedule module. Run: node --test --test-reporter=spec lab2/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { ScheduleEntry } from '../src/schedule.ts';\n\n// Three bookings of 2 Nov 2026, in the order the database returned them.\nconst e1: ScheduleEntry = { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null };\nconst e2: ScheduleEntry = { id: 2, lab: 'BE-201', range: [480, 600], bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' };\nconst e3: ScheduleEntry = { id: 3, lab: 'BE-202', range: [540, 660], bookedBy: 'chi.lm', note: 'Bring HDMI adapters' };\nconst today = (): ScheduleEntry[] => [e1, e2, e3];\n\ntest('LABS lists the three LabFlow labs', () => assert.deepEqual([...LABS], ['BE-201', 'BE-202', 'AL-301']));\ntest('isLab: BE-201 yes, BE-999 and be-201 no', () => {\n  assert.equal(isLab('BE-201'), true);\n  assert.equal(isLab('BE-999'), false);\n  assert.equal(isLab('be-201'), false);\n});\ntest('toRange: 08:00-10:00 is [480, 600]', () => assert.deepEqual([...toRange('08:00-10:00')], [480, 600]));\ntest('toRange: a single time is a TypeError', () => assert.throws(() => toRange('08:00'), TypeError));\ntest('toRange: three times is a TypeError', () => assert.throws(() => toRange('08:00-10:00-12:00'), TypeError));\ntest('findEntry: id 3 is the BE-202 booking', () => assert.equal(findEntry(today(), 3)?.bookedBy, 'chi.lm'));\ntest('findEntry: an unknown id gives undefined', () => assert.equal(findEntry(today(), 99), undefined));\ntest('noteOf: a NULL note reads \"(no note)\"', () => assert.equal(noteOf(e1), '(no note)'));\ntest('noteOf: an empty note stays empty', () => assert.equal(noteOf(e2), ''));\ntest('firstStart: BE-201 starts at 600 (the 480 booking is cancelled)', () => assert.equal(firstStart(today(), 'BE-201'), 600));\ntest('firstStart: AL-301 has no booking today, so null', () => assert.equal(firstStart(today(), 'AL-301'), null));\ntest('sortByStart: sorted copy, the input keeps its order', () => {\n  const input = today();\n  assert.deepEqual(sortByStart(input).map((e) => e.id), [2, 3, 1]);\n  assert.deepEqual(input.map((e) => e.id), [1, 2, 3]);\n});\ntest('labelOf: shows times, booker and cancellation date', () => {\n  assert.equal(labelOf(e2), 'BE-201 08:00–10:00 binh.tt (cancelled 2026-11-01)');\n  assert.equal(labelOf(e3), 'BE-202 09:00–11:00 chi.lm');\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — CORRECT uses. They must keep compiling with your types (part B).\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry } from '../src/schedule.ts';\n\n// Rows as they come from the database: a NULL note, and no cancelledAt until a booking is cancelled.\nconst today: readonly ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null },\n  { id: 2, lab: 'BE-201', range: toRange('08:00-10:00'), bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' },\n];\n\nconst sorted: ScheduleEntry[] = sortByStart(today);    // a read-only list is accepted, a new list comes back\nconst start: number = toRange('08:00-10:00')[0];        // position 0 of a range is always there\nconst firstLab: LabCode = LABS[0];                      // so is position 0 of the fixed list of labs\n\nconst found = findEntry(today, 1);\nif (found !== undefined) console.log(noteOf(found), labelOf(found));\n\nconst first = firstStart(today, 'BE-201');\nif (first !== null) console.log(first + 30);\n\nconst fromQuery: string = 'AL-301';\nif (isLab(fromQuery)) {\n  const lab: LabCode = fromQuery;                       // after the check, the text IS a LabCode\n  console.log(lab, sorted.length, start, firstLab);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { LABS, findEntry, firstStart } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry, TimeRange } from '../src/schedule.ts';\n\ndeclare const today: readonly ScheduleEntry[];\ndeclare const entry: ScheduleEntry;\n\nfindEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist // expect TS2532\nentry.note.toUpperCase();                        // S2 a note may be NULL // expect TS18047\nentry.cancelledAt.slice(0, 10);                  // S3 only cancelled bookings have a date // expect TS18048\nfirstStart(today, 'BE-201') + 30;                // S4 a lab may have no booking today // expect TS2531\nconst three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] // expect TS2322\nentry.range[0] = 0;                              // S6 a range is never changed in place // expect TS2540\nconst lab: LabCode = 'BE-999';                   // S7 only the three LabFlow labs exist // expect TS2322\nLABS.push('BE-999');                             // S8 the list of labs is fixed // expect TS2339\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/schedule.ts",
+          "language": "typescript",
+          "code": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+        },
+        {
+          "name": "src/time.ts",
+          "language": "typescript",
+          "code": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+        },
+        {
+          "name": "test/schedule.test.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — behaviour of the schedule module. Run: node --test --test-reporter=spec lab2/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { ScheduleEntry } from '../src/schedule.ts';\n\n// Three bookings of 2 Nov 2026, in the order the database returned them.\nconst e1: ScheduleEntry = { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null };\nconst e2: ScheduleEntry = { id: 2, lab: 'BE-201', range: [480, 600], bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' };\nconst e3: ScheduleEntry = { id: 3, lab: 'BE-202', range: [540, 660], bookedBy: 'chi.lm', note: 'Bring HDMI adapters' };\nconst today = (): ScheduleEntry[] => [e1, e2, e3];\n\ntest('LABS lists the three LabFlow labs', () => assert.deepEqual([...LABS], ['BE-201', 'BE-202', 'AL-301']));\ntest('isLab: BE-201 yes, BE-999 and be-201 no', () => {\n  assert.equal(isLab('BE-201'), true);\n  assert.equal(isLab('BE-999'), false);\n  assert.equal(isLab('be-201'), false);\n});\ntest('toRange: 08:00-10:00 is [480, 600]', () => assert.deepEqual([...toRange('08:00-10:00')], [480, 600]));\ntest('toRange: a single time is a TypeError', () => assert.throws(() => toRange('08:00'), TypeError));\ntest('toRange: three times is a TypeError', () => assert.throws(() => toRange('08:00-10:00-12:00'), TypeError));\ntest('findEntry: id 3 is the BE-202 booking', () => assert.equal(findEntry(today(), 3)?.bookedBy, 'chi.lm'));\ntest('findEntry: an unknown id gives undefined', () => assert.equal(findEntry(today(), 99), undefined));\ntest('noteOf: a NULL note reads \"(no note)\"', () => assert.equal(noteOf(e1), '(no note)'));\ntest('noteOf: an empty note stays empty', () => assert.equal(noteOf(e2), ''));\ntest('firstStart: BE-201 starts at 600 (the 480 booking is cancelled)', () => assert.equal(firstStart(today(), 'BE-201'), 600));\ntest('firstStart: AL-301 has no booking today, so null', () => assert.equal(firstStart(today(), 'AL-301'), null));\ntest('sortByStart: sorted copy, the input keeps its order', () => {\n  const input = today();\n  assert.deepEqual(sortByStart(input).map((e) => e.id), [2, 3, 1]);\n  assert.deepEqual(input.map((e) => e.id), [1, 2, 3]);\n});\ntest('labelOf: shows times, booker and cancellation date', () => {\n  assert.equal(labelOf(e2), 'BE-201 08:00–10:00 binh.tt (cancelled 2026-11-01)');\n  assert.equal(labelOf(e3), 'BE-202 09:00–11:00 chi.lm');\n});\n"
+        },
+        {
+          "name": "kiem/phai-dung.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — CORRECT uses. They must keep compiling with your types (part B).\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry } from '../src/schedule.ts';\n\n// Rows as they come from the database: a NULL note, and no cancelledAt until a booking is cancelled.\nconst today: readonly ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null },\n  { id: 2, lab: 'BE-201', range: toRange('08:00-10:00'), bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' },\n];\n\nconst sorted: ScheduleEntry[] = sortByStart(today);    // a read-only list is accepted, a new list comes back\nconst start: number = toRange('08:00-10:00')[0];        // position 0 of a range is always there\nconst firstLab: LabCode = LABS[0];                      // so is position 0 of the fixed list of labs\n\nconst found = findEntry(today, 1);\nif (found !== undefined) console.log(noteOf(found), labelOf(found));\n\nconst first = firstStart(today, 'BE-201');\nif (first !== null) console.log(first + 30);\n\nconst fromQuery: string = 'AL-301';\nif (isLab(fromQuery)) {\n  const lab: LabCode = fromQuery;                       // after the check, the text IS a LabCode\n  console.log(lab, sorted.length, start, firstLab);\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "// Lab 2 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { LABS, findEntry, firstStart } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry, TimeRange } from '../src/schedule.ts';\n\ndeclare const today: readonly ScheduleEntry[];\ndeclare const entry: ScheduleEntry;\n\nfindEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist // expect TS2532\nentry.note.toUpperCase();                        // S2 a note may be NULL // expect TS18047\nentry.cancelledAt.slice(0, 10);                  // S3 only cancelled bookings have a date // expect TS18048\nfirstStart(today, 'BE-201') + 30;                // S4 a lab may have no booking today // expect TS2531\nconst three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] // expect TS2322\nentry.range[0] = 0;                              // S6 a range is never changed in place // expect TS2540\nconst lab: LabCode = 'BE-999';                   // S7 only the three LabFlow labs exist // expect TS2322\nLABS.push('BE-999');                             // S8 the list of labs is fixed // expect TS2339\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — tests fixed, compiler silenced with ! and as; honest null/undefined but number[] ranges and a string[] of labs — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — tests fixed, compiler silenced with ! and as; honest null/undefined but number[] ranges and a string[] of labs — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "test/schedule.test.ts": "// Lab 2 — behaviour of the schedule module. Run: node --test --test-reporter=spec lab2/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { ScheduleEntry } from '../src/schedule.ts';\n\n// Three bookings of 2 Nov 2026, in the order the database returned them.\nconst e1: ScheduleEntry = { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null };\nconst e2: ScheduleEntry = { id: 2, lab: 'BE-201', range: [480, 600], bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' };\nconst e3: ScheduleEntry = { id: 3, lab: 'BE-202', range: [540, 660], bookedBy: 'chi.lm', note: 'Bring HDMI adapters' };\nconst today = (): ScheduleEntry[] => [e1, e2, e3];\n\ntest('LABS lists the three LabFlow labs', () => assert.deepEqual([...LABS], ['BE-201', 'BE-202', 'AL-301']));\ntest('isLab: BE-201 yes, BE-999 and be-201 no', () => {\n  assert.equal(isLab('BE-201'), true);\n  assert.equal(isLab('BE-999'), false);\n  assert.equal(isLab('be-201'), false);\n});\ntest('toRange: 08:00-10:00 is [480, 600]', () => assert.deepEqual([...toRange('08:00-10:00')], [480, 600]));\ntest('toRange: a single time is a TypeError', () => assert.throws(() => toRange('08:00'), TypeError));\ntest('toRange: three times is a TypeError', () => assert.throws(() => toRange('08:00-10:00-12:00'), TypeError));\ntest('findEntry: id 3 is the BE-202 booking', () => assert.equal(findEntry(today(), 3)?.bookedBy, 'chi.lm'));\ntest('findEntry: an unknown id gives undefined', () => assert.equal(findEntry(today(), 99), undefined));\ntest('noteOf: a NULL note reads \"(no note)\"', () => assert.equal(noteOf(e1), '(no note)'));\ntest('noteOf: an empty note stays empty', () => assert.equal(noteOf(e2), ''));\ntest('firstStart: BE-201 starts at 600 (the 480 booking is cancelled)', () => assert.equal(firstStart(today(), 'BE-201'), 600));\ntest('firstStart: AL-301 has no booking today, so null', () => assert.equal(firstStart(today(), 'AL-301'), null));\ntest('sortByStart: sorted copy, the input keeps its order', () => {\n  const input = today();\n  assert.deepEqual(sortByStart(input).map((e) => e.id), [2, 3, 1]);\n  assert.deepEqual(input.map((e) => e.id), [1, 2, 3]);\n});\ntest('labelOf: shows times, booker and cancellation date', () => {\n  assert.equal(labelOf(e2), 'BE-201 08:00–10:00 binh.tt (cancelled 2026-11-01)');\n  assert.equal(labelOf(e3), 'BE-202 09:00–11:00 chi.lm');\n});\n",
+          "kiem/phai-dung.ts": "// Lab 2 — CORRECT uses. They must keep compiling with your types (part B).\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry } from '../src/schedule.ts';\n\n// Rows as they come from the database: a NULL note, and no cancelledAt until a booking is cancelled.\nconst today: readonly ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null },\n  { id: 2, lab: 'BE-201', range: toRange('08:00-10:00'), bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' },\n];\n\nconst sorted: ScheduleEntry[] = sortByStart(today);    // a read-only list is accepted, a new list comes back\nconst start: number = toRange('08:00-10:00')[0];        // position 0 of a range is always there\nconst firstLab: LabCode = LABS[0];                      // so is position 0 of the fixed list of labs\n\nconst found = findEntry(today, 1);\nif (found !== undefined) console.log(noteOf(found), labelOf(found));\n\nconst first = firstStart(today, 'BE-201');\nif (first !== null) console.log(first + 30);\n\nconst fromQuery: string = 'AL-301';\nif (isLab(fromQuery)) {\n  const lab: LabCode = fromQuery;                       // after the check, the text IS a LabCode\n  console.log(lab, sorted.length, start, firstLab);\n}\n",
+          "kiem/sai.ts": "// Lab 2 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { LABS, findEntry, firstStart } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry, TimeRange } from '../src/schedule.ts';\n\ndeclare const today: readonly ScheduleEntry[];\ndeclare const entry: ScheduleEntry;\n\nfindEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist // expect TS2532\nentry.note.toUpperCase();                        // S2 a note may be NULL // expect TS18047\nentry.cancelledAt.slice(0, 10);                  // S3 only cancelled bookings have a date // expect TS18048\nfirstStart(today, 'BE-201') + 30;                // S4 a lab may have no booking today // expect TS2531\nconst three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] // expect TS2322\nentry.range[0] = 0;                              // S6 a range is never changed in place // expect TS2540\nconst lab: LabCode = 'BE-999';                   // S7 only the three LabFlow labs exist // expect TS2322\nLABS.push('BE-999');                             // S8 the list of labs is fixed // expect TS2339\n"
+        },
+        "tepHoc": [
+          "src/schedule.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/schedule.test.ts",
+              "kiem/phai-dung.ts"
+            ],
+            "moTa": "tsc (strict): src/schedule.ts + test/schedule.test.ts, kiem/phai-dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 9,
+            "ma": [
+              "TS2532"
+            ],
+            "moTa": "kiem/sai.ts:9 is refused with TS2532 — findEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 10,
+            "ma": [
+              "TS18047"
+            ],
+            "moTa": "kiem/sai.ts:10 is refused with TS18047 — entry.note.toUpperCase();                        // S2 a note may be NULL · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 11,
+            "ma": [
+              "TS18048"
+            ],
+            "moTa": "kiem/sai.ts:11 is refused with TS18048 — entry.cancelledAt.slice(0, 10);                  // S3 only cancelled bookings have a date · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 12,
+            "ma": [
+              "TS2531"
+            ],
+            "moTa": "kiem/sai.ts:12 is refused with TS2531 — firstStart(today, 'BE-201') + 30;                // S4 a lab may have no booking today · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 13,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:13 is refused with TS2322 — const three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 14,
+            "ma": [
+              "TS2540"
+            ],
+            "moTa": "kiem/sai.ts:14 is refused with TS2540 — entry.range[0] = 0;                              // S6 a range is never changed in place · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 15,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:15 is refused with TS2322 — const lab: LabCode = 'BE-999';                   // S7 only the three LabFlow labs exist · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 16,
+            "ma": [
+              "TS2339"
+            ],
+            "moTa": "kiem/sai.ts:16 is refused with TS2339 — LABS.push('BE-999');                             // S8 the list of labs is fixed · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/schedule.test.ts",
+            "moTa": "node --test test/schedule.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(?!const\\b)\\w+",
+              "[\\w$]+!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "tests fixed, compiler silenced with ! and as — caught by: tsc (strict): src/schedule.ts + test/schedule.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:9 is refused with TS2532 — findEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist (+8)|||tests fixed, compiler silenced with ! and as — máy chấm bắt ở: tsc (strict): src/schedule.ts + test/schedule.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:9 is refused with TS2532 — findEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist (+8)"
+        },
+        {
+          "loi": "honest null/undefined but number[] ranges and a string[] of labs — caught by: tsc (strict): src/schedule.ts + test/schedule.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:13 is refused with TS2322 — const three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] (+3)|||honest null/undefined but number[] ranges and a string[] of labs — máy chấm bắt ở: tsc (strict): src/schedule.ts + test/schedule.test.ts, kiem/phai-dung.ts compile with 0 errors; kiem/sai.ts:13 is refused with TS2322 — const three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] (+3)"
+        }
+      ]
+    }
+  ]
+}

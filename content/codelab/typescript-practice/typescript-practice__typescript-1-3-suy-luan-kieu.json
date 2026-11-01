@@ -1,0 +1,603 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-1-3-suy-luan-kieu",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-1-3-suy-luan-kieu"
+  },
+  "exercises": [
+    {
+      "title": "Declare what checkSlot returns",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-1-3-suy-luan-kieu"
+      ],
+      "problemHtml": "<p>checkSlot returns objects whose type is left to inference, so <code>ok</code> is inferred as <code>boolean</code> and a caller cannot narrow on it. Declare a result type and annotate the return so that <code>kiem/dung.ts</code> compiles.</p><p><b>Done when:</b> tsc is clean, the tests pass, no <code>any</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/slot.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/slot.test.ts</code>.</li>\n  <li><code>node --test test/slot.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>checkSlot trả về object với kiểu để tự suy, nên <code>ok</code> bị suy là <code>boolean</code> và người gọi không thu hẹp được. Khai báo một kiểu kết quả và ghi kiểu trả về để <code>kiem/dung.ts</code> biên dịch được.</p><p><b>Đạt khi:</b> tsc sạch, test qua, không có <code>any</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/slot.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/slot.test.ts</code>.</li>\n  <li><code>node --test test/slot.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/slot.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/slot.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/slot.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/slot.ts",
+          "language": "typescript",
+          "code": "// Type the result of checkSlot so that callers can trust ok.\nexport function checkSlot(start: number, end: number) {\n  if (start % 30 !== 0 || end % 30 !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (end <= start) return { ok: false, code: 'END_BEFORE_START' };\n  return { ok: true, minutes: end - start };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { checkSlot } from '../src/slot.ts';\n\nconst slot = checkSlot(480, 600);\nif (!slot.ok) throw new Error(slot.code);\nconst minutes: number = slot.minutes;\nconsole.log(minutes);\n"
+        },
+        {
+          "name": "test/slot.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { checkSlot } from '../src/slot.ts';\ntest('480–600 is 120 minutes', () => assert.deepEqual(checkSlot(480, 600), { ok: true, minutes: 120 }));\ntest('495 is off the grid', () => assert.deepEqual(checkSlot(495, 600), { ok: false, code: 'OFF_GRID' }));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/slot.ts",
+          "language": "typescript",
+          "code": "// One declared result type: ok: true carries minutes, ok: false carries a known code.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\n// The return type is the contract: a typo in a code is now an error on its own line.\nexport function checkSlot(start: number, end: number): SlotResult {\n  if (start % 30 !== 0 || end % 30 !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (end <= start) return { ok: false, code: 'END_BEFORE_START' };\n  return { ok: true, minutes: end - start };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { checkSlot } from '../src/slot.ts';\n\nconst slot = checkSlot(480, 600);\nif (!slot.ok) throw new Error(slot.code);\nconst minutes: number = slot.minutes;\nconsole.log(minutes);\n"
+        },
+        {
+          "name": "test/slot.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { checkSlot } from '../src/slot.ts';\ntest('480–600 is 120 minutes', () => assert.deepEqual(checkSlot(480, 600), { ok: true, minutes: 120 }));\ntest('495 is off the grid', () => assert.deepEqual(checkSlot(495, 600), { ok: false, code: 'OFF_GRID' }));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — one loose object type: { ok: boolean; minutes?: number; code?: string } — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — one loose object type: { ok: boolean; minutes?: number; code?: string } — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { checkSlot } from '../src/slot.ts';\n\nconst slot = checkSlot(480, 600);\nif (!slot.ok) throw new Error(slot.code);\nconst minutes: number = slot.minutes;\nconsole.log(minutes);\n",
+          "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { checkSlot } from '../src/slot.ts';\ntest('480–600 is 120 minutes', () => assert.deepEqual(checkSlot(480, 600), { ok: true, minutes: 120 }));\ntest('495 is off the grid', () => assert.deepEqual(checkSlot(495, 600), { ok: false, code: 'OFF_GRID' }));\n"
+        },
+        "tepHoc": [
+          "src/slot.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/slot.test.ts"
+            ],
+            "moTa": "tsc (strict): src/slot.ts + kiem/dung.ts, test/slot.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/slot.test.ts",
+            "moTa": "node --test test/slot.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "one loose object type: { ok: boolean; minutes?: number; code?: string } — caught by: tsc (strict): src/slot.ts + kiem/dung.ts, test/slot.test.ts compile with 0 errors|||one loose object type: { ok: boolean; minutes?: number; code?: string } — máy chấm bắt ở: tsc (strict): src/slot.ts + kiem/dung.ts, test/slot.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Stop the input object from widening",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-1-3-suy-luan-kieu"
+      ],
+      "problemHtml": "<p><code>input</code> is built first and passed later, so its <code>role</code> is inferred as <code>string</code> and <code>createBooking(input)</code> fails with TS2345. Fix it without changing the call and without a cast (<code>as</code> to a type).</p><p><b>Done when:</b> tsc is clean and <code>node src/main.ts</code> prints <code>PENDING</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/main.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>lib/rules.ts</code>.</li>\n  <li><code>node src/main.ts</code> exits with code 0 and prints <code>PENDING</code> — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(BookingInput|Role)\\b</code>, <code>createBooking\\(\\s*\\{</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>input</code> được dựng trước rồi truyền sau, nên <code>role</code> bị suy là <code>string</code> và <code>createBooking(input)</code> lỗi TS2345. Sửa mà không đổi lời gọi và không ép kiểu (<code>as</code> sang một kiểu).</p><p><b>Đạt khi:</b> tsc sạch và <code>node src/main.ts</code> in <code>PENDING</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/main.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>lib/rules.ts</code>.</li>\n  <li><code>node src/main.ts</code> thoát với mã 0 và in <code>PENDING</code> — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>\\bas\\s+(BookingInput|Role)\\b</code>, <code>createBooking\\(\\s*\\{</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/main.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/main.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node src/main.ts",
+          "output": "PENDING",
+          "explanation": "The program must still print exactly this once the types are fixed — types are erased when Node runs the file, so they cannot change the output, only refuse wrong code.|||Chương trình vẫn phải in đúng như vậy sau khi sửa kiểu — kiểu bị xoá khi Node chạy tệp nên không đổi được output, chỉ từ chối code sai."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as BookingInput / as Role · an object literal written inside createBooking({ … }) — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · as BookingInput / as Role · an object literal written inside createBooking({ … }) — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/main.ts",
+          "language": "typescript",
+          "code": "import { createBooking } from '../lib/rules.ts';\n\n// Built first, passed later. Make this compile WITHOUT changing the createBooking call.\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\nconsole.log(createBooking(input).status);\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/main.ts",
+          "language": "typescript",
+          "code": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// satisfies: checked against BookingInput while it is still a literal, so role keeps the type 'STUDENT'.\n// (Annotating the variable, \": BookingInput\", works just as well.)\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } satisfies BookingInput;\nconsole.log(createBooking(input).status);\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — cast: createBooking(input as BookingInput); role: string annotation — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — cast: createBooking(input as BookingInput); role: string annotation — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        "tepHoc": [
+          "src/main.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "lib/rules.ts"
+            ],
+            "moTa": "tsc (strict): src/main.ts + lib/rules.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node src/main.ts",
+            "ra": "PENDING",
+            "moTa": "node src/main.ts exits 0 and prints \"PENDING\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "\\bas\\s+(BookingInput|Role)\\b",
+              "createBooking\\(\\s*\\{"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "cast: createBooking(input as BookingInput) — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||cast: createBooking(input as BookingInput) — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "role: string annotation — caught by: tsc (strict): src/main.ts + lib/rules.ts compile with 0 errors|||role: string annotation — máy chấm bắt ở: tsc (strict): src/main.ts + lib/rules.ts compile with 0 errors"
+        }
+      ]
+    },
+    {
+      "title": "Remove the noise, keep the information",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-1-3-suy-luan-kieu"
+      ],
+      "problemHtml": "<p>The file compiles but repeats what inference already knows. Remove the redundant annotations (locals initialised with a value, callback parameters and their return types, variables holding a computed array). Keep the ones that carry information. The wrong call in <code>kiem/sai.ts</code> must stay refused.</p><p><b>Done when:</b> tsc is clean, <code>node src/day.ts</code> prints <code>270 BE-201,BE-305</code>, the grader finds none of the redundant patterns.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/day.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>lib/rules.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2561); its other lines still compile.</li>\n  <li><code>node src/day.ts</code> exits with code 0 and prints <code>270 BE-201,BE-305</code> — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>:\\s*number\\s*=\\s*0</code>, <code>\\(\\w+:\\s*\\w+\\)\\s*:</code>, <code>:\\s*Booking\\[\\]\\s*=</code>, <code>:\\s*string\\[\\]\\s*=</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>File biên dịch được nhưng lặp lại điều suy luận đã biết. Bỏ các chú thích thừa (biến cục bộ có giá trị đầu, tham số callback và kiểu trả về của callback, biến chứa mảng tính ra). Giữ chú thích mang thông tin. Lời gọi sai trong <code>kiem/sai.ts</code> phải vẫn bị từ chối.</p><p><b>Đạt khi:</b> tsc sạch, <code>node src/day.ts</code> in <code>270 BE-201,BE-305</code>, máy chấm không thấy mẫu thừa nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/day.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>lib/rules.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2561); các dòng khác vẫn biên dịch.</li>\n  <li><code>node src/day.ts</code> thoát với mã 0 và in <code>270 BE-201,BE-305</code> — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>:\\s*number\\s*=\\s*0</code>, <code>\\(\\w+:\\s*\\w+\\)\\s*:</code>, <code>:\\s*Booking\\[\\]\\s*=</code>, <code>:\\s*string\\[\\]\\s*=</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/day.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/day.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: totalMinutes([{ minute: 60 }]);|||kiem/sai.ts, dòng 3: totalMinutes([{ minute: 60 }]);",
+          "output": "error TS2561",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · a redundant \": number = 0\" · a redundant return type on a callback · a redundant \": Booking[] =\" · a redundant \": string[] =\" — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · a redundant \": number = 0\" · a redundant return type on a callback · a redundant \": Booking[] =\" · a redundant \": string[] =\" — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/day.ts",
+          "language": "typescript",
+          "code": "import { createBooking } from '../lib/rules.ts';\nimport type { Booking, BookingInput } from '../lib/rules.ts';\n\n// Too many annotations. Remove the ones inference already gives you; keep the ones that carry information.\nexport function totalMinutes(bookings: readonly { minutes: number }[]): number {\n  let total: number = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\nexport const day: BookingInput[] = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\nexport const bookings: Booking[] = day.map((input: BookingInput): Booking => createBooking(input));\nexport const labs: string[] = bookings.map((b: Booking): string => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { totalMinutes } from '../src/day.ts';\n\ntotalMinutes([{ minute: 60 }]); // expect TS2561\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/day.ts",
+          "language": "typescript",
+          "code": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// Kept: the exported function's parameter and return type (its contract).\nexport function totalMinutes(bookings: readonly { minutes: number }[]): number {\n  let total = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\n// Kept: data built far from where it is used — without it, role widens to string.\nexport const day: BookingInput[] = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\n// Inferred: Booking[] and string[] — the callbacks get their types from context.\nexport const bookings = day.map((input) => createBooking(input));\nexport const labs = bookings.map((b) => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { totalMinutes } from '../src/day.ts';\n\ntotalMinutes([{ minute: 60 }]); // expect TS2561\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — removed one too many: day no longer BookingInput[] (role widens); parameter typed any — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — removed one too many: day no longer BookingInput[] (role widens); parameter typed any — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n",
+          "kiem/sai.ts": "import { totalMinutes } from '../src/day.ts';\n\ntotalMinutes([{ minute: 60 }]); // expect TS2561\n"
+        },
+        "tepHoc": [
+          "src/day.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "lib/rules.ts"
+            ],
+            "moTa": "tsc (strict): src/day.ts + lib/rules.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2561"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2561 — totalMinutes([{ minute: 60 }]); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node src/day.ts",
+            "ra": "270 BE-201,BE-305",
+            "moTa": "node src/day.ts exits 0 and prints \"270 BE-201,BE-305\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              ":\\s*number\\s*=\\s*0",
+              "\\(\\w+:\\s*\\w+\\)\\s*:",
+              ":\\s*Booking\\[\\]\\s*=",
+              ":\\s*string\\[\\]\\s*="
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "removed one too many: day no longer BookingInput[] (role widens) — caught by: tsc (strict): src/day.ts + lib/rules.ts compile with 0 errors|||removed one too many: day no longer BookingInput[] (role widens) — máy chấm bắt ở: tsc (strict): src/day.ts + lib/rules.ts compile with 0 errors"
+        },
+        {
+          "loi": "parameter typed any — caught by: kiem/sai.ts:3 is refused with TS2561 — totalMinutes([{ minute: 60 }]);; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||parameter typed any — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2561 — totalMinutes([{ minute: 60 }]);; no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        }
+      ]
+    },
+    {
+      "title": "Make the contract of an exported function explicit",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-1-3-suy-luan-kieu"
+      ],
+      "problemHtml": "<p><code>summarize</code> is exported but its return type is inferred, so <code>status</code> is a plain <code>string</code> and both wrong uses in <code>kiem/sai.ts</code> compile. Give it an explicit return type so that each marked line fails with the expected code, while <code>kiem/dung.ts</code> still compiles.</p><p><b>Done when:</b> tsc refuses exactly the two marked lines, tests pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/summary.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>lib/rules.ts</code>, <code>kiem/dung.ts</code>, <code>test/summary.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2367, TS2551); its other lines still compile.</li>\n  <li><code>node --test test/summary.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>summarize</code> được export nhưng kiểu trả về để tự suy, nên <code>status</code> là <code>string</code> trơn và cả hai cách dùng sai trong <code>kiem/sai.ts</code> đều biên dịch được. Ghi kiểu trả về rõ ràng để mỗi dòng được đánh dấu lỗi đúng mã, còn <code>kiem/dung.ts</code> vẫn biên dịch được.</p><p><b>Đạt khi:</b> tsc từ chối đúng hai dòng đánh dấu, test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/summary.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>lib/rules.ts</code>, <code>kiem/dung.ts</code>, <code>test/summary.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2367, TS2551); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/summary.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/summary.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/summary.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: if (s.status === 'APPROVED') console.log('never');|||kiem/sai.ts, dòng 4: if (s.status === 'APPROVED') console.log('never');",
+          "output": "error TS2367",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/summary.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput } from '../lib/rules.ts';\n\n// Exported, but its return type is left to inference. Make wrong uses of the result fail to compile.\nexport function summarize(input: BookingInput) {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' });\nif (s.status === 'APPROVED') console.log('never'); // expect TS2367\nconsole.log(s.seat); // expect TS2551\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '08:00', end: '09:00' });\nconst status: 'PENDING' | 'CONFIRMED' = s.status;\nconst seats: number = s.seats;\nconsole.log(status, seats);\n"
+        },
+        {
+          "name": "test/summary.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { summarize } from '../src/summary.ts';\ntest('31 student seats wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' }).status, 'PENDING'));\ntest('lecturers never wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 40, role: 'LECTURER', start: '08:00', end: '10:00' }).status, 'CONFIRMED'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/summary.ts",
+          "language": "typescript",
+          "code": "import type { BookingInput } from '../lib/rules.ts';\n\nexport type Summary = { lab: string; seats: number; status: 'PENDING' | 'CONFIRMED' };\n\n// Declaring the return type keeps status narrow: a misspelt or unknown status is now a compile error.\n// (Appending \"as const\" to the returned object would also pass these checks, but leaves the contract implicit.)\nexport function summarize(input: BookingInput): Summary {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "lib/rules.ts",
+          "language": "typescript",
+          "code": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' });\nif (s.status === 'APPROVED') console.log('never'); // expect TS2367\nconsole.log(s.seat); // expect TS2551\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '08:00', end: '09:00' });\nconst status: 'PENDING' | 'CONFIRMED' = s.status;\nconst seats: number = s.seats;\nconsole.log(status, seats);\n"
+        },
+        {
+          "name": "test/summary.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { summarize } from '../src/summary.ts';\ntest('31 student seats wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' }).status, 'PENDING'));\ntest('lecturers never wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 40, role: 'LECTURER', start: '08:00', end: '10:00' }).status, 'CONFIRMED'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — return type written, but status: string; return type Record&lt;string, string | number&gt; (every key allowed, status not narrow) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — return type written, but status: string; return type Record&lt;string, string | number&gt; (every key allowed, status not narrow) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n",
+          "kiem/sai.ts": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' });\nif (s.status === 'APPROVED') console.log('never'); // expect TS2367\nconsole.log(s.seat); // expect TS2551\n",
+          "kiem/dung.ts": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '08:00', end: '09:00' });\nconst status: 'PENDING' | 'CONFIRMED' = s.status;\nconst seats: number = s.seats;\nconsole.log(status, seats);\n",
+          "test/summary.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { summarize } from '../src/summary.ts';\ntest('31 student seats wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' }).status, 'PENDING'));\ntest('lecturers never wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 40, role: 'LECTURER', start: '08:00', end: '10:00' }).status, 'CONFIRMED'));\n"
+        },
+        "tepHoc": [
+          "src/summary.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "lib/rules.ts",
+              "kiem/dung.ts",
+              "test/summary.test.ts"
+            ],
+            "moTa": "tsc (strict): src/summary.ts + lib/rules.ts, kiem/dung.ts, test/summary.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2367"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2367 — if (s.status === 'APPROVED') console.log('never'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2551"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2551 — console.log(s.seat); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/summary.test.ts",
+            "moTa": "node --test test/summary.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "return type written, but status: string — caught by: tsc (strict): src/summary.ts + lib/rules.ts, kiem/dung.ts, test/summary.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2367 — if (s.status === 'APPROVED') console.log('never');|||return type written, but status: string — máy chấm bắt ở: tsc (strict): src/summary.ts + lib/rules.ts, kiem/dung.ts, test/summary.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2367 — if (s.status === 'APPROVED') console.log('never');"
+        },
+        {
+          "loi": "return type Record<string, string | number> (every key allowed, status not narrow) — caught by: tsc (strict): src/summary.ts + lib/rules.ts, kiem/dung.ts, test/summary.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2367 — if (s.status === 'APPROVED') console.log('never'); (+1)|||return type Record<string, string | number> (every key allowed, status not narrow) — máy chấm bắt ở: tsc (strict): src/summary.ts + lib/rules.ts, kiem/dung.ts, test/summary.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2367 — if (s.status === 'APPROVED') console.log('never'); (+1)"
+        }
+      ]
+    }
+  ]
+}

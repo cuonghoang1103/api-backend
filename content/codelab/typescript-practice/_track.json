@@ -1,0 +1,109 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "typescript-practice",
+  "name": "TypeScript — Luyện kiểu, chấm bằng tsc thật",
+  "language": "typescript",
+  "color": "#3178c6",
+  "docsUrl": "https://www.typescriptlang.org/docs/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá TypeScript (dự án xuyên khoá LabFlow TS — luật đặt phòng lab viết bằng TypeScript strict). Máy chấm là TRÌNH BIÊN DỊCH THẬT chạy ngay trong trình duyệt (TypeScript 6.0.3, tải khi mở đề): code của bạn phải biên dịch sạch với tsconfig của khoá, mọi lời gọi sai trong tệp kiem/ phải bị tsc từ chối với ĐÚNG mã lỗi (TS2345, TS2322…), và test vẫn xanh khi Node 22 bỏ kiểu rồi chạy. any, @ts-ignore, as nói dối đều bị bắt.",
+  "modules": [
+    {
+      "slug": "typescript-0-8-bat-dau-tai-day",
+      "name": "0.8 Start here (1/2) — What TypeScript is, and why it exists",
+      "level": "BEGINNER",
+      "description": "2 đề: Label the LabFlow helper so a text start time is refused · Fix the values, not the labels"
+    },
+    {
+      "slug": "typescript-0-9-bat-dau-tai-day-2",
+      "name": "0.9 Start here (2/2) — Real incidents, and how to learn TypeScript without giving up",
+      "level": "INTERMEDIATE",
+      "description": "2 đề: Fix the stale copy in the seed · Handle the lab that does not exist"
+    },
+    {
+      "slug": "typescript-0-1-gioi-thieu",
+      "name": "0.1 — About this course, the LabFlow TS project & the roadmap",
+      "level": "BEGINNER",
+      "description": "2 đề: Fix the four bugs in one LabFlow day · Finish a rename the compiler started"
+    },
+    {
+      "slug": "typescript-0-2-cach-hoc",
+      "name": "0.2 — How to study: let the compiler teach you",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Read two errors, fix two lines · Make tsc refuse the wrong calls · Produce two exact error codes"
+    },
+    {
+      "slug": "typescript-0-3-cai-dat",
+      "name": "0.3 — Setting up: Node 22, TypeScript 7, VS Code",
+      "level": "INTERMEDIATE",
+      "description": "2 đề: Green check AND green run · Replace the enum so Node can run it"
+    },
+    {
+      "slug": "typescript-0-4-mo-hinh",
+      "name": "0.4 — The one mental model: compile time vs runtime",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Replace an enum so Node can run the file · A type is not a value: write a runtime check · Do not trust JSON.parse"
+    },
+    {
+      "slug": "typescript-1-1-ba-con-bug",
+      "name": "1.1 — Three bugs JavaScript ships to production",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Make the NaN typo impossible · Refuse the wrong shape of a call · The silent bug: a lower-case role · Type the input AND the result of createBooking"
+    },
+    {
+      "slug": "typescript-1-2-chung-minh-gi",
+      "name": "1.2 — What a type checker proves — and what it cannot",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Read the first lab safely · Write the BookingInput guard · Replace a promise with a check · A list guard the compiler can use"
+    },
+    {
+      "slug": "typescript-1-3-suy-luan-kieu",
+      "name": "1.3 — Type inference: you write less than you think",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Declare what checkSlot returns · Stop the input object from widening · Remove the noise, keep the information · Make the contract of an exported function explicit"
+    },
+    {
+      "slug": "typescript-1-4-any-unknown",
+      "name": "1.4 — any, unknown & adopting TypeScript gradually",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Read seats from unknown data · Load booking history without any · Migrate a JS module: type the edges under strict · Replace a double cast with real checks"
+    },
+    {
+      "slug": "typescript-1-6-lab-chuyen-doi",
+      "name": "1.6 Lab 1 — Convert LabFlow's rules to TypeScript",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 1 — Convert LabFlow's rules to TypeScript"
+    },
+    {
+      "slug": "typescript-2-1-primitive",
+      "name": "2.1 — Primitives, annotations & strict null checks",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Say which schedule fields may be missing · An honest findEntry — no as, no ! · || or ?? — a closed lab must have 0 seats · Send a bigint booking id as JSON without losing a digit"
+    },
+    {
+      "slug": "typescript-2-2-mang-tuple",
+      "name": "2.2 — Arrays, tuples & readonly",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Sort the schedule without reordering the caller's list · A time range is exactly two numbers · Close the push hole: a range that cannot grow or be edited · Free gaps of the day, typed with tuples"
+    },
+    {
+      "slug": "typescript-2-3-kieu-dac-biet",
+      "name": "2.3 — The special types: any, unknown, never, void",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Give fail() the return type that means \"never comes back\" · Make a forgotten slot code a compile error · Fix the empty list that nothing can be pushed into · An audit log whose result nobody may test"
+    },
+    {
+      "slug": "typescript-2-4-literal-as-const",
+      "name": "2.4 — Literal types & as const",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: One list of labs: derive LabCode from LABS · Check ?lab= against the list — without a cast · A complete, read-only message table · Replace an enum with an as const object"
+    },
+    {
+      "slug": "typescript-2-6-lab-lich-phong",
+      "name": "2.6 Lab 2 — Strict null on the lab schedule",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 2 — Strict null on the lab schedule"
+    }
+  ]
+}

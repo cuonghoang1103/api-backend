@@ -12,12 +12,14 @@ import { chamKhung } from './chamKhung';
 import { chamMutation } from './chamMutation';
 import { chamSql } from './chamSql';
 import { chamTinh, type TraLoiTinh } from './chamTinh';
+import { chamTs } from './chamTs';
 import { tinhDiem } from './diem';
 import { LOAI_TRINH_DUYET, type Diem, type KetQuaKiem, type TepMap, type TestsJson } from './kieu';
 
 export * from './kieu';
 export { tinhDiem, chapNhan, demDotBien } from './diem';
 export type { TraLoiTinh } from './chamTinh';
+export { moTruocTs } from './chamTs';
 
 export interface ChamVao {
   exerciseId: number;
@@ -59,6 +61,9 @@ export async function chamBai({ exerciseId, tj, files, traLoi, onTung }: ChamVao
       break;
     case 'mutation': // 01/11/2026: chấm BỘ TEST người học — chạy với code đúng rồi với từng đột biến
       ketQua = await chamMutation(tj, kiem, files, onTung);
+      break;
+    case 'ts': // 01/11/2026: TypeScript 6.0.3 (tự lưu, tải lười) — tsc trong Worker + chạy test như Node 22 bỏ kiểu
+      ketQua = await chamTs(tj, kiem, files, onTung);
       break;
     case 'choice':
     case 'order':

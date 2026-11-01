@@ -49,7 +49,7 @@ import { TestPanel, CHAM_RONG, type TrangThaiCham } from '@/components/code-lab/
 import { TraLoiTinh } from '@/components/code-lab/TraLoiTinh';
 import { KhungAnToan } from '@/components/code-lab/KhungAnToan';
 import { chayJs } from '@/components/code-lab/chayJs';
-import { chamBai, chamDuoc, chapNhan, tinhDiem, LOAI_MAY_CHU, LOAI_TINH, TEN_LOAI, type TestsJson } from '@/components/code-lab/cham';
+import { chamBai, chamDuoc, chapNhan, moTruocTs, tinhDiem, LOAI_MAY_CHU, LOAI_TINH, TEN_LOAI, type TestsJson } from '@/components/code-lab/cham';
 import { bienDichReact, dungTrangDom, dungTrangReact } from '@/components/code-lab/cham/chamKhung';
 
 function defaultFileName(ex: { language: string; track?: { slug?: string } | null }): string {
@@ -212,13 +212,18 @@ export default function ExerciseDetailPage() {
   const laTinh = !!loai && LOAI_TINH.has(loai);
   const choMayChu = !!loai && LOAI_MAY_CHU.has(loai);
   const tepMap = useMemo(() => Object.fromEntries(files.map((f) => [f.name, f.code])), [files]);
+  // ts (01/11/2026): mở trước trình biên dịch TypeScript 6.0.3 (tự lưu ở /vendor/, ~2 MB nén) ngay khi trang MỘT đề `ts` mở,
+  // để lần Chạy đầu không phải đợi tải — trang đề loại khác không bao giờ tải nó.
+  useEffect(() => { if (loai === 'ts' && coMayCham) moTruocTs(); }, [loai, coMayCham]);
 
   // "Chạy" console cũ cho bài JS không có bộ kiểm
   const jsFile = useMemo(
     () => files.find((f) => /\.(m?js|ts)$/i.test(f.name) || ['javascript', 'js', 'typescript', 'ts'].includes((f.language || '').toLowerCase())),
     [files],
   );
-  const chayConsole = !coMayCham && !!jsFile;
+  // đề 'manual' chạy trên MÁY người học (Testing: PostgreSQL/Playwright/HTTP thật — `tj.chayTaiMay`): chạy tệp test như JS
+  // thường trong trang chỉ ra lỗi vô nghĩa ⇒ không hiện nút Run (JS); đề nói rõ lệnh chạy ở máy + tự đánh dấu.
+  const chayConsole = !coMayCham && !!jsFile && !(tj?.loai === 'manual' && !!tj.chayTaiMay);
   const runJs = useCallback(async () => {
     setRunOut('Đang chạy…');
     setRunOut(await chayJs(jsFile?.code ?? ''));
@@ -684,6 +689,14 @@ export default function ExerciseDetailPage() {
               <summary>🧬 <b>Bài viết TEST — chấm bằng đột biến (mutation testing)</b> · Vitest thu gọn chạy ngay trong trình duyệt</summary>
               <p className="mt-1">Bạn chỉ sửa tệp <code>*.test.js</code>. Máy chấm luôn dùng bản code đúng của đề (sửa tệp code trong editor không có tác dụng), chạy bộ test của bạn — phải <b>xanh hết</b> — rồi chạy lại với từng bản cài sẵn một lỗi: test đỏ ⇒ đột biến bị <b>diệt</b>. Có sẵn <code>describe / it / test / it.each / beforeEach</code> và <code>expect</code> với <code>toBe, toEqual, toStrictEqual, toMatchObject, toThrow, toBeCloseTo, toBeTruthy/Falsy, toContain, toHaveLength, toHaveProperty, toMatch, toBeGreaterThan…</code>, <code>.not</code>, <code>.resolves/.rejects</code>. Test không có <code>expect</code> bị tính đỏ (requireAssertions, như cấu hình khoá).</p>
               <p className="mt-1 opacity-80">Edit only the <code>*.test.js</code> file. The grader runs your suite against the correct code (must be all green), then against each planted bug: a red suite kills the mutant. A test without any expect() fails (requireAssertions).</p>
+            </details>
+          )}
+
+          {loai === 'ts' && (
+            <details className="cl-note-sql">
+              <summary>🟦 <b>Chấm bằng trình biên dịch TypeScript thật trong trình duyệt</b> · tsc (strict) + chạy test như Node 22</summary>
+              <p className="mt-1">Mỗi kiểm là một phép của máy chấm khoá: <b>biên dịch sạch</b> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext), mỗi dòng <code>// expect TSxxxx</code> trong tệp <code>kiem/…</code> <b>phải bị tsc từ chối</b> đúng mã đó, và <code>node --test</code> / <code>node src/…</code> vẫn chạy đúng khi kiểu bị bỏ. Chỉ sửa tệp của bạn — test và tệp <code>kiem/</code> luôn lấy bản gốc của đề. Lần đầu tải TypeScript 6.0.3 (~2 MB, rồi trình duyệt giữ lại); khoá dùng tsc 7.0.2 — cùng ngôn ngữ, một đề lệch mã lỗi đã được tính sẵn.</p>
+              <p className="mt-1 opacity-80">Graded by the real TypeScript compiler in your browser: the files must compile under the course tsconfig, every <code>// expect TSxxxx</code> line must be refused with that code, and the tests must pass when the types are stripped, as Node 22 runs them. Edit only your files; the first run downloads TypeScript 6.0.3 (~2 MB, cached afterwards).</p>
             </details>
           )}
 

@@ -1310,6 +1310,149 @@
    "PERF -> union(i, i+1) + connected(0, i+1) for every i: OK, connected 999999, count 1 | \n"
   ]
  },
+ "csd201-cs1-bouquets": {
+  "bam": "efa47ff5bccb7a93",
+  "ra": [
+   "RUN 6,2,9,3,3,8,1,5 2 2 -> 5\nRUN 6,2,9,3,3,8,1,5 3 2 -> 6\nRUN 6,2,9,3,3,8,1,5 5 2 -> -1\nRUN 6,2,9,3,3,8,1,5 100000 100000 -> -1\nRUN 7 1 1 -> 7\n",
+   "RANDOM -> 2000 random cases (impossible ones included): all 2000 agree with the brute force\n",
+   "PERF -> 30 queries, 100,000 flowers: OK, sum 15436365040\n"
+  ]
+ },
+ "csd201-cs1-first-bad": {
+  "bam": "653bbf65edfdf9a9",
+  "ra": [
+   "RUN 1 1 -> 1 (at most 32 calls)\nRUN 10 1 -> 1 (at most 32 calls)\nRUN 10 10 -> 10 (at most 32 calls)\nRUN 1000000 777777 -> 777777 (at most 32 calls)\n",
+   "RUN 2147483647 2147483647 -> 2147483647 (at most 32 calls)\nRUN 2147483647 1 -> 1 (at most 32 calls)\nRUN 2147483647 1073741825 -> 1073741825 (at most 32 calls)\n",
+   "RANDOM -> 3000 random cases: all 3000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs1-kth-missing": {
+  "bam": "506f3c0d6c4a8158",
+  "ra": [
+   "RUN 3,4,8,9,12 1 -> 1\nRUN 3,4,8,9,12 4 -> 6\nRUN 3,4,8,9,12 10 -> 15\nRUN 1,2,3,4 2 -> 6\nRUN - 3 -> 3\n",
+   "RANDOM -> 3000 random cases: all 3000 agree with the brute force\n",
+   "PERF -> 200,000 queries on 1,000,000 elements: OK, sum 283026777448\n"
+  ]
+ },
+ "csd201-cs1-max-min-distance": {
+  "bam": "ed8e28a0aa06ad1a",
+  "ra": [
+   "RUN 9,1,17,4,12,20 3 -> 8\nRUN 9,1,17,4,12,20 4 -> 3\nRUN 9,1,17,4,12,20 2 -> 19\nRUN -10,-3,0,8 3 -> 8\nRUN 5,5,5 3 -> 0\n",
+   "RANDOM -> 2000 random cases: all 2000 agree with the brute force\n",
+   "PERF -> 10 queries, 200,000 positions: OK, sum 2880867\n"
+  ]
+ },
+ "csd201-cs1-median-two-arrays": {
+  "bam": "30865b46c48fb37e",
+  "ra": [
+   "RUN 1,4,9 2,3,10,12 -> 4.0\nRUN 5,6 1,2 -> 3.5\nRUN - 7 -> 7.0\nRUN 2147483647 2147483647 -> 2.147483647E9\nRUN -3,-1 -2 -> -2.0\n",
+   "RANDOM -> random pairs (one empty, duplicates, negatives): all 4897 agree with the brute force\n",
+   "PERF -> 300,000 calls on 1,000,000 + 1,000,001 elements: OK, sum 3.599988E11\n"
+  ]
+ },
+ "csd201-cs1-single-element": {
+  "bam": "8c9f22b85129d112",
+  "ra": [
+   "RUN 1,1,4,4,6,9,9,12,12 -> 6\nRUN -5,-5,0,2,2,7,7 -> 0\nRUN 5 -> 5\nRUN 3,7,7 -> 3\nRUN 2,2,8 -> 8\n",
+   "RANDOM -> 3000 random arrays: all 3000 agree with the brute force\n",
+   "PERF -> 200,000 calls on 1,000,001 elements: OK, sum 120000200000\n"
+  ]
+ },
+ "csd201-cs2-flight-bookings": {
+  "bam": "feee9451b16c0112",
+  "ra": [
+   "RUN 5 1,2,10 2,3,20 2,5,25 -> [10, 55, 45, 25, 25]\nRUN 3 -> [0, 0, 0]\nRUN 1 1,1,7 -> [7]\nRUN 3 2,2,4 -> [0, 4, 0]\nRUN 4 1,4,1 4,4,2 -> [1, 1, 1, 3]\n",
+   "RANDOM -> 8000 random booking lists: all 8000 agree with the brute force\n",
+   "PERF -> 200,000 bookings over 200,000 flights: OK, flight 1: 9977903, flight 100000: 100107809, flight 200000: 9932480\n"
+  ]
+ },
+ "csd201-cs2-longest-k-distinct": {
+  "bam": "993b3e24b3c631c9",
+  "ra": [
+   "RUN eceba 2 -> 3\nRUN aaabbccc 1 -> 3\nRUN - 2 -> 0\nRUN abc 0 -> 0\nRUN abcde 100 -> 5\nRUN abaccc 2 -> 4\n",
+   "RANDOM -> 20000 random strings: all 20000 agree with the brute force\n",
+   "PERF -> 1,000,000 characters, k = 3 and k = 20: OK, answers 1004 and 1074\n"
+  ]
+ },
+ "csd201-cs2-max-circular-subarray": {
+  "bam": "1a3d9538895b7db3",
+  "ra": [
+   "RUN 5,-3,5 -> 10\nRUN -3,-2,-3 -> -2\nRUN -1 -> -1\nRUN 3,3,3 -> 9\nRUN 1,-2,3,-2 -> 3\nRUN 0,-1,-2 -> 0\n",
+   "RANDOM -> 20000 random arrays: all 20000 agree with the brute force\n",
+   "PERF -> 2,000,000 elements: OK, best 2202509314\n"
+  ]
+ },
+ "csd201-cs2-sort-colors": {
+  "bam": "f0d550cb94d1935f",
+  "ra": [
+   "RUN 2,0,2,1,1,0 -> [0, 0, 1, 1, 2, 2]\nRUN - -> []\nRUN 1 -> [1]\nRUN 2,2,2 -> [2, 2, 2]\nRUN 2,1,0 -> [0, 1, 2]\n",
+   "RANDOM -> 20000 random arrays: all 20000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs2-subarrays-div-k": {
+  "bam": "ff4d34e01451ed31",
+  "ra": [
+   "RUN 4,5,0,-2,-3,1 5 -> 7\nRUN - 3 -> 0\nRUN 5,5,5 5 -> 6\nRUN -5 5 -> 1\nRUN -1,2,9 2 -> 2\n",
+   "RANDOM -> 20000 random arrays: all 20000 agree with the brute force\n",
+   "PERF -> 1,000,000 elements, k = 7919, and a million zeros: OK, answers 63139367 and 500000500000\n"
+  ]
+ },
+ "csd201-cs2-trapping-rain-water": {
+  "bam": "e52dbac4bbe2639c",
+  "ra": [
+   "RUN 0,1,0,2,1,0,1,3,2,1,2,1 -> 6\nRUN - -> 0\nRUN 5 -> 0\nRUN 3,3,3 -> 0\nRUN 5,0,5 -> 5\nRUN 1,2,3,4,5 -> 0\nRUN 4,2,0,3,2,5 -> 9\n",
+   "RANDOM -> 20000 random height lists: all 20000 agree with the brute force\n",
+   "PERF -> 2,000,000 bars: OK, water 1998998084227633\n"
+  ]
+ },
+ "csd201-cs3-combination-sum-4": {
+  "bam": "de3564e3bb7d6929",
+  "ra": [
+   "RUN 1,2,3 4 -> 7\nRUN 5 3 -> 0\nRUN 5 0 -> 1\nRUN 2,3 7 -> 3\nRUN 1,2,3 40 -> 837527568\n",
+   "RANDOM -> 2000 random cases vs listing every sequence: all 2000 agree with the brute force\n",
+   "PERF -> target 100,000 with 50 values; {1,2,3} with target 40: OK, answers 6349864 and 837527568\n"
+  ]
+ },
+ "csd201-cs3-max-product": {
+  "bam": "8caa3754409f0552",
+  "ra": [
+   "RUN 2,-3,4,-2,0 -> 48\nRUN -2,0,-1 -> 0\nRUN -3 -> -3\nRUN -2,3,-4 -> 24\nRUN 0,2 -> 2\nRUN -1,-1 -> 1\n",
+   "RANDOM -> 20000 random arrays: all 20000 agree with the brute force\n",
+   "PERF -> 1,000,000 elements: OK, best 5509980288\n"
+  ]
+ },
+ "csd201-cs3-min-cost-tickets": {
+  "bam": "795c77ef34aed421",
+  "ra": [
+   "RUN 1,3,4,5,9,20,21,22,25,60 30,100,250 -> 260\nRUN - 2,7,15 -> 0\nRUN 365 30,100,250 -> 30\nRUN 1,2,3,4,5,6,7,8,9,10,30,31 2,7,15 -> 17\nRUN 1,2,3 5,4,100 -> 4\n",
+   "RANDOM -> 2000 random trips (odd prices too): all 2000 agree with the brute force\n",
+   "PERF -> 300 travel days: OK, cost 1140\n"
+  ]
+ },
+ "csd201-cs3-number-of-lis": {
+  "bam": "864e8fbc9595d395",
+  "ra": [
+   "RUN 1,4,2,5,3,6 -> 3\nRUN 2,2,2 -> 3\nRUN - -> 0\nRUN 1,3,5,4,7 -> 2\nRUN 5,4,3,2,1 -> 5\n",
+   "RANDOM -> 3000 random arrays vs all subsets: all 3000 agree with the brute force\n",
+   "PERF -> 3000 elements (50 values twice): OK, count 1125899906842624\n"
+  ]
+ },
+ "csd201-cs3-perfect-squares": {
+  "bam": "d463409924b670d4",
+  "ra": [
+   "RUN 12 -> 3\nRUN 13 -> 2\nRUN 7 -> 4\nRUN 0 -> 0\nRUN 1 -> 1\nRUN 48 -> 3\n",
+   "RANDOM -> n = 0..600 (shortest path 0 -> n by squares): all 601 agree with the brute force\n",
+   "PERF -> n = 200,000 and n = 199,999: OK, answers 2 and 4\n"
+  ]
+ },
+ "csd201-cs3-russian-doll": {
+  "bam": "6747a108b5d1f1ea",
+  "ra": [
+   "RUN 5,4 6,4 6,7 2,3 7,8 6,5 -> 4\nRUN 3,1 3,2 3,3 -> 1\nRUN 1,1 -> 1\nRUN 1,1 1,1 2,2 -> 2\nRUN 4,5 4,6 6,7 2,3 1,1 -> 4\n",
+   "RANDOM -> 2000 random sets vs all subsets: all 2000 agree with the brute force\n",
+   "PERF -> 200,000 envelopes: OK, chain 872\n"
+  ]
+ },
  "csd201-pe-sp26-b5p4-q1-mylist": {
   "bam": "2182e62fb9c36da9",
   "ra": [

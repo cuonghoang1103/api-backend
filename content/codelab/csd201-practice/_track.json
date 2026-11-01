@@ -340,6 +340,24 @@
       "description": "Luyện: Union-Find with union by rank and iterative path compression · Amortized analysis by counting: element copies of a dynamic array, doubling vs growing by k · A stack that grows and shrinks: halve at one quarter, not at one half"
     },
     {
+      "slug": "csd201-cs1-on",
+      "name": "10.1 ⭐ CS.1 Binary search — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: First bad version with n up to 2³¹ − 1 — at most 32 questions · The single element in a sorted array of pairs — O(log n) with a parity invariant · The k-th missing positive number — binary search on a computed value · Minimum days to make m bouquets — binary search on the answer (first T) · Maximise the minimum distance — search on the answer for the LAST T · Median of two sorted arrays in O(log min(m, n)) — binary search on a split point"
+    },
+    {
+      "slug": "csd201-cs2-on",
+      "name": "10.2 ⭐ CS.2 Array techniques — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Sort colours 0/1/2 in place in one pass — the Dutch national flag · Longest substring with at most k distinct characters — a growing/shrinking window · Count subarrays whose sum is divisible by k — prefix sums and remainders · Flight bookings — m range updates with a difference array · Trapping rain water with two pointers in O(n) time and O(1) memory · Maximum sum of a circular subarray — Kadane twice"
+    },
+    {
+      "slug": "csd201-cs3-on",
+      "name": "10.3 ⭐ CS.3 Dynamic programming I — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Fewest perfect squares that sum to n — coin change with coins 1, 4, 9, 16 … · Cheapest travel passes (1, 7 and 30 days) — DP over calendar days · Count ordered sequences that sum to a target — the loop order decides the answer · Maximum product subarray — keep the largest AND the smallest product · How many longest increasing subsequences? — length and count side by side · Russian doll envelopes — sort cleverly, then LIS in O(n log n)"
+    },
+    {
       "slug": "csd201-on-pe",
       "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
       "level": "ADVANCED",

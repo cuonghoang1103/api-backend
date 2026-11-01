@@ -17,12 +17,12 @@ CREATE TABLE Order1NF (
   CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)
 );
 INSERT INTO Order1NF VALUES
- (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),
- (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),
- (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),
- (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),
- (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),
- (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);
+ (1001, '2026-09-01', 'C001', N'Nguyen An',  N'Ha Noi',    'P01', 2, 5000),
+ (1001, '2026-09-01', 'C001', N'Nguyen An',  N'Ha Noi',    'P07', 1, 18000),
+ (1002, '2026-09-02', 'C002', N'Tran Binh',  N'Da Nang',   'P01', 10, 5000),
+ (1003, '2026-09-05', 'C001', N'Nguyen An',  N'Ha Noi',    'P03', 1, 7000),
+ (1003, '2026-09-05', 'C001', N'Nguyen An',  N'Ha Noi',    'P07', 3, 18000),
+ (1004, '2026-09-06', 'C003', N'Le Chi',     N'Can Tho',   'P03', 4, 7000);
 `;
 export const LD_ORDER1NF = {
   en: '<p><b>The 1NF table of lesson 4.4</b> (tab <code>Order1NF.sql</code>): <code>Order1NF(order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price)</code>, key (order_id, product_id). FDs: order_id → order_date, cust_id · cust_id → cust_name, cust_city · product_id → unit_price · order_id, product_id → qty.</p>',
@@ -40,7 +40,7 @@ export default mod('dbi202-chuan-hoa-vi-du', '4.4 One table, normalized 1NF → 
     giai: `SELECT cust_id, COUNT(*) AS copies      -- every row repeats the customer's name and city
 FROM Order1NF
 GROUP BY cust_id;`,
-    kiem: [kq(['Copies of each customer\'s data', 'Số bản sao dữ liệu mỗi khách']), kqAn(['Another order of C002', 'Thêm đơn của C002'], `INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C002', N'Trần Bình', N'Đà Nẵng', 'P07', 1, 18000), (1005, '2026-09-08', 'C002', N'Trần Bình', N'Đà Nẵng', 'P03', 2, 7000)`), ma(['Uses GROUP BY', 'Dùng GROUP BY'], '\\bGROUP\\s+BY\\b')],
+    kiem: [kq(['Copies of each customer\'s data', 'Số bản sao dữ liệu mỗi khách']), kqAn(['Another order of C002', 'Thêm đơn của C002'], `INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C002', N'Tran Binh', N'Da Nang', 'P07', 1, 18000), (1005, '2026-09-08', 'C002', N'Tran Binh', N'Da Nang', 'P03', 2, 7000)`), ma(['Uses GROUP BY', 'Dùng GROUP BY'], '\\bGROUP\\s+BY\\b')],
     sai: [`SELECT cust_id, COUNT(DISTINCT order_id) AS copies FROM Order1NF GROUP BY cust_id`],
     gy: [['Each row of Order1NF carries the customer\'s name and city.', 'Mỗi dòng của Order1NF mang tên và thành phố của khách.'], ['COUNT(*) per cust_id.', 'COUNT(*) theo cust_id.']],
     lhg: [['Counting orders (COUNT(DISTINCT order_id)) — the city is stored once per LINE, not per order.', 'Đếm đơn (COUNT(DISTINCT order_id)) — thành phố lưu theo mỗi DÒNG, không theo mỗi đơn.'], ['Counting only orders of one customer.', 'Chỉ đếm đơn của một khách.']],

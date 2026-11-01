@@ -16,9 +16,9 @@ CREATE TABLE EmpFlat (
 );
 INSERT INTO EmpFlat VALUES
  (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),
- (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),
+ (2, N'Binh', 'IT1', N'Software',   N'Hoa Lac'),
  (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),
- (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),
+ (4, N'Dung', 'ACC', N'Accounting', N'Cau Giay'),
  (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');
 `;
 const LD = {
@@ -37,7 +37,7 @@ CREATE TABLE Employee (
 );
 INSERT INTO Department SELECT DISTINCT deptID, deptName, location FROM EmpFlat;
 INSERT INTO Employee   SELECT empID, fullName, deptID FROM EmpFlat;`;
-const THEM = `INSERT INTO EmpFlat VALUES (6, N'Giang', 'HR1', N'Human Resources', N'Hoa Lac'), (7, N'Hà', 'ACC', N'Accounting', N'Cau Giay')`;
+const THEM = `INSERT INTO EmpFlat VALUES (6, N'Giang', 'HR1', N'Human Resources', N'Hoa Lac'), (7, N'Ha', 'ACC', N'Accounting', N'Cau Giay')`;
 const F5 = F('AB->C', 'C->B', 'C->D');
 
 export default mod('dbi202-slide-dbi4-4', '4.D The 3NF fix, BCNF & the two decomposition algorithms (slides 59–73)', [
@@ -47,7 +47,7 @@ export default mod('dbi202-slide-dbi4-4', '4.D The 3NF fix, BCNF & the two decom
     kn: ['3NF', 'transitive dependency', 'decomposition'], tag: ['normalization', '3nf', 'decomposition'],
     en: '<p>deptName and location depend on empID only through deptID. Split EmpFlat into <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> and <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, then fill both from EmpFlat.</p>',
     vi: '<p>deptName và location chỉ phụ thuộc empID thông qua deptID. Tách EmpFlat thành <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> và <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, rồi đổ dữ liệu từ EmpFlat.</p>',
-    yc: [['Department first (Employee references it); each department once.', 'Department trước (Employee tham chiếu nó); mỗi phòng một lần.'], ['VARCHAR instead of NVARCHAR here.', 'Ở đây dùng VARCHAR thay NVARCHAR.']],
+    yc: [['Department first (Employee references it); each department once.', 'Department trước (Employee tham chiếu nó); mỗi phòng một lần.'], ['VARCHAR instead of NVARCHAR here (the in-browser grader flags NVARCHAR; the sample text has no Vietnamese diacritics, so VARCHAR keeps it intact on SQL Server too — with Vietnamese text use NVARCHAR).', 'Ở đây dùng VARCHAR thay NVARCHAR (máy chấm trình duyệt báo NVARCHAR; dữ liệu mẫu không có dấu tiếng Việt nên VARCHAR vẫn giữ nguyên trên SQL Server — có chữ Việt thì dùng NVARCHAR).']],
     giai: GIAI,
     kiem: [
       sau(['Department', 'Department'], 'SELECT deptID, deptName, location FROM Department'),

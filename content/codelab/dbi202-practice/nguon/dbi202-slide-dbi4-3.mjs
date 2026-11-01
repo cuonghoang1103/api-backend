@@ -16,11 +16,11 @@ CREATE TABLE EnrollFlat (
   CONSTRAINT pk_enrollflat PRIMARY KEY (studentID, courseID)
 );
 INSERT INTO EnrollFlat VALUES
- ('HE190001', N'Nguyễn An',  'DBI202', N'Database Systems', 3, 8.5),
- ('HE190001', N'Nguyễn An',  'CSD201', N'Data Structures',  3, 7.0),
- ('HE190002', N'Trần Bình',  'DBI202', N'Database Systems', 3, 6.0),
- ('HE190003', N'Lê Chi',     'DBI202', N'Database Systems', 3, NULL),
- ('HE190003', N'Lê Chi',     'MAE101', N'Mathematics',      3, 9.0);
+ ('HE190001', N'Nguyen An',  'DBI202', N'Database Systems', 3, 8.5),
+ ('HE190001', N'Nguyen An',  'CSD201', N'Data Structures',  3, 7.0),
+ ('HE190002', N'Tran Binh',  'DBI202', N'Database Systems', 3, 6.0),
+ ('HE190003', N'Le Chi',     'DBI202', N'Database Systems', 3, NULL),
+ ('HE190003', N'Le Chi',     'MAE101', N'Mathematics',      3, 9.0);
 `;
 const LD = {
   en: '<p><b>A flat 1NF table</b> (tab <code>EnrollFlat.sql</code>): <code>EnrollFlat(studentID, studentName, courseID, courseTitle, credits, grade)</code>, key (studentID, courseID). FDs: studentID → studentName; courseID → courseTitle, credits; studentID, courseID → grade.</p>',
@@ -44,7 +44,7 @@ CREATE TABLE Enroll (
 INSERT INTO Student SELECT DISTINCT studentID, studentName FROM EnrollFlat;           -- the part that depends on studentID only
 INSERT INTO Course  SELECT DISTINCT courseID, courseTitle, credits FROM EnrollFlat;   -- the part that depends on courseID only
 INSERT INTO Enroll  SELECT studentID, courseID, grade FROM EnrollFlat;                -- what depends on the whole key`;
-const THEM = `INSERT INTO EnrollFlat VALUES ('HE190004', N'Phạm Dũng', 'PRF192', N'Programming', 3, 5.5), ('HE190002', N'Trần Bình', 'PRF192', N'Programming', 3, 7.5)`;
+const THEM = `INSERT INTO EnrollFlat VALUES ('HE190004', N'Pham Dung', 'PRF192', N'Programming', 3, 5.5), ('HE190002', N'Tran Binh', 'PRF192', N'Programming', 3, 7.5)`;
 
 const BAI = [
   ['R(A, B, C, D), F = {A → B, C → D}', 'ABCD', F('A->B', 'C->D')],
@@ -61,7 +61,7 @@ export default mod('dbi202-slide-dbi4-3', '4.C Reaching 2NF step by step, then t
     kn: ['partial dependency', '2NF decomposition', 'INSERT … SELECT DISTINCT'], tag: ['normalization', '2nf', 'decomposition'],
     en: '<p>studentName depends on studentID only and courseTitle, credits on courseID only — partial dependencies on the key (studentID, courseID). Apply the four steps of slides 39–50: create <code>Student(studentID CHAR(8) PK, studentName VARCHAR(40))</code>, <code>Course(courseID CHAR(6) PK, courseTitle VARCHAR(40), credits INT)</code>, <code>Enroll(studentID, courseID, grade DECIMAL(4,2))</code> with key (studentID, courseID) and two foreign keys, then fill them from EnrollFlat.</p>',
     vi: '<p>studentName chỉ phụ thuộc studentID, courseTitle và credits chỉ phụ thuộc courseID — phụ thuộc bộ phận vào khoá (studentID, courseID). Làm bốn bước của slide 39–50: tạo <code>Student(studentID CHAR(8) PK, studentName VARCHAR(40))</code>, <code>Course(courseID CHAR(6) PK, courseTitle VARCHAR(40), credits INT)</code>, <code>Enroll(studentID, courseID, grade DECIMAL(4,2))</code> có khoá (studentID, courseID) và hai khoá ngoại, rồi đổ dữ liệu từ EnrollFlat.</p>',
-    yc: [['Three CREATE TABLE then three INSERT … SELECT (parents first).', 'Ba CREATE TABLE rồi ba INSERT … SELECT (bảng cha trước).'], ['Each student and each course stored once.', 'Mỗi sinh viên, mỗi môn lưu một lần.'], ['VARCHAR instead of NVARCHAR here.', 'Ở đây dùng VARCHAR thay NVARCHAR.']],
+    yc: [['Three CREATE TABLE then three INSERT … SELECT (parents first).', 'Ba CREATE TABLE rồi ba INSERT … SELECT (bảng cha trước).'], ['Each student and each course stored once.', 'Mỗi sinh viên, mỗi môn lưu một lần.'], ['VARCHAR instead of NVARCHAR here (the in-browser grader flags NVARCHAR; the sample text has no Vietnamese diacritics, so VARCHAR keeps it intact on SQL Server too — with Vietnamese text use NVARCHAR).', 'Ở đây dùng VARCHAR thay NVARCHAR (máy chấm trình duyệt báo NVARCHAR; dữ liệu mẫu không có dấu tiếng Việt nên VARCHAR vẫn giữ nguyên trên SQL Server — có chữ Việt thì dùng NVARCHAR).']],
     giai: GIAI,
     kiem: [
       sau(['Student', 'Student'], 'SELECT studentID, studentName FROM Student'),

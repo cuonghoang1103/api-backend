@@ -35,7 +35,7 @@ FROM OrderLine l
 JOIN Orders   o ON o.order_id   = l.order_id
 JOIN Customer c ON c.cust_id    = o.cust_id
 JOIN Product  p ON p.product_id = l.product_id;`;
-const MOI = `INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P09', 2, 12000), (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P01', 1, 5000)`;
+const MOI = `INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C004', N'Pham Dung', N'Hue', 'P09', 2, 12000), (1005, '2026-09-08', 'C004', N'Pham Dung', N'Hue', 'P01', 1, 5000)`;
 const CS = ORDER1NF;
 const C1 = `${ORDER1NF}\n${Q1}`;
 const C12 = `${C1}\n${Q2}`;
@@ -83,7 +83,7 @@ export default doiDau({
             { ...sau('Q1 · rows', 'SELECT cust_id, cust_name, cust_city FROM Customer'), csdl: CS },
             { ...sau('Q1 · new customer in the data', 'SELECT cust_id FROM Customer'), csdl: CS, themCsdl: MOI, an: true },
           ],
-          saiMau: ["CREATE TABLE Customer (cust_id CHAR(4) NOT NULL PRIMARY KEY, cust_name VARCHAR(40) NOT NULL, cust_city VARCHAR(30) NOT NULL); INSERT INTO Customer VALUES ('C001', 'Nguyễn An', 'Hà Nội'), ('C002', 'Trần Bình', 'Đà Nẵng'), ('C003', 'Lê Chi', 'Cần Thơ');"],
+          saiMau: ["CREATE TABLE Customer (cust_id CHAR(4) NOT NULL PRIMARY KEY, cust_name VARCHAR(40) NOT NULL, cust_city VARCHAR(30) NOT NULL); INSERT INTO Customer VALUES ('C001', 'Nguyen An', 'Ha Noi'), ('C002', 'Tran Binh', 'Da Nang'), ('C003', 'Le Chi', 'Can Tho');"],
         },
         {
           ten: { en: 'Product (2NF: product_id → unit_price)', vi: 'Product (2NF: product_id → unit_price)' }, diem: 2,

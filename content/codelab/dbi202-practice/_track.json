@@ -214,10 +214,28 @@
       "description": "Luyện: Lab 4 — Order table: decompose to BCNF and prove nothing was lost"
     },
     {
+      "slug": "dbi202-slide-dbi7-1",
+      "name": "5.A Integrity constraints, strings, LIKE, dates & NULL (slides 1–14)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: LIKE with %: everybody whose name contains \"Thị\" · LIKE … ESCAPE: texts that contain \"20%\" literally · Dates: employees born in the 1990s · Three-valued logic: not known to be born before 1990 · Strings, NULL and the truth table"
+    },
+    {
+      "slug": "dbi202-slide-dbi7-2",
+      "name": "5.B SQL DDL: CREATE, ALTER, DROP & the FUHCompany diagram (slides 15–21)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Rebuild tblDependent from the FUHCompany diagram · ALTER TABLE: an e-mail column, filled, then a named UNIQUE · DROP: remove the project feature in a legal order · DDL on SQL Server: what works, what fails"
+    },
+    {
       "slug": "dbi202-sql-ddl",
       "name": "5.1 CREATE TABLE: keys and constraints",
       "level": "BEGINNER",
       "description": "CREATE TABLE với khoá chính, NOT NULL, UNIQUE, CHECK, DEFAULT, khoá ghép, khoá ngoại và ON DELETE CASCADE — chấm theo hành vi (câu hợp lệ chạy, câu vi phạm bị chặn)."
+    },
+    {
+      "slug": "dbi202-kieu-du-lieu",
+      "name": "5.2 Data types & the choices that hurt later",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Pick the right SQL Server type for every column · IDENTITY: seed, increment and gaps that are not bugs · NULL in arithmetic: total pay with an unknown bonus · Choose the type: five design decisions"
     },
     {
       "slug": "dbi202-rang-buoc-sql",
@@ -226,16 +244,40 @@
       "description": "ALTER TABLE trên FUHCompany có sẵn dữ liệu: thêm cột, thêm CHECK/UNIQUE/FOREIGN KEY có tên, thay một ràng buộc bằng DROP CONSTRAINT."
     },
     {
+      "slug": "dbi202-on-ch5",
+      "name": "5.4 Practice: SQL DDL like PE questions 1 and 2",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exercise 1 — a small sales database from a description · Exercise 3 — ALTER a table that already has rows · Exercise 4 — add business rules to FUHCompany · Exercise 5 — drop the whole FUHCompany in a legal order · Exercise 6 — NULL, LIKE and dates on FUHCompany · Exercise 7 — mini PE: student clubs, from ERD to tested tables"
+    },
+    {
       "slug": "dbi202-5-lab-ct-library",
       "name": "Lab 5 — Build the CT Library database (DDL + constraints)",
       "level": "ADVANCED",
       "description": "Lab 5 (bản in): dựng CSDL thư viện CT Library 5 câu × 2 điểm — bảng, ràng buộc cột/bảng, DEFAULT, ALTER, xoá đúng thứ tự khoá ngoại."
     },
     {
+      "slug": "dbi202-slide-dbi7-3",
+      "name": "6.A DML, SELECT, aliases, ORDER BY and joining two tables (slides 22–36)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: INSERT … SELECT: copy department 2 projects into a new location · Aliases and a computed column: yearly salary · Two tables, the slide way: join in WHERE · The logical execution order of a SELECT · DML statements: what do they do?"
+    },
+    {
       "slug": "dbi202-slide-dbi7-4",
       "name": "6.7 Set operations: UNION, INTERSECT, EXCEPT",
       "level": "INTERMEDIATE",
       "description": "Phép tập hợp UNION, INTERSECT, EXCEPT, UNION ALL (túi vs tập) trên FUHCompany."
+    },
+    {
+      "slug": "dbi202-slide-dbi7-5",
+      "name": "6.C Correlated subqueries, JOIN expressions, outer joins (slides 53–67)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Correlated EXISTS: projects with somebody working 30+ hours · CROSS JOIN + EXCEPT: department–city pairs with no office · FULL OUTER JOIN: departments and projects, nobody left out · Outer join trap: filter the right table in ON, not in WHERE · JOIN expressions in four questions"
+    },
+    {
+      "slug": "dbi202-slide-dbi7-6",
+      "name": "6.D Bags, aggregates, GROUP BY, NULLs and HAVING (slides 68–82)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Three COUNTs that disagree · GROUP BY two columns: headcount by department and sex · WHERE and HAVING together · NULL in aggregates: average hours with unrecorded entries · Grouping and NULL: five quick answers"
     },
     {
       "slug": "dbi202-select-join",
@@ -266,6 +308,12 @@
       "name": "6.5 INSERT, UPDATE, DELETE done safely",
       "level": "INTERMEDIATE",
       "description": "INSERT đủ/thiếu cột, UPDATE/DELETE có điều kiện, UPDATE theo truy vấn con, INSERT … SELECT — chấm bằng truy vấn kiểm sau lệnh."
+    },
+    {
+      "slug": "dbi202-on-ch6",
+      "name": "6.6 Practice: SQL queries, PE style",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exercise 2 — join four tables: projects in TP Hồ Chí Minh · Exercise 4 — division: on every project of department 1 · Exercise 5 — correlated: older than their own supervisor · Exercise 6 — GROUP BY + HAVING with a join: busy projects · Exercise 7b — top 2 earners of each department (window function) · Exercise 7a — the largest department(s) with TOP 1 WITH TIES · Exercise 8 — outer join that counts zeros: dependents per employee"
     },
     {
       "slug": "dbi202-6-lab-fuhcompany-reports",

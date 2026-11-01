@@ -24,8 +24,8 @@
         "3nf",
         "decomposition"
       ],
-      "problemHtml": "<p>deptName and location depend on empID only through deptID. Split EmpFlat into <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> and <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, then fill both from EmpFlat.</p>\n<p><b>Table</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, key empID. FDs: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Department first (Employee references it); each department once.</li>\n  <li>VARCHAR instead of NVARCHAR here.</li>\n</ul>",
-      "problemHtmlVi": "<p>deptName và location chỉ phụ thuộc empID thông qua deptID. Tách EmpFlat thành <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> và <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, rồi đổ dữ liệu từ EmpFlat.</p>\n<p><b>Bảng</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, khoá empID. FD: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Department trước (Employee tham chiếu nó); mỗi phòng một lần.</li>\n  <li>Ở đây dùng VARCHAR thay NVARCHAR.</li>\n</ul>",
+      "problemHtml": "<p>deptName and location depend on empID only through deptID. Split EmpFlat into <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> and <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, then fill both from EmpFlat.</p>\n<p><b>Table</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, key empID. FDs: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Department first (Employee references it); each department once.</li>\n  <li>VARCHAR instead of NVARCHAR here (the in-browser grader flags NVARCHAR; the sample text has no Vietnamese diacritics, so VARCHAR keeps it intact on SQL Server too — with Vietnamese text use NVARCHAR).</li>\n</ul>",
+      "problemHtmlVi": "<p>deptName và location chỉ phụ thuộc empID thông qua deptID. Tách EmpFlat thành <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> và <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, rồi đổ dữ liệu từ EmpFlat.</p>\n<p><b>Bảng</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, khoá empID. FD: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Department trước (Employee tham chiếu nó); mỗi phòng một lần.</li>\n  <li>Ở đây dùng VARCHAR thay NVARCHAR (máy chấm trình duyệt báo NVARCHAR; dữ liệu mẫu không có dấu tiếng Việt nên VARCHAR vẫn giữ nguyên trên SQL Server — có chữ Việt thì dùng NVARCHAR).</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -49,7 +49,7 @@
         {
           "name": "EmpFlat.sql",
           "language": "sql",
-          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
+          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Binh', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dung', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
         }
       ],
       "solutionCodeJson": [
@@ -61,7 +61,7 @@
         {
           "name": "EmpFlat.sql",
           "language": "sql",
-          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
+          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Binh', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dung', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
         }
       ],
       "solutionExplanationHtml": "<p>Both tables are now in BCNF: the only determinants are empID and deptID, each the key of its table. The decomposition is lossless because the common attribute deptID is the key of Department.</p>",
@@ -71,7 +71,7 @@
       "testsJson": {
         "loai": "sql",
         "phuongNgu": "ansi-sqlserver",
-        "csdl": "\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n",
+        "csdl": "\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Binh', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dung', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n",
         "tepChinh": "query.sql",
         "kiem": [
           {
@@ -121,7 +121,7 @@
                 ],
                 [
                   2,
-                  "Bình",
+                  "Binh",
                   "IT1"
                 ],
                 [
@@ -131,7 +131,7 @@
                 ],
                 [
                   4,
-                  "Dũng",
+                  "Dung",
                   "ACC"
                 ],
                 [
@@ -147,7 +147,7 @@
             "moTa": "Hidden: a new department appears|||Ẩn: có phòng mới",
             "kiemTra": "SELECT deptID, deptName FROM Department",
             "an": true,
-            "themCsdl": "INSERT INTO EmpFlat VALUES (6, N'Giang', 'HR1', N'Human Resources', N'Hoa Lac'), (7, N'Hà', 'ACC', N'Accounting', N'Cau Giay')",
+            "themCsdl": "INSERT INTO EmpFlat VALUES (6, N'Giang', 'HR1', N'Human Resources', N'Hoa Lac'), (7, N'Ha', 'ACC', N'Accounting', N'Cau Giay')",
             "mongDoi": {
               "cot": [
                 "deptID",

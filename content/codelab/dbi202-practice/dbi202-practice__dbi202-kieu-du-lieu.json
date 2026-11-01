@@ -1,0 +1,606 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-kieu-du-lieu",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-kieu-du-lieu"
+  },
+  "exercises": [
+    {
+      "title": "Pick the right SQL Server type for every column",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "NVARCHAR",
+        "DECIMAL",
+        "DATE / DATETIME2",
+        "BIT",
+        "IDENTITY",
+        "DEFAULT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "data-types",
+        "identity",
+        "ddl"
+      ],
+      "problemHtml": "<p>Create <code>Product</code> for a shop and insert one product. Choose the types as lesson 5.2 teaches:</p><ul><li><code>productID</code> — an integer numbered automatically from 1 (surrogate primary key);</li><li><code>sku</code> — an ASCII code up to 20 characters, required, unique;</li><li><code>productName</code> — Vietnamese text up to 100 characters, required;</li><li><code>price</code> — money in VND, no decimals, exact, &gt; 0;</li><li><code>releaseDate</code> — a calendar day, optional;</li><li><code>createdAt</code> — a timestamp to the second, required, defaulting to the current time;</li><li><code>isActive</code> — yes/no, required, defaulting to yes.</li></ul><p>Then insert <code>(sku CT-0001, Bút bi Thiên Long, 5000, released 2025-01-02)</code> giving ONLY those four columns.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> This exercise is about SQL Server's own types (NVARCHAR, DATETIME2, BIT, IDENTITY) and defaults like SYSDATETIME(); the in-browser grader runs PostgreSQL and would have to translate them — so it is checked on a real SQL Server with sys.columns. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 6 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (6 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 6 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Types: INT IDENTITY(1,1), VARCHAR(20), NVARCHAR(100), DECIMAL(12,0), DATE, DATETIME2(0), BIT.</li>\n  <li>Defaults: SYSDATETIME() for createdAt, 1 for isActive. Vietnamese literal with N''.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo bảng <code>Product</code> cho một cửa hàng và thêm một sản phẩm. Chọn kiểu như bài 5.2 dạy (danh sách cột ở bản tiếng Anh): khoá thay thế tự đánh số từ 1, mã ASCII ≤ 20 ký tự duy nhất, tên tiếng Việt ≤ 100 ký tự, giá VND không lẻ chính xác &gt; 0, ngày phát hành tuỳ chọn, mốc thời gian tạo tới giây mặc định là lúc hiện tại, cờ có/không mặc định là có.</p><p>Rồi thêm <code>(sku CT-0001, Bút bi Thiên Long, 5000, phát hành 2025-01-02)</code> CHỈ ghi bốn cột đó.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Bài này nói về chính các kiểu của SQL Server (NVARCHAR, DATETIME2, BIT, IDENTITY) và giá trị mặc định như SYSDATETIME(); máy chấm trình duyệt chạy PostgreSQL nên sẽ phải dịch chúng — vì vậy bài được kiểm trên SQL Server thật bằng sys.columns. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 6 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (6 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 6 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểu: INT IDENTITY(1,1), VARCHAR(20), NVARCHAR(100), DECIMAL(12,0), DATE, DATETIME2(0), BIT.</li>\n  <li>Mặc định: SYSDATETIME() cho createdAt, 1 cho isActive. Chuỗi tiếng Việt với N''.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. productID is INT IDENTITY(1,1) and the primary key\nPASS 2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)\nPASS 3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)\nPASS 4. Defaults work: createdAt is now, isActive is 1 (BIT)\nPASS 5. The row was inserted correctly (Vietnamese text intact, id 1)\nPASS 6. Rules: price 0 and a duplicate sku are rejected\nALL 6 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Text a person reads ⇒ NVARCHAR; a code ⇒ VARCHAR/CHAR; money ⇒ DECIMAL; a day ⇒ DATE; a moment ⇒ DATETIME2.|||Chữ người đọc ⇒ NVARCHAR; mã ⇒ VARCHAR/CHAR; tiền ⇒ DECIMAL; một ngày ⇒ DATE; một thời điểm ⇒ DATETIME2.",
+        "productID INT IDENTITY(1,1) PRIMARY KEY, then leave productID out of the INSERT.|||productID INT IDENTITY(1,1) PRIMARY KEY, rồi bỏ productID khỏi INSERT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Pick the right SQL Server type for every column\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE TABLE Product ( ... );\n-- INSERT INTO Product (sku, productName, price, releaseDate) VALUES (...);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Pick the right SQL Server type for every column\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — you create Product yourself)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Pick the right SQL Server type for every column\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 6 checks ──────────';\n\n-- CHECK 1: productID is INT IDENTITY(1,1) and the primary key\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''productID'' AND t.name = N''int'' AND c.is_identity = 1)\n  AND (SELECT CAST(seed_value AS INT) FROM sys.identity_columns WHERE object_id = OBJECT_ID(N''dbo.Product'')) = 1\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Product'') AND i.is_primary_key = 1 AND c.name = N''productID''), 1, 0);\nSET @info = N''expected productID INT IDENTITY(1,1) PRIMARY KEY'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. productID is INT IDENTITY(1,1) and the primary key | productID là INT IDENTITY(1,1) và là khoá chính'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. productID is INT IDENTITY(1,1) and the primary key | productID là INT IDENTITY(1,1) và là khoá chính', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''sku'' AND t.name = N''varchar'' AND c.max_length = 20 AND c.is_nullable = 0) AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''productName'' AND t.name = N''nvarchar'' AND c.max_length = 200 AND c.is_nullable = 0)\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Product'') AND i.is_unique = 1 AND i.is_primary_key = 0 AND c.name = N''sku''), 1, 0);\nSET @info = N''expected sku VARCHAR(20) NOT NULL UNIQUE and productName NVARCHAR(100) NOT NULL (Vietnamese text needs NVARCHAR)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100) | Kiểu chữ: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100) | Kiểu chữ: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''price'' AND t.name = N''decimal'' AND c.precision = 12 AND c.scale = 0) AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''releaseDate'' AND t.name = N''date'') AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''createdAt'' AND t.name = N''datetime2'' AND c.scale = 0), 1, 0);\nSET @info = N''price must be DECIMAL(12,0) (not FLOAT/MONEY), releaseDate DATE, createdAt DATETIME2(0)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0) | Tiền và ngày: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0) | Tiền và ngày: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Defaults work: createdAt is now, isActive is 1 (BIT)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @c DATETIME2(0), @a BIT;\nSELECT @c = createdAt, @a = isActive FROM dbo.Product WHERE sku = ''CT-0001'';\nSET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''isActive'' AND t.name = N''bit'') AND @a = 1 AND ABS(DATEDIFF(MINUTE, @c, SYSDATETIME())) < 60, 1, 0);\nSET @info = CONCAT(N''createdAt = '', COALESCE(CONVERT(NVARCHAR(30), @c, 120), N''NULL''), N'', isActive = '', COALESCE(CAST(@a AS NVARCHAR(5)), N''NULL''), N'' — expected now and 1'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Defaults work: createdAt is now, isActive is 1 (BIT) | Mặc định chạy: createdAt là lúc này, isActive là 1 (BIT)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Defaults work: createdAt is now, isActive is 1 (BIT) | Mặc định chạy: createdAt là lúc này, isActive là 1 (BIT)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: The row was inserted correctly (Vietnamese text intact, id 1)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Product WHERE productID = 1 AND sku = ''CT-0001'' AND productName = N''Bút bi Thiên Long'' COLLATE Latin1_General_BIN2 AND price = 5000 AND releaseDate = ''2025-01-02''), 1, 0);\nSET @info = (SELECT TOP (1) CONCAT(N''found: '', productID, N'' | '', productName, N'' | '', price) FROM dbo.Product);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. The row was inserted correctly (Vietnamese text intact, id 1) | Dòng được thêm đúng (chữ Việt nguyên vẹn, id 1)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. The row was inserted correctly (Vietnamese text intact, id 1) | Dòng được thêm đúng (chữ Việt nguyên vẹn, id 1)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 6: Rules: price 0 and a duplicate sku are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Product (sku, productName, price) VALUES (''CT-0002'', N''X'', 0); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (sku, productName, price) VALUES (''CT-0001'', N''Y'', 100); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 bad rows were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 6. Rules: price 0 and a duplicate sku are rejected | Luật: giá 0 và sku trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 6. Rules: price 0 and a duplicate sku are rejected | Luật: giá 0 và sku trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Pick the right SQL Server type for every column\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE Product (\n    productID   INT IDENTITY(1,1) NOT NULL PRIMARY KEY,         -- surrogate key, numbered by SQL Server\n    sku         VARCHAR(20)    NOT NULL UNIQUE,                 -- ASCII code: VARCHAR is enough\n    productName NVARCHAR(100)  NOT NULL,                        -- Vietnamese text: NVARCHAR\n    price       DECIMAL(12,0)  NOT NULL CHECK (price > 0),      -- money: exact DECIMAL, never FLOAT\n    releaseDate DATE           NULL,                            -- a day, no time\n    createdAt   DATETIME2(0)   NOT NULL DEFAULT SYSDATETIME(),  -- a timestamp\n    isActive    BIT            NOT NULL DEFAULT 1               -- a yes/no flag\n);\nINSERT INTO Product (sku, productName, price, releaseDate) VALUES ('CT-0001', N'Bút bi Thiên Long', 5000, '2025-01-02');\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Pick the right SQL Server type for every column\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — you create Product yourself)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Pick the right SQL Server type for every column\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 6 checks ──────────';\n\n-- CHECK 1: productID is INT IDENTITY(1,1) and the primary key\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''productID'' AND t.name = N''int'' AND c.is_identity = 1)\n  AND (SELECT CAST(seed_value AS INT) FROM sys.identity_columns WHERE object_id = OBJECT_ID(N''dbo.Product'')) = 1\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Product'') AND i.is_primary_key = 1 AND c.name = N''productID''), 1, 0);\nSET @info = N''expected productID INT IDENTITY(1,1) PRIMARY KEY'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. productID is INT IDENTITY(1,1) and the primary key | productID là INT IDENTITY(1,1) và là khoá chính'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. productID is INT IDENTITY(1,1) and the primary key | productID là INT IDENTITY(1,1) và là khoá chính', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''sku'' AND t.name = N''varchar'' AND c.max_length = 20 AND c.is_nullable = 0) AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''productName'' AND t.name = N''nvarchar'' AND c.max_length = 200 AND c.is_nullable = 0)\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Product'') AND i.is_unique = 1 AND i.is_primary_key = 0 AND c.name = N''sku''), 1, 0);\nSET @info = N''expected sku VARCHAR(20) NOT NULL UNIQUE and productName NVARCHAR(100) NOT NULL (Vietnamese text needs NVARCHAR)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100) | Kiểu chữ: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100) | Kiểu chữ: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''price'' AND t.name = N''decimal'' AND c.precision = 12 AND c.scale = 0) AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''releaseDate'' AND t.name = N''date'') AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''createdAt'' AND t.name = N''datetime2'' AND c.scale = 0), 1, 0);\nSET @info = N''price must be DECIMAL(12,0) (not FLOAT/MONEY), releaseDate DATE, createdAt DATETIME2(0)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0) | Tiền và ngày: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0) | Tiền và ngày: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Defaults work: createdAt is now, isActive is 1 (BIT)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @c DATETIME2(0), @a BIT;\nSELECT @c = createdAt, @a = isActive FROM dbo.Product WHERE sku = ''CT-0001'';\nSET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Product'') AND c.name = N''isActive'' AND t.name = N''bit'') AND @a = 1 AND ABS(DATEDIFF(MINUTE, @c, SYSDATETIME())) < 60, 1, 0);\nSET @info = CONCAT(N''createdAt = '', COALESCE(CONVERT(NVARCHAR(30), @c, 120), N''NULL''), N'', isActive = '', COALESCE(CAST(@a AS NVARCHAR(5)), N''NULL''), N'' — expected now and 1'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Defaults work: createdAt is now, isActive is 1 (BIT) | Mặc định chạy: createdAt là lúc này, isActive là 1 (BIT)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Defaults work: createdAt is now, isActive is 1 (BIT) | Mặc định chạy: createdAt là lúc này, isActive là 1 (BIT)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: The row was inserted correctly (Vietnamese text intact, id 1)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Product WHERE productID = 1 AND sku = ''CT-0001'' AND productName = N''Bút bi Thiên Long'' COLLATE Latin1_General_BIN2 AND price = 5000 AND releaseDate = ''2025-01-02''), 1, 0);\nSET @info = (SELECT TOP (1) CONCAT(N''found: '', productID, N'' | '', productName, N'' | '', price) FROM dbo.Product);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. The row was inserted correctly (Vietnamese text intact, id 1) | Dòng được thêm đúng (chữ Việt nguyên vẹn, id 1)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. The row was inserted correctly (Vietnamese text intact, id 1) | Dòng được thêm đúng (chữ Việt nguyên vẹn, id 1)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 6: Rules: price 0 and a duplicate sku are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Product (sku, productName, price) VALUES (''CT-0002'', N''X'', 0); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (sku, productName, price) VALUES (''CT-0001'', N''Y'', 100); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 bad rows were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 6. Rules: price 0 and a duplicate sku are rejected | Luật: giá 0 và sku trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 6. Rules: price 0 and a duplicate sku are rejected | Luật: giá 0 và sku trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NVARCHAR(100) shows as max_length 200 in sys.columns (2 bytes per character). The type is a constraint you cannot undo cheaply: changing it later means rewriting every row.</p>",
+      "solutionExplanationHtmlVi": "<p>NVARCHAR(100) hiện max_length 200 trong sys.columns (2 byte mỗi ký tự). Kiểu là một ràng buộc khó gỡ: đổi về sau là phải viết lại mọi dòng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "This exercise is about SQL Server's own types (NVARCHAR, DATETIME2, BIT, IDENTITY) and defaults like SYSDATETIME(); the in-browser grader runs PostgreSQL and would have to translate them — so it is checked on a real SQL Server with sys.columns.|||Bài này nói về chính các kiểu của SQL Server (NVARCHAR, DATETIME2, BIT, IDENTITY) và giá trị mặc định như SYSDATETIME(); máy chấm trình duyệt chạy PostgreSQL nên sẽ phải dịch chúng — vì vậy bài được kiểm trên SQL Server thật bằng sys.columns.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. productID is INT IDENTITY(1,1) and the primary key",
+            "2. Text types: sku VARCHAR(20) UNIQUE, productName NVARCHAR(100)",
+            "3. Money and dates: price DECIMAL(12,0), releaseDate DATE, createdAt DATETIME2(0)",
+            "4. Defaults work: createdAt is now, isActive is 1 (BIT)",
+            "5. The row was inserted correctly (Vietnamese text intact, id 1)",
+            "6. Rules: price 0 and a duplicate sku are rejected"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "price FLOAT — 0.1 + 0.2 = 0.30000000000000004; sums of money drift.|||price FLOAT — 0.1 + 0.2 = 0.30000000000000004; tổng tiền bị lệch."
+        },
+        {
+          "loi": "productName VARCHAR with a non-N literal — 'Bút bi Thiên Long' arrives with '?' instead of letters.|||productName VARCHAR với chuỗi không có N — 'Bút bi Thiên Long' tới nơi có '?' thay chữ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IDENTITY",
+          "vi": "cột tự đánh số"
+        },
+        {
+          "en": "DECIMAL(p,s)",
+          "vi": "số thập phân chính xác"
+        },
+        {
+          "en": "DATETIME2",
+          "vi": "ngày giờ (SQL Server)"
+        }
+      ]
+    },
+    {
+      "title": "IDENTITY: seed, increment and gaps that are not bugs",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "IDENTITY(seed, increment)",
+        "SCOPE_IDENTITY()",
+        "gaps after rollback"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "identity",
+        "ddl"
+      ],
+      "problemHtml": "<p>Invoices are numbered from 1000 in steps of 10. Create <code>Invoice(invoiceNo INT IDENTITY(1000,10) PRIMARY KEY, customer NVARCHAR(50) NOT NULL, amount DECIMAL(12,0) NOT NULL)</code>, then in <code>solution.sql</code>:</p><ol><li>insert an invoice for <i>An</i> (amount 500000);</li><li>start a transaction, insert an invoice for <i>Bình</i> (300000) and ROLL IT BACK;</li><li>insert an invoice for <i>Chi</i> (200000).</li></ol><p>Predict the numbers before you run — the self-check verifies them.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> IDENTITY and SCOPE_IDENTITY() are SQL Server features (PostgreSQL spells auto-numbering differently), and the \"gap after a rolled-back INSERT\" behaviour must be seen on the real engine. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Never write invoiceNo in an INSERT.</li>\n  <li>BEGIN TRAN … INSERT … ROLLBACK for Bình.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hoá đơn đánh số từ 1000, bước 10. Tạo <code>Invoice(invoiceNo INT IDENTITY(1000,10) PRIMARY KEY, customer NVARCHAR(50) NOT NULL, amount DECIMAL(12,0) NOT NULL)</code>, rồi trong <code>solution.sql</code>: (1) thêm hoá đơn của <i>An</i> (500000); (2) mở giao dịch, thêm hoá đơn của <i>Bình</i> (300000) rồi ROLLBACK; (3) thêm hoá đơn của <i>Chi</i> (200000).</p><p>Đoán trước các số rồi mới chạy — tệp tự kiểm sẽ kiểm chúng.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> IDENTITY và SCOPE_IDENTITY() là tính năng của SQL Server (PostgreSQL viết tự đánh số khác), và hành vi \"hụt số sau INSERT bị huỷ\" phải xem trên máy thật. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ ghi invoiceNo trong INSERT.</li>\n  <li>BEGIN TRAN … INSERT … ROLLBACK cho Bình.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. invoiceNo is IDENTITY(1000, 10)\nPASS 2. Exactly two invoices: An and Chi (Bình was rolled back)\nPASS 3. An got 1000 and Chi got 1020 — the gap 1010 is normal\nPASS 4. An explicit invoiceNo is rejected without IDENTITY_INSERT\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "The rolled-back INSERT still consumed its number — IDENTITY is not transactional.|||INSERT bị huỷ vẫn đã tiêu một số — IDENTITY không thuộc giao dịch.",
+        "After the script: SELECT * FROM Invoice shows 1000 and 1020.|||Sau script: SELECT * FROM Invoice cho 1000 và 1020."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: IDENTITY: seed, increment and gaps that are not bugs\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE TABLE Invoice ( ... IDENTITY(1000,10) ... );\n-- INSERT ... An\n-- BEGIN TRAN; INSERT ... Bình; ROLLBACK;\n-- INSERT ... Chi\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: IDENTITY: seed, increment and gaps that are not bugs\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: IDENTITY: seed, increment and gaps that are not bugs\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: invoiceNo is IDENTITY(1000, 10)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = OBJECT_ID(N''dbo.Invoice'') AND name = N''invoiceNo'' AND CAST(seed_value AS INT) = 1000 AND CAST(increment_value AS INT) = 10), 1, 0);\nSET @info = N''expected invoiceNo INT IDENTITY(1000,10)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. invoiceNo is IDENTITY(1000, 10) | invoiceNo là IDENTITY(1000, 10)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. invoiceNo is IDENTITY(1000, 10) | invoiceNo là IDENTITY(1000, 10)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Exactly two invoices: An and Chi (Bình was rolled back)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.Invoice) = 2 AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''An'') AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Chi'') AND NOT EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Bình''), 1, 0);\nSET @info = CONCAT(N''rows: '', (SELECT COUNT(*) FROM dbo.Invoice));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Exactly two invoices: An and Chi (Bình was rolled back) | Đúng hai hoá đơn: An và Chi (Bình đã bị huỷ)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Exactly two invoices: An and Chi (Bình was rolled back) | Đúng hai hoá đơn: An và Chi (Bình đã bị huỷ)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An got 1000 and Chi got 1020 — the gap 1010 is normal\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''An'' AND invoiceNo = 1000) AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Chi'' AND invoiceNo = 1020), 1, 0);\nSET @info = (SELECT STRING_AGG(CONCAT(customer, N''='', invoiceNo), N'', '') FROM dbo.Invoice);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An got 1000 and Chi got 1020 — the gap 1010 is normal | An nhận 1000 và Chi nhận 1020 — khoảng hụt 1010 là bình thường'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An got 1000 and Chi got 1020 — the gap 1010 is normal | An nhận 1000 và Chi nhận 1020 — khoảng hụt 1010 là bình thường', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: An explicit invoiceNo is rejected without IDENTITY_INSERT\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Invoice (invoiceNo, customer, amount) VALUES (5000, N''X'', 1); SET @info = N''the explicit id was accepted — is invoiceNo really an IDENTITY column?''; END TRY\nBEGIN CATCH SET @ok = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. An explicit invoiceNo is rejected without IDENTITY_INSERT | Ghi tay invoiceNo bị từ chối khi chưa bật IDENTITY_INSERT'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. An explicit invoiceNo is rejected without IDENTITY_INSERT | Ghi tay invoiceNo bị từ chối khi chưa bật IDENTITY_INSERT', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: IDENTITY: seed, increment and gaps that are not bugs\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE Invoice (\n    invoiceNo INT IDENTITY(1000,10) NOT NULL PRIMARY KEY,\n    customer  NVARCHAR(50)  NOT NULL,\n    amount    DECIMAL(12,0) NOT NULL\n);\nGO\nINSERT INTO Invoice (customer, amount) VALUES (N'An', 500000);       -- 1000\nBEGIN TRAN;\n    INSERT INTO Invoice (customer, amount) VALUES (N'Bình', 300000); -- takes 1010 …\nROLLBACK;                                                            -- … and 1010 is gone for good\nINSERT INTO Invoice (customer, amount) VALUES (N'Chi', 200000);      -- 1020, not 1010\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: IDENTITY: seed, increment and gaps that are not bugs\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: IDENTITY: seed, increment and gaps that are not bugs\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: invoiceNo is IDENTITY(1000, 10)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.identity_columns WHERE object_id = OBJECT_ID(N''dbo.Invoice'') AND name = N''invoiceNo'' AND CAST(seed_value AS INT) = 1000 AND CAST(increment_value AS INT) = 10), 1, 0);\nSET @info = N''expected invoiceNo INT IDENTITY(1000,10)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. invoiceNo is IDENTITY(1000, 10) | invoiceNo là IDENTITY(1000, 10)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. invoiceNo is IDENTITY(1000, 10) | invoiceNo là IDENTITY(1000, 10)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Exactly two invoices: An and Chi (Bình was rolled back)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM dbo.Invoice) = 2 AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''An'') AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Chi'') AND NOT EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Bình''), 1, 0);\nSET @info = CONCAT(N''rows: '', (SELECT COUNT(*) FROM dbo.Invoice));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Exactly two invoices: An and Chi (Bình was rolled back) | Đúng hai hoá đơn: An và Chi (Bình đã bị huỷ)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Exactly two invoices: An and Chi (Bình was rolled back) | Đúng hai hoá đơn: An và Chi (Bình đã bị huỷ)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An got 1000 and Chi got 1020 — the gap 1010 is normal\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''An'' AND invoiceNo = 1000) AND EXISTS (SELECT 1 FROM dbo.Invoice WHERE customer = N''Chi'' AND invoiceNo = 1020), 1, 0);\nSET @info = (SELECT STRING_AGG(CONCAT(customer, N''='', invoiceNo), N'', '') FROM dbo.Invoice);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An got 1000 and Chi got 1020 — the gap 1010 is normal | An nhận 1000 và Chi nhận 1020 — khoảng hụt 1010 là bình thường'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An got 1000 and Chi got 1020 — the gap 1010 is normal | An nhận 1000 và Chi nhận 1020 — khoảng hụt 1010 là bình thường', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: An explicit invoiceNo is rejected without IDENTITY_INSERT\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Invoice (invoiceNo, customer, amount) VALUES (5000, N''X'', 1); SET @info = N''the explicit id was accepted — is invoiceNo really an IDENTITY column?''; END TRY\nBEGIN CATCH SET @ok = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. An explicit invoiceNo is rejected without IDENTITY_INSERT | Ghi tay invoiceNo bị từ chối khi chưa bật IDENTITY_INSERT'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. An explicit invoiceNo is rejected without IDENTITY_INSERT | Ghi tay invoiceNo bị từ chối khi chưa bật IDENTITY_INSERT', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Never treat IDENTITY values as a count or as a gap-free public sequence. Read the value you just inserted with <code>SCOPE_IDENTITY()</code> (not @@IDENTITY, which a trigger can change).</p>",
+      "solutionExplanationHtmlVi": "<p>Đừng coi giá trị IDENTITY là số đếm hay dãy công khai không hụt. Đọc giá trị vừa chèn bằng <code>SCOPE_IDENTITY()</code> (không dùng @@IDENTITY, vì trigger có thể làm nó đổi).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "IDENTITY and SCOPE_IDENTITY() are SQL Server features (PostgreSQL spells auto-numbering differently), and the \"gap after a rolled-back INSERT\" behaviour must be seen on the real engine.|||IDENTITY và SCOPE_IDENTITY() là tính năng của SQL Server (PostgreSQL viết tự đánh số khác), và hành vi \"hụt số sau INSERT bị huỷ\" phải xem trên máy thật.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. invoiceNo is IDENTITY(1000, 10)",
+            "2. Exactly two invoices: An and Chi (Bình was rolled back)",
+            "3. An got 1000 and Chi got 1020 — the gap 1010 is normal",
+            "4. An explicit invoiceNo is rejected without IDENTITY_INSERT"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting Chi to get 1010 — gaps after rollbacks and failed inserts are by design.|||Tưởng Chi nhận 1010 — hụt số sau rollback và INSERT lỗi là thiết kế có chủ ý."
+        },
+        {
+          "loi": "Using MAX(invoiceNo) + 10 as \"the next number\" — wrong under concurrency and after gaps.|||Dùng MAX(invoiceNo) + 10 làm \"số tiếp theo\" — sai khi đồng thời và khi có khoảng hụt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IDENTITY(seed, increment)",
+          "vi": "tự đánh số (giá trị đầu, bước)"
+        },
+        {
+          "en": "SCOPE_IDENTITY()",
+          "vi": "số vừa cấp trong phạm vi hiện tại"
+        }
+      ]
+    },
+    {
+      "title": "NULL in arithmetic: total pay with an unknown bonus",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "NULL arithmetic",
+        "COALESCE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "null",
+        "coalesce"
+      ],
+      "problemHtml": "<p>For every employee compute <code>totalPay = salary + bonus</code>, treating a bonus that is not decided yet as 0.</p>\n<p><b>Table</b> (tab <code>Payroll.sql</code>): <code>Payroll(empID, empName, salary, bonus)</code> — bonus is NULL when not decided yet.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>empID, totalPay</code>.</li>\n  <li>Use COALESCE (ISNULL is SQL Server only). Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi nhân viên tính <code>totalPay = salary + bonus</code>, coi thưởng chưa quyết là 0.</p>\n<p><b>Bảng</b> (tab <code>Payroll.sql</code>): <code>Payroll(empID, empName, salary, bonus)</code> — bonus là NULL khi chưa quyết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>empID, totalPay</code>.</li>\n  <li>Dùng COALESCE (ISNULL chỉ có ở SQL Server). Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "empID | totalPay\n------+---------\n1     | 17000000\n2     | 12000000\n3     | 18000000\n4     | 9000000 ",
+          "explanation": "Expected result of check \"Total pay per employee\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Tổng lương mỗi người\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Any arithmetic with NULL gives NULL.|||Mọi phép tính với NULL đều ra NULL.",
+        "COALESCE(bonus, 0) returns 0 when bonus is NULL.|||COALESCE(bonus, 0) trả 0 khi bonus là NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Payroll.sql",
+          "language": "sql",
+          "code": "-- Payroll.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Payroll.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Payroll (empID INT NOT NULL PRIMARY KEY, empName NVARCHAR(40) NOT NULL, salary DECIMAL(12,0) NOT NULL, bonus DECIMAL(12,0) NULL);\nINSERT INTO Payroll VALUES (1, N'An', 15000000, 2000000), (2, N'Bình', 12000000, NULL), (3, N'Chi', 18000000, 0), (4, N'Dũng', 9000000, NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT empID, salary + COALESCE(bonus, 0) AS totalPay    -- 5 + NULL = NULL, so replace NULL first\nFROM Payroll;\n"
+        },
+        {
+          "name": "Payroll.sql",
+          "language": "sql",
+          "code": "-- Payroll.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Payroll.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Payroll (empID INT NOT NULL PRIMARY KEY, empName NVARCHAR(40) NOT NULL, salary DECIMAL(12,0) NOT NULL, bonus DECIMAL(12,0) NULL);\nINSERT INTO Payroll VALUES (1, N'An', 15000000, 2000000), (2, N'Bình', 12000000, NULL), (3, N'Chi', 18000000, 0), (4, N'Dũng', 9000000, NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NULL is \"unknown\", not 0 — the database refuses to guess. You decide the business meaning (here: no bonus yet = 0) with COALESCE.</p>",
+      "solutionExplanationHtmlVi": "<p>NULL là \"chưa biết\", không phải 0 — CSDL không đoán thay bạn. Bạn quyết ý nghĩa nghiệp vụ (ở đây: chưa có thưởng = 0) bằng COALESCE.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Payroll (empID INT NOT NULL PRIMARY KEY, empName NVARCHAR(40) NOT NULL, salary DECIMAL(12,0) NOT NULL, bonus DECIMAL(12,0) NULL);\nINSERT INTO Payroll VALUES (1, N'An', 15000000, 2000000), (2, N'Bình', 12000000, NULL), (3, N'Chi', 18000000, 0), (4, N'Dũng', 9000000, NULL);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Total pay per employee|||Tổng lương mỗi người",
+            "mongDoi": {
+              "cot": [
+                "empID",
+                "totalPay"
+              ],
+              "hang": [
+                [
+                  1,
+                  17000000
+                ],
+                [
+                  2,
+                  12000000
+                ],
+                [
+                  3,
+                  18000000
+                ],
+                [
+                  4,
+                  9000000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another undecided bonus|||Thêm một thưởng chưa quyết",
+            "an": true,
+            "themCsdl": "INSERT INTO Payroll VALUES (5, N'Em', 11000000, NULL)",
+            "mongDoi": {
+              "cot": [
+                "empID",
+                "totalPay"
+              ],
+              "hang": [
+                [
+                  1,
+                  17000000
+                ],
+                [
+                  2,
+                  12000000
+                ],
+                [
+                  3,
+                  18000000
+                ],
+                [
+                  4,
+                  9000000
+                ],
+                [
+                  5,
+                  11000000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses COALESCE|||Dùng COALESCE",
+            "khop": "\\bCOALESCE\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "salary + bonus — Bình and Dũng get a NULL total.|||salary + bonus — Bình và Dũng có tổng NULL."
+        },
+        {
+          "loi": "Filtering the NULL bonuses away — those employees disappear.|||Lọc bỏ thưởng NULL — các nhân viên đó biến mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COALESCE",
+          "vi": "giá trị thay NULL"
+        }
+      ]
+    },
+    {
+      "title": "Choose the type: five design decisions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "CHAR vs VARCHAR",
+        "FLOAT vs DECIMAL",
+        "DATE in VARCHAR",
+        "surrogate vs natural key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "data-types"
+      ],
+      "problemHtml": "<p>Lesson 5.2 in five decisions.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 5.2 trong năm quyết định.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the value IS: a code, money, a day, a moment, a name?|||Hỏi giá trị LÀ gì: mã, tiền, một ngày, một thời điểm, một cái tên?",
+        "Narrow types = more rows per 8 KB page = fewer reads.|||Kiểu hẹp = nhiều dòng hơn mỗi trang 8 KB = ít lần đọc hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose the type: five design decisions\n\nAnswer in the answer panel (no code needed).\n\n1. A province code that is always 2 letters (HN, SG, DN):Mã tỉnh luôn đúng 2 chữ (HN, SG, DN):\n2. A bank balance in VND with cents of accuracy needed for audits:Số dư ngân hàng (VND) cần chính xác tuyệt đối để kiểm toán:\n3. Storing dates as VARCHAR like '10/01/2026' causes…Lưu ngày dạng VARCHAR như '10/01/2026' gây ra…\n4. Common practice for a Student table:Cách làm phổ biến cho bảng Student:\n5. An NVARCHAR(50) column uses at most how many bytes of data?Cột NVARCHAR(50) dùng tối đa bao nhiêu byte dữ liệu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Choose the type: five design decisions — answer key\n\n1. A province code that is always 2 letters (HN, SG, DN):Mã tỉnh luôn đúng 2 chữ (HN, SG, DN):\n   Answer: a) CHAR(2)\n   Fixed-length ASCII code ⇒ CHAR(n).VI: Mã ASCII độ dài cố định ⇒ CHAR(n).\n\n2. A bank balance in VND with cents of accuracy needed for audits:Số dư ngân hàng (VND) cần chính xác tuyệt đối để kiểm toán:\n   Answer: c) DECIMAL(18,2)\n   Binary floats cannot store 0.1 exactly — never for money.VI: Số thực nhị phân không lưu đúng 0.1 — không bao giờ dùng cho tiền.\n\n3. Storing dates as VARCHAR like '10/01/2026' causes…Lưu ngày dạng VARCHAR như '10/01/2026' gây ra…\n   Answer: b) alphabetical sorting and locale-dependent meaning\n   '10/01' < '2/01' as text; and 10/01 is October or January depending on the locale.VI: '10/01' < '2/01' khi là chữ; và 10/01 là tháng 10 hay tháng 1 tuỳ ngôn ngữ.\n\n4. Common practice for a Student table:Cách làm phổ biến cho bảng Student:\n   Answer: d) surrogate INT IDENTITY primary key + UNIQUE on the student code\n   Surrogate keys are narrow and never change; the natural key stays protected by UNIQUE.VI: Khoá thay thế hẹp và không đổi; khoá tự nhiên vẫn được UNIQUE bảo vệ.\n\n5. An NVARCHAR(50) column uses at most how many bytes of data?Cột NVARCHAR(50) dùng tối đa bao nhiêu byte dữ liệu?\n   Answer: c) 100\n   2 bytes per character (UTF-16) ⇒ sys.columns shows max_length 100.VI: 2 byte mỗi ký tự (UTF-16) ⇒ sys.columns hiện max_length 100.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> CHAR(2)</p><p>Fixed-length ASCII code ⇒ CHAR(n).</p><p><i>VI: Mã ASCII độ dài cố định ⇒ CHAR(n).</i></p></li><li><p><b>c)</b> DECIMAL(18,2)</p><p>Binary floats cannot store 0.1 exactly — never for money.</p><p><i>VI: Số thực nhị phân không lưu đúng 0.1 — không bao giờ dùng cho tiền.</i></p></li><li><p><b>b)</b> alphabetical sorting and locale-dependent meaning</p><p>'10/01' < '2/01' as text; and 10/01 is October or January depending on the locale.</p><p><i>VI: '10/01' < '2/01' khi là chữ; và 10/01 là tháng 10 hay tháng 1 tuỳ ngôn ngữ.</i></p></li><li><p><b>d)</b> surrogate INT IDENTITY primary key + UNIQUE on the student code</p><p>Surrogate keys are narrow and never change; the natural key stays protected by UNIQUE.</p><p><i>VI: Khoá thay thế hẹp và không đổi; khoá tự nhiên vẫn được UNIQUE bảo vệ.</i></p></li><li><p><b>c)</b> 100</p><p>2 bytes per character (UTF-16) ⇒ sys.columns shows max_length 100.</p><p><i>VI: 2 byte mỗi ký tự (UTF-16) ⇒ sys.columns hiện max_length 100.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A province code that is always 2 letters (HN, SG, DN):</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã tỉnh luôn đúng 2 chữ (HN, SG, DN):</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CHAR(2)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "FLOAT"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NVARCHAR(MAX)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DATETIME"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fixed-length ASCII code ⇒ CHAR(n).</p><p><i>VI: Mã ASCII độ dài cố định ⇒ CHAR(n).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A bank balance in VND with cents of accuracy needed for audits:</p><p style=\"opacity:.75;font-size:.92em\"><i>Số dư ngân hàng (VND) cần chính xác tuyệt đối để kiểm toán:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "FLOAT"
+              },
+              {
+                "ma": "b",
+                "noiDung": "REAL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DECIMAL(18,2)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "VARCHAR(20)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Binary floats cannot store 0.1 exactly — never for money.</p><p><i>VI: Số thực nhị phân không lưu đúng 0.1 — không bao giờ dùng cho tiền.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Storing dates as VARCHAR like '10/01/2026' causes…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lưu ngày dạng VARCHAR như '10/01/2026' gây ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing, it is the same as DATE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "alphabetical sorting and locale-dependent meaning"
+              },
+              {
+                "ma": "c",
+                "noiDung": "faster range queries"
+              },
+              {
+                "ma": "d",
+                "noiDung": "automatic time zones"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>'10/01' < '2/01' as text; and 10/01 is October or January depending on the locale.</p><p><i>VI: '10/01' < '2/01' khi là chữ; và 10/01 là tháng 10 hay tháng 1 tuỳ ngôn ngữ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Common practice for a Student table:</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách làm phổ biến cho bảng Student:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no key at all, because every row is unique anyway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the full name as primary key, since names rarely repeat"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a FLOAT key so new ids can be inserted in between"
+              },
+              {
+                "ma": "d",
+                "noiDung": "surrogate INT IDENTITY primary key + UNIQUE on the student code"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Surrogate keys are narrow and never change; the natural key stays protected by UNIQUE.</p><p><i>VI: Khoá thay thế hẹp và không đổi; khoá tự nhiên vẫn được UNIQUE bảo vệ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An NVARCHAR(50) column uses at most how many bytes of data?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột NVARCHAR(50) dùng tối đa bao nhiêu byte dữ liệu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "25"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "50"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2 bytes per character (UTF-16) ⇒ sys.columns shows max_length 100.</p><p><i>VI: 2 byte mỗi ký tự (UTF-16) ⇒ sys.columns hiện max_length 100.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "FLOAT for money.|||FLOAT cho tiền."
+        },
+        {
+          "loi": "NVARCHAR(MAX) \"just in case\" — cannot be indexed normally and wastes pages.|||NVARCHAR(MAX) \"cho chắc\" — không đánh chỉ mục bình thường được và tốn trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "surrogate key",
+          "vi": "khoá thay thế"
+        },
+        {
+          "en": "natural key",
+          "vi": "khoá tự nhiên"
+        }
+      ]
+    }
+  ]
+}

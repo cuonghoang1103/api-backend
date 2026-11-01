@@ -1,0 +1,862 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-on-ch5",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch5"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — a small sales database from a description",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "IDENTITY",
+        "named DEFAULT",
+        "CHECK IN",
+        "filtered unique index",
+        "M:N table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "ddl",
+        "pe-q1",
+        "identity"
+      ],
+      "problemHtml": "<p>A shop stores its <b>customers</b> (code of exactly 5 characters, full name compulsory, e-mail — optional but never shared by two customers, city — Hà Nội if not given), its <b>products</b> (number generated automatically, name compulsory and unique, price greater than 0, stock never negative and 0 by default), its <b>orders</b> (number generated automatically, the customer who ordered — compulsory, order date — today by default, status NEW / PAID / CANCELLED, NEW by default) and the <b>order lines</b> (which product, in which order, quantity greater than 0, unit price). A product appears at most once in an order.</p><p>Tables: <code>Customer(customerID, fullName, email, city)</code>, <code>Product(productID, productName, price, stock)</code>, <code>Orders(orderID, customerID, orderDate, status)</code>, <code>OrderLine(orderID, productID, quantity, unitPrice)</code>.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The description needs SQL Server features — IDENTITY, DEFAULT CAST(GETDATE() AS DATE), NVARCHAR and a filtered unique index — and the behaviour of UNIQUE with NULLs is exactly where SQL Server differs from the browser engine. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 5 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (5 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 5 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>IDENTITY(1,1) for productID and orderID; named DEFAULTs; CHECK … IN for status.</li>\n  <li>\"Optional but never shared\": two customers WITHOUT e-mail must be allowed — think about what a UNIQUE constraint does with NULLs on SQL Server.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một cửa hàng lưu <b>khách hàng</b> (mã đúng 5 ký tự, họ tên bắt buộc, e-mail — không bắt buộc nhưng không hai khách dùng chung, thành phố — Hà Nội nếu không ghi), <b>sản phẩm</b> (số tự sinh, tên bắt buộc và không trùng, giá &gt; 0, tồn kho không âm mặc định 0), <b>đơn hàng</b> (số tự sinh, khách đặt — bắt buộc, ngày đặt — mặc định hôm nay, trạng thái NEW / PAID / CANCELLED, mặc định NEW) và <b>dòng đơn</b> (sản phẩm nào, đơn nào, số lượng &gt; 0, đơn giá). Một sản phẩm xuất hiện tối đa một lần trong một đơn.</p><p>Bảng như bản tiếng Anh.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Đoạn mô tả cần tính năng của SQL Server — IDENTITY, DEFAULT CAST(GETDATE() AS DATE), NVARCHAR và chỉ mục duy nhất có lọc — và cách UNIQUE xử lý NULL chính là chỗ SQL Server khác máy chấm trình duyệt. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 5 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (5 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 5 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>IDENTITY(1,1) cho productID và orderID; DEFAULT có tên; CHECK … IN cho status.</li>\n  <li>\"Không bắt buộc nhưng không dùng chung\": phải cho phép hai khách KHÔNG có e-mail — nghĩ xem ràng buộc UNIQUE xử lý NULL thế nào trên SQL Server.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated\nPASS 2. Two customers without e-mail are allowed; a shared e-mail is rejected\nPASS 3. Product rules: price 0, negative stock and a duplicate name are rejected\nPASS 4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected\nPASS 5. customerID is exactly CHAR(5); productID and orderID are IDENTITY\nALL 5 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Read the paragraph phrase by phrase: \"generated automatically\" ⇒ IDENTITY, \"by default\" ⇒ DEFAULT, \"never negative\" ⇒ CHECK, \"at most once\" ⇒ a key.|||Đọc từng cụm: \"tự sinh\" ⇒ IDENTITY, \"mặc định\" ⇒ DEFAULT, \"không âm\" ⇒ CHECK, \"tối đa một lần\" ⇒ khoá.",
+        "Optional + unique on SQL Server: CREATE UNIQUE INDEX … ON Customer (email) WHERE email IS NOT NULL.|||Không bắt buộc + duy nhất trên SQL Server: CREATE UNIQUE INDEX … ON Customer (email) WHERE email IS NOT NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — a small sales database from a description\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE TABLE Customer ( ... );\n-- CREATE TABLE Product  ( ... );\n-- CREATE TABLE Orders   ( ... );\n-- CREATE TABLE OrderLine ( ... );\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — a small sales database from a description\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — you create the four tables yourself)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — a small sales database from a description\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An'');\nINSERT INTO dbo.Product (productName, price) VALUES (N''Bút bi'', 5000);\nINSERT INTO dbo.Orders (customerID) VALUES (''KH001'');\nSET @ok = IIF((SELECT city FROM dbo.Customer WHERE customerID = ''KH001'') = N''Hà Nội''\n  AND (SELECT stock FROM dbo.Product WHERE productName = N''Bút bi'') = 0\n  AND EXISTS (SELECT 1 FROM dbo.Orders WHERE customerID = ''KH001'' AND status = ''NEW'' AND orderDate = CAST(GETDATE() AS DATE) AND orderID IS NOT NULL), 1, 0);\nSET @info = N''a row inserted with only the compulsory columns must get the defaults'';\nROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated | Mặc định: city Hà Nội, stock 0, status NEW, orderDate hôm nay; id tự sinh'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated | Mặc định: city Hà Nội, stock 0, status NEW, orderDate hôm nay; id tự sinh', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Two customers without e-mail are allowed; a shared e-mail is rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @hai BIT = 0, @trung BIT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An''), (''KH002'', N''Bình''); SET @hai = 1; END TRY BEGIN CATCH END CATCH;\nBEGIN TRY INSERT INTO dbo.Customer (customerID, fullName, email) VALUES (''KH003'', N''Chi'', ''x@a.vn''), (''KH004'', N''Dũng'', ''x@a.vn''); END TRY BEGIN CATCH SET @trung = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@hai = 1 AND @trung = 1, 1, 0);\nSET @info = CONCAT(N''two NULL e-mails accepted: '', @hai, N'' · duplicate e-mail rejected: '', @trung, N'' — a UNIQUE constraint allows only one NULL on SQL Server'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Two customers without e-mail are allowed; a shared e-mail is rejected | Hai khách không e-mail được phép; e-mail dùng chung bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Two customers without e-mail are allowed; a shared e-mail is rejected | Hai khách không e-mail được phép; e-mail dùng chung bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Product rules: price 0, negative stock and a duplicate name are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Product (productName, price) VALUES (N''A'', 0); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (productName, price, stock) VALUES (N''B'', 10, -1); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (productName, price) VALUES (N''C'', 10), (N''C'', 20); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 3, 1, 0); SET @info = CONCAT(@n, N'' of 3 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Product rules: price 0, negative stock and a duplicate name are rejected | Luật sản phẩm: giá 0, tồn âm, tên trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Product rules: price 0, negative stock and a duplicate name are rejected | Luật sản phẩm: giá 0, tồn âm, tên trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An'');\nINSERT INTO dbo.Product (productName, price) VALUES (N''Bút'', 5000);\nINSERT INTO dbo.Orders (customerID) VALUES (''KH001'');\nDECLARE @o INT = SCOPE_IDENTITY(), @p INT = (SELECT MAX(productID) FROM dbo.Product);\nDECLARE @n INT = 0;\nBEGIN TRY INSERT INTO dbo.Orders (customerID) VALUES (''KH999''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Orders (customerID, status) VALUES (''KH001'', ''SHIPPED''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.OrderLine VALUES (@o, @p, 0, 5000); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.OrderLine VALUES (@o, @p, 1, 5000), (@o, @p, 2, 5000); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 4, 1, 0); SET @info = CONCAT(@n, N'' of 4 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected | Luật đơn: khách lạ, trạng thái SHIPPED, số lượng 0, trùng sản phẩm bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected | Luật đơn: khách lạ, trạng thái SHIPPED, số lượng 0, trùng sản phẩm bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: customerID is exactly CHAR(5); productID and orderID are IDENTITY\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Customer'') AND c.name = N''customerID'' AND t.name = N''char'' AND c.max_length = 5)\n  AND COLUMNPROPERTY(OBJECT_ID(N''dbo.Product''), ''productID'', ''IsIdentity'') = 1\n  AND COLUMNPROPERTY(OBJECT_ID(N''dbo.Orders''), ''orderID'', ''IsIdentity'') = 1, 1, 0);\nSET @info = N''expected customerID CHAR(5), productID and orderID IDENTITY'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. customerID is exactly CHAR(5); productID and orderID are IDENTITY | customerID đúng CHAR(5); productID và orderID là IDENTITY'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. customerID is exactly CHAR(5); productID and orderID are IDENTITY | customerID đúng CHAR(5); productID và orderID là IDENTITY', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 1 — a small sales database from a description\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE Customer (\n    customerID CHAR(5)       NOT NULL,\n    fullName   NVARCHAR(50)  NOT NULL,\n    email      VARCHAR(100)  NULL,\n    city       NVARCHAR(30)  NOT NULL CONSTRAINT df_customer_city DEFAULT N'Hà Nội',\n    CONSTRAINT pk_customer PRIMARY KEY (customerID)\n);\n-- \"optional but never shared\": a UNIQUE constraint would allow only ONE NULL on SQL Server ⇒ filtered unique index\nCREATE UNIQUE INDEX uq_customer_email ON Customer (email) WHERE email IS NOT NULL;\nCREATE TABLE Product (\n    productID   INT IDENTITY(1,1) NOT NULL,\n    productName NVARCHAR(100) NOT NULL,\n    price       DECIMAL(12,0) NOT NULL,\n    stock       INT           NOT NULL CONSTRAINT df_product_stock DEFAULT 0,\n    CONSTRAINT pk_product       PRIMARY KEY (productID),\n    CONSTRAINT uq_product_name  UNIQUE (productName),\n    CONSTRAINT ck_product_price CHECK (price > 0),\n    CONSTRAINT ck_product_stock CHECK (stock >= 0)\n);\nCREATE TABLE Orders (\n    orderID    INT IDENTITY(1,1) NOT NULL,\n    customerID CHAR(5)     NOT NULL,\n    orderDate  DATE        NOT NULL CONSTRAINT df_orders_date DEFAULT CAST(GETDATE() AS DATE),\n    status     VARCHAR(10) NOT NULL CONSTRAINT df_orders_status DEFAULT 'NEW',\n    CONSTRAINT pk_orders          PRIMARY KEY (orderID),\n    CONSTRAINT fk_orders_customer FOREIGN KEY (customerID) REFERENCES Customer (customerID),\n    CONSTRAINT ck_orders_status   CHECK (status IN ('NEW', 'PAID', 'CANCELLED'))\n);\nCREATE TABLE OrderLine (\n    orderID   INT           NOT NULL,\n    productID INT           NOT NULL,\n    quantity  INT           NOT NULL,\n    unitPrice DECIMAL(12,0) NOT NULL,\n    CONSTRAINT pk_orderline         PRIMARY KEY (orderID, productID),\n    CONSTRAINT fk_orderline_orders  FOREIGN KEY (orderID)   REFERENCES Orders (orderID),\n    CONSTRAINT fk_orderline_product FOREIGN KEY (productID) REFERENCES Product (productID),\n    CONSTRAINT ck_orderline_qty     CHECK (quantity > 0)\n);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 1 — a small sales database from a description\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — you create the four tables yourself)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 1 — a small sales database from a description\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An'');\nINSERT INTO dbo.Product (productName, price) VALUES (N''Bút bi'', 5000);\nINSERT INTO dbo.Orders (customerID) VALUES (''KH001'');\nSET @ok = IIF((SELECT city FROM dbo.Customer WHERE customerID = ''KH001'') = N''Hà Nội''\n  AND (SELECT stock FROM dbo.Product WHERE productName = N''Bút bi'') = 0\n  AND EXISTS (SELECT 1 FROM dbo.Orders WHERE customerID = ''KH001'' AND status = ''NEW'' AND orderDate = CAST(GETDATE() AS DATE) AND orderID IS NOT NULL), 1, 0);\nSET @info = N''a row inserted with only the compulsory columns must get the defaults'';\nROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated | Mặc định: city Hà Nội, stock 0, status NEW, orderDate hôm nay; id tự sinh'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated | Mặc định: city Hà Nội, stock 0, status NEW, orderDate hôm nay; id tự sinh', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Two customers without e-mail are allowed; a shared e-mail is rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @hai BIT = 0, @trung BIT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An''), (''KH002'', N''Bình''); SET @hai = 1; END TRY BEGIN CATCH END CATCH;\nBEGIN TRY INSERT INTO dbo.Customer (customerID, fullName, email) VALUES (''KH003'', N''Chi'', ''x@a.vn''), (''KH004'', N''Dũng'', ''x@a.vn''); END TRY BEGIN CATCH SET @trung = 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@hai = 1 AND @trung = 1, 1, 0);\nSET @info = CONCAT(N''two NULL e-mails accepted: '', @hai, N'' · duplicate e-mail rejected: '', @trung, N'' — a UNIQUE constraint allows only one NULL on SQL Server'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Two customers without e-mail are allowed; a shared e-mail is rejected | Hai khách không e-mail được phép; e-mail dùng chung bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Two customers without e-mail are allowed; a shared e-mail is rejected | Hai khách không e-mail được phép; e-mail dùng chung bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Product rules: price 0, negative stock and a duplicate name are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Product (productName, price) VALUES (N''A'', 0); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (productName, price, stock) VALUES (N''B'', 10, -1); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Product (productName, price) VALUES (N''C'', 10), (N''C'', 20); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 3, 1, 0); SET @info = CONCAT(@n, N'' of 3 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Product rules: price 0, negative stock and a duplicate name are rejected | Luật sản phẩm: giá 0, tồn âm, tên trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Product rules: price 0, negative stock and a duplicate name are rejected | Luật sản phẩm: giá 0, tồn âm, tên trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Customer (customerID, fullName) VALUES (''KH001'', N''An'');\nINSERT INTO dbo.Product (productName, price) VALUES (N''Bút'', 5000);\nINSERT INTO dbo.Orders (customerID) VALUES (''KH001'');\nDECLARE @o INT = SCOPE_IDENTITY(), @p INT = (SELECT MAX(productID) FROM dbo.Product);\nDECLARE @n INT = 0;\nBEGIN TRY INSERT INTO dbo.Orders (customerID) VALUES (''KH999''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Orders (customerID, status) VALUES (''KH001'', ''SHIPPED''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.OrderLine VALUES (@o, @p, 0, 5000); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.OrderLine VALUES (@o, @p, 1, 5000), (@o, @p, 2, 5000); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 4, 1, 0); SET @info = CONCAT(@n, N'' of 4 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected | Luật đơn: khách lạ, trạng thái SHIPPED, số lượng 0, trùng sản phẩm bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected | Luật đơn: khách lạ, trạng thái SHIPPED, số lượng 0, trùng sản phẩm bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: customerID is exactly CHAR(5); productID and orderID are IDENTITY\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.Customer'') AND c.name = N''customerID'' AND t.name = N''char'' AND c.max_length = 5)\n  AND COLUMNPROPERTY(OBJECT_ID(N''dbo.Product''), ''productID'', ''IsIdentity'') = 1\n  AND COLUMNPROPERTY(OBJECT_ID(N''dbo.Orders''), ''orderID'', ''IsIdentity'') = 1, 1, 0);\nSET @info = N''expected customerID CHAR(5), productID and orderID IDENTITY'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. customerID is exactly CHAR(5); productID and orderID are IDENTITY | customerID đúng CHAR(5); productID và orderID là IDENTITY'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. customerID is exactly CHAR(5); productID and orderID are IDENTITY | customerID đúng CHAR(5); productID và orderID là IDENTITY', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On SQL Server a UNIQUE constraint treats NULLs as equal (only one allowed); the filtered unique index ignores NULL rows. PostgreSQL's UNIQUE allows many NULLs by default — a real portability trap.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên SQL Server ràng buộc UNIQUE coi các NULL là bằng nhau (chỉ cho một); chỉ mục duy nhất có lọc bỏ qua dòng NULL. UNIQUE của PostgreSQL mặc định cho nhiều NULL — một cái bẫy chuyển đổi thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The description needs SQL Server features — IDENTITY, DEFAULT CAST(GETDATE() AS DATE), NVARCHAR and a filtered unique index — and the behaviour of UNIQUE with NULLs is exactly where SQL Server differs from the browser engine.|||Đoạn mô tả cần tính năng của SQL Server — IDENTITY, DEFAULT CAST(GETDATE() AS DATE), NVARCHAR và chỉ mục duy nhất có lọc — và cách UNIQUE xử lý NULL chính là chỗ SQL Server khác máy chấm trình duyệt.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. Defaults: city Hà Nội, stock 0, status NEW, orderDate today; ids generated",
+            "2. Two customers without e-mail are allowed; a shared e-mail is rejected",
+            "3. Product rules: price 0, negative stock and a duplicate name are rejected",
+            "4. Order rules: unknown customer, status SHIPPED, quantity 0, same product twice are rejected",
+            "5. customerID is exactly CHAR(5); productID and orderID are IDENTITY"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CONSTRAINT … UNIQUE (email) — the second customer without an e-mail is rejected (\"duplicate key value is (NULL)\").|||CONSTRAINT … UNIQUE (email) — khách thứ hai không có e-mail bị từ chối (\"duplicate key value is (NULL)\")."
+        },
+        {
+          "loi": "Forgetting PRIMARY KEY (orderID, productID) on OrderLine — a product can appear twice in an order.|||Quên PRIMARY KEY (orderID, productID) trên OrderLine — một sản phẩm xuất hiện hai lần trong đơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "filtered index",
+          "vi": "chỉ mục có lọc"
+        },
+        {
+          "en": "named DEFAULT constraint",
+          "vi": "ràng buộc mặc định có tên"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 3 — ALTER a table that already has rows",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ALTER TABLE ADD",
+        "fix data before adding a CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "ddl",
+        "alter"
+      ],
+      "problemHtml": "<p>(1) Add a column <code>phone VARCHAR(15)</code>. (2) Add the rule named <code>ck_customer_email</code>: an e-mail contains @ with something before and after it (<code>LIKE '%_@_%'</code>). It is refused while KH002 breaks it — so (3) first correct KH002 (its real address is <code>hai.tran@fpt.edu.vn</code>), then add the rule.</p>\n<p><b>Table</b> (tab <code>Customer.sql</code>): <code>Customer(customerID, fullName, email)</code> with KH001 (trang@gmail.com), KH002 ('hai.tran' — no @) and KH003 (no e-mail).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Three statements in the right order: ALTER … ADD phone; UPDATE KH002; ALTER … ADD CONSTRAINT.</li>\n  <li>KH003 (no e-mail) must stay valid — CHECK lets NULL through.</li>\n</ul>",
+      "problemHtmlVi": "<p>(1) Thêm cột <code>phone VARCHAR(15)</code>. (2) Thêm luật tên <code>ck_customer_email</code>: e-mail chứa @ có ký tự trước và sau (<code>LIKE '%_@_%'</code>). Luật bị từ chối khi KH002 còn vi phạm — nên (3) sửa KH002 trước (địa chỉ thật là <code>hai.tran@fpt.edu.vn</code>), rồi mới thêm luật.</p>\n<p><b>Bảng</b> (tab <code>Customer.sql</code>): <code>Customer(customerID, fullName, email)</code> với KH001 (trang@gmail.com), KH002 ('hai.tran' — thiếu @) và KH003 (không e-mail).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba câu đúng thứ tự: ALTER … ADD phone; UPDATE KH002; ALTER … ADD CONSTRAINT.</li>\n  <li>KH003 (không e-mail) phải vẫn hợp lệ — CHECK cho NULL qua.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "customerID | email               | phone\n-----------+---------------------+------\nKH001      | trang@gmail.com     | NULL \nKH003      | NULL                | NULL \nKH002      | hai.tran@fpt.edu.vn | NULL ",
+          "explanation": "Expected result of check \"Data after the change\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Dữ liệu sau khi đổi\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Find the offenders first: SELECT … WHERE NOT (email LIKE '%_@_%').|||Tìm dòng vi phạm trước: SELECT … WHERE NOT (email LIKE '%_@_%').",
+        "Fix them with UPDATE, then ADD CONSTRAINT.|||Sửa bằng UPDATE, rồi ADD CONSTRAINT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Customer.sql",
+          "language": "sql",
+          "code": "-- Customer.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Customer.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Customer (\n  customerID CHAR(5)      NOT NULL PRIMARY KEY,\n  fullName   NVARCHAR(50) NOT NULL,\n  email      VARCHAR(100) NULL\n);\nINSERT INTO Customer VALUES ('KH001', N'Trang', 'trang@gmail.com'), ('KH002', N'Hải', 'hai.tran'), ('KH003', N'Long', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE Customer ADD phone VARCHAR(15) NULL;\nUPDATE Customer SET email = 'hai.tran@fpt.edu.vn' WHERE customerID = 'KH002';        -- fix the data first …\nALTER TABLE Customer ADD CONSTRAINT ck_customer_email CHECK (email LIKE '%_@_%');   -- … then the rule is accepted\n"
+        },
+        {
+          "name": "Customer.sql",
+          "language": "sql",
+          "code": "-- Customer.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Customer.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Customer (\n  customerID CHAR(5)      NOT NULL PRIMARY KEY,\n  fullName   NVARCHAR(50) NOT NULL,\n  email      VARCHAR(100) NULL\n);\nINSERT INTO Customer VALUES ('KH001', N'Trang', 'trang@gmail.com'), ('KH002', N'Hải', 'hai.tran'), ('KH003', N'Long', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQL Server checks a new constraint against every existing row (Msg 547 when one fails). Fix the data, never weaken the rule. (SQL Server also has WITH NOCHECK to skip old rows — avoid it: the optimizer then cannot trust the constraint.)</p>",
+      "solutionExplanationHtmlVi": "<p>SQL Server kiểm ràng buộc mới với mọi dòng đang có (Msg 547 khi có dòng hỏng). Sửa dữ liệu, đừng nới luật. (SQL Server có WITH NOCHECK để bỏ qua dòng cũ — tránh dùng: bộ tối ưu sẽ không tin ràng buộc đó nữa.)</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Customer (\n  customerID CHAR(5)      NOT NULL PRIMARY KEY,\n  fullName   NVARCHAR(50) NOT NULL,\n  email      VARCHAR(100) NULL\n);\nINSERT INTO Customer VALUES ('KH001', N'Trang', 'trang@gmail.com'), ('KH002', N'Hải', 'hai.tran'), ('KH003', N'Long', NULL);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Data after the change|||Dữ liệu sau khi đổi",
+            "kiemTra": "SELECT customerID, email, phone FROM Customer",
+            "mongDoi": {
+              "cot": [
+                "customerID",
+                "email",
+                "phone"
+              ],
+              "hang": [
+                [
+                  "KH001",
+                  "trang@gmail.com",
+                  null
+                ],
+                [
+                  "KH003",
+                  null,
+                  null
+                ],
+                [
+                  "KH002",
+                  "hai.tran@fpt.edu.vn",
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A new bad e-mail is rejected|||E-mail sai mới bị từ chối",
+            "thu": "INSERT INTO Customer (customerID, fullName, email) VALUES ('KH004', 'Ha', 'ha.gmail.com')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An address with nothing after @ is rejected|||Địa chỉ không có gì sau @ bị từ chối",
+            "thu": "INSERT INTO Customer (customerID, fullName, email) VALUES ('KH006', 'Minh', 'minh@')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A customer without e-mail is still accepted|||Khách không e-mail vẫn được nhận",
+            "thu": "INSERT INTO Customer (customerID, fullName) VALUES ('KH005', 'Lan')"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The constraint has the required name|||Ràng buộc có đúng tên",
+            "kiemTra": "SELECT lower(constraint_name) AS name FROM information_schema.table_constraints WHERE lower(table_name) = 'customer' AND lower(constraint_name) = 'ck_customer_email'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "name"
+              ],
+              "hang": [
+                [
+                  "ck_customer_email"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting KH002 to make the rule pass — you lose a customer.|||Xoá KH002 cho luật qua — mất một khách hàng."
+        },
+        {
+          "loi": "'%@%' — accepts '@' alone or 'x@'; the rule needs a character on each side.|||'%@%' — nhận cả '@' trơ trọi hay 'x@'; luật cần một ký tự ở mỗi bên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — add business rules to FUHCompany",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ALTER TABLE ADD CONSTRAINT",
+        "table-level CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "ddl",
+        "constraints",
+        "fuhcompany"
+      ],
+      "problemHtml": "<p>Add two named rules to the live FUHCompany data: <code>ck_department_mgrdate</code> — a manager assignment date, when known, is not before 2000-01-01; <code>ck_workson_maxhours</code> — work hours are at most 60 per week (they are already ≥ 0).</p>\n<details class=\"cl-luoc-do\" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns (PK underlined, FK in italics)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Two ALTER TABLE … ADD CONSTRAINT … CHECK (…).</li>\n  <li>Existing rows satisfy both rules.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thêm hai luật có tên cho dữ liệu FUHCompany đang chạy: <code>ck_department_mgrdate</code> — ngày nhận chức trưởng phòng, nếu biết, không trước 2000-01-01; <code>ck_workson_maxhours</code> — giờ làm tối đa 60 mỗi tuần (đã ≥ 0 sẵn).</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột (khoá chính gạch chân, khoá ngoại in nghiêng)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai câu ALTER TABLE … ADD CONSTRAINT … CHECK (…).</li>\n  <li>Các dòng đang có đều thoả hai luật.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: UPDATE tblDepartment SET mgrAssDate = '1999-12-31' WHERE depNum = 1|||Sau (các) lệnh của bạn, máy chấm chạy: UPDATE tblDepartment SET mgrAssDate = '1999-12-31' WHERE depNum = 1",
+          "output": "Rejected by a constraint (error).|||Bị ràng buộc chặn (báo lỗi).",
+          "explanation": "Check \"An assignment date in 1999 is rejected\".|||Kiểm \"Ngày nhận chức năm 1999 bị từ chối\"."
+        }
+      ],
+      "hintsJson": [
+        "ALTER TABLE t ADD CONSTRAINT name CHECK (condition).|||ALTER TABLE t ADD CONSTRAINT tên CHECK (điều kiện).",
+        "\"When known\" ⇒ do not forbid NULL — CHECK already lets UNKNOWN through.|||\"Nếu biết\" ⇒ đừng cấm NULL — CHECK vốn đã cho UNKNOWN qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE tblDepartment ADD CONSTRAINT ck_department_mgrdate CHECK (mgrAssDate >= '2000-01-01');  -- NULL passes (UNKNOWN)\nALTER TABLE tblWorksOn    ADD CONSTRAINT ck_workson_maxhours      CHECK (workHours <= 60);\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rules in the database protect every application at once. Name them: an error \"conflicted with the CHECK constraint ck_workson_maxhours\" explains itself.</p>",
+      "solutionExplanationHtmlVi": "<p>Luật nằm trong CSDL bảo vệ mọi ứng dụng cùng lúc. Đặt tên cho chúng: lỗi \"conflicted with the CHECK constraint ck_workson_maxhours\" tự giải thích.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "bi-chan",
+            "moTa": "An assignment date in 1999 is rejected|||Ngày nhận chức năm 1999 bị từ chối",
+            "thu": "UPDATE tblDepartment SET mgrAssDate = '1999-12-31' WHERE depNum = 1",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "61 hours is rejected|||61 giờ bị từ chối",
+            "thu": "UPDATE tblWorksOn SET workHours = 61 WHERE empSSN = 30121050001 AND proNum = 1",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A department without a manager date is still fine; 60 hours is fine|||Phòng chưa có ngày nhận chức vẫn ổn; 60 giờ vẫn ổn",
+            "thu": "UPDATE tblDepartment SET mgrAssDate = NULL WHERE depNum = 5; UPDATE tblWorksOn SET workHours = 60 WHERE empSSN = 30121050001 AND proNum = 1"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Both constraints exist with their names|||Cả hai ràng buộc có đúng tên",
+            "kiemTra": "SELECT lower(constraint_name) AS name FROM information_schema.table_constraints WHERE lower(constraint_name) IN ('ck_department_mgrdate', 'ck_workson_maxhours')",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "name"
+              ],
+              "hang": [
+                [
+                  "ck_department_mgrdate"
+                ],
+                [
+                  "ck_workson_maxhours"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding IS NOT NULL to the CHECK — departments without a manager date are now rejected.|||Thêm IS NOT NULL vào CHECK — phòng chưa có ngày nhận chức bị từ chối."
+        },
+        {
+          "loi": "Forgetting the second rule.|||Quên luật thứ hai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 5 — drop the whole FUHCompany in a legal order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "DROP order",
+        "circular foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "ddl",
+        "drop",
+        "fuhcompany"
+      ],
+      "problemHtml": "<p>tblEmployee references tblDepartment (depNum) AND tblDepartment references tblEmployee (mgrSSN) — a cycle. Plan the teardown.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>tblEmployee tham chiếu tblDepartment (depNum) VÀ tblDepartment tham chiếu tblEmployee (mgrSSN) — một vòng. Lên kế hoạch xoá.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "List every FK and draw the arrows.|||Liệt kê mọi khoá ngoại và vẽ mũi tên.",
+        "A cycle must be cut with ALTER TABLE … DROP CONSTRAINT first.|||Vòng phải được cắt bằng ALTER TABLE … DROP CONSTRAINT trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 5 — drop the whole FUHCompany in a legal order\n\nAnswer in the answer panel (no code needed).\n\n1. Which statement must come before you can drop tblEmployee or tblDepartment?Câu nào phải chạy trước khi xoá được tblEmployee hay tblDepartment?\n2. Which table can be dropped FIRST without any error?Bảng nào xoá ĐẦU TIÊN được mà không lỗi?\n3. tblLocation is referenced by…tblLocation bị bảng nào tham chiếu?\n4. Why is \"DELETE FROM tblEmployee\" not enough to drop the table?Vì sao \"DELETE FROM tblEmployee\" không đủ để xoá bảng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 5 — drop the whole FUHCompany in a legal order — answer key\n\n1. Which statement must come before you can drop tblEmployee or tblDepartment?Câu nào phải chạy trước khi xoá được tblEmployee hay tblDepartment?\n   Answer: c) ALTER TABLE tblDepartment DROP CONSTRAINT fk_department_manager\n   Break the cycle by dropping one of the two foreign keys; deleting rows does not remove a constraint.VI: Phá vòng bằng cách bỏ một trong hai khoá ngoại; xoá dòng không bỏ được ràng buộc.\n\n2. Which table can be dropped FIRST without any error?Bảng nào xoá ĐẦU TIÊN được mà không lỗi?\n   Answer: d) tblDependent (nobody references it)\n   A table that no foreign key points to can always be dropped.VI: Bảng không bị khoá ngoại nào trỏ tới thì luôn xoá được.\n\n3. tblLocation is referenced by…tblLocation bị bảng nào tham chiếu?\n   Answer: c) tblDepLocation and tblProject\n   Drop tblDepLocation and tblProject (after tblWorksOn) before tblLocation.VI: Xoá tblDepLocation và tblProject (sau tblWorksOn) trước tblLocation.\n\n4. Why is \"DELETE FROM tblEmployee\" not enough to drop the table?Vì sao \"DELETE FROM tblEmployee\" không đủ để xoá bảng?\n   Answer: b) DROP is blocked by the foreign key constraints themselves, even on empty tables\n   Constraints, not rows, block a DROP.VI: Ràng buộc, không phải dữ liệu, chặn DROP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> ALTER TABLE tblDepartment DROP CONSTRAINT fk_department_manager</p><p>Break the cycle by dropping one of the two foreign keys; deleting rows does not remove a constraint.</p><p><i>VI: Phá vòng bằng cách bỏ một trong hai khoá ngoại; xoá dòng không bỏ được ràng buộc.</i></p></li><li><p><b>d)</b> tblDependent (nobody references it)</p><p>A table that no foreign key points to can always be dropped.</p><p><i>VI: Bảng không bị khoá ngoại nào trỏ tới thì luôn xoá được.</i></p></li><li><p><b>c)</b> tblDepLocation and tblProject</p><p>Drop tblDepLocation and tblProject (after tblWorksOn) before tblLocation.</p><p><i>VI: Xoá tblDepLocation và tblProject (sau tblWorksOn) trước tblLocation.</i></p></li><li><p><b>b)</b> DROP is blocked by the foreign key constraints themselves, even on empty tables</p><p>Constraints, not rows, block a DROP.</p><p><i>VI: Ràng buộc, không phải dữ liệu, chặn DROP.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which statement must come before you can drop tblEmployee or tblDepartment?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào phải chạy trước khi xoá được tblEmployee hay tblDepartment?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DELETE FROM tblEmployee"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DROP TABLE tblLocation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ALTER TABLE tblDepartment DROP CONSTRAINT fk_department_manager"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ALTER TABLE tblEmployee ADD CONSTRAINT …"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Break the cycle by dropping one of the two foreign keys; deleting rows does not remove a constraint.</p><p><i>VI: Phá vòng bằng cách bỏ một trong hai khoá ngoại; xoá dòng không bỏ được ràng buộc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which table can be dropped FIRST without any error?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng nào xoá ĐẦU TIÊN được mà không lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tblEmployee"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tblDepartment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tblLocation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "tblDependent (nobody references it)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A table that no foreign key points to can always be dropped.</p><p><i>VI: Bảng không bị khoá ngoại nào trỏ tới thì luôn xoá được.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>tblLocation is referenced by…</p><p style=\"opacity:.75;font-size:.92em\"><i>tblLocation bị bảng nào tham chiếu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tblEmployee only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tblDepLocation and tblProject"
+              },
+              {
+                "ma": "d",
+                "noiDung": "tblDependent"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Drop tblDepLocation and tblProject (after tblWorksOn) before tblLocation.</p><p><i>VI: Xoá tblDepLocation và tblProject (sau tblWorksOn) trước tblLocation.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why is \"DELETE FROM tblEmployee\" not enough to drop the table?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"DELETE FROM tblEmployee\" không đủ để xoá bảng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because DELETE without a WHERE is refused by SQL Server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DROP is blocked by the foreign key constraints themselves, even on empty tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is enough: an empty table can always be dropped"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because DELETE is a DDL statement and cannot be undone"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Constraints, not rows, block a DROP.</p><p><i>VI: Ràng buộc, không phải dữ liệu, chặn DROP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trying to drop tblDepartment while tblEmployee and tblProject still reference it.|||Cố xoá tblDepartment khi tblEmployee và tblProject còn tham chiếu nó."
+        },
+        {
+          "loi": "Thinking an empty table can always be dropped.|||Tưởng bảng rỗng thì luôn xoá được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "circular reference",
+          "vi": "tham chiếu vòng"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 6 — NULL, LIKE and dates on FUHCompany",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "NOT LIKE and NULL",
+        "date range"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "null",
+        "like",
+        "date",
+        "fuhcompany"
+      ],
+      "problemHtml": "<p>Employees born before 1990 who do <b>not</b> live in TP Hồ Chí Minh — an unknown address counts as \"not in TP Hồ Chí Minh\".</p>\n<details class=\"cl-luoc-do\" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns (PK underlined, FK in italics)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>empName, empAddress, empBirthdate</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhân viên sinh trước 1990 và <b>không</b> sống ở TP Hồ Chí Minh — địa chỉ chưa biết tính là \"không ở TP Hồ Chí Minh\".</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột (khoá chính gạch chân, khoá ngoại in nghiêng)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>empName, empAddress, empBirthdate</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "empName        | empAddress                   | empBirthdate\n---------------+------------------------------+-------------\nPhạm Quốc Bảo  | 102 Kim Mã, Ba Đình, TP Hà … | 1978-09-09  \nNguyễn Thị Mai | 60 Bạch Đằng, Hải Châu, TP … | 1980-06-25  \nLý Thanh Tâm   | 77 Hùng Vương, Hải Châu, TP… | 1983-03-03  \nHồ Ngọc Hân    | 33 Cầu Giấy, TP Hà Nội       | 1988-12-01  \nĐặng Tuấn Anh  | 5 Láng Hạ, Đống Đa, TP Hà N… | 1970-04-18  ",
+          "explanation": "Expected result of check \"Born before 1990, not in HCMC\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sinh trước 1990, không ở TP HCM\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "NOT LIKE on a NULL address is UNKNOWN — the row disappears.|||NOT LIKE trên địa chỉ NULL là UNKNOWN — dòng biến mất.",
+        "Parenthesise the OR: AND (addr IS NULL OR addr NOT LIKE …).|||Đặt OR trong ngoặc: AND (addr IS NULL OR addr NOT LIKE …)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT empName, empAddress, empBirthdate\nFROM tblEmployee\nWHERE empBirthdate < '1990-01-01'\n  AND (empAddress IS NULL OR empAddress NOT LIKE N'%Hồ Chí Minh%');   -- NOT LIKE on NULL is UNKNOWN\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FUH data: Bùi Văn Nam has no address but was born in 1998, so the sample answer does not contain him; the hidden employee (born 1970, no address) must appear.</p>",
+      "solutionExplanationHtmlVi": "<p>Dữ liệu FUH: Bùi Văn Nam không có địa chỉ nhưng sinh 1998 nên không có trong đáp án mẫu; nhân viên ẩn (sinh 1970, không địa chỉ) phải xuất hiện.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Born before 1990, not in HCMC|||Sinh trước 1990, không ở TP HCM",
+            "mongDoi": {
+              "cot": [
+                "empName",
+                "empAddress",
+                "empBirthdate"
+              ],
+              "hang": [
+                [
+                  "Phạm Quốc Bảo",
+                  "102 Kim Mã, Ba Đình, TP Hà Nội",
+                  "1978-09-09"
+                ],
+                [
+                  "Nguyễn Thị Mai",
+                  "60 Bạch Đằng, Hải Châu, TP Đà Nẵng",
+                  "1980-06-25"
+                ],
+                [
+                  "Lý Thanh Tâm",
+                  "77 Hùng Vương, Hải Châu, TP Đà Nẵng",
+                  "1983-03-03"
+                ],
+                [
+                  "Hồ Ngọc Hân",
+                  "33 Cầu Giấy, TP Hà Nội",
+                  "1988-12-01"
+                ],
+                [
+                  "Đặng Tuấn Anh",
+                  "5 Láng Hạ, Đống Đa, TP Hà Nội",
+                  "1970-04-18"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "An older employee with no address|||Một nhân viên lớn tuổi chưa có địa chỉ",
+            "an": true,
+            "themCsdl": "INSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum) VALUES (30121050093, N'Tạ Văn Cao', NULL, 60000, 'M', '1970-01-01', 4)",
+            "mongDoi": {
+              "cot": [
+                "empName",
+                "empAddress",
+                "empBirthdate"
+              ],
+              "hang": [
+                [
+                  "Phạm Quốc Bảo",
+                  "102 Kim Mã, Ba Đình, TP Hà Nội",
+                  "1978-09-09"
+                ],
+                [
+                  "Nguyễn Thị Mai",
+                  "60 Bạch Đằng, Hải Châu, TP Đà Nẵng",
+                  "1980-06-25"
+                ],
+                [
+                  "Lý Thanh Tâm",
+                  "77 Hùng Vương, Hải Châu, TP Đà Nẵng",
+                  "1983-03-03"
+                ],
+                [
+                  "Hồ Ngọc Hân",
+                  "33 Cầu Giấy, TP Hà Nội",
+                  "1988-12-01"
+                ],
+                [
+                  "Đặng Tuấn Anh",
+                  "5 Láng Hạ, Đống Đa, TP Hà Nội",
+                  "1970-04-18"
+                ],
+                [
+                  "Tạ Văn Cao",
+                  null,
+                  "1970-01-01"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses NOT LIKE|||Dùng NOT LIKE",
+            "khop": "\\bNOT\\s+LIKE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the NULL address case.|||Quên trường hợp địa chỉ NULL."
+        },
+        {
+          "loi": "Mixing AND/OR without parentheses — AND binds tighter than OR.|||Trộn AND/OR không có ngoặc — AND ưu tiên hơn OR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NULL",
+          "vi": "giá trị chưa biết",
+          "giaiThich": "So sánh với NULL bằng = cho UNKNOWN ⇒ dòng bị loại. Dùng IS NULL / IS NOT NULL."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 7 — mini PE: student clubs, from ERD to tested tables",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "LIKE 'SE[0-9]…'",
+        "DEFAULT GETDATE",
+        "weak entity with CASCADE",
+        "M:N with attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "ddl",
+        "pe-q1"
+      ],
+      "problemHtml": "<p>A club has a number, a unique name and a founding date. A student has an ID of the form <b>SE + 6 digits</b> and a name. A student joins many clubs and a club has many members; for each membership store the join date (today by default) and the role (Chủ nhiệm, Phó chủ nhiệm or Thành viên — Thành viên by default). A club organises events numbered 1, 2, 3… inside each club (every club has its own event 1) with a title and a date; when a club is deleted its events disappear with it.</p><p>Tables: <code>Club(clubID, clubName, foundedDate)</code>, <code>Student(studentID CHAR(8), fullName)</code>, <code>Membership(studentID, clubID, joinDate, role)</code>, <code>Event(clubID, eventNo, title, eventDate)</code>.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The student-ID rule uses the T-SQL character class LIKE 'SE[0-9][0-9]…' and the join date defaults to GETDATE() — both SQL Server only. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>CHECK (studentID LIKE 'SE[0-9][0-9][0-9][0-9][0-9][0-9]').</li>\n  <li>Event is weak: key (clubID, eventNo), FK to Club ON DELETE CASCADE.</li>\n</ul>",
+      "problemHtmlVi": "<p>CLB có số, tên duy nhất và ngày thành lập. Sinh viên có mã dạng <b>SE + 6 chữ số</b> và tên. Sinh viên tham gia nhiều CLB, CLB có nhiều thành viên; mỗi lần tham gia lưu ngày tham gia (mặc định hôm nay) và vai trò (Chủ nhiệm, Phó chủ nhiệm hoặc Thành viên — mặc định Thành viên). CLB tổ chức sự kiện đánh số 1, 2, 3… trong từng CLB (CLB nào cũng có sự kiện 1) với tiêu đề và ngày; xoá CLB thì các sự kiện mất theo.</p><p>Bảng như bản tiếng Anh.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Luật mã sinh viên dùng lớp ký tự T-SQL LIKE 'SE[0-9][0-9]…' và ngày tham gia mặc định GETDATE() — cả hai chỉ có ở SQL Server. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CHECK (studentID LIKE 'SE[0-9][0-9][0-9][0-9][0-9][0-9]').</li>\n  <li>Event là thực thể yếu: khoá (clubID, eventNo), FK tới Club ON DELETE CASCADE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. A valid student, membership with defaults, and events of two clubs\nPASS 2. Student IDs that are not SE + 6 digits are rejected\nPASS 3. An unknown role and a duplicate club name are rejected\nPASS 4. Deleting a club deletes its events; event numbers restart in each club\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "T-SQL LIKE accepts character classes: [0-9] = one digit.|||LIKE của T-SQL nhận lớp ký tự: [0-9] = một chữ số.",
+        "Membership = M:N with attributes; Event = weak entity (owner key + number).|||Membership = M:N có thuộc tính; Event = thực thể yếu (khoá chủ + số)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE TABLE Club ( ... );\n-- CREATE TABLE Student ( ... );\n-- CREATE TABLE Membership ( ... );\n-- CREATE TABLE Event ( ... );\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A valid student, membership with defaults, and events of two clubs\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName, foundedDate) VALUES (1, N''CLB Guitar'', ''2015-09-01''), (2, N''CLB Lập trình'', ''2018-03-15'');\nINSERT INTO dbo.Student VALUES (''SE123456'', N''Nguyễn Văn Cường'');\nINSERT INTO dbo.Membership (studentID, clubID) VALUES (''SE123456'', 2);\nINSERT INTO dbo.Event VALUES (2, 1, N''Hackathon'', ''2026-10-20''), (1, 1, N''Đêm nhạc'', ''2026-11-05'');\nSET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Membership WHERE studentID = ''SE123456'' AND clubID = 2 AND role = N''Thành viên'' AND joinDate = CAST(GETDATE() AS DATE)), 1, 0);\nSET @info = N''the membership must get role Thành viên and today''''s date by default'';\nROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A valid student, membership with defaults, and events of two clubs | Sinh viên hợp lệ, tham gia với mặc định, sự kiện của hai CLB'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A valid student, membership with defaults, and events of two clubs | Sinh viên hợp lệ, tham gia với mặc định, sự kiện của hai CLB', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Student IDs that are not SE + 6 digits are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Student VALUES (''SE12AB56'', N''Sai định dạng''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Student VALUES (''HE123456'', N''Sai tiền tố''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Student IDs that are not SE + 6 digits are rejected | Mã sinh viên không đúng SE + 6 chữ số bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Student IDs that are not SE + 6 digits are rejected | Mã sinh viên không đúng SE + 6 chữ số bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown role and a duplicate club name are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName) VALUES (1, N''CLB Guitar'');\nINSERT INTO dbo.Student VALUES (''SE123456'', N''An'');\nDECLARE @n INT = 0;\nBEGIN TRY INSERT INTO dbo.Membership (studentID, clubID, role) VALUES (''SE123456'', 1, N''Thủ quỹ''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Club (clubID, clubName) VALUES (2, N''CLB Guitar''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown role and a duplicate club name are rejected | Vai trò lạ và tên CLB trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown role and a duplicate club name are rejected | Vai trò lạ và tên CLB trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Deleting a club deletes its events; event numbers restart in each club\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName) VALUES (1, N''A''), (2, N''B'');\nINSERT INTO dbo.Event VALUES (1, 1, N''x'', ''2026-01-01''), (1, 2, N''y'', ''2026-01-02''), (2, 1, N''z'', ''2026-01-03'');\nDELETE FROM dbo.Club WHERE clubID = 1;\nSET @ok = IIF((SELECT COUNT(*) FROM dbo.Event) = 1, 1, 0);\nSET @info = CONCAT(N''events left: '', (SELECT COUNT(*) FROM dbo.Event), N'' (expected 1)'');\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Deleting a club deletes its events; event numbers restart in each club | Xoá CLB thì xoá sự kiện; số sự kiện bắt đầu lại ở mỗi CLB'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Deleting a club deletes its events; event numbers restart in each club | Xoá CLB thì xoá sự kiện; số sự kiện bắt đầu lại ở mỗi CLB', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE Club (\n    clubID      INT          NOT NULL,\n    clubName    NVARCHAR(60) NOT NULL,\n    foundedDate DATE         NULL,\n    CONSTRAINT pk_club      PRIMARY KEY (clubID),\n    CONSTRAINT uq_club_name UNIQUE (clubName)\n);\nCREATE TABLE Student (\n    studentID CHAR(8)      NOT NULL,\n    fullName  NVARCHAR(50) NOT NULL,\n    CONSTRAINT pk_student    PRIMARY KEY (studentID),\n    CONSTRAINT ck_student_id CHECK (studentID LIKE 'SE[0-9][0-9][0-9][0-9][0-9][0-9]')   -- T-SQL character class\n);\nCREATE TABLE Membership (\n    studentID CHAR(8)      NOT NULL,\n    clubID    INT          NOT NULL,\n    joinDate  DATE         NOT NULL CONSTRAINT df_membership_join DEFAULT CAST(GETDATE() AS DATE),\n    role      NVARCHAR(20) NOT NULL CONSTRAINT df_membership_role DEFAULT N'Thành viên',\n    CONSTRAINT pk_membership         PRIMARY KEY (studentID, clubID),\n    CONSTRAINT fk_membership_student FOREIGN KEY (studentID) REFERENCES Student (studentID),\n    CONSTRAINT fk_membership_club    FOREIGN KEY (clubID)    REFERENCES Club (clubID),\n    CONSTRAINT ck_membership_role    CHECK (role IN (N'Chủ nhiệm', N'Phó chủ nhiệm', N'Thành viên'))\n);\nCREATE TABLE Event (\n    clubID    INT           NOT NULL,\n    eventNo   INT           NOT NULL,\n    title     NVARCHAR(100) NOT NULL,\n    eventDate DATE          NOT NULL,\n    CONSTRAINT pk_event      PRIMARY KEY (clubID, eventNo),\n    CONSTRAINT fk_event_club FOREIGN KEY (clubID) REFERENCES Club (clubID) ON DELETE CASCADE\n);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables)\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Exercise 7 — mini PE: student clubs, from ERD to tested tables\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A valid student, membership with defaults, and events of two clubs\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName, foundedDate) VALUES (1, N''CLB Guitar'', ''2015-09-01''), (2, N''CLB Lập trình'', ''2018-03-15'');\nINSERT INTO dbo.Student VALUES (''SE123456'', N''Nguyễn Văn Cường'');\nINSERT INTO dbo.Membership (studentID, clubID) VALUES (''SE123456'', 2);\nINSERT INTO dbo.Event VALUES (2, 1, N''Hackathon'', ''2026-10-20''), (1, 1, N''Đêm nhạc'', ''2026-11-05'');\nSET @ok = IIF(EXISTS (SELECT 1 FROM dbo.Membership WHERE studentID = ''SE123456'' AND clubID = 2 AND role = N''Thành viên'' AND joinDate = CAST(GETDATE() AS DATE)), 1, 0);\nSET @info = N''the membership must get role Thành viên and today''''s date by default'';\nROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A valid student, membership with defaults, and events of two clubs | Sinh viên hợp lệ, tham gia với mặc định, sự kiện của hai CLB'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A valid student, membership with defaults, and events of two clubs | Sinh viên hợp lệ, tham gia với mặc định, sự kiện của hai CLB', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Student IDs that are not SE + 6 digits are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0;\nBEGIN TRAN;\nBEGIN TRY INSERT INTO dbo.Student VALUES (''SE12AB56'', N''Sai định dạng''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Student VALUES (''HE123456'', N''Sai tiền tố''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Student IDs that are not SE + 6 digits are rejected | Mã sinh viên không đúng SE + 6 chữ số bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Student IDs that are not SE + 6 digits are rejected | Mã sinh viên không đúng SE + 6 chữ số bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown role and a duplicate club name are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName) VALUES (1, N''CLB Guitar'');\nINSERT INTO dbo.Student VALUES (''SE123456'', N''An'');\nDECLARE @n INT = 0;\nBEGIN TRY INSERT INTO dbo.Membership (studentID, clubID, role) VALUES (''SE123456'', 1, N''Thủ quỹ''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nBEGIN TRY INSERT INTO dbo.Club (clubID, clubName) VALUES (2, N''CLB Guitar''); END TRY BEGIN CATCH SET @n += 1; END CATCH;\nIF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 2, 1, 0); SET @info = CONCAT(@n, N'' of 2 invalid statements were rejected'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown role and a duplicate club name are rejected | Vai trò lạ và tên CLB trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown role and a duplicate club name are rejected | Vai trò lạ và tên CLB trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Deleting a club deletes its events; event numbers restart in each club\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\nINSERT INTO dbo.Club (clubID, clubName) VALUES (1, N''A''), (2, N''B'');\nINSERT INTO dbo.Event VALUES (1, 1, N''x'', ''2026-01-01''), (1, 2, N''y'', ''2026-01-02''), (2, 1, N''z'', ''2026-01-03'');\nDELETE FROM dbo.Club WHERE clubID = 1;\nSET @ok = IIF((SELECT COUNT(*) FROM dbo.Event) = 1, 1, 0);\nSET @info = CONCAT(N''events left: '', (SELECT COUNT(*) FROM dbo.Event), N'' (expected 1)'');\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Deleting a club deletes its events; event numbers restart in each club | Xoá CLB thì xoá sự kiện; số sự kiện bắt đầu lại ở mỗi CLB'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Deleting a club deletes its events; event numbers restart in each club | Xoá CLB thì xoá sự kiện; số sự kiện bắt đầu lại ở mỗi CLB', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On PostgreSQL the same ID rule is written with a regular expression: <code>CHECK (studentID ~ '^SE[0-9]{6}$')</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên PostgreSQL cùng luật mã viết bằng biểu thức chính quy: <code>CHECK (studentID ~ '^SE[0-9]{6}$')</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The student-ID rule uses the T-SQL character class LIKE 'SE[0-9][0-9]…' and the join date defaults to GETDATE() — both SQL Server only.|||Luật mã sinh viên dùng lớp ký tự T-SQL LIKE 'SE[0-9][0-9]…' và ngày tham gia mặc định GETDATE() — cả hai chỉ có ở SQL Server.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. A valid student, membership with defaults, and events of two clubs",
+            "2. Student IDs that are not SE + 6 digits are rejected",
+            "3. An unknown role and a duplicate club name are rejected",
+            "4. Deleting a club deletes its events; event numbers restart in each club"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "LIKE 'SE%' — accepts SE12AB56.|||LIKE 'SE%' — nhận cả SE12AB56."
+        },
+        {
+          "loi": "No ON DELETE CASCADE on Event — a club with events cannot be deleted.|||Không ON DELETE CASCADE ở Event — CLB có sự kiện không xoá được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "character class [0-9]",
+          "vi": "lớp ký tự [0-9]"
+        }
+      ]
+    }
+  ]
+}

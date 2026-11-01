@@ -106,6 +106,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/reports/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bookings and booked hours per lab per day (lab managers only)
+         * @description Cancelled bookings are not counted; days are UTC dates. The result may be up to 60 seconds old
+         *     (see Age). At most 2 reports are computed at once per instance; more ⇒ 503 OVERLOADED.
+         */
+        get: operations["getUsageReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/waitlist/{id}": {
         parameters: {
             query?: never;
@@ -243,10 +264,310 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Export bookings as CSV — in the background (lab managers only)
+         * @description Answers at once with 202 and a job. A whole-campus semester (~214,000 rows) takes about two minutes:
+         *     too long to hold a request open behind a proxy that gives up after 100 s. Poll the job, or subscribe
+         *     to `labflow.export.completed.v1` (webhook).
+         */
+        post: operations["startBookingsExport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reports/usage/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Whole-campus usage report — in the background (Lab 10)
+         * @description The result is the usage report as JSON; when it is ready, `labflow.report.ready.v1` is sent to the creator's webhooks.
+         */
+        post: operations["startUsageReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/jobs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Status and progress of one of your jobs
+         * @description Jobs of other people answer 404. Job records are kept 7 days; results 1 hour (`result.expiresAt`).
+         */
+        get: operations["getJob"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/jobs/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask a queued or running job to stop */
+        post: operations["cancelJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/jobs/{id}/result": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download the result of a succeeded job */
+        get: operations["getJobResult"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Booking events after a position (polling and long polling)
+         * @description Without `after` ⇒ `{ data: [], next: <latest id> }` ("start from now"). With `wait` > 0 the request is held
+         *     until an event arrives or `wait` seconds pass (long polling). An `after` older than the retained window ⇒ 410.
+         */
+        get: operations["pollEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/events/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Booking events as Server-Sent Events
+         * @description Each event: `id:` (resume position), `event:` (the type), `data:` (the Event as JSON). `: ping` every 15 s.
+         *     Reconnect with `Last-Event-ID` to receive what you missed; too old ⇒ one `event: reset` (reload state).
+         *     Browsers cannot send Authorization with EventSource: use `?ticket=` from POST /realtime/tickets.
+         */
+        get: operations["streamEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/realtime/tickets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** A one-time ticket (30 s) for EventSource or WebSocket (`ws://…/v2/ws?ticket=`) */
+        post: operations["createRealtimeTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Your subscriptions (without secrets) */
+        get: operations["listWebhooks"];
+        put?: never;
+        /**
+         * Subscribe an HTTPS endpoint to events (lab managers only)
+         * @description The `secret` (whsec_…) is shown ONCE. Private and non-HTTPS addresses ⇒ 422 URL_NOT_ALLOWED.
+         */
+        post: operations["createWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Unsubscribe */
+        delete: operations["deleteWebhook"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/{id}/deliveries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The last 50 delivery attempts — status, error, duration */
+        get: operations["listWebhookDeliveries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>;
+export interface webhooks {
+    bookingEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * What LabFlow POSTs to your endpoint (booking.created / cancelled / checked_in, export.completed, report.ready)
+         * @description Signed per Standard Webhooks: verify `webhook-signature` = `v1,` + base64(HMAC-SHA256(secret, id + "." + timestamp + "." + raw body))
+         *     over the RAW body, reject timestamps more than 5 minutes away, deduplicate by `webhook-id`.
+         *     Answer 2xx within 5 s (do the work later). Non-2xx or timeout ⇒ retried 8 times with exponential backoff
+         *     and jitter (30 s, 1 min, 2 min …); 410 ⇒ the subscription is disabled.
+         */
+        post: operations["receiveBookingEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+}
 export interface components {
     schemas: {
+        ExportRequest: {
+            labId?: components["schemas"]["LabId"];
+            /** Format: date */
+            from: string;
+            /** Format: date */
+            to: string;
+        };
+        Job: {
+            /** @example job_7 */
+            id: string;
+            /** @enum {string} */
+            kind: "bookings-export" | "usage-report";
+            /** @enum {string} */
+            status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+            progress: {
+                done: number;
+                total: number | null;
+                percent: number;
+            };
+            createdAt: components["schemas"]["Instant"];
+            startedAt: components["schemas"]["Instant"] | null;
+            finishedAt: components["schemas"]["Instant"] | null;
+            cancelRequested: boolean;
+            /** @description Only when succeeded. The result itself is kept until expiresAt, then 410. */
+            result: null | {
+                href: string;
+                contentType: string;
+                bytes: number;
+                expiresAt: components["schemas"]["Instant"];
+            };
+            error: null | {
+                code: string;
+                detail: string;
+            };
+            links: {
+                self: string;
+                /** @description Absent once the job has finished */
+                cancel?: string;
+            };
+        };
+        /** @enum {string} */
+        EventType: "labflow.booking.created.v1" | "labflow.booking.cancelled.v1" | "labflow.booking.checked_in.v1" | "labflow.export.completed.v1" | "labflow.report.ready.v1";
+        /** @description CloudEvents 1.0 (JSON). Delivered at least once — deduplicate by `id`; use `data.version` to drop older news. */
+        Event: {
+            id: string;
+            /** @constant */
+            specversion: "1.0";
+            type: components["schemas"]["EventType"];
+            source: string;
+            subject?: string;
+            time: components["schemas"]["Instant"];
+            /** @constant */
+            datacontenttype?: "application/json";
+            data: Record<string, never>;
+        };
+        WebhookSubscription: {
+            /** @example wh_mvx53e0v */
+            id: string;
+            /** Format: uri */
+            url: string;
+            events: components["schemas"]["EventType"][];
+            /** @enum {string} */
+            status: "active" | "disabled";
+            createdAt: components["schemas"]["Instant"];
+        };
         /** @example lab_1 */
         LabId: string;
         /**
@@ -396,6 +717,27 @@ export interface components {
         };
     };
     responses: {
+        /** @description Accepted — not done yet. Follow Location; wait Retry-After seconds between polls. */
+        JobAccepted: {
+            headers: {
+                /** @description The job, e.g. /v2/jobs/job_7 */
+                Location?: string;
+                "Retry-After": components["headers"]["Retry-After"];
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Job"];
+            };
+        };
+        /** @description Existed, but is no longer kept (job result expired, or an event position too old) */
+        Gone: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
         /** @description The body does not match the schema */
         ValidationFailed: {
             headers: {
@@ -497,17 +839,35 @@ export interface components {
                 "application/problem+json": components["schemas"]["Problem"];
             };
         };
+        /** @description Overloaded (`OVERLOADED`) or a dependency is down (`DEPENDENCY_DOWN`). Safe to retry after Retry-After. */
+        Unavailable: {
+            headers: {
+                "Retry-After": components["headers"]["Retry-After"];
+                [name: string]: unknown;
+            };
+            content: {
+                "application/problem+json": components["schemas"]["Problem"];
+            };
+        };
     };
     parameters: {
         Limit: number;
         /** @description Opaque; copy `page.next` from the previous page. */
         Cursor: string;
         BookingId: string;
+        JobId: string;
+        WebhookId: string;
         /** @description Optional. Same key + same body within 24 h ⇒ the first answer is replayed. */
         IdempotencyKey: string;
     };
     requestBodies: never;
     headers: {
+        /** @description Seconds to wait before retrying (503 overload or dependency down, 429 quota) */
+        "Retry-After": number;
+        /** @description Seconds since this copy was fresh (RFC 9111); sent with LabFlow-Degraded */
+        Age: number;
+        /** @description Present when the body is a stale copy served during an incident; see Age */
+        "LabFlow-Degraded": "stale-data";
         /** @description Remaining quota, e.g. `"booking";r=4;t=12` (draft-ietf-httpapi-ratelimit-headers) */
         RateLimit: string;
         /** @description The policy, e.g. `"booking";q=5;w=60` */
@@ -550,6 +910,7 @@ export interface operations {
             401: components["responses"]["Unauthenticated"];
             415: components["responses"]["UnsupportedMediaType"];
             429: components["responses"]["TooManyRequests"];
+            503: components["responses"]["Unavailable"];
         };
     };
     getMe: {
@@ -587,9 +948,11 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description All labs that match */
+            /** @description All labs that match. During a database incident this may be the last good copy, marked by LabFlow-Degraded and Age. */
             200: {
                 headers: {
+                    Age: components["headers"]["Age"];
+                    "LabFlow-Degraded": components["headers"]["LabFlow-Degraded"];
                     [name: string]: unknown;
                 };
                 content: {
@@ -600,6 +963,7 @@ export interface operations {
             };
             400: components["responses"]["InvalidQuery"];
             429: components["responses"]["TooManyRequests"];
+            503: components["responses"]["Unavailable"];
         };
     };
     getLab: {
@@ -696,6 +1060,47 @@ export interface operations {
                 };
             };
             401: components["responses"]["Unauthenticated"];
+        };
+    };
+    getUsageReport: {
+        parameters: {
+            query: {
+                /** @example 2026-11-02 */
+                from: string;
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One row per (day, lab), ordered by day then lab */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, max-age=60";
+                    Age: components["headers"]["Age"];
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: date */
+                        from: string;
+                        days: number;
+                        rows: {
+                            /** Format: date */
+                            day: string;
+                            labId: components["schemas"]["LabId"];
+                            bookings: number;
+                            hours: number;
+                        }[];
+                    };
+                };
+            };
+            400: components["responses"]["InvalidQuery"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            503: components["responses"]["Unavailable"];
         };
     };
     leaveWaitlist: {
@@ -797,6 +1202,7 @@ export interface operations {
             415: components["responses"]["UnsupportedMediaType"];
             422: components["responses"]["Unprocessable"];
             429: components["responses"]["TooManyRequests"];
+            503: components["responses"]["Unavailable"];
         };
     };
     getBooking: {
@@ -975,6 +1381,374 @@ export interface operations {
             409: components["responses"]["Conflict"];
             412: components["responses"]["PreconditionFailed"];
             415: components["responses"]["UnsupportedMediaType"];
+        };
+    };
+    startBookingsExport: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional. Same key + same body within 24 h ⇒ the first answer is replayed. */
+                "Idempotency-Key"?: components["parameters"]["IdempotencyKey"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExportRequest"];
+            };
+        };
+        responses: {
+            202: components["responses"]["JobAccepted"];
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    startUsageReport: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional. Same key + same body within 24 h ⇒ the first answer is replayed. */
+                "Idempotency-Key"?: components["parameters"]["IdempotencyKey"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: date */
+                    from: string;
+                    /** @default 30 */
+                    days?: number;
+                };
+            };
+        };
+        responses: {
+            202: components["responses"]["JobAccepted"];
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    getJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["JobId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The job. `Retry-After` is present while it is queued or running. */
+            200: {
+                headers: {
+                    "Retry-After": components["headers"]["Retry-After"];
+                    "Cache-Control"?: "no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Job"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    cancelJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["JobId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cancellation requested; the worker stops before its next batch (`cancelRequested` is true) */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Job"];
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+        };
+    };
+    getJobResult: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["JobId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The result (CSV for exports, JSON for reports) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": string;
+                    "application/json": Record<string, never>;
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            404: components["responses"]["NotFound"];
+            409: components["responses"]["Conflict"];
+            410: components["responses"]["Gone"];
+        };
+    };
+    pollEvents: {
+        parameters: {
+            query?: {
+                after?: string;
+                limit?: number;
+                wait?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Events in order; continue with `next` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["Event"][];
+                        next: string;
+                    };
+                };
+            };
+            400: components["responses"]["InvalidQuery"];
+            401: components["responses"]["Unauthenticated"];
+            410: components["responses"]["Gone"];
+        };
+    };
+    streamEvents: {
+        parameters: {
+            query?: {
+                ticket?: string;
+            };
+            header?: {
+                "Last-Event-ID"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description An open stream */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/event-stream": string;
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+        };
+    };
+    createRealtimeTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The ticket */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        ticket: string;
+                        /** @constant */
+                        expiresIn: 30;
+                    };
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+        };
+    };
+    listWebhooks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The list */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: components["schemas"]["WebhookSubscription"][];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+        };
+    };
+    createWebhook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uri */
+                    url: string;
+                    events: components["schemas"]["EventType"][];
+                };
+            };
+        };
+        responses: {
+            /** @description Subscribed */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookSubscription"] & {
+                        secret: string;
+                    };
+                };
+            };
+            400: components["responses"]["ValidationFailed"];
+            401: components["responses"]["Unauthenticated"];
+            403: components["responses"]["Forbidden"];
+            422: components["responses"]["Unprocessable"];
+        };
+    };
+    deleteWebhook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["WebhookId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["Unauthenticated"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    listWebhookDeliveries: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: components["parameters"]["WebhookId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Newest first */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        data: {
+                            messageId: string;
+                            type: components["schemas"]["EventType"];
+                            attempt: number;
+                            status?: number | null;
+                            error?: string | null;
+                            durationMs?: number;
+                            at: components["schemas"]["Instant"];
+                        }[];
+                    };
+                };
+            };
+            401: components["responses"]["Unauthenticated"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    receiveBookingEvent: {
+        parameters: {
+            query?: never;
+            header: {
+                "webhook-id": string;
+                "webhook-timestamp": string;
+                "webhook-signature": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Event"];
+            };
+        };
+        responses: {
+            /** @description Received */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Received; will be processed later (recommended) */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Received */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Stop sending — LabFlow disables the subscription */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
     };
 }

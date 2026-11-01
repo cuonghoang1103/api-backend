@@ -3083,7 +3083,12 @@ Operator sees alarms for zone-C: [zone-C: test alarm]</div>
 <li>Pattern template: name, aliases, context, problem, summary of solution, strengths, weaknesses, applicability, related patterns, reference.</li>
 <li>Interface = contract; separate from implementation; names start with "I"; provided = ball, required = socket, realization = dashed line + hollow triangle; expanded box has a blank second compartment.</li>
 <li>Kinds of architecture: OO (14), client/server (15), SOA (16), component-based (17), real-time (18), product line (19); quality attributes (20). Slides 30–31 have a wrong title.</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-2-su-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Measure it in API &amp; System Design (Courses) — lesson 10.3: event contracts</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: the Asynchronous Message pattern — the producer goes on without waiting, consumers read from a queue. Different: this lesson draws the pattern; Courses runs it on LabFlow with Redis Streams and measures it. It also adds: the CloudEvents envelope, thin vs fat events, versioning, duplicates on redelivery (17 of 1,000), idempotent consumers and the transactional outbox (342 lost events vs 0).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>✍️ Tự làm thử — mẫu giao tiếp nào?</h2>
 <p>Với mỗi tương tác chọn Call/Return, Asynchronous Message hay Synchronous Message with Reply, rồi đối chiếu:</p>
 <table>
@@ -3103,7 +3108,12 @@ Operator sees alarms for zone-C: [zone-C: test alarm]</div>
 <li>Khuôn pattern: tên, tên khác, bối cảnh, vấn đề, tóm tắt lời giải, điểm mạnh, điểm yếu, áp dụng, pattern liên quan, tham khảo.</li>
 <li>Interface = hợp đồng; tách khỏi hiện thực; tên bắt đầu bằng "I"; cung cấp = quả bóng, đòi hỏi = ổ cắm, hiện thực = nét đứt + tam giác rỗng; hộp mở rộng để trống ngăn thứ hai.</li>
 <li>Các loại kiến trúc: OO (14), client/server (15), SOA (16), component (17), thời gian thực (18), dòng sản phẩm (19); thuộc tính chất lượng (20). Slide 30–31 ghi sai tiêu đề.</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-2-su-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 10.3: hợp đồng sự kiện</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: mẫu Asynchronous Message — bên gửi đi tiếp không chờ, bên nhận đọc từ hàng đợi. Khác: bài này vẽ pattern; Courses chạy nó trên LabFlow bằng Redis Streams rồi đo. Ở đó có thêm: phong bì CloudEvents, sự kiện mỏng và dày, phiên bản, bản trùng khi giao lại (17 trên 1.000), consumer idempotent và transactional outbox (mất 342 sự kiện so với 0).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['gomaa', 'Chapter 12, sections 12.3–12.7 (Figures 12.4–12.13, Tables 12.1–12.3) and Appendix A (all patterns in the template)', 'Chương 12, mục 12.3–12.7 (Hình 12.4–12.13, Bảng 12.1–12.3) và Phụ lục A (mọi pattern theo khuôn)'],
       ['fowler', 'Chapter 14 "Component Diagrams" (provided/required interfaces, ball and socket)', 'Chương 14 "Component Diagrams" (interface cung cấp/đòi hỏi, quả bóng và ổ cắm)'],

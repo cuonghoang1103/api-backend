@@ -1,0 +1,496 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-10-7-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-10-7-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10 · 1 — The starter, the traps and the reference run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "async APIs",
+        "webhooks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>POST /v2/reports/usage/exports for 50 labs × up to 92 days, graded by lab/grade-lab10.mjs (starter 0/10, solution 10/10).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>POST /v2/reports/usage/exports cho 50 phòng × tối đa 92 ngày, chấm bằng lab/grade-lab10.mjs (bản khởi đầu 0/10, lời giải 10/10).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the trap boxes of the lab page.|||Đọc các khung “Bẫy” của trang lab.",
+        "Ask: who receives this, and what does it contain?|||Hỏi: ai nhận được cái này, và nó chứa gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 10 · 1 — The starter, the traps and the reference run\n\nAnswer in the answer panel (no code needed).\n\n1. The starter answered a 92-day report correctly in 23.3 s. Why did it still score 0/10?Bản khởi đầu trả đúng báo cáo 92 ngày trong 23,3 s. Vì sao vẫn được 0/10?\n2. Trap: the worker publishes labflow.report.ready.v1 without an owner. What does the dispatcher of 10.5 do?Bẫy: worker phát labflow.report.ready.v1 mà không có owner. Bộ điều phối của bài 10.5 làm gì?\n3. Why is report.ready thin (job id + result link) while booking events are fat?Vì sao report.ready mỏng (id việc + liên kết kết quả) còn sự kiện lượt đặt thì dày?\n4. Trap: cancel only removes the job from the queue. What happens to a running 92-day report?Bẫy: huỷ chỉ xoá việc khỏi hàng đợi. Báo cáo 92 ngày đang chạy sẽ ra sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 10 · 1 — The starter, the traps and the reference run — answer key\n\n1. The starter answered a 92-day report correctly in 23.3 s. Why did it still score 0/10?Bản khởi đầu trả đúng báo cáo 92 ngày trong 23,3 s. Vì sao vẫn được 0/10?\n   Answer: b) The contract was wrong: the client held the connection, a second click recomputed, nobody was told when it was done\n   The lab changes the contract, not the computation: 23.3 s of waiting became a 202 in 6 ms.VI: Lab đổi hợp đồng, không đổi phép tính: 23,3 s chờ thành 202 trong 6 ms.\n\n2. Trap: the worker publishes labflow.report.ready.v1 without an owner. What does the dispatcher of 10.5 do?Bẫy: worker phát labflow.report.ready.v1 mà không có owner. Bộ điều phối của bài 10.5 làm gì?\n   Answer: d) Sends it to every manager subscribed to report.ready — the whole campus report leaks\n   WHERE … AND ($2 IS NULL OR owner_id = $2): no owner means no filter. Put the creator in the event, and keep the event thin — a link, not the rows.VI: WHERE … AND ($2 IS NULL OR owner_id = $2): không có owner là không lọc. Đưa người tạo vào sự kiện, và giữ sự kiện mỏng — một liên kết, không phải các dòng.\n\n3. Why is report.ready thin (job id + result link) while booking events are fat?Vì sao report.ready mỏng (id việc + liên kết kết quả) còn sự kiện lượt đặt thì dày?\n   Answer: a) The report is 46–300 KB, private to its creator, and already at a URL that checks the token\n   A webhook full of campus data would sit in the receiver’s logs for years.VI: Một webhook chứa đầy dữ liệu toàn trường sẽ nằm trong log của bên nhận nhiều năm.\n\n4. Trap: cancel only removes the job from the queue. What happens to a running 92-day report?Bẫy: huỷ chỉ xoá việc khỏi hàng đợi. Báo cáo 92 ngày đang chạy sẽ ra sao?\n   Answer: a) It reports “cancelled” but keeps calling the attendance service for about 20 more seconds\n   The task must look at the abort signal once per day; the reference stopped at 5% and the result answered 409.VI: Tác vụ phải xem tín hiệu huỷ mỗi ngày một lần; lời giải dừng ở 5% và kết quả trả 409.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The contract was wrong: the client held the connection, a second click recomputed, nobody was told when it was done</p><p>The lab changes the contract, not the computation: 23.3 s of waiting became a 202 in 6 ms.</p><p><i>VI: Lab đổi hợp đồng, không đổi phép tính: 23,3 s chờ thành 202 trong 6 ms.</i></p></li><li><p><b>d)</b> Sends it to every manager subscribed to report.ready — the whole campus report leaks</p><p>WHERE … AND ($2 IS NULL OR owner_id = $2): no owner means no filter. Put the creator in the event, and keep the event thin — a link, not the rows.</p><p><i>VI: WHERE … AND ($2 IS NULL OR owner_id = $2): không có owner là không lọc. Đưa người tạo vào sự kiện, và giữ sự kiện mỏng — một liên kết, không phải các dòng.</i></p></li><li><p><b>a)</b> The report is 46–300 KB, private to its creator, and already at a URL that checks the token</p><p>A webhook full of campus data would sit in the receiver’s logs for years.</p><p><i>VI: Một webhook chứa đầy dữ liệu toàn trường sẽ nằm trong log của bên nhận nhiều năm.</i></p></li><li><p><b>a)</b> It reports “cancelled” but keeps calling the attendance service for about 20 more seconds</p><p>The task must look at the abort signal once per day; the reference stopped at 5% and the result answered 409.</p><p><i>VI: Tác vụ phải xem tín hiệu huỷ mỗi ngày một lần; lời giải dừng ở 5% và kết quả trả 409.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The starter answered a 92-day report correctly in 23.3 s. Why did it still score 0/10?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản khởi đầu trả đúng báo cáo 92 ngày trong 23,3 s. Vì sao vẫn được 0/10?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The numbers did not match SQL, because the starter skipped the attendance service"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The contract was wrong: the client held the connection, a second click recomputed, nobody was told when it was done"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The grader’s timeout is 10 s, so every check after the first one could not run at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The starter returned CSV, while the rubric asks for application/json in every check"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The lab changes the contract, not the computation: 23.3 s of waiting became a 202 in 6 ms.</p><p><i>VI: Lab đổi hợp đồng, không đổi phép tính: 23,3 s chờ thành 202 trong 6 ms.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Trap: the worker publishes labflow.report.ready.v1 without an owner. What does the dispatcher of 10.5 do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bẫy: worker phát labflow.report.ready.v1 mà không có owner. Bộ điều phối của bài 10.5 làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Queues it until the creator subscribes, and then delivers it exactly once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Drops it, because events without an owner fail the AsyncAPI schema validation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sends it only to the first subscription created, which is usually the admin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Sends it to every manager subscribed to report.ready — the whole campus report leaks"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>WHERE … AND ($2 IS NULL OR owner_id = $2): no owner means no filter. Put the creator in the event, and keep the event thin — a link, not the rows.</p><p><i>VI: WHERE … AND ($2 IS NULL OR owner_id = $2): không có owner là không lọc. Đưa người tạo vào sự kiện, và giữ sự kiện mỏng — một liên kết, không phải các dòng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is report.ready thin (job id + result link) while booking events are fat?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao report.ready mỏng (id việc + liên kết kết quả) còn sự kiện lượt đặt thì dày?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The report is 46–300 KB, private to its creator, and already at a URL that checks the token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The receiver would have to recompute the report to verify a fat event"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Thin events are required by Standard Webhooks for any payload over 1 KB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fat events cannot be signed with HMAC once the body is larger than 64 KB"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A webhook full of campus data would sit in the receiver’s logs for years.</p><p><i>VI: Một webhook chứa đầy dữ liệu toàn trường sẽ nằm trong log của bên nhận nhiều năm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Trap: cancel only removes the job from the queue. What happens to a running 92-day report?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bẫy: huỷ chỉ xoá việc khỏi hàng đợi. Báo cáo 92 ngày đang chạy sẽ ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It reports “cancelled” but keeps calling the attendance service for about 20 more seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It finishes and sends report.ready, because the webhook was queued in advance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It stops at once, because removing a job also aborts the worker’s handler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BullMQ kills the worker process, so every other job on that worker is lost too"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The task must look at the abort signal once per day; the reference stopped at 5% and the result answered 409.</p><p><i>VI: Tác vụ phải xem tín hiệu huỷ mỗi ngày một lần; lời giải dừng ở 5% và kết quả trả 409.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Publishing report.ready without the creator.|||Phát report.ready mà không có người tạo."
+        },
+        {
+          "loi": "Cancelling only the queue entry.|||Chỉ huỷ mục trong hàng đợi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rubric",
+          "vi": "thang điểm"
+        },
+        {
+          "en": "thin event",
+          "vi": "sự kiện mỏng — chỉ id + liên kết"
+        }
+      ]
+    },
+    {
+      "title": "Lab 10 · 2 — Write gradeStatus(trace): the “Status” check of grade-lab10.mjs",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "async APIs",
+        "testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The grader polls <code>GET /v2/jobs/{id}</code> every 500 ms until a final status and records each answer as <code>{ status, percent, retryAfter }</code> (<code>retryAfter</code>: the header value or <code>null</code>). Grade the trace (1 point):</p><ul><li><code>seen</code> = the statuses with consecutive repeats collapsed, joined by <code>\" → \"</code>;</li><li><code>problems</code>, in this order: <code>\"not succeeded\"</code> (the last status is not <code>succeeded</code>, or the trace is empty), <code>\"never running\"</code>, <code>\"progress went back\"</code> (a percent lower than the one before it), <code>\"missing Retry-After\"</code> (a non-final answer without it; final = succeeded, failed, cancelled);</li><li><code>points</code> = 1 if there is no problem, else 0.</li></ul><p>Return <code>{ points, seen, problems }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ chấm hỏi <code>GET /v2/jobs/{id}</code> mỗi 500 ms tới khi gặp trạng thái cuối và ghi mỗi câu trả lời thành <code>{ status, percent, retryAfter }</code> (<code>retryAfter</code>: giá trị header hoặc <code>null</code>). Chấm dãy này (1 điểm):</p><ul><li><code>seen</code> = các trạng thái, gộp những lần lặp liền nhau, nối bằng <code>\" → \"</code>;</li><li><code>problems</code>, theo thứ tự: <code>\"not succeeded\"</code> (trạng thái cuối cùng không phải <code>succeeded</code>, hoặc dãy rỗng), <code>\"never running\"</code>, <code>\"progress went back\"</code> (một percent nhỏ hơn cái ngay trước), <code>\"missing Retry-After\"</code> (một câu trả lời chưa cuối mà thiếu nó; cuối = succeeded, failed, cancelled);</li><li><code>points</code> = 1 nếu không có vấn đề nào, ngược lại 0.</li></ul><p>Trả <code>{ points, seen, problems }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "trace — [{ status, percent, retryAfter: string | null }]|||trace — [{ status, percent, retryAfter: chuỗi | null }]",
+      "outputSpec": "{ points: 0 | 1, seen: string, problems: string[] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "gradeStatus([{\"status\":\"running\",\"percent\":0,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":14,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":57,\"retryAfter\":\"2\"},{\"status\":\"succeeded\",\"percent\":100,\"retryAfter\":null}])",
+          "output": "{\"points\":1,\"seen\":\"running → succeeded\",\"problems\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build seen by pushing a status only when it differs from the last one pushed.|||Dựng seen bằng cách chỉ thêm trạng thái khi khác cái vừa thêm.",
+        "Each problem is one .some(…) over the trace.|||Mỗi vấn đề là một .some(…) trên dãy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** grade the polling trace of one job */\nfunction gradeStatus(trace) {\n  // Write your solution here\n  const last = trace[trace.length - 1];\n  const ok = last.status === 'succeeded';\n  return { points: ok ? 1 : 0, seen: [...new Set(trace.map((t) => t.status))].join(' → '), problems: ok ? [] : ['not succeeded'] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction gradeStatus(trace) {\n  const FINAL = ['succeeded', 'failed', 'cancelled'];\n  const seen = [];\n  for (const t of trace) if (seen[seen.length - 1] !== t.status) seen.push(t.status);   // gộp các lần hỏi liền nhau cùng trạng thái\n  const problems = [];\n  if (!trace.length || trace[trace.length - 1].status !== 'succeeded') problems.push('not succeeded');\n  if (!seen.includes('running')) problems.push('never running');\n  if (trace.some((t, i) => i > 0 && t.percent < trace[i - 1].percent)) problems.push('progress went back');\n  if (trace.some((t) => !FINAL.includes(t.status) && !t.retryAfter)) problems.push('missing Retry-After');\n  return { points: problems.length ? 0 : 1, seen: seen.join(' → '), problems };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reference run: “✓ 1/1 … — running → succeeded”. A progress per day that never goes backwards and a Retry-After until the end are part of the contract of 10.1, not decoration.</p>",
+      "solutionExplanationHtmlVi": "<p>Lần chạy tham khảo: “✓ 1/1 … — running → succeeded”. Tiến độ theo ngày không bao giờ lùi và Retry-After tới cuối là một phần hợp đồng của bài 10.1, không phải trang trí.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The reference solution",
+              "vi": "Lời giải tham khảo"
+            },
+            "goi": "gradeStatus([{\"status\":\"running\",\"percent\":0,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":14,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":57,\"retryAfter\":\"2\"},{\"status\":\"succeeded\",\"percent\":100,\"retryAfter\":null}])",
+            "mongDoi": {
+              "points": 1,
+              "seen": "running → succeeded",
+              "problems": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Too fast to see running, no Retry-After",
+              "vi": "Quá nhanh nên không thấy running, thiếu Retry-After"
+            },
+            "goi": "gradeStatus([{\"status\":\"queued\",\"percent\":0,\"retryAfter\":null},{\"status\":\"succeeded\",\"percent\":100,\"retryAfter\":null}])",
+            "mongDoi": {
+              "points": 0,
+              "seen": "queued → succeeded",
+              "problems": [
+                "never running",
+                "missing Retry-After"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "gradeStatus([{\"status\":\"running\",\"percent\":40,\"retryAfter\":\"2\"},{\"status\":\"queued\",\"percent\":0,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":20,\"retryAfter\":\"2\"},{\"status\":\"succeeded\",\"percent\":100,\"retryAfter\":null}])",
+            "mongDoi": {
+              "points": 0,
+              "seen": "running → queued → running → succeeded",
+              "problems": [
+                "progress went back"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "gradeStatus([{\"status\":\"running\",\"percent\":5,\"retryAfter\":\"2\"},{\"status\":\"cancelled\",\"percent\":5,\"retryAfter\":null}])",
+            "mongDoi": {
+              "points": 0,
+              "seen": "running → cancelled",
+              "problems": [
+                "not succeeded"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "gradeStatus([])",
+            "mongDoi": {
+              "points": 0,
+              "seen": "",
+              "problems": [
+                "not succeeded",
+                "never running"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "gradeStatus([{\"status\":\"queued\",\"percent\":0,\"retryAfter\":\"2\"},{\"status\":\"queued\",\"percent\":0,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":50,\"retryAfter\":\"2\"},{\"status\":\"running\",\"percent\":50,\"retryAfter\":\"2\"},{\"status\":\"succeeded\",\"percent\":100,\"retryAfter\":null}])",
+            "mongDoi": {
+              "points": 1,
+              "seen": "queued → running → succeeded",
+              "problems": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Requiring Retry-After on the final answer too — LabFlow stops sending it once the job is finished.|||Đòi Retry-After cả ở câu trả lời cuối — LabFlow thôi gửi nó khi việc đã xong."
+        },
+        {
+          "loi": "Using a Set for seen: running → queued → running (a retry) would lose the second running.|||Dùng Set cho seen: running → queued → running (một lần thử lại) mất running thứ hai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trace",
+          "vi": "dãy quan sát"
+        },
+        {
+          "en": "monotonic",
+          "vi": "không giảm"
+        }
+      ]
+    },
+    {
+      "title": "Lab 10 · 3 — Write dispatch(events, subscriptions): report.ready only to its creator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "webhooks",
+        "authorization",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The webhook dispatcher of src/worker.js. Events come from the stream in order (the same event may be read twice). For each event, for each subscription in order, queue one message when the subscription is <code>active</code>, lists the event’s <code>type</code>, and — if the event has <code>data.owner</code> — belongs to that owner (<code>ownerId</code>); events without an owner (booking events) go to every matching subscription. The message id is <code>msg_&lt;event id&gt;_&lt;subscription id&gt;</code> and is also the queue’s job id, so a message already queued is not added again. Return the queued message ids in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ điều phối webhook trong src/worker.js. Sự kiện tới từ stream theo thứ tự (cùng một sự kiện có thể bị đọc hai lần). Với mỗi sự kiện, với mỗi đăng ký theo thứ tự, xếp một thông điệp khi đăng ký đang <code>active</code>, có <code>type</code> của sự kiện trong danh sách, và — nếu sự kiện có <code>data.owner</code> — thuộc về đúng người đó (<code>ownerId</code>); sự kiện không có owner (sự kiện lượt đặt) tới mọi đăng ký khớp. Id thông điệp là <code>msg_&lt;id sự kiện&gt;_&lt;id đăng ký&gt;</code> và cũng là job id của hàng đợi, nên thông điệp đã xếp thì không thêm lần nữa. Trả các id thông điệp đã xếp theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "events — [{ id, type, data }]; subscriptions — [{ id, ownerId, events, status }]",
+      "outputSpec": "string[] — message ids|||string[] — id thông điệp",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "dispatch([{\"id\":\"1793497205314-0\",\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"kind\":\"usage-report\",\"owner\":\"u_lan\",\"result\":\"/v2/jobs/job_2/result\",\"expiresAt\":\"2026-11-01T02:33:25.814Z\"}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+          "output": "[\"msg_1793497205314-0_wh_lan\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three filters per subscription: active, type, owner (only when the event has one).|||Ba bộ lọc cho mỗi đăng ký: active, type, owner (chỉ khi sự kiện có owner).",
+        "The dedupe key is the message id, not the event id: one event legitimately produces several messages.|||Khoá chống trùng là id thông điệp, không phải id sự kiện: một sự kiện sinh ra nhiều thông điệp là đúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which webhook messages should be queued? */\nfunction dispatch(events, subscriptions) {\n  // Write your solution here\n  const out = [];\n  for (const e of events) {\n    for (const s of subscriptions) {\n      if (s.events.includes(e.type)) out.push('msg_' + e.id + '_' + s.id);\n    }\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction dispatch(events, subscriptions) {\n  const queued = [];\n  for (const e of events) {\n    const owner = e.data && e.data.owner ? e.data.owner : null;\n    for (const s of subscriptions) {\n      if (s.status !== 'active' || !s.events.includes(e.type)) continue;\n      if (owner !== null && s.ownerId !== owner) continue;          // việc của ai ⇒ chỉ webhook của người đó\n      const msgId = `msg_${e.id}_${s.id}`;\n      if (!queued.includes(msgId)) queued.push(msgId);               // jobId = msgId: đọc lại sự kiện không xếp trùng\n    }\n  }\n  return queued;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the SQL of the dispatcher — status = ’active’ AND $1 = ANY(events) AND ($2 IS NULL OR owner_id = $2) — plus jobId = msgId. In the reference run the grader’s receiver got exactly 1 webhook for the 14-day job, a valid signature, and nothing for the cancelled one.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là câu SQL của bộ điều phối — status = ’active’ AND $1 = ANY(events) AND ($2 IS NULL OR owner_id = $2) — cộng jobId = msgId. Ở lần chạy tham khảo, bên nhận của bộ chấm nhận đúng 1 webhook cho việc 14 ngày, chữ ký hợp lệ, và không gì cho việc bị huỷ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "report.ready of Cô Lan’s job",
+              "vi": "report.ready của việc Cô Lan"
+            },
+            "goi": "dispatch([{\"id\":\"1793497205314-0\",\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"kind\":\"usage-report\",\"owner\":\"u_lan\",\"result\":\"/v2/jobs/job_2/result\",\"expiresAt\":\"2026-11-01T02:33:25.814Z\"}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [
+              "msg_1793497205314-0_wh_lan"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "A booking event has no owner",
+              "vi": "Sự kiện lượt đặt không có owner"
+            },
+            "goi": "dispatch([{\"id\":\"1793497206001-0\",\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_9\",\"status\":\"CANCELLED\",\"version\":2}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [
+              "msg_1793497206001-0_wh_lan",
+              "msg_1793497206001-0_wh_dept"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "dispatch([{\"id\":\"1793497205314-0\",\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"kind\":\"usage-report\",\"owner\":\"u_lan\",\"result\":\"/v2/jobs/job_2/result\",\"expiresAt\":\"2026-11-01T02:33:25.814Z\"}},{\"id\":\"1793497206001-0\",\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_9\",\"status\":\"CANCELLED\",\"version\":2}},{\"id\":\"1793497205314-0\",\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"kind\":\"usage-report\",\"owner\":\"u_lan\",\"result\":\"/v2/jobs/job_2/result\",\"expiresAt\":\"2026-11-01T02:33:25.814Z\"}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [
+              "msg_1793497205314-0_wh_lan",
+              "msg_1793497206001-0_wh_lan",
+              "msg_1793497206001-0_wh_dept"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "dispatch([{\"id\":\"1793497300000-0\",\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"kind\":\"usage-report\",\"owner\":\"u_hung\",\"result\":\"/v2/jobs/job_2/result\",\"expiresAt\":\"2026-11-01T02:33:25.814Z\"}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [
+              "msg_1793497300000-0_wh_hung"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "dispatch([{\"id\":\"1793497300001-0\",\"type\":\"labflow.export.completed.v1\",\"data\":{\"jobId\":\"job_3\",\"owner\":\"u_lan\"}}], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "dispatch([], [{\"id\":\"wh_lan\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\",\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_hung\",\"ownerId\":\"u_hung\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"active\"},{\"id\":\"wh_dept\",\"ownerId\":\"u_dept\",\"events\":[\"labflow.booking.cancelled.v1\"],\"status\":\"active\"},{\"id\":\"wh_old\",\"ownerId\":\"u_lan\",\"events\":[\"labflow.report.ready.v1\"],\"status\":\"disabled\"}])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring the owner — the trap of the lab: the whole campus report goes to every manager.|||Bỏ qua owner — bẫy của lab: báo cáo toàn trường tới mọi quản lý."
+        },
+        {
+          "loi": "Filtering by owner for booking events too, so the department’s subscription never gets a cancellation.|||Lọc theo owner cả với sự kiện lượt đặt, nên đăng ký của phòng đào tạo không bao giờ nhận lệnh huỷ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dispatcher",
+          "vi": "bộ điều phối"
+        },
+        {
+          "en": "fan-out",
+          "vi": "một sự kiện tới nhiều đăng ký"
+        }
+      ]
+    }
+  ]
+}

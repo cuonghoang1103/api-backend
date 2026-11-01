@@ -9,6 +9,19 @@ const PRIVATE = [/^127\./, /^10\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./,
   /^::1$/, /^f[cd]/i, /^fe80:/i, /^::ffff:(127|10|192\.168|169\.254)\./i];
 const isPrivate = (ip) => PRIVATE.some((r) => r.test(ip));
 
+// Bài 10.5 — URL webhook: LabFlow sẽ tự gửi request tới đó ⇒ cùng luật SSRF, kiểm lúc đăng ký VÀ lúc gửi (DNS có thể đổi).
+// LABFLOW_WEBHOOK_ALLOW_LOCAL=1 (CHỈ để học trên máy mình) cho phép http://localhost — bên nhận thử ở cổng 4005.
+export async function assertPublicUrl(raw) {
+  let url;
+  try { url = new URL(raw); } catch { throw new HttpError(422, 'URL_NOT_ALLOWED', { reason: 'not a URL' }); }
+  const host = url.hostname.replace(/^\[|\]$/g, '');
+  if (process.env.LABFLOW_WEBHOOK_ALLOW_LOCAL === '1' && ['localhost', '127.0.0.1'].includes(host)) return url;
+  if (url.protocol !== 'https:') throw new HttpError(422, 'URL_NOT_ALLOWED', { reason: 'https only' });
+  const addrs = isIP(host) ? [host] : (await lookup(host, { all: true })).map((a) => a.address);
+  if (addrs.some(isPrivate)) throw new HttpError(422, 'URL_NOT_ALLOWED', { reason: 'private address' });
+  return url;
+}
+
 export async function safeFetch(raw) {
   let url;
   try { url = new URL(raw); } catch { throw new HttpError(422, 'URL_NOT_ALLOWED', { reason: 'not a URL' }); }

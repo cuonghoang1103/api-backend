@@ -1,0 +1,601 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-10-3-realtime",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-10-3-realtime"
+  },
+  "exercises": [
+    {
+      "title": "Realtime 1 — Delay, idle cost and the buffering trap",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "realtime"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 10.4: perf/realtime.mjs (30 bookings, one client of each kind), perf/idle.mjs (100 clients, 30 s, no events) and perf/sse-buffer.mjs.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 10.4: perf/realtime.mjs (30 lượt đặt, mỗi loại một client), perf/idle.mjs (100 client, 30 s, không có sự kiện) và perf/sse-buffer.mjs.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For polling, think “half the interval”.|||Với polling, nghĩ tới “nửa khoảng hỏi”.",
+        "Test streams the way browsers call them — with gzip.|||Thử stream theo cách trình duyệt gọi — có gzip."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 1 — Delay, idle cost and the buffering trap\n\nAnswer in the answer panel (no code needed).\n\n1. Polling every 2 s saw events 1,112 ms late at p50. If the client polls every 500 ms instead, what should you expect?Polling mỗi 2 s thấy sự kiện trễ 1.112 ms ở p50. Nếu client hỏi mỗi 500 ms, nên chờ đợi điều gì?\n2. 100 idle clients for 30 s, zero events. How many requests did each contract make?100 client im lặng trong 30 s, không có sự kiện. Mỗi hợp đồng gửi bao nhiêu request?\n3. With compression on and res.flush() forgotten, a browser saw 0 of 8 SSE events while plain curl saw them all. Why?Bật nén mà quên res.flush(), trình duyệt thấy 0/8 sự kiện SSE còn curl thường thấy hết. Vì sao?\n4. Two LabFlow instances with events in process memory: a dashboard on :4002 saw 0 of 10 bookings made on :4000. What fixed it?Hai instance LabFlow giữ sự kiện trong bộ nhớ tiến trình: dashboard ở :4002 thấy 0/10 lượt đặt tạo ở :4000. Cái gì sửa được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Realtime 1 — Delay, idle cost and the buffering trap — answer key\n\n1. Polling every 2 s saw events 1,112 ms late at p50. If the client polls every 500 ms instead, what should you expect?Polling mỗi 2 s thấy sự kiện trễ 1.112 ms ở p50. Nếu client hỏi mỗi 500 ms, nên chờ đợi điều gì?\n   Answer: b) About 250 ms average delay and four times as many requests, most of them empty\n   An event lands at a random point of the interval: on average half of it (1.1 s for 2 s), at worst all of it (2,005 ms measured).VI: Sự kiện rơi vào một điểm ngẫu nhiên trong khoảng: trung bình nửa khoảng (1,1 s với 2 s), tệ nhất cả khoảng (đo 2.005 ms).\n\n2. 100 idle clients for 30 s, zero events. How many requests did each contract make?100 client im lặng trong 30 s, không có sự kiện. Mỗi hợp đồng gửi bao nhiêu request?\n   Answer: c) Polling 1,500 (~524 KB to say “nothing new”); long polling and SSE 100\n   Behind one NAT with Chapter 5’s 100 requests / 60 s IP limit, a computer room of polling clients is blocked within seconds.VI: Sau một NAT với giới hạn IP 100 request / 60 s của Chương 5, cả phòng máy dùng polling bị chặn sau vài giây.\n\n3. With compression on and res.flush() forgotten, a browser saw 0 of 8 SSE events while plain curl saw them all. Why?Bật nén mà quên res.flush(), trình duyệt thấy 0/8 sự kiện SSE còn curl thường thấy hết. Vì sao?\n   Answer: a) The browser sends Accept-Encoding: gzip, and gzip holds small writes in its buffer\n   curl without --compressed gets no gzip, so the bug ships when the developer tests with curl. nginx buffers too — LabFlow sends X-Accel-Buffering: no.VI: curl không --compressed thì không có gzip, nên lỗi lọt ra khi lập trình viên thử bằng curl. nginx cũng đệm — LabFlow gửi X-Accel-Buffering: no.\n\n4. Two LabFlow instances with events in process memory: a dashboard on :4002 saw 0 of 10 bookings made on :4000. What fixed it?Hai instance LabFlow giữ sự kiện trong bộ nhớ tiến trình: dashboard ở :4002 thấy 0/10 lượt đặt tạo ở :4000. Cái gì sửa được?\n   Answer: d) LABFLOW_EVENTS=redis: every instance reads the tail of one Redis Stream (10 of 10)\n   The same stream doubles as the replay log for Last-Event-ID.VI: Cùng stream đó cũng là nhật ký phát bù cho Last-Event-ID.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> About 250 ms average delay and four times as many requests, most of them empty</p><p>An event lands at a random point of the interval: on average half of it (1.1 s for 2 s), at worst all of it (2,005 ms measured).</p><p><i>VI: Sự kiện rơi vào một điểm ngẫu nhiên trong khoảng: trung bình nửa khoảng (1,1 s với 2 s), tệ nhất cả khoảng (đo 2.005 ms).</i></p></li><li><p><b>c)</b> Polling 1,500 (~524 KB to say “nothing new”); long polling and SSE 100</p><p>Behind one NAT with Chapter 5’s 100 requests / 60 s IP limit, a computer room of polling clients is blocked within seconds.</p><p><i>VI: Sau một NAT với giới hạn IP 100 request / 60 s của Chương 5, cả phòng máy dùng polling bị chặn sau vài giây.</i></p></li><li><p><b>a)</b> The browser sends Accept-Encoding: gzip, and gzip holds small writes in its buffer</p><p>curl without --compressed gets no gzip, so the bug ships when the developer tests with curl. nginx buffers too — LabFlow sends X-Accel-Buffering: no.</p><p><i>VI: curl không --compressed thì không có gzip, nên lỗi lọt ra khi lập trình viên thử bằng curl. nginx cũng đệm — LabFlow gửi X-Accel-Buffering: no.</i></p></li><li><p><b>d)</b> LABFLOW_EVENTS=redis: every instance reads the tail of one Redis Stream (10 of 10)</p><p>The same stream doubles as the replay log for Last-Event-ID.</p><p><i>VI: Cùng stream đó cũng là nhật ký phát bù cho Last-Event-ID.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Polling every 2 s saw events 1,112 ms late at p50. If the client polls every 500 ms instead, what should you expect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Polling mỗi 2 s thấy sự kiện trễ 1.112 ms ở p50. Nếu client hỏi mỗi 500 ms, nên chờ đợi điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 500 ms average delay and half as many requests, thanks to keep-alive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 250 ms average delay and four times as many requests, most of them empty"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 1 ms delay, the same as SSE, and the same number of requests as before"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No change in delay, because the server answers polls only once per second"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An event lands at a random point of the interval: on average half of it (1.1 s for 2 s), at worst all of it (2,005 ms measured).</p><p><i>VI: Sự kiện rơi vào một điểm ngẫu nhiên trong khoảng: trung bình nửa khoảng (1,1 s với 2 s), tệ nhất cả khoảng (đo 2.005 ms).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>100 idle clients for 30 s, zero events. How many requests did each contract make?</p><p style=\"opacity:.75;font-size:.92em\"><i>100 client im lặng trong 30 s, không có sự kiện. Mỗi hợp đồng gửi bao nhiêu request?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Polling 3,000; SSE 0, because the stream is opened only when an event exists"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All three made 100 requests, because idle connections are kept alive"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Polling 1,500 (~524 KB to say “nothing new”); long polling and SSE 100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Polling 100; long polling 1,500, because it reconnects after every timeout"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Behind one NAT with Chapter 5’s 100 requests / 60 s IP limit, a computer room of polling clients is blocked within seconds.</p><p><i>VI: Sau một NAT với giới hạn IP 100 request / 60 s của Chương 5, cả phòng máy dùng polling bị chặn sau vài giây.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With compression on and res.flush() forgotten, a browser saw 0 of 8 SSE events while plain curl saw them all. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bật nén mà quên res.flush(), trình duyệt thấy 0/8 sự kiện SSE còn curl thường thấy hết. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The browser sends Accept-Encoding: gzip, and gzip holds small writes in its buffer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "curl ignores retry: 3000, while the browser waits 3 s before every event"
+              },
+              {
+                "ma": "c",
+                "noiDung": "EventSource only accepts events whose id is a UUID, not a sequence number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers block text/event-stream unless the response also has CORS headers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>curl without --compressed gets no gzip, so the bug ships when the developer tests with curl. nginx buffers too — LabFlow sends X-Accel-Buffering: no.</p><p><i>VI: curl không --compressed thì không có gzip, nên lỗi lọt ra khi lập trình viên thử bằng curl. nginx cũng đệm — LabFlow gửi X-Accel-Buffering: no.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Two LabFlow instances with events in process memory: a dashboard on :4002 saw 0 of 10 bookings made on :4000. What fixed it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai instance LabFlow giữ sự kiện trong bộ nhớ tiến trình: dashboard ở :4002 thấy 0/10 lượt đặt tạo ở :4000. Cái gì sửa được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Sticky sessions, so that every client always reaches the instance it booked on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Switching the dashboard to WebSocket, which broadcasts to every instance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A shorter heartbeat, so that the dashboard reconnects to the other instance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "LABFLOW_EVENTS=redis: every instance reads the tail of one Redis Stream (10 of 10)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The same stream doubles as the replay log for Last-Event-ID.</p><p><i>VI: Cùng stream đó cũng là nhật ký phát bù cho Last-Event-ID.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing polling for many idle clients.|||Chọn polling cho nhiều client ít hoạt động."
+        },
+        {
+          "loi": "Testing SSE only with plain curl.|||Chỉ thử SSE bằng curl thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "long polling",
+          "vi": "giữ request tới khi có tin"
+        },
+        {
+          "en": "Server-Sent Events",
+          "vi": "luồng sự kiện server → client"
+        },
+        {
+          "en": "fan-out",
+          "vi": "toả sự kiện tới mọi instance"
+        }
+      ]
+    },
+    {
+      "title": "Realtime 2 — Write parseSse(text): read a text/event-stream",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "realtime",
+        "SSE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Parse an SSE stream the way <code>EventSource</code> does (WHATWG HTML, simplified). Lines end with <code>\\n</code>, <code>\\r\\n</code> or <code>\\r</code>.</p><ul><li>A line starting with <code>:</code> is a comment (<code>: ping</code>) — ignore it.</li><li><code>field: value</code> — split at the first <code>:</code> and drop <b>one</b> leading space of the value (a line without <code>:</code> is a field with an empty value). Fields: <code>data</code> (append a line), <code>event</code> (the type), <code>id</code> (remembered: later events without an <code>id</code> line carry the last id seen; <code>null</code> before any), <code>retry</code> (only if all digits ⇒ a number). Other fields are ignored.</li><li>A blank line dispatches <code>{ id, event, data }</code> — <code>event</code> defaults to <code>\"message\"</code>, data lines are joined with <code>\\n</code> — but only if at least one <code>data</code> line was seen; then the data and the type are reset (not the id).</li><li>An event not followed by a blank line before the end is discarded.</li></ul><p>Return <code>{ retry, events }</code> (<code>retry</code>: the last valid value, or <code>null</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc một luồng SSE như <code>EventSource</code> (WHATWG HTML, rút gọn). Dòng kết thúc bằng <code>\\n</code>, <code>\\r\\n</code> hoặc <code>\\r</code>.</p><ul><li>Dòng bắt đầu bằng <code>:</code> là chú thích (<code>: ping</code>) — bỏ qua.</li><li><code>field: value</code> — tách ở dấu <code>:</code> đầu tiên và bỏ <b>một</b> dấu cách đầu của value (dòng không có <code>:</code> là trường với value rỗng). Các trường: <code>data</code> (thêm một dòng), <code>event</code> (loại), <code>id</code> (được nhớ: sự kiện sau không có dòng <code>id</code> mang id cuối cùng đã thấy; <code>null</code> nếu chưa có), <code>retry</code> (chỉ khi toàn chữ số ⇒ một số). Trường khác bỏ qua.</li><li>Dòng trống phát <code>{ id, event, data }</code> — <code>event</code> mặc định <code>\"message\"</code>, các dòng data nối bằng <code>\\n</code> — nhưng chỉ khi đã thấy ít nhất một dòng <code>data</code>; rồi xoá data và loại (không xoá id).</li><li>Sự kiện chưa có dòng trống theo sau khi hết chữ thì bị bỏ.</li></ul><p>Trả <code>{ retry, events }</code> (<code>retry</code>: giá trị hợp lệ cuối cùng, hoặc <code>null</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — string (the bytes received so far)|||text — chuỗi (những gì đã nhận được)",
+      "outputSpec": "{ retry: number | null, events: [{ id, event, data }] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseSse(\"retry: 3000\\n\\nid: 41\\nevent: labflow.booking.created.v1\\ndata: {\\\"id\\\":\\\"41\\\",\\\"subject\\\":\\\"bk_41\\\"}\\n\\nid: 42\\nevent: labflow.booking.created.v1\\ndata: {\\\"id\\\":\\\"42\\\",\\\"subject\\\":\\\"bk_42\\\"}\\n\\n\")",
+          "output": "{\"retry\":3000,\"events\":[{\"id\":\"41\",\"event\":\"labflow.booking.created.v1\",\"data\":\"{\\\"id\\\":\\\"41\\\",\\\"subject\\\":\\\"bk_41\\\"}\"},{\"id\":\"42\",\"event\":\"labflow.booking.created.v1\",\"data\":\"{\\\"id\\\":\\\"42\\\",\\\"subject\\\":\\\"bk_42\\\"}\"}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(/\\r\\n|\\r|\\n/) — keep the empty strings, they are the blank lines.|||split(/\\r\\n|\\r|\\n/) — giữ các chuỗi rỗng, chúng là dòng trống.",
+        "Keep buffers: data lines, type, last id; flush them on a blank line.|||Giữ các bộ đệm: dòng data, loại, id cuối; xả chúng ở dòng trống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** parse a text/event-stream body */\nfunction parseSse(text) {\n  // Write your solution here\n  const events = [];\n  for (const block of text.split('\\n\\n')) {\n    const ev = {};\n    for (const line of block.split('\\n')) {\n      const [k, v] = line.split(': ');\n      ev[k] = v;\n    }\n    if (ev.data) events.push({ id: ev.id || null, event: ev.event || 'message', data: ev.data });\n  }\n  return { retry: null, events };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseSse(text) {\n  const events = [];\n  let retry = null, lastId = null, type = '', data = [];\n  for (const line of text.split(/\\r\\n|\\r|\\n/)) {\n    if (line === '') {                                           // dòng trống: kết thúc một sự kiện\n      if (data.length) events.push({ id: lastId, event: type || 'message', data: data.join('\\n') });\n      data = []; type = '';\n      continue;\n    }\n    if (line.startsWith(':')) continue;                          // chú thích (\": ping\")\n    const at = line.indexOf(':');\n    const field = at === -1 ? line : line.slice(0, at);\n    let value = at === -1 ? '' : line.slice(at + 1);\n    if (value.startsWith(' ')) value = value.slice(1);           // bỏ MỘT dấu cách sau dấu hai chấm\n    if (field === 'data') data.push(value);\n    else if (field === 'event') type = value;\n    else if (field === 'id') lastId = value;                     // id được NHỚ cho các sự kiện sau\n    else if (field === 'retry' && /^\\d+$/.test(value)) retry = Number(value);\n  }\n  return { retry, events };                                      // sự kiện chưa có dòng trống ở cuối bị bỏ\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the raw stream of lesson 10.4: retry: 3000 tells EventSource to wait 3 s before reconnecting, comments keep proxies from closing idle connections, and the remembered id is what the browser sends back as Last-Event-ID.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là luồng thô của bài 10.4: retry: 3000 bảo EventSource đợi 3 s trước khi nối lại, chú thích giữ proxy không cắt kết nối im lặng, và id được nhớ chính là thứ trình duyệt gửi lại trong Last-Event-ID.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The raw stream of 10.4",
+              "vi": "Luồng thô của bài 10.4"
+            },
+            "goi": "parseSse(\"retry: 3000\\n\\nid: 41\\nevent: labflow.booking.created.v1\\ndata: {\\\"id\\\":\\\"41\\\",\\\"subject\\\":\\\"bk_41\\\"}\\n\\nid: 42\\nevent: labflow.booking.created.v1\\ndata: {\\\"id\\\":\\\"42\\\",\\\"subject\\\":\\\"bk_42\\\"}\\n\\n\")",
+            "mongDoi": {
+              "retry": 3000,
+              "events": [
+                {
+                  "id": "41",
+                  "event": "labflow.booking.created.v1",
+                  "data": "{\"id\":\"41\",\"subject\":\"bk_41\"}"
+                },
+                {
+                  "id": "42",
+                  "event": "labflow.booking.created.v1",
+                  "data": "{\"id\":\"42\",\"subject\":\"bk_42\"}"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Comment, two data lines, a reset event",
+              "vi": "Chú thích, hai dòng data, sự kiện reset"
+            },
+            "goi": "parseSse(\": ping\\n\\ndata: line one\\ndata: line two\\n\\nevent: reset\\ndata: {\\\"latest\\\":\\\"42\\\"}\\n\\n\")",
+            "mongDoi": {
+              "retry": null,
+              "events": [
+                {
+                  "id": null,
+                  "event": "message",
+                  "data": "line one\nline two"
+                },
+                {
+                  "id": null,
+                  "event": "reset",
+                  "data": "{\"latest\":\"42\"}"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseSse(\"id: 7\\ndata: a\\n\\ndata: b\\n\\nid: 8\\ndata: c\")",
+            "mongDoi": {
+              "retry": null,
+              "events": [
+                {
+                  "id": "7",
+                  "event": "message",
+                  "data": "a"
+                },
+                {
+                  "id": "7",
+                  "event": "message",
+                  "data": "b"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseSse(\"retry: 3000\\r\\n\\r\\ndata:no-space\\r\\ndata:  two spaces\\r\\n\\r\\nretry: soon\\r\\n\")",
+            "mongDoi": {
+              "retry": 3000,
+              "events": [
+                {
+                  "id": null,
+                  "event": "message",
+                  "data": "no-space\n two spaces"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseSse(\"data: {\\\"a\\\": 1, \\\"b\\\": \\\"x: y\\\"}\\nfoo: bar\\ndata\\n\\n\")",
+            "mongDoi": {
+              "retry": null,
+              "events": [
+                {
+                  "id": null,
+                  "event": "message",
+                  "data": "{\"a\": 1, \"b\": \"x: y\"}\n"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseSse(\"event: labflow.booking.cancelled.v1\\n\\nid: 9\\n\\n\")",
+            "mongDoi": {
+              "retry": null,
+              "events": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting on \": \" — a JSON value with \": \" inside gets cut.|||Tách theo \": \" — value JSON có \": \" bên trong bị cắt."
+        },
+        {
+          "loi": "Dispatching “retry: 3000” followed by a blank line as an event without data.|||Phát “retry: 3000” kèm dòng trống thành một sự kiện không có data."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "event stream",
+          "vi": "luồng sự kiện"
+        },
+        {
+          "en": "dispatch",
+          "vi": "phát sự kiện ra"
+        },
+        {
+          "en": "Last-Event-ID",
+          "vi": "id sự kiện cuối đã nhận"
+        }
+      ]
+    },
+    {
+      "title": "Realtime 3 — Write resume(ring, lastEventId, held): replay without holes or duplicates",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "realtime",
+        "SSE",
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>An SSE client reconnects. LabFlow keeps the last events in a ring buffer <code>ring</code> (ids as numeric strings, oldest first; it already contains every event published so far, including those that arrived while the handler was replaying). The handler subscribes <b>before</b> it replays, so events that arrived during the replay are also in <code>held</code>. Return what to send:</p><ul><li><code>lastEventId === null</code> (fresh connection) ⇒ <code>{ reset: false, send: held }</code>;</li><li>the ring is not empty and <code>lastEventId &lt; first id − 1</code> (events were lost from the buffer) ⇒ <code>{ reset: true, latest: &lt;last id of ring&gt;, send: &lt;held ids greater than lastEventId&gt; }</code>;</li><li>otherwise ⇒ <code>{ reset: false, send }</code>: the ring ids greater than <code>lastEventId</code>, then the held ids greater than the last id sent — each id at most once, in order.</li></ul><p>Compare ids as <b>numbers</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một client SSE nối lại. LabFlow giữ các sự kiện cuối trong vòng đệm <code>ring</code> (id là chuỗi số, cũ trước; nó đã chứa mọi sự kiện đã phát, kể cả những sự kiện tới trong lúc handler đang phát bù). Handler đăng ký nghe <b>trước</b> khi phát bù, nên sự kiện tới giữa lúc phát bù cũng nằm trong <code>held</code>. Trả những gì cần gửi:</p><ul><li><code>lastEventId === null</code> (kết nối mới) ⇒ <code>{ reset: false, send: held }</code>;</li><li>vòng đệm khác rỗng và <code>lastEventId &lt; id đầu − 1</code> (sự kiện đã rơi khỏi vùng giữ) ⇒ <code>{ reset: true, latest: &lt;id cuối của ring&gt;, send: &lt;các id trong held lớn hơn lastEventId&gt; }</code>;</li><li>ngược lại ⇒ <code>{ reset: false, send }</code>: các id trong ring lớn hơn <code>lastEventId</code>, rồi các id trong held lớn hơn id vừa gửi cuối cùng — mỗi id tối đa một lần, đúng thứ tự.</li></ul><p>So id như <b>số</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ring — string[] (ascending numeric ids); lastEventId — string | null; held — string[]|||ring — string[] (id số tăng dần); lastEventId — chuỗi | null; held — string[]",
+      "outputSpec": "{ reset: false, send } | { reset: true, latest, send }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "resume([\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], \"5\", [])",
+          "output": "{\"reset\":false,\"send\":[\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A gap means the first id you still have is not lastEventId + 1 or less.|||Có khoảng hở nghĩa là id đầu còn giữ lớn hơn lastEventId + 1.",
+        "Track the last id sent; the held list then filters itself.|||Theo dõi id đã gửi cuối; danh sách held tự lọc theo nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what to send to a reconnecting SSE client */\nfunction resume(ring, lastEventId, held) {\n  // Write your solution here\n  return { reset: false, send: ring.filter((id) => id > (lastEventId || '')).concat(held) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction resume(ring, lastEventId, held) {\n  if (lastEventId === null) return { reset: false, send: [...held] };            // không nối lại: chỉ những gì mới tới\n  let last = Number(lastEventId);                                                 // id là SỐ: \"10\" > \"9\"\n  if (ring.length && last < Number(ring[0]) - 1) {                                // đã rơi khỏi vùng giữ ⇒ không giả vờ\n    return { reset: true, latest: ring[ring.length - 1], send: held.filter((id) => Number(id) > last) };\n  }\n  const send = [];\n  for (const id of ring) if (Number(id) > last) { send.push(id); last = Number(id); }\n  for (const id of held) if (Number(id) > last) { send.push(id); last = Number(id); }   // tới giữa lúc phát bù: không trùng\n  return { reset: false, send };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>perf/sse-resume.mjs with EVENTS_KEEP=20: no Last-Event-ID ⇒ only 11 and 12 (bk_6…bk_10 silently lost); Last-Event-ID: 5 ⇒ all 7 in order; too old ⇒ one reset {\"latest\":\"42\"}, and the client reloads state from the REST API.</p>",
+      "solutionExplanationHtmlVi": "<p>perf/sse-resume.mjs với EVENTS_KEEP=20: không Last-Event-ID ⇒ chỉ 11 và 12 (bk_6…bk_10 mất âm thầm); Last-Event-ID: 5 ⇒ đủ 7 theo thứ tự; quá cũ ⇒ một sự kiện reset {\"latest\":\"42\"}, client tải lại trạng thái từ REST API.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "(b) Last-Event-ID: 5",
+              "vi": "(b) Last-Event-ID: 5"
+            },
+            "goi": "resume([\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], \"5\", [])",
+            "mongDoi": {
+              "reset": false,
+              "send": [
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "(c) too old, EVENTS_KEEP=20",
+              "vi": "(c) quá cũ, EVENTS_KEEP=20"
+            },
+            "goi": "resume([\"23\",\"24\",\"25\",\"26\",\"27\",\"28\",\"29\",\"30\",\"31\",\"32\",\"33\",\"34\",\"35\",\"36\",\"37\",\"38\",\"39\",\"40\",\"41\",\"42\"], \"5\", [])",
+            "mongDoi": {
+              "reset": true,
+              "latest": "42",
+              "send": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "resume([\"1\",\"2\",\"3\",\"4\",\"5\",\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], null, [\"11\",\"12\"])",
+            "mongDoi": {
+              "reset": false,
+              "send": [
+                "11",
+                "12"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "resume([\"41\",\"42\",\"43\",\"44\",\"45\",\"46\",\"47\",\"48\",\"49\",\"50\"], \"45\", [\"49\",\"50\"])",
+            "mongDoi": {
+              "reset": false,
+              "send": [
+                "46",
+                "47",
+                "48",
+                "49",
+                "50"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "resume([\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], \"9\", [])",
+            "mongDoi": {
+              "reset": false,
+              "send": [
+                "10",
+                "11",
+                "12"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "resume([\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], \"5\", [\"12\"])",
+            "mongDoi": {
+              "reset": false,
+              "send": [
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "resume([\"6\",\"7\",\"8\",\"9\",\"10\",\"11\",\"12\"], \"12\", [])",
+            "mongDoi": {
+              "reset": false,
+              "send": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "resume([\"30\",\"31\",\"32\",\"33\",\"34\",\"35\",\"36\",\"37\",\"38\",\"39\",\"40\",\"41\",\"42\",\"43\",\"44\",\"45\",\"46\",\"47\",\"48\",\"49\"], \"7\", [\"48\",\"49\"])",
+            "mongDoi": {
+              "reset": true,
+              "latest": "49",
+              "send": [
+                "48",
+                "49"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ids as strings: \"10\" &lt; \"9\", so event 10 is never replayed.|||So id như chuỗi: \"10\" &lt; \"9\", nên sự kiện 10 không bao giờ được phát bù."
+        },
+        {
+          "loi": "Appending held to the replay without filtering — the events of the replay window arrive twice.|||Nối held vào phần phát bù mà không lọc — sự kiện trong lúc phát bù tới hai lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ring buffer",
+          "vi": "vòng đệm"
+        },
+        {
+          "en": "replay",
+          "vi": "phát bù"
+        },
+        {
+          "en": "reset",
+          "vi": "báo client tải lại trạng thái"
+        }
+      ]
+    }
+  ]
+}

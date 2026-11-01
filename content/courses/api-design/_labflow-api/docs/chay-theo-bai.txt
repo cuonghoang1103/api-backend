@@ -1,0 +1,27 @@
+LabFlow API — cuối Chương 10 khoá API Design (cuongthai.com/courses/api-design)
+Chỉ để HỌC. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026.
+
+  npm install
+  npm start                      # không cần PostgreSQL/Redis (việc nền chạy trong RAM: LABFLOW_JOBS=memory)
+  npm test                       # 13 test
+
+Cần cho Chương 9–10: PostgreSQL 18 ở PGURL (mặc định postgres://labflow@localhost:55432/labflow, có bảng bookings
+1 triệu dòng của Chương 3) và Redis 8.2 ở LABFLOW_REDIS (mặc định redis://localhost:6390).
+
+Chương 10 (bài → lệnh):
+  10.1  node perf/edge-proxy.mjs 8090 4000 ; curl …:8090/v2/exports/bookings.csv?from=2026-11-01&to=2027-03-01   (524 ở giây 100)
+        LABFLOW_JOBS=bullmq npm start ; node src/worker.js ; node perf/poll-job.mjs '{"labId":"lab_1","from":"2026-11-01","to":"2028-06-01"}'
+        node perf/many-jobs.mjs 6      (chạy 1 rồi 3 worker để so)   — EXPORT_BATCH_MS giả lập dịch vụ điểm danh (250 ms/lô)
+  10.2  MODE=none|mark-first|same-tx CRASH=0.02 node events/redelivery.mjs     (giao trùng và consumer idempotent)
+        MODE=dual|outbox node events/outbox.mjs                                (ghi kép và transactional outbox)
+        node events/thin-vs-fat.mjs ; node events/versions.mjs ; node asyncapi/validate.mjs
+  10.3  LABFLOW_BOOKING_LIMIT=1000000/60 npm start ; node perf/realtime.mjs ; node perf/idle.mjs poll|long|sse
+        EVENTS_KEEP=20 … ; node perf/sse-resume.mjs ; LABFLOW_SSE_NOFLUSH=1 … ; node perf/sse-buffer.mjs
+        LABFLOW_EVENTS=redis (hai instance :4000 và :4002) ; node perf/two-instances.mjs ; node perf/ws-demo.mjs
+  10.4  LABFLOW_PG=1 LABFLOW_EVENTS=redis LABFLOW_WEBHOOK_ALLOW_LOCAL=1 npm start ; LABFLOW_WEBHOOK_ALLOW_LOCAL=1 node src/worker.js
+        WEBHOOK_SECRET=whsec_… node webhooks/receiver.mjs   (FAIL_FIRST, SLOW_MS, ASYNC, DEDUPE, ORDER, DUMP)
+        node webhooks/replay.mjs dump.json [--tamper] ; node webhooks/reserialize.mjs
+  Lab 10  cp lab/report-exports-starter.js src/routes/reportExports.js   (src/routes/reportExports.js trong gói là lời giải — sao lưu trước)
+          node lab/grade-lab10.mjs   (bộ chấm 10 điểm; mở bên nhận ở :4006)
+
+Hợp đồng: openapi/openapi.yaml 2.3.0 (+ mốc openapi-v2.2.0.yaml, npm run api:diff) · asyncapi/asyncapi.yaml (AsyncAPI 3.1) · docs/slo.md

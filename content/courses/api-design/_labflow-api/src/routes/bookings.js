@@ -13,6 +13,15 @@ import { authorize } from '../policy.js';
 import { now } from '../deprecation.js';
 import { requireDependency } from '../resilience.js';
 import { notModifiedEarly, bump } from '../httpCache.js';
+import { publish } from '../events.js';
+
+// Chương 10 — mỗi thay đổi của lượt đặt thành MỘT sự kiện (realtime 10.4, webhook 10.5).
+// data KHÔNG có userId/tên/email: ai cũng nhận được sự kiện này (10.3 — sự kiện "dày" nhưng không chở dữ liệu cá nhân).
+// version tăng mỗi lần đổi ⇒ bên nhận biết sự kiện nào mới hơn khi chúng tới sai thứ tự (10.6).
+const bookingEvent = (b) => ({ id: b.id, labId: b.labId, period: { start: b.startAt, end: b.endAt }, status: b.status, version: b.version ?? 1 });
+// ⚠ GHI KÉP (dual write, bài 10.3): lượt đặt đã lưu, rồi MỚI phát sự kiện — phát hỏng thì sự kiện mất.
+// LabFlow giữ dữ liệu trong RAM tới Chương 12, nên outbox (10.3) chờ tới khi có PostgreSQL.
+const emit = (type, b) => publish(`labflow.booking.${type}.v1`, b.id, bookingEvent(b)).catch((e) => console.error('publish', e.message));
 
 // Bài 6.3 (OWASP API6 — luồng nghiệp vụ nhạy cảm): một sinh viên giữ tối đa 3 lượt đặt còn hiệu lực
 export const MAX_ACTIVE = 3;
@@ -96,6 +105,7 @@ bookingsRouter.route('/')
     };
     bookings.push(booking);
     bump('bookings');
+    emit('created', booking);
     res.status(201).location(`${req.baseUrl}/${booking.id}`).json(viewsOf(req).booking(booking));
   })
   .all(onlyAllow('GET', 'HEAD', 'POST'));
@@ -127,6 +137,8 @@ bookingsRouter.route('/:id/check-in')
     b.status = 'CHECKED_IN';
     bump('bookings');
     b.checkedInAt = new Date().toISOString();
+    b.version = (b.version ?? 1) + 1;
+    emit('checked_in', b);
     res.json(viewsOf(req).booking(b));
   })
   .all(v2Only, onlyAllow('POST'));
@@ -139,6 +151,8 @@ bookingsRouter.route('/:id/cancel')
     b.status = 'CANCELLED';
     bump('bookings');
     b.cancelledAt = new Date().toISOString();
+    b.version = (b.version ?? 1) + 1;
+    emit('cancelled', b);
     res.json(viewsOf(req).booking(b));
   })
   .all(onlyAllow('POST'));

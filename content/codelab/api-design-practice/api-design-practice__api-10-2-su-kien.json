@@ -1,0 +1,627 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-10-2-su-kien",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-10-2-su-kien"
+  },
+  "exercises": [
+    {
+      "title": "Event contracts 1 — Thin, fat, duplicates and lost events",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "events",
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 10.3: events/thin-vs-fat.mjs, events/redelivery.mjs (1,000 events, 2% crash at each dangerous moment) and events/outbox.mjs (Redis cut off for 1.5 s).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 10.3: events/thin-vs-fat.mjs, events/redelivery.mjs (1.000 sự kiện, 2% chết ở mỗi thời điểm nguy hiểm) và events/outbox.mjs (Redis rớt 1,5 s).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: what can happen between two steps that are not in one transaction?|||Hỏi: điều gì có thể xảy ra giữa hai bước không cùng một transaction?",
+        "Duplicates can be filtered; losses cannot be undone.|||Bản trùng lọc được; mất thì không lấy lại được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Event contracts 1 — Thin, fat, duplicates and lost events\n\nAnswer in the answer panel (no code needed).\n\n1. Thin events were 39% smaller (203 vs 330 B). What did they cost the email consumer?Sự kiện mỏng nhỏ hơn 39% (203 so với 330 B). Consumer gửi email phải trả giá gì?\n2. With MODE=mark-first (“remember the id, then send”), what did 1,000 events with crashes give?Với MODE=mark-first (“ghi nhớ id rồi mới gửi”), 1.000 sự kiện có sự cố cho kết quả gì?\n3. Redis was down for 1.5 s while 1,000 bookings were written. Dual write lost 342 events; the outbox lost 0. What did the outbox pay?Redis sập 1,5 s khi ghi 1.000 lượt đặt. Ghi kép mất 342 sự kiện; outbox mất 0. Outbox phải trả gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Event contracts 1 — Thin, fat, duplicates and lost events — answer key\n\n1. Thin events were 39% smaller (203 vs 330 B). What did they cost the email consumer?Sự kiện mỏng nhỏ hơn 39% (203 so với 330 B). Consumer gửi email phải trả giá gì?\n   Answer: c) 200 call-backs to LabFlow, and 100 “confirmed” emails that read today’s CANCELLED\n   A thin event says that something changed; you learn what only by asking now — and now may be later.VI: Sự kiện mỏng nói rằng có gì đó đã đổi; muốn biết đổi gì phải hỏi lúc này — mà lúc này có thể đã muộn.\n\n2. With MODE=mark-first (“remember the id, then send”), what did 1,000 events with crashes give?Với MODE=mark-first (“ghi nhớ id rồi mới gửi”), 1.000 sự kiện có sự cố cho kết quả gì?\n   Answer: b) 21 lost: a crash after the mark left events marked as done but never sent\n   none: 17 duplicates · mark-first: 21 lost · same-tx (mark + send in one transaction): exactly 1,000.VI: none: 17 trùng · mark-first: mất 21 · same-tx (đánh dấu + gửi trong một transaction): đúng 1.000.\n\n3. Redis was down for 1.5 s while 1,000 bookings were written. Dual write lost 342 events; the outbox lost 0. What did the outbox pay?Redis sập 1,5 s khi ghi 1.000 lượt đặt. Ghi kép mất 342 sự kiện; outbox mất 0. Outbox phải trả gì?\n   Answer: d) Delay (p50 118 ms, p99 1.6 s) and 18 duplicates when the relay died before marking\n   The relay may publish twice, so consumers must be idempotent — and the outbox gives each event its own id (evt_42) before publishing, so a duplicate keeps it.VI: Relay có thể phát hai lần, nên consumer phải chống trùng — và outbox gán id riêng (evt_42) trước khi phát, nên bản trùng giữ nguyên id.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 200 call-backs to LabFlow, and 100 “confirmed” emails that read today’s CANCELLED</p><p>A thin event says that something changed; you learn what only by asking now — and now may be later.</p><p><i>VI: Sự kiện mỏng nói rằng có gì đó đã đổi; muốn biết đổi gì phải hỏi lúc này — mà lúc này có thể đã muộn.</i></p></li><li><p><b>b)</b> 21 lost: a crash after the mark left events marked as done but never sent</p><p>none: 17 duplicates · mark-first: 21 lost · same-tx (mark + send in one transaction): exactly 1,000.</p><p><i>VI: none: 17 trùng · mark-first: mất 21 · same-tx (đánh dấu + gửi trong một transaction): đúng 1.000.</i></p></li><li><p><b>d)</b> Delay (p50 118 ms, p99 1.6 s) and 18 duplicates when the relay died before marking</p><p>The relay may publish twice, so consumers must be idempotent — and the outbox gives each event its own id (evt_42) before publishing, so a duplicate keeps it.</p><p><i>VI: Relay có thể phát hai lần, nên consumer phải chống trùng — và outbox gán id riêng (evt_42) trước khi phát, nên bản trùng giữ nguyên id.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Thin events were 39% smaller (203 vs 330 B). What did they cost the email consumer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện mỏng nhỏ hơn 39% (203 so với 330 B). Consumer gửi email phải trả giá gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The consumer had to keep a copy of every booking in its own database first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every thin event had to be signed twice, which doubled the broker’s CPU time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 call-backs to LabFlow, and 100 “confirmed” emails that read today’s CANCELLED"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing measurable: the call-backs were cached by the CDN in front of LabFlow"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A thin event says that something changed; you learn what only by asking now — and now may be later.</p><p><i>VI: Sự kiện mỏng nói rằng có gì đó đã đổi; muốn biết đổi gì phải hỏi lúc này — mà lúc này có thể đã muộn.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With MODE=mark-first (“remember the id, then send”), what did 1,000 events with crashes give?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với MODE=mark-first (“ghi nhớ id rồi mới gửi”), 1.000 sự kiện có sự cố cho kết quả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "17 duplicates: the mark is checked after the notification is already sent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "21 lost: a crash after the mark left events marked as done but never sent"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exactly 1,000: marking first is the textbook idempotent consumer pattern"
+              },
+              {
+                "ma": "d",
+                "noiDung": "342 lost: the consumer could not reach Redis while it was writing the mark"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>none: 17 duplicates · mark-first: 21 lost · same-tx (mark + send in one transaction): exactly 1,000.</p><p><i>VI: none: 17 trùng · mark-first: mất 21 · same-tx (đánh dấu + gửi trong một transaction): đúng 1.000.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Redis was down for 1.5 s while 1,000 bookings were written. Dual write lost 342 events; the outbox lost 0. What did the outbox pay?</p><p style=\"opacity:.75;font-size:.92em\"><i>Redis sập 1,5 s khi ghi 1.000 lượt đặt. Ghi kép mất 342 sự kiện; outbox mất 0. Outbox phải trả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A distributed transaction across PostgreSQL and Redis that doubled the write time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The bookings were refused with 503 for as long as Redis was unreachable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every event had to be published twice, once by the API and once by the relay"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Delay (p50 118 ms, p99 1.6 s) and 18 duplicates when the relay died before marking"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The relay may publish twice, so consumers must be idempotent — and the outbox gives each event its own id (evt_42) before publishing, so a duplicate keeps it.</p><p><i>VI: Relay có thể phát hai lần, nên consumer phải chống trùng — và outbox gán id riêng (evt_42) trước khi phát, nên bản trùng giữ nguyên id.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Mark first” — it turns duplicates into silent losses.|||“Đánh dấu trước” — biến bản trùng thành mất âm thầm."
+        },
+        {
+          "loi": "Saving the row, then publishing the event (dual write).|||Lưu dòng rồi mới phát sự kiện (ghi kép)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thin / fat event",
+          "vi": "sự kiện mỏng / dày"
+        },
+        {
+          "en": "dual write",
+          "vi": "ghi kép"
+        },
+        {
+          "en": "transactional outbox",
+          "vi": "hộp thư đi trong transaction"
+        }
+      ]
+    },
+    {
+      "title": "Event contracts 2 — Write checkEnvelope(e) for LabFlow events",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "events",
+        "CloudEvents"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Check an event before it is published. Return the list of problems, in this order (empty list = valid):</p><ol><li>for each of <code>id</code>, <code>source</code>, <code>specversion</code>, <code>type</code> (the four required CloudEvents attributes) that is not a non-empty string: <code>\"missing &lt;name&gt;\"</code>;</li><li><code>specversion</code> present but not <code>\"1.0\"</code>: <code>\"specversion must be 1.0\"</code>;</li><li><code>type</code> present but not ending in <code>.v&lt;digits&gt;</code>: <code>\"type needs a version\"</code>;</li><li>for each of <code>email</code>, <code>name</code>, <code>userId</code> that is a key of <code>data</code>: <code>\"PII in data: &lt;key&gt;\"</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm một sự kiện trước khi phát. Trả danh sách vấn đề, theo thứ tự (danh sách rỗng = hợp lệ):</p><ol><li>với mỗi <code>id</code>, <code>source</code>, <code>specversion</code>, <code>type</code> (bốn thuộc tính bắt buộc của CloudEvents) không phải chuỗi khác rỗng: <code>\"missing &lt;tên&gt;\"</code>;</li><li>có <code>specversion</code> nhưng khác <code>\"1.0\"</code>: <code>\"specversion must be 1.0\"</code>;</li><li>có <code>type</code> nhưng không kết thúc bằng <code>.v&lt;chữ số&gt;</code>: <code>\"type needs a version\"</code>;</li><li>với mỗi <code>email</code>, <code>name</code>, <code>userId</code> là khoá của <code>data</code>: <code>\"PII in data: &lt;khoá&gt;\"</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "e — object (data may be missing)|||e — object (data có thể thiếu)",
+      "outputSpec": "string[]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkEnvelope({\"id\":\"1\",\"specversion\":\"1.0\",\"type\":\"labflow.booking.created.v1\",\"source\":\"/labflow/v2\",\"subject\":\"bk_1\",\"time\":\"2026-11-01T01:28:47.355Z\",\"datacontenttype\":\"application/json\",\"data\":{\"id\":\"bk_1\",\"labId\":\"lab_2\",\"period\":{\"start\":\"2026-12-01T01:00:00.000Z\",\"end\":\"2026-12-01T03:00:00.000Z\"},\"status\":\"PENDING\",\"version\":1}})",
+          "output": "[]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Loop over the four required names first, then the two format rules.|||Duyệt bốn tên bắt buộc trước, rồi hai luật định dạng.",
+        "/\\.v\\d+$/ checks the version suffix; \"k in data\" checks a key.|||/\\.v\\d+$/ kiểm hậu tố phiên bản; \"k in data\" kiểm một khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** problems of a CloudEvents envelope */\nfunction checkEnvelope(e) {\n  // Write your solution here\n  return ['id', 'type'].filter((k) => !e[k]).map((k) => 'missing ' + k);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkEnvelope(e) {\n  const problems = [];\n  for (const k of ['id', 'source', 'specversion', 'type']) {\n    if (typeof e[k] !== 'string' || e[k] === '') problems.push(`missing ${k}`);   // bốn thuộc tính bắt buộc của CloudEvents 1.0\n  }\n  if (typeof e.specversion === 'string' && e.specversion !== '' && e.specversion !== '1.0') problems.push('specversion must be 1.0');\n  if (typeof e.type === 'string' && e.type !== '' && !/\\.v\\d+$/.test(e.type)) problems.push('type needs a version');\n  const data = e.data && typeof e.data === 'object' ? e.data : {};\n  for (const k of ['email', 'name', 'userId']) if (k in data) problems.push(`PII in data: ${k}`);   // sự kiện tới MỌI subscriber\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Required by CloudEvents 1.0: id, source, specversion, type (source + id unique per distinct event). The version lives in the type (.v1), and LabFlow’s booking events carry no user id, name or email because every subscriber receives them.</p>",
+      "solutionExplanationHtmlVi": "<p>Bắt buộc theo CloudEvents 1.0: id, source, specversion, type (source + id duy nhất cho mỗi sự kiện khác nhau). Phiên bản nằm trong type (.v1), và sự kiện lượt đặt của LabFlow không mang id, tên hay email người dùng vì mọi subscriber đều nhận được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real event of lesson 10.3",
+              "vi": "Sự kiện thật của bài 10.3"
+            },
+            "goi": "checkEnvelope({\"id\":\"1\",\"specversion\":\"1.0\",\"type\":\"labflow.booking.created.v1\",\"source\":\"/labflow/v2\",\"subject\":\"bk_1\",\"time\":\"2026-11-01T01:28:47.355Z\",\"datacontenttype\":\"application/json\",\"data\":{\"id\":\"bk_1\",\"labId\":\"lab_2\",\"period\":{\"start\":\"2026-12-01T01:00:00.000Z\",\"end\":\"2026-12-01T03:00:00.000Z\"},\"status\":\"PENDING\",\"version\":1}})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Three things wrong",
+              "vi": "Ba chỗ sai"
+            },
+            "goi": "checkEnvelope({\"id\":\"7\",\"type\":\"labflow.booking.created\",\"data\":{\"id\":\"bk_7\",\"email\":\"an@fpt.edu.vn\"}})",
+            "mongDoi": [
+              "missing source",
+              "missing specversion",
+              "type needs a version",
+              "PII in data: email"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkEnvelope({\"id\":\"1\",\"specversion\":\"0.3\",\"type\":\"labflow.booking.created.v1\",\"source\":\"/labflow/v2\",\"subject\":\"bk_1\",\"time\":\"2026-11-01T01:28:47.355Z\",\"datacontenttype\":\"application/json\",\"data\":{\"id\":\"bk_1\",\"labId\":\"lab_2\",\"period\":{\"start\":\"2026-12-01T01:00:00.000Z\",\"end\":\"2026-12-01T03:00:00.000Z\"},\"status\":\"PENDING\",\"version\":1}})",
+            "mongDoi": [
+              "specversion must be 1.0"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkEnvelope({\"id\":\"\",\"specversion\":\"1.0\",\"type\":\"labflow.booking.created.v1\",\"source\":\"/labflow/v2\",\"subject\":\"bk_1\",\"time\":\"2026-11-01T01:28:47.355Z\",\"datacontenttype\":\"application/json\",\"data\":{\"id\":\"bk_1\",\"labId\":\"lab_2\",\"period\":{\"start\":\"2026-12-01T01:00:00.000Z\",\"end\":\"2026-12-01T03:00:00.000Z\"},\"status\":\"PENDING\",\"version\":1,\"userId\":\"u_an\",\"name\":\"An\"}})",
+            "mongDoi": [
+              "missing id",
+              "PII in data: name",
+              "PII in data: userId"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkEnvelope({\"specversion\":\"1.0\",\"source\":\"/labflow/v2\",\"id\":\"9\",\"type\":\"labflow.booking.cancelled.v12\"})",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "checkEnvelope({})",
+            "mongDoi": [
+              "missing id",
+              "missing source",
+              "missing specversion",
+              "missing type"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting “type needs a version” for a missing type as well.|||Báo “type needs a version” cả khi type bị thiếu."
+        },
+        {
+          "loi": "Treating labName as PII — only the exact keys email, name, userId count here.|||Coi labName là PII — ở đây chỉ đúng các khoá email, name, userId."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "envelope",
+          "vi": "phong bì sự kiện"
+        },
+        {
+          "en": "PII",
+          "vi": "thông tin định danh cá nhân"
+        }
+      ]
+    },
+    {
+      "title": "Event contracts 3 — Write nextType(type, oldFields, newFields)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "events",
+        "versioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The payload of an event type is described as a map <code>field path ⇒ type</code>. When the producer changes it, classify the change and return the type to publish:</p><ul><li>a field of <code>oldFields</code> is missing or has another type in <code>newFields</code> ⇒ <code>{ change: \"breaking\", type }</code> with the version bumped (<code>…created.v1</code> ⇒ <code>…created.v2</code>, <code>.v9</code> ⇒ <code>.v10</code>);</li><li>otherwise, new fields only ⇒ <code>{ change: \"additive\", type }</code> (same type);</li><li>identical ⇒ <code>{ change: \"same\", type }</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Payload của một loại sự kiện được mô tả bằng map <code>đường dẫn trường ⇒ kiểu</code>. Khi bên phát đổi nó, phân loại thay đổi và trả loại sự kiện cần phát:</p><ul><li>một trường của <code>oldFields</code> bị mất hoặc đổi kiểu trong <code>newFields</code> ⇒ <code>{ change: \"breaking\", type }</code> với phiên bản tăng (<code>…created.v1</code> ⇒ <code>…created.v2</code>, <code>.v9</code> ⇒ <code>.v10</code>);</li><li>ngược lại, chỉ thêm trường ⇒ <code>{ change: \"additive\", type }</code> (giữ loại);</li><li>giống hệt ⇒ <code>{ change: \"same\", type }</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "type — string ending in .v&lt;n&gt;; oldFields, newFields — { path: typeName }|||type — chuỗi kết thúc bằng .v&lt;n&gt;; oldFields, newFields — { đường dẫn: tên kiểu }",
+      "outputSpec": "{ change: \"same\" | \"additive\" | \"breaking\", type }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "nextType(\"labflow.booking.created.v1\", {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\",\"purposeCategory\":\"string\"})",
+          "output": "{\"change\":\"additive\",\"type\":\"labflow.booking.created.v1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check removals and type changes first — they win over additions.|||Xét mất trường và đổi kiểu trước — chúng thắng việc thêm trường.",
+        "/^(.*)\\.v(\\d+)$/ splits the name and the number; Number() before +1.|||/^(.*)\\.v(\\d+)$/ tách tên và số; Number() trước khi +1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** classify a payload change and pick the event type */\nfunction nextType(type, oldFields, newFields) {\n  // Write your solution here\n  const same = Object.keys(oldFields).length === Object.keys(newFields).length;\n  return same ? { change: 'same', type } : { change: 'breaking', type: type.replace(/\\d+$/, (n) => n + 1) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction nextType(type, oldFields, newFields) {\n  const removedOrChanged = Object.keys(oldFields).some((k) => newFields[k] !== oldFields[k]);   // mất trường / đổi kiểu\n  const added = Object.keys(newFields).some((k) => !(k in oldFields));\n  if (removedOrChanged) {\n    const m = /^(.*)\\.v(\\d+)$/.exec(type);\n    return { change: 'breaking', type: `${m[1]}.v${Number(m[2]) + 1}` };                       // loại MỚI, phát song song\n  }\n  return { change: added ? 'additive' : 'same', type };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>events/versions.mjs: adding purposeCategory kept labflow.booking.created.v1 (the strict reader broke, the tolerant reader did not); replacing period with startAt/endAt made …created.v2, published in parallel (139 B + 132 B per booking) until nobody subscribes to v1.</p>",
+      "solutionExplanationHtmlVi": "<p>events/versions.mjs: thêm purposeCategory giữ labflow.booking.created.v1 (bên đọc chặt vỡ, bên đọc khoan dung thì không); thay period bằng startAt/endAt thành …created.v2, phát song song (139 B + 132 B mỗi lượt đặt) tới khi không ai còn nghe v1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Add purposeCategory",
+              "vi": "Thêm purposeCategory"
+            },
+            "goi": "nextType(\"labflow.booking.created.v1\", {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\",\"purposeCategory\":\"string\"})",
+            "mongDoi": {
+              "change": "additive",
+              "type": "labflow.booking.created.v1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "period ⇒ startAt/endAt",
+              "vi": "period ⇒ startAt/endAt"
+            },
+            "goi": "nextType(\"labflow.booking.created.v1\", {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"version\":\"number\"})",
+            "mongDoi": {
+              "change": "breaking",
+              "type": "labflow.booking.created.v2"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "nextType(\"labflow.booking.cancelled.v1\", {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"period.start\":\"string\",\"period.end\":\"string\",\"status\":\"string\",\"version\":\"number\"})",
+            "mongDoi": {
+              "change": "same",
+              "type": "labflow.booking.cancelled.v1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "nextType(\"labflow.export.completed.v9\", {\"jobId\":\"string\",\"bytes\":\"number\"}, {\"jobId\":\"string\",\"bytes\":\"string\"})",
+            "mongDoi": {
+              "change": "breaking",
+              "type": "labflow.export.completed.v10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "nextType(\"labflow.report.ready.v1\", {\"jobId\":\"string\",\"result\":\"string\"}, {\"jobId\":\"string\",\"expiresAt\":\"string\",\"owner\":\"string\"})",
+            "mongDoi": {
+              "change": "breaking",
+              "type": "labflow.report.ready.v2"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bumping the version for an added field — every v1 subscriber is cut off for nothing.|||Tăng phiên bản khi chỉ thêm trường — mọi subscriber v1 bị cắt vô cớ."
+        },
+        {
+          "loi": "String concatenation: \"1\" + 1 = \"11\".|||Nối chuỗi: \"1\" + 1 = \"11\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "additive change",
+          "vi": "thay đổi chỉ thêm"
+        },
+        {
+          "en": "breaking change",
+          "vi": "thay đổi phá vỡ"
+        },
+        {
+          "en": "tolerant reader",
+          "vi": "bên đọc khoan dung"
+        }
+      ]
+    },
+    {
+      "title": "Event contracts 4 — Write redeliver(mode, ids, crashes): 17 duplicates, 21 lost or exactly once",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "events",
+        "idempotency",
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Replay events/notifier.mjs. A consumer handles the events <code>ids</code> in order; a crash means the event was not acknowledged (no XACK), so the restarted consumer handles <b>the same event again</b>. Each <code>[id, point]</code> in <code>crashes</code> crashes the consumer once, the first time it reaches that point for that event. The modes:</p><ul><li><code>\"none\"</code>: send → (point <code>afterSend</code>) → ack.</li><li><code>\"mark-first\"</code>: if the id is not marked: mark (committed at once) → (point <code>afterMark</code>) → send. Then (point <code>afterSend</code>) → ack.</li><li><code>\"same-tx\"</code>: if the id is not marked: (point <code>afterMark</code> = crash before COMMIT: nothing is kept) → mark and send together. Then (point <code>afterSend</code>) → ack.</li></ul><p>Return <code>{ sends, duplicates, lost }</code>: total notifications sent, sends minus distinct ids sent, ids never sent. A point that a mode does not have is never reached.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại events/notifier.mjs. Một consumer xử lý các sự kiện <code>ids</code> theo thứ tự; chết nghĩa là sự kiện chưa được xác nhận (chưa XACK), nên consumer khởi động lại xử lý <b>lại đúng sự kiện đó</b>. Mỗi <code>[id, point]</code> trong <code>crashes</code> làm consumer chết một lần, ở lần đầu nó tới điểm đó với sự kiện đó. Các chế độ:</p><ul><li><code>\"none\"</code>: gửi → (điểm <code>afterSend</code>) → ack.</li><li><code>\"mark-first\"</code>: nếu id chưa được đánh dấu: đánh dấu (commit ngay) → (điểm <code>afterMark</code>) → gửi. Rồi (điểm <code>afterSend</code>) → ack.</li><li><code>\"same-tx\"</code>: nếu id chưa được đánh dấu: (điểm <code>afterMark</code> = chết trước COMMIT: không giữ lại gì) → đánh dấu và gửi cùng lúc. Rồi (điểm <code>afterSend</code>) → ack.</li></ul><p>Trả <code>{ sends, duplicates, lost }</code>: tổng số thông báo đã gửi, số lần gửi trừ số id khác nhau đã gửi, số id không bao giờ được gửi. Điểm nào chế độ không có thì không bao giờ tới.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "mode — \"none\" | \"mark-first\" | \"same-tx\"; ids — distinct strings; crashes — [id, \"afterMark\" | \"afterSend\"][]|||mode — \"none\" | \"mark-first\" | \"same-tx\"; ids — chuỗi khác nhau; crashes — [id, \"afterMark\" | \"afterSend\"][]",
+      "outputSpec": "{ sends, duplicates, lost }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "redeliver(\"none\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_3\",\"afterSend\"],[\"evt_7\",\"afterMark\"]])",
+          "output": "{\"sends\":11,\"duplicates\":1,\"lost\":0}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep an index i of the first unacknowledged event; a crash is “continue without i++”.|||Giữ chỉ số i của sự kiện đầu tiên chưa ack; chết là “continue mà không i++”.",
+        "Use a Set of \"id@point\" and delete from it when a crash fires, so it fires once.|||Dùng Set các \"id@point\" và xoá khi điểm chết xảy ra, để nó chỉ xảy ra một lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** replay a consumer that may crash, in one of three modes */\nfunction redeliver(mode, ids, crashes) {\n  // Write your solution here\n  return { sends: ids.length, duplicates: 0, lost: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction redeliver(mode, ids, crashes) {\n  const left = new Set(crashes.map(([id, point]) => `${id}@${point}`));   // mỗi điểm chết chỉ xảy ra MỘT lần\n  const crash = (id, point) => left.delete(`${id}@${point}`);\n  const marks = new Set();                                                 // bảng processed_events\n  const sent = {};\n  let i = 0;\n  while (i < ids.length) {                                                 // i = sự kiện đầu tiên chưa XACK\n    const id = ids[i];\n    const send = () => { sent[id] = (sent[id] || 0) + 1; };\n    if (mode === 'none') {\n      send();\n      if (crash(id, 'afterSend')) continue;                                // chết trước XACK ⇒ giao lại\n    } else if (mode === 'mark-first') {\n      if (!marks.has(id)) {\n        marks.add(id);                                                     // tự commit ngay\n        if (crash(id, 'afterMark')) continue;                              // giao lại thấy đã đánh dấu ⇒ không bao giờ gửi\n        send();\n      }\n      if (crash(id, 'afterSend')) continue;\n    } else {\n      if (!marks.has(id)) {\n        if (crash(id, 'afterMark')) continue;                              // chết trước COMMIT ⇒ cả hai cùng mất, giao lại làm lại\n        marks.add(id); send();                                             // COMMIT: đánh dấu + gửi cùng lúc\n      }\n      if (crash(id, 'afterSend')) continue;\n    }\n    i++;                                                                   // XACK\n  }\n  const distinct = Object.keys(sent).length;\n  const sends = Object.values(sent).reduce((a, b) => a + b, 0);\n  return { sends, duplicates: sends - distinct, lost: ids.length - distinct };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same mechanics, 1,000 events with 2% crashes in lesson 10.3: none 1,017 sends (17 duplicates), mark-first 979 (21 lost), same-tx exactly 1,000. Recording the id in the same transaction as the effect is what makes an at-least-once channel give an exactly-once effect.</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng cơ chế, 1.000 sự kiện với 2% sự cố ở bài 10.3: none gửi 1.017 (17 trùng), mark-first 979 (mất 21), same-tx đúng 1.000. Ghi id trong cùng transaction với tác dụng là cách để kênh ít-nhất-một-lần cho tác dụng đúng-một-lần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "none — two crashes",
+              "vi": "none — hai lần chết"
+            },
+            "goi": "redeliver(\"none\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_3\",\"afterSend\"],[\"evt_7\",\"afterMark\"]])",
+            "mongDoi": {
+              "sends": 11,
+              "duplicates": 1,
+              "lost": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "mark-first — the same crashes",
+              "vi": "mark-first — cùng các lần chết"
+            },
+            "goi": "redeliver(\"mark-first\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_3\",\"afterSend\"],[\"evt_7\",\"afterMark\"]])",
+            "mongDoi": {
+              "sends": 9,
+              "duplicates": 0,
+              "lost": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "redeliver(\"same-tx\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_3\",\"afterSend\"],[\"evt_7\",\"afterMark\"]])",
+            "mongDoi": {
+              "sends": 10,
+              "duplicates": 0,
+              "lost": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "redeliver(\"none\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_1\",\"afterSend\"],[\"evt_2\",\"afterSend\"],[\"evt_2\",\"afterMark\"]])",
+            "mongDoi": {
+              "sends": 12,
+              "duplicates": 2,
+              "lost": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "redeliver(\"mark-first\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_1\",\"afterMark\"],[\"evt_5\",\"afterMark\"],[\"evt_9\",\"afterSend\"]])",
+            "mongDoi": {
+              "sends": 8,
+              "duplicates": 0,
+              "lost": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "redeliver(\"same-tx\", [\"evt_1\",\"evt_2\",\"evt_3\",\"evt_4\",\"evt_5\",\"evt_6\",\"evt_7\",\"evt_8\",\"evt_9\",\"evt_10\"], [[\"evt_1\",\"afterMark\"],[\"evt_5\",\"afterMark\"],[\"evt_9\",\"afterSend\"]])",
+            "mongDoi": {
+              "sends": 10,
+              "duplicates": 0,
+              "lost": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "redeliver(\"none\", [], [])",
+            "mongDoi": {
+              "sends": 0,
+              "duplicates": 0,
+              "lost": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the event after a crash — the stream redelivers it, it is not lost by the broker.|||Bỏ qua sự kiện sau khi chết — stream giao lại nó, broker không làm mất."
+        },
+        {
+          "loi": "In same-tx, keeping the mark when the crash happened before COMMIT.|||Trong same-tx, vẫn giữ dấu dù chết trước COMMIT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "at-least-once",
+          "vi": "ít nhất một lần"
+        },
+        {
+          "en": "idempotent consumer",
+          "vi": "consumer chống trùng"
+        },
+        {
+          "en": "XACK",
+          "vi": "xác nhận đã xử lý thông điệp"
+        }
+      ]
+    }
+  ]
+}

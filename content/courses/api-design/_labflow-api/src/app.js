@@ -18,6 +18,10 @@ import { authRouter } from './routes/auth.js';
 import { cors } from './cors.js';
 import { serverTiming } from './timing.js';
 import { dependency, chaosDbRouter } from './resilience.js';
+import { exportsRouter } from './routes/exports.js';
+import { jobsRouter } from './routes/jobs.js';
+import { realtimeRouter } from './routes/realtime.js';
+import { reportExportsRouter } from './routes/reportExports.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -65,7 +69,8 @@ app.use(appVersionGuard);
 // Chương 4 — MỘT bộ route dùng chung cho mọi phiên bản; khác nhau ở view và lược đồ (chọn theo req.apiVersion)
 const api = Router();
 // Chương 9 — các route dùng PostgreSQL (+ replica, Redis) chỉ bật khi có LABFLOW_PG=1; thiếu thì LabFlow vẫn chạy như cũ
-const pgRoutes = process.env.LABFLOW_PG ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')) } : null;
+const pgRoutes = process.env.LABFLOW_PG
+  ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')), ...(await import('./routes/webhooks.js')) } : null;
 if (pgRoutes) api.use('/labs/:labId/notes', pgRoutes.labNotesRouter);   // bài 9.3 — đặt TRƯỚC /labs
 api.use('/labs', labsRouter);
 api.use('/devices/:id/issues', deviceIssuesRouter);   // đặt TRƯỚC /devices
@@ -74,9 +79,14 @@ api.use('/issues', issuesRouter);
 api.use('/bookings', bookingsRouter);
 api.use('/me', meRouter);
 api.use('/waitlist', waitlistRouter);                         // Lab 7
+api.use('/reports/usage/exports', reportExportsRouter);        // Lab 10 — đặt TRƯỚC /reports
 api.use('/reports', reportsRouter);                            // Lab 8
 if (pgRoutes) api.use('/stats', pgRoutes.statsRouter);          // bài 9.2
 if (pgRoutes) api.use('/notes', pgRoutes.notesRouter);          // bài 9.3
+if (pgRoutes) api.use('/webhooks', pgRoutes.webhooksRouter);    // bài 10.5
+api.use('/exports', exportsRouter);                            // bài 10.1: đồng bộ (chờ) và bất đồng bộ (202)
+api.use('/jobs', jobsRouter);                                  // bài 10.1: tài nguyên công việc
+api.use(realtimeRouter);                                       // bài 10.4: /events, /events/stream, /realtime/tickets
 api.use('/admin', adminRouter);
 api.use('/auth', authRouter);                                  // bài 6.1: /v1/auth/login, /v2/auth/login
 

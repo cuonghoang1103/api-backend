@@ -28,6 +28,8 @@ export function rateLimit({ name, capacity, windowSec, key }) {
 // Hai giới hạn của LabFlow: đặt phòng theo NGƯỜI DÙNG, đọc công khai theo ĐỊA CHỈ IP
 // Lab 5 — báo hỏng: tối đa 3 báo cáo mỗi phút cho một người
 export const reportLimit = rateLimit({ name: 'report', capacity: 3, windowSec: 60, key: (req) => req.user.id });
-export const bookingLimit = rateLimit({ name: 'booking', capacity: 5, windowSec: 60, key: (req) => req.user.id });
+// Bài 10.3–10.4: kịch bản đo tạo hàng trăm lượt đặt ⇒ LABFLOW_BOOKING_LIMIT=1000000/60 (CHỈ để đo, như LABFLOW_IP_LIMIT)
+const [bq, bw] = (process.env.LABFLOW_BOOKING_LIMIT ?? '5/60').split('/').map(Number);
+export const bookingLimit = rateLimit({ name: 'booking', capacity: bq, windowSec: bw, key: (req) => req.user.id });
 const [q, w] = (process.env.LABFLOW_IP_LIMIT ?? '100/60').split('/').map(Number);
 export const ipLimit = rateLimit({ name: 'ip', capacity: q, windowSec: w, key: (req) => req.ip });

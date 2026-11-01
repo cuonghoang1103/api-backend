@@ -332,6 +332,48 @@
       "name": "Lab 9 — A notes feed ready for scale",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 9 · 1 — The reference run · Lab 9 · 2 — Write pageAfter(ids, cursor, limit) with UUIDv7 cursors"
+    },
+    {
+      "slug": "api-10-1-hang-doi",
+      "name": "10.1 Asynchronous APIs: 202 Accepted, job resources and polling",
+      "level": "BEGINNER",
+      "description": "Luyện: Async jobs 1 — What the 524 taught us · Async jobs 2 — Write canTransition(from, to) · Async jobs 3 — Write resultResponse(job, userId, now) for GET /jobs/{id}/result · Async jobs 4 — Write pollDelay(retryAfter, now, capSec)"
+    },
+    {
+      "slug": "api-10-1-worker",
+      "name": "10.2 Queues and workers: where a job really runs",
+      "level": "BEGINNER",
+      "description": "Luyện: Queues and workers 1 — What happened in each failure · Queues and workers 2 — Write backoffDelays(attempts, delayMs) · Queues and workers 3 — Write stallRecovery(lockMs, killAt, checks): why 34 s, not 15"
+    },
+    {
+      "slug": "api-10-2-su-kien",
+      "name": "10.3 Event contracts: payloads, versions and idempotent consumers",
+      "level": "BEGINNER",
+      "description": "Luyện: Event contracts 1 — Thin, fat, duplicates and lost events · Event contracts 2 — Write checkEnvelope(e) for LabFlow events · Event contracts 3 — Write nextType(type, oldFields, newFields) · Event contracts 4 — Write redeliver(mode, ids, crashes): 17 duplicates, 21 lost or exactly once"
+    },
+    {
+      "slug": "api-10-3-realtime",
+      "name": "10.4 Realtime: polling, SSE or WebSocket",
+      "level": "BEGINNER",
+      "description": "Luyện: Realtime 1 — Delay, idle cost and the buffering trap · Realtime 2 — Write parseSse(text): read a text/event-stream · Realtime 3 — Write resume(ring, lastEventId, held): replay without holes or duplicates"
+    },
+    {
+      "slug": "api-10-4-webhook",
+      "name": "10.5 Sending webhooks: signatures, retries and a delivery log",
+      "level": "BEGINNER",
+      "description": "Luyện: Sending webhooks 1 — The sender’s contract · Sending webhooks 2 — Write prepare(msgId, nowMs, body, macs): the Standard Webhooks headers · Sending webhooks 3 — Write nextStep(status, attempt, maxAttempts, baseMs, jitter) · Sending webhooks 4 — Write urlProblem(url, allowLocal): SSRF checks without new URL()"
+    },
+    {
+      "slug": "api-10-4-nhan-webhook",
+      "name": "10.6 Receiving webhooks: raw bodies, replays, fast answers and order",
+      "level": "BEGINNER",
+      "description": "Luyện: Receiving webhooks 1 — Each habit switched off once · Receiving webhooks 2 — Write checkHeaders(headers, nowSec, toleranceSec) · Receiving webhooks 3 — Write safeEqual(a, b) and verifyAny(expected, signatures) · Receiving webhooks 4 — Write receive(deliveries): the receiver’s final state"
+    },
+    {
+      "slug": "api-10-7-lab",
+      "name": "Lab 10 — The usage report as a background job with a webhook",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 10 · 1 — The starter, the traps and the reference run · Lab 10 · 2 — Write gradeStatus(trace): the “Status” check of grade-lab10.mjs · Lab 10 · 3 — Write dispatch(events, subscriptions): report.ready only to its creator"
     }
   ]
 }

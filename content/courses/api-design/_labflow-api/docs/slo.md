@@ -22,3 +22,13 @@
 - `Retry-After` dài hơn thời gian màn hình chịu chờ ⇒ dừng và báo người dùng, đừng quay vòng.
 
 Trang trạng thái: https://status.labflow.example (ví dụ)
+
+## Chương 10 — lời hứa của phần bất đồng bộ
+
+| Thứ | Lời hứa |
+|---|---|
+| `POST /v2/exports`, `POST /v2/reports/usage/exports` | trả 202 trong < 50 ms (p99); việc bắt đầu trong 5 s khi hàng đợi rỗng |
+| Bản ghi việc / kết quả | bản ghi giữ 7 ngày; kết quả giữ 1 giờ sau khi xong, rồi 410 `RESULT_EXPIRED` |
+| Huỷ | việc đang chạy dừng trước lô kế tiếp (đo: 261 ms) |
+| Sự kiện realtime | giữ 1.000 sự kiện gần nhất để nối lại bằng `Last-Event-ID`; xa hơn ⇒ `event: reset` / 410 `EVENTS_EXPIRED` |
+| Webhook | ký Standard Webhooks; giao ít nhất một lần; 8 lần thử, lùi 30 s × 2ⁿ ± 50%; bên nhận phải trả 2xx trong 5 s; 410 ⇒ tắt đăng ký |

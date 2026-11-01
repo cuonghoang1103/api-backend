@@ -1,6 +1,6 @@
-# Bàn giao khoá API & System Design (`api-design`) — 01/11/2026, sau Chương 9
+# Bàn giao khoá API & System Design (`api-design`) — 01/11/2026, sau Chương 10
 
-Viết cho phiên/agent tiếp theo để làm Ch10–Ch12 **cùng chuẩn** với Ch5–9. Đọc cùng `_HOP-DONG.md` (luật nội dung, thoát ký tự, lộ trình mã).
+Viết cho phiên/agent tiếp theo để làm Ch11–Ch12 **cùng chuẩn** với Ch5–10. Đọc cùng `_HOP-DONG.md` (luật nội dung, thoát ký tự, lộ trình mã).
 
 ## 1. Trạng thái từng chương
 
@@ -12,34 +12,39 @@ Viết cho phiên/agent tiếp theo để làm Ch10–Ch12 **cùng chuẩn** v�
 | 7 | `s07-hop-dong.mjs` | 7 bài (mới: `api-7-1-kiem-hop-dong`, `api-7-6-lab`, `api-7-7-quiz`) | a6c0c097a |
 | 0–6 đợt chất lượng | sơ đồ 20→86, nguồn 56→134, mở đầu chương | — | b8d76cf07 |
 | 8 | `s08-he-thong.mjs` | 8 bài (mới: `api-8-2-payload`, `api-8-4-suy-giam`, `api-8-7-lab`, `api-8-8-quiz`) | f3210f154 |
-| 9 | `s09-du-lieu.mjs` | 7 bài (mới: `api-9-1-server-cache`, `api-9-6-lab`, `api-9-7-quiz`) | commit chứa tệp này |
-| 10–12 | còn là **khung** trong `api-design.mjs` (`khung('api', …)`, hiện `.slice(10)`) | 4 bài giữ chỗ/chương | — |
+| 9 | `s09-du-lieu.mjs` | 7 bài (mới: `api-9-1-server-cache`, `api-9-6-lab`, `api-9-7-quiz`) | 422a9dcfd |
+| — | `_labflow-api/` — BẢN CHỤP BỀN mã LabFlow (mục 3) | cuối Ch9: e1f36a6b7; cuối Ch10: commit Ch10 | |
+| 10 | `s10-bat-dong-bo.mjs` | 8 bài (mới: `api-10-1-worker` = 10.2, `api-10-4-nhan-webhook` = 10.6, `api-10-7-lab`, `api-10-8-quiz`) | commit chứa tệp này |
+| 11–12 | còn là **khung** trong `api-design.mjs` (`khung('api', …)`, hiện `.slice(11)`) | 4 bài giữ chỗ/chương | — |
 
-Số liệu sau Ch9: 76 bài, 2,49 triệu ký tự, sơ đồ 144, nguồn 192 (course-depth-audit “đạt mọi sàn”), course-content-check 0 lỗi. Code Lab `api-design-practice`: 54 module, 166 đề, máy chấm 962/962.
+Số liệu sau Ch9: 76 bài, 2,49 triệu ký tự, sơ đồ 144, nguồn 192. Sau Ch10: 80 bài, 2,76 triệu ký tự, sơ đồ 164, nguồn 224 (course-depth-audit “đạt mọi sàn”), content-check 0 lỗi; Code Lab `api-design-practice`: 61 module, 191 đề, máy chấm 1114/1114 (Ch10 thêm 7 module, 25 đề).
 
 ## 2. Chương còn lại — nội dung dự kiến (theo khung trong manifest)
 
-**GIỮ slug khung** (`api-10-1-hang-doi`, `api-10-2-su-kien`, `api-10-3-realtime`, `api-10-4-webhook`, `api-11-1-khung`, `api-11-2-rut-gon-link`, `api-11-3-feed-chat`, `api-11-4-dat-lich`, `api-12-1-thiet-ke`, `api-12-2-xay-dung`, `api-12-3-mo-rong`, `api-12-4-tong-ket`) — seed không xoá bài cũ (`scripts/course-seed.mjs` khoá theo slug; manifest có `syncOrder: true`). Bài tách thêm ⇒ slug MỚI chèn giữa, ghi trong `header` của spec.
+**GIỮ slug khung** (`api-11-1-khung`, `api-11-2-rut-gon-link`, `api-11-3-feed-chat`, `api-11-4-dat-lich`, `api-12-1-thiet-ke`, `api-12-2-xay-dung`, `api-12-3-mo-rong`, `api-12-4-tong-ket`) — seed không xoá bài cũ (`scripts/course-seed.mjs` khoá theo slug; manifest có `syncOrder: true`). Bài tách thêm ⇒ slug MỚI chèn giữa, ghi trong `header` của spec.
 
-- **Ch10 Async & realtime:** 10.1 POST trả 202 + Location `/jobs/{id}`, trạng thái/tiến độ/huỷ/thời hạn giữ kết quả (đo: request dài 30 s bị Cloudflare-kiểu cắt ⇒ chuyển 202; worker bằng hàng đợi — có Redis 8.2 ở :6390: BullMQ hoặc Redis Streams). 10.2 hợp đồng sự kiện: mỏng/dày, phiên bản, AsyncAPI, consumer idempotent (đo: giao trùng ⇒ xử lý hai lần nếu không có khoá), outbox → khoá software-architecture Ch9. 10.3 polling vs SSE vs WebSocket: đo cùng luồng ghi chú/lượt đặt (độ trễ, số request, nối lại + `Last-Event-ID`; **compression buffer SSE ⇒ phải `res.flush()`** — đã ghi ở 8.3). 10.4 webhook: ký HMAC + timestamp chống replay, thử lại lùi dần, thứ tự/trùng lặp, endpoint nhận trả 2xx nhanh. Lab 10: hàng đợi xuất báo cáo (Lab 8) thành job 202 + webhook báo xong. Liên kết chéo Academy: SDN302 (socket.io nếu có bài), SWD392 (kiến trúc hướng sự kiện, nguồn flm-nguon — xem mục 5); Courses: `/courses/socket-io`, `/courses/background-jobs` nếu tồn tại (kiểm `ls content/courses`).
-- **Ch11 Phỏng vấn:** khung trả lời 45 phút cho câu hỏi thiết kế API (làm rõ → tài nguyên/endpoint → lỗi/phân trang → auth/rate limit/phiên bản → quy mô), rồi ba đề: rút gọn link, news feed + chat, đặt lịch (LabFlow chính là đề này — dùng số đo Ch5–9 làm “bằng chứng” khi trả lời). Mỗi bài có bản ghi một buổi phỏng vấn mẫu + thang chấm.
-- **Ch12 Capstone:** đưa LabFlow từ RAM sang PostgreSQL thật (Ch8 8.4 và Ch9 đã hứa “dữ liệu chờ Chương 12”): migration, pool, idempotency + rate limit dùng chung, cache, hàng đợi thông báo, đo tải lại toàn bộ, OpenAPI cuối, checklist triển khai, kể dự án theo STAR. Gói zip cuối khoá.
+- **Ch10 Async & realtime:** XONG (01/11/2026) — xem `_HOP-DONG.md` mục 5 “Từ Chương 10”. Còn treo: cặp SWD392 `swd392-slide-swd25-2` ↔ `api-10-1-worker` (bài 10.2 sát trần 40k — muốn thêm thẻ thì bớt chữ trước); cặp `background-jobs` ↔ 10.2 và `software-architecture` Ch9 ↔ 10.3 khi hai khoá đó hết là khung (ghi ở `content/_LIEN-KET-CHEO/sdn302-api-design.md`).
+- **Ch11 Phỏng vấn:** (VIỆC KẾ TIẾP) khung trả lời 45 phút cho câu hỏi thiết kế API (làm rõ → tài nguyên/endpoint → lỗi/phân trang → auth/rate limit/phiên bản → quy mô), rồi ba đề: rút gọn link, news feed + chat, đặt lịch (LabFlow chính là đề này — dùng số đo Ch5–10 làm “bằng chứng” khi trả lời; đề feed + chat dùng thẳng số đo 10.4: polling p50 1,1 s vs SSE/WS ~1 ms, 1.500 vs 100 request khi ngồi chờ, Last-Event-ID, vé WebSocket, fan-out qua Redis). Mỗi bài có bản ghi một buổi phỏng vấn mẫu + thang chấm.
+- **Ch12 Capstone:** đưa LabFlow từ RAM sang PostgreSQL thật (Ch8 8.4, Ch9 và Ch10 đã hứa “dữ liệu chờ Chương 12” — Ch10: `emit` sự kiện lượt đặt đang là GHI KÉP, Ch12 phải đổi sang transactional outbox như `events/outbox.mjs`): migration, pool, idempotency + rate limit dùng chung, cache, hàng đợi thông báo, đo tải lại toàn bộ, OpenAPI cuối, checklist triển khai, kể dự án theo STAR. Gói zip cuối khoá.
 
 Mỗi chương: mở đầu “Học xong Chương N bạn làm được / Vì sao đáng học” (bài đầu chương), mỗi bài 22–40k ký tự (**kể cả phần giảng slide**), ≥ 1 sơ đồ `lz-flow|lz-stack|lz-map`, ≥ 1–2 thẻ nguồn có “read 1 Nov 2026 / đọc ngày …”, 🧪 thực hành, 🗂 thuật ngữ, 📌 tóm tắt, mục phỏng vấn; Lab có thang chấm 10 điểm + lời giải đo thật + gói zip; quiz 10 câu (đáp án rải đều vị trí).
 
 ## 3. Thư mục làm việc ngoài repo, chạy LabFlow, PostgreSQL, Redis
 
-Scratch: `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/641f37e5-0c56-4501-9b67-2330c62e4b07/scratchpad/apid` (gọi tắt `apid/`). **Thư mục tạm của phiên — có thể mất.** Bản bền: gói zip trên R2 `https://media.cuongthai.com/files/academy/API/v1/labflow-api-chN.zip` (N = 7, 8, 9) — tải về, `npm install`, `npm test` (10 test).
+**BẢN BỀN TRONG REPO (từ 01/11/2026):** `content/courses/api-design/_labflow-api/` = mã LabFlow cuối chương mới nhất (hiện: cuối Ch10), phiên bản ghim chính xác, `.gitignore`, `README.md` (cách chạy + cách cập nhật), `docs/chay-theo-bai.txt` (lệnh từng bài). Bắt đầu chương mới: `rsync -a --exclude README.md --exclude .gitignore content/courses/api-design/_labflow-api/ <scratch>/labflow-chN/ && npm ci`; xong chương: rsync ngược lại (`--delete`), `npm ci && npm test` trên bản sao sạch, gitleaks, cập nhật bảng trong README.md.
 
-- Dự án theo chương: `apid/labflow-ch7`, `labflow-ch8`, `labflow-ch9` (= cuối chương = lời giải lab), lab: `labflow-lab8`, `labflow-lab8-sol`, `labflow-lab9`.
+Scratch: `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/641f37e5-0c56-4501-9b67-2330c62e4b07/scratchpad/apid` (gọi tắt `apid/`). **Thư mục tạm của phiên — có thể mất.** Gói zip trên R2 `https://media.cuongthai.com/files/academy/API/v1/labflow-api-chN.zip` (N = 7, 8, 9, 10) — tải về, `npm install`, `npm test` (Ch10: 13 test).
+
+- Dự án theo chương: `apid/labflow-ch7` … `labflow-ch10` (= cuối chương = lời giải lab), lab: `labflow-lab8`, `labflow-lab8-sol`, `labflow-lab9`; Ch10: lab khởi đầu là `lab/report-exports-starter.js` trong chính `labflow-ch10` (`apid/reportExports.solution.js` = bản lời giải để chép trả lại).
 - Node: `export PATH=$HOME/.nvm/versions/node/v22.23.3/bin:$PATH`. zsh không tách từ ⇒ vòng lặp/biến danh sách chạy trong `bash -c`.
 - `apid/srv.sh <thư mục> [cổng] ["ENV=… ENV=…"]` khởi động lại server (giết đúng tiến trình LISTEN cổng đó), log `apid/srv.log`.
-- `apid/chay.sh <tệp lệnh>`: mỗi dòng một lệnh bash, `## nhãn` mở một mục; output dán vào `apid/out2/*.txt`; renderer bỏ tiền tố `cd X && `.
+- `apid/chay.sh <tệp lệnh>` (từ Ch10 tự đặt PATH Node 22 — trước đó lệnh `node …` trong tệp lệnh chạy Node 26 mặc định của máy): mỗi dòng một lệnh bash, `## nhãn` mở một mục; output dán vào `apid/out2/*.txt`; renderer bỏ tiền tố `cd X && `.
 - PostgreSQL 18 riêng: `pg_ctl -D apid/pgdata -l apid/pg.log -o "-p 55432 -c unix_socket_directories=''" start`, user/db `labflow`; bảng `bookings` 1.000.000 dòng (Ch3), `lab_notes` (Ch9, 200.003 dòng), `idempotency_keys` (8.4), schema `shard0/shard1`, bảng `id_seq/id_v4/id_v7`, `labs_r/devices_r/issues_r/labs_d` (Ch9).
 - Replica: `pg_ctl -D apid/pgreplica -l apid/pgreplica.log -o "-p 55433 -c unix_socket_directories=''" start` (`recovery_min_apply_delay = '2s'`).
 - Redis: `redis-server --port 6390 --save "" --appendonly no --dir apid/redisdata --daemonize yes`; dừng: `redis-cli -p 6390 shutdown nosave`.
+- Ch10: `apid/w.sh <tên> [ENV…]` chạy một worker nền (log `apid/worker-<tên>.log`); `apid/wh.sh "<ENV bên nhận>"` dựng lại cả bộ webhook (API PG + events redis, worker 5 lần/lùi 1 s/timeout 2 s, đăng ký mới ⇒ `apid/wh.json`, `apid/wh.secret`, bên nhận :4005); `apid/rerun10.sh` chạy lại mọi phép đo có script node của Ch10; tệp lệnh `apid/cmd-101a…104h.txt`, `cmd-lab10a/b.txt`; output `apid/out2/101a…lab10b.txt`, trích mã `apid/out2/src-10/` (dựng lại bằng `apid/mkexc.sh`); soạn bài `apid/s10/` (gen.py, spec.json, *.en/vi.html, quiz.json).
 - Biến LabFlow hay dùng: `SEED_BOOKINGS=n`, `LABFLOW_IP_LIMIT=1000000/60` (chỉ để test tải — bẫy 429 ở 8.2), `NODE_ENV=production LABFLOW_JWT_SECRET=…` (JSON gọn), `LABFLOW_PG=1` (route Ch9), `LABFLOW_CHAOS=1`, `LABFLOW_OUTAGE_MS`, `LABFLOW_LOGIN_MAX_INFLIGHT`, `LABFLOW_IDEMPOTENCY=pg`, `LABFLOW_INSTANCE`.
-- Khi xong việc: tắt LabFlow (4000–4003), proxy 8080/8081/8090, Prism 4010/4011, PostgreSQL (cả replica), Redis; xoá token tạm `apid/*.jwt`, `lan.json`.
+- Khi xong việc: tắt LabFlow (4000–4003), worker (`pkill -f src/worker.js`), bên nhận webhook 4005, proxy 8080/8081/8090, Prism 4010/4011, PostgreSQL (cả replica), Redis; xoá token tạm `apid/*.jwt`, `lan.json`, `apid/wh.secret`, `apid/dump.json`.
 
 ## 4. Soạn bài (generator)
 
@@ -62,6 +67,12 @@ Scratch: `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/641f37e5-0c
 - **Express:** `res.set('Vary', …)` ghi đè Vary của CORS ⇒ dùng `res.vary()`. 304 tự động của Express chỉ tiết kiệm byte (băm body sau khi đã dựng). PostgreSQL không có `max()` cho `uuid`.
 - **Replica:** migration cũng trễ ⇒ đọc bảng mới từ replica quá sớm ra 500. Route dùng PostgreSQL phải gắn có điều kiện (`LABFLOW_PG=1`) để `npm test` chạy được không cần CSDL.
 - **oasdiff:** tải binary bị bộ phân loại quyền từ chối — đừng thử lại; dùng `openapi/diff.mjs` tự viết (openapi-diff 0.24 không đọc OAS 3.1).
+- **Cloudflare 524 = 125 s, không phải 100 s** (docs đọc 1/11/2026; nginx `proxy_read_timeout` 60 s giữa hai lần đọc). Ghi nhớ cũ “Cloudflare cắt 100 s” đã lỗi thời — `perf/edge-proxy.mjs` dùng 100 s và bài 10.1 nói rõ là con số ví dụ.
+- **Trần 40k của một bài gồm cả giảng:** deck 6 slide tốn ~2,4k chỉ cho ảnh + chú thích ⇒ giữ `measure.py` (EN+VI) ≤ ~36,5k; Ch10 phải tách 10.1 → 10.1 + 10.2 (worker) và 10.4 cũ → 10.5 + 10.6 (webhook gửi/nhận), và bỏ bớt một số khối output (`@@run … n=1`).
+- **Kịch bản đo tạo nhiều lượt đặt** dính `bookingLimit` 5/60 s của Lab 5 ⇒ chạy LabFlow với `LABFLOW_BOOKING_LIMIT=1000000/60` (lần đầu `thin-vs-fat` chỉ ra 8 sự kiện thay vì 300). `perf/book.mjs` chọn khung giờ ngẫu nhiên mỗi tiến trình — đặt cố định thì tiến trình sau dính 409 trùng lịch.
+- **Bí mật trong output:** secret webhook `whsec_…`, chữ ký `v1,…`, vé `tkt_…` phải cắt bằng … trước khi đưa vào bài/slide (đoạn python trong lịch sử phiên: thay trong `apid/out2/104*.txt`).
+- **srv.sh** giờ chờ 2,5 s (Ch10 nạp thêm bullmq/ws/redis; 1,5 s từng làm một phép đo ECONNREFUSED).
+- **Node fetch (undici) không cho đo “không nén”:** đặt `accept-encoding: identity` vẫn không thấy sự kiện SSE ⇒ chứng minh lỗi nén bằng `curl` trơn vs `curl --compressed` (bài 10.4).
 - **Commit:** index riêng — `bash -c 'export GIT_INDEX_FILE=$(mktemp -u); git read-tree HEAD; git add <tệp>; git commit -F msg; unset GIT_INDEX_FILE; git reset -q HEAD -- <tệp>'`. Không Co-Authored-By, không push, không deploy.
 
 ## 6. Slide, giảng, zip, Code Lab — các bước
@@ -69,7 +80,7 @@ Scratch: `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/641f37e5-0c
 1. **Slide** `scripts/slides-src/api-NN-M.mjs` (+ `api-lab-N.mjs`) dùng `_api-chung.mjs` (`lamDeck, sql, http, two, three, box, cards, flow`), tiếng Anh, không logo FPT. Kiểm: `_api-kiem-slide.mjs` = 0. Xem: `bash apid/xem2.sh <deck>` ⇒ `apid/render2/<deck>/ghep-*.png` (mở ra nhìn). KHÔNG sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 2. **Upload slide:** chép `render2/<deck>/[0-9]*.webp` vào `apid/uploadNN/<deck>/` rồi `node --env-file=.env scripts/upload-academy-slides.mjs --dir apid/uploadNN --prefix API/v1`.
 3. **Giảng** `content/courses/api-design/giang/api-NN-M.mjs`: `walkApi(deck, tenEn, tenVi, [[n, 'Tiêu đề', '<p>EN</p>', '<p>VI</p>'], …])` phủ đủ mọi slide; câu ngắn để bài không quá 40k.
-4. **Zip dự án:** `rsync -a --exclude node_modules apid/labflow-chN/ apid/zipN/labflow-api/` + `README.txt` (lệnh theo bài) ⇒ `zip -qr labflow-api-chN.zip labflow-api` ⇒ giải nén thử + `npm test` ⇒ `node --env-file=.env scripts/upload-academy-file.mjs --file … --key API/v1/labflow-api-chN.zip`.
+4. **Bản chụp + zip dự án:** rsync `apid/labflow-chN/` ⇒ `content/courses/api-design/_labflow-api/` (mục 3) rồi zip: `rsync -a --exclude node_modules apid/labflow-chN/ apid/zipN/labflow-api/` + `README.txt` (lệnh theo bài) ⇒ `zip -qr labflow-api-chN.zip labflow-api` ⇒ giải nén thử + `npm test` ⇒ `node --env-file=.env scripts/upload-academy-file.mjs --file … --key API/v1/labflow-api-chN.zip`.
 5. **Code Lab:** module `content/codelab/api-design-practice/nguon/<slug-bài>.mjs` (`cs`, `q`, `jsBai`, `nguon`, `goi`, `doiDau({ slug, ten, khoa: KHOA, baiHoc, de })`). Dựng: `node content/codelab/api-design-practice/nguon/_dung-track.mjs` → `node scripts/codelab-xuat-de.mjs --track api-design-practice` → `npx tsx scripts/codelab-kiem-cham-trinh-duyet.mjs --track api-design-practice` (mọi lời giải đạt, mọi code khởi đầu trượt) → `node scripts/codelab-kiem-noi-dung.mjs --track api-design-practice --chi-tiet` (0 lỗi, 0 ⚠). Thứ tự module lấy theo manifest khoá.
 6. **Liên kết chéo:** thẻ `link-card lien-ket-cheo` hai chiều Academy↔Courses (EN “You met this in …” / VI “Bạn đã gặp điều này ở …”; phía Academy “Measure it in API & System Design …”), ghi vào `content/_LIEN-KET-CHEO/sdn302-api-design.md` (bảng + dòng “Không cặp (ChN)”). Courses↔Courses (redis, postgresql) dùng `link-card` thường.
 7. **Ghi `_HOP-DONG.md`** (cấu trúc tệp, “Từ Chương N” mô tả mã), chạy content-check + depth-audit, gitleaks, commit một chương một commit, báo điều phối (SHA + số chính).

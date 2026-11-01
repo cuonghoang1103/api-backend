@@ -1,0 +1,105 @@
+# AsyncAPI 3.1 — hợp đồng SỰ KIỆN của LabFlow (bài 10.3). OpenAPI mô tả request/response; AsyncAPI mô tả thông điệp đi một chiều.
+asyncapi: 3.1.0
+info:
+  title: LabFlow events
+  version: 1.0.0
+  description: |
+    Sự kiện về lượt đặt và việc nền, phong bì CloudEvents 1.0 (JSON). Giao ít nhất một lần (at-least-once):
+    consumer PHẢI chống trùng theo `id`. Thứ tự chỉ đảm bảo trong một stream; dùng `data.version` để bỏ sự kiện cũ.
+    Thay đổi THÊM trường giữ nguyên type; thay đổi PHÁ VỠ tạo type mới (`.v2`) và phát song song cả hai trong thời gian chuyển.
+servers:
+  local:
+    host: localhost:6390
+    protocol: redis
+    description: Redis 8.2 Streams — XADD labflow:events (MAXLEN ~1000)
+defaultContentType: application/json
+channels:
+  labflowEvents:
+    address: labflow:events
+    messages:
+      bookingCreated: { $ref: '#/components/messages/BookingCreated' }
+      bookingCancelled: { $ref: '#/components/messages/BookingCancelled' }
+      bookingCheckedIn: { $ref: '#/components/messages/BookingCheckedIn' }
+      exportCompleted: { $ref: '#/components/messages/ExportCompleted' }
+      reportReady: { $ref: '#/components/messages/ReportReady' }
+operations:
+  publishLabflowEvents:
+    action: send
+    summary: LabFlow API và worker phát sự kiện vào stream
+    channel: { $ref: '#/channels/labflowEvents' }
+    messages:
+      - { $ref: '#/channels/labflowEvents/messages/bookingCreated' }
+      - { $ref: '#/channels/labflowEvents/messages/bookingCancelled' }
+      - { $ref: '#/channels/labflowEvents/messages/bookingCheckedIn' }
+      - { $ref: '#/channels/labflowEvents/messages/exportCompleted' }
+      - { $ref: '#/channels/labflowEvents/messages/reportReady' }
+components:
+  messages:
+    BookingCreated:
+      name: labflow.booking.created.v1
+      title: Một lượt đặt vừa được tạo
+      payload: { $ref: '#/components/schemas/BookingEvent' }
+    BookingCancelled:
+      name: labflow.booking.cancelled.v1
+      title: Một lượt đặt vừa bị huỷ
+      payload: { $ref: '#/components/schemas/BookingEvent' }
+    BookingCheckedIn:
+      name: labflow.booking.checked_in.v1
+      title: Sinh viên đã check-in
+      payload: { $ref: '#/components/schemas/BookingEvent' }
+    ReportReady:
+      name: labflow.report.ready.v1
+      title: Báo cáo dùng phòng (Lab 10) đã tính xong — sự kiện MỎNG có link, vì báo cáo lớn và chỉ người tạo được đọc
+      payload: { $ref: '#/components/schemas/JobDone' }
+    ExportCompleted:
+      name: labflow.export.completed.v1
+      title: Một việc xuất dữ liệu đã xong (chỉ gửi cho người tạo việc)
+      payload: { $ref: '#/components/schemas/JobDone' }
+  schemas:
+    JobDone:
+      allOf:
+        - { $ref: '#/components/schemas/Envelope' }
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: object
+              required: [jobId, kind, result, expiresAt]
+              properties:
+                jobId: { type: string, examples: [job_7] }
+                kind: { type: string, examples: [bookings-export] }
+                owner: { type: string }
+                result: { type: string, description: 'Đường dẫn tải kết quả (cần token của người tạo)' }
+                expiresAt: { type: string, format: date-time }
+    Envelope:
+      type: object
+      required: [id, specversion, type, source, time, data]
+      properties:
+        id: { type: string, description: 'Duy nhất theo source — khoá chống trùng của consumer' }
+        specversion: { const: '1.0' }
+        type: { type: string, pattern: '^labflow\.[a-z_.]+\.v[0-9]+$' }
+        source: { type: string, examples: [/labflow/v2] }
+        subject: { type: string, examples: [bk_42] }
+        time: { type: string, format: date-time }
+        datacontenttype: { const: application/json }
+    BookingEvent:
+      allOf:
+        - { $ref: '#/components/schemas/Envelope' }
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: object
+              description: Trạng thái lượt đặt TẠI THỜI ĐIỂM sự kiện. Không có userId, tên, email.
+              required: [id, labId, period, status, version]
+              properties:
+                id: { type: string, examples: [bk_42] }
+                labId: { type: string, examples: [lab_1] }
+                period:
+                  type: object
+                  required: [start, end]
+                  properties:
+                    start: { type: string, format: date-time }
+                    end: { type: string, format: date-time }
+                status: { type: string, enum: [PENDING, CHECKED_IN, CANCELLED] }
+                version: { type: integer, minimum: 1, description: 'Tăng mỗi lần lượt đặt đổi — so để bỏ sự kiện cũ tới muộn' }

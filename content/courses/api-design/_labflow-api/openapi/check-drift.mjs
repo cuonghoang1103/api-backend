@@ -77,3 +77,19 @@ if (spec.paths['/labs/{labId}/waitlist']) {
   await check('DELETE', '/waitlist/wl_1', { token: an });
   await check('DELETE', '/waitlist/wl_1', { token: bin });
 }
+
+// Chương 10 — việc nền, sự kiện, vé realtime (cần PostgreSQL cho việc xuất chạy tới succeeded; thiếu thì job ra failed — vẫn đúng hợp đồng)
+await check('POST', '/exports', { token: lan, body: { labId: 'lab_1', from: '2026-11-01', to: '2026-12-01' } });
+await check('POST', '/exports', { token: lan, body: { labId: 'lab_1', from: '2026-11-01' } });
+await check('POST', '/exports', { token: an, body: { labId: 'lab_1', from: '2026-11-01', to: '2026-12-01' } });
+await check('GET', '/jobs/job_1', { token: lan });
+await check('GET', '/jobs/job_1', { token: an });
+await check('POST', '/jobs/job_1/cancel', { token: lan });
+await new Promise((ok) => setTimeout(ok, 1500));
+await check('GET', '/jobs/job_1', { token: lan });
+await check('POST', '/jobs/job_1/cancel', { token: lan });
+await check('GET', '/jobs/job_1/result', { token: lan });
+await check('GET', '/events', { token: an });
+await check('GET', '/events?after=0', { token: an });
+await check('GET', '/events?wait=99', { token: an });
+await check('POST', '/realtime/tickets', { token: an });

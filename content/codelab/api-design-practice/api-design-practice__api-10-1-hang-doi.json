@@ -1,0 +1,654 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-10-1-hang-doi",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-10-1-hang-doi"
+  },
+  "exercises": [
+    {
+      "title": "Async jobs 1 — What the 524 taught us",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "async APIs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 10.1: exporting every booking of the semester through perf/edge-proxy.mjs (gives up after 100 s), then the same export as a job.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 10.1: xuất mọi lượt đặt của học kỳ qua perf/edge-proxy.mjs (bỏ cuộc sau 100 s), rồi cùng việc đó dưới dạng job.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: who is still waiting, and who is still working?|||Hỏi: ai còn đang chờ, ai còn đang làm?",
+        "Each answer reuses a rule from Chapters 2–6.|||Mỗi câu dùng lại một luật của Chương 2–6."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Async jobs 1 — What the 524 taught us\n\nAnswer in the answer panel (no code needed).\n\n1. The client got 524 after 100.0 s. What did LabFlow’s own log show for the same request?Client nhận 524 sau 100,0 s. Log của chính LabFlow cho cùng request đó ghi gì?\n2. Which answer to POST /v2/exports fits a two-minute export?Câu trả lời nào cho POST /v2/exports hợp với một lượt xuất hai phút?\n3. An (tok_an) asks GET /v2/jobs/job_1, a job created by Cô Lan. What does LabFlow answer?An (tok_an) hỏi GET /v2/jobs/job_1, việc do Cô Lan tạo. LabFlow trả gì?\n4. Cô Lan sends POST /v2/jobs/job_2/cancel while the export is running. What comes back?Cô Lan gửi POST /v2/jobs/job_2/cancel khi lượt xuất đang chạy. Nhận lại gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Async jobs 1 — What the 524 taught us — answer key\n\n1. The client got 524 after 100.0 s. What did LabFlow’s own log show for the same request?Client nhận 524 sau 100,0 s. Log của chính LabFlow cho cùng request đó ghi gì?\n   Answer: b) It kept working until 114.8 s and built an 11.7 MB file that nobody received\n   The server never learns that the client left. A second click ran the whole 114 s (and 428 attendance calls) again.VI: Server không biết client đã bỏ đi. Bấm lần hai chạy lại cả 114 s (và 428 lần gọi dịch vụ điểm danh).\n\n2. Which answer to POST /v2/exports fits a two-minute export?Câu trả lời nào cho POST /v2/exports hợp với một lượt xuất hai phút?\n   Answer: d) 202 Accepted, Location: /v2/jobs/job_1, Retry-After: 2 and the job body\n   RFC 9110: 202 = accepted, not finished; point to a status monitor. The POST took 17.1 ms on the server.VI: RFC 9110: 202 = đã nhận, chưa xong; chỉ tới chỗ theo dõi trạng thái. POST tốn 17,1 ms ở server.\n\n3. An (tok_an) asks GET /v2/jobs/job_1, a job created by Cô Lan. What does LabFlow answer?An (tok_an) hỏi GET /v2/jobs/job_1, việc do Cô Lan tạo. LabFlow trả gì?\n   Answer: d) 404 JOB_NOT_FOUND — someone else’s job must not even be confirmed to exist\n   BOLA (6.2): answering 403 would confirm that job_1 exists.VI: BOLA (6.2): trả 403 là xác nhận job_1 tồn tại.\n\n4. Cô Lan sends POST /v2/jobs/job_2/cancel while the export is running. What comes back?Cô Lan gửi POST /v2/jobs/job_2/cancel khi lượt xuất đang chạy. Nhận lại gì?\n   Answer: a) 202 with status running and cancelRequested: true; the worker stops at the next batch\n   Cancel is a request: 261 ms later the job was cancelled at 6,000 of 213,749 rows. A second cancel ⇒ 409 JOB_FINISHED.VI: Huỷ là một yêu cầu: 261 ms sau việc dừng ở dòng 6.000/213.749. Huỷ lần hai ⇒ 409 JOB_FINISHED.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It kept working until 114.8 s and built an 11.7 MB file that nobody received</p><p>The server never learns that the client left. A second click ran the whole 114 s (and 428 attendance calls) again.</p><p><i>VI: Server không biết client đã bỏ đi. Bấm lần hai chạy lại cả 114 s (và 428 lần gọi dịch vụ điểm danh).</i></p></li><li><p><b>d)</b> 202 Accepted, Location: /v2/jobs/job_1, Retry-After: 2 and the job body</p><p>RFC 9110: 202 = accepted, not finished; point to a status monitor. The POST took 17.1 ms on the server.</p><p><i>VI: RFC 9110: 202 = đã nhận, chưa xong; chỉ tới chỗ theo dõi trạng thái. POST tốn 17,1 ms ở server.</i></p></li><li><p><b>d)</b> 404 JOB_NOT_FOUND — someone else’s job must not even be confirmed to exist</p><p>BOLA (6.2): answering 403 would confirm that job_1 exists.</p><p><i>VI: BOLA (6.2): trả 403 là xác nhận job_1 tồn tại.</i></p></li><li><p><b>a)</b> 202 with status running and cancelRequested: true; the worker stops at the next batch</p><p>Cancel is a request: 261 ms later the job was cancelled at 6,000 of 213,749 rows. A second cancel ⇒ 409 JOB_FINISHED.</p><p><i>VI: Huỷ là một yêu cầu: 261 ms sau việc dừng ở dòng 6.000/213.749. Huỷ lần hai ⇒ 409 JOB_FINISHED.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The client got 524 after 100.0 s. What did LabFlow’s own log show for the same request?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client nhận 524 sau 100,0 s. Log của chính LabFlow cho cùng request đó ghi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It finished in 2.3 s; the 524 came from the attendance service being slow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It kept working until 114.8 s and built an 11.7 MB file that nobody received"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It stopped the export at 100 s because the proxy closed the connection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It answered 504 at 100 s and rolled back the partial file it had written"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The server never learns that the client left. A second click ran the whole 114 s (and 428 attendance calls) again.</p><p><i>VI: Server không biết client đã bỏ đi. Bấm lần hai chạy lại cả 114 s (và 428 lần gọi dịch vụ điểm danh).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which answer to POST /v2/exports fits a two-minute export?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu trả lời nào cho POST /v2/exports hợp với một lượt xuất hai phút?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "201 Created, Location: /v2/exports/exp_1, sent after the CSV is complete"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 OK with the CSV, after raising the proxy timeout to 300 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "303 See Other to /v2/jobs/job_1, with no body and no Retry-After"
+              },
+              {
+                "ma": "d",
+                "noiDung": "202 Accepted, Location: /v2/jobs/job_1, Retry-After: 2 and the job body"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>RFC 9110: 202 = accepted, not finished; point to a status monitor. The POST took 17.1 ms on the server.</p><p><i>VI: RFC 9110: 202 = đã nhận, chưa xong; chỉ tới chỗ theo dõi trạng thái. POST tốn 17,1 ms ở server.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An (tok_an) asks GET /v2/jobs/job_1, a job created by Cô Lan. What does LabFlow answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>An (tok_an) hỏi GET /v2/jobs/job_1, việc do Cô Lan tạo. LabFlow trả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "403 FORBIDDEN — the job exists, but it belongs to another user of LabFlow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 with progress only, because job progress is not sensitive information"
+              },
+              {
+                "ma": "c",
+                "noiDung": "401 UNAUTHORIZED — job resources need a special scope in the token"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404 JOB_NOT_FOUND — someone else’s job must not even be confirmed to exist"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>BOLA (6.2): answering 403 would confirm that job_1 exists.</p><p><i>VI: BOLA (6.2): trả 403 là xác nhận job_1 tồn tại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Cô Lan sends POST /v2/jobs/job_2/cancel while the export is running. What comes back?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cô Lan gửi POST /v2/jobs/job_2/cancel khi lượt xuất đang chạy. Nhận lại gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "202 with status running and cancelRequested: true; the worker stops at the next batch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "204 No Content; the job record is deleted together with its partial result"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with status cancelled, because the worker is killed at once by the API"
+              },
+              {
+                "ma": "d",
+                "noiDung": "409 JOB_RUNNING, because a running job can only be cancelled by an admin"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Cancel is a request: 261 ms later the job was cancelled at 6,000 of 213,749 rows. A second cancel ⇒ 409 JOB_FINISHED.</p><p><i>VI: Huỷ là một yêu cầu: 261 ms sau việc dừng ở dòng 6.000/213.749. Huỷ lần hai ⇒ 409 JOB_FINISHED.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Raising the timeout instead of changing the contract.|||Tăng timeout thay vì đổi hợp đồng."
+        },
+        {
+          "loi": "Answering 403 for another user’s job.|||Trả 403 cho việc của người khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "202 Accepted",
+          "vi": "đã nhận, chưa xong"
+        },
+        {
+          "en": "job resource",
+          "vi": "tài nguyên công việc"
+        },
+        {
+          "en": "proxy read timeout",
+          "vi": "thời gian proxy chờ server"
+        }
+      ]
+    },
+    {
+      "title": "Async jobs 2 — Write canTransition(from, to)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "async APIs",
+        "state machines"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The status of a LabFlow job may only change along these arrows: <code>queued → running</code>, <code>queued → cancelled</code>, <code>running → succeeded | failed | cancelled</code>, and <code>running → queued</code> (BullMQ puts a job back in waiting before a retry or after a stall, and LabFlow shows waiting as <code>queued</code>). <code>succeeded</code>, <code>failed</code> and <code>cancelled</code> are final. Return <code>true</code> when the change is allowed; anything else — including the same status twice or an unknown status — is <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trạng thái một việc của LabFlow chỉ được đổi theo các mũi tên: <code>queued → running</code>, <code>queued → cancelled</code>, <code>running → succeeded | failed | cancelled</code>, và <code>running → queued</code> (BullMQ đưa việc về hàng chờ trước một lần thử lại hoặc sau khi bị bỏ dở, LabFlow hiện hàng chờ là <code>queued</code>). <code>succeeded</code>, <code>failed</code>, <code>cancelled</code> là trạng thái cuối. Trả <code>true</code> khi được phép đổi; mọi thứ khác — kể cả hai lần cùng một trạng thái hay trạng thái lạ — là <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "from, to — strings|||from, to — chuỗi",
+      "outputSpec": "true | false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canTransition(\"queued\", \"running\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write the arrows as a table: status ⇒ list of next statuses.|||Viết các mũi tên thành bảng: trạng thái ⇒ danh sách trạng thái kế.",
+        "Final statuses map to an empty list.|||Trạng thái cuối ứng với danh sách rỗng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** may a job go from one status to another? */\nfunction canTransition(from, to) {\n  // Write your solution here\n  return from !== to;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction canTransition(from, to) {\n  const NEXT = {\n    queued: ['running', 'cancelled'],\n    running: ['succeeded', 'failed', 'cancelled', 'queued'],   // queued: chờ thử lại (backoff) hoặc bị bỏ dở (stalled)\n    succeeded: [], failed: [], cancelled: [],                    // trạng thái cuối: không đi đâu nữa\n  };\n  return (NEXT[from] || []).includes(to);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The table is the contract a client can rely on: once final, the job never changes — that is why a poll client stops at the first final status.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng này là hợp đồng client tin được: đã cuối thì không đổi nữa — vì thế client hỏi vòng dừng ở trạng thái cuối đầu tiên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The worker takes the job",
+              "vi": "Worker nhận việc"
+            },
+            "goi": "canTransition(\"queued\", \"running\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Cancel after it finished",
+              "vi": "Huỷ sau khi đã xong"
+            },
+            "goi": "canTransition(\"succeeded\", \"cancelled\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "canTransition(\"running\", \"queued\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "canTransition(\"queued\", \"succeeded\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "canTransition(\"running\", \"running\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "canTransition(\"paused\", \"running\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "canTransition(\"queued\", \"cancelled\")",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Allowing succeeded → cancelled — LabFlow answers 409 JOB_FINISHED instead.|||Cho succeeded → cancelled — LabFlow trả 409 JOB_FINISHED."
+        },
+        {
+          "loi": "Forgetting running → queued, so a retry looks like an illegal change.|||Quên running → queued, nên một lần thử lại trông như đổi trạng thái sai luật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "final status",
+          "vi": "trạng thái cuối"
+        },
+        {
+          "en": "stalled",
+          "vi": "bị bỏ dở (khoá hết hạn)"
+        }
+      ]
+    },
+    {
+      "title": "Async jobs 3 — Write resultResponse(job, userId, now) for GET /jobs/{id}/result",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "async APIs",
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Decide what <code>GET /v2/jobs/{id}/result</code> answers, in this order:</p><ol><li>no job, or <code>job.owner !== userId</code> ⇒ <code>{ status: 404, code: \"JOB_NOT_FOUND\" }</code>;</li><li>status <code>queued</code> or <code>running</code> ⇒ <code>{ status: 409, code: \"JOB_NOT_FINISHED\", retryAfter: 2 }</code>;</li><li><code>failed</code> or <code>cancelled</code> ⇒ <code>{ status: 409, code: \"JOB_NOT_FINISHED\" }</code> (no <code>retryAfter</code>: asking again will not help);</li><li><code>succeeded</code> but <code>now ≥ job.result.expiresAt</code> ⇒ <code>{ status: 410, code: \"RESULT_EXPIRED\" }</code>;</li><li>otherwise <code>{ status: 200 }</code>.</li></ol><p><code>now</code> and <code>expiresAt</code> are ISO 8601 strings.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định <code>GET /v2/jobs/{id}/result</code> trả gì, theo thứ tự:</p><ol><li>không có việc, hoặc <code>job.owner !== userId</code> ⇒ <code>{ status: 404, code: \"JOB_NOT_FOUND\" }</code>;</li><li>trạng thái <code>queued</code> hoặc <code>running</code> ⇒ <code>{ status: 409, code: \"JOB_NOT_FINISHED\", retryAfter: 2 }</code>;</li><li><code>failed</code> hoặc <code>cancelled</code> ⇒ <code>{ status: 409, code: \"JOB_NOT_FINISHED\" }</code> (không có <code>retryAfter</code>: hỏi lại cũng vô ích);</li><li><code>succeeded</code> nhưng <code>now ≥ job.result.expiresAt</code> ⇒ <code>{ status: 410, code: \"RESULT_EXPIRED\" }</code>;</li><li>còn lại <code>{ status: 200 }</code>.</li></ol><p><code>now</code> và <code>expiresAt</code> là chuỗi ISO 8601.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "job — { id, owner, status, result? } | null; userId — string; now — ISO string|||job — { id, owner, status, result? } | null; userId — chuỗi; now — chuỗi ISO",
+      "outputSpec": "{ status, code?, retryAfter? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"running\",\"progress\":{\"done\":7500,\"total\":20000}}, \"u_lan\", \"2026-11-01T01:27:46.000Z\")",
+          "output": "{\"status\":409,\"code\":\"JOB_NOT_FINISHED\",\"retryAfter\":2}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check ownership first — a stranger must not learn the job’s status.|||Kiểm chủ sở hữu trước — người lạ không được biết trạng thái việc.",
+        "Compare times with Date.parse, not as strings of different formats.|||So thời gian bằng Date.parse, đừng so chuỗi khác định dạng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what does GET /v2/jobs/{id}/result answer? */\nfunction resultResponse(job, userId, now) {\n  // Write your solution here\n  if (job.status === 'succeeded') return { status: 200 };\n  return { status: 409, code: 'JOB_NOT_FINISHED' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction resultResponse(job, userId, now) {\n  if (!job || job.owner !== userId) return { status: 404, code: 'JOB_NOT_FOUND' };          // việc của người khác: như không có\n  if (job.status !== 'succeeded') {\n    const finished = job.status === 'failed' || job.status === 'cancelled';\n    return finished ? { status: 409, code: 'JOB_NOT_FINISHED' } : { status: 409, code: 'JOB_NOT_FINISHED', retryAfter: 2 };\n  }\n  if (Date.parse(now) >= Date.parse(job.result.expiresAt)) return { status: 410, code: 'RESULT_EXPIRED' };  // đã từng có, nay hết hạn\n  return { status: 200 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is routes/jobs.js of 10.1: 409 + Retry-After 2 while running (measured), 200 with 230,490 bytes, then 410 RESULT_EXPIRED 20 s later.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là routes/jobs.js của bài 10.1: 409 + Retry-After 2 khi đang chạy (đo thật), 200 với 230.490 byte, rồi 410 RESULT_EXPIRED sau 20 s.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Too early (4 s after POST)",
+              "vi": "Quá sớm (4 s sau POST)"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"running\",\"progress\":{\"done\":7500,\"total\":20000}}, \"u_lan\", \"2026-11-01T01:27:46.000Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "JOB_NOT_FINISHED",
+              "retryAfter": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Ready and not expired",
+              "vi": "Đã xong, chưa hết hạn"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"succeeded\",\"result\":{\"href\":\"/v2/jobs/job_1/result\",\"contentType\":\"text/csv; charset=utf-8\",\"bytes\":230490,\"expiresAt\":\"2026-11-01T01:05:39.249Z\"}}, \"u_lan\", \"2026-11-01T01:05:20.000Z\")",
+            "mongDoi": {
+              "status": 200
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"succeeded\",\"result\":{\"href\":\"/v2/jobs/job_1/result\",\"contentType\":\"text/csv; charset=utf-8\",\"bytes\":230490,\"expiresAt\":\"2026-11-01T01:05:39.249Z\"}}, \"u_lan\", \"2026-11-01T01:06:00.000Z\")",
+            "mongDoi": {
+              "status": 410,
+              "code": "RESULT_EXPIRED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"succeeded\",\"result\":{\"href\":\"/v2/jobs/job_1/result\",\"contentType\":\"text/csv; charset=utf-8\",\"bytes\":230490,\"expiresAt\":\"2026-11-01T01:05:39.249Z\"}}, \"u_an\", \"2026-11-01T01:05:20.000Z\")",
+            "mongDoi": {
+              "status": 404,
+              "code": "JOB_NOT_FOUND"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "resultResponse(null, \"u_lan\", \"2026-11-01T01:05:20.000Z\")",
+            "mongDoi": {
+              "status": 404,
+              "code": "JOB_NOT_FOUND"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"cancelled\"}, \"u_lan\", \"2026-11-01T01:05:20.000Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "JOB_NOT_FINISHED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"queued\"}, \"u_lan\", \"2026-11-01T01:05:20.000Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "JOB_NOT_FINISHED",
+              "retryAfter": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "resultResponse({\"id\":\"job_1\",\"owner\":\"u_lan\",\"status\":\"succeeded\",\"result\":{\"href\":\"/v2/jobs/job_1/result\",\"contentType\":\"text/csv; charset=utf-8\",\"bytes\":230490,\"expiresAt\":\"2026-11-01T01:05:39.249Z\"}}, \"u_lan\", \"2026-11-01T01:05:39.249Z\")",
+            "mongDoi": {
+              "status": 410,
+              "code": "RESULT_EXPIRED"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 404 after expiry: the result existed, so 410 Gone tells the client to start a new job.|||Trả 404 sau khi hết hạn: kết quả đã từng có, nên 410 Gone mới bảo client tạo việc mới."
+        },
+        {
+          "loi": "Sending Retry-After for a failed job, so the client polls forever.|||Gửi Retry-After cho việc đã hỏng, nên client hỏi mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "410 Gone",
+          "vi": "đã từng có, nay không còn"
+        },
+        {
+          "en": "retention",
+          "vi": "thời hạn giữ"
+        }
+      ]
+    },
+    {
+      "title": "Async jobs 4 — Write pollDelay(retryAfter, now, capSec)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "async APIs",
+        "HTTP headers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The poll client waits <code>Retry-After</code> seconds between status requests. Return the number of whole seconds to wait:</p><ul><li><code>Retry-After</code> may be <b>delta-seconds</b> (<code>\"2\"</code>) or an <b>HTTP-date</b> (<code>\"Sun, 01 Nov 2026 01:27:48 GMT\"</code>) — then wait until that date from <code>now</code> (ISO string), rounded <b>up</b> to whole seconds;</li><li>missing (<code>null</code>) or unreadable ⇒ <code>2</code>;</li><li>never less than <code>1</code> (no hammering every 50 ms, even if the date is in the past) and never more than <code>capSec</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Client hỏi vòng chờ <code>Retry-After</code> giây giữa các lần hỏi trạng thái. Trả số giây nguyên phải chờ:</p><ul><li><code>Retry-After</code> có thể là <b>số giây</b> (<code>\"2\"</code>) hoặc <b>ngày HTTP</b> (<code>\"Sun, 01 Nov 2026 01:27:48 GMT\"</code>) — khi đó chờ tới thời điểm ấy tính từ <code>now</code> (chuỗi ISO), làm tròn <b>lên</b> giây nguyên;</li><li>thiếu (<code>null</code>) hoặc không đọc được ⇒ <code>2</code>;</li><li>không bao giờ dưới <code>1</code> (không dội request mỗi 50 ms, kể cả khi ngày đã qua) và không quá <code>capSec</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "retryAfter — string | null; now — ISO string; capSec — number|||retryAfter — chuỗi | null; now — chuỗi ISO; capSec — số",
+      "outputSpec": "integer seconds in [1, capSec]|||số giây nguyên trong [1, capSec]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pollDelay(\"2\", \"2026-11-01T01:27:46.000Z\", 10)",
+          "output": "2",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "/^\\d+$/ recognises delta-seconds; anything else, try Date.parse.|||/^\\d+$/ nhận ra số giây; còn lại thử Date.parse.",
+        "Clamp last: Math.min(cap, Math.max(1, s)).|||Kẹp sau cùng: Math.min(cap, Math.max(1, s))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** how many seconds should the poll client wait? */\nfunction pollDelay(retryAfter, now, capSec) {\n  // Write your solution here\n  return Number(retryAfter) || 2;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pollDelay(retryAfter, now, capSec) {\n  const DEFAULT = 2;\n  let sec = DEFAULT;\n  if (typeof retryAfter === 'string' && /^\\d+$/.test(retryAfter.trim())) sec = Number(retryAfter.trim());   // delta-seconds\n  else if (typeof retryAfter === 'string' && !Number.isNaN(Date.parse(retryAfter))) {\n    sec = Math.ceil((Date.parse(retryAfter) - Date.parse(now)) / 1000);                                      // HTTP-date\n  }\n  return Math.min(capSec, Math.max(1, sec));                                                                 // không dưới 1 s, không quá trần\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 9110 §10.2.3 allows both forms. With Retry-After: 2 the poll client of 10.1 made 7 status requests for a 10.2 s job; the cap is the practice task of the lesson (estimatedSecondsLeft capped at 10).</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 9110 §10.2.3 cho phép cả hai dạng. Với Retry-After: 2, client hỏi vòng của bài 10.1 gửi 7 lần hỏi cho việc 10,2 s; trần là bài thực hành của bài học (estimatedSecondsLeft, trần 10).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "LabFlow’s Retry-After: 2",
+              "vi": "Retry-After: 2 của LabFlow"
+            },
+            "goi": "pollDelay(\"2\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "An HTTP-date 6 s ahead",
+              "vi": "Ngày HTTP sau 6 s"
+            },
+            "goi": "pollDelay(\"Sun, 01 Nov 2026 01:27:52 GMT\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pollDelay(\"120\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 10,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pollDelay(null, \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pollDelay(\"Sun, 01 Nov 2026 01:27:47 GMT\", \"2026-11-01T01:27:45.600Z\", 10)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pollDelay(\"Sun, 01 Nov 2026 01:20:00 GMT\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "pollDelay(\"0\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "pollDelay(\"soon\", \"2026-11-01T01:27:46.000Z\", 10)",
+            "mongDoi": 2,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Number(\"Sun, 01 Nov …\") is NaN, and NaN || 2 hides the HTTP-date form.|||Number(\"Sun, 01 Nov …\") là NaN, và NaN || 2 che mất dạng ngày HTTP."
+        },
+        {
+          "loi": "Rounding down: 1.4 s becomes 1 s and the client asks too early (409).|||Làm tròn xuống: 1,4 s thành 1 s và client hỏi quá sớm (409)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Retry-After",
+          "vi": "hỏi lại sau bao lâu"
+        },
+        {
+          "en": "HTTP-date",
+          "vi": "ngày giờ theo định dạng HTTP"
+        }
+      ]
+    }
+  ]
+}

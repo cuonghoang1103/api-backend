@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: LabFlow API
-  version: 2.2.0
+  version: 2.3.0
   summary: Book university labs, report broken devices.
   description: |
     LabFlow v2. Every error is `application/problem+json` (RFC 9457).
@@ -30,6 +30,12 @@ tags:
     description: Queueing for a slot that is already booked
   - name: Reports
     description: Usage figures for lab managers
+  - name: Jobs
+    description: Long-running work — POST answers 202 and a job you poll (Chapter 10.1)
+  - name: Events
+    description: The same booking events by polling, Server-Sent Events or WebSocket (Chapter 10.4)
+  - name: Webhooks
+    description: LabFlow calls your HTTPS endpoint, signed (Chapters 10.5–10.6)
 security:
   - bearerAuth: []
 paths:
@@ -388,6 +394,271 @@ paths:
         '409': { $ref: '#/components/responses/Conflict' }
         '412': { $ref: '#/components/responses/PreconditionFailed' }
         '415': { $ref: '#/components/responses/UnsupportedMediaType' }
+  /exports:
+    post:
+      tags: [Jobs]
+      operationId: startBookingsExport
+      summary: Export bookings as CSV — in the background (lab managers only)
+      description: |
+        Answers at once with 202 and a job. A whole-campus semester (~214,000 rows) takes about two minutes:
+        too long to hold a request open behind a proxy that gives up after 100 s. Poll the job, or subscribe
+        to `labflow.export.completed.v1` (webhook).
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ExportRequest' }
+      responses:
+        '202': { $ref: '#/components/responses/JobAccepted' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /reports/usage/exports:
+    post:
+      tags: [Jobs, Reports]
+      operationId: startUsageReport
+      summary: Whole-campus usage report — in the background (Lab 10)
+      description: The result is the usage report as JSON; when it is ready, `labflow.report.ready.v1` is sent to the creator's webhooks.
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [from]
+              properties:
+                from: { type: string, format: date }
+                days: { type: integer, minimum: 1, maximum: 92, default: 30 }
+      responses:
+        '202': { $ref: '#/components/responses/JobAccepted' }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /jobs/{id}:
+    get:
+      tags: [Jobs]
+      operationId: getJob
+      summary: Status and progress of one of your jobs
+      description: Jobs of other people answer 404. Job records are kept 7 days; results 1 hour (`result.expiresAt`).
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '200':
+          description: The job. `Retry-After` is present while it is queued or running.
+          headers:
+            Retry-After: { $ref: '#/components/headers/Retry-After' }
+            Cache-Control: { schema: { type: string, const: no-store } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /jobs/{id}/cancel:
+    post:
+      tags: [Jobs]
+      operationId: cancelJob
+      summary: Ask a queued or running job to stop
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '202':
+          description: Cancellation requested; the worker stops before its next batch (`cancelRequested` is true)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /jobs/{id}/result:
+    get:
+      tags: [Jobs]
+      operationId: getJobResult
+      summary: Download the result of a succeeded job
+      parameters: [{ $ref: '#/components/parameters/JobId' }]
+      responses:
+        '200':
+          description: The result (CSV for exports, JSON for reports)
+          content:
+            text/csv: { schema: { type: string } }
+            application/json: { schema: { type: object } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '410': { $ref: '#/components/responses/Gone' }
+  /events:
+    get:
+      tags: [Events]
+      operationId: pollEvents
+      summary: Booking events after a position (polling and long polling)
+      description: |
+        Without `after` ⇒ `{ data: [], next: <latest id> }` ("start from now"). With `wait` > 0 the request is held
+        until an event arrives or `wait` seconds pass (long polling). An `after` older than the retained window ⇒ 410.
+      parameters:
+        - { name: after, in: query, schema: { type: string, pattern: '^\d+(-\d+)?$' } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 100 } }
+        - { name: wait, in: query, schema: { type: integer, minimum: 0, maximum: 25, default: 0 } }
+      responses:
+        '200':
+          description: Events in order; continue with `next`
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, next]
+                properties:
+                  data: { type: array, items: { $ref: '#/components/schemas/Event' } }
+                  next: { type: string }
+        '400': { $ref: '#/components/responses/InvalidQuery' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '410': { $ref: '#/components/responses/Gone' }
+  /events/stream:
+    get:
+      tags: [Events]
+      operationId: streamEvents
+      summary: Booking events as Server-Sent Events
+      description: |
+        Each event: `id:` (resume position), `event:` (the type), `data:` (the Event as JSON). `: ping` every 15 s.
+        Reconnect with `Last-Event-ID` to receive what you missed; too old ⇒ one `event: reset` (reload state).
+        Browsers cannot send Authorization with EventSource: use `?ticket=` from POST /realtime/tickets.
+      parameters:
+        - { name: Last-Event-ID, in: header, schema: { type: string } }
+        - { name: ticket, in: query, schema: { type: string } }
+      responses:
+        '200':
+          description: An open stream
+          content:
+            text/event-stream: { schema: { type: string } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /realtime/tickets:
+    post:
+      tags: [Events]
+      operationId: createRealtimeTicket
+      summary: A one-time ticket (30 s) for EventSource or WebSocket (`ws://…/v2/ws?ticket=`)
+      responses:
+        '201':
+          description: The ticket
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ticket, expiresIn]
+                properties:
+                  ticket: { type: string }
+                  expiresIn: { type: integer, const: 30 }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+  /webhooks:
+    post:
+      tags: [Webhooks]
+      operationId: createWebhook
+      summary: Subscribe an HTTPS endpoint to events (lab managers only)
+      description: The `secret` (whsec_…) is shown ONCE. Private and non-HTTPS addresses ⇒ 422 URL_NOT_ALLOWED.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [url, events]
+              properties:
+                url: { type: string, format: uri, maxLength: 500 }
+                events: { type: array, minItems: 1, items: { $ref: '#/components/schemas/EventType' } }
+      responses:
+        '201':
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/WebhookSubscription' }
+                  - type: object
+                    required: [secret]
+                    properties: { secret: { type: string, pattern: '^whsec_' } }
+        '400': { $ref: '#/components/responses/ValidationFailed' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+    get:
+      tags: [Webhooks]
+      operationId: listWebhooks
+      summary: Your subscriptions (without secrets)
+      responses:
+        '200':
+          description: The list
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties: { data: { type: array, items: { $ref: '#/components/schemas/WebhookSubscription' } } }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /webhooks/{id}:
+    delete:
+      tags: [Webhooks]
+      operationId: deleteWebhook
+      summary: Unsubscribe
+      parameters: [{ $ref: '#/components/parameters/WebhookId' }]
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /webhooks/{id}/deliveries:
+    get:
+      tags: [Webhooks]
+      operationId: listWebhookDeliveries
+      summary: The last 50 delivery attempts — status, error, duration
+      parameters: [{ $ref: '#/components/parameters/WebhookId' }]
+      responses:
+        '200':
+          description: Newest first
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required: [messageId, type, attempt, at]
+                      properties:
+                        messageId: { type: string }
+                        type: { $ref: '#/components/schemas/EventType' }
+                        attempt: { type: integer, minimum: 1 }
+                        status: { type: [integer, 'null'] }
+                        error: { type: [string, 'null'] }
+                        durationMs: { type: integer }
+                        at: { $ref: '#/components/schemas/Instant' }
+        '401': { $ref: '#/components/responses/Unauthenticated' }
+        '404': { $ref: '#/components/responses/NotFound' }
+webhooks:
+  bookingEvent:
+    post:
+      tags: [Webhooks]
+      operationId: receiveBookingEvent
+      summary: What LabFlow POSTs to your endpoint (booking.created / cancelled / checked_in, export.completed, report.ready)
+      description: |
+        Signed per Standard Webhooks: verify `webhook-signature` = `v1,` + base64(HMAC-SHA256(secret, id + "." + timestamp + "." + raw body))
+        over the RAW body, reject timestamps more than 5 minutes away, deduplicate by `webhook-id`.
+        Answer 2xx within 5 s (do the work later). Non-2xx or timeout ⇒ retried 8 times with exponential backoff
+        and jitter (30 s, 1 min, 2 min …); 410 ⇒ the subscription is disabled.
+      parameters:
+        - { name: webhook-id, in: header, required: true, schema: { type: string, pattern: '^msg_' } }
+        - { name: webhook-timestamp, in: header, required: true, schema: { type: string, pattern: '^\d+$' } }
+        - { name: webhook-signature, in: header, required: true, schema: { type: string, pattern: '^v1,' } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Event' }
+      responses:
+        '200': { description: Received }
+        '202': { description: 'Received; will be processed later (recommended)' }
+        '204': { description: Received }
+        '410': { description: Stop sending — LabFlow disables the subscription }
 components:
   securitySchemes:
     bearerAuth:
@@ -410,6 +681,16 @@ components:
       in: path
       required: true
       schema: { type: string, pattern: '^bk_\d+$' }
+    JobId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^job_\d+$' }
+    WebhookId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^wh_[a-z0-9]+$' }
     IdempotencyKey:
       name: Idempotency-Key
       in: header
@@ -432,6 +713,80 @@ components:
       description: 'The policy, e.g. `"booking";q=5;w=60`'
       schema: { type: string }
   schemas:
+    ExportRequest:
+      type: object
+      additionalProperties: false
+      required: [from, to]
+      properties:
+        labId: { $ref: '#/components/schemas/LabId' }
+        from: { type: string, format: date }
+        to: { type: string, format: date }
+    Job:
+      type: object
+      required: [id, kind, status, progress, createdAt, startedAt, finishedAt, cancelRequested, result, error, links]
+      properties:
+        id: { type: string, examples: [job_7] }
+        kind: { type: string, enum: [bookings-export, usage-report] }
+        status: { type: string, enum: [queued, running, succeeded, failed, cancelled] }
+        progress:
+          type: object
+          required: [done, total, percent]
+          properties:
+            done: { type: integer, minimum: 0 }
+            total: { type: [integer, 'null'] }
+            percent: { type: integer, minimum: 0, maximum: 100 }
+        createdAt: { $ref: '#/components/schemas/Instant' }
+        startedAt: { oneOf: [{ $ref: '#/components/schemas/Instant' }, { type: 'null' }] }
+        finishedAt: { oneOf: [{ $ref: '#/components/schemas/Instant' }, { type: 'null' }] }
+        cancelRequested: { type: boolean }
+        result:
+          description: Only when succeeded. The result itself is kept until expiresAt, then 410.
+          oneOf:
+            - type: 'null'
+            - type: object
+              required: [href, contentType, bytes, expiresAt]
+              properties:
+                href: { type: string }
+                contentType: { type: string }
+                bytes: { type: integer }
+                expiresAt: { $ref: '#/components/schemas/Instant' }
+        error:
+          oneOf:
+            - type: 'null'
+            - type: object
+              required: [code, detail]
+              properties: { code: { type: string }, detail: { type: string } }
+        links:
+          type: object
+          required: [self]
+          properties:
+            self: { type: string }
+            cancel: { type: string, description: Absent once the job has finished }
+    EventType:
+      type: string
+      enum: [labflow.booking.created.v1, labflow.booking.cancelled.v1, labflow.booking.checked_in.v1, labflow.export.completed.v1, labflow.report.ready.v1]
+    Event:
+      description: CloudEvents 1.0 (JSON). Delivered at least once — deduplicate by `id`; use `data.version` to drop older news.
+      type: object
+      required: [id, specversion, type, source, time, data]
+      properties:
+        id: { type: string }
+        specversion: { type: string, const: '1.0' }
+        type: { $ref: '#/components/schemas/EventType' }
+        source: { type: string }
+        subject: { type: string }
+        time: { $ref: '#/components/schemas/Instant' }
+        datacontenttype: { type: string, const: application/json }
+        data: { type: object }
+    WebhookSubscription:
+      type: object
+      required: [id, url, events, status, createdAt]
+      properties:
+        id: { type: string, examples: [wh_mvx53e0v] }
+        url: { type: string, format: uri }
+        events: { type: array, items: { $ref: '#/components/schemas/EventType' } }
+        status: { type: string, enum: [active, disabled] }
+        createdAt: { $ref: '#/components/schemas/Instant' }
     LabId: { type: string, pattern: '^lab_\d+$', examples: [lab_1] }
     Instant:
       type: string
@@ -599,6 +954,19 @@ components:
               parameter: { type: string, description: Name of the query parameter }
               detail: { type: string }
   responses:
+    JobAccepted:
+      description: Accepted — not done yet. Follow Location; wait Retry-After seconds between polls.
+      headers:
+        Location: { description: 'The job, e.g. /v2/jobs/job_7', schema: { type: string } }
+        Retry-After: { $ref: '#/components/headers/Retry-After' }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Job' }
+    Gone:
+      description: Existed, but is no longer kept (job result expired, or an event position too old)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
     ValidationFailed:
       description: The body does not match the schema
       content:

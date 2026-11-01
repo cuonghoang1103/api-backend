@@ -1,0 +1,746 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-10-4-nhan-webhook",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-10-4-nhan-webhook"
+  },
+  "exercises": [
+    {
+      "title": "Receiving webhooks 1 — Each habit switched off once",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "webhooks",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 10.6: webhooks/receiver.mjs on port 4005 with VERIFY, DEDUPE, ASYNC and ORDER switched off one at a time.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 10.6: webhooks/receiver.mjs ở cổng 4005, tắt lần lượt VERIFY, DEDUPE, ASYNC và ORDER.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The signature covers bytes, not objects.|||Chữ ký phủ byte, không phủ object.",
+        "A sender that times out retries — even if you finished.|||Bên gửi quá giờ sẽ thử lại — kể cả khi bạn đã làm xong."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Receiving webhooks 1 — Each habit switched off once\n\nAnswer in the answer panel (no code needed).\n\n1. A receiver uses express.json() and checks the signature over JSON.stringify(req.body). Which sender breaks it?Bên nhận dùng express.json() rồi kiểm chữ ký trên JSON.stringify(req.body). Bên gửi nào làm nó hỏng?\n2. An attacker replays a captured delivery unchanged 1 s later (tolerance 10 s). What happens?Kẻ tấn công phát lại y nguyên một lần giao bắt được, 1 s sau (cửa sổ 10 s). Chuyện gì xảy ra?\n3. The receiver’s work takes 3 s and LabFlow waits 2 s. What did answering 202 first (ASYNC=1) change?Việc của bên nhận mất 3 s và LabFlow chờ 2 s. Trả 202 trước (ASYNC=1) đã thay đổi gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Receiving webhooks 1 — Each habit switched off once — answer key\n\n1. A receiver uses express.json() and checks the signature over JSON.stringify(req.body). Which sender breaks it?Bên nhận dùng express.json() rồi kiểm chữ ký trên JSON.stringify(req.body). Bên gửi nào làm nó hỏng?\n   Answer: d) A Python sender: json.dumps escapes “ò” as \\u00f2 and adds spaces, so the bytes differ\n   Same data, different bytes, different signature — and the error only shows up for Vietnamese lab names. Verify the raw body (express.raw).VI: Cùng dữ liệu, khác byte, khác chữ ký — và lỗi chỉ hiện với tên phòng tiếng Việt. Kiểm trên body thô (express.raw).\n\n2. An attacker replays a captured delivery unchanged 1 s later (tolerance 10 s). What happens?Kẻ tấn công phát lại y nguyên một lần giao bắt được, 1 s sau (cửa sổ 10 s). Chuyện gì xảy ra?\n   Answer: d) The signature is valid, the webhook-id was already seen ⇒ 200 duplicate, no second effect\n   Changed body ⇒ 401; same request 11 s later ⇒ 401 (outside the window). The window limits how long a capture is useful; the id store covers replays inside it.VI: Sửa body ⇒ 401; cùng request 11 s sau ⇒ 401 (ngoài cửa sổ). Cửa sổ giới hạn thời gian một bản bắt được còn dùng được; kho id che phần phát lại trong cửa sổ.\n\n3. The receiver’s work takes 3 s and LabFlow waits 2 s. What did answering 202 first (ASYNC=1) change?Việc của bên nhận mất 3 s và LabFlow chờ 2 s. Trả 202 trước (ASYNC=1) đã thay đổi gì?\n   Answer: d) 1 attempt in 21 ms and 1 email, instead of 5 timeouts and 5 emails\n   Dedupe alone gave 2 attempts and 1 email, but the sender still logged a timeout. In production “afterwards” means a queue, not setImmediate.VI: Chỉ chống trùng thì còn 2 lần và 1 email, nhưng bên gửi vẫn ghi một lần quá giờ. Thật thì “làm sau” nghĩa là hàng đợi, không phải setImmediate.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A Python sender: json.dumps escapes “ò” as \\u00f2 and adds spaces, so the bytes differ</p><p>Same data, different bytes, different signature — and the error only shows up for Vietnamese lab names. Verify the raw body (express.raw).</p><p><i>VI: Cùng dữ liệu, khác byte, khác chữ ký — và lỗi chỉ hiện với tên phòng tiếng Việt. Kiểm trên body thô (express.raw).</i></p></li><li><p><b>d)</b> The signature is valid, the webhook-id was already seen ⇒ 200 duplicate, no second effect</p><p>Changed body ⇒ 401; same request 11 s later ⇒ 401 (outside the window). The window limits how long a capture is useful; the id store covers replays inside it.</p><p><i>VI: Sửa body ⇒ 401; cùng request 11 s sau ⇒ 401 (ngoài cửa sổ). Cửa sổ giới hạn thời gian một bản bắt được còn dùng được; kho id che phần phát lại trong cửa sổ.</i></p></li><li><p><b>d)</b> 1 attempt in 21 ms and 1 email, instead of 5 timeouts and 5 emails</p><p>Dedupe alone gave 2 attempts and 1 email, but the sender still logged a timeout. In production “afterwards” means a queue, not setImmediate.</p><p><i>VI: Chỉ chống trùng thì còn 2 lần và 1 email, nhưng bên gửi vẫn ghi một lần quá giờ. Thật thì “làm sau” nghĩa là hàng đợi, không phải setImmediate.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A receiver uses express.json() and checks the signature over JSON.stringify(req.body). Which sender breaks it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bên nhận dùng express.json() rồi kiểm chữ ký trên JSON.stringify(req.body). Bên gửi nào làm nó hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Any sender that uses HTTP/2, because headers arrive in lower case and change the HMAC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None: JSON.stringify always gives back the exact bytes the sender originally signed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A Node sender with a body larger than 100 KB, because express.json() truncates it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A Python sender: json.dumps escapes “ò” as \\u00f2 and adds spaces, so the bytes differ"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Same data, different bytes, different signature — and the error only shows up for Vietnamese lab names. Verify the raw body (express.raw).</p><p><i>VI: Cùng dữ liệu, khác byte, khác chữ ký — và lỗi chỉ hiện với tên phòng tiếng Việt. Kiểm trên body thô (express.raw).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An attacker replays a captured delivery unchanged 1 s later (tolerance 10 s). What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kẻ tấn công phát lại y nguyên một lần giao bắt được, 1 s sau (cửa sổ 10 s). Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The signature is now invalid because the timestamp has changed ⇒ 401 bad signature"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is processed again, because a valid signature proves the request is genuine"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The receiver answers 409 Conflict so that the sender knows it was a replay"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The signature is valid, the webhook-id was already seen ⇒ 200 duplicate, no second effect"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Changed body ⇒ 401; same request 11 s later ⇒ 401 (outside the window). The window limits how long a capture is useful; the id store covers replays inside it.</p><p><i>VI: Sửa body ⇒ 401; cùng request 11 s sau ⇒ 401 (ngoài cửa sổ). Cửa sổ giới hạn thời gian một bản bắt được còn dùng được; kho id che phần phát lại trong cửa sổ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The receiver’s work takes 3 s and LabFlow waits 2 s. What did answering 202 first (ASYNC=1) change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc của bên nhận mất 3 s và LabFlow chờ 2 s. Trả 202 trước (ASYNC=1) đã thay đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5 attempts but only 1 email, because the 202 marks the message as seen"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: LabFlow still counts the delivery as failed after 2 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2 attempts and 1 email, the same as turning deduplication on alone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1 attempt in 21 ms and 1 email, instead of 5 timeouts and 5 emails"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Dedupe alone gave 2 attempts and 1 email, but the sender still logged a timeout. In production “afterwards” means a queue, not setImmediate.</p><p><i>VI: Chỉ chống trùng thì còn 2 lần và 1 email, nhưng bên gửi vẫn ghi một lần quá giờ. Thật thì “làm sau” nghĩa là hàng đợi, không phải setImmediate.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Doing slow work before answering.|||Làm việc chậm trước khi trả lời."
+        },
+        {
+          "loi": "Re-serialising the parsed body to verify it.|||Dựng lại body đã parse để kiểm chữ ký."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "raw body",
+          "vi": "body thô — đúng chuỗi byte nhận được"
+        },
+        {
+          "en": "replay attack",
+          "vi": "phát lại request bắt được"
+        },
+        {
+          "en": "acknowledge first",
+          "vi": "nhận trước, làm sau"
+        }
+      ]
+    },
+    {
+      "title": "Receiving webhooks 2 — Write checkHeaders(headers, nowSec, toleranceSec)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "webhooks",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The first checks of the receiver, before any HMAC. <code>headers</code> has lower-case names (as in Node). In this order:</p><ol><li><code>webhook-id</code>, <code>webhook-timestamp</code> or <code>webhook-signature</code> missing or empty ⇒ <code>{ ok: false, reason: \"missing headers\" }</code>;</li><li>timestamp not all digits ⇒ <code>{ ok: false, reason: \"bad timestamp\" }</code>;</li><li><code>|nowSec − timestamp| &gt; toleranceSec</code> (too old <b>or</b> too far in the future) ⇒ <code>{ ok: false, reason: \"timestamp outside tolerance\" }</code>;</li><li>the signature header is a space-separated list of <code>version,signature</code>; keep the non-empty signatures of version <code>v1</code> only (in order). None ⇒ <code>{ ok: false, reason: \"no v1 signature\" }</code>;</li><li>otherwise <code>{ ok: true, id, timestamp (number), signatures }</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các bước kiểm đầu tiên của bên nhận, trước mọi HMAC. <code>headers</code> có tên chữ thường (như trong Node). Theo thứ tự:</p><ol><li>thiếu hoặc rỗng <code>webhook-id</code>, <code>webhook-timestamp</code> hay <code>webhook-signature</code> ⇒ <code>{ ok: false, reason: \"missing headers\" }</code>;</li><li>timestamp không toàn chữ số ⇒ <code>{ ok: false, reason: \"bad timestamp\" }</code>;</li><li><code>|nowSec − timestamp| &gt; toleranceSec</code> (quá cũ <b>hoặc</b> quá xa trong tương lai) ⇒ <code>{ ok: false, reason: \"timestamp outside tolerance\" }</code>;</li><li>header chữ ký là danh sách <code>phiên bản,chữ ký</code> cách nhau dấu cách; chỉ giữ chữ ký khác rỗng của phiên bản <code>v1</code> (đúng thứ tự). Không có cái nào ⇒ <code>{ ok: false, reason: \"no v1 signature\" }</code>;</li><li>còn lại <code>{ ok: true, id, timestamp (số), signatures }</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "headers — object; nowSec, toleranceSec — numbers|||headers — object; nowSec, toleranceSec — số",
+      "outputSpec": "{ ok: false, reason } | { ok: true, id, timestamp, signatures }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v1,U77XGBo4UR95\"}, 1793496728, 10)",
+          "output": "{\"ok\":true,\"id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"timestamp\":1793496727,\"signatures\":[\"U77XGBo4UR95\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Math.abs covers both directions of the window.|||Math.abs phủ cả hai chiều của cửa sổ.",
+        "Split on \" \" first, then each part at its first comma — base64 never contains a comma or a space.|||Tách theo \" \" trước, rồi tách mỗi phần ở dấu phẩy đầu tiên — base64 không bao giờ chứa dấu phẩy hay dấu cách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** first checks on an incoming webhook */\nfunction checkHeaders(headers, nowSec, toleranceSec) {\n  // Write your solution here\n  const ts = Number(headers['webhook-timestamp']);\n  if (nowSec - ts > toleranceSec) return { ok: false, reason: 'timestamp outside tolerance' };\n  return { ok: true, id: headers['webhook-id'], timestamp: ts, signatures: [headers['webhook-signature'].slice(3)] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkHeaders(headers, nowSec, toleranceSec) {\n  const id = headers['webhook-id'], ts = headers['webhook-timestamp'], sig = headers['webhook-signature'];\n  if (!id || !ts || !sig) return { ok: false, reason: 'missing headers' };\n  if (!/^\\d+$/.test(ts)) return { ok: false, reason: 'bad timestamp' };\n  if (Math.abs(nowSec - Number(ts)) > toleranceSec) return { ok: false, reason: 'timestamp outside tolerance' };   // chống phát lại, cả hai phía\n  const signatures = [];\n  for (const part of sig.split(' ')) {                         // nhiều chữ ký cách nhau dấu cách (đang xoay khoá)\n    const comma = part.indexOf(',');\n    if (comma > 0 && part.slice(0, comma) === 'v1' && part.length > comma + 1) signatures.push(part.slice(comma + 1));\n  }\n  if (!signatures.length) return { ok: false, reason: 'no v1 signature' };\n  return { ok: true, id, timestamp: Number(ts), signatures };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The timestamp is signed, so an attacker cannot refresh it; with TOLERANCE_SEC=10 the same capture was accepted as a duplicate 1 s later and refused 11 s later. Stripe’s libraries default to 5 minutes (300 s).</p>",
+      "solutionExplanationHtmlVi": "<p>Timestamp được ký, nên kẻ tấn công không làm mới được; với TOLERANCE_SEC=10 cùng bản bắt được được nhận là trùng sau 1 s và bị từ chối sau 11 s. Thư viện của Stripe mặc định 5 phút (300 s).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Replayed 1 s later",
+              "vi": "Phát lại sau 1 s"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v1,U77XGBo4UR95\"}, 1793496728, 10)",
+            "mongDoi": {
+              "ok": true,
+              "id": "msg_1793496727230-0_wh_mvx5n6sx",
+              "timestamp": 1793496727,
+              "signatures": [
+                "U77XGBo4UR95"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Replayed 11 s later",
+              "vi": "Phát lại sau 11 s"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v1,U77XGBo4UR95\"}, 1793496738, 10)",
+            "mongDoi": {
+              "ok": false,
+              "reason": "timestamp outside tolerance"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v1,OLD+sig= v1,NEW+sig=\"}, 1793496727, 300)",
+            "mongDoi": {
+              "ok": true,
+              "id": "msg_1793496727230-0_wh_mvx5n6sx",
+              "timestamp": 1793496727,
+              "signatures": [
+                "OLD+sig=",
+                "NEW+sig="
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v2,abc= v1,def=\"}, 1793496737, 10)",
+            "mongDoi": {
+              "ok": true,
+              "id": "msg_1793496727230-0_wh_mvx5n6sx",
+              "timestamp": 1793496727,
+              "signatures": [
+                "def="
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1893496727\",\"webhook-signature\":\"v1,U77XGBo4UR95\"}, 1793496727, 300)",
+            "mongDoi": {
+              "ok": false,
+              "reason": "timestamp outside tolerance"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "checkHeaders({\"webhook-id\":\"msg_1\",\"webhook-signature\":\"v1,abc=\"}, 1793496727, 300)",
+            "mongDoi": {
+              "ok": false,
+              "reason": "missing headers"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727000\",\"webhook-signature\":\"v1,U77XGBo4UR95\"}, 1793496727, 300)",
+            "mongDoi": {
+              "ok": false,
+              "reason": "timestamp outside tolerance"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "checkHeaders({\"content-type\":\"application/json\",\"webhook-id\":\"msg_1793496727230-0_wh_mvx5n6sx\",\"webhook-timestamp\":\"1793496727\",\"webhook-signature\":\"v1, v0,abc=\"}, 1793496727, 300)",
+            "mongDoi": {
+              "ok": false,
+              "reason": "no v1 signature"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only nowSec − ts &gt; tolerance: a timestamp from next year passes for a whole year.|||Chỉ xét nowSec − ts &gt; tolerance: timestamp của năm sau qua được cả năm."
+        },
+        {
+          "loi": "Splitting the header on \",\" — two signatures become one broken list.|||Tách header theo \",\" — hai chữ ký thành một danh sách hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tolerance window",
+          "vi": "cửa sổ chấp nhận"
+        },
+        {
+          "en": "signature version",
+          "vi": "phiên bản chữ ký"
+        }
+      ]
+    },
+    {
+      "title": "Receiving webhooks 3 — Write safeEqual(a, b) and verifyAny(expected, signatures)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "webhooks",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The receiver computed the <code>expected</code> signature (base64) and parsed the header into <code>signatures</code>. Write two functions:</p><ul><li><code>safeEqual(a, b)</code> — <code>true</code> iff the two strings are equal. Different lengths ⇒ <code>false</code> at once (lengths are not secret). For equal lengths, compare <b>every</b> character and combine the differences (with <code>^</code> and <code>|=</code>), so the time does not reveal how many leading characters matched. <code>timingSafeEqual</code> does not exist in this sandbox.</li><li><code>verifyAny(expected, signatures)</code> — <code>true</code> if any signature is <code>safeEqual</code> to <code>expected</code> (during a key rotation the sender sends two).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not return early inside the character loop of safeEqual.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bên nhận đã tính chữ ký <code>expected</code> (base64) và tách header thành <code>signatures</code>. Viết hai hàm:</p><ul><li><code>safeEqual(a, b)</code> — <code>true</code> khi và chỉ khi hai chuỗi bằng nhau. Khác độ dài ⇒ <code>false</code> ngay (độ dài không phải bí mật). Cùng độ dài thì so <b>mọi</b> ký tự và gộp các chỗ khác (bằng <code>^</code> và <code>|=</code>), để thời gian chạy không lộ ra bao nhiêu ký tự đầu đã khớp. Hộp cát này không có <code>timingSafeEqual</code>.</li><li><code>verifyAny(expected, signatures)</code> — <code>true</code> nếu có chữ ký nào <code>safeEqual</code> với <code>expected</code> (khi xoay khoá bên gửi gửi hai cái).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không return sớm bên trong vòng lặp ký tự của safeEqual.</li>\n</ul>",
+      "inputSpec": "a, b, expected — strings; signatures — string[]|||a, b, expected — chuỗi; signatures — string[]",
+      "outputSpec": "true | false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyAny(\"ZLrEsD7a9yl=\", [\"ZLrEsD7a9yl=\"])",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "a.charCodeAt(i) ^ b.charCodeAt(i) is 0 only when the characters are equal.|||a.charCodeAt(i) ^ b.charCodeAt(i) bằng 0 chỉ khi hai ký tự bằng nhau.",
+        "diff |= … keeps any difference; check diff === 0 after the loop.|||diff |= … giữ lại mọi chỗ khác; xét diff === 0 sau vòng lặp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** compare two strings without leaking where they differ */\nfunction safeEqual(a, b) {\n  // Write your solution here\n  return a === b;\n}\n\n/** does any of the received signatures match? */\nfunction verifyAny(expected, signatures) {\n  return signatures.length > 0 && safeEqual(signatures[0], expected);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction safeEqual(a, b) {\n  if (a.length !== b.length) return false;                     // độ dài không bí mật: chữ ký luôn dài 44 ký tự\n  let diff = 0;\n  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);   // KHÔNG dừng ở chỗ khác đầu tiên\n  return diff === 0;\n}\n\nfunction verifyAny(expected, signatures) {\n  let ok = false;\n  for (const s of signatures) if (safeEqual(s, expected)) ok = true;   // xoay khoá: cái nào khớp cũng được\n  return ok;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>LabFlow’s verify() decodes both sides and calls crypto.timingSafeEqual after checking the length (it throws on different lengths). In 10.6, the tampered body was refused 401 bad signature.</p>",
+      "solutionExplanationHtmlVi": "<p>verify() của LabFlow giải mã hai phía rồi gọi crypto.timingSafeEqual sau khi kiểm độ dài (nó ném lỗi khi khác độ dài). Ở bài 10.6, body bị sửa bị từ chối 401 bad signature.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One signature, it matches",
+              "vi": "Một chữ ký, khớp"
+            },
+            "goi": "verifyAny(\"ZLrEsD7a9yl=\", [\"ZLrEsD7a9yl=\"])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Rotation: the second one matches",
+              "vi": "Xoay khoá: cái thứ hai khớp"
+            },
+            "goi": "verifyAny(\"NEW+sig=\", [\"OLD+sig=\",\"NEW+sig=\"])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "verifyAny(\"ZLrEsD7a9yl=\", [\"wAoADndHaYw=\"])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "verifyAny(\"abc=\", [])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "safeEqual(\"abc\", \"abcd\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "safeEqual(\"v1,abc\", \"v1,abd\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "safeEqual(\"\", \"\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Combines the differences with ^ / |= instead of stopping at the first one",
+              "vi": "Gộp các chỗ khác bằng ^ / |= thay vì dừng ở chỗ khác đầu tiên"
+            },
+            "tep": "answer.js",
+            "khop": "\\^|\\|="
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Written by hand (no timingSafeEqual, crypto or require)",
+              "vi": "Tự viết (không timingSafeEqual, crypto hay require)"
+            },
+            "tep": "answer.js",
+            "khop": "timingSafeEqual|crypto|require\\s*\\(",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "a === b: correct answer, but it stops at the first different character — an attacker can measure that, byte by byte.|||a === b: đúng kết quả, nhưng dừng ở ký tự khác đầu tiên — kẻ tấn công đo được điều đó, từng byte một."
+        },
+        {
+          "loi": "Checking only the first signature: during a rotation, receivers holding the new secret reject every delivery.|||Chỉ xét chữ ký đầu tiên: trong lúc xoay khoá, bên nhận giữ khoá mới từ chối mọi lần giao."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "constant-time compare",
+          "vi": "so sánh thời gian hằng"
+        },
+        {
+          "en": "timing attack",
+          "vi": "tấn công đo thời gian"
+        }
+      ]
+    },
+    {
+      "title": "Receiving webhooks 4 — Write receive(deliveries): the receiver’s final state",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "webhooks",
+        "idempotency",
+        "ordering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Replay webhooks/receiver.mjs (VERIFY, DEDUPE and ORDER on) over a list of deliveries <code>{ id, signatureOk, event: { type, data } }</code>, in arrival order. For each delivery:</p><ol><li><code>signatureOk</code> false ⇒ answer <code>401</code>, <code>rejected++</code> — and do <b>not</b> remember its id;</li><li>id already seen ⇒ <code>200</code>, <code>duplicates++</code>;</li><li>otherwise remember the id. If <code>data.id</code> starts with <code>bk_</code>: when the stored booking has <code>version ≥ data.version</code> ⇒ <code>stale++</code>, answer <code>204</code>, state unchanged; else store <code>{ status, version }</code>. Every other new delivery ⇒ <code>processed++</code>, answer <code>204</code>.</li></ol><p>Return <code>{ answers, bookings, stats: { rejected, duplicates, stale, processed } }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại webhooks/receiver.mjs (bật VERIFY, DEDUPE và ORDER) trên danh sách lần giao <code>{ id, signatureOk, event: { type, data } }</code>, theo thứ tự tới. Với mỗi lần giao:</p><ol><li><code>signatureOk</code> sai ⇒ trả <code>401</code>, <code>rejected++</code> — và <b>không</b> ghi nhớ id của nó;</li><li>id đã thấy ⇒ <code>200</code>, <code>duplicates++</code>;</li><li>ngược lại ghi nhớ id. Nếu <code>data.id</code> bắt đầu bằng <code>bk_</code>: khi lượt đặt đang lưu có <code>version ≥ data.version</code> ⇒ <code>stale++</code>, trả <code>204</code>, giữ nguyên trạng thái; ngược lại lưu <code>{ status, version }</code>. Mọi lần giao mới khác ⇒ <code>processed++</code>, trả <code>204</code>.</li></ol><p>Trả <code>{ answers, bookings, stats: { rejected, duplicates, stale, processed } }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "deliveries — [{ id, signatureOk, event: { type, data } }]",
+      "outputSpec": "{ answers: number[], bookings: { [id]: { status, version } }, stats }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "receive([{\"id\":\"msg_1793495998569-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}},{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}}])",
+          "output": "{\"answers\":[204,204],\"bookings\":{\"bk_1\":{\"status\":\"CANCELLED\",\"version\":2}},\"stats\":{\"rejected\":0,\"duplicates\":0,\"stale\":1,\"processed\":1}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three early exits in this order: bad signature, duplicate, stale.|||Ba lối ra sớm theo thứ tự: chữ ký sai, trùng, cũ.",
+        "A stale event is still answered 2xx — the sender must stop retrying it.|||Sự kiện cũ vẫn được trả 2xx — bên gửi phải thôi thử lại nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** replay the receiver over a list of deliveries */\nfunction receive(deliveries) {\n  // Write your solution here\n  const bookings = {};\n  const stats = { rejected: 0, duplicates: 0, stale: 0, processed: 0 };\n  const answers = [];\n  for (const d of deliveries) {\n    const b = d.event.data;\n    if (b && b.id) bookings[b.id] = { status: b.status, version: b.version };\n    stats.processed++;\n    answers.push(204);\n  }\n  return { answers, bookings, stats };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction receive(deliveries) {\n  const seen = new Set(), bookings = {};\n  const stats = { rejected: 0, duplicates: 0, stale: 0, processed: 0 };\n  const answers = [];\n  for (const d of deliveries) {\n    if (!d.signatureOk) { stats.rejected++; answers.push(401); continue; }    // giả mạo: KHÔNG ghi id vào kho\n    if (seen.has(d.id)) { stats.duplicates++; answers.push(200); continue; }  // trùng: vẫn 2xx để bên gửi dừng\n    seen.add(d.id);\n    const b = d.event.data;\n    if (b && typeof b.id === 'string' && b.id.startsWith('bk_')) {\n      const cur = bookings[b.id];\n      if (cur && cur.version >= b.version) { stats.stale++; answers.push(204); continue; }   // tin cũ tới muộn ⇒ bỏ\n      bookings[b.id] = { status: b.status, version: b.version };\n    }\n    stats.processed++; answers.push(204);\n  }\n  return { answers, bookings, stats };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured in 10.6 (FAIL_FIRST=1): cancelled v2 arrived before created v1. With ORDER=0 the receiver ended with PENDING — the department believes the lab is booked when it is free; with the version check it kept CANCELLED and counted 1 stale. Timestamps are a weak substitute (two events can share a second); a per-object version is exact.</p>",
+      "solutionExplanationHtmlVi": "<p>Đo ở bài 10.6 (FAIL_FIRST=1): cancelled v2 tới trước created v1. Với ORDER=0 bên nhận kết thúc ở PENDING — phòng đào tạo tưởng phòng đang được đặt trong khi nó trống; có kiểm version thì giữ CANCELLED và đếm 1 stale. Timestamp là thay thế yếu (hai sự kiện có thể cùng một giây); version theo từng đối tượng mới chính xác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lesson 10.6: the cancellation arrived first",
+              "vi": "Bài 10.6: lệnh huỷ tới trước"
+            },
+            "goi": "receive([{\"id\":\"msg_1793495998569-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}},{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}}])",
+            "mongDoi": {
+              "answers": [
+                204,
+                204
+              ],
+              "bookings": {
+                "bk_1": {
+                  "status": "CANCELLED",
+                  "version": 2
+                }
+              },
+              "stats": {
+                "rejected": 0,
+                "duplicates": 0,
+                "stale": 1,
+                "processed": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "A retry of the same message",
+              "vi": "Thử lại cùng một thông điệp"
+            },
+            "goi": "receive([{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}},{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}},{\"id\":\"msg_1793495998569-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}}])",
+            "mongDoi": {
+              "answers": [
+                204,
+                200,
+                204
+              ],
+              "bookings": {
+                "bk_1": {
+                  "status": "CANCELLED",
+                  "version": 2
+                }
+              },
+              "stats": {
+                "rejected": 0,
+                "duplicates": 1,
+                "stale": 0,
+                "processed": 2
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "receive([{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":false,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}},{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}},{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}}])",
+            "mongDoi": {
+              "answers": [
+                401,
+                204,
+                200
+              ],
+              "bookings": {
+                "bk_1": {
+                  "status": "PENDING",
+                  "version": 1
+                }
+              },
+              "stats": {
+                "rejected": 1,
+                "duplicates": 1,
+                "stale": 0,
+                "processed": 1
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "receive([{\"id\":\"msg_r1\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.report.ready.v1\",\"data\":{\"jobId\":\"job_2\",\"result\":\"/v2/jobs/job_2/result\"}}},{\"id\":\"msg_1793495998569-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}},{\"id\":\"msg_x\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}}])",
+            "mongDoi": {
+              "answers": [
+                204,
+                204,
+                204
+              ],
+              "bookings": {
+                "bk_1": {
+                  "status": "CANCELLED",
+                  "version": 2
+                }
+              },
+              "stats": {
+                "rejected": 0,
+                "duplicates": 0,
+                "stale": 1,
+                "processed": 2
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "receive([])",
+            "mongDoi": {
+              "answers": [],
+              "bookings": {},
+              "stats": {
+                "rejected": 0,
+                "duplicates": 0,
+                "stale": 0,
+                "processed": 0
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "receive([{\"id\":\"msg_1793495998551-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"PENDING\",\"version\":1}}},{\"id\":\"msg_c3\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.checked_in.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CHECKED_IN\",\"version\":3}}},{\"id\":\"msg_1793495998569-0_wh_mvx57\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.cancelled.v1\",\"data\":{\"id\":\"bk_1\",\"status\":\"CANCELLED\",\"version\":2}}},{\"id\":\"msg_b2\",\"signatureOk\":true,\"event\":{\"type\":\"labflow.booking.created.v1\",\"data\":{\"id\":\"bk_2\",\"status\":\"PENDING\",\"version\":1}}}])",
+            "mongDoi": {
+              "answers": [
+                204,
+                204,
+                204,
+                204
+              ],
+              "bookings": {
+                "bk_1": {
+                  "status": "CHECKED_IN",
+                  "version": 3
+                },
+                "bk_2": {
+                  "status": "PENDING",
+                  "version": 1
+                }
+              },
+              "stats": {
+                "rejected": 0,
+                "duplicates": 0,
+                "stale": 1,
+                "processed": 3
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Remembering the id of a forged request: the genuine delivery with that id is then dropped as a “duplicate”.|||Ghi nhớ id của request giả: lần giao thật mang id đó bị bỏ như “trùng”."
+        },
+        {
+          "loi": "Last write wins: the late booking.created turns a cancelled booking back into PENDING.|||Ghi sau thắng: booking.created tới muộn biến lượt đã huỷ thành PENDING lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stale event",
+          "vi": "sự kiện cũ tới muộn"
+        },
+        {
+          "en": "dedupe store",
+          "vi": "kho id đã xử lý"
+        }
+      ]
+    }
+  ]
+}

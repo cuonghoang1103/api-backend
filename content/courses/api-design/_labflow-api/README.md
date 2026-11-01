@@ -7,7 +7,8 @@ Trước 01/11/2026 mã chỉ nằm ở thư mục tạm của phiên soạn bà
 
 | Trạng thái hiện tại | Gói zip tương ứng |
 |---|---|
-| **Cuối Chương 9** (= lời giải Lab 9) | `labflow-api-ch9.zip` |
+| **Cuối Chương 10** (= lời giải Lab 10) | `labflow-api-ch10.zip` |
+| (cuối Chương 9 — commit e1f36a6b7) | `labflow-api-ch9.zip` |
 
 Chỉ để HỌC. Không có bí mật thật: token demo `tok_an` / `tok_bin` / `tok_lan`, mật khẩu demo
 `an-lab-2026` / `binh-lab-2026` / `lan-lab-2026`, khoá JWT mặc định `dev-only-secret-change-me` (chỉ ngoài production).
@@ -18,7 +19,7 @@ Chỉ để HỌC. Không có bí mật thật: token demo `tok_an` / `tok_bin` 
 # Node 22 (máy soạn bài: ~/.nvm/versions/node/v22.23.3)
 npm ci                 # phiên bản đã GHIM chính xác trong package.json + package-lock.json
 npm start              # http://localhost:4000 — không cần PostgreSQL/Redis
-npm test               # 10 test (hợp đồng v1 + bảo mật)
+npm test               # 13 test (hợp đồng v1 + bảo mật + bất đồng bộ) — không cần PostgreSQL/Redis
 ```
 
 Phần cần dịch vụ ngoài (chỉ bật khi đặt biến):
@@ -27,9 +28,10 @@ Phần cần dịch vụ ngoài (chỉ bật khi đặt biến):
 |---|---|---|
 | 3, 8.4, 9 | PostgreSQL 18 ở `:55432`, user/db `labflow` (biến `PGURL`) | `pg_ctl -D pgdata -o "-p 55432" start` |
 | 9.3 | replica streaming ở `:55433` (`PG_REPLICA_URL`, `recovery_min_apply_delay = '2s'`) | `pg_basebackup … -D pgreplica -R` |
-| 9.2 | Redis 8.2 ở `:6390` (`LABFLOW_REDIS`) | `redis-server --port 6390 --save "" --appendonly no` |
+| 9.2, 10 | Redis 8.2 ở `:6390` (`LABFLOW_REDIS`) | `redis-server --port 6390 --save "" --appendonly no` |
+| 10.2–10.6 | worker BullMQ chạy riêng | `node src/worker.js` (cùng biến môi trường với API) |
 
-Biến hay dùng: `LABFLOW_PG=1` (route Chương 9), `LABFLOW_CACHE_MODE=none|redis|singleflight`,
+Biến hay dùng: `LABFLOW_PG=1` (route Chương 9 + webhook 10.5), `LABFLOW_JOBS=memory|bullmq`, `LABFLOW_EVENTS=memory|redis`, `LABFLOW_WEBHOOK_ALLOW_LOCAL=1` (chỉ máy mình), `EXPORT_BATCH_MS`, `LABFLOW_BOOKING_LIMIT=1000000/60` (chỉ để đo), `LABFLOW_CACHE_MODE=none|redis|singleflight`,
 `LABFLOW_READS=replica|token`, `SEED_BOOKINGS=n`, `LABFLOW_IP_LIMIT=1000000/60` (chỉ để test tải),
 `LABFLOW_IDEMPOTENCY=pg`, `LABFLOW_CHAOS=1`, `LABFLOW_VULN=1` (CHỈ để học bảo mật, Chương 6).
 Mô tả đầy đủ từng chương: `content/courses/api-design/_HOP-DONG.md` mục 5.
@@ -39,7 +41,8 @@ Mô tả đầy đủ từng chương: `content/courses/api-design/_HOP-DONG.md`
 - `src/` — server (`server.js`, `app.js`), route trong `src/routes/`, middleware theo chương (problems, paging,
   versioning, idempotency, rateLimit, auth, cors, timing, resilience, httpCache, serverCache…).
 - `openapi/` — hợp đồng OpenAPI 3.1 (`openapi.yaml`) + bản mốc, kiểm trôi (`check-drift.mjs`), cổng phá vỡ (`diff.mjs`).
-- `perf/` — script đo của Chương 8–9; `sql/` — SQL của Chương 9; `lab/` — mã khởi đầu của các lab.
+- `perf/` — script đo của Chương 8–10; `sql/` — SQL của Chương 9; `lab/` — mã khởi đầu của các lab + `lab/grade-lab10.mjs` (script chấm).
+- `events/` (giao trùng, outbox, mỏng/dày, phiên bản), `asyncapi/` (AsyncAPI 3.1), `webhooks/` (bên nhận thử, phát lại) — Chương 10. Lệnh từng bài của chương mới nhất: `docs/chay-theo-bai.txt` (= README.txt trong gói zip).
 - `client/`, `graphql/`, `grpc/` — Chương 7; `web/` — trang thử CORS/CSRF của Chương 6 (`node web/serve.mjs`);
   `mistakes/` — ví dụ client sai kiểu (bài 7.3).
 

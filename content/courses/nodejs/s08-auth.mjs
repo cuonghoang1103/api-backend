@@ -217,6 +217,16 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.1: Passwords, bcrypt, sessions &amp; Passport</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: hashing passwords with bcrypt instead of storing them plain. Different: Courses makes argon2id the default (bcrypt if you must) and proves it with measurements. In this lesson we add: four ways to lose, how fast "fast" is, building a rainbow table on the spot, salts, hashing cost under load, raising the cost without forcing password resets. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-1-da-co-csdl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 2.1 — The attacker already has your database</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: the threat model is a stolen copy of the user table, and a fast hash is the wrong tool. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the speed measured on one CPU core (SHA-256 2,010,039 per second vs bcrypt cost 12 at 3.6), a 1,000,000-entry rainbow table built in 1,059 ms, salt shown on real rows. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 2.2 — Choosing and tuning the hash, by measurement</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: argon2id first, bcrypt and scrypt as fallbacks, a self-describing stored string, and tuning by measurement. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the cost under load (64 logins at once, RSS capped by the libuv thread pool), hashSync freezing a real Express server (/health answered in 2,784 ms), the 72-byte bcrypt trap with a Vietnamese passphrase, and the login timing leak (27.4× → 1.0×). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -412,6 +422,16 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.1: Mật khẩu, bcrypt, session &amp; Passport</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: băm mật khẩu bằng bcrypt thay vì lưu thô. Khác: Courses chọn argon2id làm mặc định (bcrypt nếu buộc phải) và chứng minh bằng phép đo. Ở bài này mình học thêm: bốn cách thua, "nhanh" là nhanh cỡ nào, dựng bảng cầu vồng tại chỗ, muối, chi phí băm khi có tải, nâng chi phí mà không bắt ai đổi mật khẩu. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-1-da-co-csdl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 2.1 — Kẻ tấn công ĐÃ CÓ cơ sở dữ liệu của bạn</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: mô hình mối đe doạ là một bản sao bảng người dùng bị đánh cắp, và hàm băm nhanh là công cụ sai. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: tốc độ đo trên một nhân CPU (SHA-256 2.010.039 lần/giây vs bcrypt chi phí 12 là 3,6), bảng cầu vồng 1.000.000 mục dựng trong 1.059 ms, muối thấy trên dòng thật. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 2.2 — Chọn và chỉnh hàm băm, bằng phép đo</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: argon2id trước, bcrypt và scrypt làm phương án dự phòng, chuỗi lưu tự mô tả, và chỉnh tham số bằng phép đo. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: cái giá khi có tải (64 lượt đăng nhập cùng lúc, RSS bị bể luồng libuv giới hạn), hashSync đóng băng một server Express thật (/health trả lời sau 2.784 ms), bẫy 72 byte của bcrypt với câu mật khẩu tiếng Việt, và chỗ rò thời gian ở đăng nhập (27,4× → 1,0×). Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,
@@ -662,6 +682,21 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the JWT flow: issue a token at login, verify on every request. Different: Courses adds refresh tokens and demonstrates the attacks with running code. In this lesson we add: dissecting a JWT by hand, three attacks (editing the payload, decode instead of verify, lying about the algorithm), why a refresh token is not a JWT, rotation and why reuse means theft. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-2-truong-alg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 4.2 — The token tells the server how to check it</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: the alg header is attacker-controlled: alg none and algorithm confusion, and the server must pin the algorithm. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: both attacks run against jsonwebtoken 9.0.3 (blocked: "jwt signature is required", "invalid algorithm") and against a hand-written verifier (admin, twice), decode vs verify, and the cost of a check (48,103 verifies per second). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 5.2 — Rotation, and the reuse that gives the thief away</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: single-use refresh tokens in a family, and a reused one revoking the whole family. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: rotation run against a real Notes API on PostgreSQL (REUSE_DETECTED, then REFRESH_REVOKED, the table afterwards), two tabs refreshing at the same moment logging the real user out, and a production incident re-created (a 3-second token in a 30-day cookie). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.1 — Authentication: sessions, JWT, API keys, OAuth — built and attacked</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: an HS256 access token valid for 15 minutes (900 seconds), forged and alg-none tokens refused. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the token taken apart by hand, decode vs verify, issuer/audience pinned, and refresh tokens with rotation stored as SHA-256 in PostgreSQL. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -896,6 +931,21 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: luồng JWT: phát token khi đăng nhập, verify ở mỗi request. Khác: Courses thêm refresh token và chứng minh các đòn tấn công bằng code chạy thật. Ở bài này mình học thêm: mổ một JWT bằng tay, ba đòn tấn công (sửa payload, dùng decode thay vì verify, nói dối về thuật toán), refresh token không phải JWT, xoay vòng và vì sao "dùng lại" nghĩa là bị trộm. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-2-truong-alg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 4.2 — Cái token TỰ NÓI cho máy chủ cách kiểm nó</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: trường alg nằm trong tay kẻ tấn công: alg none và nhầm thuật toán, và máy chủ phải chốt thuật toán. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: cả hai đòn chạy thật với jsonwebtoken 9.0.3 (bị chặn: "jwt signature is required", "invalid algorithm") và với một bộ kiểm tự viết (ra admin, hai lần), decode và verify, và giá của một lần kiểm (48.103 lần/giây). Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 5.2 — Xoay vòng, và cú tái dùng tố giác kẻ cắp</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: refresh token dùng một lần trong một họ, và một token bị dùng lại làm thu hồi cả họ. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: xoay vòng chạy thật trên Notes API với PostgreSQL (REUSE_DETECTED, rồi REFRESH_REVOKED, cái bảng sau đó), hai tab cùng refresh một lúc làm người dùng thật bị đăng xuất, và một sự cố production tái hiện (token 3 giây trong cookie 30 ngày). Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.1 — Xác thực: session, JWT, API key, OAuth — tự dựng rồi tự tấn công</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: access token HS256 sống 15 phút (900 giây), token giả và token alg none bị từ chối. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: mổ token bằng tay, decode và verify, chốt issuer/audience, và refresh token xoay vòng lưu dạng SHA-256 trong PostgreSQL. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
 </div>
 `,
     },
@@ -1091,6 +1141,16 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 955 — Role- &amp; Permission-Based Access</span><span class="lc-sub">10 bài tập: middleware vai trò, quyền chi tiết, kiểm sở hữu.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.2 — Authorisation and object-level access (BOLA): exploit, fix, matrix</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: a logged-in user reading another person's record by changing the id, closed by one rule and a 404. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: requireAuth with six machine-readable refusals run on a real server, the user lookup it costs (0.026 → 0.664 ms), middleware order run for real (a route silently public), and the quick service vs canTouch with the same script. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-9-5-dat-phep-kiem-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 9.5 — Where the check lives, and how to make forgetting impossible</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: putting the permission check in one place so that forgetting it is impossible. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: actor as the first parameter of every service function, one canTouch, the IDOR hole run for real and closed, and a test of the rule with no HTTP request. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1271,6 +1331,16 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 955 — Role- &amp; Permission-Based Access</span><span class="lc-sub">10 bài tập: middleware vai trò, quyền chi tiết, kiểm sở hữu.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.2 — Phân quyền và truy cập theo đối tượng (BOLA): khai thác, vá, ma trận</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: một người đã đăng nhập đọc bản ghi của người khác chỉ bằng cách đổi id, đóng bằng một quy tắc và mã 404. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: requireAuth với sáu lần từ chối có mã riêng chạy trên server thật, cái giá của lần tra user (0,026 → 0,664 ms), thứ tự middleware chạy thật (một route công khai nhầm), và bản viết vội so với canTouch bằng cùng một kịch bản. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-9-5-dat-phep-kiem-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 9.5 — Phép kiểm nằm ở đâu, và làm sao để KHÔNG THỂ quên</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: đặt phép kiểm quyền ở một chỗ để không thể quên. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: actor là tham số đầu tiên của mọi hàm service, một canTouch, lỗ IDOR chạy thật rồi đóng, và test quy tắc không cần request HTTP nào. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
 </div>
 `,
     },
@@ -1315,7 +1385,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
 </div>
 
 <h3>CSRF, with four endpoints and a real cookie jar</h3>
-<p>The scenario: you are logged into your bank in one tab. You open another site. That site's HTML contains a form that posts to the bank. Your browser attaches your bank cookies — it has no way to know the request was not your idea. In the run below, <code>curl -b jar</code> is doing exactly what the browser does: attaching cookies by domain regardless of who initiated the request.</p>
+<p>The scenario: you are logged into your bank in one tab. You open another site. That site's HTML contains a form that posts to the bank. Your browser attaches your bank cookies — it has no way to know the request was not your idea. In the run below, <code>curl -b jar</code> plays a browser with <em>no SameSite protection</em> — an old browser, a cookie set with <code>SameSite=None</code>, or (measured below in Chromium 149) a cookie with no <code>SameSite</code> attribute during its first 2 minutes: it attaches cookies by domain regardless of who initiated the request. A modern browser with <code>SameSite=Lax</code> would <strong>not</strong> attach the cookie to this cross-site POST.</p>
 <div class="out">   evil.com → /chuyen-tien-yeu        HTTP 200  {"ok":true,"soTien":"100000000"}
    evil.com → /chuyen-tien-origin     HTTP 403  {"error":"CROSS_SITE","origin":"http://evil.com"}
    evil.com → /chuyen-tien-csrf       HTTP 403  {"error":"CSRF_TOKEN_MISMATCH"}
@@ -1324,6 +1394,13 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
 <div class="out">   bank    → /chuyen-tien-origin     HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
+<div class="callout warn"><strong>Measured in a real browser (headless Chromium 149.0.7827.55 via Playwright 1.61, 1 Nov 2026).</strong> Bank on <code>localhost:4310</code>, attacker page on <code>127.0.0.1:4311</code> (a different site). For each cookie setting: log in at the bank, then the attacker's page auto-submits a POST form and shows a link the user clicks.
+<div class="out">SameSite=Lax                 POST: cookie not sent → 401        link click: cookie sent → logged in
+SameSite=Strict              POST: cookie not sent → 401        link click: cookie not sent → login page
+SameSite=None; Secure        POST: cookie SENT → money moved    link click: cookie sent
+no SameSite, just set        POST: cookie SENT → money moved    link click: cookie sent
+no SameSite, 2+ min later    POST: cookie not sent → 401        link click: cookie sent</div>
+Chromium treats a cookie without <code>SameSite</code> as Lax — except during the first 2 minutes after it was set, when a cross-site top-level POST still carries it. That window, old browsers and sibling subdomains are why SameSite alone is not the whole defence.</div>
 <p>Three defences, in the order you should adopt them:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// 1) Check Origin/Referer — two lines, stops the majority</span>
 <span class="tok-kw">const</span> o = req.get(<span class="tok-str">'origin'</span>) ?? (req.get(<span class="tok-str">'referer'</span>) ? <span class="tok-kw">new</span> URL(req.get(<span class="tok-str">'referer'</span>)).origin : <span class="tok-kw">null</span>);
@@ -1428,6 +1505,31 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 958 — Rate Limiting &amp; Account Protection</span><span class="lc-sub">10 bài tập: cửa sổ trượt, khoá tài khoản, 429 và Retry-After.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-4-csrf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 3.4 — CSRF, and the three defences ranked</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: CSRF, and the three defences in order: SameSite=Lax, checking Origin, a CSRF token. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: a SameSite matrix measured in a real Chromium 149 (a cookie without SameSite is still sent on a cross-site POST during its first 2 minutes), four bank endpoints attacked with a cookie jar, and HttpOnly checked with document.cookie. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.4 — CORS, CSRF and browsers: measured in a real Chromium</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: what a browser sends on its own and what it lets a page read; Bearer tokens have no CSRF surface. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the cookie side: HttpOnly vs localStorage in a real browser, a SameSite matrix in Chromium 149, double submit, and logging out everywhere with tokenVersion. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.1 — Authentication: sessions, JWT, API keys, OAuth — built and attacked</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: a login limit: the 6th wrong guess in a row gets 429 with Retry-After. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the limit keyed on IP + email (another email from the same IP still gets in), counting before verifying (the right password is 429 too), and trust proxy run with a spoofed X-Forwarded-For (true lets 8 out of 8 through). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 8.4 — Designing APIs that scale out: statelessness and safe retries</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: a counter kept in one process's memory stops being a limit once there are two instances. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: the login limiter itself (a Map keyed on IP + email, 429 + Retry-After, trust proxy), and revocation with tokenVersion. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-3-gioi-han-tan-suat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 11.3 — Rate limiting that survives real traffic</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: a login limiter that counts attempts per key and answers 429 with Retry-After. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: a small limiter written in Express and attacked for real: keyed on IP + email, counting before verifying, RateLimit-* headers, and trust proxy with a spoofed X-Forwarded-For. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1457,7 +1559,7 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
 </div>
 
 <h3>CSRF, với bốn endpoint và một hũ cookie thật</h3>
-<p>Kịch bản: bạn đang đăng nhập ngân hàng ở một tab. Bạn mở thêm một trang khác. HTML của trang đó chứa một biểu mẫu gửi POST sang ngân hàng. Trình duyệt của bạn đính kèm cookie ngân hàng — nó không có cách nào biết request đó không phải ý bạn. Trong lần chạy dưới đây, <code>curl -b jar</code> làm đúng cái mà trình duyệt làm: đính kèm cookie theo miền, bất kể ai khởi xướng request.</p>
+<p>Kịch bản: bạn đang đăng nhập ngân hàng ở một tab. Bạn mở thêm một trang khác. HTML của trang đó chứa một biểu mẫu gửi POST sang ngân hàng. Trình duyệt của bạn đính kèm cookie ngân hàng — nó không có cách nào biết request đó không phải ý bạn. Trong lần chạy dưới đây, <code>curl -b jar</code> đóng vai một trình duyệt <em>không có lớp SameSite</em> — trình duyệt cũ, cookie đặt <code>SameSite=None</code>, hoặc (đo bên dưới trong Chromium 149) cookie không khai <code>SameSite</code> trong 2 phút đầu: đính kèm cookie theo miền, bất kể ai khởi xướng request. Trình duyệt hiện đại với <code>SameSite=Lax</code> sẽ <strong>không</strong> đính cookie vào POST từ trang khác này.</p>
 <div class="out">   evil.com → /chuyen-tien-yeu        HTTP 200  {"ok":true,"soTien":"100000000"}
    evil.com → /chuyen-tien-origin     HTTP 403  {"error":"CROSS_SITE","origin":"http://evil.com"}
    evil.com → /chuyen-tien-csrf       HTTP 403  {"error":"CSRF_TOKEN_MISMATCH"}
@@ -1466,6 +1568,13 @@ Set-Cookie: csrf_token=5866ee2352054a7d4323e097c541f0bb; Path=/; SameSite=Lax</d
 <div class="out">   bank    → /chuyen-tien-origin     HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-csrf       HTTP 200  {"ok":true,"soTien":"50000"}
    bank    → /chuyen-tien-bearer     HTTP 200  {"ok":true,"soTien":"50000"}</div>
+<div class="callout warn"><strong>Đo trong trình duyệt thật (Chromium 149.0.7827.55 không đầu, qua Playwright 1.61, ngày 1/11/2026).</strong> Ngân hàng ở <code>localhost:4310</code>, trang kẻ tấn công ở <code>127.0.0.1:4311</code> (một site khác). Mỗi kiểu cookie: đăng nhập ngân hàng, rồi trang kẻ tấn công tự gửi một form POST và đưa ra một liên kết để người dùng bấm.
+<div class="out">SameSite=Lax                 POST: không gửi cookie → 401       bấm link: có cookie → đã đăng nhập
+SameSite=Strict              POST: không gửi cookie → 401       bấm link: không cookie → trang đăng nhập
+SameSite=None; Secure        POST: CÓ cookie → tiền bị chuyển   bấm link: có cookie
+không khai SameSite, vừa đặt POST: CÓ cookie → tiền bị chuyển   bấm link: có cookie
+không khai SameSite, sau 2 phút  POST: không gửi cookie → 401   bấm link: có cookie</div>
+Chromium coi cookie không khai <code>SameSite</code> là Lax — trừ 2 phút đầu sau khi đặt, khi POST cấp cao nhất từ trang khác vẫn mang nó theo. Cửa sổ đó, trình duyệt cũ và subdomain cùng site là lý do SameSite một mình chưa đủ.</div>
 <p>Ba lớp phòng thủ, theo đúng thứ tự nên áp dụng:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// 1) Kiểm Origin/Referer — hai dòng, chặn được đa số</span>
 <span class="tok-kw">const</span> o = req.get(<span class="tok-str">'origin'</span>) ?? (req.get(<span class="tok-str">'referer'</span>) ? <span class="tok-kw">new</span> URL(req.get(<span class="tok-str">'referer'</span>)).origin : <span class="tok-kw">null</span>);
@@ -1569,6 +1678,31 @@ email KHÁC từ cùng IP        : HTTP 200</div>
 <a class="link-card codelab" href="/code-lab/authentication${REF}#module-958" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 958 — Rate Limiting &amp; Account Protection</span><span class="lc-sub">10 bài tập: cửa sổ trượt, khoá tài khoản, 429 và Retry-After.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-4-csrf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 3.4 — CSRF, và ba lớp phòng xếp theo thứ tự</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: CSRF, và ba lớp phòng theo thứ tự: SameSite=Lax, kiểm Origin, token CSRF. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: ma trận SameSite đo trong Chromium 149 thật (cookie không khai SameSite vẫn bị gửi kèm POST từ trang khác trong 2 phút đầu), bốn endpoint ngân hàng bị tấn công bằng hũ cookie, và HttpOnly kiểm bằng document.cookie. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.4 — CORS, CSRF và trình duyệt: đo trong Chromium thật</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: trình duyệt tự gửi gì và cho trang đọc gì; token Bearer không có bề mặt CSRF. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: phía cookie: HttpOnly so với localStorage trong trình duyệt thật, ma trận SameSite trong Chromium 149, double submit, và đăng xuất mọi nơi bằng tokenVersion. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.1 — Xác thực: session, JWT, API key, OAuth — tự dựng rồi tự tấn công</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: giới hạn đăng nhập: lần đoán sai thứ 6 liên tiếp nhận 429 kèm Retry-After. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: giới hạn theo IP + email (email khác cùng IP vẫn vào được), đếm trước khi kiểm (mật khẩu đúng cũng 429), và trust proxy chạy với X-Forwarded-For giả (true để lọt 8 trên 8). Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-8-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 8.4 — Thiết kế API để mở rộng ngang: không trạng thái và gửi lại an toàn</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: bộ đếm nằm trong RAM của một tiến trình thôi là giới hạn khi có hai bản chạy. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: chính bộ chặn đăng nhập (một Map khoá theo IP + email, 429 + Retry-After, trust proxy), và thu hồi bằng tokenVersion. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-3-gioi-han-tan-suat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 11.3 — Giới hạn tần suất sống nổi với lưu lượng thật</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: bộ chặn đăng nhập đếm số lần thử theo khoá và trả 429 kèm Retry-After. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: một bộ chặn nhỏ viết trong Express rồi tấn công thật: khoá theo IP + email, đếm trước khi kiểm, header RateLimit-*, và trust proxy với X-Forwarded-For giả. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

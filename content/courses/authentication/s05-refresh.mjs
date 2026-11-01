@@ -427,6 +427,11 @@ if (cu.usedAt) {
 <a class="link-card" href="https://datatracker.ietf.org/doc/html/rfc6819#section-4.6.3" target="_blank" rel="noopener"><span class="lc-ico">🧵</span><span class="lc-body"><span class="lc-title">RFC 6819 §4.6.3 — refresh token threats</span><span class="lc-sub">datatracker.ietf.org · The threat model this design answers</span></span></a>
 <a class="link-card" href="/courses/prisma-orm/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">CuongThai course — Prisma ORM</span><span class="lc-sub">Interactive transactions, and why this one must be atomic</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Steal a refresh token, then play both scenarios and watch the family die each time</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.2 — JWT, refresh tokens and rotation</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: single-use refresh tokens in a family, and a reused one revoking the whole family. There you add: rotation run against a real Notes API on PostgreSQL (REUSE_DETECTED, then REFRESH_REVOKED, the table afterwards), two tabs refreshing at the same moment logging the real user out, and a production incident re-created (a 3-second token in a 30-day cookie). This lesson adds what that one does not: the two detection scenarios with one outcome, the reuse window stated exactly, and what to tell the user.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -556,6 +561,11 @@ if (cu.usedAt) {
 <a class="link-card" href="https://datatracker.ietf.org/doc/html/rfc6819#section-4.6.3" target="_blank" rel="noopener"><span class="lc-ico">🧵</span><span class="lc-body"><span class="lc-title">RFC 6819 §4.6.3 — mối đe doạ với refresh token</span><span class="lc-sub">datatracker.ietf.org · Mô hình mối đe doạ mà thiết kế này trả lời</span></span></a>
 <a class="link-card" href="/courses/prisma-orm/learn${REF}"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Prisma ORM</span><span class="lc-sub">Giao dịch tương tác, và vì sao cái giao dịch này BẮT BUỘC phải nguyên tử</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Cắp một refresh token, rồi diễn cả hai kịch bản và xem dòng họ chết ở cả hai lần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.2 — JWT, refresh token và xoay vòng</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: refresh token dùng một lần trong một họ, và một token bị dùng lại làm thu hồi cả họ. Ở đó học thêm: xoay vòng chạy thật trên Notes API với PostgreSQL (REUSE_DETECTED, rồi REFRESH_REVOKED, cái bảng sau đó), hai tab cùng refresh một lúc làm người dùng thật bị đăng xuất, và một sự cố production tái hiện (token 3 giây trong cookie 30 ngày). Bài này có thứ bài kia không có: hai kịch bản phát hiện cùng một kết cục, cửa sổ tái dùng nói cho chính xác, và nên nói gì với người dùng.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

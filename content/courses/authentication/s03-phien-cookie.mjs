@@ -992,6 +992,11 @@ export function checkCsrfToken(req, res, next) {
 <a class="link-card" href="https://portswigger.net/web-security/csrf" target="_blank" rel="noopener"><span class="lc-ico">🔬</span><span class="lc-body"><span class="lc-title">PortSwigger — CSRF</span><span class="lc-sub">portswigger.net · Working labs, including bypasses of half-implemented defences</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">CuongThai course — Node.js</span><span class="lc-sub">CORS, security headers and CSP, from the Express side</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Run a working CSRF against a real endpoint, then add each defence and re-run</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: CSRF, and the three defences in order: SameSite=Lax, checking Origin, a CSRF token. There you add: a SameSite matrix measured in a real Chromium 149 (a cookie without SameSite is still sent on a cross-site POST during its first 2 minutes), four bank endpoints attacked with a cookie jar, and HttpOnly checked with document.cookie. This lesson adds what that one does not: the two shapes of the attack, why CORS is not a CSRF defence, and a CSRF token for when the first two are not enough.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1136,6 +1141,11 @@ export function checkCsrfToken(req, res, next) {
 <a class="link-card" href="https://portswigger.net/web-security/csrf" target="_blank" rel="noopener"><span class="lc-ico">🔬</span><span class="lc-body"><span class="lc-title">PortSwigger — CSRF</span><span class="lc-sub">portswigger.net · Bài lab chạy được, kể cả cách vượt qua những lớp phòng làm dở</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">CORS, header bảo mật và CSP, nhìn từ phía Express</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Chạy một cú CSRF thật lên một endpoint thật, rồi thêm từng lớp phòng và chạy lại</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: CSRF, và ba lớp phòng theo thứ tự: SameSite=Lax, kiểm Origin, token CSRF. Ở đó học thêm: ma trận SameSite đo trong Chromium 149 thật (cookie không khai SameSite vẫn bị gửi kèm POST từ trang khác trong 2 phút đầu), bốn endpoint ngân hàng bị tấn công bằng hũ cookie, và HttpOnly kiểm bằng document.cookie. Bài này có thứ bài kia không có: hai hình dạng của đòn tấn công, vì sao CORS không phải lớp phòng CSRF, và token CSRF khi hai lớp đầu chưa đủ.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

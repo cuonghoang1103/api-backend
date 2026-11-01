@@ -233,6 +233,16 @@ Retry-After: 180</div>
   <li>API keys for scripts: shown once, stored as a hash.</li>
   <li>Production starts only with a secret; demo tokens are gone.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.2 — JWT, refresh tokens and rotation</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: an HS256 access token valid for 15 minutes (900 seconds), forged and alg-none tokens refused. There you add: the token taken apart by hand, decode vs verify, issuer/audience pinned, and refresh tokens with rotation stored as SHA-256 in PostgreSQL. This lesson adds what that one does not: a hand-built HS256 with node:crypto, API keys shown once, and a production server that refuses to start without its secret.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a login limit: the 6th wrong guess in a row gets 429 with Retry-After. There you add: the limit keyed on IP + email (another email from the same IP still gets in), counting before verifying (the right password is 429 too), and trust proxy run with a spoofed X-Forwarded-For (true lets 8 out of 8 through). This lesson adds what that one does not: the price of the limit for the real user (Retry-After 180: she waits three minutes too) inside a whole authentication design.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -443,6 +453,16 @@ Retry-After: 180</div>
   <li>API key cho script: hiện một lần, lưu dạng băm.</li>
   <li>Production chỉ khởi động khi có bí mật; token giả đã biến mất.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.2 — JWT, refresh token và xoay vòng</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: access token HS256 sống 15 phút (900 giây), token giả và token alg none bị từ chối. Ở đó học thêm: mổ token bằng tay, decode và verify, chốt issuer/audience, và refresh token xoay vòng lưu dạng SHA-256 trong PostgreSQL. Bài này có thứ bài kia không có: tự dựng HS256 bằng node:crypto, API key chỉ hiện một lần, và server production không chịu khởi động khi thiếu bí mật.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: giới hạn đăng nhập: lần đoán sai thứ 6 liên tiếp nhận 429 kèm Retry-After. Ở đó học thêm: giới hạn theo IP + email (email khác cùng IP vẫn vào được), đếm trước khi kiểm (mật khẩu đúng cũng 429), và trust proxy chạy với X-Forwarded-For giả (true để lọt 8 trên 8). Bài này có thứ bài kia không có: cái giá của giới hạn với người dùng thật (Retry-After 180: chính chủ cũng phải chờ ba phút) trong cả một thiết kế xác thực.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -621,6 +641,11 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
   <li>The owner comes from the token, never from the request; random ids do not replace checks.</li>
   <li>Old endpoints keep their status codes (4.1); new ones use 404.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.3 — requireAuth, roles, and deleting AUTHOR_ID = 1</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a logged-in user reading another person's record by changing the id, closed by one rule and a 404. There you add: requireAuth with six machine-readable refusals run on a real server, the user lookup it costs (0.026 → 0.664 ms), middleware order run for real (a route silently public), and the quick service vs canTouch with the same script. This lesson adds what that one does not: a policy table with deny-by-default and a matrix that logs in as everyone and asks for everything (8 wrong cells → 0).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -790,6 +815,11 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
   <li>Chủ sở hữu lấy từ token, không bao giờ từ request; id ngẫu nhiên không thay được phép kiểm.</li>
   <li>Endpoint cũ giữ mã trạng thái (4.1); endpoint mới dùng 404.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.3 — requireAuth, phân quyền, và xoá bỏ AUTHOR_ID = 1</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: một người đã đăng nhập đọc bản ghi của người khác chỉ bằng cách đổi id, đóng bằng một quy tắc và mã 404. Ở đó học thêm: requireAuth với sáu lần từ chối có mã riêng chạy trên server thật, cái giá của lần tra user (0,026 → 0,664 ms), thứ tự middleware chạy thật (một route công khai nhầm), và bản viết vội so với canTouch bằng cùng một kịch bản. Bài này có thứ bài kia không có: một bảng chính sách mặc định từ chối và một ma trận đăng nhập từng người, hỏi từng bản ghi (8 ô sai → 0).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -1342,6 +1372,11 @@ Access-Control-Allow-Credentials: true</div>
   <li>Reflecting any origin with credentials hands your users’ data to every website.</li>
   <li>Bearer tokens in headers make LabFlow immune to classic CSRF; cookie apps need SameSite and tokens.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: what a browser sends on its own and what it lets a page read; Bearer tokens have no CSRF surface. There you add: the cookie side: HttpOnly vs localStorage in a real browser, a SameSite matrix in Chromium 149, double submit, and logging out everywhere with tokenVersion. This lesson adds what that one does not: the CORS side in Chromium: a stranger's GET still reaches the server, a JSON POST stops at the preflight, and the reflect-with-credentials mistake.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1502,6 +1537,11 @@ Access-Control-Allow-Credentials: true</div>
   <li>Phản chiếu mọi origin kèm credentials là trao dữ liệu người dùng cho mọi website.</li>
   <li>Bearer token trong header giúp LabFlow miễn nhiễm CSRF kinh điển; app dùng cookie cần SameSite và token.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: trình duyệt tự gửi gì và cho trang đọc gì; token Bearer không có bề mặt CSRF. Ở đó học thêm: phía cookie: HttpOnly so với localStorage trong trình duyệt thật, ma trận SameSite trong Chromium 149, double submit, và đăng xuất mọi nơi bằng tokenVersion. Bài này có thứ bài kia không có: phía CORS trong Chromium: GET của người lạ vẫn tới server, POST JSON dừng ở preflight, và lỗi phản chiếu kèm credentials.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

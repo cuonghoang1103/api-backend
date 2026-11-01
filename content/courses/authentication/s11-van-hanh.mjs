@@ -447,6 +447,11 @@ res.status(429)
 <a class="link-card" href="https://expressjs.com/en/guide/behind-proxies.html" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">Express — trust proxy</span><span class="lc-sub">expressjs.com · Getting req.ip right, which every limiter depends on</span></span></a>
 <a class="link-card" href="/courses/redis/learn${REF}"><span class="lc-ico">🔴</span><span class="lc-body"><span class="lc-title">CuongThai course — Redis</span><span class="lc-sub">Sorted sets, atomic counters and Lua, which is where a correct limiter lives</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Fire a burst across a window boundary and count exactly how many got through</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a login limiter that counts attempts per key and answers 429 with Retry-After. There you add: a small limiter written in Express and attacked for real: keyed on IP + email, counting before verifying, RateLimit-* headers, and trust proxy with a spoofed X-Forwarded-For. This lesson adds what that one does not: three algorithms measured (a fixed window lets 20 of 20 through at the boundary, double the limit), why the counting axis matters more than the algorithm, and answering without helping the attacker.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -520,6 +525,11 @@ res.status(429)
 <a class="link-card" href="https://expressjs.com/en/guide/behind-proxies.html" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">Express — trust proxy</span><span class="lc-sub">expressjs.com · Lấy req.ip cho đúng, thứ mà mọi bộ giới hạn đều phụ thuộc vào</span></span></a>
 <a class="link-card" href="/courses/redis/learn${REF}"><span class="lc-ico">🔴</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Redis</span><span class="lc-sub">Sorted set, bộ đếm nguyên tử và Lua, nơi một bộ giới hạn ĐÚNG thật sự sống</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Bắn một tràng vắt qua mép cửa sổ rồi đếm chính xác bao nhiêu cái lọt qua</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: bộ chặn đăng nhập đếm số lần thử theo khoá và trả 429 kèm Retry-After. Ở đó học thêm: một bộ chặn nhỏ viết trong Express rồi tấn công thật: khoá theo IP + email, đếm trước khi kiểm, header RateLimit-*, và trust proxy với X-Forwarded-For giả. Bài này có thứ bài kia không có: ba thuật toán đo thật (cửa sổ cố định cho 20 trên 20 lọt qua ở chỗ giáp ranh, gấp đôi trần), vì sao trục đếm quan trọng hơn thuật toán, và trả lời mà không giúp kẻ tấn công.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

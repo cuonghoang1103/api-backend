@@ -307,6 +307,11 @@ JWSInvalid: "alg" (Algorithm) Header Parameter value not allowed
 <a class="link-card" href="https://github.com/panva/jose" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">jose</span><span class="lc-sub">github.com · The library where keys carry their algorithm, so confusion is unrepresentable</span></span></a>
 <a class="link-card" href="https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/" target="_blank" rel="noopener"><span class="lc-ico">📰</span><span class="lc-body"><span class="lc-title">The original write-up</span><span class="lc-sub">auth0.com · The 2015 disclosure of both attacks, with the affected libraries</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Forge an admin token four different ways, then close all four with one line</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.2 — JWT, refresh tokens and rotation</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: the alg header is attacker-controlled: alg none and algorithm confusion, and the server must pin the algorithm. There you add: both attacks run against jsonwebtoken 9.0.3 (blocked: "jwt signature is required", "invalid algorithm") and against a hand-written verifier (admin, twice), decode vs verify, and the cost of a check (48,103 verifies per second). This lesson adds what that one does not: case tricks (None, NONE, nOnE), RS256 confused into HS256 step by step, headers that point elsewhere (attacks 3 and 4), and the fix in one line.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -428,6 +433,11 @@ JWSInvalid: "alg" (Algorithm) Header Parameter value not allowed
 <a class="link-card" href="https://github.com/panva/jose" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">jose</span><span class="lc-sub">github.com · Thư viện mà KHOÁ tự mang thuật toán, nên sự nhầm lẫn không diễn đạt nổi</span></span></a>
 <a class="link-card" href="https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/" target="_blank" rel="noopener"><span class="lc-ico">📰</span><span class="lc-body"><span class="lc-title">Bài công bố gốc</span><span class="lc-sub">auth0.com · Công bố năm 2015 cho cả hai cú, kèm danh sách thư viện bị ảnh hưởng</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Giả mạo một token admin theo bốn cách khác nhau, rồi bịt cả bốn bằng một dòng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.2 — JWT, refresh token và xoay vòng</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: trường alg nằm trong tay kẻ tấn công: alg none và nhầm thuật toán, và máy chủ phải chốt thuật toán. Ở đó học thêm: cả hai đòn chạy thật với jsonwebtoken 9.0.3 (bị chặn: "jwt signature is required", "invalid algorithm") và với một bộ kiểm tự viết (ra admin, hai lần), decode và verify, và giá của một lần kiểm (48.103 lần/giây). Bài này có thứ bài kia không có: trò chữ hoa (None, NONE, nOnE), RS256 bị làm lẫn thành HS256 từng bước, header trỏ đi nơi khác (cú 3 và 4), và cách vá gói trong một dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

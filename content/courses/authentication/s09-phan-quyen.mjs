@@ -911,6 +911,11 @@ TAT CA KHOP.</div>
 <a class="link-card" href="https://zod.dev/?id=strict" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Zod — strict objects</span><span class="lc-sub">zod.dev · Failing on unknown keys instead of quietly dropping them</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">CuongThai course — TypeScript</span><span class="lc-sub">Discriminated unions, which is what makes the policy type refuse to compile</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Promote yourself to admin through a profile update, then allow-list the fields</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.3 — requireAuth, roles, and deleting AUTHOR_ID = 1</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: putting the permission check in one place so that forgetting it is impossible. There you add: actor as the first parameter of every service function, one canTouch, the IDOR hole run for real and closed, and a test of the rule with no HTTP request. This lesson adds what that one does not: four layers and their blind spots, doors other than the API route, and a build-time check that fails when a route has no rule.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1008,6 +1013,11 @@ TAT CA KHOP.</div>
 <a class="link-card" href="https://zod.dev/?id=strict" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Zod — đối tượng nghiêm ngặt</span><span class="lc-sub">zod.dev · Báo lỗi khi gặp khoá lạ thay vì lặng lẽ bỏ chúng đi</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — TypeScript</span><span class="lc-sub">Union phân biệt được, thứ làm cho cái kiểu chính sách kia từ chối biên dịch</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Tự thăng mình lên admin qua một lệnh cập nhật hồ sơ, rồi liệt kê trắng các trường</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.3 — requireAuth, phân quyền, và xoá bỏ AUTHOR_ID = 1</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: đặt phép kiểm quyền ở một chỗ để không thể quên. Ở đó học thêm: actor là tham số đầu tiên của mọi hàm service, một canTouch, lỗ IDOR chạy thật rồi đóng, và test quy tắc không cần request HTTP nào. Bài này có thứ bài kia không có: bốn tầng và điểm mù của từng tầng, những cánh cửa ngoài tuyến API, và phép kiểm lúc dựng báo lỗi khi một route không có luật.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

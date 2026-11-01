@@ -120,6 +120,11 @@ Cung mot the may. Chi khac tham so.</div>
 <a class="link-card" href="https://www.ietf.org/rfc/rfc9106.html" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">RFC 9106 — Argon2</span><span class="lc-sub">ietf.org · What memory-hardness means, and the parameter guidance</span></span></a>
 <a class="link-card" href="https://haveibeenpwned.com/PwnedWebsites" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">Have I Been Pwned — breached sites</span><span class="lc-sub">haveibeenpwned.com · Read a few entries and note how many say "unsalted MD5"</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Crack a table of unsalted SHA-256 hashes, then try the same attack after adding salt and cost</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.1 — Storing passwords: why almost every way is wrong</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: the threat model is a stolen copy of the user table, and a fast hash is the wrong tool. There you add: the speed measured on one CPU core (SHA-256 2,010,039 per second vs bcrypt cost 12 at 3.6), a 1,000,000-entry rainbow table built in 1,059 ms, salt shown on real rows. This lesson adds what that one does not: the same arithmetic for a GPU cracking rig, and what a leak costs in minutes for each kind of hash.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -222,6 +227,11 @@ Cung mot the may. Chi khac tham so.</div>
 <a class="link-card" href="https://www.ietf.org/rfc/rfc9106.html" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">RFC 9106 — Argon2</span><span class="lc-sub">ietf.org · "Cứng theo bộ nhớ" nghĩa là gì, và hướng dẫn chọn tham số</span></span></a>
 <a class="link-card" href="https://haveibeenpwned.com/PwnedWebsites" target="_blank" rel="noopener"><span class="lc-ico">📋</span><span class="lc-body"><span class="lc-title">Have I Been Pwned — các trang đã bị rò</span><span class="lc-sub">haveibeenpwned.com · Đọc vài mục và đếm xem bao nhiêu mục ghi "unsalted MD5"</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Bẻ một bảng chuỗi băm SHA-256 không muối, rồi thử lại đúng cú đó sau khi thêm muối và chi phí</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.1 — Lưu mật khẩu: vì sao gần như mọi cách đều sai</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: mô hình mối đe doạ là một bản sao bảng người dùng bị đánh cắp, và hàm băm nhanh là công cụ sai. Ở đó học thêm: tốc độ đo trên một nhân CPU (SHA-256 2.010.039 lần/giây vs bcrypt chi phí 12 là 3,6), bảng cầu vồng 1.000.000 mục dựng trong 1.059 ms, muối thấy trên dòng thật. Bài này có thứ bài kia không có: cùng phép tính cho một giàn GPU bẻ khoá, và một vụ rò tốn bao nhiêu phút với từng loại hàm băm.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -365,6 +375,11 @@ const bam = await scryptAsync(password, salt, 64, { N: 2 ** 15, r: 8, p: 1 });
 <a class="link-card" href="https://nodejs.org/api/crypto.html#cryptoscryptpassword-salt-keylen-options-callback" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">Node.js — crypto.scrypt</span><span class="lc-sub">nodejs.org · Parameters, and the maxmem option that trips people up</span></span></a>
 <a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">CuongThai course — Docker</span><span class="lc-sub">Memory limits, and why a native module needs the right base image</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Tune Argon2id to a 250 ms budget, then OOM the container on purpose to see the concurrency limit</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.1 — Storing passwords: why almost every way is wrong</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: argon2id first, bcrypt and scrypt as fallbacks, a self-describing stored string, and tuning by measurement. There you add: the cost under load (64 logins at once, RSS capped by the libuv thread pool), hashSync freezing a real Express server (/health answered in 2,784 ms), the 72-byte bcrypt trap with a Vietnamese passphrase, and the login timing leak (27.4× → 1.0×). This lesson adds what that one does not: the method (latency budget, measure, choose), the RAM trap of memory × concurrent requests, and all three hashes configured.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -500,6 +515,11 @@ const bam = await scryptAsync(password, salt, 64, { N: 2 ** 15, r: 8, p: 1 });
 <a class="link-card" href="https://nodejs.org/api/crypto.html#cryptoscryptpassword-salt-keylen-options-callback" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">Node.js — crypto.scrypt</span><span class="lc-sub">nodejs.org · Tham số, và tuỳ chọn maxmem hay làm người ta vấp</span></span></a>
 <a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Docker</span><span class="lc-sub">Giới hạn bộ nhớ, và vì sao một module native cần đúng ảnh nền</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Chỉnh Argon2id vào ngân sách 250 ms, rồi cố ý làm OOM container để thấy giới hạn song song</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.1 — Lưu mật khẩu: vì sao gần như mọi cách đều sai</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: argon2id trước, bcrypt và scrypt làm phương án dự phòng, chuỗi lưu tự mô tả, và chỉnh tham số bằng phép đo. Ở đó học thêm: cái giá khi có tải (64 lượt đăng nhập cùng lúc, RSS bị bể luồng libuv giới hạn), hashSync đóng băng một server Express thật (/health trả lời sau 2.784 ms), bẫy 72 byte của bcrypt với câu mật khẩu tiếng Việt, và chỗ rò thời gian ở đăng nhập (27,4× → 1,0×). Bài này có thứ bài kia không có: phương pháp (ngân sách độ trễ, đo, chọn), bẫy RAM của bộ nhớ × số request song song, và cả ba hàm băm đã cấu hình.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

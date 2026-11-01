@@ -1275,6 +1275,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
   <li>A shared PostgreSQL table with <code>INSERT … ON CONFLICT DO NOTHING</code> fixed idempotency: second request replayed. Data stays per-instance until Chapter 12.</li>
   <li>Sticky sessions hide the problem; health checks and safe retries depend on the contract (GET, idempotency keys).</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a counter kept in one process's memory stops being a limit once there are two instances. There you add: the login limiter itself (a Map keyed on IP + email, 429 + Retry-After, trust proxy), and revocation with tokenVersion. This lesson adds what that one does not: two instances behind round-robin measured: 8 bookings out of 8 got past a limit of 5, and the fix with shared counters.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1453,6 +1458,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
   <li>Bảng PostgreSQL dùng chung với <code>INSERT … ON CONFLICT DO NOTHING</code> sửa được idempotency: request thứ hai được phát lại. Dữ liệu vẫn riêng từng bản cho tới Chương 12.</li>
   <li>Sticky session giấu vấn đề; kiểm tra sức khoẻ và thử lại an toàn phụ thuộc hợp đồng (GET, khoá idempotency).</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: bộ đếm nằm trong RAM của một tiến trình thôi là giới hạn khi có hai bản chạy. Ở đó học thêm: chính bộ chặn đăng nhập (một Map khoá theo IP + email, 429 + Retry-After, trust proxy), và thu hồi bằng tokenVersion. Bài này có thứ bài kia không có: hai bản chạy sau round-robin, đo thật: 8 trên 8 lượt đặt vượt giới hạn 5, và cách sửa bằng bộ đếm dùng chung.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

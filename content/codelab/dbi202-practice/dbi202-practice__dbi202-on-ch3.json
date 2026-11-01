@@ -32,7 +32,7 @@
       "examplesJson": [
         {
           "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
-          "output": "tbl      | col        | type             \n---------+------------+------------------\nlecturer | lecturerid | character        \nlecturer | fullname   | character varying\ncourse   | coursecode | character        \ncourse   | coursename | character varying\ncourse   | credits    | integer          \ncourse   | lecturerid | character        \nstudent  | studentid  | character        \nstudent  | fullname   | character varying\n… (13 rows)",
+          "output": "tbl      | col        | type             \n---------+------------+------------------\nstudent  | studentid  | character        \nstudent  | fullname   | character varying\nstudent  | email      | character varying\nenroll   | studentid  | character        \nenroll   | coursecode | character        \nenroll   | semester   | character        \nenroll   | grade      | numeric          \nlecturer | lecturerid | character        \n… (13 rows)",
           "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
         }
       ],
@@ -76,36 +76,6 @@
               ],
               "hang": [
                 [
-                  "lecturer",
-                  "lecturerid",
-                  "character"
-                ],
-                [
-                  "lecturer",
-                  "fullname",
-                  "character varying"
-                ],
-                [
-                  "course",
-                  "coursecode",
-                  "character"
-                ],
-                [
-                  "course",
-                  "coursename",
-                  "character varying"
-                ],
-                [
-                  "course",
-                  "credits",
-                  "integer"
-                ],
-                [
-                  "course",
-                  "lecturerid",
-                  "character"
-                ],
-                [
                   "student",
                   "studentid",
                   "character"
@@ -139,6 +109,36 @@
                   "enroll",
                   "grade",
                   "numeric"
+                ],
+                [
+                  "lecturer",
+                  "lecturerid",
+                  "character"
+                ],
+                [
+                  "lecturer",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "course",
+                  "coursecode",
+                  "character"
+                ],
+                [
+                  "course",
+                  "coursename",
+                  "character varying"
+                ],
+                [
+                  "course",
+                  "credits",
+                  "integer"
+                ],
+                [
+                  "course",
+                  "lecturerid",
+                  "character"
                 ]
               ]
             }

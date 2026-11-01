@@ -5,7 +5,8 @@
  *   bi-chan            ⇒ câu thử phải LỖI trên SQL Server
  *   chay-duoc          ⇒ câu thử phải CHẠY trên SQL Server
  * Mục đích: lời giải "chạy giống nhau trên SQL Server và PostgreSQL" là lời hứa của bộ đề — kiểm nó bằng máy thật.
- * Kiểm đọc information_schema (tên kiểu khác nhau giữa hai hệ) chỉ kiểm "chạy không lỗi", không so bảng.
+ * Kiểm đọc information_schema (tên kiểu khác nhau giữa hai hệ) chỉ kiểm "chạy không lỗi", không so bảng; kiểm đọc pg_* bỏ qua
+ * (lời giải vẫn được chạy — lỗi cú pháp T-SQL vẫn bị bắt).
  *
  *   node content/codelab/dbi202-practice/nguon/_kiem-sqlserver.mjs --tedious <nháp>/node_modules/tedious [--chi <module>] [--cong 14339]
  * (container SQL Server riêng — xem đầu _kiem-tay.mjs)
@@ -101,6 +102,7 @@ for (const f of tep) {
       if (rg.loi) { loiDs.push(`${nhan}: LỜI GIẢI lỗi trên SQL Server — ${rg.loi}`); continue; }
       if (k.kiem === 'ket-qua') { const d = soBang(rg.bang, k.mongDoi); if (d) loiDs.push(`${nhan}: ${d}`); }
       else if (k.kiem === 'sau-lenh') {
+        if (/\bpg_[a-z_]+/i.test(k.kiemTra)) continue;            // kiểm đọc danh mục PostgreSQL (pg_indexes…) — không có trên SQL Server
         const rk = await chayNhieu(k.kiemTra);
         if (rk.loi) loiDs.push(`${nhan}: kiemTra lỗi — ${rk.loi}`);
         else if (!/information_schema/i.test(k.kiemTra)) { const d = soBang(rk.bang, k.mongDoi); if (d) loiDs.push(`${nhan}: ${d}`); }

@@ -194,7 +194,7 @@
       "examplesJson": [
         {
           "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
-          "output": "tbl    | col         | type             \n-------+-------------+------------------\nborrow | mid         | integer          \nborrow | bid         | integer          \nborrow | borrow_date | date             \nborrow | due_date    | date             \nbook   | bid         | integer          \nbook   | title       | character varying\nmember | mid         | integer          \nmember | name        | character varying\n… (16 rows)",
+          "output": "tbl         | col         | type             \n------------+-------------+------------------\nmember      | mid         | integer          \nmember      | name        | character varying\nmemberphone | mid         | integer          \nmemberphone | phone       | character varying\nbranch      | brid        | integer          \nbranch      | addr        | character varying\nbranch      | manager_mid | integer          \ncopy        | brid        | integer          \n… (16 rows)",
           "explanation": "Expected result of check \"The six tables and their columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sáu bảng và các cột\" (thứ tự dòng không quan trọng)."
         }
       ],
@@ -237,36 +237,6 @@
                 "type"
               ],
               "hang": [
-                [
-                  "borrow",
-                  "mid",
-                  "integer"
-                ],
-                [
-                  "borrow",
-                  "bid",
-                  "integer"
-                ],
-                [
-                  "borrow",
-                  "borrow_date",
-                  "date"
-                ],
-                [
-                  "borrow",
-                  "due_date",
-                  "date"
-                ],
-                [
-                  "book",
-                  "bid",
-                  "integer"
-                ],
-                [
-                  "book",
-                  "title",
-                  "character varying"
-                ],
                 [
                   "member",
                   "mid",
@@ -315,6 +285,36 @@
                 [
                   "copy",
                   "status",
+                  "character varying"
+                ],
+                [
+                  "borrow",
+                  "mid",
+                  "integer"
+                ],
+                [
+                  "borrow",
+                  "bid",
+                  "integer"
+                ],
+                [
+                  "borrow",
+                  "borrow_date",
+                  "date"
+                ],
+                [
+                  "borrow",
+                  "due_date",
+                  "date"
+                ],
+                [
+                  "book",
+                  "bid",
+                  "integer"
+                ],
+                [
+                  "book",
+                  "title",
                   "character varying"
                 ]
               ]

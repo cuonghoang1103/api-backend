@@ -1,0 +1,584 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-transaction-acid",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-transaction-acid"
+  },
+  "exercises": [
+    {
+      "title": "Which anomalies does each isolation level allow?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "dirty read",
+        "non-repeatable read",
+        "phantom",
+        "isolation levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "transaction",
+        "isolation"
+      ],
+      "problemHtml": "<p>Fill the table of lesson 8.3: for each level, is the anomaly <b>possible</b> or <b>prevented</b>?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền bảng của bài 8.3: với mỗi mức, dị thường là <b>possible</b> (có thể xảy ra) hay <b>prevented</b> (được ngăn)?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Dirty → non-repeatable → phantom: each level closes one more door.|||Đọc bẩn → không lặp lại → bóng ma: mỗi mức đóng thêm một cửa.",
+        "Phantoms are NEW rows matching a WHERE; only SERIALIZABLE (range locks) stops them.|||Bóng ma là dòng MỚI khớp WHERE; chỉ SERIALIZABLE (khoá khoảng) chặn được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which anomalies does each isolation level allow?\n\nAnswer in the answer panel (no code needed).\n\n1. Isolation level × anomalyMức cô lập × dị thường\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which anomalies does each isolation level allow? — answer key\n\n1. Isolation level × anomalyMức cô lập × dị thường\n   - r1.dr: possible\n   - r1.nr: possible\n   - r1.ph: possible\n   - r2.dr: prevented\n   - r2.nr: possible\n   - r2.ph: possible\n   - r3.dr: prevented\n   - r3.nr: prevented\n   - r3.ph: possible\n   - r4.dr: prevented\n   - r4.nr: prevented\n   - r4.ph: prevented\n   Each level forbids one more anomaly than the previous one, at the price of more locking (less concurrency).VI: Mỗi mức cấm thêm một dị thường so với mức trước, đổi lại khoá nhiều hơn (ít đồng thời hơn).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each level forbids one more anomaly than the previous one, at the price of more locking (less concurrency).</p><p><i>VI: Mỗi mức cấm thêm một dị thường so với mức trước, đổi lại khoá nhiều hơn (ít đồng thời hơn).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Isolation level × anomaly</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức cô lập × dị thường</i></p>",
+            "cot": [
+              {
+                "ma": "lv",
+                "ten": "Level / Mức"
+              },
+              {
+                "ma": "dr",
+                "ten": "Dirty read",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              },
+              {
+                "ma": "nr",
+                "ten": "Non-repeatable read",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              },
+              {
+                "ma": "ph",
+                "ten": "Phantom",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "lv": "READ UNCOMMITTED"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "lv": "READ COMMITTED (SQL Server default)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "lv": "REPEATABLE READ"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "lv": "SERIALIZABLE"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dr": "possible",
+              "r1.nr": "possible",
+              "r1.ph": "possible",
+              "r2.dr": "prevented",
+              "r2.nr": "possible",
+              "r2.ph": "possible",
+              "r3.dr": "prevented",
+              "r3.nr": "prevented",
+              "r3.ph": "possible",
+              "r4.dr": "prevented",
+              "r4.nr": "prevented",
+              "r4.ph": "prevented"
+            },
+            "giaiThich": "<p>Each level forbids one more anomaly than the previous one, at the price of more locking (less concurrency).</p><p><i>VI: Mỗi mức cấm thêm một dị thường so với mức trước, đổi lại khoá nhiều hơn (ít đồng thời hơn).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking READ COMMITTED prevents non-repeatable reads.|||Tưởng READ COMMITTED ngăn được đọc không lặp lại."
+        },
+        {
+          "loi": "Thinking REPEATABLE READ prevents phantoms.|||Tưởng REPEATABLE READ ngăn được bóng ma."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "phantom read",
+          "vi": "đọc bóng ma"
+        },
+        {
+          "en": "non-repeatable read",
+          "vi": "đọc không lặp lại"
+        }
+      ]
+    },
+    {
+      "title": "Book the last seat safely with one atomic UPDATE",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "lost update",
+        "check-and-change in one statement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "transaction",
+        "concurrency",
+        "update"
+      ],
+      "problemHtml": "<p>Two students book the last DBI202 seat at the same moment. \"SELECT seats … then UPDATE\" lets both read 1 and both decrement (seats = −1). Write the booking for course <b>DBI202</b> as ONE UPDATE that takes a seat <b>only if one is left</b> — on a full course it must change nothing.</p>\n<p><b>Table</b> (tab <code>Course.sql</code>): <code>Course(cid, title, seats)</code> — DBI202 has 1 free seat, CSD201 is full (0), PRF192 has 30.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One UPDATE with the condition in its WHERE.</li>\n  <li>(In T-SQL, check @@ROWCOUNT = 1 afterwards to know whether you got the seat.)</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai sinh viên cùng đặt chỗ cuối của DBI202. \"SELECT seats … rồi UPDATE\" cho cả hai đọc 1 và cùng trừ (seats = −1). Viết lệnh đặt chỗ cho môn <b>DBI202</b> thành MỘT câu UPDATE chỉ lấy chỗ <b>khi còn chỗ</b> — môn đã đầy thì không đổi gì.</p>\n<p><b>Bảng</b> (tab <code>Course.sql</code>): <code>Course(cid, title, seats)</code> — DBI202 còn 1 chỗ, CSD201 đã đầy (0), PRF192 còn 30.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu UPDATE có điều kiện nằm trong WHERE.</li>\n  <li>(Trong T-SQL, kiểm @@ROWCOUNT = 1 sau đó để biết có giành được chỗ không.)</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "cid    | seats\n-------+------\nCSD201 | 0    \nPRF192 | 30   \nDBI202 | 0    ",
+          "explanation": "Expected result of check \"DBI202 goes from 1 to 0\" (row order does not matter).|||Kết quả mong đợi của kiểm \"DBI202 từ 1 xuống 0\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Put \"seats &gt; 0\" in the WHERE of the UPDATE itself.|||Đặt \"seats &gt; 0\" ngay trong WHERE của câu UPDATE.",
+        "The UPDATE locks the row while it tests and changes it, so two sessions cannot both pass the test.|||UPDATE khoá dòng trong lúc vừa kiểm vừa đổi nên hai phiên không thể cùng qua phép kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Course.sql",
+          "language": "sql",
+          "code": "-- Course.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Course.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL);\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 1), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE Course\nSET seats = seats - 1\nWHERE cid = 'DBI202' AND seats > 0;     -- the test and the change are one atomic statement\n"
+        },
+        {
+          "name": "Course.sql",
+          "language": "sql",
+          "code": "-- Course.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Course.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL);\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 1), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Of the three fixes of lesson 8.3 (one atomic statement, UPDLOCK, SERIALIZABLE) this is the cheapest and the one to remember.</p>",
+      "solutionExplanationHtmlVi": "<p>Trong ba cách sửa của bài 8.3 (một câu nguyên tử, UPDLOCK, SERIALIZABLE) đây là cách rẻ nhất và nên nhớ nhất.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL);\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 1), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "DBI202 goes from 1 to 0|||DBI202 từ 1 xuống 0",
+            "kiemTra": "SELECT cid, seats FROM Course",
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "seats"
+              ],
+              "hang": [
+                [
+                  "CSD201",
+                  0
+                ],
+                [
+                  "PRF192",
+                  30
+                ],
+                [
+                  "DBI202",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: running the booking twice never goes below 0|||Ẩn: đặt hai lần không bao giờ xuống dưới 0",
+            "kiemTra": "UPDATE Course SET seats = seats - 1 WHERE cid = 'DBI202' AND seats > 0; SELECT cid, seats FROM Course",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "seats"
+              ],
+              "hang": [
+                [
+                  "CSD201",
+                  0
+                ],
+                [
+                  "PRF192",
+                  30
+                ],
+                [
+                  "DBI202",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: on a full DBI202 nothing changes|||Ẩn: DBI202 đã đầy thì không đổi gì",
+            "kiemTra": "SELECT cid, seats FROM Course",
+            "an": true,
+            "themCsdl": "UPDATE Course SET seats = 0 WHERE cid = 'DBI202'",
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "seats"
+              ],
+              "hang": [
+                [
+                  "CSD201",
+                  0
+                ],
+                [
+                  "PRF192",
+                  30
+                ],
+                [
+                  "DBI202",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: with 5 seats left, one booking leaves 4|||Ẩn: còn 5 chỗ thì đặt một lần còn 4",
+            "kiemTra": "SELECT cid, seats FROM Course",
+            "an": true,
+            "themCsdl": "UPDATE Course SET seats = 5 WHERE cid = 'DBI202'",
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "seats"
+              ],
+              "hang": [
+                [
+                  "CSD201",
+                  0
+                ],
+                [
+                  "PRF192",
+                  30
+                ],
+                [
+                  "DBI202",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses UPDATE|||Dùng UPDATE",
+            "khop": "\\bUPDATE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No seats &gt; 0 test — a full course goes to −1.|||Không kiểm seats &gt; 0 — môn đầy xuống −1."
+        },
+        {
+          "loi": "SET seats = 0 — correct only for the very last seat.|||SET seats = 0 — chỉ đúng với chỗ cuối cùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "@@ROWCOUNT",
+        "atomic check-and-change"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "procedure",
+        "concurrency"
+      ],
+      "problemHtml": "<p>Wrap the booking in <code>prBookSeat @cid CHAR(6), @booked BIT OUTPUT</code>: one UPDATE that takes a seat only if one is left, then <code>@booked = 1</code> when a row was changed, 0 otherwise.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> @@ROWCOUNT and OUTPUT parameters are T-SQL; the procedure is what an application would call. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 3 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (3 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 3 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Read @@ROWCOUNT immediately after the UPDATE.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bọc việc đặt chỗ thành <code>prBookSeat @cid CHAR(6), @booked BIT OUTPUT</code>: một câu UPDATE chỉ lấy chỗ khi còn, rồi <code>@booked = 1</code> nếu có dòng bị đổi, ngược lại 0.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> @@ROWCOUNT và tham số OUTPUT là T-SQL; procedure là thứ ứng dụng sẽ gọi. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 3 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (3 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 3 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc @@ROWCOUNT ngay sau câu UPDATE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. The first booking of DBI202 succeeds, the second fails\nPASS 2. A full course: @booked = 0, seats stay 0\nPASS 3. An unknown course: @booked = 0\nALL 3 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "UPDATE … WHERE cid = @cid AND seats &gt; 0",
+        "SET @booked = IIF(@@ROWCOUNT = 1, 1, 0) right after it.|||SET @booked = IIF(@@ROWCOUNT = 1, 1, 0) ngay sau đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE OR ALTER PROCEDURE prBookSeat @cid CHAR(6), @booked BIT OUTPUT AS\n-- BEGIN ... END\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL);\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 1), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The first booking of DBI202 succeeds, the second fails\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT, @b BIT; BEGIN TRAN; EXEC dbo.prBookSeat ''DBI202'', @a OUTPUT; EXEC dbo.prBookSeat ''DBI202'', @b OUTPUT;\nSET @ok = IIF(@a = 1 AND @b = 0 AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 0, 1, 0); SET @info = CONCAT(N''first='', @a, N'' second='', @b, N'' seats='', (SELECT seats FROM Course WHERE cid = ''DBI202'')); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The first booking of DBI202 succeeds, the second fails | Lần đặt đầu của DBI202 thành công, lần hai thất bại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The first booking of DBI202 succeeds, the second fails | Lần đặt đầu của DBI202 thành công, lần hai thất bại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: A full course: @booked = 0, seats stay 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT; BEGIN TRAN; EXEC dbo.prBookSeat ''CSD201'', @a OUTPUT;\nSET @ok = IIF(@a = 0 AND (SELECT seats FROM Course WHERE cid = ''CSD201'') = 0, 1, 0); SET @info = CONCAT(N''booked='', @a); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. A full course: @booked = 0, seats stay 0 | Môn đầy: @booked = 0, chỗ vẫn 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. A full course: @booked = 0, seats stay 0 | Môn đầy: @booked = 0, chỗ vẫn 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown course: @booked = 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT; EXEC dbo.prBookSeat ''XXX999'', @a OUTPUT; SET @ok = IIF(@a = 0, 1, 0); SET @info = CONCAT(N''booked='', @a);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown course: @booked = 0 | Môn không tồn tại: @booked = 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown course: @booked = 0 | Môn không tồn tại: @booked = 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE prBookSeat\n    @cid    CHAR(6),\n    @booked BIT OUTPUT\nAS\nBEGIN\n    SET NOCOUNT ON;\n    UPDATE Course SET seats = seats - 1\n    WHERE cid = @cid AND seats > 0;          -- check and change in ONE atomic statement\n    SET @booked = IIF(@@ROWCOUNT = 1, 1, 0); -- read @@ROWCOUNT immediately\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL);\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 1), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The first booking of DBI202 succeeds, the second fails\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT, @b BIT; BEGIN TRAN; EXEC dbo.prBookSeat ''DBI202'', @a OUTPUT; EXEC dbo.prBookSeat ''DBI202'', @b OUTPUT;\nSET @ok = IIF(@a = 1 AND @b = 0 AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 0, 1, 0); SET @info = CONCAT(N''first='', @a, N'' second='', @b, N'' seats='', (SELECT seats FROM Course WHERE cid = ''DBI202'')); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The first booking of DBI202 succeeds, the second fails | Lần đặt đầu của DBI202 thành công, lần hai thất bại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The first booking of DBI202 succeeds, the second fails | Lần đặt đầu của DBI202 thành công, lần hai thất bại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: A full course: @booked = 0, seats stay 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT; BEGIN TRAN; EXEC dbo.prBookSeat ''CSD201'', @a OUTPUT;\nSET @ok = IIF(@a = 0 AND (SELECT seats FROM Course WHERE cid = ''CSD201'') = 0, 1, 0); SET @info = CONCAT(N''booked='', @a); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. A full course: @booked = 0, seats stay 0 | Môn đầy: @booked = 0, chỗ vẫn 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. A full course: @booked = 0, seats stay 0 | Môn đầy: @booked = 0, chỗ vẫn 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: An unknown course: @booked = 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @a BIT; EXEC dbo.prBookSeat ''XXX999'', @a OUTPUT; SET @ok = IIF(@a = 0, 1, 0); SET @info = CONCAT(N''booked='', @a);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. An unknown course: @booked = 0 | Môn không tồn tại: @booked = 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. An unknown course: @booked = 0 | Môn không tồn tại: @booked = 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>No explicit transaction and no isolation level change needed: a single statement is already atomic and holds its locks while it runs.</p>",
+      "solutionExplanationHtmlVi": "<p>Không cần giao dịch tường minh hay đổi mức cô lập: một câu lệnh vốn đã nguyên tử và giữ khoá trong lúc chạy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "@@ROWCOUNT and OUTPUT parameters are T-SQL; the procedure is what an application would call.|||@@ROWCOUNT và tham số OUTPUT là T-SQL; procedure là thứ ứng dụng sẽ gọi.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. The first booking of DBI202 succeeds, the second fails",
+            "2. A full course: @booked = 0, seats stay 0",
+            "3. An unknown course: @booked = 0"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Read-then-write in two statements — under concurrency both readers see 1.|||Đọc rồi ghi bằng hai câu — khi đồng thời cả hai đều thấy 1."
+        },
+        {
+          "loi": "Always answering @booked = 1.|||Luôn trả @booked = 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "@@ROWCOUNT",
+          "vi": "số dòng câu trước đã đụng"
+        }
+      ]
+    },
+    {
+      "title": "Deadlock: how it happens, how to live with it",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "deadlock",
+        "deadlock victim",
+        "retry"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "transaction",
+        "deadlock"
+      ],
+      "problemHtml": "<p>Two transfers run at the same time: T1 moves money A → B, T2 moves money B → A.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai lần chuyển tiền chạy cùng lúc: T1 chuyển A → B, T2 chuyển B → A.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each transaction holds one lock and waits for the other's.|||Mỗi giao dịch giữ một khoá và chờ khoá của bên kia.",
+        "Detection comes after both are waiting.|||Phát hiện xảy ra sau khi cả hai đều chờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock: how it happens, how to live with it\n\nAnswer in the answer panel (no code needed).\n\n1. Order the events of the deadlockSắp các sự kiện của deadlock\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock: how it happens, how to live with it — answer key\n\n1. Order the events of the deadlockSắp các sự kiện của deadlock\n   Answer: m3) Each transaction locks the first row it updates (T1 holds A, T2 holds B)  →  m1) Each asks for the row the other one holds  →  m5) Both wait for each other: a cycle  →  m4) The lock monitor detects the cycle  →  m2) One transaction is chosen as victim and rolled back (error 1205)  →  m6) The application catches 1205 and retries the victim's transaction\n   A cycle of waits can only be broken by killing one transaction; the fix is to access rows in the same order (always the smaller account first) and to retry on 1205.VI: Vòng chờ chỉ phá được bằng cách giết một giao dịch; cách sửa là truy cập dòng theo cùng thứ tự (luôn tài khoản nhỏ hơn trước) và thử lại khi gặp 1205.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A cycle of waits can only be broken by killing one transaction; the fix is to access rows in the same order (always the smaller account first) and to retry on 1205.</p><p><i>VI: Vòng chờ chỉ phá được bằng cách giết một giao dịch; cách sửa là truy cập dòng theo cùng thứ tự (luôn tài khoản nhỏ hơn trước) và thử lại khi gặp 1205.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the events of the deadlock</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các sự kiện của deadlock</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Each asks for the row the other one holds"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "One transaction is chosen as victim and rolled back (error 1205)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Each transaction locks the first row it updates (T1 holds A, T2 holds B)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The lock monitor detects the cycle"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Both wait for each other: a cycle"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The application catches 1205 and retries the victim's transaction"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m1",
+              "m5",
+              "m4",
+              "m2",
+              "m6"
+            ],
+            "giaiThich": "<p>A cycle of waits can only be broken by killing one transaction; the fix is to access rows in the same order (always the smaller account first) and to retry on 1205.</p><p><i>VI: Vòng chờ chỉ phá được bằng cách giết một giao dịch; cách sửa là truy cập dòng theo cùng thứ tự (luôn tài khoản nhỏ hơn trước) và thử lại khi gặp 1205.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a deadlock is a bug that can be \"fixed forever\" — it is a normal condition to handle with retries.|||Tưởng deadlock là lỗi \"sửa một lần là hết\" — nó là tình huống bình thường cần xử lý bằng thử lại."
+        },
+        {
+          "loi": "Keeping transactions open while waiting for user input.|||Giữ giao dịch mở trong lúc chờ người dùng nhập."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deadlock",
+          "vi": "khoá chết"
+        },
+        {
+          "en": "deadlock victim",
+          "vi": "nạn nhân deadlock"
+        }
+      ]
+    }
+  ]
+}

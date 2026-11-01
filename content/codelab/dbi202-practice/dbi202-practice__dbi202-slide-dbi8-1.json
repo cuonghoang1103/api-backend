@@ -1,0 +1,510 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi8-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi8-1"
+  },
+  "exercises": [
+    {
+      "title": "Atomic transfer with SET XACT_ABORT ON",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "BEGIN TRANSACTION / COMMIT",
+        "SET XACT_ABORT ON",
+        "THROW",
+        "@@ROWCOUNT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "transaction",
+        "acid",
+        "slide"
+      ],
+      "problemHtml": "<p>Slide 9: a transfer is two UPDATEs that must succeed or fail together. Write <code>prTransfer @from CHAR(4), @to CHAR(4), @amount DECIMAL(12,0)</code>: take the money from @from, add it to @to, write one row to <code>TransferLog</code>, all in one transaction. With <code>SET XACT_ABORT ON</code> and TRY … CATCH, a CHECK violation (balance below 0) or a THROW for an unknown account undoes everything; the CATCH rolls back and re-raises the error (<code>THROW;</code>) so the caller knows.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> BEGIN TRANSACTION / COMMIT / ROLLBACK and XACT_ABORT are exactly what the browser grader cannot run (it wraps every check in its own transaction). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>SET XACT_ABORT ON; BEGIN TRY BEGIN TRANSACTION; … COMMIT TRANSACTION; END TRY BEGIN CATCH IF @@TRANCOUNT &gt; 0 ROLLBACK; THROW; END CATCH</li>\n  <li>@@ROWCOUNT = 0 after an UPDATE ⇒ THROW (unknown account).</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9: chuyển khoản là hai câu UPDATE phải cùng thành công hoặc cùng thất bại. Viết <code>prTransfer @from CHAR(4), @to CHAR(4), @amount DECIMAL(12,0)</code>: trừ tiền ở @from, cộng vào @to, ghi một dòng vào <code>TransferLog</code>, tất cả trong một giao dịch. Với <code>SET XACT_ABORT ON</code> và TRY … CATCH, vi phạm CHECK (số dư âm) hoặc THROW vì tài khoản lạ sẽ huỷ toàn bộ; CATCH huỷ giao dịch rồi ném lại lỗi (<code>THROW;</code>) cho bên gọi biết.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> BEGIN TRANSACTION / COMMIT / ROLLBACK và XACT_ABORT chính là thứ máy chấm trình duyệt không chạy được (nó tự bọc mỗi kiểm trong giao dịch riêng). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>SET XACT_ABORT ON; BEGIN TRY BEGIN TRANSACTION; … COMMIT TRANSACTION; END TRY BEGIN CATCH IF @@TRANCOUNT &gt; 0 ROLLBACK; THROW; END CATCH</li>\n  <li>@@ROWCOUNT = 0 sau UPDATE ⇒ THROW (tài khoản lạ).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. A valid transfer moves the money and logs it\nPASS 2. Too much money: error, nothing changes (total still 1,200,000)\nPASS 3. Unknown destination: the money taken from A001 comes back\nPASS 4. No transaction is left open after an error\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Without a transaction each UPDATE commits on its own (autocommit) — the first one stays even if the second fails.|||Không có giao dịch thì mỗi UPDATE tự commit (autocommit) — câu đầu vẫn còn dù câu sau lỗi.",
+        "XACT_ABORT ON turns any runtime error into \"roll back the whole transaction and stop\".|||XACT_ABORT ON biến mọi lỗi lúc chạy thành \"huỷ cả giao dịch và dừng\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Atomic transfer with SET XACT_ABORT ON\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE OR ALTER PROCEDURE prTransfer @from CHAR(4), @to CHAR(4), @amount DECIMAL(12,0) AS\n-- BEGIN ... END\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Atomic transfer with SET XACT_ABORT ON\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Account (accNo CHAR(4) NOT NULL PRIMARY KEY, owner NVARCHAR(40) NOT NULL,\n                      balance DECIMAL(12,0) NOT NULL CONSTRAINT ck_account_balance CHECK (balance >= 0));\nCREATE TABLE TransferLog (logID INT IDENTITY(1,1) PRIMARY KEY, fromAcc CHAR(4) NOT NULL, toAcc CHAR(4) NOT NULL,\n                          amount DECIMAL(12,0) NOT NULL, at DATETIME2 NOT NULL DEFAULT SYSDATETIME());\nINSERT INTO Account VALUES ('A001', N'An', 1000000), ('B002', N'Bình', 200000), ('C003', N'Chi', 0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Atomic transfer with SET XACT_ABORT ON\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A valid transfer moves the money and logs it\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC dbo.prTransfer ''A001'', ''B002'', 300000;\nSET @ok = IIF((SELECT balance FROM Account WHERE accNo = ''A001'') = 700000 AND (SELECT balance FROM Account WHERE accNo = ''B002'') = 500000 AND (SELECT COUNT(*) FROM TransferLog) = 1, 1, 0);\nSET @info = CONCAT(N''A001='', (SELECT balance FROM Account WHERE accNo = ''A001''), N'' B002='', (SELECT balance FROM Account WHERE accNo = ''B002''));\nUPDATE Account SET balance = 1000000 WHERE accNo = ''A001''; UPDATE Account SET balance = 200000 WHERE accNo = ''B002''; DELETE FROM TransferLog;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A valid transfer moves the money and logs it | Chuyển hợp lệ dời tiền và ghi nhật ký'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A valid transfer moves the money and logs it | Chuyển hợp lệ dời tiền và ghi nhật ký', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Too much money: error, nothing changes (total still 1,200,000)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @loi BIT = 0;\nBEGIN TRY EXEC dbo.prTransfer ''B002'', ''C003'', 500000; END TRY BEGIN CATCH SET @loi = 1; END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @loi = 1 AND (SELECT SUM(balance) FROM Account) = 1200000 AND (SELECT balance FROM Account WHERE accNo = ''C003'') = 0 AND (SELECT COUNT(*) FROM TransferLog) = 0, 1, 0);\nSET @info = CONCAT(N''error raised: '', @loi, N'' · C003 = '', (SELECT balance FROM Account WHERE accNo = ''C003''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Too much money: error, nothing changes (total still 1,200,000) | Quá số dư: lỗi, không đổi gì (tổng vẫn 1.200.000)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Too much money: error, nothing changes (total still 1,200,000) | Quá số dư: lỗi, không đổi gì (tổng vẫn 1.200.000)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Unknown destination: the money taken from A001 comes back\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @loi BIT = 0;\nBEGIN TRY EXEC dbo.prTransfer ''A001'', ''Z999'', 300000; END TRY BEGIN CATCH SET @loi = 1; END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @loi = 1 AND (SELECT balance FROM Account WHERE accNo = ''A001'') = 1000000 AND (SELECT COUNT(*) FROM TransferLog) = 0, 1, 0);\nSET @info = CONCAT(N''error raised: '', @loi, N'' · A001 = '', (SELECT balance FROM Account WHERE accNo = ''A001''));\nUPDATE Account SET balance = 1000000 WHERE accNo = ''A001'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Unknown destination: the money taken from A001 comes back | Tài khoản đích lạ: tiền đã trừ ở A001 được hoàn lại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Unknown destination: the money taken from A001 comes back | Tài khoản đích lạ: tiền đã trừ ở A001 được hoàn lại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: No transaction is left open after an error\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRY EXEC dbo.prTransfer ''A001'', ''Z999'', 1; END TRY BEGIN CATCH END CATCH;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @@TRANCOUNT = 0, 1, 0); SET @info = CONCAT(N''@@TRANCOUNT = '', @@TRANCOUNT); WHILE @@TRANCOUNT > 0 ROLLBACK; UPDATE Account SET balance = 1000000 WHERE accNo = ''A001'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. No transaction is left open after an error | Không để giao dịch mở sau lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. No transaction is left open after an error | Không để giao dịch mở sau lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Atomic transfer with SET XACT_ABORT ON\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE prTransfer\n    @from   CHAR(4),\n    @to     CHAR(4),\n    @amount DECIMAL(12,0)\nAS\nBEGIN\n    SET NOCOUNT ON;\n    SET XACT_ABORT ON;                               -- any runtime error dooms the whole transaction\n    BEGIN TRY\n        BEGIN TRANSACTION;\n            UPDATE Account SET balance = balance - @amount WHERE accNo = @from;\n            IF @@ROWCOUNT = 0 THROW 50001, N'Source account not found', 1;\n            UPDATE Account SET balance = balance + @amount WHERE accNo = @to;\n            IF @@ROWCOUNT = 0 THROW 50002, N'Destination account not found', 1;\n            INSERT INTO TransferLog (fromAcc, toAcc, amount) VALUES (@from, @to, @amount);\n        COMMIT TRANSACTION;\n    END TRY\n    BEGIN CATCH\n        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;     -- never leave a (doomed) transaction open\n        THROW;                                       -- re-raise the original error to the caller\n    END CATCH\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Atomic transfer with SET XACT_ABORT ON\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Account (accNo CHAR(4) NOT NULL PRIMARY KEY, owner NVARCHAR(40) NOT NULL,\n                      balance DECIMAL(12,0) NOT NULL CONSTRAINT ck_account_balance CHECK (balance >= 0));\nCREATE TABLE TransferLog (logID INT IDENTITY(1,1) PRIMARY KEY, fromAcc CHAR(4) NOT NULL, toAcc CHAR(4) NOT NULL,\n                          amount DECIMAL(12,0) NOT NULL, at DATETIME2 NOT NULL DEFAULT SYSDATETIME());\nINSERT INTO Account VALUES ('A001', N'An', 1000000), ('B002', N'Bình', 200000), ('C003', N'Chi', 0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Atomic transfer with SET XACT_ABORT ON\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: A valid transfer moves the money and logs it\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'EXEC dbo.prTransfer ''A001'', ''B002'', 300000;\nSET @ok = IIF((SELECT balance FROM Account WHERE accNo = ''A001'') = 700000 AND (SELECT balance FROM Account WHERE accNo = ''B002'') = 500000 AND (SELECT COUNT(*) FROM TransferLog) = 1, 1, 0);\nSET @info = CONCAT(N''A001='', (SELECT balance FROM Account WHERE accNo = ''A001''), N'' B002='', (SELECT balance FROM Account WHERE accNo = ''B002''));\nUPDATE Account SET balance = 1000000 WHERE accNo = ''A001''; UPDATE Account SET balance = 200000 WHERE accNo = ''B002''; DELETE FROM TransferLog;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. A valid transfer moves the money and logs it | Chuyển hợp lệ dời tiền và ghi nhật ký'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. A valid transfer moves the money and logs it | Chuyển hợp lệ dời tiền và ghi nhật ký', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Too much money: error, nothing changes (total still 1,200,000)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @loi BIT = 0;\nBEGIN TRY EXEC dbo.prTransfer ''B002'', ''C003'', 500000; END TRY BEGIN CATCH SET @loi = 1; END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @loi = 1 AND (SELECT SUM(balance) FROM Account) = 1200000 AND (SELECT balance FROM Account WHERE accNo = ''C003'') = 0 AND (SELECT COUNT(*) FROM TransferLog) = 0, 1, 0);\nSET @info = CONCAT(N''error raised: '', @loi, N'' · C003 = '', (SELECT balance FROM Account WHERE accNo = ''C003''));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Too much money: error, nothing changes (total still 1,200,000) | Quá số dư: lỗi, không đổi gì (tổng vẫn 1.200.000)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Too much money: error, nothing changes (total still 1,200,000) | Quá số dư: lỗi, không đổi gì (tổng vẫn 1.200.000)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Unknown destination: the money taken from A001 comes back\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @loi BIT = 0;\nBEGIN TRY EXEC dbo.prTransfer ''A001'', ''Z999'', 300000; END TRY BEGIN CATCH SET @loi = 1; END CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @loi = 1 AND (SELECT balance FROM Account WHERE accNo = ''A001'') = 1000000 AND (SELECT COUNT(*) FROM TransferLog) = 0, 1, 0);\nSET @info = CONCAT(N''error raised: '', @loi, N'' · A001 = '', (SELECT balance FROM Account WHERE accNo = ''A001''));\nUPDATE Account SET balance = 1000000 WHERE accNo = ''A001'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Unknown destination: the money taken from A001 comes back | Tài khoản đích lạ: tiền đã trừ ở A001 được hoàn lại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Unknown destination: the money taken from A001 comes back | Tài khoản đích lạ: tiền đã trừ ở A001 được hoàn lại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: No transaction is left open after an error\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRY EXEC dbo.prTransfer ''A001'', ''Z999'', 1; END TRY BEGIN CATCH END CATCH;\nSET @ok = IIF(OBJECT_ID(N''dbo.prTransfer'') IS NOT NULL AND @@TRANCOUNT = 0, 1, 0); SET @info = CONCAT(N''@@TRANCOUNT = '', @@TRANCOUNT); WHILE @@TRANCOUNT > 0 ROLLBACK; UPDATE Account SET balance = 1000000 WHERE accNo = ''A001'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. No transaction is left open after an error | Không để giao dịch mở sau lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. No transaction is left open after an error | Không để giao dịch mở sau lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Atomicity: all or nothing. Consistency: the CHECK keeps balances ≥ 0 and the total constant. Durability: after COMMIT the log guarantees it survives a crash.</p>",
+      "solutionExplanationHtmlVi": "<p>Nguyên tử: tất cả hoặc không gì. Nhất quán: CHECK giữ số dư ≥ 0 và tổng không đổi. Bền vững: sau COMMIT, nhật ký bảo đảm nó sống sót qua sự cố.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "BEGIN TRANSACTION / COMMIT / ROLLBACK and XACT_ABORT are exactly what the browser grader cannot run (it wraps every check in its own transaction).|||BEGIN TRANSACTION / COMMIT / ROLLBACK và XACT_ABORT chính là thứ máy chấm trình duyệt không chạy được (nó tự bọc mỗi kiểm trong giao dịch riêng).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. A valid transfer moves the money and logs it",
+            "2. Too much money: error, nothing changes (total still 1,200,000)",
+            "3. Unknown destination: the money taken from A001 comes back",
+            "4. No transaction is left open after an error"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No transaction: an unknown destination leaves A001 300,000 poorer — money disappears.|||Không có giao dịch: tài khoản đích lạ làm A001 mất 300.000 — tiền bốc hơi."
+        },
+        {
+          "loi": "No @@ROWCOUNT check — an UPDATE of 0 rows is not an error, the transfer \"succeeds\" into nowhere.|||Không kiểm @@ROWCOUNT — UPDATE 0 dòng không phải lỗi, tiền \"chuyển thành công\" vào hư không."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "XACT_ABORT",
+          "vi": "tự huỷ giao dịch khi lỗi"
+        },
+        {
+          "en": "autocommit",
+          "vi": "tự động commit"
+        }
+      ]
+    },
+    {
+      "title": "ACID: which property is at stake?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "atomicity",
+        "consistency",
+        "isolation",
+        "durability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "acid",
+        "slide"
+      ],
+      "problemHtml": "<p>For each incident, name the ACID property that a correct transaction would have protected (slides 4–8).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi sự cố, gọi tên tính chất ACID mà một giao dịch đúng sẽ bảo vệ (slide 4–8).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Half-done work ⇒ A. Seeing someone else's half-done work ⇒ I.|||Việc làm dở ⇒ A. Thấy việc làm dở của người khác ⇒ I.",
+        "\"After COMMIT\" ⇒ D.|||\"Sau COMMIT\" ⇒ D."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACID: which property is at stake?\n\nAnswer in the answer panel (no code needed).\n\n1. Incident → propertySự cố → tính chất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ACID: which property is at stake? — answer key\n\n1. Incident → propertySự cố → tính chất\n   - r1.tc: Atomicity\n   - r2.tc: Consistency\n   - r3.tc: Isolation\n   - r4.tc: Durability\n   All-or-nothing = A; rules hold before and after = C; concurrent transactions do not see each other's intermediate state = I; committed means permanent = D.VI: Tất cả hoặc không = A; luật đúng trước và sau = C; giao dịch đồng thời không thấy trạng thái dở của nhau = I; đã commit là vĩnh viễn = D.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All-or-nothing = A; rules hold before and after = C; concurrent transactions do not see each other's intermediate state = I; committed means permanent = D.</p><p><i>VI: Tất cả hoặc không = A; luật đúng trước và sau = C; giao dịch đồng thời không thấy trạng thái dở của nhau = I; đã commit là vĩnh viễn = D.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Incident → property</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → tính chất</i></p>",
+            "cot": [
+              {
+                "ma": "sc",
+                "ten": "Incident / Sự cố"
+              },
+              {
+                "ma": "tc",
+                "ten": "Property",
+                "luaChon": [
+                  "Atomicity",
+                  "Consistency",
+                  "Isolation",
+                  "Durability"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "sc": "Power fails between the debit and the credit; the debit stays, the credit is lost."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "sc": "A transfer leaves a balance at −50,000 although the rule says balances are never negative."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "sc": "A report reads a half-finished transfer of another session and shows money that never existed."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "sc": "The server crashes one second after \"COMMIT completed\"; after restart the transfer is gone."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.tc": "Atomicity",
+              "r2.tc": "Consistency",
+              "r3.tc": "Isolation",
+              "r4.tc": "Durability"
+            },
+            "giaiThich": "<p>All-or-nothing = A; rules hold before and after = C; concurrent transactions do not see each other's intermediate state = I; committed means permanent = D.</p><p><i>VI: Tất cả hoặc không = A; luật đúng trước và sau = C; giao dịch đồng thời không thấy trạng thái dở của nhau = I; đã commit là vĩnh viễn = D.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the dirty report an atomicity problem — the transfer itself is fine; the reader is not isolated.|||Gọi báo cáo đọc bẩn là vấn đề nguyên tử — bản thân lần chuyển ổn; người đọc không được cách ly."
+        },
+        {
+          "loi": "Calling the negative balance durability.|||Gọi số dư âm là vấn đề bền vững."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ACID",
+          "vi": "Nguyên tử · Nhất quán · Cách ly · Bền vững"
+        }
+      ]
+    },
+    {
+      "title": "Transaction lifecycle and autocommit",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "autocommit",
+        "explicit transaction",
+        "ROLLBACK",
+        "NOLOCK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "transaction",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 10–21 on SQL Server.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 10–21 trên SQL Server.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Autocommit = every statement is its own transaction.|||Autocommit = mỗi câu lệnh là một giao dịch riêng.",
+        "Locks live as long as the transaction.|||Khoá sống bằng tuổi giao dịch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transaction lifecycle and autocommit\n\nAnswer in the answer panel (no code needed).\n\n1. In SSMS you run UPDATE Account SET balance = 0 (no BEGIN TRANSACTION). Can you undo it with ROLLBACK?Trong SSMS bạn chạy UPDATE Account SET balance = 0 (không BEGIN TRANSACTION). ROLLBACK được không?\n2. SELECT … FROM Account WITH (NOLOCK) may return…SELECT … FROM Account WITH (NOLOCK) có thể trả về…\n3. A transaction is open in one SSMS window and you forget to COMMIT. Other users…Một giao dịch mở trong cửa sổ SSMS và bạn quên COMMIT. Người khác…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Transaction lifecycle and autocommit — answer key\n\n1. In SSMS you run UPDATE Account SET balance = 0 (no BEGIN TRANSACTION). Can you undo it with ROLLBACK?Trong SSMS bạn chạy UPDATE Account SET balance = 0 (không BEGIN TRANSACTION). ROLLBACK được không?\n   Answer: b) No — in autocommit mode each statement commits by itself\n   ROLLBACK then fails with \"no corresponding BEGIN TRANSACTION\". Start risky work with BEGIN TRAN.VI: ROLLBACK khi đó báo \"no corresponding BEGIN TRANSACTION\". Việc rủi ro hãy bắt đầu bằng BEGIN TRAN.\n\n2. SELECT … FROM Account WITH (NOLOCK) may return…SELECT … FROM Account WITH (NOLOCK) có thể trả về…\n   Answer: b) uncommitted changes of other transactions (dirty reads)\n   NOLOCK = READ UNCOMMITTED for that table: fast but may read data that is later rolled back.VI: NOLOCK = READ UNCOMMITTED cho bảng đó: nhanh nhưng có thể đọc dữ liệu sau đó bị huỷ.\n\n3. A transaction is open in one SSMS window and you forget to COMMIT. Other users…Một giao dịch mở trong cửa sổ SSMS và bạn quên COMMIT. Người khác…\n   Answer: a) wait on the rows it locked until you commit or roll back\n   Exclusive locks stay until the transaction ends — the classic \"query spins forever\" of lesson 0.2.VI: Khoá độc quyền còn tới khi giao dịch kết thúc — lỗi \"truy vấn quay mãi\" của bài 0.2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> No — in autocommit mode each statement commits by itself</p><p>ROLLBACK then fails with \"no corresponding BEGIN TRANSACTION\". Start risky work with BEGIN TRAN.</p><p><i>VI: ROLLBACK khi đó báo \"no corresponding BEGIN TRANSACTION\". Việc rủi ro hãy bắt đầu bằng BEGIN TRAN.</i></p></li><li><p><b>b)</b> uncommitted changes of other transactions (dirty reads)</p><p>NOLOCK = READ UNCOMMITTED for that table: fast but may read data that is later rolled back.</p><p><i>VI: NOLOCK = READ UNCOMMITTED cho bảng đó: nhanh nhưng có thể đọc dữ liệu sau đó bị huỷ.</i></p></li><li><p><b>a)</b> wait on the rows it locked until you commit or roll back</p><p>Exclusive locks stay until the transaction ends — the classic \"query spins forever\" of lesson 0.2.</p><p><i>VI: Khoá độc quyền còn tới khi giao dịch kết thúc — lỗi \"truy vấn quay mãi\" của bài 0.2.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In SSMS you run UPDATE Account SET balance = 0 (no BEGIN TRANSACTION). Can you undo it with ROLLBACK?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong SSMS bạn chạy UPDATE Account SET balance = 0 (không BEGIN TRANSACTION). ROLLBACK được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, within 60 seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — in autocommit mode each statement commits by itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if the table has a primary key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — SSMS keeps every statement open"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>ROLLBACK then fails with \"no corresponding BEGIN TRANSACTION\". Start risky work with BEGIN TRAN.</p><p><i>VI: ROLLBACK khi đó báo \"no corresponding BEGIN TRANSACTION\". Việc rủi ro hãy bắt đầu bằng BEGIN TRAN.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>SELECT … FROM Account WITH (NOLOCK) may return…</p><p style=\"opacity:.75;font-size:.92em\"><i>SELECT … FROM Account WITH (NOLOCK) có thể trả về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an error whenever another session writes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "uncommitted changes of other transactions (dirty reads)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the same result as SERIALIZABLE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only rows committed before the query started"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>NOLOCK = READ UNCOMMITTED for that table: fast but may read data that is later rolled back.</p><p><i>VI: NOLOCK = READ UNCOMMITTED cho bảng đó: nhanh nhưng có thể đọc dữ liệu sau đó bị huỷ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A transaction is open in one SSMS window and you forget to COMMIT. Other users…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một giao dịch mở trong cửa sổ SSMS và bạn quên COMMIT. Người khác…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "wait on the rows it locked until you commit or roll back"
+              },
+              {
+                "ma": "b",
+                "noiDung": "are unaffected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "get the old values and can overwrite them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "see your changes immediately"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Exclusive locks stay until the transaction ends — the classic \"query spins forever\" of lesson 0.2.</p><p><i>VI: Khoá độc quyền còn tới khi giao dịch kết thúc — lỗi \"truy vấn quay mãi\" của bài 0.2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting ROLLBACK to undo an autocommitted statement.|||Tưởng ROLLBACK huỷ được câu đã tự commit."
+        },
+        {
+          "loi": "Using NOLOCK \"to make it faster\" in a money report.|||Dùng NOLOCK \"cho nhanh\" trong báo cáo tiền."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dirty read",
+          "vi": "đọc bẩn"
+        },
+        {
+          "en": "write-ahead log",
+          "vi": "ghi nhật ký trước"
+        }
+      ]
+    },
+    {
+      "title": "The life of a transaction, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "transaction lifecycle",
+        "write-ahead logging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "transaction",
+        "slide"
+      ],
+      "problemHtml": "<p>What happens, in order, when an explicit transaction succeeds (slides 10–14)?</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuyện gì xảy ra, theo thứ tự, khi một giao dịch tường minh thành công (slide 10–14)?</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The log is written before COMMIT returns.|||Nhật ký được ghi trước khi COMMIT trả về.",
+        "Locks are released only at the end.|||Khoá chỉ được nhả ở cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The life of a transaction, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the life of an explicit transaction that succeedsSắp vòng đời một giao dịch tường minh thành công\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The life of a transaction, in order — answer key\n\n1. Order the life of an explicit transaction that succeedsSắp vòng đời một giao dịch tường minh thành công\n   Answer: m5) BEGIN TRANSACTION  →  m4) The statements run and take their locks  →  m1) The changes are written to the transaction log  →  m2) COMMIT TRANSACTION  →  m3) Locks are released and other sessions see the new data\n   The log record must be safe before COMMIT returns (write-ahead logging); locks are held until the end of the transaction.VI: Bản ghi nhật ký phải an toàn trước khi COMMIT trả về (ghi nhật ký trước); khoá được giữ tới cuối giao dịch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The log record must be safe before COMMIT returns (write-ahead logging); locks are held until the end of the transaction.</p><p><i>VI: Bản ghi nhật ký phải an toàn trước khi COMMIT trả về (ghi nhật ký trước); khoá được giữ tới cuối giao dịch.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the life of an explicit transaction that succeeds</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp vòng đời một giao dịch tường minh thành công</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The changes are written to the transaction log"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "COMMIT TRANSACTION"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Locks are released and other sessions see the new data"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The statements run and take their locks"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "BEGIN TRANSACTION"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m4",
+              "m1",
+              "m2",
+              "m3"
+            ],
+            "giaiThich": "<p>The log record must be safe before COMMIT returns (write-ahead logging); locks are held until the end of the transaction.</p><p><i>VI: Bản ghi nhật ký phải an toàn trước khi COMMIT trả về (ghi nhật ký trước); khoá được giữ tới cuối giao dịch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Releasing locks before COMMIT.|||Nhả khoá trước COMMIT."
+        },
+        {
+          "loi": "Thinking data pages must reach the disk before COMMIT (only the log must).|||Tưởng trang dữ liệu phải xuống đĩa trước COMMIT (chỉ nhật ký phải)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

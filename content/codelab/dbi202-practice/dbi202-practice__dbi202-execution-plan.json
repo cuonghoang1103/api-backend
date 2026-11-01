@@ -1,0 +1,541 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-execution-plan",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-execution-plan"
+  },
+  "exercises": [
+    {
+      "title": "Composite index: the column order that serves both queries",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "composite index",
+        "leftmost-prefix rule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "index",
+        "composite"
+      ],
+      "problemHtml": "<p>Two frequent queries on <code>Customer</code>: (A) <code>WHERE lastName = @l AND firstName = @f</code> and (B) <code>WHERE lastName = @l</code>. Create ONE index <code>ix_customer_name</code> that lets both use an Index Seek.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The point is the KEY ORDER of a SQL Server index, read from sys.index_columns, and the seek you see in the SSMS plan. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 3 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (3 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 3 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A two-column key; think about which column every query mentions.</li>\n  <li>Then run both queries with the plan on (Ctrl+M).</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai truy vấn thường gặp trên <code>Customer</code>: (A) <code>WHERE lastName = @l AND firstName = @f</code> và (B) <code>WHERE lastName = @l</code>. Tạo MỘT chỉ mục <code>ix_customer_name</code> để cả hai dùng được Index Seek.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Trọng tâm là THỨ TỰ KHOÁ của chỉ mục SQL Server, đọc từ sys.index_columns, và thao tác seek bạn thấy trong kế hoạch của SSMS. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 3 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (3 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 3 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá hai cột; nghĩ xem cột nào truy vấn nào cũng nhắc tới.</li>\n  <li>Rồi chạy hai truy vấn với kế hoạch bật (Ctrl+M).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. The index has exactly two key columns\nPASS 2. lastName is the FIRST key column\nPASS 3. firstName is the second key column\nALL 3 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "A composite index is sorted by the first column, then by the second inside equal first values — like a phone book (last name, first name).|||Chỉ mục ghép sắp theo cột đầu, rồi theo cột hai trong cùng giá trị cột đầu — như danh bạ (họ, tên).",
+        "A query that does not give the first column cannot seek: (firstName, lastName) does not help query B.|||Truy vấn không cho cột đầu thì không seek được: (firstName, lastName) không giúp truy vấn B."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Composite index: the column order that serves both queries\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE INDEX ix_customer_name ON Customer (..., ...);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Composite index: the column order that serves both queries\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Customer (\n    customerID INT           NOT NULL,\n    lastName   NVARCHAR(40)  NOT NULL,\n    firstName  NVARCHAR(40)  NOT NULL,\n    city       NVARCHAR(30)  NOT NULL,\n    CONSTRAINT pk_customer PRIMARY KEY (customerID)\n);\nINSERT INTO Customer VALUES (1, N'Nguyễn', N'An', N'Hà Nội'), (2, N'Trần', N'Bình', N'Huế'), (3, N'Nguyễn', N'Chi', N'Đà Nẵng');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Composite index: the column order that serves both queries\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The index has exactly two key columns\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x) = 2, 1, 0); SET @info = CONCAT(N''key columns: '', (SELECT COUNT(*) FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The index has exactly two key columns | Chỉ mục có đúng hai cột khoá'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The index has exactly two key columns | Chỉ mục có đúng hai cột khoá', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: lastName is the FIRST key column\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x WHERE x.col = N''lastName'' AND x.key_ordinal = 1), 1, 0); SET @info = N''query B searches lastName alone: it must be the leading column'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. lastName is the FIRST key column | lastName là cột khoá THỨ NHẤT'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. lastName is the FIRST key column | lastName là cột khoá THỨ NHẤT', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: firstName is the second key column\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x WHERE x.col = N''firstName'' AND x.key_ordinal = 2), 1, 0); SET @info = N''expected (lastName, firstName)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. firstName is the second key column | firstName là cột khoá thứ hai'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. firstName is the second key column | firstName là cột khoá thứ hai', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Composite index: the column order that serves both queries\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE INDEX ix_customer_name ON Customer (lastName, firstName);   -- equality column first, then the second search column\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Composite index: the column order that serves both queries\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Customer (\n    customerID INT           NOT NULL,\n    lastName   NVARCHAR(40)  NOT NULL,\n    firstName  NVARCHAR(40)  NOT NULL,\n    city       NVARCHAR(30)  NOT NULL,\n    CONSTRAINT pk_customer PRIMARY KEY (customerID)\n);\nINSERT INTO Customer VALUES (1, N'Nguyễn', N'An', N'Hà Nội'), (2, N'Trần', N'Bình', N'Huế'), (3, N'Nguyễn', N'Chi', N'Đà Nẵng');\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Composite index: the column order that serves both queries\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The index has exactly two key columns\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF((SELECT COUNT(*) FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x) = 2, 1, 0); SET @info = CONCAT(N''key columns: '', (SELECT COUNT(*) FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The index has exactly two key columns | Chỉ mục có đúng hai cột khoá'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The index has exactly two key columns | Chỉ mục có đúng hai cột khoá', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: lastName is the FIRST key column\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x WHERE x.col = N''lastName'' AND x.key_ordinal = 1), 1, 0); SET @info = N''query B searches lastName alone: it must be the leading column'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. lastName is the FIRST key column | lastName là cột khoá THỨ NHẤT'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. lastName is the FIRST key column | lastName là cột khoá THỨ NHẤT', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: firstName is the second key column\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Customer'') AND i.name = N''ix_customer_name'' AND ic.is_included_column = 0) x WHERE x.col = N''firstName'' AND x.key_ordinal = 2), 1, 0); SET @info = N''expected (lastName, firstName)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. firstName is the second key column | firstName là cột khoá thứ hai'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. firstName is the second key column | firstName là cột khoá thứ hai', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Leftmost-prefix rule: an index on (a, b, c) serves a, (a, b) and (a, b, c), not b or c alone.</p>",
+      "solutionExplanationHtmlVi": "<p>Luật tiền tố trái: chỉ mục (a, b, c) phục vụ a, (a, b) và (a, b, c), không phục vụ riêng b hay c.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The point is the KEY ORDER of a SQL Server index, read from sys.index_columns, and the seek you see in the SSMS plan.|||Trọng tâm là THỨ TỰ KHOÁ của chỉ mục SQL Server, đọc từ sys.index_columns, và thao tác seek bạn thấy trong kế hoạch của SSMS.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. The index has exactly two key columns",
+            "2. lastName is the FIRST key column",
+            "3. firstName is the second key column"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "(firstName, lastName) — query B (lastName only) scans.|||(firstName, lastName) — truy vấn B (chỉ lastName) phải quét."
+        },
+        {
+          "loi": "Only (lastName) — query A must still filter firstName after the seek (fine, but the two-column key is better).|||Chỉ (lastName) — truy vấn A còn phải lọc firstName sau seek (được, nhưng khoá hai cột tốt hơn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composite index",
+          "vi": "chỉ mục ghép"
+        },
+        {
+          "en": "leftmost prefix",
+          "vi": "tiền tố trái"
+        }
+      ]
+    },
+    {
+      "title": "Clustered vs nonclustered: put the table in date order",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 14,
+      "points": 30,
+      "concepts": [
+        "clustered index",
+        "PRIMARY KEY NONCLUSTERED",
+        "heap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "index",
+        "clustered"
+      ],
+      "problemHtml": "<p><code>Orders</code> was created as a heap (no primary key). Almost every query reads a range of dates. (1) Add the primary key <code>pk_orders</code> on orderID as <b>NONCLUSTERED</b>; (2) create the clustered index <code>cix_orders_date</code> on <code>(orderDate, orderID)</code> so the rows are physically kept in date order.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> CLUSTERED / NONCLUSTERED and heaps are SQL Server storage concepts checked in sys.indexes (PostgreSQL has no clustered index in this sense). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 3 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (3 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 3 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>ALTER TABLE Orders ADD CONSTRAINT pk_orders PRIMARY KEY NONCLUSTERED (orderID);</li>\n  <li>CREATE CLUSTERED INDEX cix_orders_date ON Orders (orderDate, orderID);</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Orders</code> được tạo dạng heap (không khoá chính). Hầu hết truy vấn đọc một khoảng ngày. (1) Thêm khoá chính <code>pk_orders</code> trên orderID dạng <b>NONCLUSTERED</b>; (2) tạo chỉ mục clustered <code>cix_orders_date</code> trên <code>(orderDate, orderID)</code> để các dòng được lưu vật lý theo thứ tự ngày.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> CLUSTERED / NONCLUSTERED và heap là khái niệm lưu trữ của SQL Server, kiểm trong sys.indexes (PostgreSQL không có chỉ mục clustered theo nghĩa này). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 3 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (3 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 3 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>ALTER TABLE Orders ADD CONSTRAINT pk_orders PRIMARY KEY NONCLUSTERED (orderID);</li>\n  <li>CREATE CLUSTERED INDEX cix_orders_date ON Orders (orderDate, orderID);</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. pk_orders is a NONCLUSTERED primary key on orderID\nPASS 2. cix_orders_date is the CLUSTERED index on (orderDate, orderID)\nPASS 3. The table is no longer a heap and duplicates of orderID are rejected\nALL 3 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "A table has at most ONE clustered index — it IS the table, sorted by its key.|||Một bảng có tối đa MỘT chỉ mục clustered — nó CHÍNH LÀ bảng, sắp theo khoá của nó.",
+        "PRIMARY KEY is clustered by default on SQL Server — say NONCLUSTERED to keep the clustered slot for orderDate.|||PRIMARY KEY mặc định là clustered trên SQL Server — ghi NONCLUSTERED để dành chỗ clustered cho orderDate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Clustered vs nonclustered: put the table in date order\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- ALTER TABLE Orders ADD CONSTRAINT pk_orders PRIMARY KEY ... (orderID);\n-- CREATE ... INDEX cix_orders_date ON Orders (...);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Clustered vs nonclustered: put the table in date order\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Orders (                                   -- created as a HEAP: no primary key, no clustered index\n    orderID    INT           NOT NULL,\n    customerID INT           NOT NULL,\n    orderDate  DATE          NOT NULL,\n    total      DECIMAL(12,0) NOT NULL\n);\nINSERT INTO Orders VALUES (1, 10, '2026-10-01', 500000), (2, 11, '2026-10-01', 120000), (3, 10, '2026-10-03', 80000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Clustered vs nonclustered: put the table in date order\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: pk_orders is a NONCLUSTERED primary key on orderID\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''pk_orders'' AND is_primary_key = 1 AND type_desc = N''NONCLUSTERED''), 1, 0);\nSET @info = (SELECT CONCAT(N''pk_orders is '', type_desc) FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''pk_orders'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. pk_orders is a NONCLUSTERED primary key on orderID | pk_orders là khoá chính NONCLUSTERED trên orderID'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. pk_orders is a NONCLUSTERED primary key on orderID | pk_orders là khoá chính NONCLUSTERED trên orderID', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: cix_orders_date is the CLUSTERED index on (orderDate, orderID)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''cix_orders_date'' AND type_desc = N''CLUSTERED'')\n  AND EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Orders'') AND i.name = N''cix_orders_date'' AND ic.is_included_column = 0) x WHERE x.col = N''orderDate'' AND x.key_ordinal = 1)\n  AND EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Orders'') AND i.name = N''cix_orders_date'' AND ic.is_included_column = 0) x WHERE x.col = N''orderID'' AND x.key_ordinal = 2), 1, 0);\nSET @info = N''expected CREATE CLUSTERED INDEX cix_orders_date ON Orders (orderDate, orderID)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. cix_orders_date is the CLUSTERED index on (orderDate, orderID) | cix_orders_date là chỉ mục CLUSTERED trên (orderDate, orderID)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. cix_orders_date is the CLUSTERED index on (orderDate, orderID) | cix_orders_date là chỉ mục CLUSTERED trên (orderDate, orderID)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: The table is no longer a heap and duplicates of orderID are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0; BEGIN TRAN; BEGIN TRY INSERT INTO Orders VALUES (1, 12, ''2026-10-05'', 1); END TRY BEGIN CATCH SET @n = 1; END CATCH; IF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 1 AND NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND type_desc = N''HEAP''), 1, 0); SET @info = N''a primary key on orderID must reject a second order 1'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. The table is no longer a heap and duplicates of orderID are rejected | Bảng không còn là heap và orderID trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. The table is no longer a heap and duplicates of orderID are rejected | Bảng không còn là heap và orderID trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Clustered vs nonclustered: put the table in date order\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nALTER TABLE Orders ADD CONSTRAINT pk_orders PRIMARY KEY NONCLUSTERED (orderID);   -- uniqueness, without owning the physical order\nCREATE CLUSTERED INDEX cix_orders_date ON Orders (orderDate, orderID);               -- the table itself is now kept in date order\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Clustered vs nonclustered: put the table in date order\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Orders (                                   -- created as a HEAP: no primary key, no clustered index\n    orderID    INT           NOT NULL,\n    customerID INT           NOT NULL,\n    orderDate  DATE          NOT NULL,\n    total      DECIMAL(12,0) NOT NULL\n);\nINSERT INTO Orders VALUES (1, 10, '2026-10-01', 500000), (2, 11, '2026-10-01', 120000), (3, 10, '2026-10-03', 80000);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Clustered vs nonclustered: put the table in date order\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: pk_orders is a NONCLUSTERED primary key on orderID\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''pk_orders'' AND is_primary_key = 1 AND type_desc = N''NONCLUSTERED''), 1, 0);\nSET @info = (SELECT CONCAT(N''pk_orders is '', type_desc) FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''pk_orders'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. pk_orders is a NONCLUSTERED primary key on orderID | pk_orders là khoá chính NONCLUSTERED trên orderID'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. pk_orders is a NONCLUSTERED primary key on orderID | pk_orders là khoá chính NONCLUSTERED trên orderID', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: cix_orders_date is the CLUSTERED index on (orderDate, orderID)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND name = N''cix_orders_date'' AND type_desc = N''CLUSTERED'')\n  AND EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Orders'') AND i.name = N''cix_orders_date'' AND ic.is_included_column = 0) x WHERE x.col = N''orderDate'' AND x.key_ordinal = 1)\n  AND EXISTS (SELECT 1 FROM (SELECT c.name AS col, ic.key_ordinal FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id\nJOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.Orders'') AND i.name = N''cix_orders_date'' AND ic.is_included_column = 0) x WHERE x.col = N''orderID'' AND x.key_ordinal = 2), 1, 0);\nSET @info = N''expected CREATE CLUSTERED INDEX cix_orders_date ON Orders (orderDate, orderID)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. cix_orders_date is the CLUSTERED index on (orderDate, orderID) | cix_orders_date là chỉ mục CLUSTERED trên (orderDate, orderID)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. cix_orders_date is the CLUSTERED index on (orderDate, orderID) | cix_orders_date là chỉ mục CLUSTERED trên (orderDate, orderID)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: The table is no longer a heap and duplicates of orderID are rejected\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @n INT = 0; BEGIN TRAN; BEGIN TRY INSERT INTO Orders VALUES (1, 12, ''2026-10-05'', 1); END TRY BEGIN CATCH SET @n = 1; END CATCH; IF @@TRANCOUNT > 0 ROLLBACK;\nSET @ok = IIF(@n = 1 AND NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N''dbo.Orders'') AND type_desc = N''HEAP''), 1, 0); SET @info = N''a primary key on orderID must reject a second order 1'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. The table is no longer a heap and duplicates of orderID are rejected | Bảng không còn là heap và orderID trùng bị từ chối'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. The table is no longer a heap and duplicates of orderID are rejected | Bảng không còn là heap và orderID trùng bị từ chối', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Range queries on the clustered key read consecutive pages. Adding orderID makes the clustered key unique (otherwise SQL Server adds a hidden \"uniquifier\").</p>",
+      "solutionExplanationHtmlVi": "<p>Truy vấn khoảng trên khoá clustered đọc các trang liên tiếp. Thêm orderID làm khoá clustered duy nhất (nếu không SQL Server tự thêm \"uniquifier\" ẩn).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "CLUSTERED / NONCLUSTERED and heaps are SQL Server storage concepts checked in sys.indexes (PostgreSQL has no clustered index in this sense).|||CLUSTERED / NONCLUSTERED và heap là khái niệm lưu trữ của SQL Server, kiểm trong sys.indexes (PostgreSQL không có chỉ mục clustered theo nghĩa này).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. pk_orders is a NONCLUSTERED primary key on orderID",
+            "2. cix_orders_date is the CLUSTERED index on (orderDate, orderID)",
+            "3. The table is no longer a heap and duplicates of orderID are rejected"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY without NONCLUSTERED — it takes the clustered slot, and CREATE CLUSTERED INDEX then fails (\"Cannot create more than one clustered index\").|||PRIMARY KEY không ghi NONCLUSTERED — nó chiếm chỗ clustered, và CREATE CLUSTERED INDEX lỗi (\"Cannot create more than one clustered index\")."
+        },
+        {
+          "loi": "A NONCLUSTERED index on orderDate — the table stays a heap.|||Chỉ mục NONCLUSTERED trên orderDate — bảng vẫn là heap."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clustered index",
+          "vi": "chỉ mục cụm"
+        },
+        {
+          "en": "heap",
+          "vi": "bảng không có chỉ mục cụm"
+        }
+      ]
+    },
+    {
+      "title": "Read the plan: what does each operator mean?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "execution plan operators"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "execution-plan"
+      ],
+      "problemHtml": "<p>Lesson 8.2: match each operator you see in an SSMS plan (Ctrl+M) with what it means.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 8.2: ghép mỗi toán tử thấy trong kế hoạch SSMS (Ctrl+M) với ý nghĩa của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Heap ⇒ Table Scan; clustered table ⇒ Clustered Index Scan.|||Heap ⇒ Table Scan; bảng clustered ⇒ Clustered Index Scan.",
+        "Seek needs a usable leading key column in the predicate.|||Seek cần cột khoá đầu dùng được trong điều kiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the plan: what does each operator mean?\n\nAnswer in the answer panel (no code needed).\n\n1. Operator → meaningToán tử → ý nghĩa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the plan: what does each operator mean? — answer key\n\n1. Operator → meaningToán tử → ý nghĩa\n   - r1.yn: every row of a heap is read\n   - r2.yn: every row of the clustered index (the table) is read\n   - r3.yn: the B-tree is entered by key to reach only matching rows\n   - r4.yn: for each row found in a nonclustered index, fetch the missing columns from the table\n   - r5.yn: every leaf page of a nonclustered index is read\n   Scan = read everything; Seek = navigate by key. Key Lookup is the price of an index that does not cover the query — remove it with INCLUDE (lesson 8.B).VI: Scan = đọc hết; Seek = đi theo khoá. Key Lookup là cái giá của chỉ mục không phủ truy vấn — xoá nó bằng INCLUDE (bài 8.B).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Scan = read everything; Seek = navigate by key. Key Lookup is the price of an index that does not cover the query — remove it with INCLUDE (lesson 8.B).</p><p><i>VI: Scan = đọc hết; Seek = đi theo khoá. Key Lookup là cái giá của chỉ mục không phủ truy vấn — xoá nó bằng INCLUDE (bài 8.B).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Operator → meaning</p><p style=\"opacity:.75;font-size:.92em\"><i>Toán tử → ý nghĩa</i></p>",
+            "cot": [
+              {
+                "ma": "op",
+                "ten": "Operator / Toán tử"
+              },
+              {
+                "ma": "yn",
+                "ten": "Meaning / Ý nghĩa",
+                "luaChon": [
+                  "every row of a heap is read",
+                  "every row of the clustered index (the table) is read",
+                  "the B-tree is entered by key to reach only matching rows",
+                  "for each row found in a nonclustered index, fetch the missing columns from the table",
+                  "every leaf page of a nonclustered index is read"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "op": "Table Scan"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "op": "Clustered Index Scan"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "op": "Index Seek"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "op": "Key Lookup"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "op": "Index Scan"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.yn": "every row of a heap is read",
+              "r2.yn": "every row of the clustered index (the table) is read",
+              "r3.yn": "the B-tree is entered by key to reach only matching rows",
+              "r4.yn": "for each row found in a nonclustered index, fetch the missing columns from the table",
+              "r5.yn": "every leaf page of a nonclustered index is read"
+            },
+            "giaiThich": "<p>Scan = read everything; Seek = navigate by key. Key Lookup is the price of an index that does not cover the query — remove it with INCLUDE (lesson 8.B).</p><p><i>VI: Scan = đọc hết; Seek = đi theo khoá. Key Lookup là cái giá của chỉ mục không phủ truy vấn — xoá nó bằng INCLUDE (bài 8.B).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking Clustered Index Scan is cheap because it says \"index\" — it reads the whole table.|||Tưởng Clustered Index Scan rẻ vì có chữ \"index\" — nó đọc cả bảng."
+        },
+        {
+          "loi": "Ignoring Key Lookups repeated thousands of times.|||Bỏ qua Key Lookup lặp hàng nghìn lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "execution plan",
+          "vi": "kế hoạch thực thi"
+        }
+      ]
+    },
+    {
+      "title": "Which queries can seek on an index (x, y, z)?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "leftmost-prefix rule"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "index",
+        "composite"
+      ],
+      "problemHtml": "<p>Index <code>ix ON T (x, y, z)</code>.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỉ mục <code>ix ON T (x, y, z)</code>.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the key left to right; stop at the first column without an equality predicate.|||Đọc khoá từ trái sang phải; dừng ở cột đầu tiên không có điều kiện bằng.",
+        "Equality columns first, range column last, when you design a composite index.|||Khi thiết kế chỉ mục ghép: cột so bằng trước, cột khoảng sau cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which queries can seek on an index (x, y, z)?\n\nAnswer in the answer panel (no code needed).\n\n1. WHERE x = 1 AND y = 2WHERE x = 1 AND y = 2\n2. WHERE y = 2 AND z = 3WHERE y = 2 AND z = 3\n3. WHERE x = 1 AND z = 3WHERE x = 1 AND z = 3\n4. WHERE x > 5 AND y = 2WHERE x > 5 AND y = 2\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which queries can seek on an index (x, y, z)? — answer key\n\n1. WHERE x = 1 AND y = 2WHERE x = 1 AND y = 2\n   Answer: b) seek on the pair (x, y)\n   The leading prefix (x, y) is given.VI: Có tiền tố đầu (x, y).\n\n2. WHERE y = 2 AND z = 3WHERE y = 2 AND z = 3\n   Answer: d) no seek: leading column x missing\n   Without x, the index order does not help.VI: Thiếu x thì thứ tự chỉ mục không giúp được.\n\n3. WHERE x = 1 AND z = 3WHERE x = 1 AND z = 3\n   Answer: a) seek on x, then z filters those rows\n   The prefix stops at the first missing column (y); z becomes a residual filter.VI: Tiền tố dừng ở cột đầu tiên bị thiếu (y); z thành điều kiện lọc phụ.\n\n4. WHERE x > 5 AND y = 2WHERE x > 5 AND y = 2\n   Answer: b) seek on the x range; y filtered inside\n   After a range on a column, the following key columns cannot narrow the seek.VI: Sau một khoảng trên một cột, các cột khoá sau không thu hẹp seek được nữa.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> seek on the pair (x, y)</p><p>The leading prefix (x, y) is given.</p><p><i>VI: Có tiền tố đầu (x, y).</i></p></li><li><p><b>d)</b> no seek: leading column x missing</p><p>Without x, the index order does not help.</p><p><i>VI: Thiếu x thì thứ tự chỉ mục không giúp được.</i></p></li><li><p><b>a)</b> seek on x, then z filters those rows</p><p>The prefix stops at the first missing column (y); z becomes a residual filter.</p><p><i>VI: Tiền tố dừng ở cột đầu tiên bị thiếu (y); z thành điều kiện lọc phụ.</i></p></li><li><p><b>b)</b> seek on the x range; y filtered inside</p><p>After a range on a column, the following key columns cannot narrow the seek.</p><p><i>VI: Sau một khoảng trên một cột, các cột khoá sau không thu hẹp seek được nữa.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>WHERE x = 1 AND y = 2</p><p style=\"opacity:.75;font-size:.92em\"><i>WHERE x = 1 AND y = 2</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "seek on y alone, x checked later"
+              },
+              {
+                "ma": "b",
+                "noiDung": "seek on the pair (x, y)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a full scan only, no seek"
+              },
+              {
+                "ma": "d",
+                "noiDung": "seek on z alone, x and y checked"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The leading prefix (x, y) is given.</p><p><i>VI: Có tiền tố đầu (x, y).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>WHERE y = 2 AND z = 3</p><p style=\"opacity:.75;font-size:.92em\"><i>WHERE y = 2 AND z = 3</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "seek on all three (x, y, z)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "seek on z, then y is filtered"
+              },
+              {
+                "ma": "c",
+                "noiDung": "seek on the pair (y, z)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no seek: leading column x missing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Without x, the index order does not help.</p><p><i>VI: Thiếu x thì thứ tự chỉ mục không giúp được.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>WHERE x = 1 AND z = 3</p><p style=\"opacity:.75;font-size:.92em\"><i>WHERE x = 1 AND z = 3</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "seek on x, then z filters those rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no seek at all, a full scan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "seek on the pair (x, z) at once"
+              },
+              {
+                "ma": "d",
+                "noiDung": "seek on z alone, x filtered later"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The prefix stops at the first missing column (y); z becomes a residual filter.</p><p><i>VI: Tiền tố dừng ở cột đầu tiên bị thiếu (y); z thành điều kiện lọc phụ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>WHERE x > 5 AND y = 2</p><p style=\"opacity:.75;font-size:.92em\"><i>WHERE x > 5 AND y = 2</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "seek on y first, then the x range"
+              },
+              {
+                "ma": "b",
+                "noiDung": "seek on the x range; y filtered inside"
+              },
+              {
+                "ma": "c",
+                "noiDung": "seek on (x, y) as two equalities"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no seek, the range kills the index"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>After a range on a column, the following key columns cannot narrow the seek.</p><p><i>VI: Sau một khoảng trên một cột, các cột khoá sau không thu hẹp seek được nữa.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming any subset of the columns can seek.|||Tưởng tập con cột nào cũng seek được."
+        },
+        {
+          "loi": "Putting the range column first in a composite index.|||Đặt cột khoảng lên đầu chỉ mục ghép."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "residual predicate",
+          "vi": "điều kiện lọc phụ"
+        }
+      ]
+    }
+  ]
+}

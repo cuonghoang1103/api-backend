@@ -376,6 +376,48 @@
       "description": "Luyện: Lab 7 — CT Library programmability (5 questions, PE questions 8–10 style)"
     },
     {
+      "slug": "dbi202-slide-dbi8-1",
+      "name": "8.A Transactions & ACID (slides 1–21)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Atomic transfer with SET XACT_ABORT ON · ACID: which property is at stake? · Transaction lifecycle and autocommit · The life of a transaction, in order"
+    },
+    {
+      "slug": "dbi202-slide-dbi8-2",
+      "name": "8.B Indexes, views & query optimization (slides 22–41)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A covering index: key + INCLUDE, so the query never touches the table · SARGable rewrite: let the index be used · Seek, scan, and the views of slides 28–41"
+    },
+    {
+      "slug": "dbi202-chi-muc",
+      "name": "8.1 Indexes & query performance",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Index the foreign key you join on · A unique index enforces a rule · Which index helps this query? · What an index costs"
+    },
+    {
+      "slug": "dbi202-execution-plan",
+      "name": "8.2 Clustered vs nonclustered & reading a plan",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Composite index: the column order that serves both queries · Clustered vs nonclustered: put the table in date order · Read the plan: what does each operator mean? · Which queries can seek on an index (a, b, c)?"
+    },
+    {
+      "slug": "dbi202-transaction-acid",
+      "name": "8.3 Transactions, ACID & isolation levels",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Which anomalies does each isolation level allow? · Book the last seat safely with one atomic UPDATE · prBookSeat: the atomic UPDATE + @@ROWCOUNT as a procedure · Deadlock: how it happens, how to live with it"
+    },
+    {
+      "slug": "dbi202-on-ch8",
+      "name": "8.4 Practice: transactions, indexes & views",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exercise 1 — a bonus-transfer transaction with TRY…CATCH and XACT_STATE() · Exercise 2 — choose and prove an index · Exercise 3 — composite index: does column order matter? · Exercise 4 — a view WITH CHECK OPTION: senior staff only · Exercise 6 — a partial index (PostgreSQL only) · Exercise 7 — a materialized view (PostgreSQL only)"
+    },
+    {
+      "slug": "dbi202-8-lab-giao-dich-chi-muc-shop",
+      "name": "Lab 8 — CT Shop on SQL Server: transactions, indexes & views",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 8 — CT Shop: atomic orders, covering & filtered indexes, a checked view, archiving (5 questions)"
+    },
+    {
       "slug": "dbi202-9-pe-1-ct-rent",
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",

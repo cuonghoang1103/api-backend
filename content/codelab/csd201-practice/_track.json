@@ -218,6 +218,54 @@
       "name": "5.8 🧪 Practice — sequential colouring, Floyd–Warshall, and a 🎯 PE-format Graph paper",
       "level": "INTERMEDIATE",
       "description": "Luyện: Sequential colouring: natural order versus largest degree first · Floyd–Warshall: every pair, a negative edge, and the paths · 🎯 PE format — Graph: f1 depth-first from C with the degrees of the 2nd–6th vertices, f2 an Euler cycle from A"
+    },
+    {
+      "slug": "csd201-sap-xep-co-ban",
+      "name": "6.1 Basic sorts (O(n²))",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Selection sort: the array after every pass, and the number of swaps · Insertion sort: passes, shifts — and why it is fast on almost sorted data · Bubble sort that stops early: count the passes it really needs"
+    },
+    {
+      "slug": "csd201-sap-xep-hieu-qua",
+      "name": "6.2 Efficient sorts: quick, merge, heap",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Shell sort with Knuth’s gaps 1, 4, 13, 40, … · Sort cars by price (high to low), then by owner (A to Z) — with a Comparator · Sort first, then solve: the two closest numbers in O(n log n)"
+    },
+    {
+      "slug": "csd201-quicksort",
+      "name": "6.3 Quick-sort: partitioning in detail",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lomuto partition: the pivot’s final index and the array after each partition · A quick sort that survives sorted input: median of three, recurse on the smaller side · Quickselect: the k-th smallest without sorting everything"
+    },
+    {
+      "slug": "csd201-mergesort",
+      "name": "6.4 Merge-sort & stability",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Top-down merge sort: every merge, in the order it happens · Bottom-up merge sort: no recursion, one buffer, two million values · Stability: sort student records by grade, keeping the name order"
+    },
+    {
+      "slug": "csd201-heapsort",
+      "name": "6.5 Heap-sort",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Heap sort step by step: the heap after building, then after every extraction · Sort an almost sorted array (each value at most k places away) in O(n log k) · The running median with two heaps"
+    },
+    {
+      "slug": "csd201-sap-xep-tuyen-tinh",
+      "name": "6.6 Linear-time sorting: bucket & radix",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Counting sort: stable, O(n + k), no comparisons · LSD radix sort, one digit per pass — the slides’ trace · Bucket sort for real numbers in [0, 1)"
+    },
+    {
+      "slug": "csd201-so-sanh-sap-xep",
+      "name": "6.7 Choosing a sort: the full comparison",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The Dutch national flag: sort 0s, 1s and 2s in one pass · The minimum number of swaps to sort a permutation (count the cycles) · Sort once, search many: a million membership queries"
+    },
+    {
+      "slug": "csd201-on-ch6",
+      "name": "6.8 🧪 Practice — sorting linked lists of cars, PE style",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Merge sort on a linked list of cars: price, then owner — O(n log n), no new nodes · PE style: sort only positions i..j of a linked list, descending by price · Insertion sort of a linked list by relinking nodes (stable)"
     }
   ]
 }

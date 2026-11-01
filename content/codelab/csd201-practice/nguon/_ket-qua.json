@@ -855,5 +855,185 @@
    "natural [1, 2, 1, 3, 2, 4] -> 4 colours | largest first [1, 2, 2, 1, 1, 2] -> 2 colours\nnatural [1, 2, 1, 2, 3] -> 3 colours | largest first [1, 2, 1, 2, 3] -> 3 colours\n",
    "natural [1, 2, 3, 4] -> 4 colours | largest first [1, 2, 3, 4] -> 4 colours\nnatural [1, 1, 1] -> 1 colours | largest first [1, 1, 1] -> 1 colours\nnatural [1, 2, 2, 2, 2] -> 2 colours | largest first [1, 2, 2, 2, 2] -> 2 colours\n"
   ]
+ },
+ "csd201-6-1-bubble-early-exit": {
+  "bam": "a5c386ab7ef99625",
+  "ra": [
+   "SORT 1 2 3 4 5 -> [1, 2, 3, 4, 5] in 1 pass(es)\nSORT 1 2 4 3 5 -> [1, 2, 3, 4, 5] in 2 pass(es)\nSORT 5 4 3 2 1 -> [1, 2, 3, 4, 5] in 4 pass(es)\n",
+   "SORT 2 3 4 5 1 -> [1, 2, 3, 4, 5] in 4 pass(es)\nSORT 9 -> [9] in 0 pass(es)\nSORT 2 1 -> [1, 2] in 1 pass(es)\n"
+  ]
+ },
+ "csd201-6-1-insertion-trace": {
+  "bam": "01ea1789cec0c878",
+  "ra": [
+   "SORT 5 2 4 6 1 3 -> \npass 1: 2 5 4 6 1 3\npass 2: 2 4 5 6 1 3\npass 3: 2 4 5 6 1 3\npass 4: 1 2 4 5 6 3\npass 5: 1 2 3 4 5 6\nshifts 9\nSORT 1 2 3 5 4 -> \npass 1: 1 2 3 5 4\npass 2: 1 2 3 5 4\npass 3: 1 2 3 5 4\npass 4: 1 2 3 4 5\nshifts 1\n",
+   "SORT 5 4 3 2 1 -> \npass 1: 4 5 3 2 1\npass 2: 3 4 5 2 1\npass 3: 2 3 4 5 1\npass 4: 1 2 3 4 5\nshifts 10\nSORT 2 1 2 1 -> \npass 1: 1 2 2 1\npass 2: 1 2 2 1\npass 3: 1 1 2 2\nshifts 3\nSORT 1 2 3 -> \npass 1: 1 2 3\npass 2: 1 2 3\nshifts 0\n"
+  ]
+ },
+ "csd201-6-1-selection-trace": {
+  "bam": "cfc02e9a8f653858",
+  "ra": [
+   "SORT 5 2 4 6 1 3 -> \npass 1: 1 2 4 6 5 3\npass 2: 1 2 4 6 5 3\npass 3: 1 2 3 6 5 4\npass 4: 1 2 3 4 5 6\npass 5: 1 2 3 4 5 6\nswaps 3, comparisons 15\nSORT 1 2 3 4 -> \npass 1: 1 2 3 4\npass 2: 1 2 3 4\npass 3: 1 2 3 4\nswaps 0, comparisons 6\n",
+   "SORT 3 1 3 1 -> \npass 1: 1 3 3 1\npass 2: 1 1 3 3\npass 3: 1 1 3 3\nswaps 2, comparisons 6\nSORT 4 3 2 1 -> \npass 1: 1 3 2 4\npass 2: 1 2 3 4\npass 3: 1 2 3 4\nswaps 2, comparisons 6\nSORT 7 -> \nswaps 0, comparisons 0\n"
+  ]
+ },
+ "csd201-6-2-closest-pair": {
+  "bam": "41c8be0425fc3d10",
+  "ra": [
+   "30 5 20 9 1 -> diff 4: 1 5\n4 2 1 3 -> diff 1: 1 2\n10 10 -> diff 0: 10 10\n",
+   "-2147483648 2147483647 -> diff 4294967295: -2147483648 2147483647\n-5 100 -7 50 -> diff 2: -7 -5\n7 7 3 3 -> diff 0: 3 3\n",
+   "PERF -> n = 1,000,000: OK, diff 789: -999996224 -999995435\n"
+  ]
+ },
+ "csd201-6-2-comparator-two-keys": {
+  "bam": "fe75f094de92baba",
+  "ra": [
+   "Hoa 25 -> ok\nNam 12 -> ok\nLan 40 -> ok\nAn 25 -> ok\nBinh 40 -> ok\nBY1 -> [(Binh,40), (Lan,40), (An,25), (Hoa,25), (Nam,12)]\nBY2 -> [(An,25), (Lan,40), (Hoa,25), (Nam,12), (Binh,40)]\n",
+   "Zed 5 -> ok\nAmy 5 -> ok\nBo 5 -> ok\nAl 9 -> ok\nCy 9 -> ok\nBY2 -> [(Bo,5), (Al,9), (Cy,9), (Zed,5), (Amy,5)]\nBY1 -> [(Al,9), (Cy,9), (Amy,5), (Bo,5), (Zed,5)]\nBY2 -> [(Al,9), (Cy,9), (Bo,5), (Amy,5), (Zed,5)]\n"
+  ]
+ },
+ "csd201-6-2-shell-sort": {
+  "bam": "b1eb5fdc2fa82936",
+  "ra": [
+   "SORT 9 8 7 6 5 4 3 2 1 0 -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nSORT 3 1 2 -> [1, 2, 3]\nGAPS 100 -> 40 13 4 1\nGAPS 10 -> 4 1\nGAPS 2 -> 1\n",
+   "SORT 4 -1 4 0 -1 7 3 3 -> [-1, -1, 0, 3, 3, 4, 4, 7]\nGAPS 1000000 -> 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1\nGAPS 13 -> 4 1\nGAPS 40 -> 13 4 1\n",
+   "PERF -> shellSort of 2,000,000: OK, sorted true\n"
+  ]
+ },
+ "csd201-6-3-lomuto-trace": {
+  "bam": "4d88415a6c31c1a0",
+  "ra": [
+   "SORT 2 8 7 1 3 5 6 4 -> \npivot 4 at 3: 2 1 3 4 7 5 6 8\npivot 3 at 2: 2 1 3 4 7 5 6 8\npivot 1 at 0: 1 2 3 4 7 5 6 8\npivot 8 at 7: 1 2 3 4 7 5 6 8\npivot 6 at 5: 1 2 3 4 5 6 7 8\nsorted [1, 2, 3, 4, 5, 6, 7, 8]\nSORT 3 1 2 -> \npivot 2 at 1: 1 2 3\nsorted [1, 2, 3]\n",
+   "SORT 5 5 1 5 -> \npivot 5 at 3: 5 5 1 5\npivot 1 at 0: 1 5 5 5\npivot 5 at 2: 1 5 5 5\nsorted [1, 5, 5, 5]\nSORT 1 2 3 4 -> \npivot 4 at 3: 1 2 3 4\npivot 3 at 2: 1 2 3 4\npivot 2 at 1: 1 2 3 4\nsorted [1, 2, 3, 4]\nSORT 9 -> \nsorted [9]\n"
+  ]
+ },
+ "csd201-6-3-quickselect": {
+  "bam": "d38210d108dee893",
+  "ra": [
+   "1 : 7 2 9 4 1 8 -> 1\n6 : 7 2 9 4 1 8 -> 9\n3 : 7 2 9 4 1 8 -> 4\n1 : 5 -> 5\n",
+   "2 : 3 3 3 1 -> 3\n4 : 3 3 3 1 -> 3\n3 : -1 -5 -3 0 -> -1\n5 : 9 8 7 6 5 4 3 2 1 -> 5\n",
+   "PERF -> 20 medians of 1,000,000: OK, checksum 9284218033\n"
+  ]
+ },
+ "csd201-6-3-quicksort-robust": {
+  "bam": "54a3d2a48f60f734",
+  "ra": [
+   "SORT 2 8 7 1 3 5 6 4 -> [1, 2, 3, 4, 5, 6, 7, 8]\nSORT 5 5 5 5 -> [5, 5, 5, 5]\nSORT 9 8 7 6 5 4 3 2 1 -> [1, 2, 3, 4, 5, 6, 7, 8, 9]\n",
+   "SORT 0 -3 7 -3 0 2 -> [-3, -3, 0, 0, 2, 7]\nSORT 2 1 -> [1, 2]\nSORT 1 -> [1]\n",
+   "PERF -> sorted: OK; reversed: OK; all equal: OK; random: OK\n"
+  ]
+ },
+ "csd201-6-4-bottom-up": {
+  "bam": "8075cedd139ca332",
+  "ra": [
+   "SORT 38 27 43 3 9 82 10 -> [3, 9, 10, 27, 38, 43, 82]\nSORT 5 1 4 2 3 -> [1, 2, 3, 4, 5]\nSORT 2 1 -> [1, 2]\n",
+   "SORT 7 -> [7]\nSORT 3 3 1 1 2 2 -> [1, 1, 2, 2, 3, 3]\n",
+   "PERF -> 2,000,000 values: OK, sorted true\n"
+  ]
+ },
+ "csd201-6-4-merge-trace": {
+  "bam": "de3e7a98a2cc88da",
+  "ra": [
+   "SORT 38 27 43 3 9 82 10 1 -> \nmerge [0..1]: 27 38\nmerge [2..3]: 3 43\nmerge [0..3]: 3 27 38 43\nmerge [4..5]: 9 82\nmerge [6..7]: 1 10\nmerge [4..7]: 1 9 10 82\nmerge [0..7]: 1 3 9 10 27 38 43 82\nsorted [1, 3, 9, 10, 27, 38, 43, 82], comparisons 17\nSORT 2 1 3 -> \nmerge [0..1]: 1 2\nmerge [0..2]: 1 2 3\nsorted [1, 2, 3], comparisons 3\n",
+   "SORT 5 4 3 2 1 -> \nmerge [0..1]: 4 5\nmerge [0..2]: 3 4 5\nmerge [3..4]: 1 2\nmerge [0..4]: 1 2 3 4 5\nsorted [1, 2, 3, 4, 5], comparisons 5\nSORT 1 2 3 4 -> \nmerge [0..1]: 1 2\nmerge [2..3]: 3 4\nmerge [0..3]: 1 2 3 4\nsorted [1, 2, 3, 4], comparisons 4\nSORT 2 2 1 1 -> \nmerge [0..1]: 2 2\nmerge [2..3]: 1 1\nmerge [0..3]: 1 1 2 2\nsorted [1, 1, 2, 2], comparisons 4\n"
+  ]
+ },
+ "csd201-6-4-stable-records": {
+  "bam": "c2bf4ba1c3bb33a4",
+  "ra": [
+   "An 8.5 -> ok\nBinh 7.0 -> ok\nChi 8.5 -> ok\nDung 9.0 -> ok\nEm 7.0 -> ok\nGiang 8.5 -> ok\nGO -> Dung(9.0)#3 An(8.5)#0 Chi(8.5)#2 Giang(8.5)#5 Binh(7.0)#1 Em(7.0)#4\n",
+   "A 5 -> ok\nB 5 -> ok\nC 5 -> ok\nGO -> A(5.0)#0 B(5.0)#1 C(5.0)#2\nX 9 -> ok\nY 8 -> ok\nZ 7 -> ok\nGO -> X(9.0)#0 Y(8.0)#1 Z(7.0)#2\nSolo 10 -> ok\nGO -> Solo(10.0)#0\n"
+  ]
+ },
+ "csd201-6-5-heapsort-trace": {
+  "bam": "c2264a3320c5cf2b",
+  "ra": [
+   "SORT 4 10 3 5 1 -> \nheap: 10 5 3 4 1\nstep 1: 5 4 3 1 10\nstep 2: 4 1 3 5 10\nstep 3: 3 1 4 5 10\nstep 4: 1 3 4 5 10\nSORT 2 8 6 1 10 15 3 -> \nheap: 15 10 6 1 8 2 3\nstep 1: 10 8 6 1 3 2 15\nstep 2: 8 3 6 1 2 10 15\nstep 3: 6 3 2 1 8 10 15\nstep 4: 3 1 2 6 8 10 15\nstep 5: 2 1 3 6 8 10 15\nstep 6: 1 2 3 6 8 10 15\n",
+   "SORT 3 3 1 3 -> \nheap: 3 3 1 3\nstep 1: 3 3 1 3\nstep 2: 3 1 3 3\nstep 3: 1 3 3 3\nSORT 1 2 3 4 5 -> \nheap: 5 4 3 1 2\nstep 1: 4 2 3 1 5\nstep 2: 3 2 1 4 5\nstep 3: 2 1 3 4 5\nstep 4: 1 2 3 4 5\nSORT 1 2 -> \nheap: 2 1\nstep 1: 1 2\n"
+  ]
+ },
+ "csd201-6-5-k-sorted": {
+  "bam": "ece3051664d210ba",
+  "ra": [
+   "2 : 3 1 2 6 4 5 -> [1, 2, 3, 4, 5, 6]\n3 : 6 5 3 2 8 10 9 -> [2, 3, 5, 6, 8, 9, 10]\n0 : 1 2 3 -> [1, 2, 3]\n",
+   "10 : 4 3 2 1 -> [1, 2, 3, 4]\n1 : 2 1 2 1 3 3 -> [1, 2, 1, 2, 3, 3]\n",
+   "PERF -> n = 2,000,000, k = 10: OK, sorted true\n"
+  ]
+ },
+ "csd201-6-5-running-median": {
+  "bam": "09b81f9f7e3fac35",
+  "ra": [
+   "ADD 5 -> 5.0\nADD 15 -> 10.0\nADD 1 -> 5.0\nADD 3 -> 4.0\nADD 8 -> 5.0\nADD 7 -> 6.0\n",
+   "ADD 2 -> 2.0\nADD 2 -> 2.0\nADD 2 -> 2.0\nADD -4 -> 2.0\nADD 2147483647 -> 2.0\nADD 2147483647 -> 2.0\nADD -2147483648 -> 2.0\n",
+   "PERF -> 500,000 values, a median after each: OK, final median 4.62982793E8, checksum 231423375928461\n"
+  ]
+ },
+ "csd201-6-6-bucket-sort": {
+  "bam": "563f39d9256f0d06",
+  "ra": [
+   "SORT 0.78 0.17 0.39 0.26 0.72 0.94 0.21 0.12 0.23 0.68 -> [0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]\nSORT 0.5 -> [0.5]\n",
+   "SORT 0.11 0.13 0.12 0.111 0.119 -> [0.11, 0.111, 0.119, 0.12, 0.13]\nSORT 0.0 0.999 0.0 0.5 -> [0.0, 0.0, 0.5, 0.999]\n",
+   "PERF -> 1,000,000 values: OK, sorted true\n"
+  ]
+ },
+ "csd201-6-6-counting-sort": {
+  "bam": "af56b106593404d3",
+  "ra": [
+   "5 : 2/1 5/2 3/3 0/4 2/5 3/6 0/7 3/8 -> 0/4 0/7 2/1 2/5 3/3 3/6 3/8 5/2\n3 : 1/1 1/2 1/3 -> 1/1 1/2 1/3\n",
+   "0 : 0/1 0/2 -> 0/1 0/2\n9 : 9/1 0/2 9/3 4/4 -> 0/2 4/4 9/1 9/3\n",
+   "PERF -> 3,000,000 records: OK, sorted and stable true\n"
+  ]
+ },
+ "csd201-6-6-radix-trace": {
+  "bam": "f6ab9ebb27b1e6f3",
+  "ra": [
+   "SORT 170 45 75 90 802 24 2 66 -> \npass 1 (digit 1): 170 90 802 2 24 45 75 66\npass 2 (digit 10): 802 2 24 45 66 170 75 90\npass 3 (digit 100): 2 24 45 66 75 90 170 802\nSORT 329 457 657 839 436 720 355 -> \npass 1 (digit 1): 720 355 436 457 657 329 839\npass 2 (digit 10): 720 329 436 839 355 457 657\npass 3 (digit 100): 329 355 436 457 657 720 839\n",
+   "SORT 3 1 2 -> \npass 1 (digit 1): 1 2 3\nSORT 0 0 0 -> \npass 1 (digit 1): 0 0 0\nSORT 1000 1 100 10 -> \npass 1 (digit 1): 1000 100 10 1\npass 2 (digit 10): 1000 100 1 10\npass 3 (digit 100): 1000 1 10 100\npass 4 (digit 1000): 1 10 100 1000\n"
+  ]
+ },
+ "csd201-6-7-dutch-flag": {
+  "bam": "836beb601768d88b",
+  "ra": [
+   "2 0 2 1 1 0 -> [0, 0, 1, 1, 2, 2] swaps 4\n2 0 1 -> [0, 1, 2] swaps 2\n0 1 2 -> [0, 1, 2] swaps 2\n",
+   "1 1 1 -> [1, 1, 1] swaps 0\n2 2 0 0 -> [0, 0, 2, 2] swaps 4\n0 -> [0] swaps 1\n2 1 2 1 -> [1, 1, 2, 2] swaps 2\n"
+  ]
+ },
+ "csd201-6-7-min-swaps": {
+  "bam": "714e555b77162202",
+  "ra": [
+   "0 1 2 3 -> 0\n1 0 3 2 -> 2\n1 2 3 0 -> 3\n4 3 2 1 0 -> 2\n",
+   "0 -> 0\n2 0 1 3 5 4 -> 3\n",
+   "PERF -> n = 2,000,000: OK, swaps 1999747\n"
+  ]
+ },
+ "csd201-6-7-sort-then-search": {
+  "bam": "692507e08fab7494",
+  "ra": [
+   "5 3 5 1 5 3 | 5 3 1 2 9 -> [3, 2, 1, 0, 0]\n7 | 7 7 8 -> [1, 1, 0]\n",
+   "| 1 2 -> [0, 0]\n-1 -1 -2147483648 2147483647 | -1 2147483647 -2147483648 0 -> [2, 1, 1, 0]\n",
+   "PERF -> n = q = 1,000,000: OK, total 1670932\n"
+  ]
+ },
+ "csd201-6-8-insertion-relink": {
+  "bam": "e9c4e0bcc267e71a",
+  "ra": [
+   "S Hoa 25 Nam 12 Lan 40 An 25 Binh 40 Minh 7 -> (Minh,7)#5 (Nam,12)#1 (Hoa,25)#0 (An,25)#3 (Lan,40)#2 (Binh,40)#4\nS A 1 -> (A,1)#0\nS -> \n",
+   "S A 3 B 3 C 3 -> (A,3)#0 (B,3)#1 (C,3)#2\nS A 1 B 2 C 3 -> (A,1)#0 (B,2)#1 (C,3)#2\nS C 3 B 2 A 1 -> (A,1)#2 (B,2)#1 (C,3)#0\n"
+  ]
+ },
+ "csd201-6-8-list-merge-sort": {
+  "bam": "8afcd2d6f7f9e9fb",
+  "ra": [
+   "S Hoa 25 Nam 12 Lan 40 An 25 Binh 40 Minh 7 -> (Minh,7)#5 (Nam,12)#1 (An,25)#3 (Hoa,25)#0 (Binh,40)#4 (Lan,40)#2\nS A 1 -> (A,1)#0\nS -> \n",
+   "S X 5 X 5 A 5 -> (A,5)#2 (X,5)#0 (X,5)#1\nS E 5 D 4 C 3 B 2 A 1 -> (A,1)#4 (B,2)#3 (C,3)#2 (D,4)#1 (E,5)#0\n",
+   "PERF -> 300,000 cars: OK, sorted true, nodes 300000\n"
+  ]
+ },
+ "csd201-6-8-sort-range": {
+  "bam": "16629cba854d0425",
+  "ra": [
+   "R 1 4 : A 5 B 2 C 9 D 4 E 7 F 1 -> (A,5) (C,9) (E,7) (D,4) (B,2) (F,1)\nR 0 9 : A 5 B 2 C 9 -> (C,9) (A,5) (B,2)\nR 2 99 : A 1 B 2 C 3 D 4 -> (A,1) (B,2) (D,4) (C,3)\n",
+   "R 0 3 : A 5 B 7 C 5 D 7 -> (B,7) (D,7) (A,5) (C,5)\nR 3 1 : A 1 B 2 C 3 D 4 -> (A,1) (B,2) (C,3) (D,4)\nR 5 6 : A 1 B 2 -> (A,1) (B,2)\nR 2 2 : A 1 B 2 C 3 -> (A,1) (B,2) (C,3)\n"
+  ]
  }
 }

@@ -904,6 +904,11 @@ AssertionError: expected 1 to be +0</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Whether the transaction rolls back</span><span class="lz-d">The behaviour under a mid-transaction failure is the thing you most want tested, and it is exactly what a fake cannot simulate.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">At a cost you can measure</span><span class="lz-d">A container per suite is seconds; per test is minutes. Isolation by transaction rollback keeps it fast and keeps tests independent.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-2-backend" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 11.2: four bugs only PostgreSQL shows</span><span class="lc-sub">Same: tests against a real database, not a fake. Deeper there: one feature with a measured list of what the in-memory version cannot see — dates handed back as JS Dates at local midnight, an exclusion constraint that still blocks a cancelled slot, a non-atomic UPDATE that lets two cancels win, an id beyond int4 that becomes a 500 — every unit test green, every integration test red.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1023,6 +1028,11 @@ AssertionError: expected 1 to be +0</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Giao dịch có quay lui không</span><span class="lz-d">Hành vi khi hỏng giữa chừng một giao dịch là thứ bạn muốn kiểm thử nhất, và đó chính xác là thứ một bản giả không mô phỏng nổi.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Với một cái giá đo được</span><span class="lz-d">Một container cho mỗi bộ kiểm thử là vài giây; cho mỗi bài kiểm thử là vài phút. Cô lập bằng cách quay lui giao dịch giữ cho nó nhanh và giữ cho các bài kiểm thử độc lập.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-2-backend" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 11.2: bốn bug chỉ PostgreSQL mới thấy</span><span class="lc-sub">Giống: test với CSDL thật, không phải đồ giả. Sâu hơn ở đó: một tính năng với danh sách đo được những gì bản bộ nhớ không thể thấy — ngày trả về thành JS Date lúc nửa đêm giờ máy, ràng buộc loại trừ vẫn chặn khung đã huỷ, UPDATE không nguyên tử để hai lượt huỷ cùng thắng, id vượt int4 thành lỗi 500 — mọi unit test xanh, mọi test tích hợp đỏ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

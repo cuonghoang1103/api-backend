@@ -13,13 +13,13 @@ describe('bookLab', () => {
     await expect(bookLab(repo, { ...input, start: '06:00' })).rejects.toMatchObject({ name: 'BookingError', code: 'OUTSIDE_HOURS' });
   });
 
-  it('rejects an overlapping booking with OVERLAP', async () => {
+  it('rejects an overlapping booking with OVERLAP (BR-04)', async () => {
     const repo = createMemoryRepo();
     await bookLab(repo, input);
     await expect(bookLab(repo, { ...input, start: '09:00', end: '11:00' })).rejects.toMatchObject({ code: 'OVERLAP' });
   });
 
-  it('accepts the slot that starts when the previous one ends', async () => {
+  it('accepts the slot that starts when the previous one ends (BR-04)', async () => {
     const repo = createMemoryRepo();
     await bookLab(repo, input);
     await expect(bookLab(repo, { ...input, start: '10:00', end: '12:00' })).resolves.toMatchObject({ id: 2 });

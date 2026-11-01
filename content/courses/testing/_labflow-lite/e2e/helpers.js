@@ -20,8 +20,14 @@ export async function book(page, { lab = 'BE-201', date = '2026-11-16', start = 
 }
 
 // A lab code of its own for every test, every repeat and every retry: tests running in parallel never share a slot (lesson 7.3).
+// Lesson 11.3: "QA-100…999" was only 900 codes — 25 tests had a 28% chance that two of them share one (the birthday problem),
+// and renaming a test changed its testId, its code, and made an old test flaky. Two letters × 900 numbers = 608,400 codes.
+const SPACE = 26 * 26 * 900;
 export function freshLab(testInfo) {
   const key = [testInfo.testId, testInfo.repeatEachIndex, testInfo.retry].join('/');
-  const n = parseInt(createHash('sha256').update(key).digest('hex').slice(0, 8), 16) % 900;
-  return 'QA-' + String(100 + n);
+  const n = parseInt(createHash('sha256').update(key).digest('hex').slice(0, 12), 16) % SPACE;
+  const letters = String.fromCharCode(65 + Math.floor(n / 900 / 26), 65 + (Math.floor(n / 900) % 26));
+  const lab = letters + '-' + String(100 + (n % 900));
+  testInfo.annotations.push({ type: 'lab', description: lab });   // lesson 11.3: the report says which lab each test used
+  return lab;
 }

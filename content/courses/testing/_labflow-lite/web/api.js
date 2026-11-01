@@ -10,5 +10,7 @@ export function createClient({ token, baseUrl = '', fetch: send = (...args) => g
     createBooking: (input) => call('POST', '/api/bookings', input),
     getBooking: (id) => call('GET', '/api/bookings/' + id),
     listAll: () => call('GET', '/api/admin/bookings'),
+    listMine: () => call('GET', '/api/bookings'),                          // Chapter 11: My bookings
+    cancelBooking: (id) => call('POST', '/api/bookings/' + id + '/cancel'),
   };
 }

@@ -1,0 +1,7 @@
+{
+  "pull_request": {
+    "number": 11,
+    "head": { "ref": "feature/my-bookings" },
+    "base": { "ref": "main" }
+  }
+}

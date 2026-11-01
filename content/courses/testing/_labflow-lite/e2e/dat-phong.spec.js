@@ -12,13 +12,13 @@ test.describe('as student an', () => {
     await expect(page.getByRole('status')).toHaveText('Booked. See you in ' + lab + '.');
   });
 
-  test('31 seats waits for approval', async ({ page }, testInfo) => {
+  test('31 seats waits for approval (BR-06)', async ({ page }, testInfo) => {
     await page.goto('/');
     await book(page, { lab: freshLab(testInfo), seats: '31' });
     await expect(page.getByRole('status')).toHaveText('Sent. A lecturer must approve this booking.');
   });
 
-  test('the same slot twice is refused', async ({ page }, testInfo) => {
+  test('the same slot twice is refused (BR-04)', async ({ page }, testInfo) => {
     const lab = freshLab(testInfo);
     await page.goto('/');
     await book(page, { lab });

@@ -3,13 +3,13 @@ import { defineConfig, devices } from '@playwright/test';
 // End-to-end tests (Chapter 7). Run: npm run test:e2e
 export default defineConfig({
   testDir: '.',
-  testMatch: ['e2e/**/*.spec.js', 'demo7/**/*.spec.js'],   // npm run test:e2e runs e2e/ only
+  testMatch: ['e2e/**/*.spec.js', 'demo7/**/*.spec.js', 'demo11/**/*.spec.js'],   // npm run test:e2e runs e2e/ only
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   // CI (lesson 9.2): annotations on the pull request, an HTML report to upload, JUnit XML for other tools
   reporter: process.env.CI
-    ? [['list'], ['github'], ['html', { open: 'never' }], ['junit', { outputFile: 'reports/junit-e2e.xml' }]]
+    ? [['list'], ['github'], ['html', { open: 'never' }], ['junit', { outputFile: 'reports/junit-e2e.xml' }], ['json', { outputFile: 'reports/e2e.json' }]]   // json: lesson 11.4
     : [['list']],
   use: {
     baseURL: 'http://localhost:4173',

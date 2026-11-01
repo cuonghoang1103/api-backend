@@ -81,3 +81,21 @@ Chương 10 Courses (01/11) — TDD và testing trong đội thật:
 | Courses `api-design` `api-11-1-khung` | `tst-10-4-phong-van` | hai chiều (Chương 11 API Design đã commit def9418f8 trong lúc soạn — thêm thẻ ngược cuối ml-en/ml-vi của 11.1) | khung trả lời câu hỏi phỏng vấn | phần testing của vòng phỏng vấn |
 
 Không cặp Chương 10: Lab 10 và quiz. 10.4 không cặp SWT301 (SWT301 không có bài phỏng vấn).
+
+Chương 11 Courses (01/11) — Dự án cuối khoá:
+
+| Phía kia | Courses testing | Chiều | Giống | Courses sâu thêm |
+|---|---|---|---|---|
+| SWT301 `swt301-test-plan-risk` (7.2) | `tst-11-1-ke-hoach` | hai chiều (SWT301 thêm một cặp `bi()` cuối bài) | nội dung test plan, chiến lược, tiêu chí vào/ra, DoD | kế hoạch cho một bản phát hành thật (US-11); 12 bug cài vào × 5 tầng (không tầng nào quá 6/12); ngân sách đo bằng giây; RTM sinh từ báo cáo test thật, chặn merge |
+| SWT301 `swt301-risk-based-testing` (7.5) | `tst-11-1-ke-hoach` | MỘT chiều SWT301 → Courses (bài 11.1 chỉ giữ thẻ 7.2 cho vừa độ dài) | mức rủi ro = khả năng × tác động, test nhiều hơn ở rủi ro cao | 8 rủi ro sản phẩm chấm điểm; rủi ro High phải có test trên tầng Unit, CI tự kiểm |
+| SWT301 `swt301-test-monitoring-control` (7.3) | `tst-11-4-ci` | hai chiều | số đo kiểm thử, test summary report để quyết định phát hành | báo cáo chất lượng tự sinh trên mọi PR (test từng tầng, độ phủ, đột biến, truy vết) và chính nó chặn merge; act thật: mọi test xanh mà ci-ok đỏ vì AC7 chưa có test |
+| Academy SWP391 `swp391-5-1-testing-bug-tracking` (5.1) | `tst-11-5-du-an-cuoi-khoa` | hai chiều | các mức test quyết định chất lượng (hệ số Q) từng màn hình | một tính năng test ở mọi tầng, máy chấm 100 điểm cài 12 bug (bản yếu 42, tham khảo 100), kể dự án trong CV bằng số tái hiện được |
+| Academy SEP490 `sep490-3-1-build-test-release` (3.1) | `tst-11-1-ke-hoach` | hai chiều (SEP490 thêm một cặp [en, vi] vào `doc()` của bài) | truy mỗi test về một yêu cầu | tên test mang mã yêu cầu, RTM dựng từ báo cáo test đã chạy, CI từ chối merge khi thiếu |
+| Courses `nodejs` `nodejs-14-4-db-that` | `tst-11-2-backend` | hai chiều | test với CSDL thật | bốn bug chỉ PostgreSQL thấy (ngày → JS Date, EXCLUDE chặn khung đã huỷ, UPDATE không nguyên tử, id vượt int4) — unit xanh, tích hợp đỏ |
+| Courses `github-actions` `ga-14-1-cong-chat-luong` | `tst-11-4-ci` | hai chiều | một job tổng hợp là check bắt buộc | cổng đòi thêm mutation + báo cáo chất lượng đọc báo cáo của mọi job |
+| Courses `api-design` `api-7-1-kiem-hop-dong` | `tst-11-2-backend` | MỘT chiều (khoá api-design do phiên khác soạn) | — | hợp đồng OpenAPI kiểm trên API chạy bằng PostgreSQL |
+| Courses `api-design` `api-12-4-tong-ket` | `tst-11-5-du-an-cuoi-khoa` | MỘT chiều (Ch12 api-design đang soạn) | — | kể dự án theo STAR bằng số đo |
+| Courses `react` `rx-9-1-testing-library` | 11.3 | MỘT chiều | — | — |
+| Bài 11.7 (học tiếp) | `tst-11-7-hoc-tiep` | MỘT chiều tới api-design, nodejs, github-actions, observability-monitoring, system-design, performance-load-testing | — | lộ trình sau khoá |
+
+Không cặp Chương 11: bài thi cuối khoá `tst-11-6-kiem-tra-cuoi-khoa` (quiz).

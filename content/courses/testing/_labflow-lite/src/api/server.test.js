@@ -27,7 +27,7 @@ describe('POST /api/bookings', () => {
     expect(role.body.error.details).toContainEqual({ path: '', message: 'Unrecognized key: "role"' });
   });
 
-  it('422 for a rule, 409 for a taken slot', async () => {
+  it('422 for a rule, 409 for a taken slot (BR-04)', async () => {
     const api = makeApi();
     const auth = await as(api, 'an');
     const rule = await request(api.app).post('/api/bookings').set('Authorization', auth).send(body({ start: '06:00' }));

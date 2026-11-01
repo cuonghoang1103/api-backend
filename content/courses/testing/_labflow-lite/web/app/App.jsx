@@ -3,12 +3,28 @@ import { useState } from 'react';
 import { createClient } from '../api.js';
 import { BookingForm } from '../BookingForm.jsx';
 import { AdminBookings } from '../AdminBookings.jsx';
+import { MyBookings } from '../MyBookings.jsx';
 import { LoginForm } from './LoginForm.jsx';
 
 const KEY = 'labflow.session';
 
 function loadSession() {
   try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; }
+}
+
+// Chapter 11: a student has two pages — book a lab (/) and My bookings (/my-bookings). Plain links: no router needed.
+function StudentPages({ client }) {
+  const mine = window.location.pathname === '/my-bookings';
+  return (
+    <>
+      <nav aria-label="Pages">
+        <a href="/" aria-current={mine ? undefined : 'page'}>Book a lab</a> · <a href="/my-bookings" aria-current={mine ? 'page' : undefined}>My bookings</a>
+      </nav>
+      {mine
+        ? (<><h2>My bookings</h2><MyBookings client={client} /></>)
+        : (<><h2>Book a lab</h2><BookingForm onSubmit={client.createBooking} /></>)}
+    </>
+  );
 }
 
 export function App() {
@@ -36,7 +52,7 @@ export function App() {
       <main>
         {session.user.role === 'ADMIN'
           ? (<><h2>All bookings</h2><AdminBookings client={client} /></>)
-          : (<><h2>Book a lab</h2><BookingForm onSubmit={client.createBooking} /></>)}
+          : (<StudentPages client={client} />)}
       </main>
     </>
   );

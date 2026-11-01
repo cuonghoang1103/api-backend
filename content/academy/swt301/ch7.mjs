@@ -1826,6 +1826,16 @@ total E = 20 SD(total) = 2.46 range 17.54 - 22.46</code></pre>
       ['sp5', '§6.2 "Testing Strategies": §6.2.1 Test Planning (PDF 256), §6.2.2 Selecting a Testing Strategy (PDF 259), §6.2.3 Concrete Strategies (PDF 262), §6.2.5 Testing Effort and Costs (PDF 267), §6.2.6 Estimating Testing Effort (PDF 269); §6.3.1 Test Execution Planning (PDF 273–278)', '§6.2 "Testing Strategies": §6.2.1 Test Planning (PDF 256), §6.2.2 Selecting a Testing Strategy (PDF 259), §6.2.3 Concrete Strategies (PDF 262), §6.2.5 Testing Effort and Costs (PDF 267), §6.2.6 Estimating Testing Effort (PDF 269); §6.3.1 Test Execution Planning (PDF 273–278)'],
       ['sp4', '§6.2 "Test Planning" (test plan p.175, prioritising tests p.177, entry/exit criteria p.179), §6.3 "Cost and Economy Aspects" (estimation p.184), §6.4 "Choosing the Test Strategy and Test Approach" — pp.174–189 (PDF 189–204)', '§6.2 "Test Planning" (test plan trang 175, ưu tiên test trang 177, entry/exit trang 179), §6.3 "Cost and Economy Aspects" (ước lượng trang 184), §6.4 "Choosing the Test Strategy and Test Approach" — trang 174–189 (PDF 189–204)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 11)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 11.1: a test plan whose numbers are measured</span><span class="lc-sub">Same as this lesson: scope, test approach, entry and exit criteria, a definition of done. Different: Courses writes the plan for a real release of LabFlow Lite (cancelling a booking) — 12 planted bugs show which test level catches which (no level more than 6 of 12), each level's cost is measured in seconds, and the traceability matrix is generated from real test reports and blocks the merge when a requirement has no passing test.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 11.1: một test plan có số đo thật</span><span class="lc-sub">Giống bài này: phạm vi, cách tiếp cận test, tiêu chí vào và ra, Definition of Done. Khác: Courses viết kế hoạch cho một bản phát hành thật của LabFlow Lite (huỷ lượt đặt) — 12 bug cài vào cho thấy mức test nào bắt được bug nào (không mức nào quá 6/12), chi phí từng mức đo bằng giây, và ma trận truy vết sinh từ báo cáo test thật, chặn merge khi một yêu cầu chưa có test xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -2266,6 +2276,16 @@ velocity 35 TC/week -&gt; remaining 130 TC need 3.71 weeks vs 2 planned</code></
       ['sp5', '§6.3 "Test Planning, Control, and Monitoring": §6.3.2 Test Control (PDF 279), §6.3.3 Test Cycle Monitoring (PDF 280), §6.3.4 Test Reports (PDF 281–283)', '§6.3 "Test Planning, Control, and Monitoring": §6.3.2 Test Control (PDF 279), §6.3.3 Test Cycle Monitoring (PDF 280), §6.3.4 Test Reports (PDF 281–283)'],
       ['sp4', '§6.5 "Test Activity Management" (monitoring, reporting, control) — pp.189–192 (PDF 204–207)', '§6.5 "Test Activity Management" (giám sát, báo cáo, kiểm soát) — trang 189–192 (PDF 204–207)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 11)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-4-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 11.4: a test report on every pull request</span><span class="lc-sub">Same as this lesson: test metrics and a test summary report that tells readers whether to release. Different: Courses generates the report automatically on every pull request — tests per level, coverage, mutation score, traceability — and the report itself blocks the merge (shown with a real CI run where every test passed and the merge was still refused).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-4-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 11.4: báo cáo test trên mọi pull request</span><span class="lc-sub">Giống bài này: số đo kiểm thử và báo cáo tổng kết giúp người đọc quyết định có phát hành không. Khác: Courses tự sinh báo cáo trên mọi pull request — số test từng mức, độ phủ, điểm đột biến, truy vết — và chính báo cáo chặn merge (có một lần chạy CI thật: mọi test xanh mà merge vẫn bị từ chối).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -2859,6 +2879,16 @@ const L75 = {
       ['sp5', '§6.2.4 "Testing and Risk" — PDF 263–266', '§6.2.4 "Testing and Risk" — PDF 263–266'],
       ['sp4', '§6.4 "Choosing the Test Strategy and Test Approach", risk-based testing p.187 (PDF 202)', '§6.4 "Choosing the Test Strategy and Test Approach", phần risk-based testing trang 187 (PDF 202)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 11)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 11.1: risk-based testing on a real release</span><span class="lc-sub">Same as this lesson: risk level = likelihood × impact, and more testing where the risk is higher. Different: Courses scores eight product risks of a LabFlow Lite release, sends every High risk to a test level above unit tests, and checks that rule automatically in CI from the test reports.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 11.1: kiểm thử dựa trên rủi ro cho một bản phát hành thật</span><span class="lc-sub">Giống bài này: mức rủi ro = khả năng xảy ra × tác động, rủi ro càng cao càng test nhiều. Khác: Courses chấm tám rủi ro sản phẩm của một bản phát hành LabFlow Lite, đưa mọi rủi ro High lên một mức test cao hơn unit test, và để CI tự kiểm luật đó từ báo cáo test.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

@@ -286,6 +286,11 @@ ${slide('ga-14', 8, 'Three tiers: the PR tier blocks, the queue tier blocks, the
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.3: one required check for a test suite</span><span class="lc-sub">Same: a summary job needs always() because skipped counts as passing. Deeper there: the gate as tested code (decideMerge), a pipe that swallows the exit code (| tee without pipefail), and a flaky test quarantined so it never blocks.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-4-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 11.4: the gate that reads the test reports</span><span class="lc-sub">Same: one summary job is the required check. Deeper there: the gate also requires mutation testing and a quality report built from every job's reports — a real run where all tests passed and the merge was still refused, because a new requirement had no test yet.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 14 · Bài 14.1</span>
@@ -506,6 +511,11 @@ ${slide('ga-14', 8, 'Ba tầng: tầng PR chặn, tầng hàng đợi chặn, t�
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.3: một check bắt buộc cho bộ test</span><span class="lc-sub">Giống: job tổng hợp cần always() vì bị bỏ qua được tính là đạt. Sâu thêm ở đó: cổng là code có test (decideMerge), đường ống nuốt mã thoát (| tee không có pipefail), và một test chập chờn bị cách ly để không bao giờ chặn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-4-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 11.4: cổng chặn đọc cả báo cáo test</span><span class="lc-sub">Giống: một job tổng hợp là check bắt buộc. Sâu hơn ở đó: cổng còn đòi kiểm thử đột biến và một báo cáo chất lượng dựng từ báo cáo của mọi job — một lần chạy thật mọi test đều xanh mà merge vẫn bị từ chối, vì một yêu cầu mới chưa có test.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>

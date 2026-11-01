@@ -1,0 +1,22 @@
+{
+  "release": "LabFlow Lite 1.1 — My bookings and cancel (US-11)",
+  "requirements": [
+    { "id": "BR-04", "risk": "High", "inScope": true, "text": "30-minute grid inside 07:00–21:00; two bookings of one lab never overlap" },
+    { "id": "BR-05", "risk": "Medium", "inScope": true, "text": "At most 14 days ahead, counted in Viet Nam's calendar" },
+    { "id": "BR-06", "risk": "High", "inScope": true, "text": "A student's booking for more than 30 seats waits for approval" },
+    { "id": "Lite-1", "risk": "Low", "inScope": true, "text": "A booking lasts at most 4 hours" },
+    { "id": "Lite-2", "risk": "Medium", "inScope": true, "text": "Lecturers and admins never need approval" },
+    { "id": "Lite-3", "risk": "High", "inScope": true, "text": "A booking can be cancelled until 60 minutes before it starts (Viet Nam time)" },
+    { "id": "US-11 AC1", "risk": "High", "inScope": true, "text": "My bookings lists only my own bookings, by date and start, cancelled ones too" },
+    { "id": "US-11 AC2", "risk": "High", "inScope": true, "text": "I can cancel my own booking until 60 minutes before it starts; at 59 minutes: TOO_LATE_TO_CANCEL" },
+    { "id": "US-11 AC3", "risk": "High", "inScope": true, "text": "Someone else's booking looks missing (404): nobody learns it exists" },
+    { "id": "US-11 AC4", "risk": "Medium", "inScope": true, "text": "Cancelling twice — even at the same moment — succeeds once: ALREADY_CANCELLED" },
+    { "id": "US-11 AC5", "risk": "High", "inScope": true, "text": "A cancelled slot can be booked again" },
+    { "id": "US-11 AC6", "risk": "Low", "inScope": true, "text": "An admin may cancel any booking, at any time" },
+    { "id": "BR-02", "risk": "High", "inScope": false, "text": "5 wrong passwords in a row lock the account for 15 minutes (library only; the demo login does not use it)" },
+    { "id": "BR-07", "risk": "Medium", "inScope": false, "text": "Check-in window (library only, no endpoint yet)" },
+    { "id": "BR-08", "risk": "Medium", "inScope": false, "text": "No-show ban (library only, no endpoint yet)" },
+    { "id": "BR-09", "risk": "Medium", "inScope": false, "text": "Waitlist (library only, no endpoint yet)" },
+    { "id": "BR-10", "risk": "Low", "inScope": false, "text": "Weekly series for lecturers (library only, no endpoint yet)" }
+  ]
+}

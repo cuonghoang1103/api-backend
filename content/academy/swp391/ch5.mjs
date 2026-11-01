@@ -249,6 +249,16 @@ Severity: Major (bảo mật + dữ liệu)</pre>
       ['sommerville', 'Ch. 8 "Software testing" (development, release and user testing)', 'Ch. 8 "Software testing" (test khi phát triển, test bản phát hành, test người dùng)'],
       ['wiegers', 'Ch. 17 "Validating the requirements" — writing tests from requirements', 'Ch. 17 "Validating the requirements" — viết test từ yêu cầu'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 11)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-5-du-an-cuoi-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Practise it in the Testing course (Courses) — lesson 11.5: a final project graded out of 100</span><span class="lc-sub">Same as this lesson: unit, integration, system and acceptance tests decide the quality of every screen. Different: Courses gives you one feature (cancelling a booking) to test at every level, a grader that plants 12 real bugs and scores your tests out of 100 (a typical first attempt: 42), and a way to describe the result on your CV with numbers you can reproduce — then apply the same plan to your SWP391 screens.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-5-du-an-cuoi-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Luyện ở khoá Testing (Courses) — bài 11.5: dự án cuối khoá chấm trên thang 100</span><span class="lc-sub">Giống bài này: unit, integration, system và acceptance test quyết định chất lượng của từng màn hình. Khác: Courses giao một tính năng (huỷ lượt đặt) để test ở mọi mức, một máy chấm cài 12 bug thật và chấm bộ test của bạn trên thang 100 (lần thử đầu điển hình: 42), và cách kể kết quả trong CV bằng những con số tái hiện được — rồi áp đúng kế hoạch đó cho các màn hình SWP391 của bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

@@ -2,12 +2,13 @@
 import express from 'express';
 import { bookLab, BookingError } from '../booking/service.js';
 import { BookingInput } from './schemas.js';
+import { mountMyBookings } from './myBookings.js';
 
 const RULE_CODES = ['OFF_GRID', 'END_BEFORE_START', 'OUTSIDE_HOURS', 'TOO_LONG'];
 const fail = (res, status, code, extra = {}) => res.status(status).json({ error: { code, ...extra } });
 const toPublic = (b) => ({ id: b.id, lab: b.lab, date: b.date, start: b.start, end: b.end, seats: b.seats, status: b.status, minutes: b.minutes });
 
-export function createApp({ repo, auth }) {
+export function createApp({ repo, auth, now = () => new Date() }) {   // now: the clock, for cancelling (Chapter 11)
   const app = express();
   app.use(express.json());
 
@@ -45,6 +46,8 @@ export function createApp({ repo, auth }) {
   app.get('/api/admin/bookings', requireUser, requireRole('ADMIN'), async (req, res) => {
     res.json((await repo.list()).map(toPublic));
   });
+
+  mountMyBookings(app, { repo, requireUser, now, fail, toPublic });   // Chapter 11: GET /api/bookings, POST /api/bookings/:id/cancel
 
   app.use((err, req, res, next) => {
     if (err.type === 'entity.parse.failed') return fail(res, 400, 'BAD_JSON');

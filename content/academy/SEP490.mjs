@@ -147,7 +147,18 @@ const c3 = doc('sep490-3-1-build-test-release', '3.1 — Coding, testing & relea
 </ul>
 <h3>Phát hành &amp; bảo vệ</h3>
 <p><strong>Triển khai</strong> sản phẩm (máy chủ, đám mây, hoặc bộ cài), viết <strong>tài liệu người dùng &amp; kỹ thuật</strong>, và chuẩn bị <strong>buổi bảo vệ</strong>: demo sản phẩm chạy được, giải thích các quyết định, và cho thấy đã đáp ứng yêu cầu ra sao. Đồ án được chấm trên một hệ thống <em>chạy được, có tài liệu, bảo vệ được</em> — không chỉ code.</p>
-<div class="callout"><span class="badge">Xuyên suốt</span> Mọi pha nối nhau: yêu cầu → thiết kế → xây → test chứng minh yêu cầu → bản phát hành bảo vệ được. Truy vết (traceability) là thứ phân biệt một dự án với một đống code.</div>`,
+<div class="callout"><span class="badge">Xuyên suốt</span> Mọi pha nối nhau: yêu cầu → thiết kế → xây → test chứng minh yêu cầu → bản phát hành bảo vệ được. Truy vết (traceability) là thứ phân biệt một dự án với một đống code.</div>`,,
+  ], [
+    `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 11.1: traceability you can run</span><span class="lc-sub">Same as this lesson: trace each test back to a requirement. Different: Courses names every test after the requirement it proves, builds the traceability matrix from the reports of the tests that really ran, and lets CI refuse a merge when an in-scope requirement has no passing test — the same habit you need for the SEP490 test documents and defence.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
+    `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 11.1: truy vết chạy được</span><span class="lc-sub">Giống bài này: truy mỗi test về một yêu cầu. Khác: Courses đặt tên mỗi test theo yêu cầu mà nó chứng minh, dựng ma trận truy vết từ báo cáo của chính các test đã chạy, và để CI từ chối merge khi một yêu cầu trong phạm vi chưa có test xanh — đúng thói quen cần cho tài liệu test và buổi bảo vệ SEP490.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`,
   ]]);
 
 const c3q = quiz('sep490-quiz-3', 'Quiz 3 — Build, test & release|||Quiz 3 — Xây, test & phát hành', [

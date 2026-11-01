@@ -2216,8 +2216,8 @@
         },
         {
           "file": ".github/workflows/test.yml",
-          "from": "needs: [unit, integration, e2e]",
-          "to": "needs: [unit, e2e]",
+          "from": "needs: [unit, integration, e2e, mutation, report]",
+          "to": "needs: [unit, e2e, mutation, report]",
           "label": "the gate forgot the integration job"
         },
         {
@@ -2803,6 +2803,410 @@
           "from": "member: club.member == true",
           "to": "member: !!club.member",
           "label": "a club with member: 'yes' gets the discount v0 never gave"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-1",
+      "bai": "tst-11-1-ke-hoach",
+      "tieuDe": "A traceability matrix that tells the truth|||Ma trận truy vết nói thật",
+      "ham": "tagsOf, layerOf, testsFromPlaywright, buildMatrix, traceGaps",
+      "fileDung": [
+        "src/ci/rtm.js"
+      ],
+      "testThamKhao": [
+        "src/ci/rtm.test.js"
+      ],
+      "yeuCau": "Test the traceability matrix of lesson 11.1: tagsOf finds BR-xx and Lite-x ids and expands \"US-11 AC2–AC4\" into three criteria, but finds nothing in \"AC2\" without the story id; layerOf sorts a file into Unit, API, DB, UI, E2E — and returns null for the CI tooling's own tests (src/ci/); a Playwright test that passed on retry still counts; only passing tests count; traceGaps reports an in-scope requirement with no passing test, and a High-risk one tested only at the Unit layer, but never an out-of-scope one.|||Test ma trận truy vết của bài 11.1: tagsOf tìm id BR-xx và Lite-x và mở \"US-11 AC2–AC4\" thành ba tiêu chí, nhưng không tìm thấy gì trong \"AC2\" thiếu mã story; layerOf xếp một file vào Unit, API, DB, UI, E2E — và trả null cho test của chính công cụ CI (src/ci/); một test Playwright xanh khi chạy lại vẫn được tính; chỉ test xanh mới được tính; traceGaps báo một yêu cầu trong phạm vi chưa có test xanh nào, và một yêu cầu rủi ro High chỉ được test ở tầng Unit, nhưng không bao giờ báo yêu cầu ngoài phạm vi.",
+      "dotBien": [
+        {
+          "file": "src/ci/rtm.js",
+          "from": "n <= Number(to ?? from)",
+          "to": "n <= Number(from)",
+          "label": "AC2–AC4 only proves AC2"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "const story = /\\bUS-11\\b(.*)/.exec(name);",
+          "to": "const story = /(.*)/.exec(name);",
+          "label": "an AC without the story id is counted"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "if (t.passed && layerOf(t.file) && ",
+          "to": "if (layerOf(t.file) && ",
+          "label": "a red test still proves the requirement"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "else if (r.risk === 'High' && r.total === r.counts.Unit)",
+          "to": "else if (false)",
+          "label": "a High-risk requirement tested only by unit tests passes the gate"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "for (const r of rows.filter((x) => x.inScope))",
+          "to": "for (const r of rows)",
+          "label": "out-of-scope requirements block the merge"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "  if (/(^|\\/)src\\/ci\\//.test(file)) return null;   // tests of the CI tooling itself — their names quote ids as DATA (lesson 11.4)\n",
+          "to": "",
+          "label": "the CI tooling's own tests count as proof"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "t.status === 'expected' || t.status === 'flaky'",
+          "to": "t.status === 'expected'",
+          "label": "an E2E test that passed on retry stops counting"
+        },
+        {
+          "file": "src/ci/rtm.js",
+          "from": "  if (/(^|\\/)src\\/api\\//.test(file)) return 'API';\n",
+          "to": "",
+          "label": "API tests count as Unit tests"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/ci/rtm.js",
+          "from": "  return [...tags];",
+          "to": "  return Array.from(tags);",
+          "label": "Array.from instead of spread"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-2",
+      "bai": "tst-11-2-backend",
+      "tieuDe": "US-11 on the backend: rule, service and API|||US-11 ở backend: luật, service và API",
+      "ham": "cancelDecision, startsAtVN, cancelMyBooking, listMyBookings, GET /api/bookings, POST /api/bookings/:id/cancel",
+      "fileDung": [
+        "src/rules/cancel.js",
+        "src/booking/myBookings.js",
+        "src/booking/service.js",
+        "src/api/myBookings.js"
+      ],
+      "testThamKhao": [
+        "src/rules/cancel.test.js",
+        "src/booking/myBookings.test.js",
+        "src/api/myBookings.test.js"
+      ],
+      "yeuCau": "Test US-11 without a database: the decision table of cancelDecision (owner, another student, a lecturer, an admin × active or cancelled × 60 or 59 minutes before the start, in Viet Nam time); the service on the in-memory repository (a cancelled slot can be booked again; two cancels at the same moment — exactly one wins); the API with Supertest (only my bookings in GET /api/bookings; 200, 404, 409, 422 for cancel, each response checked against openapi.json).|||Test US-11 không cần CSDL: bảng quyết định của cancelDecision (chủ lượt đặt, sinh viên khác, giảng viên, admin × đang hiệu lực hay đã huỷ × trước giờ bắt đầu 60 hay 59 phút, theo giờ Việt Nam); service trên repository bộ nhớ (khung đã huỷ đặt lại được; hai lượt huỷ cùng lúc — đúng một lượt thắng); API bằng Supertest (GET /api/bookings chỉ trả lượt của tôi; 200, 404, 409, 422 khi huỷ, mỗi phản hồi đối chiếu openapi.json).",
+      "dotBien": [
+        {
+          "file": "src/rules/cancel.js",
+          "from": "if (!isAdmin && !canCancel(",
+          "to": "if (!canCancel(",
+          "label": "admins are refused inside the last hour too"
+        },
+        {
+          "file": "src/rules/cancel.js",
+          "from": "booking.userId !== user.id && !isAdmin",
+          "to": "booking.userId !== user.id && user.role === 'STUDENT'",
+          "label": "a lecturer can cancel anyone's booking"
+        },
+        {
+          "file": "src/rules/cancel.js",
+          "from": "':00+07:00'",
+          "to": "':00Z'",
+          "label": "start read as UTC: cancelling stays open 7 hours too long"
+        },
+        {
+          "file": "src/rules/cancel.js",
+          "from": "  if (booking.status === 'CANCELLED') return { ok: false, code: 'ALREADY_CANCELLED' };\n",
+          "to": "",
+          "label": "a cancelled booking inside the last hour says TOO_LATE, not ALREADY_CANCELLED"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "b.status !== 'CANCELLED' && ",
+          "to": "",
+          "label": "a cancelled slot stays blocked"
+        },
+        {
+          "file": "src/booking/myBookings.js",
+          "from": "const booking = await repo.cancel(id);",
+          "to": "await repo.cancel(id);\n  const booking = await repo.findById(id);",
+          "label": "two cancels at the same moment both succeed"
+        },
+        {
+          "file": "src/api/myBookings.js",
+          "from": "listMyBookings(repo, req.user.id)",
+          "to": "repo.list()",
+          "label": "My bookings shows everyone's bookings"
+        },
+        {
+          "file": "src/api/myBookings.js",
+          "from": "TOO_LATE_TO_CANCEL: 422",
+          "to": "TOO_LATE_TO_CANCEL: 409",
+          "label": "too late answered as 409, not 422"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/myBookings.js",
+          "from": "const CANCEL_STATUS = { NOT_FOUND: 404, ALREADY_CANCELLED: 409, TOO_LATE_TO_CANCEL: 422 };",
+          "to": "const CANCEL_STATUS = { TOO_LATE_TO_CANCEL: 422, NOT_FOUND: 404, ALREADY_CANCELLED: 409 };",
+          "label": "keys of CANCEL_STATUS in another order"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-2b",
+      "bai": "tst-11-2-backend",
+      "config": "vitest.integration.config.js",
+      "tieuDe": "US-11 on a real PostgreSQL|||US-11 trên PostgreSQL thật",
+      "ham": "createPgRepo (findById, listByUser, cancel), db/schema.sql, the API on PostgreSQL",
+      "fileDung": [
+        "src/booking/pgRepo.js",
+        "db/schema.sql",
+        "src/api/myBookings.js"
+      ],
+      "testThamKhao": [
+        "test/integration/myBookings.int.test.js"
+      ],
+      "yeuCau": "Test what only PostgreSQL 17 can show (needs Docker): listByUser gives back my rows in the API shape (\"2026-11-16\", \"09:00\") by date then start; two cancels at the same moment on two warm connections — one wins, one ALREADY_CANCELLED; a cancelled slot can be booked again while a live booking is still refused by the exclusion constraint; the API backed by PostgreSQL answers book → list → cancel inside openapi.json, and a cancel id of 2147483648 is a 404, never a database error.|||Test những gì chỉ PostgreSQL 17 mới cho thấy (cần Docker): listByUser trả lượt của tôi đúng dạng API (\"2026-11-16\", \"09:00\") theo ngày rồi giờ bắt đầu; hai lượt huỷ cùng lúc trên hai kết nối đã mở sẵn — một thắng, một ALREADY_CANCELLED; khung đã huỷ đặt lại được trong khi lượt còn hiệu lực vẫn bị ràng buộc loại trừ từ chối; API chạy trên PostgreSQL trả lời đặt → xem → huỷ đúng openapi.json, và huỷ id 2147483648 là 404, không bao giờ là lỗi CSDL.",
+      "dotBien": [
+        {
+          "file": "db/schema.sql",
+          "from": "  ) WHERE (status <> 'CANCELLED')",
+          "to": "  )",
+          "label": "PostgreSQL still blocks a cancelled slot"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "to_char(date, 'YYYY-MM-DD') AS date",
+          "to": "date",
+          "label": "dates come back as JS Dates at local midnight"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "to_char(start_time, 'HH24:MI') AS start",
+          "to": "start_time AS start",
+          "label": "start comes back as \"09:00:00\""
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "WHERE id = $1 AND status <> 'CANCELLED' RETURNING",
+          "to": "WHERE id = $1 RETURNING",
+          "label": "the cancel UPDATE is not atomic: both win"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "WHERE user_id = $1 ORDER BY date, start_time",
+          "to": "WHERE user_id = $1 ORDER BY start_time",
+          "label": "My bookings sorted by time of day, not by date"
+        },
+        {
+          "file": "src/api/myBookings.js",
+          "from": " || id > MAX_ID",
+          "to": "",
+          "label": "an id beyond int4 reaches PostgreSQL: 500"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "' FROM bookings WHERE id = $1', [id]);",
+          "to": "' FROM bookings WHERE id = $1 LIMIT 1', [id]);",
+          "label": "LIMIT 1 on a primary-key lookup"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-3",
+      "bai": "tst-11-3-frontend",
+      "config": "vitest.web.config.js",
+      "tieuDe": "The My bookings screen, as a user sees it|||Màn hình My bookings, như người dùng thấy",
+      "ham": "MyBookings",
+      "fileDung": [
+        "web/MyBookings.jsx"
+      ],
+      "testThamKhao": [
+        "web/MyBookings.test.jsx"
+      ],
+      "yeuCau": "Test MyBookings with a stub client and Testing Library (roles and names, never class names): one row per booking and no Cancel button on a cancelled one; after Cancel the row says CANCELLED, the button is gone and a status message says which booking was cancelled; while cancelling the button reads \"Cancelling…\" and every Cancel button is disabled (a double click sends one request); 422 → an alert and the row unchanged; 409 → the row shows CANCELLED; no network → \"Cannot reach the server\"; an empty list; a failed load with a working Try again.|||Test MyBookings bằng client giả và Testing Library (vai trò và tên, không bao giờ dùng class): mỗi lượt đặt một dòng, dòng đã huỷ không có nút Cancel; bấm Cancel xong thì dòng ghi CANCELLED, nút biến mất và một thông báo status nói lượt nào vừa huỷ; trong lúc huỷ nút ghi \"Cancelling…\" và mọi nút Cancel bị khoá (bấm đúp chỉ gửi một request); 422 → một alert và dòng giữ nguyên; 409 → dòng hiện CANCELLED; mất mạng → \"Cannot reach the server\"; danh sách rỗng; tải lỗi có nút Try again chạy được.",
+      "dotBien": [
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "disabled={busyId !== null}",
+          "to": "disabled={busyId === b.id}",
+          "label": "other rows stay clickable during a cancel"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "        replace(res.data);\n",
+          "to": "",
+          "label": "the row still says CONFIRMED after a cancel"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "        if (code === 'ALREADY_CANCELLED') replace({ ...booking, status: 'CANCELLED' });   // the server knows better: show it\n",
+          "to": "",
+          "label": "409 leaves a Cancel button on a cancelled booking"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "{b.status !== 'CANCELLED' && (",
+          "to": "{(",
+          "label": "a cancelled booking still has a Cancel button"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "{notice && <p role={notice.ok ? 'status' : 'alert'}>{notice.text}</p>}",
+          "to": "{notice && <p>{notice.text}</p>}",
+          "label": "the outcome is not announced to screen readers"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "TOO_LATE_TO_CANCEL: 'Too late to cancel: the booking starts in less than 1 hour.',",
+          "to": "",
+          "label": "too late shows a generic error"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "      setNotice({ ok: false, text: 'Cannot reach the server. Check your connection.' });\n",
+          "to": "",
+          "label": "a network failure says nothing"
+        },
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "{busyId === b.id ? 'Cancelling…' : 'Cancel'}",
+          "to": "{'Cancel'}",
+          "label": "no sign that the cancel is in progress"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/MyBookings.jsx",
+          "from": "({ ...s, bookings: s.bookings.map(",
+          "to": "({ phase: s.phase, bookings: s.bookings.map(",
+          "label": "state copied field by field instead of spread"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-3b",
+      "bai": "tst-11-3-frontend",
+      "runner": "playwright",
+      "tieuDe": "One end-to-end journey for US-11|||Một hành trình đầu-cuối cho US-11",
+      "ham": "web/api.js, web/app/App.jsx, the in-memory repository, e2e/server.js",
+      "fileDung": [
+        "web/api.js",
+        "web/app/App.jsx",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "e2e/huy-phong.spec.js"
+      ],
+      "yeuCau": "Write ONE Playwright journey as student an (storageState): book a fresh lab a few days from today, open My bookings by its link, cancel that row (scope the button to the row), check the status message and CANCELLED, reload to see what the server stored, then book the same slot again and see \"Booked.\" — the bugs below are invisible to the component tests, which use a stub client.|||Viết MỘT hành trình Playwright với sinh viên an (storageState): đặt một phòng lab riêng vài ngày sau hôm nay, mở My bookings bằng link, huỷ đúng dòng đó (tìm nút trong dòng), kiểm thông báo status và CANCELLED, tải lại trang để thấy thứ server đã lưu, rồi đặt lại đúng khung đó và thấy \"Booked.\" — các bug bên dưới vô hình với test component, vốn dùng client giả.",
+      "dotBien": [
+        {
+          "file": "web/api.js",
+          "from": "'/cancel')",
+          "to": "'/cancellation')",
+          "label": "the screen calls a URL the API does not have"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "window.location.pathname === '/my-bookings'",
+          "to": "window.location.pathname === '/my-booking'",
+          "label": "the My bookings page never shows"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "<a href=\"/my-bookings\"",
+          "to": "<a href=\"/bookings\"",
+          "label": "the link goes to the wrong page"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "b.status !== 'CANCELLED' && ",
+          "to": "",
+          "label": "a cancelled slot stays blocked"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/app/App.jsx",
+          "from": "Book a lab</a> · <a",
+          "to": "Book a lab</a> | <a",
+          "label": "another separator between the links"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-11-4",
+      "bai": "tst-11-4-ci",
+      "tieuDe": "The quality report and the gate|||Báo cáo chất lượng và cổng chặn",
+      "ham": "mutationScore, qualityReport, .github/workflows/test.yml",
+      "fileDung": [
+        "src/ci/quality.js",
+        ".github/workflows/test.yml"
+      ],
+      "testThamKhao": [
+        "src/ci/quality.test.js",
+        "src/ci/workflow.test.js"
+      ],
+      "yeuCau": "Test the pull-request quality report of lesson 11.4: mutationScore counts killed and timed-out mutants and leaves out the ones that could not run; qualityReport turns a failed test, a missing report, coverage under a minimum (exactly at the minimum is enough), a mutation score under the break and every traceability gap into a reason not to merge. Then test the workflow file itself: ci-ok needs mutation and report, and the report step keeps its exit code through tee.|||Test báo cáo chất lượng pull request của bài 11.4: mutationScore tính đột biến bị diệt và hết giờ, bỏ ra ngoài những đột biến không chạy được; qualityReport biến một test đỏ, một báo cáo thiếu, độ phủ dưới mức tối thiểu (đúng bằng mức tối thiểu là đủ), điểm đột biến dưới ngưỡng break và mọi lỗ hổng truy vết thành lý do không được merge. Rồi test chính file workflow: ci-ok cần mutation và report, bước report giữ được mã thoát qua tee.",
+      "dotBien": [
+        {
+          "file": "src/ci/quality.js",
+          "from": "if (m.status === 'Killed' || m.status === 'Timeout') detected++;",
+          "to": "if (m.status === 'Killed') detected++;",
+          "label": "timed-out mutants count as survivors"
+        },
+        {
+          "file": "src/ci/quality.js",
+          "from": "if (['CompileError', 'RuntimeError', 'Ignored'].includes(m.status)) continue;",
+          "to": "if (m.status === 'Ignored') continue;",
+          "label": "mutants that could not compile lower the score"
+        },
+        {
+          "file": "src/ci/quality.js",
+          "from": "coverage.total[m].pct < thresholds[m]",
+          "to": "coverage.total[m].pct <= thresholds[m]",
+          "label": "coverage exactly at the minimum blocks the merge"
+        },
+        {
+          "file": "src/ci/quality.js",
+          "from": "    if (!tests) { problems.push(label + ': no report'); return",
+          "to": "    if (!tests) { return",
+          "label": "a missing report is not a problem"
+        },
+        {
+          "file": "src/ci/quality.js",
+          "from": "else if (mutation < mutationBreak)",
+          "to": "else if (mutation < mutationBreak - 1)",
+          "label": "a mutation score of 94.99% passes a 95% bar"
+        },
+        {
+          "file": "src/ci/quality.js",
+          "from": "  problems.push(...rtm.gaps.map((g) => 'traceability — ' + g));\n",
+          "to": "",
+          "label": "traceability gaps never block"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "needs: [unit, integration, e2e, mutation, report]",
+          "to": "needs: [unit, integration, e2e, report]",
+          "label": "ci-ok does not wait for mutation testing"
+        },
+        {
+          "file": ".github/workflows/test.yml",
+          "from": "        shell: bash                           # bash -eo pipefail: \"| tee\" must not swallow the exit code (lesson 9.3)\n",
+          "to": "",
+          "label": "tee swallows the exit code of the report"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/ci/quality.js",
+          "from": "  let detected = 0;\n  let valid = 0;",
+          "to": "  let valid = 0;\n  let detected = 0;",
+          "label": "counters declared in another order"
         }
       ]
     }

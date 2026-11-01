@@ -1,4 +1,4 @@
-# LabFlow Lite — tests on every pull request and on main (Chapter 9).
+# LabFlow Lite — tests on every pull request and on main (Chapter 9; Chapter 11 adds mutation + one quality report).
 # Branch protection requires ONE status check: ci-ok (lesson 9.3). Run it on your machine with act (lesson 9.1).
 name: tests
 
@@ -76,7 +76,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run test:int -- test/integration --reporter=tree --reporter=github-actions
+      - run: npm run test:int -- test/integration --reporter=tree --reporter=github-actions --reporter=json --outputFile.json=reports/int.json
+      - name: upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: int-reports
+          path: reports/
+          retention-days: 7
 
   e2e:
     name: e2e (Chromium)
@@ -91,12 +98,34 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - name: upload Playwright report
+      - name: upload Playwright reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: e2e-reports                     # playwright-report/ (HTML + traces) and reports/e2e.json (lesson 11.4)
+          path: |
+            playwright-report/
+            reports/
+          retention-days: 7
+
+  mutation:
+    name: mutation (Stryker, src/rules)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:mutation              # fails below thresholds.break (95) in stryker.config.mjs — lesson 11.4
+      - name: upload mutation report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: reports/mutation/
           retention-days: 7
 
   quarantine:
@@ -113,10 +142,47 @@ jobs:
       - run: npm ci
       - run: npm run test:quarantine -- --repeats=9
 
+  report:
+    name: quality report + traceability
+    if: ${{ !cancelled() }}                   # also when a test job failed: the report says what is missing
+    needs: [unit, integration, e2e, mutation]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        continue-on-error: true               # a missing report is listed by the script, not a crash here
+        with:
+          name: unit-reports-node22
+          path: .
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: int-reports
+          path: reports/
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: e2e-reports
+          path: .
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: mutation-report
+          path: reports/mutation/
+      - name: one page for the whole pull request
+        shell: bash                           # bash -eo pipefail: "| tee" must not swallow the exit code (lesson 9.3)
+        run: node scripts/ci-report.mjs | tee -a "$GITHUB_STEP_SUMMARY"
+
   ci-ok:
     name: ci-ok
     if: always()                              # must run (and fail) when a job it needs failed or was skipped
-    needs: [unit, integration, e2e]
+    needs: [unit, integration, e2e, mutation, report]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -124,5 +190,5 @@ jobs:
       - name: every required job passed?
         env:
           NEEDS: ${{ toJSON(needs) }}
-          REQUIRED: unit,integration,e2e
+          REQUIRED: unit,integration,e2e,mutation,report
         run: node scripts/ci-gate.mjs

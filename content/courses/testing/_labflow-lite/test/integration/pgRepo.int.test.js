@@ -10,7 +10,7 @@ beforeEach(() => pool.query('TRUNCATE bookings RESTART IDENTITY'));
 afterAll(() => pool.end());
 const row = (b) => ({ ...b, status: 'CONFIRMED', minutes: 120 });
 
-describe('findOverlap — the SQL', () => {
+describe('findOverlap — the SQL (BR-04)', () => {
   it.each([
     ['09:00', '11:00', 'BE-201', '2026-11-16', true],   // overlaps 08:00–10:00
     ['07:00', '08:30', 'BE-201', '2026-11-16', true],   // overlaps the start

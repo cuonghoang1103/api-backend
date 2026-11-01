@@ -15,7 +15,7 @@ export function createMemoryRepo() {
   return {
     async findOverlap(lab, date, start, end) {
       await latency();
-      return rows.find((b) => b.lab === lab && b.date === date && b.start < end && start < b.end) ?? null;
+      return rows.find((b) => b.status !== 'CANCELLED' && b.lab === lab && b.date === date && b.start < end && start < b.end) ?? null; // a cancelled booking frees its slot (Chapter 11)
     },
     async insert(booking) {
       await latency();
@@ -37,6 +37,17 @@ export function createMemoryRepo() {
       return i === -1 ? null : rows.splice(i, 1)[0];
     },
     count: () => rows.length,
+    async listByUser(userId) { // Chapter 11: My bookings — one student's bookings, by date and start
+      await latency();
+      return rows.filter((b) => b.userId === userId).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start)).map((b) => ({ ...b }));
+    },
+    async cancel(id) { // Chapter 11: CONFIRMED or PENDING → CANCELLED in one step; null if missing or already cancelled
+      await latency();
+      const row = rows.find((b) => b.id === id && b.status !== 'CANCELLED');
+      if (!row) return null;
+      row.status = 'CANCELLED';
+      return { ...row };
+    },
   };
 }
 

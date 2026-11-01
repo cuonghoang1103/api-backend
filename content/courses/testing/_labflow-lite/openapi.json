@@ -1,6 +1,6 @@
 {
   "openapi": "3.1.0",
-  "info": { "title": "LabFlow Lite API", "version": "1.0.0" },
+  "info": { "title": "LabFlow Lite API", "version": "1.1.0" },
   "paths": {
     "/api/bookings": {
       "post": {
@@ -12,6 +12,13 @@
           "409": { "description": "Slot taken", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
           "422": { "description": "Against a booking rule", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
         }
+      },
+      "get": {
+        "summary": "My bookings, by date and start — cancelled ones too (US-11)",
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Booking" } } } } },
+          "401": { "description": "No valid token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
       }
     },
     "/api/bookings/{id}": {
@@ -21,6 +28,18 @@
           "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Booking" } } } },
           "401": { "description": "No valid token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
           "404": { "description": "Missing, or not mine", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/api/bookings/{id}/cancel": {
+      "post": {
+        "summary": "Cancel one of my bookings (US-11, Lite-3)",
+        "responses": {
+          "200": { "description": "Cancelled", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Booking" } } } },
+          "401": { "description": "No valid token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "404": { "description": "Missing, or not mine", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "409": { "description": "Already cancelled", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+          "422": { "description": "Less than 60 minutes before the start", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
         }
       }
     },
@@ -48,7 +67,7 @@
           "start": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$" },
           "end": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$" },
           "seats": { "type": "integer", "minimum": 1 },
-          "status": { "enum": ["CONFIRMED", "PENDING"] },
+          "status": { "enum": ["CONFIRMED", "PENDING", "CANCELLED"] },
           "minutes": { "type": "integer", "minimum": 30 }
         }
       },

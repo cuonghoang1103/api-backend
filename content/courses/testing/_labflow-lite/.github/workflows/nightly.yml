@@ -1,5 +1,5 @@
 # LabFlow Lite — the slow checks, once a night (lesson 9.3). Not a required check: it opens no pull request,
-# it tells the team in the morning. Cron is in UTC: 20:00 UTC = 03:00 in Viet Nam (before 07:00 — lesson 8.3's clock bug hour).
+# it tells the team in the morning. Lesson 11.4: mutation moved to every pull request (23 s); Viet Nam time zone added. Cron is in UTC: 20:00 UTC = 03:00 in Viet Nam (before 07:00 — lesson 8.3's clock bug hour).
 name: nightly
 
 on:
@@ -11,10 +11,12 @@ permissions:
   contents: read
 
 jobs:
-  mutation:
-    name: mutation (Stryker)
+  unit-hanoi:
+    name: unit, in Viet Nam time (Asia/Ho_Chi_Minh)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
+    env:
+      TZ: Asia/Ho_Chi_Minh                    # pull requests run in UTC; this catches the opposite time-zone bugs (lessons 2.2, 11.2)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,14 +24,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run test:mutation
-      - name: upload mutation report
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: mutation-report
-          path: reports/mutation/
-          retention-days: 14
+      - run: npm run test:unit
 
   shuffled:
     name: unit, shuffled ×5 (flaky hunt)

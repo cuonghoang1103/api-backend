@@ -8,7 +8,7 @@ export const SECRET = 'test-secret-not-for-production';
 export function makeApi({ now } = {}) {
   const repo = createMemoryRepo();
   const auth = createAuth({ secret: SECRET, now });
-  const app = createApp({ repo, auth });
+  const app = createApp({ repo, auth, now });   // the same clock for tokens and for cancelling (Chapter 11)
   const bearer = async (id, role = 'STUDENT') => 'Bearer ' + (await auth.sign({ id, role }));
   return { app, repo, auth, bearer };
 }

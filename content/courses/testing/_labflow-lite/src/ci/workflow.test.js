@@ -36,13 +36,25 @@ describe('.github/workflows/test.yml', () => {
     expect(runs('e2e')).toEqual(['npm ci', 'npx playwright install --with-deps chromium', 'npm run test:e2e']);
   });
 
-  it('reports are uploaded even when the tests are red', () => {
-    const uploads = Object.values(jobs).flatMap((j) => j.steps.filter((s) => String(s.uses).startsWith('actions/upload-artifact@')));
-    expect(uploads.map((s) => s.if)).toEqual(['${{ !cancelled() }}', '${{ !cancelled() }}']);
+  it('every test job uploads its reports, even when the tests are red', () => {
+    const uploaders = Object.entries(jobs).filter(([, j]) => j.steps.some((s) => String(s.uses).startsWith('actions/upload-artifact@')));
+    expect(uploaders.map(([id]) => id)).toEqual(['unit', 'integration', 'e2e', 'mutation']);
+    const uploads = uploaders.flatMap(([, j]) => j.steps.filter((s) => String(s.uses).startsWith('actions/upload-artifact@')));
+    expect(uploads.every((s) => s.if === '${{ !cancelled() }}')).toBe(true);
   });
 
-  it('the gate requires exactly unit, integration and e2e', () => {
-    expect(jobs['ci-ok'].needs).toEqual(['unit', 'integration', 'e2e']);
-    expect(jobs['ci-ok'].steps.at(-1).env.REQUIRED).toBe('unit,integration,e2e');
+  it('the gate requires exactly unit, integration, e2e, mutation and report (lesson 11.4)', () => {
+    expect(jobs['ci-ok'].needs).toEqual(['unit', 'integration', 'e2e', 'mutation', 'report']);
+    expect(jobs['ci-ok'].steps.at(-1).env.REQUIRED).toBe('unit,integration,e2e,mutation,report');
+  });
+
+  it('the report job reads every report, runs even after a red job, and keeps the exit code through tee', () => {
+    const report = jobs.report;
+    expect(report.if).toBe('${{ !cancelled() }}');
+    expect(report.needs).toEqual(['unit', 'integration', 'e2e', 'mutation']);
+    const names = report.steps.filter((s) => String(s.uses).startsWith('actions/download-artifact@')).map((s) => s.with.name);
+    expect(names).toEqual(['unit-reports-node22', 'int-reports', 'e2e-reports', 'mutation-report']);
+    const last = report.steps.at(-1);
+    expect([last.shell, last.run]).toEqual(['bash', 'node scripts/ci-report.mjs | tee -a "$GITHUB_STEP_SUMMARY"']);
   });
 });

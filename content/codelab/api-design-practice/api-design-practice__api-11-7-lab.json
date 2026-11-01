@@ -1,0 +1,512 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-11-7-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-11-7-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 11 · 1 — The starter, the YAML trap and the reference",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "interview",
+        "openapi"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Club event sign-up and check-in, graded by lab/grade-lab11.mjs (starter 0/10, one unquoted brace 2/10, reference 10/10).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đăng ký và check-in sự kiện CLB, chấm bằng lab/grade-lab11.mjs (khởi đầu 0/10, một dấu ngoặc thiếu nháy 2/10, lời giải 10/10).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the trap boxes of the lab page.|||Đọc các khung “Bẫy” của trang lab.",
+        "Ask what exists right after the request.|||Hỏi: ngay sau request, cái gì đã tồn tại?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11 · 1 — The starter, the YAML trap and the reference\n\nAnswer in the answer panel (no code needed).\n\n1. One line { description: /v1/events/{eventId} } in a flow map dropped the reference solution to 2/10. Why so many points?Một dòng { description: /v1/events/{eventId} } trong flow map kéo lời giải xuống 2/10. Vì sao mất nhiều điểm vậy?\n2. The event is full and a student registers. Why does the reference answer 201 with status WAITLISTED, not 202?Sự kiện hết chỗ và một sinh viên đăng ký. Vì sao lời giải trả 201 kèm status WAITLISTED mà không 202?\n3. An organiser scans the same ticket twice (or an offline queue replays it). What should the API answer?Ban tổ chức quét một vé hai lần (hoặc hàng đợi offline phát lại). API nên trả gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11 · 1 — The starter, the YAML trap and the reference — answer key\n\n1. One line { description: /v1/events/{eventId} } in a flow map dropped the reference solution to 2/10. Why so many points?Một dòng { description: /v1/events/{eventId} } trong flow map kéo lời giải xuống 2/10. Vì sao mất nhiều điểm vậy?\n   Answer: b) The whole YAML stopped parsing, so every contract check after the design doc failed\n   Quote strings with {, : or a comma inside flow maps, and run the grader after every edit (7.1 had the same family of traps).VI: Đặt trong nháy chuỗi có {, : hay dấu phẩy trong flow map, và chạy bộ chấm sau mỗi lần sửa (7.1 có cùng họ bẫy).\n\n2. The event is full and a student registers. Why does the reference answer 201 with status WAITLISTED, not 202?Sự kiện hết chỗ và một sinh viên đăng ký. Vì sao lời giải trả 201 kèm status WAITLISTED mà không 202?\n   Answer: d) A waitlist place is created immediately — it has an id, a position and can be cancelled\n   202 means “decided later”; use it only if registrations went through a queue at a far bigger scale (10.1).VI: 202 nghĩa là “quyết sau”; chỉ dùng khi đăng ký phải qua hàng đợi ở quy mô lớn hơn nhiều (10.1).\n\n3. An organiser scans the same ticket twice (or an offline queue replays it). What should the API answer?Ban tổ chức quét một vé hai lần (hoặc hàng đợi offline phát lại). API nên trả gì?\n   Answer: c) 200 with the first check-in — “already in” is the answer the door needs\n   Same reasoning as a replayed Idempotency-Key: the repeat is not an error to dismiss.VI: Cùng lý lẽ với Idempotency-Key được phát lại: lần lặp không phải lỗi để bấm tắt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The whole YAML stopped parsing, so every contract check after the design doc failed</p><p>Quote strings with {, : or a comma inside flow maps, and run the grader after every edit (7.1 had the same family of traps).</p><p><i>VI: Đặt trong nháy chuỗi có {, : hay dấu phẩy trong flow map, và chạy bộ chấm sau mỗi lần sửa (7.1 có cùng họ bẫy).</i></p></li><li><p><b>d)</b> A waitlist place is created immediately — it has an id, a position and can be cancelled</p><p>202 means “decided later”; use it only if registrations went through a queue at a far bigger scale (10.1).</p><p><i>VI: 202 nghĩa là “quyết sau”; chỉ dùng khi đăng ký phải qua hàng đợi ở quy mô lớn hơn nhiều (10.1).</i></p></li><li><p><b>c)</b> 200 with the first check-in — “already in” is the answer the door needs</p><p>Same reasoning as a replayed Idempotency-Key: the repeat is not an error to dismiss.</p><p><i>VI: Cùng lý lẽ với Idempotency-Key được phát lại: lần lặp không phải lỗi để bấm tắt.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>One line { description: /v1/events/{eventId} } in a flow map dropped the reference solution to 2/10. Why so many points?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dòng { description: /v1/events/{eventId} } trong flow map kéo lời giải xuống 2/10. Vì sao mất nhiều điểm vậy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The grader penalises path templates inside descriptions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The whole YAML stopped parsing, so every contract check after the design doc failed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The design doc referred to a path that no longer existed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "redocly treats curly braces in descriptions as a breaking change"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Quote strings with {, : or a comma inside flow maps, and run the grader after every edit (7.1 had the same family of traps).</p><p><i>VI: Đặt trong nháy chuỗi có {, : hay dấu phẩy trong flow map, và chạy bộ chấm sau mỗi lần sửa (7.1 có cùng họ bẫy).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The event is full and a student registers. Why does the reference answer 201 with status WAITLISTED, not 202?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện hết chỗ và một sinh viên đăng ký. Vì sao lời giải trả 201 kèm status WAITLISTED mà không 202?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "201 is required by OpenAPI for every POST"
+              },
+              {
+                "ma": "b",
+                "noiDung": "202 is only allowed for POST requests without a body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Clients cannot read the body of a 202 response"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A waitlist place is created immediately — it has an id, a position and can be cancelled"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>202 means “decided later”; use it only if registrations went through a queue at a far bigger scale (10.1).</p><p><i>VI: 202 nghĩa là “quyết sau”; chỉ dùng khi đăng ký phải qua hàng đợi ở quy mô lớn hơn nhiều (10.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An organiser scans the same ticket twice (or an offline queue replays it). What should the API answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ban tổ chức quét một vé hai lần (hoặc hàng đợi offline phát lại). API nên trả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "201 again with a second check-in record"
+              },
+              {
+                "ma": "b",
+                "noiDung": "422, because a used ticket breaks a business rule"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with the first check-in — “already in” is the answer the door needs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "409 CONFLICT, because the ticket was already used"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same reasoning as a replayed Idempotency-Key: the repeat is not an error to dismiss.</p><p><i>VI: Cùng lý lẽ với Idempotency-Key được phát lại: lần lặp không phải lỗi để bấm tắt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Unquoted braces inside YAML flow maps.|||Dấu ngoặc nhọn không có nháy trong flow map YAML."
+        },
+        {
+          "loi": "Answering 409 at the door for a repeat scan.|||Trả 409 ở cửa cho lần quét lặp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flow map",
+          "vi": "map viết trên một dòng { … }"
+        },
+        {
+          "en": "waitlist",
+          "vi": "hàng chờ"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11 · 2 — Write checkPaths(paths): check 4 of the grader",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "resources",
+        "openapi"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create rubric check 4 of <code>lab/grade-lab11.mjs</code>. A path is <b>bad</b> when it does not start with <code>/v1/</code>, or when any segment that is not a template (does not start with <code>{</code>) is a verb: it matches <code>^(get|create|update|delete|register|add|remove|list|fetch|do|set|checkin)</code> case-insensitively, followed by an upper-case letter, <code>_</code>, <code>-</code> or the end. <b>Missing</b> lists those of <code>/events</code>, <code>/registrations</code>, <code>/check-ins</code> (in that order) that no path contains. Return <code>{ ok, bad, missing }</code>; <code>ok</code> needs at least one path, no bad path and nothing missing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại phép kiểm 4 của <code>lab/grade-lab11.mjs</code>. Một đường là <b>sai</b> khi không bắt đầu bằng <code>/v1/</code>, hoặc khi có đoạn không phải tham số (không bắt đầu bằng <code>{</code>) là động từ: khớp <code>^(get|create|update|delete|register|add|remove|list|fetch|do|set|checkin)</code> không phân biệt hoa thường, theo sau là chữ hoa, <code>_</code>, <code>-</code> hoặc hết chuỗi. <b>Thiếu</b> liệt kê những cái trong <code>/events</code>, <code>/registrations</code>, <code>/check-ins</code> (đúng thứ tự) mà không đường nào chứa. Trả <code>{ ok, bad, missing }</code>; <code>ok</code> cần ít nhất một đường, không đường sai và không thiếu gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "paths — string[] (the keys of openapi.paths)|||paths — string[] (các khoá của openapi.paths)",
+      "outputSpec": "{ ok: boolean, bad: string[], missing: string[] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkPaths([\"/getEvents\",\"/registerEvent\",\"/checkin\"])",
+          "output": "{\"ok\":false,\"bad\":[\"/getEvents\",\"/registerEvent\",\"/checkin\"],\"missing\":[\"/events\",\"/registrations\",\"/check-ins\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(\"/\") and skip segments starting with “{”.|||split(\"/\") và bỏ qua đoạn bắt đầu bằng “{”.",
+        "The verb must be followed by an upper-case letter, _ , - or the end — so “getEvents” is a verb but “settings” is not.|||Động từ phải theo sau bởi chữ hoa, _, - hoặc hết chuỗi — nên “getEvents” là động từ còn “settings” thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rubric check 4 */\nfunction checkPaths(paths) {\n  // Write your solution here\n  const bad = paths.filter((p) => /get|create|register|checkin/i.test(p));\n  return { ok: bad.length === 0, bad, missing: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkPaths(paths) {\n  const verb = /^(get|create|update|delete|register|add|remove|list|fetch|do|set|checkin)([A-Z_-]|$)/i;\n  const bad = paths.filter((p) => !p.startsWith('/v1/') || p.split('/').some((seg) => !seg.startsWith('{') && verb.test(seg)));\n  const missing = ['/events', '/registrations', '/check-ins'].filter((n) => !paths.some((p) => p.includes(n)));\n  return { ok: paths.length > 0 && bad.length === 0 && missing.length === 0, bad, missing };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The starter of Lab 11 failed exactly this: /getEvents, /registerEvent, /checkin. The reference passed with six resource paths under /v1/.</p>",
+      "solutionExplanationHtmlVi": "<p>Bản khởi đầu của Lab 11 trượt đúng chỗ này: /getEvents, /registerEvent, /checkin. Lời giải qua với sáu đường tài nguyên dưới /v1/.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The starter of Lab 11",
+              "vi": "Bản khởi đầu của Lab 11"
+            },
+            "goi": "checkPaths([\"/getEvents\",\"/registerEvent\",\"/checkin\"])",
+            "mongDoi": {
+              "ok": false,
+              "bad": [
+                "/getEvents",
+                "/registerEvent",
+                "/checkin"
+              ],
+              "missing": [
+                "/events",
+                "/registrations",
+                "/check-ins"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "The reference solution",
+              "vi": "Lời giải tham khảo"
+            },
+            "goi": "checkPaths([\"/v1/events\",\"/v1/events/{eventId}\",\"/v1/events/{eventId}/registrations\",\"/v1/events/{eventId}/registrations/{registrationId}\",\"/v1/me/registrations\",\"/v1/events/{eventId}/check-ins\"])",
+            "mongDoi": {
+              "ok": true,
+              "bad": [],
+              "missing": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "checkPaths([\"/v1/events\",\"/v1/events/{id}/register\",\"/v1/me/settings\"])",
+            "mongDoi": {
+              "ok": false,
+              "bad": [
+                "/v1/events/{id}/register",
+                "/v1/me/settings"
+              ],
+              "missing": [
+                "/registrations",
+                "/check-ins"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "checkPaths([\"/events\",\"/v1/registrations\",\"/v1/check-ins\"])",
+            "mongDoi": {
+              "ok": false,
+              "bad": [
+                "/events"
+              ],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "checkPaths([])",
+            "mongDoi": {
+              "ok": false,
+              "bad": [],
+              "missing": [
+                "/events",
+                "/registrations",
+                "/check-ins"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "checkPaths([\"/v1/events/{createdBy}/registrations\",\"/v1/check-ins/list_all\"])",
+            "mongDoi": {
+              "ok": false,
+              "bad": [
+                "/v1/check-ins/list_all"
+              ],
+              "missing": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Flagging “check-ins” because it starts with “check”.|||Bắt nhầm “check-ins” vì nó bắt đầu bằng “check”."
+        },
+        {
+          "loi": "Forgetting the /v1/ prefix rule.|||Quên luật tiền tố /v1/."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "path template",
+          "vi": "tham số trong đường dẫn {id}"
+        },
+        {
+          "en": "segment",
+          "vi": "đoạn đường dẫn"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11 · 3 — Write register(event, regs, userId): a seat or the waitlist",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "business rules",
+        "errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The decision inside <code>POST /v1/events/{eventId}/registrations</code>, in this order:</p><ol><li>the user already has a registration that is not CANCELLED ⇒ <code>{ status: 409, code: \"ALREADY_REGISTERED\" }</code>;</li><li><code>event.open</code> is false ⇒ <code>422 REGISTRATION_CLOSED</code>;</li><li>fewer CONFIRMED than <code>event.capacity</code> ⇒ <code>{ status: 201, registration: { userId, status: \"CONFIRMED\", waitlistPosition: null } }</code>;</li><li>WAITLISTED count ≥ <code>event.waitlistLimit</code> ⇒ <code>422 WAITLIST_FULL</code>;</li><li>otherwise <code>201</code> with <code>status: \"WAITLISTED\"</code> and <code>waitlistPosition</code> = waiting count + 1.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định bên trong <code>POST /v1/events/{eventId}/registrations</code>, theo thứ tự:</p><ol><li>người dùng đã có đăng ký không ở trạng thái CANCELLED ⇒ <code>{ status: 409, code: \"ALREADY_REGISTERED\" }</code>;</li><li><code>event.open</code> là false ⇒ <code>422 REGISTRATION_CLOSED</code>;</li><li>số CONFIRMED ít hơn <code>event.capacity</code> ⇒ <code>{ status: 201, registration: { userId, status: \"CONFIRMED\", waitlistPosition: null } }</code>;</li><li>số WAITLISTED ≥ <code>event.waitlistLimit</code> ⇒ <code>422 WAITLIST_FULL</code>;</li><li>ngược lại <code>201</code> với <code>status: \"WAITLISTED\"</code> và <code>waitlistPosition</code> = số đang chờ + 1.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "event — {capacity, waitlistLimit, open}; regs — {userId, status}[]; userId — string|||event — {capacity, waitlistLimit, open}; regs — {userId, status}[]; userId — chuỗi",
+      "outputSpec": "{ status: 201, registration } | { status: 409 | 422, code }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"u1\",\"status\":\"CONFIRMED\"}], \"u2\")",
+          "output": "{\"status\":201,\"registration\":{\"userId\":\"u2\",\"status\":\"CONFIRMED\",\"waitlistPosition\":null}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Count CONFIRMED and WAITLISTED separately; ignore CANCELLED.|||Đếm CONFIRMED và WAITLISTED riêng; bỏ qua CANCELLED.",
+        "A cancelled earlier registration does not block a new one.|||Một đăng ký cũ đã huỷ không chặn đăng ký mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** seat or waitlist */\nfunction register(event, regs, userId) {\n  // Write your solution here\n  if (regs.length >= event.capacity) return { status: 409, code: 'EVENT_FULL' };\n  return { status: 201, registration: { userId, status: 'CONFIRMED', waitlistPosition: null } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction register(event, regs, userId) {\n  const mine = regs.find((r) => r.userId === userId && r.status !== 'CANCELLED');\n  if (mine) return { status: 409, code: 'ALREADY_REGISTERED' };\n  if (!event.open) return { status: 422, code: 'REGISTRATION_CLOSED' };\n  const confirmed = regs.filter((r) => r.status === 'CONFIRMED').length;\n  const waiting = regs.filter((r) => r.status === 'WAITLISTED').length;\n  if (confirmed < event.capacity) return { status: 201, registration: { userId, status: 'CONFIRMED', waitlistPosition: null } };\n  if (waiting >= event.waitlistLimit) return { status: 422, code: 'WAITLIST_FULL' };\n  return { status: 201, registration: { userId, status: 'WAITLISTED', waitlistPosition: waiting + 1 } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In the database this decision is one transaction: UPDATE events SET seats_left = seats_left - 1 WHERE id = $1 AND seats_left > 0 (0 rows ⇒ waitlist) plus UNIQUE (event_id, user_id) — the race of 11.6 cannot slip through.</p>",
+      "solutionExplanationHtmlVi": "<p>Trong CSDL quyết định này là một transaction: UPDATE events SET seats_left = seats_left - 1 WHERE id = $1 AND seats_left > 0 (0 dòng ⇒ hàng chờ) cộng UNIQUE (event_id, user_id) — cuộc đua ở bài 11.6 không lọt được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The last seat",
+              "vi": "Chỗ cuối cùng"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"u1\",\"status\":\"CONFIRMED\"}], \"u2\")",
+            "mongDoi": {
+              "status": 201,
+              "registration": {
+                "userId": "u2",
+                "status": "CONFIRMED",
+                "waitlistPosition": null
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Full ⇒ waitlist",
+              "vi": "Hết chỗ ⇒ hàng chờ"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"u1\",\"status\":\"CONFIRMED\"},{\"userId\":\"u2\",\"status\":\"CONFIRMED\"}], \"u3\")",
+            "mongDoi": {
+              "status": 201,
+              "registration": {
+                "userId": "u3",
+                "status": "WAITLISTED",
+                "waitlistPosition": 1
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"u1\",\"status\":\"CONFIRMED\"}], \"u1\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "ALREADY_REGISTERED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"u1\",\"status\":\"CANCELLED\"},{\"userId\":\"u2\",\"status\":\"CONFIRMED\"}], \"u1\")",
+            "mongDoi": {
+              "status": 201,
+              "registration": {
+                "userId": "u1",
+                "status": "CONFIRMED",
+                "waitlistPosition": null
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"a\",\"status\":\"CONFIRMED\"},{\"userId\":\"b\",\"status\":\"CONFIRMED\"},{\"userId\":\"c\",\"status\":\"WAITLISTED\"},{\"userId\":\"d\",\"status\":\"WAITLISTED\"}], \"e\")",
+            "mongDoi": {
+              "status": 422,
+              "code": "WAITLIST_FULL"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":false}, [], \"u1\")",
+            "mongDoi": {
+              "status": 422,
+              "code": "REGISTRATION_CLOSED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "register({\"capacity\":2,\"waitlistLimit\":2,\"open\":true}, [{\"userId\":\"a\",\"status\":\"CONFIRMED\"},{\"userId\":\"b\",\"status\":\"CONFIRMED\"},{\"userId\":\"c\",\"status\":\"WAITLISTED\"}], \"c\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "ALREADY_REGISTERED"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting CANCELLED rows as taken seats.|||Đếm dòng CANCELLED là chỗ đã có người."
+        },
+        {
+          "loi": "Answering 409 when the event is full — full is not a conflict with this user.|||Trả 409 khi hết chỗ — hết chỗ không phải xung đột với người này."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "capacity",
+          "vi": "số chỗ"
+        },
+        {
+          "en": "waitlist position",
+          "vi": "vị trí trong hàng chờ"
+        }
+      ]
+    }
+  ]
+}

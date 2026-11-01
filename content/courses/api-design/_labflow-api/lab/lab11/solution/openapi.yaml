@@ -1,0 +1,355 @@
+# Lời giải tham khảo Lab 11 — API sự kiện CLB (OpenAPI 3.1). Một lời giải, không phải lời giải duy nhất.
+openapi: 3.1.0
+info:
+  title: ClubHub API
+  version: 1.0.0
+  summary: Club events, registrations with a waitlist, and door check-in.
+  description: |
+    Errors are `application/problem+json` (RFC 9457) with a machine-readable `code`.
+    Lists use cursor pagination (`limit`, `cursor`, `page.next`). Times are RFC 3339.
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://api.clubhub.example
+    description: Production
+  - url: http://localhost:4130
+    description: Local development
+tags:
+  - name: Events
+    description: Events created by clubs
+  - name: Registrations
+    description: Seats, the waitlist and tickets
+  - name: Check-ins
+    description: Scanning tickets at the door
+security:
+  - bearerAuth: []
+paths:
+  /v1/events:
+    get:
+      tags: [Events]
+      operationId: listEvents
+      summary: List upcoming events
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: clubId
+          in: query
+          schema: { type: string, examples: [club_fcode] }
+      responses:
+        '200':
+          description: A page of events, soonest first
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EventPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [Events]
+      operationId: createEvent
+      summary: Create an event (club organizers only)
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EventInput' }
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location: { schema: { type: string }, description: 'Path of the new event' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Event' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/Unprocessable' }
+  /v1/events/{eventId}:
+    parameters:
+      - $ref: '#/components/parameters/EventId'
+    get:
+      tags: [Events]
+      operationId: getEvent
+      summary: One event with seats left
+      responses:
+        '200':
+          description: The event
+          headers:
+            ETag: { schema: { type: string }, description: 'Changes when seats change' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Event' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /v1/events/{eventId}/registrations:
+    parameters:
+      - $ref: '#/components/parameters/EventId'
+    post:
+      tags: [Registrations]
+      operationId: register
+      summary: Register the current student — a seat if one is left, otherwise the waitlist
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '201':
+          description: CONFIRMED (a seat, with a ticket) or WAITLISTED (with a position)
+          headers:
+            Location: { schema: { type: string }, description: 'Path of the new registration' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Registration' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: ALREADY_REGISTERED — this student already holds a seat or a waitlist place
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '422':
+          description: REGISTRATION_CLOSED or WAITLIST_FULL
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+    get:
+      tags: [Registrations]
+      operationId: listRegistrations
+      summary: Attendee list (organizers of this club only)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: status
+          in: query
+          schema: { type: string, enum: [CONFIRMED, WAITLISTED, CANCELLED] }
+      responses:
+        '200':
+          description: A page of registrations, oldest first
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistrationPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /v1/events/{eventId}/registrations/{registrationId}:
+    parameters:
+      - $ref: '#/components/parameters/EventId'
+      - name: registrationId
+        in: path
+        required: true
+        schema: { type: string, examples: [reg_8f3k2] }
+    delete:
+      tags: [Registrations]
+      operationId: cancelRegistration
+      summary: Cancel; the first waitlisted student is promoted in the same transaction
+      responses:
+        '204': { description: 'Cancelled (also when already cancelled)' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /v1/me/registrations:
+    get:
+      tags: [Registrations]
+      operationId: listMyRegistrations
+      summary: My registrations and tickets (the QR code shows ticketCode)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: A page of my registrations
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistrationPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /v1/events/{eventId}/check-ins:
+    parameters:
+      - $ref: '#/components/parameters/EventId'
+    post:
+      tags: [Check-ins]
+      operationId: checkIn
+      summary: Scan a ticket at the door (organizers). Queued offline scans are replayed with their Idempotency-Key.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CheckInInput' }
+      responses:
+        '201':
+          description: Checked in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckIn' }
+        '200':
+          description: This ticket was already checked in — the first check-in is returned (not an error at the door)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckIn' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422':
+          description: TICKET_NOT_CONFIRMED (waitlisted or cancelled) or TICKET_OTHER_EVENT
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+    get:
+      tags: [Check-ins]
+      operationId: listCheckIns
+      summary: Who is in the room (organizers)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: A page of check-ins, newest first
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckInPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    EventId:
+      name: eventId
+      in: path
+      required: true
+      schema: { type: string, examples: [evt_hackathon26] }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Cursor:
+      name: cursor
+      in: query
+      description: Opaque; copy page.next from the previous page
+      schema: { type: string }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      description: A UUID per user intention; a retry with the same key replays the first answer
+      schema: { type: string, maxLength: 64 }
+  responses:
+    BadRequest:
+      description: INVALID_QUERY or INVALID_CURSOR
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Unauthorized:
+      description: Missing or invalid token
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Forbidden:
+      description: Not an organizer of this club
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    NotFound:
+      description: No such resource (or not yours)
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    Unprocessable:
+      description: The request is well-formed but breaks a rule
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+    TooManyRequests:
+      description: RATE_LIMITED — 10 registrations per minute per student
+      headers:
+        Retry-After: { schema: { type: integer }, description: 'Seconds to wait' }
+        RateLimit: { schema: { type: string } }
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status, code]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+        code: { type: string, examples: [ALREADY_REGISTERED] }
+    Page:
+      type: object
+      required: [limit, next]
+      properties:
+        limit: { type: integer }
+        next: { type: [string, 'null'] }
+    EventInput:
+      type: object
+      required: [clubId, title, startsAt, endsAt, capacity]
+      properties:
+        clubId: { type: string }
+        title: { type: string, maxLength: 120 }
+        startsAt: { type: string, format: date-time }
+        endsAt: { type: string, format: date-time }
+        capacity: { type: integer, minimum: 1, maximum: 2000 }
+        waitlistLimit: { type: integer, minimum: 0, default: 200 }
+        registrationOpensAt: { type: string, format: date-time }
+    Event:
+      allOf:
+        - $ref: '#/components/schemas/EventInput'
+        - type: object
+          required: [id, seatsLeft, waitlistCount]
+          properties:
+            id: { type: string }
+            seatsLeft: { type: integer }
+            waitlistCount: { type: integer }
+    EventPage:
+      type: object
+      required: [data, page]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Event' } }
+        page: { $ref: '#/components/schemas/Page' }
+    Registration:
+      type: object
+      required: [id, eventId, userId, status, createdAt]
+      properties:
+        id: { type: string }
+        eventId: { type: string }
+        userId: { type: string }
+        status: { type: string, enum: [CONFIRMED, WAITLISTED, CANCELLED] }
+        waitlistPosition: { type: [integer, 'null'], description: 'Computed when read, not stored' }
+        ticketCode: { type: [string, 'null'], description: 'Random, shown as a QR code; only when CONFIRMED' }
+        createdAt: { type: string, format: date-time }
+    RegistrationPage:
+      type: object
+      required: [data, page]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/Registration' } }
+        page: { $ref: '#/components/schemas/Page' }
+    CheckInInput:
+      type: object
+      required: [ticketCode, scannedAt]
+      properties:
+        ticketCode: { type: string }
+        scannedAt: { type: string, format: date-time, description: 'Device time of the scan (an offline queue keeps it)' }
+        deviceId: { type: string }
+    CheckIn:
+      type: object
+      required: [id, registrationId, scannedAt, receivedAt]
+      properties:
+        id: { type: string }
+        registrationId: { type: string }
+        scannedAt: { type: string, format: date-time }
+        receivedAt: { type: string, format: date-time }
+    CheckInPage:
+      type: object
+      required: [data, page]
+      properties:
+        data: { type: array, items: { $ref: '#/components/schemas/CheckIn' } }
+        page: { $ref: '#/components/schemas/Page' }

@@ -1,0 +1,544 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-11-4-dat-lich",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-11-4-dat-lich"
+  },
+  "exercises": [
+    {
+      "title": "Booking 1 — Fifty students, one slot, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "concurrency",
+        "databases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 11.6: race.mjs on PostgreSQL 18.4 — 50 handlers book lab_1 14:00–16:00 at once — and the expiring-hold trap.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 11.6: race.mjs trên PostgreSQL 18.4 — 50 handler cùng đặt lab_1 14:00–16:00 — và bẫy giữ chỗ hết hạn.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What does a SELECT see in Read Committed?|||Một SELECT thấy gì ở Read Committed?",
+        "Index predicates must be immutable.|||Điều kiện của chỉ mục phải bất biến."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Booking 1 — Fifty students, one slot, measured\n\nAnswer in the answer panel (no code needed).\n\n1. “SELECT overlapping bookings, then INSERT” inside a Read Committed transaction, 50 handlers at once. Result?“SELECT lượt đặt chồng giờ, rồi INSERT” trong transaction Read Committed, 50 handler cùng lúc. Kết quả?\n2. Under SERIALIZABLE, 49 handlers lost. What did they get in the measured run?Ở SERIALIZABLE, 49 handler thua. Lần đo đó họ nhận gì?\n3. Why did Bình’s hold fail with 23P01 although An’s hold had expired 0.5 s earlier?Vì sao chỗ giữ của Bình lỗi 23P01 dù chỗ giữ của An đã hết hạn 0,5 s?\n4. In an interview, how should you use the evidence table of Chapters 3–10?Khi phỏng vấn, nên dùng bảng bằng chứng của Chương 3–10 thế nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Booking 1 — Fifty students, one slot, measured — answer key\n\n1. “SELECT overlapping bookings, then INSERT” inside a Read Committed transaction, 50 handlers at once. Result?“SELECT lượt đặt chồng giờ, rồi INSERT” trong transaction Read Committed, 50 handler cùng lúc. Kết quả?\n   Answer: b) 50 bookings for the same slot, in three runs of three\n   Each SELECT sees only rows committed before it began, and nobody had committed yet.VI: Mỗi SELECT chỉ thấy dòng đã commit trước khi nó bắt đầu, mà chưa ai commit cả.\n\n2. Under SERIALIZABLE, 49 handlers lost. What did they get in the measured run?Ở SERIALIZABLE, 49 handler thua. Lần đo đó họ nhận gì?\n   Answer: c) 37 got error 40001 and 12 saw the winner and got a clean 409\n   40001 means “retry me”: the API must retry it or map it to 409 — never answer 500.VI: 40001 nghĩa là “thử lại tôi”: API phải thử lại hoặc đổi thành 409 — không bao giờ trả 500.\n\n3. Why did Bình’s hold fail with 23P01 although An’s hold had expired 0.5 s earlier?Vì sao chỗ giữ của Bình lỗi 23P01 dù chỗ giữ của An đã hết hạn 0,5 s?\n   Answer: c) The constraint cannot read the clock (now() is not allowed in an index predicate), so the expired hold still counts\n   Fix: in the inserting transaction, mark that lab’s expired holds EXPIRED, then insert.VI: Sửa: trong transaction chèn, đánh dấu EXPIRED các chỗ giữ đã hết hạn của phòng đó, rồi chèn.\n\n4. In an interview, how should you use the evidence table of Chapters 3–10?Khi phỏng vấn, nên dùng bảng bằng chứng của Chương 3–10 thế nào?\n   Answer: d) Pick the two or three rows the follow-up questions lead to, each with its number and lesson\n   “Have you actually seen this happen?” — “Yes, here is the number” ends the question.VI: “Em đã thấy chuyện đó xảy ra thật chưa?” — “Rồi ạ, đây là con số” khép câu hỏi lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 50 bookings for the same slot, in three runs of three</p><p>Each SELECT sees only rows committed before it began, and nobody had committed yet.</p><p><i>VI: Mỗi SELECT chỉ thấy dòng đã commit trước khi nó bắt đầu, mà chưa ai commit cả.</i></p></li><li><p><b>c)</b> 37 got error 40001 and 12 saw the winner and got a clean 409</p><p>40001 means “retry me”: the API must retry it or map it to 409 — never answer 500.</p><p><i>VI: 40001 nghĩa là “thử lại tôi”: API phải thử lại hoặc đổi thành 409 — không bao giờ trả 500.</i></p></li><li><p><b>c)</b> The constraint cannot read the clock (now() is not allowed in an index predicate), so the expired hold still counts</p><p>Fix: in the inserting transaction, mark that lab’s expired holds EXPIRED, then insert.</p><p><i>VI: Sửa: trong transaction chèn, đánh dấu EXPIRED các chỗ giữ đã hết hạn của phòng đó, rồi chèn.</i></p></li><li><p><b>d)</b> Pick the two or three rows the follow-up questions lead to, each with its number and lesson</p><p>“Have you actually seen this happen?” — “Yes, here is the number” ends the question.</p><p><i>VI: “Em đã thấy chuyện đó xảy ra thật chưa?” — “Rồi ạ, đây là con số” khép câu hỏi lại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>“SELECT overlapping bookings, then INSERT” inside a Read Committed transaction, 50 handlers at once. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>“SELECT lượt đặt chồng giờ, rồi INSERT” trong transaction Read Committed, 50 handler cùng lúc. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 25 bookings — half see the others’ uncommitted rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "50 bookings for the same slot, in three runs of three"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0 bookings — PostgreSQL rolls back every conflicting transaction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 1 booking — the transaction makes check and insert atomic"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each SELECT sees only rows committed before it began, and nobody had committed yet.</p><p><i>VI: Mỗi SELECT chỉ thấy dòng đã commit trước khi nó bắt đầu, mà chưa ai commit cả.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Under SERIALIZABLE, 49 handlers lost. What did they get in the measured run?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở SERIALIZABLE, 49 handler thua. Lần đo đó họ nhận gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "All 49 waited and then succeeded one by one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All 49 got 500, because PostgreSQL aborted them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "37 got error 40001 and 12 saw the winner and got a clean 409"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All 49 got 409, because SERIALIZABLE checks the overlap for you"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>40001 means “retry me”: the API must retry it or map it to 409 — never answer 500.</p><p><i>VI: 40001 nghĩa là “thử lại tôi”: API phải thử lại hoặc đổi thành 409 — không bao giờ trả 500.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why did Bình’s hold fail with 23P01 although An’s hold had expired 0.5 s earlier?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chỗ giữ của Bình lỗi 23P01 dù chỗ giữ của An đã hết hạn 0,5 s?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The serial id 2 was already used by An’s hold, so the insert collided on the key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Bình’s range also overlapped a confirmed booking of the same lab that afternoon"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The constraint cannot read the clock (now() is not allowed in an index predicate), so the expired hold still counts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The btree_gist extension was not installed, so equality on lab_id failed"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Fix: in the inserting transaction, mark that lab’s expired holds EXPIRED, then insert.</p><p><i>VI: Sửa: trong transaction chèn, đánh dấu EXPIRED các chỗ giữ đã hết hạn của phòng đó, rồi chèn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In an interview, how should you use the evidence table of Chapters 3–10?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi phỏng vấn, nên dùng bảng bằng chứng của Chương 3–10 thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never mention numbers — interviewers only care about diagrams"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Recite all rows at the start to show how much you know"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only quote numbers from big companies’ blogs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Pick the two or three rows the follow-up questions lead to, each with its number and lesson"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>“Have you actually seen this happen?” — “Yes, here is the number” ends the question.</p><p><i>VI: “Em đã thấy chuyện đó xảy ra thật chưa?” — “Rồi ạ, đây là con số” khép câu hỏi lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a transaction alone prevents double booking.|||Tin rằng chỉ transaction là chặn được đặt trùng."
+        },
+        {
+          "loi": "Returning 500 for a serialization failure.|||Trả 500 cho lỗi tuần tự hoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "race condition",
+          "vi": "điều kiện đua"
+        },
+        {
+          "en": "exclusion constraint",
+          "vi": "ràng buộc loại trừ"
+        },
+        {
+          "en": "40001",
+          "vi": "lỗi tuần tự hoá"
+        }
+      ]
+    },
+    {
+      "title": "Booking 2 — Write findConflict(bookings, req, now): what the constraint checks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "concurrency",
+        "validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return the id of the first booking that blocks <code>req = { labId, start, end }</code> at time <code>now</code>, or <code>null</code>. A booking blocks when it is for the same lab, is <b>active</b> — <code>CONFIRMED</code>, or <code>HELD</code> with <code>holdExpiresAt</code> after <code>now</code> — and its half-open range <code>[start, end)</code> overlaps the request’s: <code>b.start &lt; req.end</code> and <code>req.start &lt; b.end</code>. Times are ISO strings; compare them with <code>Date.parse</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả id của lượt đặt đầu tiên chặn <code>req = { labId, start, end }</code> ở thời điểm <code>now</code>, hoặc <code>null</code>. Một lượt đặt chặn khi cùng phòng, đang <b>hiệu lực</b> — <code>CONFIRMED</code>, hoặc <code>HELD</code> có <code>holdExpiresAt</code> sau <code>now</code> — và khoảng nửa mở <code>[start, end)</code> chồng với của request: <code>b.start &lt; req.end</code> và <code>req.start &lt; b.end</code>. Thời gian là chuỗi ISO; so bằng <code>Date.parse</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bookings — object[]; req — {labId, start, end}; now — ISO string|||bookings — object[]; req — {labId, start, end}; now — chuỗi ISO",
+      "outputSpec": "string | null|||chuỗi | null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_1\",\"start\":\"2026-11-20T08:00:00Z\",\"end\":\"2026-11-20T08:30:00Z\"}, \"2026-11-01T10:00:00Z\")",
+          "output": "\"bk_1\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two half-open ranges overlap when each starts before the other ends.|||Hai khoảng nửa mở chồng nhau khi cái này bắt đầu trước khi cái kia kết thúc.",
+        "Ignore CANCELLED and expired HELD bookings.|||Bỏ qua lượt CANCELLED và HELD đã hết hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which booking blocks this request? */\nfunction findConflict(bookings, req, now) {\n  // Write your solution here\n  for (const b of bookings) {\n    if (b.labId === req.labId && b.start <= req.end && req.start <= b.end) return b.id;\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction findConflict(bookings, req, now) {\n  const ms = (s) => Date.parse(s);\n  for (const b of bookings) {\n    if (b.labId !== req.labId) continue;\n    const active = b.status === 'CONFIRMED' || (b.status === 'HELD' && ms(b.holdExpiresAt) > ms(now));\n    if (active && ms(b.start) < ms(req.end) && ms(req.start) < ms(b.end)) return b.id;   // [start, end) chồng nhau\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In PostgreSQL this is EXCLUDE USING gist (lab_id WITH =, slot WITH &&) WHERE (status IN (...)) — except the database cannot evaluate “expired at now”, which is why the transaction must expire holds first (11.6).</p>",
+      "solutionExplanationHtmlVi": "<p>Trong PostgreSQL đây là EXCLUDE USING gist (lab_id WITH =, slot WITH &&) WHERE (status IN (...)) — chỉ khác là CSDL không tính được “hết hạn ở thời điểm now”, vì thế transaction phải cho chỗ giữ hết hạn trước (11.6).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Inside a confirmed booking",
+              "vi": "Nằm trong một lượt đã xác nhận"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_1\",\"start\":\"2026-11-20T08:00:00Z\",\"end\":\"2026-11-20T08:30:00Z\"}, \"2026-11-01T10:00:00Z\")",
+            "mongDoi": "bk_1"
+          },
+          {
+            "moTa": {
+              "en": "Starts exactly when bk_1 ends; bk_2 is still held",
+              "vi": "Bắt đầu đúng lúc bk_1 kết thúc; bk_2 còn giữ"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T09:30:00Z\"}, \"2026-11-01T10:00:00Z\")",
+            "mongDoi": "bk_2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T09:30:00Z\"}, \"2026-11-01T10:00:03Z\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\"}, \"2026-11-01T10:00:00Z\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_2\",\"start\":\"2026-11-20T06:00:00Z\",\"end\":\"2026-11-20T07:00:00Z\"}, \"2026-11-01T10:00:00Z\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "findConflict([{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T09:00:00Z\",\"end\":\"2026-11-20T10:00:00Z\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"labId\":\"lab_2\",\"start\":\"2026-11-20T07:00:00Z\",\"end\":\"2026-11-20T09:00:00Z\",\"status\":\"CONFIRMED\"},{\"id\":\"bk_4\",\"labId\":\"lab_1\",\"start\":\"2026-11-20T11:00:00Z\",\"end\":\"2026-11-20T12:00:00Z\",\"status\":\"CANCELLED\"}], {\"labId\":\"lab_2\",\"start\":\"2026-11-20T06:00:00Z\",\"end\":\"2026-11-20T07:00:01Z\"}, \"2026-11-01T10:00:00Z\")",
+            "mongDoi": "bk_3",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using ≤: 07:00–09:00 and 09:00–10:00 then “overlap”.|||Dùng ≤: 07:00–09:00 và 09:00–10:00 thành “chồng”."
+        },
+        {
+          "loi": "Counting an expired hold as active — the trap the constraint itself has.|||Coi chỗ giữ hết hạn là còn hiệu lực — đúng cái bẫy ràng buộc mắc phải."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "half-open range",
+          "vi": "khoảng nửa mở"
+        },
+        {
+          "en": "overlap",
+          "vi": "chồng nhau"
+        }
+      ]
+    },
+    {
+      "title": "Booking 3 — Write confirmHold(bookings, id, now): a conditional UPDATE",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "concurrency",
+        "state machines"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Model <code>UPDATE bookings SET status = 'CONFIRMED', hold_expires_at = NULL WHERE id = $1 AND status = 'HELD' AND hold_expires_at &gt; now()</code> and the API answer around it. Return <code>{ status, code?, bookings }</code>:</p><ul><li>unknown id ⇒ <code>404 BOOKING_NOT_FOUND</code>;</li><li>not HELD ⇒ <code>409 NOT_HELD</code>;</li><li><code>holdExpiresAt</code> ≤ <code>now</code> ⇒ <code>409 HOLD_EXPIRED</code>;</li><li>otherwise <code>200</code> and a <b>new</b> array where that booking is CONFIRMED with <code>holdExpiresAt: null</code>.</li></ul><p>In every error case return the input array unchanged; never mutate it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng <code>UPDATE bookings SET status = 'CONFIRMED', hold_expires_at = NULL WHERE id = $1 AND status = 'HELD' AND hold_expires_at &gt; now()</code> và câu trả lời API quanh nó. Trả <code>{ status, code?, bookings }</code>:</p><ul><li>id không có ⇒ <code>404 BOOKING_NOT_FOUND</code>;</li><li>không ở HELD ⇒ <code>409 NOT_HELD</code>;</li><li><code>holdExpiresAt</code> ≤ <code>now</code> ⇒ <code>409 HOLD_EXPIRED</code>;</li><li>ngược lại <code>200</code> và một mảng <b>mới</b> trong đó lượt đặt đó thành CONFIRMED với <code>holdExpiresAt: null</code>.</li></ul><p>Mọi trường hợp lỗi trả nguyên mảng đầu vào; không bao giờ sửa nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bookings — {id, status, holdExpiresAt}[]; id — string; now — ISO string|||bookings — {id, status, holdExpiresAt}[]; id — chuỗi; now — chuỗi ISO",
+      "outputSpec": "{ status, code?, bookings }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_1\", \"2026-11-01T10:00:02.500Z\")",
+          "output": "{\"status\":409,\"code\":\"HOLD_EXPIRED\",\"bookings\":[{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check in the order: exists, HELD, not expired.|||Kiểm theo thứ tự: có tồn tại, đang HELD, chưa hết hạn.",
+        "map() builds the new array without mutating.|||map() dựng mảng mới mà không sửa mảng cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** confirm a hold */\nfunction confirmHold(bookings, id, now) {\n  // Write your solution here\n  const b = bookings.find((x) => x.id === id);\n  b.status = 'CONFIRMED';\n  return { status: 200, bookings };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction confirmHold(bookings, id, now) {\n  const b = bookings.find((x) => x.id === id);\n  if (!b) return { status: 404, code: 'BOOKING_NOT_FOUND', bookings };\n  if (b.status !== 'HELD') return { status: 409, code: 'NOT_HELD', bookings };\n  if (Date.parse(b.holdExpiresAt) <= Date.parse(now)) return { status: 409, code: 'HOLD_EXPIRED', bookings };\n  return { status: 200, bookings: bookings.map((x) => (x.id === id ? { ...x, status: 'CONFIRMED', holdExpiresAt: null } : x)) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measured in 11.6: An confirms #1 after the hold expired — 0 rows changed ⇒ 409 HOLD_EXPIRED; Bình confirms #3 in time — 1 row ⇒ 200 CONFIRMED. The WHERE clause is the whole state machine.</p>",
+      "solutionExplanationHtmlVi": "<p>Đo ở bài 11.6: An xác nhận #1 sau khi chỗ giữ hết hạn — đổi 0 dòng ⇒ 409 HOLD_EXPIRED; Bình xác nhận #3 kịp lúc — 1 dòng ⇒ 200 CONFIRMED. Vế WHERE chính là cả máy trạng thái.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An, half a second too late",
+              "vi": "An, muộn nửa giây"
+            },
+            "goi": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_1\", \"2026-11-01T10:00:02.500Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "HOLD_EXPIRED",
+              "bookings": [
+                {
+                  "id": "bk_1",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:00:02Z"
+                },
+                {
+                  "id": "bk_3",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:05:00Z"
+                },
+                {
+                  "id": "bk_4",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Bình, in time",
+              "vi": "Bình, kịp lúc"
+            },
+            "goi": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_3\", \"2026-11-01T10:00:03Z\")",
+            "mongDoi": {
+              "status": 200,
+              "bookings": [
+                {
+                  "id": "bk_1",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:00:02Z"
+                },
+                {
+                  "id": "bk_3",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                },
+                {
+                  "id": "bk_4",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_4\", \"2026-11-01T10:00:00Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "NOT_HELD",
+              "bookings": [
+                {
+                  "id": "bk_1",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:00:02Z"
+                },
+                {
+                  "id": "bk_3",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:05:00Z"
+                },
+                {
+                  "id": "bk_4",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_9\", \"2026-11-01T10:00:00Z\")",
+            "mongDoi": {
+              "status": 404,
+              "code": "BOOKING_NOT_FOUND",
+              "bookings": [
+                {
+                  "id": "bk_1",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:00:02Z"
+                },
+                {
+                  "id": "bk_3",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:05:00Z"
+                },
+                {
+                  "id": "bk_4",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "confirmHold([{\"id\":\"bk_1\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:00:02Z\"},{\"id\":\"bk_3\",\"status\":\"HELD\",\"holdExpiresAt\":\"2026-11-01T10:05:00Z\"},{\"id\":\"bk_4\",\"status\":\"CONFIRMED\",\"holdExpiresAt\":null}], \"bk_1\", \"2026-11-01T10:00:02Z\")",
+            "mongDoi": {
+              "status": 409,
+              "code": "HOLD_EXPIRED",
+              "bookings": [
+                {
+                  "id": "bk_1",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:00:02Z"
+                },
+                {
+                  "id": "bk_3",
+                  "status": "HELD",
+                  "holdExpiresAt": "2026-11-01T10:05:00Z"
+                },
+                {
+                  "id": "bk_4",
+                  "status": "CONFIRMED",
+                  "holdExpiresAt": null
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confirming a hold that expired one second ago.|||Xác nhận chỗ giữ đã hết hạn một giây."
+        },
+        {
+          "loi": "Confirming twice: a CONFIRMED booking is not HELD any more.|||Xác nhận hai lần: lượt đã CONFIRMED không còn HELD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "conditional UPDATE",
+          "vi": "UPDATE có điều kiện"
+        },
+        {
+          "en": "hold",
+          "vi": "giữ chỗ"
+        }
+      ]
+    }
+  ]
+}

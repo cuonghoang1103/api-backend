@@ -7,7 +7,8 @@ Trước 01/11/2026 mã chỉ nằm ở thư mục tạm của phiên soạn bà
 
 | Trạng thái hiện tại | Gói zip tương ứng |
 |---|---|
-| **Cuối Chương 10** (= lời giải Lab 10) | `labflow-api-ch10.zip` |
+| **Cuối Chương 11** (Ch10 + `interview/` + Lab 11, `src/` không đổi) | `labflow-api-ch11.zip` |
+| (cuối Chương 10 — commit 745e25e09) | `labflow-api-ch10.zip` |
 | (cuối Chương 9 — commit e1f36a6b7) | `labflow-api-ch9.zip` |
 
 Chỉ để HỌC. Không có bí mật thật: token demo `tok_an` / `tok_bin` / `tok_lan`, mật khẩu demo
@@ -41,7 +42,7 @@ Mô tả đầy đủ từng chương: `content/courses/api-design/_HOP-DONG.md`
 - `src/` — server (`server.js`, `app.js`), route trong `src/routes/`, middleware theo chương (problems, paging,
   versioning, idempotency, rateLimit, auth, cors, timing, resilience, httpCache, serverCache…).
 - `openapi/` — hợp đồng OpenAPI 3.1 (`openapi.yaml`) + bản mốc, kiểm trôi (`check-drift.mjs`), cổng phá vỡ (`diff.mjs`).
-- `perf/` — script đo của Chương 8–10; `sql/` — SQL của Chương 9; `lab/` — mã khởi đầu của các lab + `lab/grade-lab10.mjs` (script chấm).
+- `interview/` — Chương 11 (ước lượng, rút gọn link, feed, chat, cuộc đua đặt lịch); `perf/` — script đo của Chương 8–10; `sql/` — SQL của Chương 9; `lab/` — mã khởi đầu của các lab + `lab/grade-lab10.mjs`, `lab/grade-lab11.mjs` (script chấm), `lab/lab11/` (đề phỏng vấn thử + lời giải).
 - `events/` (giao trùng, outbox, mỏng/dày, phiên bản), `asyncapi/` (AsyncAPI 3.1), `webhooks/` (bên nhận thử, phát lại) — Chương 10. Lệnh từng bài của chương mới nhất: `docs/chay-theo-bai.txt` (= README.txt trong gói zip).
 - `client/`, `graphql/`, `grpc/` — Chương 7; `web/` — trang thử CORS/CSRF của Chương 6 (`node web/serve.mjs`);
   `mistakes/` — ví dụ client sai kiểu (bài 7.3).

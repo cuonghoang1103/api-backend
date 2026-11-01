@@ -374,6 +374,48 @@
       "name": "Lab 10 — The usage report as a background job with a webhook",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 10 · 1 — The starter, the traps and the reference run · Lab 10 · 2 — Write gradeStatus(trace): the “Status” check of grade-lab10.mjs · Lab 10 · 3 — Write dispatch(events, subscriptions): report.ready only to its creator"
+    },
+    {
+      "slug": "api-11-1-khung",
+      "name": "11.1 A framework for API design interviews",
+      "level": "BEGINNER",
+      "description": "Luyện: Framework 1 — The 45-minute plan and what is scored · Framework 2 — Write estimate(a): average versus peak · Framework 3 — Write rubricScore(scores): is this a strong junior answer?"
+    },
+    {
+      "slug": "api-11-2-rut-gon-link",
+      "name": "11.2 Interview: a URL shortener (1)",
+      "level": "BEGINNER",
+      "description": "Luyện: Shortener 1 — Codes and contract, measured · Shortener 2 — Write toBase62(n) · Shortener 4 — Write checkCreate(body, taken, base): the checks of POST /v1/links · Shortener 3 — Write codeLength(n, tolerated): how many characters?"
+    },
+    {
+      "slug": "api-11-2-chuyen-huong",
+      "name": "11.3 Interview: a URL shortener (2) — redirects and the hot path",
+      "level": "BEGINNER",
+      "description": "Luyện: Redirects 1 — 301, 302 and the hot path, measured · Redirects 2 — Write serverCounts(clicks, status, cacheControl) · Redirects 3 — Write perMinute(events): the click worker"
+    },
+    {
+      "slug": "api-11-3-feed-chat",
+      "name": "11.4 Interview: a news feed",
+      "level": "BEGINNER",
+      "description": "Luyện: Feed 1 — Push, pull and hybrid, measured · Feed 2 — Write mergeFeed(lists, limit, cursor): pull at read time · Feed 3 — Write fanoutPlan(authors, following, threshold): the hybrid"
+    },
+    {
+      "slug": "api-11-3-chat",
+      "name": "11.5 Interview: a chat",
+      "level": "BEGINNER",
+      "description": "Luyện: Chat 1 — Duplicates, order and devices, measured · Chat 2 — Write accept(state, cid, msg): dedupe and assign seq · Chat 3 — Write applyPush(have, pushed): sync one device"
+    },
+    {
+      "slug": "api-11-4-dat-lich",
+      "name": "11.6 Interview: a booking system",
+      "level": "BEGINNER",
+      "description": "Luyện: Booking 1 — Fifty students, one slot, measured · Booking 2 — Write findConflict(bookings, req, now): what the constraint checks · Booking 3 — Write confirmHold(bookings, id, now): a conditional UPDATE"
+    },
+    {
+      "slug": "api-11-7-lab",
+      "name": "Lab 11 — Mock interview: club event sign-up and check-in",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 11 · 1 — The starter, the YAML trap and the reference · Lab 11 · 2 — Write checkPaths(paths): check 4 of the grader · Lab 11 · 3 — Write register(event, regs, userId): a seat or the waitlist"
     }
   ]
 }

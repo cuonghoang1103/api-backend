@@ -1,0 +1,531 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-11-1-khung",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-11-1-khung"
+  },
+  "exercises": [
+    {
+      "title": "Framework 1 — The 45-minute plan and what is scored",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "interview",
+        "estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 11.1: the five steps, the estimate for LabFlow (interview/estimate.mjs) and the six-row rubric.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 11.1: năm bước, phép ước lượng cho LabFlow (interview/estimate.mjs) và thang chấm sáu dòng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of a driving test: habits, not one right answer.|||Nghĩ tới thi bằng lái: thói quen, không phải một đáp án đúng.",
+        "Numbers must end in a decision.|||Con số phải kết thúc bằng một quyết định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Framework 1 — The 45-minute plan and what is scored\n\nAnswer in the answer panel (no code needed).\n\n1. The interviewer says “Design a URL shortener”. What should the first minutes contain?Người phỏng vấn nói “Thiết kế dịch vụ rút gọn link”. Những phút đầu nên có gì?\n2. estimate.mjs printed an average of 0.83 reads/s and a 07:00 peak of 500 reads/s. Which number do you design for?estimate.mjs in trung bình 0,83 lượt đọc/s và đỉnh 07:00 là 500 lượt đọc/s. Thiết kế theo số nào?\n3. Logins at the peak are 50/s and one process measured 114 logins/s (8.2). What is the honest conclusion?Đăng nhập lúc đỉnh là 50/s và một tiến trình đo được 114 lượt/s (8.2). Kết luận trung thực là gì?\n4. Which rubric total counts as a strong junior answer in this course?Tổng điểm nào được coi là câu trả lời junior mạnh trong khoá này?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Framework 1 — The 45-minute plan and what is scored — answer key\n\n1. The interviewer says “Design a URL shortener”. What should the first minutes contain?Người phỏng vấn nói “Thiết kế dịch vụ rút gọn link”. Những phút đầu nên có gì?\n   Answer: d) Questions: who uses it, core use cases, how many, what must never happen — answers written on the board\n   Clarify before drawing; every later decision points back to those answers.VI: Làm rõ trước khi vẽ; mọi quyết định sau đều trỏ về các câu trả lời đó.\n\n2. estimate.mjs printed an average of 0.83 reads/s and a 07:00 peak of 500 reads/s. Which number do you design for?estimate.mjs in trung bình 0,83 lượt đọc/s và đỉnh 07:00 là 500 lượt đọc/s. Thiết kế theo số nào?\n   Answer: b) The peak, compared with a measured capacity (~8,000 reads/s on one process)\n   The average hides the spike; the peak against a measured capacity says one process uses ~6% for reads.VI: Trung bình che mất cú dồn; đỉnh so với công suất đã đo cho thấy một tiến trình chỉ dùng ~6% cho đọc.\n\n3. Logins at the peak are 50/s and one process measured 114 logins/s (8.2). What is the honest conclusion?Đăng nhập lúc đỉnh là 50/s và một tiến trình đo được 114 lượt/s (8.2). Kết luận trung thực là gì?\n   Answer: b) Logins use ~44% of capacity — the spike, not reads, is the risk to watch\n   A number earns its place when it leads to a decision; here it points at the expensive endpoint.VI: Con số đáng nói khi dẫn tới quyết định; ở đây nó chỉ ra endpoint đắt.\n\n4. Which rubric total counts as a strong junior answer in this course?Tổng điểm nào được coi là câu trả lời junior mạnh trong khoá này?\n   Answer: a) At least 13 of 18, with no 1 in API surface or correctness\n   The course rubric (not any company’s official sheet): six rows scored 1–3.VI: Thang chấm của khoá (không phải phiếu chính thức của công ty nào): sáu dòng, 1–3 điểm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Questions: who uses it, core use cases, how many, what must never happen — answers written on the board</p><p>Clarify before drawing; every later decision points back to those answers.</p><p><i>VI: Làm rõ trước khi vẽ; mọi quyết định sau đều trỏ về các câu trả lời đó.</i></p></li><li><p><b>b)</b> The peak, compared with a measured capacity (~8,000 reads/s on one process)</p><p>The average hides the spike; the peak against a measured capacity says one process uses ~6% for reads.</p><p><i>VI: Trung bình che mất cú dồn; đỉnh so với công suất đã đo cho thấy một tiến trình chỉ dùng ~6% cho đọc.</i></p></li><li><p><b>b)</b> Logins use ~44% of capacity — the spike, not reads, is the risk to watch</p><p>A number earns its place when it leads to a decision; here it points at the expensive endpoint.</p><p><i>VI: Con số đáng nói khi dẫn tới quyết định; ở đây nó chỉ ra endpoint đắt.</i></p></li><li><p><b>a)</b> At least 13 of 18, with no 1 in API surface or correctness</p><p>The course rubric (not any company’s official sheet): six rows scored 1–3.</p><p><i>VI: Thang chấm của khoá (không phải phiếu chính thức của công ty nào): sáu dòng, 1–3 điểm.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The interviewer says “Design a URL shortener”. What should the first minutes contain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người phỏng vấn nói “Thiết kế dịch vụ rút gọn link”. Những phút đầu nên có gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A diagram with a load balancer, three services and Kafka, to show breadth"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A list of every HTTP status code the API might ever return"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database schema, because data decides everything else"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Questions: who uses it, core use cases, how many, what must never happen — answers written on the board"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Clarify before drawing; every later decision points back to those answers.</p><p><i>VI: Làm rõ trước khi vẽ; mọi quyết định sau đều trỏ về các câu trả lời đó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>estimate.mjs printed an average of 0.83 reads/s and a 07:00 peak of 500 reads/s. Which number do you design for?</p><p style=\"opacity:.75;font-size:.92em\"><i>estimate.mjs in trung bình 0,83 lượt đọc/s và đỉnh 07:00 là 500 lượt đọc/s. Thiết kế theo số nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Neither — estimates are not expected in an API design round"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The peak, compared with a measured capacity (~8,000 reads/s on one process)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The sum of both, to leave a safety margin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The average, because the server is idle most of the day"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The average hides the spike; the peak against a measured capacity says one process uses ~6% for reads.</p><p><i>VI: Trung bình che mất cú dồn; đỉnh so với công suất đã đo cho thấy một tiến trình chỉ dùng ~6% cho đọc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Logins at the peak are 50/s and one process measured 114 logins/s (8.2). What is the honest conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đăng nhập lúc đỉnh là 50/s và một tiến trình đo được 114 lượt/s (8.2). Kết luận trung thực là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Logins should be cached in Redis to remove the hashing cost"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Logins use ~44% of capacity — the spike, not reads, is the risk to watch"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Logins need ten servers because scrypt is slow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Logins are fine because 50 is less than 114, so nothing needs mentioning"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A number earns its place when it leads to a decision; here it points at the expensive endpoint.</p><p><i>VI: Con số đáng nói khi dẫn tới quyết định; ở đây nó chỉ ra endpoint đắt.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which rubric total counts as a strong junior answer in this course?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng điểm nào được coi là câu trả lời junior mạnh trong khoá này?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "At least 13 of 18, with no 1 in API surface or correctness"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At least 13 of 18, even with a 1 in correctness"
+              },
+              {
+                "ma": "c",
+                "noiDung": "At least 9 of 18, as long as communication scores 3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 18 of 18 — anything less is a rejection"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The course rubric (not any company’s official sheet): six rows scored 1–3.</p><p><i>VI: Thang chấm của khoá (không phải phiếu chính thức của công ty nào): sáu dòng, 1–3 điểm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Designing for the daily average.|||Thiết kế theo trung bình cả ngày."
+        },
+        {
+          "loi": "Drawing boxes before asking a single question.|||Vẽ hộp trước khi hỏi câu nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "peak",
+          "vi": "đỉnh tải"
+        },
+        {
+          "en": "rubric",
+          "vi": "thang chấm"
+        },
+        {
+          "en": "back-of-the-envelope",
+          "vi": "ước lượng nhanh"
+        }
+      ]
+    },
+    {
+      "title": "Framework 2 — Write estimate(a): average versus peak",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "estimation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create the arithmetic of <code>interview/estimate.mjs</code>. Input <code>a</code> has <code>students, dailyActive, readsPerUser, bookingsPerUser, spikeShare, spikeSec, spikeReadsPerUser</code>. Return:</p><ul><li><code>dau</code> = students × dailyActive;</li><li><code>perDay</code> = <code>{ reads: dau × readsPerUser, bookings: dau × bookingsPerUser }</code>;</li><li><code>avgPerSec</code> = perDay ÷ 86,400 (each rounded to 2 decimals);</li><li><code>peakPerSec</code>: the spike users are dau × spikeShare; reads = spikeUsers × spikeReadsPerUser ÷ spikeSec, bookings = spikeUsers × bookingsPerUser ÷ spikeSec (rounded to 2 decimals).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại phép tính của <code>interview/estimate.mjs</code>. Đầu vào <code>a</code> có <code>students, dailyActive, readsPerUser, bookingsPerUser, spikeShare, spikeSec, spikeReadsPerUser</code>. Trả về:</p><ul><li><code>dau</code> = students × dailyActive;</li><li><code>perDay</code> = <code>{ reads: dau × readsPerUser, bookings: dau × bookingsPerUser }</code>;</li><li><code>avgPerSec</code> = perDay ÷ 86.400 (mỗi số làm tròn 2 chữ số thập phân);</li><li><code>peakPerSec</code>: số người dồn vào đỉnh là dau × spikeShare; reads = spikeUsers × spikeReadsPerUser ÷ spikeSec, bookings = spikeUsers × bookingsPerUser ÷ spikeSec (làm tròn 2 chữ số).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "a — object of assumptions (numbers)|||a — object các giả định (số)",
+      "outputSpec": "{ dau, perDay: {reads, bookings}, avgPerSec: {reads, bookings}, peakPerSec: {reads, bookings} }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "estimate({\"students\":30000,\"dailyActive\":0.2,\"readsPerUser\":12,\"bookingsPerUser\":1,\"spikeShare\":0.5,\"spikeSec\":60,\"spikeReadsPerUser\":10})",
+          "output": "{\"dau\":6000,\"perDay\":{\"reads\":72000,\"bookings\":6000},\"avgPerSec\":{\"reads\":0.83,\"bookings\":0.07},\"peakPerSec\":{\"reads\":500,\"bookings\":50}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Round with Math.round(x * 100) / 100.|||Làm tròn bằng Math.round(x * 100) / 100.",
+        "The peak divides by spikeSec, not by 86,400.|||Đỉnh chia cho spikeSec, không phải 86.400."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** back-of-the-envelope estimate */\nfunction estimate(a) {\n  // Write your solution here\n  const dau = a.students * a.dailyActive;\n  const perDay = { reads: dau * a.readsPerUser, bookings: dau * a.bookingsPerUser };\n  const avg = { reads: perDay.reads / 86400, bookings: perDay.bookings / 86400 };\n  return { dau, perDay, avgPerSec: avg, peakPerSec: avg };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction estimate(a) {\n  const r2 = (x) => Math.round(x * 100) / 100;\n  const dau = a.students * a.dailyActive;\n  const spikeUsers = dau * a.spikeShare;\n  const perDay = { reads: dau * a.readsPerUser, bookings: dau * a.bookingsPerUser };\n  return {\n    dau,\n    perDay,\n    avgPerSec: { reads: r2(perDay.reads / 86400), bookings: r2(perDay.bookings / 86400) },\n    peakPerSec: { reads: r2(spikeUsers * a.spikeReadsPerUser / a.spikeSec), bookings: r2(spikeUsers * a.bookingsPerUser / a.spikeSec) },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 11.1: 6,000 DAU ⇒ 0.83 reads/s on average but 500 reads/s and 50 bookings/s in the 07:00 minute. The design target is the peak.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài 11.1: 6.000 DAU ⇒ trung bình 0,83 lượt đọc/s nhưng 500 lượt đọc/s và 50 lượt đặt/s trong phút 07:00. Mục tiêu thiết kế là đỉnh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The LabFlow assumptions of lesson 11.1",
+              "vi": "Giả định LabFlow của bài 11.1"
+            },
+            "goi": "estimate({\"students\":30000,\"dailyActive\":0.2,\"readsPerUser\":12,\"bookingsPerUser\":1,\"spikeShare\":0.5,\"spikeSec\":60,\"spikeReadsPerUser\":10})",
+            "mongDoi": {
+              "dau": 6000,
+              "perDay": {
+                "reads": 72000,
+                "bookings": 6000
+              },
+              "avgPerSec": {
+                "reads": 0.83,
+                "bookings": 0.07
+              },
+              "peakPerSec": {
+                "reads": 500,
+                "bookings": 50
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "estimate({\"students\":20000,\"dailyActive\":0.2,\"readsPerUser\":12,\"bookingsPerUser\":1,\"spikeShare\":0.15,\"spikeSec\":60,\"spikeReadsPerUser\":10})",
+            "mongDoi": {
+              "dau": 4000,
+              "perDay": {
+                "reads": 48000,
+                "bookings": 4000
+              },
+              "avgPerSec": {
+                "reads": 0.56,
+                "bookings": 0.05
+              },
+              "peakPerSec": {
+                "reads": 100,
+                "bookings": 10
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "estimate({\"students\":1000,\"dailyActive\":1,\"readsPerUser\":12,\"bookingsPerUser\":1,\"spikeShare\":1,\"spikeSec\":600,\"spikeReadsPerUser\":3})",
+            "mongDoi": {
+              "dau": 1000,
+              "perDay": {
+                "reads": 12000,
+                "bookings": 1000
+              },
+              "avgPerSec": {
+                "reads": 0.14,
+                "bookings": 0.01
+              },
+              "peakPerSec": {
+                "reads": 5,
+                "bookings": 1.67
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "estimate({\"students\":7,\"dailyActive\":1,\"readsPerUser\":1,\"bookingsPerUser\":0,\"spikeShare\":1,\"spikeSec\":1,\"spikeReadsPerUser\":10})",
+            "mongDoi": {
+              "dau": 7,
+              "perDay": {
+                "reads": 7,
+                "bookings": 0
+              },
+              "avgPerSec": {
+                "reads": 0,
+                "bookings": 0
+              },
+              "peakPerSec": {
+                "reads": 70,
+                "bookings": 0
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the whole population for the spike instead of dau × spikeShare.|||Lấy cả số sinh viên cho cú dồn thay vì dau × spikeShare."
+        },
+        {
+          "loi": "Rounding before multiplying, which changes the result.|||Làm tròn trước khi nhân, làm lệch kết quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DAU",
+          "vi": "người dùng mỗi ngày"
+        },
+        {
+          "en": "peak",
+          "vi": "đỉnh"
+        },
+        {
+          "en": "average",
+          "vi": "trung bình"
+        }
+      ]
+    },
+    {
+      "title": "Framework 3 — Write rubricScore(scores): is this a strong junior answer?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "interview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The six rubric rows are, in order: <code>requirements, api, correctness, security, scale, communication</code>. <code>scores</code> must be an array of exactly six integers, each 1, 2 or 3 — otherwise throw a <code>RangeError</code>. Return <code>{ total, strong, focus }</code>: <code>total</code> is the sum; <code>strong</code> is true when total ≥ 13 <b>and</b> neither <code>api</code> nor <code>correctness</code> scored 1; <code>focus</code> lists the names of the rows with the lowest score, in row order — what to practise next.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu dòng của thang chấm, theo thứ tự: <code>requirements, api, correctness, security, scale, communication</code>. <code>scores</code> phải là mảng đúng sáu số nguyên, mỗi số 1, 2 hoặc 3 — nếu không thì ném <code>RangeError</code>. Trả <code>{ total, strong, focus }</code>: <code>total</code> là tổng; <code>strong</code> đúng khi total ≥ 13 <b>và</b> cả <code>api</code> lẫn <code>correctness</code> không bị điểm 1; <code>focus</code> liệt kê tên các dòng có điểm thấp nhất, theo thứ tự dòng — thứ cần luyện tiếp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "scores — number[6]",
+      "outputSpec": "{ total: number, strong: boolean, focus: string[] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rubricScore([3,3,3,2,3,2])",
+          "output": "{\"total\":16,\"strong\":true,\"focus\":[\"security\",\"communication\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Validate first: length, then each value.|||Kiểm trước: độ dài, rồi từng giá trị.",
+        "Math.min(...scores) gives the lowest score.|||Math.min(...scores) cho điểm thấp nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** score a mock interview */\nfunction rubricScore(scores) {\n  // Write your solution here\n  const total = scores.reduce((a, b) => a + b, 0);\n  return { total, strong: total >= 13, focus: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nconst ROWS = ['requirements', 'api', 'correctness', 'security', 'scale', 'communication'];\n\nfunction rubricScore(scores) {\n  if (!Array.isArray(scores) || scores.length !== 6 || !scores.every((s) => s === 1 || s === 2 || s === 3)) throw new RangeError('six scores from 1 to 3');\n  const total = scores.reduce((a, b) => a + b, 0);\n  const strong = total >= 13 && scores[1] > 1 && scores[2] > 1;\n  const focus = ROWS.filter((_, i) => scores[i] === Math.min(...scores));\n  return { total, strong, focus };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 11.1: a high total cannot hide a 1 in the two rows interviewers weigh most — the API surface and correctness under failure.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài 11.1: tổng cao không che được điểm 1 ở hai dòng người phỏng vấn coi trọng nhất — bề mặt API và độ đúng khi có sự cố.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The shortener answer of 11.3 with communication 2",
+              "vi": "Câu trả lời rút gọn link ở 11.3 với giao tiếp 2"
+            },
+            "goi": "rubricScore([3,3,3,2,3,2])",
+            "mongDoi": {
+              "total": 16,
+              "strong": true,
+              "focus": [
+                "security",
+                "communication"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "rubricScore([3,3,1,3,3,3])",
+            "mongDoi": {
+              "total": 16,
+              "strong": false,
+              "focus": [
+                "correctness"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "rubricScore([2,2,2,2,2,2])",
+            "mongDoi": {
+              "total": 12,
+              "strong": false,
+              "focus": [
+                "requirements",
+                "api",
+                "correctness",
+                "security",
+                "scale",
+                "communication"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "rubricScore([1,2,2,3,1,3])",
+            "mongDoi": {
+              "total": 12,
+              "strong": false,
+              "focus": [
+                "requirements",
+                "scale"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "rubricScore([3,3,3,3,3])",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "rubricScore([3,3,3,3,3,4])",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling 13/18 strong although correctness scored 1.|||Gọi 13/18 là mạnh dù độ đúng chỉ được 1 điểm."
+        },
+        {
+          "loi": "Accepting 0 or 4 as a score.|||Chấp nhận điểm 0 hoặc 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rubric",
+          "vi": "thang chấm"
+        },
+        {
+          "en": "row",
+          "vi": "tiêu chí"
+        }
+      ]
+    }
+  ]
+}

@@ -845,6 +845,11 @@ export default {
 </table>
 <div class="pitfall"><b>Use cases and user stories are not requirements themselves — they are containers.</b> A use case implies many functional requirements; a story needs <em>acceptance criteria</em> (Ch5/6) to become testable. Beginners write a story and think they're done — without acceptance criteria the developer still has to guess.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The "3 C's" of a user story (Ron Jeffries).</b> A good story is <b>Card</b> (a short written promise), <b>Conversation</b> (the detail is worked out by talking, not by writing a spec), and <b>Confirmation</b> (acceptance criteria that confirm it's done). This is the philosophical opposite of the heavyweight use case: a use case front-loads detail on paper; a story deliberately defers detail to a just-in-time conversation. Neither is "better" — plan-driven projects favor use cases, Agile teams favor stories. A skilled BA can write both and knows when each fits.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-7-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — Lab 11: mock interview, club event sign-up and check-in</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: alternative and exception flows are where the design really happens. Different: there each exception flow (event full, a double click, a scan with no Wi-Fi) becomes a status code, a header or a database rule in an OpenAPI contract, graded by a script (starter 0/10, reference 10/10).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -888,6 +893,11 @@ export default {
 </table>
 <div class="pitfall"><b>Use case và user story tự thân KHÔNG phải là yêu cầu — chúng là vật chứa.</b> Một use case hàm ý nhiều yêu cầu chức năng; một story cần <em>acceptance criteria</em> (Ch5/6) mới kiểm thử được. Người mới viết xong một story tưởng đã xong — không có acceptance criteria thì lập trình viên vẫn phải đoán.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"3 chữ C" của user story (Ron Jeffries).</b> Một story tốt là <b>Card</b> (một lời hứa ngắn viết ra), <b>Conversation</b> (chi tiết được làm rõ bằng nói chuyện, không phải viết đặc tả), và <b>Confirmation</b> (acceptance criteria xác nhận đã xong). Đây là mặt đối lập triết lý với use case đồ sộ: use case dồn chi tiết lên giấy trước; story cố ý hoãn chi tiết tới một cuộc đối thoại đúng lúc. Không cái nào "tốt hơn" — dự án theo kế hoạch ưa use case, đội Agile ưa story. Một BA giỏi viết được cả hai và biết khi nào hợp cái nào.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-7-lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — Lab 11: phỏng vấn thử, đăng ký và check-in sự kiện CLB</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: luồng thay thế và luồng ngoại lệ là nơi thiết kế thật sự diễn ra. Khác: ở đó mỗi luồng ngoại lệ (sự kiện hết chỗ, bấm hai lần, quét vé khi mất Wi-Fi) thành một status code, một header hay một luật CSDL trong hợp đồng OpenAPI, chấm bằng script (khởi đầu 0/10, lời giải 10/10).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

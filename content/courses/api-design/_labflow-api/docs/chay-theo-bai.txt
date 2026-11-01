@@ -1,4 +1,4 @@
-LabFlow API — cuối Chương 10 khoá API Design (cuongthai.com/courses/api-design)
+LabFlow API — cuối Chương 11 khoá API Design (cuongthai.com/courses/api-design)
 Chỉ để HỌC. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026.
 
   npm install
@@ -23,5 +23,17 @@ Chương 10 (bài → lệnh):
         node webhooks/replay.mjs dump.json [--tamper] ; node webhooks/reserialize.mjs
   Lab 10  cp lab/report-exports-starter.js src/routes/reportExports.js   (src/routes/reportExports.js trong gói là lời giải — sao lưu trước)
           node lab/grade-lab10.mjs   (bộ chấm 10 điểm; mở bên nhận ở :4006)
+
+Chương 11 (phỏng vấn thiết kế API — mã ở interview/, không đổi src/):
+  11.1  npx autocannon -c 50 -d 10 -j http://localhost:4000/v2/labs > perf/bench-labs.json ; node interview/estimate.mjs   (sửa GIẢ ĐỊNH ở đầu tệp)
+  11.2  node interview/shortener/collisions.mjs [N]           (trùng mã: ngẫu nhiên / băm / bộ đếm Base62)
+        PORT=4120 DAY_MS=2000 node interview/shortener/app.mjs  (API rút gọn link; CODE=random|counter; tạo link: tok_an / tok_bin / tok_lan)
+  11.3  PORT=4122 REDIRECT=301 node interview/shortener/app.mjs ; node interview/shortener/browser-redirect.mjs http://localhost:4122   (Chromium, cần npx playwright install chromium)
+        CLICKS=memory|pg|stream … app.mjs ; tạo link f-code-k20 ; bash interview/shortener/bench-short.sh <cổng> <nhãn>
+  11.4  node interview/feed/fanout.mjs write|read|hybrid|page   (Redis DB 3 — XOÁ SẠCH DB 3 trước và sau)
+  11.5  PORT=4123 DEDUPE=0 DROP_EVERY=4 node interview/chat/server.mjs ; node interview/chat/send.mjs http://localhost:4123   (DEDUPE=1 để so)
+  11.6  node interview/booking/race.mjs naive|lock|serializable|constraint|holds   (PostgreSQL, schema riêng iv — bị XOÁ và dựng lại mỗi lần chạy)
+  Lab 11  lab/lab11/de-bai.md (đề) · design-doc-starter.md + openapi-starter.yaml (khởi đầu) · lab/lab11/solution/ (lời giải tham khảo)
+          node lab/grade-lab11.mjs <design-doc.md> <openapi.yaml>   (10 điểm phần máy chấm; phần nói chấm bằng thang 6 tiêu chí bài 11.1)
 
 Hợp đồng: openapi/openapi.yaml 2.3.0 (+ mốc openapi-v2.2.0.yaml, npm run api:diff) · asyncapi/asyncapi.yaml (AsyncAPI 3.1) · docs/slo.md

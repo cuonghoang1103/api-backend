@@ -1,0 +1,50 @@
+# Bản nháp đầu tiên điển hình (Lab 11) — sửa thành bản nộp được
+openapi: 3.1.0
+info:
+  title: Club API
+  version: 0.1.0
+paths:
+  /getEvents:
+    get:
+      summary: Get all events
+      responses:
+        '200':
+          description: All events
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Event' }
+  /registerEvent:
+    post:
+      summary: Register for an event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId: { type: integer }
+                studentId: { type: string }
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema: { type: object, properties: { message: { type: string } } }
+  /checkin:
+    post:
+      summary: Check in a student
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        seats: { type: integer }

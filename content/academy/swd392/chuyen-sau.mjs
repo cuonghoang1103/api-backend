@@ -16969,7 +16969,12 @@ proxy is a DefaultBookingService? false</div>
 <li>Spring Framework reference: <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html">Rolling back a declarative transaction</a>, <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html">Using @Transactional</a>, <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html">Transaction propagation</a>.</li>
 <li><a href="https://docs.spring.io/spring-framework/reference/core/aop/proxying.html">Proxying mechanisms</a>, <a href="https://docs.spring.io/spring-framework/reference/core/aop/introduction-defn.html">AOP concepts</a>, Spring Boot reference <a href="https://docs.spring.io/spring-boot/reference/features/aop.html">Aspect-Oriented Programming</a>.</li>
 <li><a href="https://docs.spring.io/spring-framework/reference/core/beans/introduction.html">Introduction to the Spring IoC container</a>, <a href="https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html">Dependency injection</a>, <a href="https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html">Bean scopes</a>; <code>@Transactional</code> javadoc (readOnly is a hint).</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-1-khung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 11.1: A framework for API design interview questions</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: a time-boxed design answered out loud, assumptions first, trade-offs named. Different: there the centre of the board is the HTTP contract, the answer is 45 minutes in five steps, every claim is backed by a number you measured (the 07:00 peak against ~8,000 reads/s on one process) and a six-row rubric scores it; then four classic problems — URL shortener, news feed, chat and booking (LabFlow).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần nhớ từ slide 12–24</h2>
 <ul>
 <li>Thiết kế 15 phút: yêu cầu → actor/UC → thực thể → kiến trúc → sequence luồng chính → trạng thái và đánh đổi; nói to từng quyết định.</li>
@@ -16983,7 +16988,12 @@ proxy is a DefaultBookingService? false</div>
 <li>Tài liệu tham khảo Spring Framework: <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html">Rolling back a declarative transaction</a>, <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html">Using @Transactional</a>, <a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html">Transaction propagation</a>.</li>
 <li><a href="https://docs.spring.io/spring-framework/reference/core/aop/proxying.html">Proxying mechanisms</a>, <a href="https://docs.spring.io/spring-framework/reference/core/aop/introduction-defn.html">AOP concepts</a>, tài liệu Spring Boot <a href="https://docs.spring.io/spring-boot/reference/features/aop.html">Aspect-Oriented Programming</a>.</li>
 <li><a href="https://docs.spring.io/spring-framework/reference/core/beans/introduction.html">Introduction to the Spring IoC container</a>, <a href="https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html">Dependency injection</a>, <a href="https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html">Bean scopes</a>; javadoc <code>@Transactional</code> (readOnly chỉ là gợi ý).</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-1-khung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 11.1: Khung trả lời câu hỏi phỏng vấn thiết kế API</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: thiết kế có bấm giờ, nói to, giả định trước, gọi tên đánh đổi. Khác: ở đó giữa bảng là hợp đồng HTTP, câu trả lời 45 phút theo năm bước, mỗi khẳng định có con số chính bạn đo (đỉnh 07:00 so với ~8.000 lượt đọc/s trên một tiến trình) và được chấm bằng thang sáu tiêu chí; rồi bốn đề kinh điển — rút gọn link, news feed, chat và đặt lịch (LabFlow).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['gof', 'Proxy, Decorator, Strategy, State, Singleton, Factory Method, Abstract Factory — the "Intent" and "Applicability" sections are exactly what interview answers need', 'Proxy, Decorator, Strategy, State, Singleton, Factory Method, Abstract Factory — mục "Intent" và "Applicability" đúng là thứ câu trả lời phỏng vấn cần'],
       ['gomaa', 'Chapter 20 (software quality attributes) for trade-off questions; Chapter 12 (software architecture overview)', 'Chương 20 (thuộc tính chất lượng phần mềm) cho câu hỏi đánh đổi; Chương 12 (tổng quan kiến trúc phần mềm)'],

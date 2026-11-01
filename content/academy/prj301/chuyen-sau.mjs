@@ -30216,7 +30216,12 @@ Content-Type: application/problem+json
 <li>VNPay with an SPA: API returns the signed URL, the IPN writes (97/01/04/02, conditional UPDATEs, one transaction), the React return page only asks the API, which only reads.</li>
 <li>React: token in memory, one shared refresh, one retry, <code>credentials: "include"</code>, CORS with exact origins; built, tested and run end to end for real.</li>
 <li>LabFlow checklist: structure, environments, security, data, tests, CI/deploy.</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-4-dat-lich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 11.6: Interview: design the API of a booking system</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: two people pressing the same button at the same moment, stopped by a database constraint, the loser gets 409. Different: there it runs on PostgreSQL with 50 concurrent handlers and overlapping time ranges — check-then-insert stored 50 bookings; FOR UPDATE, SERIALIZABLE (40001) and EXCLUDE USING gist stored exactly 1 — plus expiring holds and how to say all of it in an interview.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần mang theo gì từ slide 13–26</h2>
 <ul>
 <li>Đặt trùng: kiểm bằng Java để có câu thông báo, partial unique index để có sự thật, một transaction; 8 luồng ⇒ 1 dòng, lần nào cũng vậy.</li>
@@ -30226,7 +30231,12 @@ Content-Type: application/problem+json
 <li>VNPay với SPA: API trả URL đã ký, IPN ghi (97/01/04/02, UPDATE có điều kiện, một transaction), trang return của React chỉ hỏi API, API chỉ đọc.</li>
 <li>React: token trong bộ nhớ, một lần refresh dùng chung, thử lại một lần, <code>credentials: "include"</code>, CORS đúng origin; build, test và chạy đầu-cuối thật.</li>
 <li>Checklist LabFlow: cấu trúc, môi trường, bảo mật, dữ liệu, test, CI/deploy.</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-4-dat-lich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 11.6: Phỏng vấn: thiết kế API cho hệ thống đặt lịch</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: hai người bấm cùng một nút cùng một lúc, bị chặn bằng ràng buộc CSDL, người thua nhận 409. Khác: ở đó chạy trên PostgreSQL với 50 handler đồng thời và khoảng thời gian chồng nhau — kiểm-rồi-chèn lưu 50 lượt đặt; FOR UPDATE, SERIALIZABLE (40001) và EXCLUDE USING gist lưu đúng 1 — thêm giữ chỗ có hạn và cách nói tất cả khi phỏng vấn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['springData', '"Specifications", "Paging, Iterating Large Results, Sorting", "Fetch- and LoadGraphs" (@EntityGraph)', '"Specifications", "Paging, Iterating Large Results, Sorting", "Fetch- and LoadGraphs" (@EntityGraph)'],
       ['springFramework', '"Transaction Management" (rollback-only, UnexpectedRollbackException) and "Web on Servlet Stack → CORS"', '"Transaction Management" (rollback-only, UnexpectedRollbackException) và "Web on Servlet Stack → CORS"'],

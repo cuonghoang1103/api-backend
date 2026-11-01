@@ -1,0 +1,576 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-11-3-chat",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-11-3-chat"
+  },
+  "exercises": [
+    {
+      "title": "Chat 1 — Duplicates, order and devices, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "reliability",
+        "realtime"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 11.5: interview/chat/server.mjs with DROP_EVERY=4 and send.mjs from a phone (clock 2 minutes slow) and a laptop.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 11.5: interview/chat/server.mjs với DROP_EVERY=4 và send.mjs từ điện thoại (đồng hồ chậm 2 phút) và laptop.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A lost response is not a lost request.|||Mất phản hồi không có nghĩa là mất request.",
+        "Who owns the clock that orders messages?|||Đồng hồ của ai quyết định thứ tự tin?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Chat 1 — Duplicates, order and devices, measured\n\nAnswer in the answer panel (no code needed).\n\n1. Every fourth request is stored and then the connection is cut. Without deduplication, 200 messages became…Cứ request thứ tư thì lưu xong rồi cắt kết nối. Không chống trùng, 200 tin thành…\n2. Sorted by the client’s sentAt, how many of the 200 messages were out of place?Sắp theo sentAt của client, bao nhiêu trong 200 tin sai chỗ?\n3. A laptop reconnects after a week. How does it catch up?Laptop nối lại sau một tuần. Nó bắt kịp bằng cách nào?\n4. A late “seen up to 100” arrives after “seen up to 120”. What should PUT …/read-cursor do?“Đã xem tới 100” tới muộn sau “đã xem tới 120”. PUT …/read-cursor nên làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Chat 1 — Duplicates, order and devices, measured — answer key\n\n1. Every fourth request is stored and then the connection is cut. Without deduplication, 200 messages became…Cứ request thứ tư thì lưu xong rồi cắt kết nối. Không chống trùng, 200 tin thành…\n   Answer: d) 266 stored messages — 66 duplicates\n   The phone cannot know whether a timed-out request was stored, so it sends again; with clientMessageId the server replayed instead (0 duplicates).VI: Điện thoại không biết request hết giờ đã được lưu chưa, nên gửi lại; có clientMessageId thì server phát lại (0 tin trùng).\n\n2. Sorted by the client’s sentAt, how many of the 200 messages were out of place?Sắp theo sentAt của client, bao nhiêu trong 200 tin sai chỗ?\n   Answer: b) All 200 — every phone message jumped ahead of the laptop’s\n   Order comes from the server’s per-conversation seq; client time is only displayed.VI: Thứ tự lấy từ seq theo cuộc trò chuyện của server; giờ client chỉ để hiển thị.\n\n3. A laptop reconnects after a week. How does it catch up?Laptop nối lại sau một tuần. Nó bắt kịp bằng cách nào?\n   Answer: a) GET …/messages?after={last seq it has} page by page, then the socket again\n   The socket is for live messages; history and gaps are fetched with a cursor.VI: Socket dành cho tin trực tiếp; lịch sử và phần hở lấy bằng cursor.\n\n4. A late “seen up to 100” arrives after “seen up to 120”. What should PUT …/read-cursor do?“Đã xem tới 100” tới muộn sau “đã xem tới 120”. PUT …/read-cursor nên làm gì?\n   Answer: a) Keep 120 — the read cursor only moves forward\n   Monotonic cursors make out-of-order requests harmless.VI: Con trỏ chỉ đi tới làm request sai thứ tự trở nên vô hại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 266 stored messages — 66 duplicates</p><p>The phone cannot know whether a timed-out request was stored, so it sends again; with clientMessageId the server replayed instead (0 duplicates).</p><p><i>VI: Điện thoại không biết request hết giờ đã được lưu chưa, nên gửi lại; có clientMessageId thì server phát lại (0 tin trùng).</i></p></li><li><p><b>b)</b> All 200 — every phone message jumped ahead of the laptop’s</p><p>Order comes from the server’s per-conversation seq; client time is only displayed.</p><p><i>VI: Thứ tự lấy từ seq theo cuộc trò chuyện của server; giờ client chỉ để hiển thị.</i></p></li><li><p><b>a)</b> GET …/messages?after={last seq it has} page by page, then the socket again</p><p>The socket is for live messages; history and gaps are fetched with a cursor.</p><p><i>VI: Socket dành cho tin trực tiếp; lịch sử và phần hở lấy bằng cursor.</i></p></li><li><p><b>a)</b> Keep 120 — the read cursor only moves forward</p><p>Monotonic cursors make out-of-order requests harmless.</p><p><i>VI: Con trỏ chỉ đi tới làm request sai thứ tự trở nên vô hại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Every fourth request is stored and then the connection is cut. Without deduplication, 200 messages became…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cứ request thứ tư thì lưu xong rồi cắt kết nối. Không chống trùng, 200 tin thành…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "150 stored messages — the cut requests were lost"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 stored messages — TCP retransmits safely"
+              },
+              {
+                "ma": "c",
+                "noiDung": "400 stored messages — every retry doubles"
+              },
+              {
+                "ma": "d",
+                "noiDung": "266 stored messages — 66 duplicates"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The phone cannot know whether a timed-out request was stored, so it sends again; with clientMessageId the server replayed instead (0 duplicates).</p><p><i>VI: Điện thoại không biết request hết giờ đã được lưu chưa, nên gửi lại; có clientMessageId thì server phát lại (0 tin trùng).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Sorted by the client’s sentAt, how many of the 200 messages were out of place?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp theo sentAt của client, bao nhiêu trong 200 tin sai chỗ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Exactly 100 — only the phone’s messages"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All 200 — every phone message jumped ahead of the laptop’s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "About 66 — the retried ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None — the phone’s clock was only two minutes off"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Order comes from the server’s per-conversation seq; client time is only displayed.</p><p><i>VI: Thứ tự lấy từ seq theo cuộc trò chuyện của server; giờ client chỉ để hiển thị.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A laptop reconnects after a week. How does it catch up?</p><p style=\"opacity:.75;font-size:.92em\"><i>Laptop nối lại sau một tuần. Nó bắt kịp bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "GET …/messages?after={last seq it has} page by page, then the socket again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ask the phone to forward what it received"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Download the whole conversation and diff it locally"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Wait for the server to push every missed message over the socket"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The socket is for live messages; history and gaps are fetched with a cursor.</p><p><i>VI: Socket dành cho tin trực tiếp; lịch sử và phần hở lấy bằng cursor.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A late “seen up to 100” arrives after “seen up to 120”. What should PUT …/read-cursor do?</p><p style=\"opacity:.75;font-size:.92em\"><i>“Đã xem tới 100” tới muộn sau “đã xem tới 120”. PUT …/read-cursor nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keep 120 — the read cursor only moves forward"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Set 100 — the last request always wins"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Return 409, because the two requests conflict"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Store both, one per device"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Monotonic cursors make out-of-order requests harmless.</p><p><i>VI: Con trỏ chỉ đi tới làm request sai thứ tự trở nên vô hại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting TCP to prevent duplicate messages.|||Tin TCP sẽ chặn tin trùng."
+        },
+        {
+          "loi": "Sorting by device timestamps.|||Sắp theo giờ của thiết bị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clientMessageId",
+          "vi": "id tin do client tạo"
+        },
+        {
+          "en": "seq",
+          "vi": "số thứ tự của server"
+        },
+        {
+          "en": "read cursor",
+          "vi": "con trỏ đã đọc"
+        }
+      ]
+    },
+    {
+      "title": "Chat 2 — Write accept(state, cid, msg): dedupe and assign seq",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "reliability",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The server keeps <code>state = { lastSeq: {cid: n}, byKey: {\"cid|clientMessageId\": seq} }</code>. For a message <code>{ clientMessageId, text }</code> in conversation <code>cid</code>:</p><ul><li>if this conversation already has this clientMessageId ⇒ <code>{ status: 200, seq: &lt;the stored seq&gt;, state }</code> (unchanged state);</li><li>otherwise seq = last seq of <b>this conversation</b> + 1 ⇒ <code>{ status: 201, seq, state: &lt;new state&gt; }</code>.</li></ul><p>Do not mutate the input state.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Server giữ <code>state = { lastSeq: {cid: n}, byKey: {\"cid|clientMessageId\": seq} }</code>. Với tin <code>{ clientMessageId, text }</code> trong cuộc trò chuyện <code>cid</code>:</p><ul><li>nếu cuộc trò chuyện này đã có clientMessageId đó ⇒ <code>{ status: 200, seq: &lt;seq đã lưu&gt;, state }</code> (state giữ nguyên);</li><li>ngược lại seq = seq cuối của <b>cuộc trò chuyện này</b> + 1 ⇒ <code>{ status: 201, seq, state: &lt;state mới&gt; }</code>.</li></ul><p>Không sửa state đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "state — object; cid — string; msg — {clientMessageId, text}|||state — object; cid — chuỗi; msg — {clientMessageId, text}",
+      "outputSpec": "{ status: 200 | 201, seq: number, state }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "accept({\"lastSeq\":{},\"byKey\":{}}, \"c_1\", {\"clientMessageId\":\"m-1\",\"text\":\"tin 1\"})",
+          "output": "{\"status\":201,\"seq\":1,\"state\":{\"lastSeq\":{\"c_1\":1},\"byKey\":{\"c_1|m-1\":1}}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Key by conversation AND clientMessageId — two chats may reuse an id.|||Khoá theo cuộc trò chuyện VÀ clientMessageId — hai cuộc trò chuyện có thể trùng id.",
+        "Spread objects to build the new state.|||Dùng spread để dựng state mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** dedupe + sequence */\nfunction accept(state, cid, msg) {\n  // Write your solution here\n  const seq = Object.keys(state.byKey).length + 1;\n  return { status: 201, seq, state: { lastSeq: { ...state.lastSeq, [cid]: seq }, byKey: { ...state.byKey, [msg.clientMessageId]: seq } } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction accept(state, cid, msg) {\n  const key = `${cid}|${msg.clientMessageId}`;\n  if (state.byKey[key] !== undefined) return { status: 200, seq: state.byKey[key], state };   // gửi lại ⇒ phát lại\n  const seq = (state.lastSeq[cid] || 0) + 1;\n  return {\n    status: 201, seq,\n    state: { lastSeq: { ...state.lastSeq, [cid]: seq }, byKey: { ...state.byKey, [key]: seq } },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the server of 11.5 without the network: with it, 250 calls stored exactly 200 messages; the 50 retries came back as 200 with Idempotent-Replayed.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là server của bài 11.5 bỏ phần mạng: có nó, 250 lần gọi lưu đúng 200 tin; 50 lần gửi lại nhận 200 kèm Idempotent-Replayed.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First message of a conversation",
+              "vi": "Tin đầu của một cuộc trò chuyện"
+            },
+            "goi": "accept({\"lastSeq\":{},\"byKey\":{}}, \"c_1\", {\"clientMessageId\":\"m-1\",\"text\":\"tin 1\"})",
+            "mongDoi": {
+              "status": 201,
+              "seq": 1,
+              "state": {
+                "lastSeq": {
+                  "c_1": 1
+                },
+                "byKey": {
+                  "c_1|m-1": 1
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "The same message sent again",
+              "vi": "Cùng tin đó gửi lại"
+            },
+            "goi": "accept({\"lastSeq\":{\"c_1\":1},\"byKey\":{\"c_1|m-1\":1}}, \"c_1\", {\"clientMessageId\":\"m-1\",\"text\":\"tin 1\"})",
+            "mongDoi": {
+              "status": 200,
+              "seq": 1,
+              "state": {
+                "lastSeq": {
+                  "c_1": 1
+                },
+                "byKey": {
+                  "c_1|m-1": 1
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "accept({\"lastSeq\":{\"c_1\":7,\"c_2\":3},\"byKey\":{\"c_1|m-1\":1}}, \"c_2\", {\"clientMessageId\":\"m-1\",\"text\":\"khác\"})",
+            "mongDoi": {
+              "status": 201,
+              "seq": 4,
+              "state": {
+                "lastSeq": {
+                  "c_1": 7,
+                  "c_2": 4
+                },
+                "byKey": {
+                  "c_1|m-1": 1,
+                  "c_2|m-1": 4
+                }
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "accept({\"lastSeq\":{\"c_1\":7},\"byKey\":{\"c_1|m-9\":5}}, \"c_1\", {\"clientMessageId\":\"m-9\",\"text\":\"tin 5\"})",
+            "mongDoi": {
+              "status": 200,
+              "seq": 5,
+              "state": {
+                "lastSeq": {
+                  "c_1": 7
+                },
+                "byKey": {
+                  "c_1|m-9": 5
+                }
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "accept({\"lastSeq\":{\"c_1\":7},\"byKey\":{}}, \"c_1\", {\"clientMessageId\":\"m-8\",\"text\":\"tin 8\"})",
+            "mongDoi": {
+              "status": 201,
+              "seq": 8,
+              "state": {
+                "lastSeq": {
+                  "c_1": 8
+                },
+                "byKey": {
+                  "c_1|m-8": 8
+                }
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "One global seq for all conversations.|||Một seq chung cho mọi cuộc trò chuyện."
+        },
+        {
+          "loi": "Giving a retry a new seq.|||Cấp seq mới cho lần gửi lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replay",
+          "vi": "phát lại"
+        },
+        {
+          "en": "sequence",
+          "vi": "dãy số thứ tự"
+        }
+      ]
+    },
+    {
+      "title": "Chat 3 — Write applyPush(have, pushed): sync one device",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "realtime",
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A device has the seqs <code>have</code> of one conversation; pushes arrive with seqs <code>pushed</code> (any order, maybe duplicates). Return:</p><ul><li><code>messages</code> — all seqs, unique, ascending;</li><li><code>lastContiguous</code> — the largest n such that 1…n are all present (0 if seq 1 is missing);</li><li><code>fetch</code> — <code>null</code> if nothing is missing up to the largest seq, otherwise <code>{ after: lastContiguous, missing: [the missing seqs between lastContiguous and the largest seq] }</code> — what the device asks with <code>GET …?after=</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một thiết bị có các seq <code>have</code> của một cuộc trò chuyện; tin đẩy tới mang các seq <code>pushed</code> (thứ tự bất kỳ, có thể trùng). Trả về:</p><ul><li><code>messages</code> — mọi seq, không trùng, tăng dần;</li><li><code>lastContiguous</code> — n lớn nhất mà 1…n đều có (0 nếu thiếu seq 1);</li><li><code>fetch</code> — <code>null</code> nếu không thiếu gì tới seq lớn nhất, ngược lại <code>{ after: lastContiguous, missing: [các seq thiếu giữa lastContiguous và seq lớn nhất] }</code> — thứ thiết bị hỏi bằng <code>GET …?after=</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "have — number[]; pushed — number[]",
+      "outputSpec": "{ messages: number[], lastContiguous: number, fetch: null | {after, missing} }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "applyPush([1,2,3,4,5], [7])",
+          "output": "{\"messages\":[1,2,3,4,5,7],\"lastContiguous\":5,\"fetch\":{\"after\":5,\"missing\":[6]}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Union with a Set, then sort numerically.|||Hợp bằng Set, rồi sắp theo số.",
+        "Walk up from 1 while the next seq exists.|||Đi lên từ 1 trong khi seq kế tiếp còn có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** merge pushes into a device's copy */\nfunction applyPush(have, pushed) {\n  // Write your solution here\n  const all = have.concat(pushed).sort();\n  return { messages: all, lastContiguous: all[all.length - 1] || 0, fetch: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction applyPush(have, pushed) {\n  const all = [...new Set([...have, ...pushed])].sort((a, b) => a - b);\n  let contiguous = 0;\n  while (all.includes(contiguous + 1)) contiguous++;\n  const max = all.length ? all[all.length - 1] : 0;\n  const gaps = [];\n  for (let s = contiguous + 1; s <= max; s++) if (!all.includes(s)) gaps.push(s);\n  return { messages: all, lastContiguous: contiguous, fetch: gaps.length ? { after: contiguous, missing: gaps } : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 11.5: a pushed seq that is not exactly last + 1 means something was missed — fetch the gap with ?after= instead of trusting the push. The same idea as Last-Event-ID in 10.4.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài 11.5: seq được đẩy tới mà không đúng bằng cuối + 1 nghĩa là đã lỡ gì đó — lấy phần hở bằng ?after= thay vì tin tin đẩy. Cùng ý với Last-Event-ID ở bài 10.4.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Seq 6 was missed",
+              "vi": "Lỡ mất seq 6"
+            },
+            "goi": "applyPush([1,2,3,4,5], [7])",
+            "mongDoi": {
+              "messages": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                7
+              ],
+              "lastContiguous": 5,
+              "fetch": {
+                "after": 5,
+                "missing": [
+                  6
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "A duplicate push",
+              "vi": "Một tin đẩy trùng"
+            },
+            "goi": "applyPush([1,2,3], [4,4,5])",
+            "mongDoi": {
+              "messages": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "lastContiguous": 5,
+              "fetch": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "applyPush([], [3,1])",
+            "mongDoi": {
+              "messages": [
+                1,
+                3
+              ],
+              "lastContiguous": 1,
+              "fetch": {
+                "after": 1,
+                "missing": [
+                  2
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "applyPush([1,2,9,10], [11,8])",
+            "mongDoi": {
+              "messages": [
+                1,
+                2,
+                8,
+                9,
+                10,
+                11
+              ],
+              "lastContiguous": 2,
+              "fetch": {
+                "after": 2,
+                "missing": [
+                  3,
+                  4,
+                  5,
+                  6,
+                  7
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "applyPush([], [])",
+            "mongDoi": {
+              "messages": [],
+              "lastContiguous": 0,
+              "fetch": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "applyPush([2,3], [])",
+            "mongDoi": {
+              "messages": [
+                2,
+                3
+              ],
+              "lastContiguous": 0,
+              "fetch": {
+                "after": 0,
+                "missing": [
+                  1
+                ]
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting the socket: showing 7 after 5 without fetching 6.|||Tin socket: hiện 7 sau 5 mà không lấy 6."
+        },
+        {
+          "loi": "Sorting numbers as strings: 10 before 9.|||Sắp số như chuỗi: 10 trước 9."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "gap",
+          "vi": "phần hở"
+        },
+        {
+          "en": "contiguous",
+          "vi": "liền mạch"
+        }
+      ]
+    }
+  ]
+}

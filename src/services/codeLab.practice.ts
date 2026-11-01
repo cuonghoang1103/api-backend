@@ -88,6 +88,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'course', ten: 'Testing', courseSlug: 'testing', trackSlug: 'testing-practice' },
   { loai: 'course', ten: 'TypeScript', courseSlug: 'typescript', trackSlug: 'typescript-practice' },
   { loai: 'course', ten: 'Authentication', courseSlug: 'authentication', trackSlug: 'authentication-practice' },
+  { loai: 'course', ten: 'PostgreSQL', courseSlug: 'postgresql', trackSlug: 'postgresql-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

@@ -272,6 +272,12 @@
       "name": "⭐ CS.8 Concurrency with deterministic results",
       "level": "ADVANCED",
       "description": "Luyện: Two desks collect fines into one account: the lost update · A transfer that deadlocks, and a lock order that does not · Scan a million loans on four threads with invokeAll · Producer and consumer through a BlockingQueue"
+    },
+    {
+      "slug": "pro192-du-an-ct-library",
+      "name": "🏁 Final project — CT Library 1.0",
+      "level": "ADVANCED",
+      "description": "Luyện: Final project — CT Library 1.0 (8 parts on 200 items, 300 members, 2,000 loans)"
     }
   ]
 }

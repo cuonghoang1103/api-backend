@@ -19,7 +19,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 9 | `pro192-9-1-file-io` 4 · `pro192-on-ch9` 4 · `pro192-lab-9-luu-tep` 1 | 9 |
 | 🎓 LAB211 | `pro192-lab211-cach-qua-review` 4 (khung Note từ TODO + 3 đề "sửa lỗi thầy bắt": lỗi thường gặp, service giữ repo, Java 8) · `-p0011-change-base-number` 1 · `-p0021-student-management` 1 · `-p0056-worker-management` 1 · `-p0070-ebank-login` 1 · `-p0071-task-management` 1 · `-p0073-handy-expense` 1 | 10 |
 | ⭐ CS (Java 17) | `pro192-cs1-on` 5 (max generic, PECS, sắp 4 khoá, Repo<T,ID>, ẩn danh→lambda) · `cs2` 5 (groupingBy, top 3 từ, toMap gộp, câu 3 PE `java: 8`, Optional) · `cs3` 5 (record kiểm dữ liệu, enum + switch expression, sealed + instanceof pattern, text block, về JDK 8 `release: 8`) · `cs4` 4 (equals/hashCode, bất biến, VAT BigDecimal, builder) · `cs5` 4 (rò HashSet, đệ quy sâu, Integer cache, thứ tự static) · `cs6` 4 (bọc thay kế thừa, tiêm Clock, ngoại lệ có mã, bảng biên `java: 8`) · `cs7` 4 (registry Strategy, LSP Stack, Observer tự huỷ, Template Method) · `cs8` 4 (mất cập nhật, khoá chết, invokeAll, BlockingQueue) | 35 |
-| **tổng** | 44 module | **130** |
+| 🏁 Dự án cuối khoá | `pro192-du-an-ct-library` 1 đề lớn (8 TODO DA của starter khoá, 57 tệp, data 200/300/2000, 2 lần chạy; ca 1 = 557 dòng `expected.txt` của khoá + 3 ca ẩn: ngày 22/10, ngày 18/10 + báo cáo trước + cán bộ mới + mở lại, menu sai + mã sai + dời ngày cuối năm) | 1 |
+| **tổng** | 45 module | **131** |
 
 Đăng ký track: `src/services/codeLab.practice.ts` (`'object-oriented-programming': 'pro192-practice'`; PRACTICE_CATALOG có sẵn dòng PRO192).
 
@@ -56,7 +57,10 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
    **⭐ Chuyên sâu CS.1–CS.8** — module `pro192-cs1-on` … `pro192-cs8-on` (3–6 đề/bài, Java 17+: đặt `java: 17` trong spec ⇒
    `javac --release 17` và cham.mjs đòi JDK 17). Ý đề + lời giải chạy thật có sẵn ở `gen/src/extra/csN-on.txt` + `gen/java/csN/`.
    Đề đa luồng (CS.8): output phải tất định (join, CountDownLatch, kết quả cuối) — đừng in thứ tự xen kẽ của luồng.
-3. **🏁 Dự án cuối khoá** `pro192-du-an-ct-library` — `gen/lab/da/` có starter (8 "TODO DA") + solution + data CSV 200/300/2000 dòng.
+3. ~~🏁 Dự án cuối khoá~~ — XONG. Ghi chú: tệp của ca (data/*.csv) giống nhau giữa các ca nay lưu MỘT lần trong `DE.shared`
+   của cham.mjs (ca giữ `filesRef`) — JSON đề 1,27 MB (57 tệp nguồn + data 132 KB ×2 bản tải). Ca ẩn tự viết KHÔNG được có dòng
+   trống ở lời nhắc "Ngay lam viec (Enter = hom nay)" (ra ngày thật ⇒ output không tất định) ⇒ không dùng `menuRac` của deLab.
+   Đột biến "không ghi members.csv" trượt 3/4 ca.
 4. (tuỳ) 🎯 Luyện PE `pro192-luyen-pe-1..4` — đề kiểu PE câu 1–4 trên dữ liệu khác.
 5. Frontend (tuỳ, cùng commit riêng bằng index riêng vì tệp có thay đổi của phiên khác): `frontend/src/lib/codelabToc.ts` —
    thêm `'pro192-practice': 'object-oriented-programming'` vào `KHOA_CUA_TRACK` (cờ `solved` trên trang bài học) và tên chương vào

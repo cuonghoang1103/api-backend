@@ -120,12 +120,22 @@ export function deJava(s) {
   const coKq = daGhi && daGhi.bam === khoaBam;
   if (!coKq && !process.env.PRO192_DUNG) throw new Error(`${s.id}: output mong đợi chưa có / đã cũ — chạy: node content/codelab/pro192-practice/nguon/_dung.mjs`);
   const ra = coKq ? daGhi.ra : caGoc.map(() => null);
-  const cases = caGoc.map((x, i) => (s.ca[i].an ? { h: Buffer.from(JSON.stringify({ ...x, expected: ra[i] }), 'utf8').toString('base64') } : { ...x, expected: ra[i] }));
+  // tệp của ca (data/*.csv của lab) giống nhau giữa các ca ⇒ lưu MỘT lần trong DE.shared, ca chỉ giữ khoá (cham.mjs gọn)
+  const shared = {};
+  const gonTep = (x) => {
+    if (!x.files) return x;
+    const k = 'f' + bam(x.files).slice(0, 8);
+    shared[k] = x.files;
+    const { files, ...rest } = x;
+    return { ...rest, filesRef: k };
+  };
+  const cases = caGoc.map((x, i) => (s.ca[i].an ? { h: Buffer.from(JSON.stringify({ ...gonTep(x), expected: ra[i] }), 'utf8').toString('base64') } : { ...gonTep(x), expected: ra[i] }));
   const DE = {
     id: s.id, title: hai(s.tieuDe).en, src, extra: Object.keys(harness).length ? ['cham'] : [], main: s.main || 'Main', javaMin,
     timeoutMs: s.timeoutMs ?? 10000, loose: !!s.loose, lab211: !!s.lab211, ...(s.release ? { release: s.release } : {}), ...tuyChon,
     rules: (s.quyTac || []).map((r) => ({ id: r.id, en: r.en, vi: r.vi, re: r.re, ...(r.flags ? { flags: r.flags } : {}), ...(r.file ? { file: r.file } : {}), ...(r.need ? { need: true } : {}) })),
     cases,
+    ...(Object.keys(shared).length ? { shared } : {}),
   };
   const cham = MAU.replace('/*@@DE@@*/null', JSON.stringify(DE, null, 1)).replace('@@TEN@@', `${s.id} — ${DE.title}`);
   const mau = {};

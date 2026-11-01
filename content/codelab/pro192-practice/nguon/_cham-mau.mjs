@@ -175,7 +175,7 @@ function runLive(c, input, dir) {
 }
 async function runCase(c) {
   const dir = fs.mkdtempSync(path.join(work, 'case-'));
-  for (const [f, text] of Object.entries(c.files || {})) {
+  for (const [f, text] of Object.entries(c.files || (c.filesRef ? DE.shared[c.filesRef] : {}))) {
     fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true });
     fs.writeFileSync(path.join(dir, f), text);
   }

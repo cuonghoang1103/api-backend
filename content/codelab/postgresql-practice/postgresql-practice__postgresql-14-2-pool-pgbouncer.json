@@ -1,0 +1,593 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-14-2-pool-pgbouncer",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-14-2-pool-pgbouncer"
+  },
+  "exercises": [
+    {
+      "title": "Shrink the pools until the fleet fits",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pool sizing",
+        "headroom for admin/migrations",
+        "floor division"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "pool",
+        "capacity"
+      ],
+      "problemHtml": "<p>Keep <b>10 connections</b> free for psql, migrations and monitoring. What is the largest pool size, the same for every process, that still fits? Return <code>processes, available, per_process_pool, total</code>: processes = Σ processes; available = max_connections − superuser_reserved_connections − 10 (read from server_setting); per_process_pool = available ÷ processes rounded <b>down</b>; total = processes × per_process_pool.</p>\n<h4>Tables (same as 14.1)</h4><pre>server_setting (name, setting text)        -- max_connections 100, superuser_reserved_connections 3\nconn_client (name, processes, pool_size)   -- 12 processes in total, every pool 10</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Integer division of two integers already rounds down in PostgreSQL (or use floor()).</li>\n  <li>Read the two settings; do not hard-code 97.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chừa <b>10 kết nối</b> cho psql, migration và giám sát. Cỡ pool lớn nhất, như nhau cho mọi tiến trình, mà vẫn vừa là bao nhiêu? Trả về <code>processes, available, per_process_pool, total</code>: processes = Σ processes; available = max_connections − superuser_reserved_connections − 10 (đọc từ server_setting); per_process_pool = available ÷ processes làm tròn <b>xuống</b>; total = processes × per_process_pool.</p>\n<h4>Bảng (như 14.1)</h4><pre>server_setting (name, setting text)        -- max_connections 100, superuser_reserved_connections 3\nconn_client (name, processes, pool_size)   -- tổng 12 tiến trình, mọi pool 10</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chia hai số nguyên trong PostgreSQL đã làm tròn xuống (hoặc dùng floor()).</li>\n  <li>Đọc hai thiết lập; đừng viết cứng 97.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "processes | available | per_process_pool | total\n----------+-----------+------------------+------\n12        | 87        | 7                | 84   ",
+          "explanation": "Expected result of check \"12 processes, 87 usable slots\" (row order does not matter).|||Kết quả mong đợi của kiểm \"12 tiến trình, 87 suất dùng được\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "87 / 12 = 7 in integer arithmetic: 12 × 7 = 84 ≤ 87.|||87 / 12 = 7 với phép chia nguyên: 12 × 7 = 84 ≤ 87.",
+        "Rounding to nearest can overshoot the limit.|||Làm tròn gần nhất có thể vượt trần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "budget.sql",
+          "language": "sql",
+          "code": "-- budget.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- budget.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES ('web', 6, 10), ('worker', 3, 10), ('cron', 1, 10), ('relay', 1, 10), ('migrate', 1, 10);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH p AS (\n  SELECT sum(processes)::int AS processes FROM conn_client\n), cap AS (\n  SELECT max(setting::int) FILTER (WHERE name = 'max_connections')\n       - max(setting::int) FILTER (WHERE name = 'superuser_reserved_connections')\n       - 10 AS available                                        -- room for psql, migrations, monitoring\n  FROM server_setting\n)\nSELECT processes, available,\n       available / processes AS per_process_pool,              -- int / int rounds down\n       processes * (available / processes) AS total\nFROM p, cap;\n"
+        },
+        {
+          "name": "budget.sql",
+          "language": "sql",
+          "code": "-- budget.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- budget.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES ('web', 6, 10), ('worker', 3, 10), ('cron', 1, 10), ('relay', 1, 10), ('migrate', 1, 10);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pool size × processes must fit under the limit with room to spare. When autoscaling makes the process count unpredictable, the per-process pool collapses (here to 4) — that is the moment PgBouncer earns its place.</p>",
+      "solutionExplanationHtmlVi": "<p>Cỡ pool × số tiến trình phải vừa dưới trần và còn dư. Khi tự co giãn làm số tiến trình khó đoán, pool mỗi tiến trình co lại (ở đây còn 4) — đó là lúc PgBouncer đáng có mặt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES ('web', 6, 10), ('worker', 3, 10), ('cron', 1, 10), ('relay', 1, 10), ('migrate', 1, 10);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "12 processes, 87 usable slots|||12 tiến trình, 87 suất dùng được",
+            "mongDoi": {
+              "cot": [
+                "processes",
+                "available",
+                "per_process_pool",
+                "total"
+              ],
+              "hang": [
+                [
+                  12,
+                  87,
+                  7,
+                  84
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Autoscaling added 8 web containers|||Tự co giãn thêm 8 container web",
+            "an": true,
+            "themCsdl": "UPDATE conn_client SET processes = 14 WHERE name = 'web'",
+            "mongDoi": {
+              "cot": [
+                "processes",
+                "available",
+                "per_process_pool",
+                "total"
+              ],
+              "hang": [
+                [
+                  20,
+                  87,
+                  4,
+                  80
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A bigger server: max_connections 300|||Máy lớn hơn: max_connections 300",
+            "an": true,
+            "themCsdl": "UPDATE server_setting SET setting = '300' WHERE name = 'max_connections'",
+            "mongDoi": {
+              "cot": [
+                "processes",
+                "available",
+                "per_process_pool",
+                "total"
+              ],
+              "hang": [
+                [
+                  12,
+                  287,
+                  23,
+                  276
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "round() instead of rounding down — 87 / 12 = 7.25 happens to round to 7, but with 13 processes 87 / 13 = 6.69 rounds to 7 and 13 × 7 = 91 &gt; 87.|||round() thay vì làm tròn xuống — 87 / 12 = 7,25 tình cờ ra 7, nhưng với 13 tiến trình 87 / 13 = 6,69 làm tròn thành 7 và 13 × 7 = 91 &gt; 87."
+        },
+        {
+          "loi": "Forgetting the admin headroom — the incident you need psql for is the one where every slot is taken.|||Quên khoảng dư cho quản trị — sự cố mà bạn cần psql chính là lúc mọi suất đã bị chiếm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pool size",
+          "vi": "cỡ pool"
+        },
+        {
+          "en": "autoscaling",
+          "vi": "tự co giãn"
+        }
+      ]
+    },
+    {
+      "title": "What breaks in PgBouncer transaction mode",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "session state",
+        "transaction pooling",
+        "pg_advisory_xact_lock",
+        "LISTEN/NOTIFY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "pool",
+        "pgbouncer"
+      ],
+      "problemHtml": "<p>In transaction mode, two transactions of the same client may run on different server connections. For each feature, say whether it keeps working.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ở chế độ transaction, hai giao dịch của cùng một client có thể chạy trên hai kết nối máy chủ khác nhau. Với mỗi tính năng, cho biết nó còn chạy đúng không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does it outlive COMMIT?|||Tự hỏi: nó có sống quá COMMIT không?",
+        "The _xact_ and LOCAL forms are the transaction-scoped twins.|||Dạng _xact_ và LOCAL là bản gói trong giao dịch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What breaks in PgBouncer transaction mode\n\nAnswer in the answer panel (no code needed).\n\n1. Feature → in transaction modeTính năng → ở chế độ transaction\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What breaks in PgBouncer transaction mode — answer key\n\n1. Feature → in transaction modeTính năng → ở chế độ transaction\n   - r1.ok: works\n   - r2.ok: breaks\n   - r3.ok: breaks\n   - r4.ok: works\n   - r5.ok: breaks\n   - r6.ok: works\n   - r7.ok: breaks\n   - r8.ok: breaks\n   Anything that lives in the SESSION (prepared statements, plain SET, session advisory locks, temp tables, LISTEN) is bound to a backend you no longer keep after COMMIT. Anything scoped to ONE transaction still works.VI: Mọi thứ sống trong PHIÊN (prepared statement, SET thường, khoá advisory phiên, bảng tạm, LISTEN) gắn với một backend mà bạn không còn giữ sau COMMIT. Mọi thứ gói trong MỘT giao dịch vẫn chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Anything that lives in the SESSION (prepared statements, plain SET, session advisory locks, temp tables, LISTEN) is bound to a backend you no longer keep after COMMIT. Anything scoped to ONE transaction still works.</p><p><i>VI: Mọi thứ sống trong PHIÊN (prepared statement, SET thường, khoá advisory phiên, bảng tạm, LISTEN) gắn với một backend mà bạn không còn giữ sau COMMIT. Mọi thứ gói trong MỘT giao dịch vẫn chạy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Feature → in transaction mode</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính năng → ở chế độ transaction</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Feature / Tính năng"
+              },
+              {
+                "ma": "ok",
+                "ten": "Works? / Chạy đúng?",
+                "luaChon": [
+                  "works",
+                  "breaks"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "BEGIN; UPDATE …; UPDATE …; COMMIT;"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "Named prepared statements (Prisma, pg with name:)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "SET search_path = app; then later queries"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "SET LOCAL statement_timeout inside BEGIN … COMMIT"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "pg_advisory_lock(42) … pg_advisory_unlock(42) across transactions"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "f": "pg_advisory_xact_lock(42) inside one transaction"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "f": "LISTEN orders_changed"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "f": "CREATE TEMP TABLE, used by the next transaction"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ok": "works",
+              "r2.ok": "breaks",
+              "r3.ok": "breaks",
+              "r4.ok": "works",
+              "r5.ok": "breaks",
+              "r6.ok": "works",
+              "r7.ok": "breaks",
+              "r8.ok": "breaks"
+            },
+            "giaiThich": "<p>Anything that lives in the SESSION (prepared statements, plain SET, session advisory locks, temp tables, LISTEN) is bound to a backend you no longer keep after COMMIT. Anything scoped to ONE transaction still works.</p><p><i>VI: Mọi thứ sống trong PHIÊN (prepared statement, SET thường, khoá advisory phiên, bảng tạm, LISTEN) gắn với một backend mà bạn không còn giữ sau COMMIT. Mọi thứ gói trong MỘT giao dịch vẫn chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking SET is safe because \"it worked in testing\" — testing used one connection.|||Tưởng SET an toàn vì \"thử thì chạy\" — lúc thử chỉ có một kết nối."
+        },
+        {
+          "loi": "Running migrations through PgBouncer — use a direct URL (Prisma DIRECT_URL).|||Chạy migration qua PgBouncer — hãy dùng URL trực tiếp (Prisma DIRECT_URL)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction pooling",
+          "vi": "pool theo giao dịch"
+        },
+        {
+          "en": "session state",
+          "vi": "trạng thái phiên"
+        }
+      ]
+    },
+    {
+      "title": "Sizing and deciding",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "pool size formula",
+        "queueing",
+        "when to add PgBouncer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "pool"
+      ],
+      "problemHtml": "<p>Lesson 14.2 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 14.2 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start from cores, not from users.|||Bắt đầu từ số nhân, không phải số người dùng.",
+        "Two layers: client pools and server connections.|||Hai tầng: pool phía client và kết nối phía máy chủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sizing and deciding\n\nAnswer in the answer panel (no code needed).\n\n1. A 4-core VPS on SSD. A sensible starting pool size per process is about…VPS 4 nhân, SSD. Cỡ pool khởi điểm hợp lý mỗi tiến trình là khoảng…\n2. Why can a request that waits 3 ms for a pool slot beat one that starts immediately?Vì sao yêu cầu chờ 3 ms lấy suất pool có thể nhanh hơn yêu cầu được chạy ngay?\n3. You add PgBouncer but keep 12 processes × pool 10. What changes for the application side?Bạn thêm PgBouncer nhưng giữ 12 tiến trình × pool 10. Phía ứng dụng thay đổi gì?\n4. When is the application pool alone enough?Khi nào chỉ pool trong ứng dụng là đủ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sizing and deciding — answer key\n\n1. A 4-core VPS on SSD. A sensible starting pool size per process is about…VPS 4 nhân, SSD. Cỡ pool khởi điểm hợp lý mỗi tiến trình là khoảng…\n   Answer: d) 10 ((cores × 2) + effective disks)\n   (4 × 2) + 1 ≈ 9–10. Bigger pools add contention, not throughput.VI: (4 × 2) + 1 ≈ 9–10. Pool lớn hơn chỉ thêm tranh chấp, không thêm thông lượng.\n\n2. Why can a request that waits 3 ms for a pool slot beat one that starts immediately?Vì sao yêu cầu chờ 3 ms lấy suất pool có thể nhanh hơn yêu cầu được chạy ngay?\n   Answer: a) 100 queries at once fight for CPU and locks; each takes far longer\n   Queueing in the pool keeps the database at the concurrency it handles best.VI: Xếp hàng ở pool giữ CSDL ở mức đồng thời nó xử lý tốt nhất.\n\n3. You add PgBouncer but keep 12 processes × pool 10. What changes for the application side?Bạn thêm PgBouncer nhưng giữ 12 tiến trình × pool 10. Phía ứng dụng thay đổi gì?\n   Answer: a) nothing: it still opens 120 client connections, now to PgBouncer\n   PgBouncer limits SERVER connections; client pools must still be sized.VI: PgBouncer giới hạn kết nối phía MÁY CHỦ; pool phía client vẫn phải chỉnh cỡ.\n\n4. When is the application pool alone enough?Khi nào chỉ pool trong ứng dụng là đủ?\n   Answer: a) few processes, and processes × pool fits under the limit with room\n   Do not add a component you do not need; PgBouncer is for many or unpredictable processes.VI: Đừng thêm thành phần không cần; PgBouncer dành cho nhiều tiến trình hoặc số tiến trình khó đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 10 ((cores × 2) + effective disks)</p><p>(4 × 2) + 1 ≈ 9–10. Bigger pools add contention, not throughput.</p><p><i>VI: (4 × 2) + 1 ≈ 9–10. Pool lớn hơn chỉ thêm tranh chấp, không thêm thông lượng.</i></p></li><li><p><b>a)</b> 100 queries at once fight for CPU and locks; each takes far longer</p><p>Queueing in the pool keeps the database at the concurrency it handles best.</p><p><i>VI: Xếp hàng ở pool giữ CSDL ở mức đồng thời nó xử lý tốt nhất.</i></p></li><li><p><b>a)</b> nothing: it still opens 120 client connections, now to PgBouncer</p><p>PgBouncer limits SERVER connections; client pools must still be sized.</p><p><i>VI: PgBouncer giới hạn kết nối phía MÁY CHỦ; pool phía client vẫn phải chỉnh cỡ.</i></p></li><li><p><b>a)</b> few processes, and processes × pool fits under the limit with room</p><p>Do not add a component you do not need; PgBouncer is for many or unpredictable processes.</p><p><i>VI: Đừng thêm thành phần không cần; PgBouncer dành cho nhiều tiến trình hoặc số tiến trình khó đoán.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A 4-core VPS on SSD. A sensible starting pool size per process is about…</p><p style=\"opacity:.75;font-size:.92em\"><i>VPS 4 nhân, SSD. Cỡ pool khởi điểm hợp lý mỗi tiến trình là khoảng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1, to avoid contention entirely"
+              },
+              {
+                "ma": "b",
+                "noiDung": "400, one per expected user"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100, so no request ever waits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10 ((cores × 2) + effective disks)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>(4 × 2) + 1 ≈ 9–10. Bigger pools add contention, not throughput.</p><p><i>VI: (4 × 2) + 1 ≈ 9–10. Pool lớn hơn chỉ thêm tranh chấp, không thêm thông lượng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why can a request that waits 3 ms for a pool slot beat one that starts immediately?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao yêu cầu chờ 3 ms lấy suất pool có thể nhanh hơn yêu cầu được chạy ngay?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "100 queries at once fight for CPU and locks; each takes far longer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the pool rewrites the query into a cheaper plan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it cannot — a request that waits is always slower"
+              },
+              {
+                "ma": "d",
+                "noiDung": "waiting in the pool warms the shared buffer cache first"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Queueing in the pool keeps the database at the concurrency it handles best.</p><p><i>VI: Xếp hàng ở pool giữ CSDL ở mức đồng thời nó xử lý tốt nhất.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>You add PgBouncer but keep 12 processes × pool 10. What changes for the application side?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn thêm PgBouncer nhưng giữ 12 tiến trình × pool 10. Phía ứng dụng thay đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing: it still opens 120 client connections, now to PgBouncer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it now opens only 20 connections, one per server slot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL itself now rejects the extra 20 connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PgBouncer resizes every application pool automatically"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>PgBouncer limits SERVER connections; client pools must still be sized.</p><p><i>VI: PgBouncer giới hạn kết nối phía MÁY CHỦ; pool phía client vẫn phải chỉnh cỡ.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>When is the application pool alone enough?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào chỉ pool trong ứng dụng là đủ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "few processes, and processes × pool fits under the limit with room"
+              },
+              {
+                "ma": "b",
+                "noiDung": "whenever the application talks to PostgreSQL through Prisma"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never — production always needs PgBouncer in front"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only when PgBouncer would have to run in statement mode"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Do not add a component you do not need; PgBouncer is for many or unpredictable processes.</p><p><i>VI: Đừng thêm thành phần không cần; PgBouncer dành cho nhiều tiến trình hoặc số tiến trình khó đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sizing the pool by expected concurrent users.|||Chỉnh cỡ pool theo số người dùng đồng thời dự kiến."
+        },
+        {
+          "loi": "Expecting PgBouncer to shrink the app pools.|||Mong PgBouncer tự thu nhỏ pool của app."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PgBouncer",
+          "vi": "bộ gom kết nối"
+        }
+      ]
+    },
+    {
+      "title": "Break a prepared statement behind PgBouncer, then fix it",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "PgBouncer transaction mode",
+        "error 26000 / 42P05",
+        "Prisma pgbouncer=true + directUrl"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "pgbouncer",
+        "docker",
+        "prisma"
+      ],
+      "problemHtml": "<p>Start PostgreSQL + PgBouncer (transaction mode):</p><pre># docker-compose.yml — PostgreSQL + PgBouncer in transaction mode\nservices:\n  db:\n    image: postgres:17\n    environment: { POSTGRES_PASSWORD: postgres }\n    ports: [\"5444:5432\"]\n  bouncer:\n    image: edoburu/pgbouncer:v1.23.1-p3\n    environment:\n      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres\n      POOL_MODE: transaction\n      DEFAULT_POOL_SIZE: \"5\"\n      MAX_CLIENT_CONN: \"500\"\n      AUTH_TYPE: scram-sha-256\n    ports: [\"6432:5432\"]\n    depends_on: [db]</pre><p>Then send 200 queries using the <b>same named prepared statement</b>, first directly, then through PgBouncer:</p><pre>// prepared.mjs — node prepared.mjs   (npm i pg)\nimport pg from 'pg';\nfor (const [label, port] of [['direct  ', 5444], ['bouncer ', 6432]]) {\n  const pool = new pg.Pool({ host: 'localhost', port, user: 'postgres', password: 'postgres', database: 'postgres', max: 20 });\n  let fail = 0;\n  await Promise.all(Array.from({ length: 200 }, (_, i) =&gt;\n    pool.query({ name: 's0', text: 'SELECT $1::int AS n', values: [i] }).catch((e) =&gt; { fail++; if (fail === 1) console.log(label, e.code, e.message); })));\n  console.log(`${label}: ${fail} of 200 named-prepared queries failed`);\n  await pool.end();\n}</pre><p>Finally write the Prisma datasource that avoids it.</p><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> PgBouncer is a separate network daemon in front of a real server; the browser grader has neither. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Direct: 0 failures. Through PgBouncer: many failures with <code>26000 prepared statement \"s0\" does not exist</code> or <code>42P05 … already exists</code>.</li>\n  <li>Prisma: <code>DATABASE_URL</code> → port 6432 with <code>?pgbouncer=true</code>, <code>directUrl = env(\"DIRECT_URL\")</code> → port 5444 for migrations.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng PostgreSQL + PgBouncer (chế độ transaction):</p><pre># docker-compose.yml — PostgreSQL + PgBouncer in transaction mode\nservices:\n  db:\n    image: postgres:17\n    environment: { POSTGRES_PASSWORD: postgres }\n    ports: [\"5444:5432\"]\n  bouncer:\n    image: edoburu/pgbouncer:v1.23.1-p3\n    environment:\n      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres\n      POOL_MODE: transaction\n      DEFAULT_POOL_SIZE: \"5\"\n      MAX_CLIENT_CONN: \"500\"\n      AUTH_TYPE: scram-sha-256\n    ports: [\"6432:5432\"]\n    depends_on: [db]</pre><p>Rồi gửi 200 truy vấn dùng <b>cùng một prepared statement có tên</b>, trước đi thẳng, sau đi qua PgBouncer:</p><pre>// prepared.mjs — node prepared.mjs   (npm i pg)\nimport pg from 'pg';\nfor (const [label, port] of [['direct  ', 5444], ['bouncer ', 6432]]) {\n  const pool = new pg.Pool({ host: 'localhost', port, user: 'postgres', password: 'postgres', database: 'postgres', max: 20 });\n  let fail = 0;\n  await Promise.all(Array.from({ length: 200 }, (_, i) =&gt;\n    pool.query({ name: 's0', text: 'SELECT $1::int AS n', values: [i] }).catch((e) =&gt; { fail++; if (fail === 1) console.log(label, e.code, e.message); })));\n  console.log(`${label}: ${fail} of 200 named-prepared queries failed`);\n  await pool.end();\n}</pre><p>Cuối cùng viết datasource Prisma tránh được lỗi này.</p><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> PgBouncer là một tiến trình mạng riêng đứng trước máy chủ thật; máy chấm trình duyệt không có cả hai. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đi thẳng: 0 lỗi. Qua PgBouncer: rất nhiều lỗi <code>26000 prepared statement \"s0\" does not exist</code> hoặc <code>42P05 … already exists</code>.</li>\n  <li>Prisma: <code>DATABASE_URL</code> → cổng 6432 kèm <code>?pgbouncer=true</code>, <code>directUrl = env(\"DIRECT_URL\")</code> → cổng 5444 cho migration.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "node prepared.mjs|||node prepared.mjs",
+          "output": "direct 0 failed · bouncer ~180 failed|||đi thẳng 0 lỗi · qua bouncer ~180 lỗi",
+          "explanation": "The statement was prepared on one server backend and executed on another.|||Câu lệnh được chuẩn bị trên một backend rồi thực thi trên backend khác."
+        }
+      ],
+      "hintsJson": [
+        "Named statements live in the backend session; transaction mode hands you a different backend each time.|||Statement có tên sống trong phiên backend; chế độ transaction mỗi lần đưa bạn một backend khác.",
+        "Unnamed queries (no name:) do not fail — that is why the bug hides until an ORM prepares.|||Truy vấn không tên (không name:) không lỗi — vì thế lỗi này ẩn tới khi ORM chuẩn bị câu lệnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "docker-compose.yml",
+          "language": "text",
+          "code": "# docker-compose.yml — PostgreSQL + PgBouncer in transaction mode\nservices:\n  db:\n    image: postgres:17\n    environment: { POSTGRES_PASSWORD: postgres }\n    ports: [\"5444:5432\"]\n  bouncer:\n    image: edoburu/pgbouncer:v1.23.1-p3\n    environment:\n      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres\n      POOL_MODE: transaction\n      DEFAULT_POOL_SIZE: \"5\"\n      MAX_CLIENT_CONN: \"500\"\n      AUTH_TYPE: scram-sha-256\n    ports: [\"6432:5432\"]\n    depends_on: [db]\n"
+        },
+        {
+          "name": "prepared.mjs",
+          "language": "javascript",
+          "code": "// prepared.mjs — node prepared.mjs   (npm i pg)\nimport pg from 'pg';\nfor (const [label, port] of [['direct  ', 5444], ['bouncer ', 6432]]) {\n  const pool = new pg.Pool({ host: 'localhost', port, user: 'postgres', password: 'postgres', database: 'postgres', max: 20 });\n  let fail = 0;\n  await Promise.all(Array.from({ length: 200 }, (_, i) =>\n    pool.query({ name: 's0', text: 'SELECT $1::int AS n', values: [i] }).catch((e) => { fail++; if (fail === 1) console.log(label, e.code, e.message); })));\n  console.log(`${label}: ${fail} of 200 named-prepared queries failed`);\n  await pool.end();\n}\n"
+        },
+        {
+          "name": "schema.prisma",
+          "language": "text",
+          "code": "datasource db {\n  provider = \"postgresql\"\n  // TODO\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "docker-compose.yml",
+          "language": "text",
+          "code": "# docker-compose.yml — PostgreSQL + PgBouncer in transaction mode\nservices:\n  db:\n    image: postgres:17\n    environment: { POSTGRES_PASSWORD: postgres }\n    ports: [\"5444:5432\"]\n  bouncer:\n    image: edoburu/pgbouncer:v1.23.1-p3\n    environment:\n      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres\n      POOL_MODE: transaction\n      DEFAULT_POOL_SIZE: \"5\"\n      MAX_CLIENT_CONN: \"500\"\n      AUTH_TYPE: scram-sha-256\n    ports: [\"6432:5432\"]\n    depends_on: [db]\n"
+        },
+        {
+          "name": "prepared.mjs",
+          "language": "javascript",
+          "code": "// prepared.mjs — node prepared.mjs   (npm i pg)\nimport pg from 'pg';\nfor (const [label, port] of [['direct  ', 5444], ['bouncer ', 6432]]) {\n  const pool = new pg.Pool({ host: 'localhost', port, user: 'postgres', password: 'postgres', database: 'postgres', max: 20 });\n  let fail = 0;\n  await Promise.all(Array.from({ length: 200 }, (_, i) =>\n    pool.query({ name: 's0', text: 'SELECT $1::int AS n', values: [i] }).catch((e) => { fail++; if (fail === 1) console.log(label, e.code, e.message); })));\n  console.log(`${label}: ${fail} of 200 named-prepared queries failed`);\n  await pool.end();\n}\n\n/* Expected (PgBouncer 1.23, transaction mode, pool 5):\ndirect  : 0 of 200 named-prepared queries failed\nbouncer  26000 prepared statement \"s0\" does not exist\nbouncer : 181 of 200 named-prepared queries failed   (the exact count varies run to run) */\n"
+        },
+        {
+          "name": "schema.prisma",
+          "language": "text",
+          "code": "datasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")   // postgresql://postgres:postgres@localhost:6432/postgres?pgbouncer=true\n  directUrl = env(\"DIRECT_URL\")     // postgresql://postgres:postgres@localhost:5444/postgres  (prisma migrate)\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the failure the lesson measured (181 of 200). <code>pgbouncer=true</code> makes Prisma stop relying on named prepared statements across transactions; migrations go through <code>directUrl</code>, straight to PostgreSQL.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là lỗi bài học đã đo (181 trên 200). <code>pgbouncer=true</code> khiến Prisma thôi dựa vào prepared statement có tên qua nhiều giao dịch; migration đi qua <code>directUrl</code>, thẳng tới PostgreSQL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "docker compose up -d && npm i pg && node prepared.mjs",
+          "lyDo": "PgBouncer is a separate network daemon in front of a real server; the browser grader has neither.|||PgBouncer là một tiến trình mạng riêng đứng trước máy chủ thật; máy chấm trình duyệt không có cả hai."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Pointing prisma migrate at PgBouncer — advisory locks and long DDL break there.|||Trỏ prisma migrate vào PgBouncer — khoá advisory và DDL dài sẽ hỏng ở đó."
+        },
+        {
+          "loi": "Switching to session mode \"to fix it\" — it works, but barely multiplexes any more.|||Chuyển sang chế độ session \"cho hết lỗi\" — chạy được, nhưng gần như không gom kết nối nữa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prepared statement",
+          "vi": "câu lệnh chuẩn bị sẵn"
+        }
+      ]
+    }
+  ]
+}

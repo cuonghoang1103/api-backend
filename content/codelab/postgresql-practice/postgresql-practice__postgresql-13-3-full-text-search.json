@@ -1,0 +1,586 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-13-3-full-text-search",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-13-3-full-text-search"
+  },
+  "exercises": [
+    {
+      "title": "Match words, not substrings: @@",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "tsvector @@ tsquery",
+        "stemming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "fts"
+      ],
+      "problemHtml": "<p>A reader types <b>indexes</b>. Find every article about it in any form (index, indexes, indexing, indexed). Return <code>id, title</code> ordered by id, searching the stored <code>tsv</code> column.</p>\n<h4>Sample table (lesson 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector GENERATED: title weight A + body weight B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>WHERE tsv @@ to_tsquery('english', 'indexes')</code>.</li>\n  <li>The english configuration reduces the query word to the same stem as the stored words.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người đọc gõ <b>indexes</b>. Tìm mọi bài nói về nó ở bất kỳ dạng nào (index, indexes, indexing, indexed). Trả về <code>id, title</code> sắp theo id, tìm trên cột <code>tsv</code> đã lưu.</p>\n<h4>Bảng mẫu (bài 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector SINH: title trọng số A + body trọng số B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>WHERE tsv @@ to_tsquery('english', 'indexes')</code>.</li>\n  <li>Cấu hình english đưa từ trong câu tìm về cùng gốc với từ đã lưu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | title                     \n---+---------------------------\n1  | PostgreSQL indexing basics\n3  | Fast queries with indexes ",
+          "explanation": "Expected result of check \"Articles 1 and 3\" (row order matters).|||Kết quả mong đợi của kiểm \"Bài 1 và 3\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "to_tsquery parses the search, @@ tests it against a tsvector.|||to_tsquery phân tích chuỗi tìm, @@ thử nó với một tsvector.",
+        "Both sides must use the same configuration (english).|||Hai vế phải cùng cấu hình (english)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT id, title\nFROM article\nWHERE tsv @@ to_tsquery('english', 'indexes')   -- the query is stemmed too: 'indexes' -> 'index'\nORDER BY id;\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A tsvector is a sorted list of normalized lexemes with positions; a tsquery is a boolean expression of lexemes. Matching is word-based and language-aware, which LIKE can never be.</p>",
+      "solutionExplanationHtmlVi": "<p>tsvector là danh sách từ vị đã chuẩn hoá, đã sắp, kèm vị trí; tsquery là biểu thức boolean của các từ vị. Khớp theo từ và hiểu ngôn ngữ — điều LIKE không bao giờ làm được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Articles 1 and 3|||Bài 1 và 3",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title"
+              ],
+              "hang": [
+                [
+                  1,
+                  "PostgreSQL indexing basics"
+                ],
+                [
+                  3,
+                  "Fast queries with indexes"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new article that only says \"indexed\"|||Bài mới chỉ nói \"indexed\"",
+            "an": true,
+            "themCsdl": "INSERT INTO article (title, body) VALUES ('Partial tricks', 'Only the hot rows are indexed.')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title"
+              ],
+              "hang": [
+                [
+                  1,
+                  "PostgreSQL indexing basics"
+                ],
+                [
+                  3,
+                  "Fast queries with indexes"
+                ],
+                [
+                  6,
+                  "Partial tricks"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses @@|||Dùng @@",
+            "khop": "@@",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "ILIKE '%index%' on the title — misses articles that mention it only in the body.|||ILIKE '%index%' trên tiêu đề — bỏ sót bài chỉ nhắc nó trong thân bài."
+        },
+        {
+          "loi": "The simple configuration for the query — no stemming, so the lexeme 'indexes' never meets the stored 'index'.|||Cấu hình simple cho câu tìm — không đưa về gốc, nên từ vị 'indexes' không bao giờ gặp 'index' đã lưu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tsvector / tsquery",
+          "vi": "tài liệu đã chuẩn hoá / câu tìm"
+        },
+        {
+          "en": "stemming",
+          "vi": "đưa từ về gốc"
+        }
+      ]
+    },
+    {
+      "title": "A search box: websearch_to_tsquery and ranking",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "websearch_to_tsquery",
+        "ts_rank",
+        "weights A/B"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "fts",
+        "ranking"
+      ],
+      "problemHtml": "<p>The user types <code>explain plan -backup</code>. Return <code>id, title, rank</code> (ts_rank rounded to 4 decimals) of matching articles, best first (ties by id). Titles weigh more than bodies (weights A/B are already in tsv).</p>\n<h4>Sample table (lesson 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector GENERATED: title weight A + body weight B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>websearch_to_tsquery('english', 'explain plan -backup')</code> accepts what users type (quotes, OR, -).</li>\n  <li><code>round(ts_rank(tsv, q)::numeric, 4)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng gõ <code>explain plan -backup</code>. Trả về <code>id, title, rank</code> (ts_rank làm tròn 4 chữ số) của các bài khớp, tốt nhất trước (bằng nhau theo id). Tiêu đề nặng ký hơn thân bài (trọng số A/B đã có trong tsv).</p>\n<h4>Bảng mẫu (bài 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector SINH: title trọng số A + body trọng số B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>websearch_to_tsquery('english', 'explain plan -backup')</code> nhận đúng thứ người dùng gõ (ngoặc kép, OR, -).</li>\n  <li><code>round(ts_rank(tsv, q)::numeric, 4)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | title                     | rank  \n---+---------------------------+-------\n5  | Reading query plans       | 0.6268\n3  | Fast queries with indexes | 0.394 ",
+          "explanation": "Expected result of check \"Articles 3 and 5, ranked\" (row order matters).|||Kết quả mong đợi của kiểm \"Bài 3 và 5, đã xếp hạng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "websearch_to_tsquery never raises a syntax error on user input (to_tsquery does).|||websearch_to_tsquery không bao giờ báo lỗi cú pháp với chuỗi người dùng nhập (to_tsquery thì có).",
+        "ts_rank uses the weights: an A (title) hit counts more than a B (body) hit.|||ts_rank dùng trọng số: khớp A (tiêu đề) nặng hơn khớp B (thân bài)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT id, title, round(ts_rank(tsv, q)::numeric, 4) AS rank\nFROM article, websearch_to_tsquery('english', 'explain plan -backup') AS q\nWHERE tsv @@ q\nORDER BY rank DESC, id;\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>websearch_to_tsquery maps Google-like syntax to a tsquery: <code>explain &amp; plan &amp; !backup</code>. ts_rank scores frequency and position weighted by A/B/C/D, so title hits float to the top.</p>",
+      "solutionExplanationHtmlVi": "<p>websearch_to_tsquery dịch cú pháp kiểu Google sang tsquery: <code>explain &amp; plan &amp; !backup</code>. ts_rank chấm theo tần suất và vị trí có trọng số A/B/C/D, nên khớp ở tiêu đề nổi lên trên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Articles 3 and 5, ranked|||Bài 3 và 5, đã xếp hạng",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "rank"
+              ],
+              "hang": [
+                [
+                  5,
+                  "Reading query plans",
+                  0.6268
+                ],
+                [
+                  3,
+                  "Fast queries with indexes",
+                  0.394
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A title match outranks a body match|||Khớp ở tiêu đề xếp trên khớp ở thân bài",
+            "an": true,
+            "themCsdl": "INSERT INTO article (title, body) VALUES ('Explain the plan', 'A short guide.'), ('Backup plan explained', 'Explain your backup plan.')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "rank"
+              ],
+              "hang": [
+                [
+                  6,
+                  "Explain the plan",
+                  0.985
+                ],
+                [
+                  5,
+                  "Reading query plans",
+                  0.6268
+                ],
+                [
+                  3,
+                  "Fast queries with indexes",
+                  0.394
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "websearch_to_tsquery|||websearch_to_tsquery",
+            "khop": "websearch_to_tsquery",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "plainto_tsquery treats \"-backup\" as a word to MATCH, not to exclude.|||plainto_tsquery coi \"-backup\" là từ phải KHỚP, không phải loại trừ."
+        },
+        {
+          "loi": "Sorting by id — the most relevant article is not on top.|||Sắp theo id — bài liên quan nhất không ở trên cùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "websearch_to_tsquery",
+          "vi": "câu tìm kiểu ô tìm kiếm"
+        },
+        {
+          "en": "ts_rank",
+          "vi": "điểm liên quan"
+        }
+      ]
+    },
+    {
+      "title": "Search CT Shop product names (simple config + GIN)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "generated tsvector column",
+        "'simple' configuration for Vietnamese",
+        "GIN on tsvector"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "fts",
+        "gin",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Add a stored generated column <code>search_tsv tsvector</code> to product built from <code>name</code> with the <code>simple</code> configuration (there is no Vietnamese stemmer), index it with GIN, then search the words <b>bút</b> and <b>thiên</b>: return <code>sku, name</code> ordered by sku.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ALTER TABLE product ADD COLUMN search_tsv tsvector GENERATED ALWAYS AS (to_tsvector('simple', name)) STORED</code>.</li>\n  <li>GIN index on search_tsv; query with <code>to_tsquery('simple', 'bút &amp; thiên')</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thêm cột sinh lưu sẵn <code>search_tsv tsvector</code> vào product, dựng từ <code>name</code> với cấu hình <code>simple</code> (không có bộ đưa-về-gốc tiếng Việt), đánh chỉ mục GIN, rồi tìm các từ <b>bút</b> và <b>thiên</b>: trả về <code>sku, name</code> sắp theo sku.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ALTER TABLE product ADD COLUMN search_tsv tsvector GENERATED ALWAYS AS (to_tsvector('simple', name)) STORED</code>.</li>\n  <li>Chỉ mục GIN trên search_tsv; truy vấn bằng <code>to_tsquery('simple', 'bút &amp; thiên')</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku    | name                        \n-------+-----------------------------\nCT0501 | Bút bi Thiên Long TL-027 (x…\nCT0502 | Bút bi Thiên Long TL-079 (h…\nCT0601 | Bút chì gỗ Thiên Long 2B GP…",
+          "explanation": "Expected result of check \"Thiên Long pens and pencils\" (row order matters).|||Kết quả mong đợi của kiểm \"Bút và bút chì Thiên Long\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A generated column keeps the tsvector in sync with name automatically.|||Cột sinh tự giữ tsvector khớp với name.",
+        "simple = lower-case + split on spaces/punctuation, no stemming, no stop words.|||simple = viết thường + tách theo dấu cách/dấu câu, không đưa về gốc, không bỏ từ dừng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE product\n  ADD COLUMN search_tsv tsvector GENERATED ALWAYS AS (to_tsvector('simple', name)) STORED;\nCREATE INDEX product_search_gin ON product USING GIN (search_tsv);\n\nSELECT sku, name\nFROM product\nWHERE search_tsv @@ to_tsquery('simple', 'bút & thiên')     -- 'simple' lower-cases, keeps accents\nORDER BY sku;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For Vietnamese, the simple configuration is the honest baseline (no stemmer exists in core). Accent-insensitive search needs an extra step — lesson 13.4 and Lab 7 add it.</p>",
+      "solutionExplanationHtmlVi": "<p>Với tiếng Việt, cấu hình simple là nền trung thực (lõi không có bộ đưa-về-gốc). Tìm không dấu cần thêm một bước — bài 13.4 và Lab 7 thêm vào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nCREATE FUNCTION plan_nodes(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE j json; out text := '';\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON, COSTS OFF) ' || q INTO j;\n  WITH RECURSIVE n(p) AS (SELECT j -> 0 -> 'Plan' UNION ALL SELECT x FROM n, json_array_elements(n.p -> 'Plans') x)\n  SELECT string_agg((p ->> 'Node Type') || coalesce(' on ' || (p ->> 'Index Name'), ''), ' / ') INTO out FROM n;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_text(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (COSTS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;\nCREATE FUNCTION plan_rows(q text) RETURNS bigint LANGUAGE plpgsql AS $f$\nDECLARE j json;\nBEGIN\n  EXECUTE 'EXPLAIN (FORMAT JSON) ' || q INTO j;\n  RETURN (j -> 0 -> 'Plan' ->> 'Plan Rows')::numeric::bigint;\nEND $f$;\nCREATE FUNCTION plan_analyze(q text) RETURNS text LANGUAGE plpgsql AS $f$\nDECLARE r record; out text := '';\nBEGIN\n  FOR r IN EXECUTE 'EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF, BUFFERS OFF) ' || q LOOP out := out || r.\"QUERY PLAN\" || E'\\n'; END LOOP;\n  RETURN out;\nEND $f$;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Thiên Long pens and pencils|||Bút và bút chì Thiên Long",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "name"
+              ],
+              "hang": [
+                [
+                  "CT0501",
+                  "Bút bi Thiên Long TL-027 (xanh)"
+                ],
+                [
+                  "CT0502",
+                  "Bút bi Thiên Long TL-079 (hộp 20 cây)"
+                ],
+                [
+                  "CT0601",
+                  "Bút chì gỗ Thiên Long 2B GP-01"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "New products are searchable at once (generated column)|||Sản phẩm mới tìm được ngay (cột sinh)",
+            "kiemTra": "INSERT INTO product (sku, name, category_id, price) VALUES ('CT0703', 'Bút dạ quang Thiên Long HL-03', 7, 7000); SELECT sku FROM product WHERE search_tsv @@ to_tsquery('simple', 'bút & thiên') ORDER BY sku",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku"
+              ],
+              "hang": [
+                [
+                  "CT0501"
+                ],
+                [
+                  "CT0502"
+                ],
+                [
+                  "CT0601"
+                ],
+                [
+                  "CT0703"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The search can use the GIN index|||Phép tìm dùng được chỉ mục GIN",
+            "kiemTra": "SET LOCAL enable_seqscan = off; SELECT plan_nodes('SELECT sku FROM product WHERE search_tsv @@ to_tsquery(''simple'', ''bút'')') ~ 'Bitmap Index Scan' AS uses_gin",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "uses_gin"
+              ],
+              "hang": [
+                [
+                  true
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing to_tsvector in every query without an index — correct, but a full scan each time.|||Tính to_tsvector trong mỗi truy vấn mà không có chỉ mục — đúng, nhưng quét toàn bảng mỗi lần."
+        },
+        {
+          "loi": "Adding the column but no GIN index — every search still reads the whole table.|||Thêm cột mà quên chỉ mục GIN — mọi lần tìm vẫn đọc cả bảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "generated column",
+          "vi": "cột sinh"
+        },
+        {
+          "en": "'simple' configuration",
+          "vi": "cấu hình tách từ đơn giản"
+        }
+      ]
+    },
+    {
+      "title": "Show where it matched: ts_headline",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "ts_headline",
+        "highlighting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "fts"
+      ],
+      "problemHtml": "<p>The result page highlights the matching words. For articles matching <code>restore</code>, return <code>id, snippet</code> where snippet is <code>ts_headline('english', body, q)</code> with the default options (matches wrapped in &lt;b&gt;…&lt;/b&gt;). Order by id.</p>\n<h4>Sample table (lesson 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector GENERATED: title weight A + body weight B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>q = to_tsquery('english', 'restore')</code>.</li>\n  <li>Filter with tsv @@ q, highlight the body.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang kết quả tô đậm các từ khớp. Với các bài khớp <code>restore</code>, trả về <code>id, snippet</code> với snippet là <code>ts_headline('english', body, q)</code> theo tuỳ chọn mặc định (từ khớp được bọc &lt;b&gt;…&lt;/b&gt;). Sắp theo id.</p>\n<h4>Bảng mẫu (bài 13.3)</h4><pre>article (id identity PK, title, body, tsv tsvector SINH: title trọng số A + body trọng số B, 'english')\n 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>q = to_tsquery('english', 'restore')</code>.</li>\n  <li>Lọc bằng tsv @@ q, tô sáng body.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | snippet                     \n---+-----------------------------\n4  | A backup is only real once …",
+          "explanation": "Expected result of check \"Article 4 with both forms highlighted\" (row order matters).|||Kết quả mong đợi của kiểm \"Bài 4 với cả hai dạng được tô\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "ts_headline(config, text, query) marks the lexemes of the query inside the text.|||ts_headline(cấu hình, văn bản, câu tìm) đánh dấu các từ vị của câu tìm trong văn bản.",
+        "Use it only on the rows you display — it re-parses the text.|||Chỉ dùng trên các dòng hiển thị — nó phân tích lại văn bản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT id, ts_headline('english', body, q) AS snippet      -- \"restored\" and \"restore\" both highlighted\nFROM article, to_tsquery('english', 'restore') AS q\nWHERE tsv @@ q\nORDER BY id;\n"
+        },
+        {
+          "name": "article.sql",
+          "language": "sql",
+          "code": "-- article.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- article.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ts_headline uses the same parser and stemmer as the search, so every form that matched is highlighted. It is expensive, so apply it after filtering and LIMIT.</p>",
+      "solutionExplanationHtmlVi": "<p>ts_headline dùng cùng bộ phân tích và đưa-về-gốc với phép tìm, nên mọi dạng đã khớp đều được tô. Nó tốn kém, nên áp sau khi lọc và LIMIT.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE article (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title text NOT NULL,\n  body  text NOT NULL,\n  tsv tsvector GENERATED ALWAYS AS (\n    setweight(to_tsvector('english', title), 'A') ||\n    setweight(to_tsvector('english', body),  'B')\n  ) STORED\n);\nINSERT INTO article (title, body) VALUES\n ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),\n ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),\n ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),\n ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),\n ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Article 4 with both forms highlighted|||Bài 4 với cả hai dạng được tô",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "snippet"
+              ],
+              "hang": [
+                [
+                  4,
+                  "A backup is only real once you have <b>restored</b> it. Test the <b>restore</b> every week."
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another article mentions restoring|||Một bài khác nhắc tới restoring",
+            "an": true,
+            "themCsdl": "INSERT INTO article (title, body) VALUES ('Drills', 'Practise restoring a dump into an empty database.')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "snippet"
+              ],
+              "hang": [
+                [
+                  4,
+                  "A backup is only real once you have <b>restored</b> it. Test the <b>restore</b> every week."
+                ],
+                [
+                  6,
+                  "Practise <b>restoring</b> a dump into an empty database."
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses ts_headline|||Dùng ts_headline",
+            "khop": "ts_headline\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Highlighting with replace() — misses \"restored\" and breaks on case.|||Tô đậm bằng replace() — bỏ sót \"restored\" và hỏng với chữ hoa."
+        },
+        {
+          "loi": "Calling ts_headline on every row before filtering — slow.|||Gọi ts_headline trên mọi dòng trước khi lọc — chậm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ts_headline",
+          "vi": "đoạn trích có tô sáng"
+        }
+      ]
+    }
+  ]
+}

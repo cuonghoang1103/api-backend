@@ -19,6 +19,8 @@ Dựng: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` → `node
 | Ch10 (10.1–10.4) + Lab 5 | ✅ 14 đề (pg_stats, CREATE STATISTICS, SET LOCAL work_mem/enable_hashjoin) + Lab 5 (P2–P6) |
 | Ch11 (11.1–11.4) | ✅ 14 đề (2 đề chạy trên máy: write skew, lost update/NOWAIT — máy chấm chỉ có một phiên) |
 | Ch12 (12.1–12.4) + Lab 6 | ✅ 17 đề (users/notes của bài + CT Shop mini) + Lab 6 (T1a/T1c/T2a/T2b/T4) |
-| Ch13–Ch17, Lab 7–9 | ⏳ đang làm |
+| Ch13 (13.1–13.4) + Lab 7 | ✅ 16 đề (13.4: pg_trgm là bài tay — PGlite không nạp extension; tìm không dấu bằng khong_dau() + chỉ mục biểu thức chấm được) + Lab 7 (J1/J2 gộp/J2 sửa+canh/J3/S2+S4) |
+| Ch14 (14.1–14.4) | ✅ 18 đề (đo kết nối, PgBouncer, autovacuum chạy, pg_stat_statements là bài tay; truy vấn giám sát chấm trên ẢNH CHỤP pg_stat_* có ghi rõ; reloptions chấm thật) |
+| Ch15–Ch17, Lab 8–9 | ⏳ đang làm |
 
 Ghi chú: xem đầu `nguon/_chung.mjs` (giới hạn PGlite đo thật, cách soạn pg()/cs()/tay()/deLonPg()).

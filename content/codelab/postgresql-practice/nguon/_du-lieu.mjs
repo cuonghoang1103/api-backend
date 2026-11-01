@@ -158,3 +158,52 @@ const LD12 = `users (id identity PK, email UNIQUE)                         20 ro
 notes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)
       500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00`;
 export const O_NOTES12 = { csdl: NOTES12, tenCsdl: 'notes12', ld: { en: `<h4>Sample tables (chapter 12)</h4>${pre(LD12)}`, vi: `<h4>Bảng mẫu (chương 12)</h4>${pre(LD12)}` } };
+
+/** Bảng product (props jsonb) và article (tsvector sinh) của Chương 13 — đúng dữ liệu bài 13.1 / 13.3. */
+export const PROPS = `CREATE TABLE product (
+  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name  text NOT NULL,
+  props jsonb NOT NULL
+);
+INSERT INTO product (name, props) VALUES
+ ('Laptop Pro 14', '{"brand":"Acme","price":1299,"tags":["laptop","pro"],"specs":{"ram":16,"cpu":"M3"}}'),
+ ('Laptop Air 13', '{"brand":"Acme","price":999,"tags":["laptop","light"],"specs":{"ram":8,"cpu":"M2"}}'),
+ ('Phone X',       '{"brand":"Zeta","price":799,"tags":["phone"],"specs":{"ram":8,"storage":256}}'),
+ ('Tablet Mini',   '{"brand":"Zeta","price":449,"tags":["tablet","light"],"specs":{"ram":4}}'),
+ ('Keyboard K1',   '{"brand":"Acme","price":89,"tags":["accessory"]}');`;
+export const O_PROPS = { csdl: PROPS, tenCsdl: 'product13', ld: { en: `<h4>Sample table (lesson 13.1)</h4>${pre(`product (id identity PK, name, props jsonb) — 5 rows:
+ 1 Laptop Pro 14  {"brand":"Acme","price":1299,"tags":["laptop","pro"],"specs":{"ram":16,"cpu":"M3"}}
+ 2 Laptop Air 13  {"brand":"Acme","price":999,"tags":["laptop","light"],"specs":{"ram":8,"cpu":"M2"}}
+ 3 Phone X        {"brand":"Zeta","price":799,"tags":["phone"],"specs":{"ram":8,"storage":256}}
+ 4 Tablet Mini    {"brand":"Zeta","price":449,"tags":["tablet","light"],"specs":{"ram":4}}
+ 5 Keyboard K1    {"brand":"Acme","price":89,"tags":["accessory"]}   ← no specs`)}`, vi: `<h4>Bảng mẫu (bài 13.1)</h4>${pre(`product (id identity PK, name, props jsonb) — 5 dòng:
+ 1 Laptop Pro 14  {"brand":"Acme","price":1299,"tags":["laptop","pro"],"specs":{"ram":16,"cpu":"M3"}}
+ 2 Laptop Air 13  {"brand":"Acme","price":999,"tags":["laptop","light"],"specs":{"ram":8,"cpu":"M2"}}
+ 3 Phone X        {"brand":"Zeta","price":799,"tags":["phone"],"specs":{"ram":8,"storage":256}}
+ 4 Tablet Mini    {"brand":"Zeta","price":449,"tags":["tablet","light"],"specs":{"ram":4}}
+ 5 Keyboard K1    {"brand":"Acme","price":89,"tags":["accessory"]}   ← không có specs`)}` } };
+export const ARTICLE = `CREATE TABLE article (
+  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  title text NOT NULL,
+  body  text NOT NULL,
+  tsv tsvector GENERATED ALWAYS AS (
+    setweight(to_tsvector('english', title), 'A') ||
+    setweight(to_tsvector('english', body),  'B')
+  ) STORED
+);
+INSERT INTO article (title, body) VALUES
+ ('PostgreSQL indexing basics', 'A B-tree index makes lookups fast. Every index has a cost on writes.'),
+ ('Scaling a database', 'Replicas spread the reads; partitioning splits big tables.'),
+ ('Fast queries with indexes', 'Read the plan with EXPLAIN before adding an index.'),
+ ('Backups you can restore', 'A backup is only real once you have restored it. Test the restore every week.'),
+ ('Reading query plans', 'EXPLAIN ANALYZE runs the query and shows where the time goes.');`;
+export const O_ARTICLE = { csdl: ARTICLE, tenCsdl: 'article', ld: { en: `<h4>Sample table (lesson 13.3)</h4>${pre(`article (id identity PK, title, body, tsv tsvector GENERATED: title weight A + body weight B, 'english')
+ 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans`)}`, vi: `<h4>Bảng mẫu (bài 13.3)</h4>${pre(`article (id identity PK, title, body, tsv tsvector SINH: title trọng số A + body trọng số B, 'english')
+ 1 PostgreSQL indexing basics · 2 Scaling a database · 3 Fast queries with indexes · 4 Backups you can restore · 5 Reading query plans`)}` } };
+
+/** Bỏ dấu tiếng Việt KHÔNG cần extension unaccent (PGlite không có): lower() rồi translate 67 chữ có dấu ⇒ không dấu. */
+export const VN_CO_DAU = 'àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ';
+export const VN_KHONG_DAU = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd';
+export const KHONG_DAU_FN = `CREATE FUNCTION khong_dau(s text) RETURNS text
+LANGUAGE sql IMMUTABLE PARALLEL SAFE
+AS $$ SELECT translate(lower(s), '${VN_CO_DAU}', '${VN_KHONG_DAU}') $$;`;

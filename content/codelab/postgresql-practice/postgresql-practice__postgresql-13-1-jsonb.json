@@ -1,0 +1,779 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-13-1-jsonb",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-13-1-jsonb"
+  },
+  "exercises": [
+    {
+      "title": "Three ways to reach inside a document",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "->",
+        "->>",
+        "nested path",
+        "cast from text"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb"
+      ],
+      "problemHtml": "<p>For every product return <code>name, brand, ram</code>: brand as <b>text</b>, ram (inside <code>specs</code>) as an <b>integer</b> — NULL when the product has no specs. Order by id.</p>\n<h4>Sample table (lesson 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 rows:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← no specs</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>props -&gt;&gt; 'brand'</code>; <code>(props -&gt; 'specs' -&gt;&gt; 'ram')::int</code> (or <code>(props #&gt;&gt; '{specs,ram}')::int</code>).</li>\n  <li>ram must be an int so it can be compared and summed.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi sản phẩm trả về <code>name, brand, ram</code>: brand dạng <b>chữ</b>, ram (nằm trong <code>specs</code>) dạng <b>số nguyên</b> — NULL khi sản phẩm không có specs. Sắp theo id.</p>\n<h4>Bảng mẫu (bài 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 dòng:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← không có specs</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>props -&gt;&gt; 'brand'</code>; <code>(props -&gt; 'specs' -&gt;&gt; 'ram')::int</code> (hoặc <code>(props #&gt;&gt; '{specs,ram}')::int</code>).</li>\n  <li>ram phải là int để so sánh và cộng được.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name          | brand | ram \n--------------+-------+-----\nLaptop Pro 14 | Acme  | 16  \nLaptop Air 13 | Acme  | 8   \nPhone X       | Zeta  | 8   \nTablet Mini   | Zeta  | 4   \nKeyboard K1   | Acme  | NULL",
+          "explanation": "Expected result of check \"Five products, Keyboard with ram NULL\" (row order matters).|||Kết quả mong đợi của kiểm \"Năm sản phẩm, Keyboard có ram NULL\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "-&gt; returns jsonb, -&gt;&gt; returns text; chain them for nested keys.|||-&gt; trả jsonb, -&gt;&gt; trả text; nối chuỗi để vào khoá lồng.",
+        "A missing key anywhere on the path gives NULL, not an error.|||Thiếu khoá ở đâu trên đường đi cũng cho NULL, không lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT name,\n       props ->> 'brand'                    AS brand,   -- text\n       (props -> 'specs' ->> 'ram')::int    AS ram      -- jsonb → text → int; missing path ⇒ NULL\nFROM product\nORDER BY id;\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The operators walk the document: <code>-&gt;</code> keeps JSON, <code>-&gt;&gt;</code> ends with text, and a cast turns that text into a real SQL type. Missing paths are simply NULL — which makes optional attributes easy.</p>",
+      "solutionExplanationHtmlVi": "<p>Các toán tử đi trong tài liệu: <code>-&gt;</code> giữ JSON, <code>-&gt;&gt;</code> kết thúc bằng chữ, và phép ép biến chữ đó thành kiểu SQL thật. Đường đi thiếu đơn giản là NULL — giúp thuộc tính tuỳ chọn dễ xử lý.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Five products, Keyboard with ram NULL|||Năm sản phẩm, Keyboard có ram NULL",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "brand",
+                "ram"
+              ],
+              "hang": [
+                [
+                  "Laptop Pro 14",
+                  "Acme",
+                  16
+                ],
+                [
+                  "Laptop Air 13",
+                  "Acme",
+                  8
+                ],
+                [
+                  "Phone X",
+                  "Zeta",
+                  8
+                ],
+                [
+                  "Tablet Mini",
+                  "Zeta",
+                  4
+                ],
+                [
+                  "Keyboard K1",
+                  "Acme",
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A product with 32 GB and one without brand|||Sản phẩm 32 GB và một sản phẩm không có hãng",
+            "an": true,
+            "themCsdl": "INSERT INTO product (name, props) VALUES ('Workstation', '{\"brand\":\"Acme\",\"specs\":{\"ram\":32}}'), ('No-name cable', '{\"price\":5}')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "brand",
+                "ram"
+              ],
+              "hang": [
+                [
+                  "Laptop Pro 14",
+                  "Acme",
+                  16
+                ],
+                [
+                  "Laptop Air 13",
+                  "Acme",
+                  8
+                ],
+                [
+                  "Phone X",
+                  "Zeta",
+                  8
+                ],
+                [
+                  "Tablet Mini",
+                  "Zeta",
+                  4
+                ],
+                [
+                  "Keyboard K1",
+                  "Acme",
+                  null
+                ],
+                [
+                  "Workstation",
+                  "Acme",
+                  32
+                ],
+                [
+                  "No-name cable",
+                  null,
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Casts ram to int|||Ép ram sang int",
+            "khop": "::\\s*int|::\\s*integer|CAST\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>props -&gt;&gt; 'ram'</code> — ram is inside specs, so this is always NULL.|||<code>props -&gt;&gt; 'ram'</code> — ram nằm trong specs nên luôn NULL."
+        },
+        {
+          "loi": "Leaving ram as jsonb: ORDER BY and sums behave as JSON, not as numbers.|||Để ram là jsonb: ORDER BY và phép cộng hành xử như JSON, không như số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb",
+          "vi": "JSON nhị phân",
+          "giaiThich": "Kiểu tài liệu JSON lưu dạng đã phân tích: so sánh, chứa (@>), đánh chỉ mục GIN được."
+        },
+        {
+          "en": "#>>",
+          "vi": "lấy chữ theo đường dẫn"
+        }
+      ]
+    },
+    {
+      "title": "Change one key without rewriting the document: jsonb_set",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jsonb_set",
+        "to_jsonb",
+        "RETURNING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb",
+        "update"
+      ],
+      "problemHtml": "<p>Zeta raises its prices by 10 % (rounded to an integer). Update <code>props.price</code> of every Zeta product — keep every other key exactly as it is — and return <code>name, price</code> (the new price as an integer).</p>\n<h4>Sample table (lesson 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 rows:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← no specs</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>SET props = jsonb_set(props, '{price}', to_jsonb(round((props-&gt;&gt;'price')::numeric * 1.1)::int))</code>.</li>\n  <li>Filter with <code>props @&gt; '{\"brand\": \"Zeta\"}'</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Zeta tăng giá 10 % (làm tròn tới số nguyên). Cập nhật <code>props.price</code> của mọi sản phẩm Zeta — giữ nguyên mọi khoá khác — và trả về <code>name, price</code> (giá mới dạng số nguyên).</p>\n<h4>Bảng mẫu (bài 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 dòng:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← không có specs</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>SET props = jsonb_set(props, '{price}', to_jsonb(round((props-&gt;&gt;'price')::numeric * 1.1)::int))</code>.</li>\n  <li>Lọc bằng <code>props @&gt; '{\"brand\": \"Zeta\"}'</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name        | price\n------------+------\nPhone X     | 879  \nTablet Mini | 494  ",
+          "explanation": "Expected result of check \"Phone X 879, Tablet Mini 494\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Phone X 879, Tablet Mini 494\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "jsonb_set(document, path, new_value) returns a new document with one value replaced.|||jsonb_set(tài liệu, đường dẫn, giá trị mới) trả tài liệu mới với một giá trị được thay.",
+        "The new value must be jsonb: wrap it with to_jsonb(…).|||Giá trị mới phải là jsonb: bọc bằng to_jsonb(…)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE product\nSET props = jsonb_set(props, '{price}',\n                      to_jsonb(round((props ->> 'price')::numeric * 1.1)::int))   -- replaces ONE key\nWHERE props @> '{\"brand\": \"Zeta\"}'\nRETURNING name, (props ->> 'price')::int AS price;\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>jsonb is immutable as a value: every change produces a new document. jsonb_set (or <code>||</code> to merge, <code>-</code> to remove a key) changes exactly what you name and keeps the rest.</p>",
+      "solutionExplanationHtmlVi": "<p>Giá trị jsonb là bất biến: mỗi thay đổi tạo ra tài liệu mới. jsonb_set (hoặc <code>||</code> để gộp, <code>-</code> để bỏ khoá) đổi đúng thứ bạn nêu và giữ phần còn lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Phone X 879, Tablet Mini 494|||Phone X 879, Tablet Mini 494",
+            "mongDoi": {
+              "cot": [
+                "name",
+                "price"
+              ],
+              "hang": [
+                [
+                  "Phone X",
+                  879
+                ],
+                [
+                  "Tablet Mini",
+                  494
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The rest of the document is intact|||Phần còn lại của tài liệu nguyên vẹn",
+            "kiemTra": "SELECT name, props - 'price' AS rest FROM product WHERE id IN (3, 4) ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "rest"
+              ],
+              "hang": [
+                [
+                  "Phone X",
+                  "{\"tags\":[\"phone\"],\"brand\":\"Zeta\",\"specs\":{\"ram\":8,\"storage\":256}}"
+                ],
+                [
+                  "Tablet Mini",
+                  "{\"tags\":[\"tablet\",\"light\"],\"brand\":\"Zeta\",\"specs\":{\"ram\":4}}"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Acme prices unchanged|||Giá Acme không đổi",
+            "kiemTra": "SELECT sum((props ->> 'price')::int) AS acme_total FROM product WHERE props ->> 'brand' = 'Acme'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "acme_total"
+              ],
+              "hang": [
+                [
+                  2387
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rebuilding the document with only the price — brand, tags and specs are wiped.|||Dựng lại tài liệu chỉ còn price — brand, tags, specs bị xoá sạch."
+        },
+        {
+          "loi": "Forgetting the WHERE — Acme prices go up too.|||Quên WHERE — giá Acme cũng tăng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb_set",
+          "vi": "thay một giá trị trong tài liệu"
+        }
+      ]
+    },
+    {
+      "title": "Build JSON for the API: jsonb_agg per brand",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jsonb_build_object",
+        "jsonb_agg … ORDER BY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb",
+        "api"
+      ],
+      "problemHtml": "<p>The API wants one row per brand: <code>brand</code> and <code>products</code>, a JSON array of objects <code>{\"name\": …, \"price\": …}</code> sorted by price (cheapest first). Order the rows by brand.</p>\n<h4>Sample table (lesson 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 rows:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← no specs</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>jsonb_agg(jsonb_build_object('name', name, 'price', (props-&gt;&gt;'price')::int) ORDER BY (props-&gt;&gt;'price')::int)</code>.</li>\n  <li>price as a JSON number, not a string.</li>\n</ul>",
+      "problemHtmlVi": "<p>API cần mỗi hãng một dòng: <code>brand</code> và <code>products</code>, một mảng JSON các đối tượng <code>{\"name\": …, \"price\": …}</code> sắp theo giá (rẻ nhất trước). Sắp các dòng theo brand.</p>\n<h4>Bảng mẫu (bài 13.1)</h4><pre>product (id identity PK, name, props jsonb) — 5 dòng:\n 1 Laptop Pro 14  {\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}\n 2 Laptop Air 13  {\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}\n 3 Phone X        {\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}\n 4 Tablet Mini    {\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}\n 5 Keyboard K1    {\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}   ← không có specs</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>jsonb_agg(jsonb_build_object('name', name, 'price', (props-&gt;&gt;'price')::int) ORDER BY (props-&gt;&gt;'price')::int)</code>.</li>\n  <li>price là số JSON, không phải chuỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "brand | products                    \n------+-----------------------------\nAcme  | [{\"name\":\"Keyboard K1\",\"pri…\nZeta  | [{\"name\":\"Tablet Mini\",\"pri…",
+          "explanation": "Expected result of check \"Acme and Zeta with their sorted products\" (row order matters).|||Kết quả mong đợi của kiểm \"Acme và Zeta kèm sản phẩm đã sắp\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Build each element with jsonb_build_object, collect them with jsonb_agg.|||Dựng từng phần tử bằng jsonb_build_object, gom bằng jsonb_agg.",
+        "Sort numbers as numbers: cast before ORDER BY.|||Sắp số như số: ép kiểu trước ORDER BY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT props ->> 'brand' AS brand,\n       jsonb_agg(jsonb_build_object('name', name, 'price', (props ->> 'price')::int)\n                 ORDER BY (props ->> 'price')::int)            AS products\nFROM product\nGROUP BY 1\nORDER BY 1;\n"
+        },
+        {
+          "name": "product13.sql",
+          "language": "sql",
+          "code": "-- product13.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- product13.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL can return exactly the JSON shape an API needs, aggregated and sorted on the server — one round-trip instead of N queries and a loop in the app.</p>",
+      "solutionExplanationHtmlVi": "<p>PostgreSQL trả được đúng hình dạng JSON mà API cần, tổng hợp và sắp ngay trên máy chủ — một lượt đi về thay vì N truy vấn và một vòng lặp trong app.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id    int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name  text NOT NULL,\n  props jsonb NOT NULL\n);\nINSERT INTO product (name, props) VALUES\n ('Laptop Pro 14', '{\"brand\":\"Acme\",\"price\":1299,\"tags\":[\"laptop\",\"pro\"],\"specs\":{\"ram\":16,\"cpu\":\"M3\"}}'),\n ('Laptop Air 13', '{\"brand\":\"Acme\",\"price\":999,\"tags\":[\"laptop\",\"light\"],\"specs\":{\"ram\":8,\"cpu\":\"M2\"}}'),\n ('Phone X',       '{\"brand\":\"Zeta\",\"price\":799,\"tags\":[\"phone\"],\"specs\":{\"ram\":8,\"storage\":256}}'),\n ('Tablet Mini',   '{\"brand\":\"Zeta\",\"price\":449,\"tags\":[\"tablet\",\"light\"],\"specs\":{\"ram\":4}}'),\n ('Keyboard K1',   '{\"brand\":\"Acme\",\"price\":89,\"tags\":[\"accessory\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Acme and Zeta with their sorted products|||Acme và Zeta kèm sản phẩm đã sắp",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "brand",
+                "products"
+              ],
+              "hang": [
+                [
+                  "Acme",
+                  "[{\"name\":\"Keyboard K1\",\"price\":89},{\"name\":\"Laptop Air 13\",\"price\":999},{\"name\":\"Laptop Pro 14\",\"price\":1299}]"
+                ],
+                [
+                  "Zeta",
+                  "[{\"name\":\"Tablet Mini\",\"price\":449},{\"name\":\"Phone X\",\"price\":799}]"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new brand and a new cheap Acme item|||Hãng mới và một món Acme rẻ mới",
+            "an": true,
+            "themCsdl": "INSERT INTO product (name, props) VALUES ('Mouse M1', '{\"brand\":\"Acme\",\"price\":25}'), ('Watch W', '{\"brand\":\"Nova\",\"price\":199}')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "brand",
+                "products"
+              ],
+              "hang": [
+                [
+                  "Acme",
+                  "[{\"name\":\"Mouse M1\",\"price\":25},{\"name\":\"Keyboard K1\",\"price\":89},{\"name\":\"Laptop Air 13\",\"price\":999},{\"name\":\"Laptop Pro 14\",\"price\":1299}]"
+                ],
+                [
+                  "Nova",
+                  "[{\"name\":\"Watch W\",\"price\":199}]"
+                ],
+                [
+                  "Zeta",
+                  "[{\"name\":\"Tablet Mini\",\"price\":449},{\"name\":\"Phone X\",\"price\":799}]"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "jsonb_agg with ORDER BY|||jsonb_agg có ORDER BY",
+            "khop": "jsonb_agg\\s*\\([\\s\\S]*ORDER\\s+BY",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ordering by the TEXT price — \"1299\" sorts before \"449\".|||Sắp theo giá dạng CHỮ — \"1299\" đứng trước \"449\"."
+        },
+        {
+          "loi": "Putting <code>-&gt;&gt;</code> text into the object — the API receives \"799\" instead of 799.|||Đưa chữ <code>-&gt;&gt;</code> vào đối tượng — API nhận \"799\" thay vì 799."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb_agg",
+          "vi": "gom thành mảng JSON"
+        },
+        {
+          "en": "jsonb_build_object",
+          "vi": "dựng đối tượng JSON"
+        }
+      ]
+    },
+    {
+      "title": "Count products per tag (CT Shop attrs)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "jsonb_array_elements_text",
+        "lateral set-returning function",
+        "GROUP BY an element"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Each CT Shop product carries <code>attrs-&gt;'tags'</code>, a JSON array such as <code>[\"học sinh\", \"sinh viên\"]</code>. Return <code>tag, products</code> — how many <b>active</b> products carry each tag — most products first (ties by tag).</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Unnest the array: <code>FROM product p, jsonb_array_elements_text(p.attrs-&gt;'tags') AS t(tag)</code>.</li>\n  <li>Products without tags simply produce no rows.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi sản phẩm CT Shop mang <code>attrs-&gt;'tags'</code>, một mảng JSON như <code>[\"học sinh\", \"sinh viên\"]</code>. Trả về <code>tag, products</code> — mỗi thẻ có bao nhiêu sản phẩm <b>đang bán</b> — nhiều nhất trước (bằng nhau theo tag).</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách mảng: <code>FROM product p, jsonb_array_elements_text(p.attrs-&gt;'tags') AS t(tag)</code>.</li>\n  <li>Sản phẩm không có thẻ đơn giản là không sinh dòng nào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tag       | products\n----------+---------\nhọc sinh  | 8       \nsinh viên | 6       \nvăn phòng | 2       ",
+          "explanation": "Expected result of check \"học sinh, sinh viên, văn phòng\" (row order matters).|||Kết quả mong đợi của kiểm \"học sinh, sinh viên, văn phòng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A set-returning function in FROM runs once per product row (an implicit LATERAL join).|||Hàm trả tập trong FROM chạy một lần cho mỗi dòng sản phẩm (phép nối LATERAL ngầm).",
+        "_text returns plain text elements, ready to GROUP BY.|||_text trả phần tử dạng chữ, sẵn sàng GROUP BY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT t.tag, count(*) AS products\nFROM product p,\n     jsonb_array_elements_text(p.attrs -> 'tags') AS t(tag)   -- one row per (product, tag)\nWHERE p.is_active\nGROUP BY t.tag\nORDER BY products DESC, t.tag;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>jsonb_array_elements(_text) turns an array into rows, so normal SQL (GROUP BY, JOIN, filters) works on its elements — the bridge between documents and relational queries.</p>",
+      "solutionExplanationHtmlVi": "<p>jsonb_array_elements(_text) biến mảng thành các dòng, nên SQL bình thường (GROUP BY, JOIN, lọc) làm việc được trên phần tử — cây cầu giữa tài liệu và truy vấn quan hệ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "học sinh, sinh viên, văn phòng|||học sinh, sinh viên, văn phòng",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "tag",
+                "products"
+              ],
+              "hang": [
+                [
+                  "học sinh",
+                  8
+                ],
+                [
+                  "sinh viên",
+                  6
+                ],
+                [
+                  "văn phòng",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A product gets a new tag|||Một sản phẩm có thêm thẻ mới",
+            "an": true,
+            "themCsdl": "UPDATE product SET attrs = jsonb_set(attrs, '{tags}', (attrs -> 'tags') || '[\"ôn thi\"]') WHERE id IN (31, 43)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "tag",
+                "products"
+              ],
+              "hang": [
+                [
+                  "học sinh",
+                  8
+                ],
+                [
+                  "sinh viên",
+                  6
+                ],
+                [
+                  "văn phòng",
+                  2
+                ],
+                [
+                  "ôn thi",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Unnests the array|||Tách mảng",
+            "khop": "jsonb_array_elements(_text)?\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Grouping by the whole array text — [\"học sinh\", \"sinh viên\"] becomes its own \"tag\".|||Gom theo cả chuỗi mảng — [\"học sinh\", \"sinh viên\"] thành một \"thẻ\" riêng."
+        },
+        {
+          "loi": "Forgetting is_active — the discontinued calculator is counted.|||Quên is_active — máy tính ngừng bán bị đếm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb_array_elements_text",
+          "vi": "tách mảng JSON thành dòng chữ"
+        }
+      ]
+    },
+    {
+      "title": "json or jsonb, column or document?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "json vs jsonb",
+        "when to use a column"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb",
+        "design"
+      ],
+      "problemHtml": "<p>Design decisions from lesson 13.1.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các quyết định thiết kế của bài 13.1.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Parsed and indexable ⇒ jsonb.|||Đã phân tích và đánh chỉ mục được ⇒ jsonb.",
+        "Constrained and joined ⇒ column.|||Có ràng buộc và được nối ⇒ cột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# json or jsonb, column or document?\n\nAnswer in the answer panel (no code needed).\n\n1. SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb; returns…SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb; trả về…\n2. Every order has a customer_id that must reference customer. Where does it belong?Mỗi đơn có customer_id phải trỏ tới customer. Nó thuộc về đâu?\n3. Product attributes differ per category (ink colour, pages, calculator functions). Best model?Thuộc tính sản phẩm khác nhau theo danh mục (màu mực, số trang, chức năng máy tính). Mô hình tốt nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# json or jsonb, column or document? — answer key\n\n1. SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb; returns…SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb; trả về…\n   Answer: b) {\"a\": 3, \"b\": 1} — keys reordered, the last duplicate wins\n   jsonb stores a parsed, normalized value; json stores the text as typed. jsonb is what you index and query.VI: jsonb lưu giá trị đã phân tích, chuẩn hoá; json lưu nguyên văn chữ. jsonb là thứ bạn đánh chỉ mục và truy vấn.\n\n2. Every order has a customer_id that must reference customer. Where does it belong?Mỗi đơn có customer_id phải trỏ tới customer. Nó thuộc về đâu?\n   Answer: c) a real column with a foreign key\n   Anything you join on, constrain, or always query belongs in a column; JSONB is for the varying rest.VI: Thứ gì bạn nối theo, ràng buộc, hay luôn truy vấn thì thuộc về cột; JSONB dành cho phần còn lại hay thay đổi.\n\n3. Product attributes differ per category (ink colour, pages, calculator functions). Best model?Thuộc tính sản phẩm khác nhau theo danh mục (màu mực, số trang, chức năng máy tính). Mô hình tốt nhất?\n   Answer: a) common columns + one jsonb attrs column (CT Shop's choice)\n   jsonb keeps the varying part flexible while price, stock, category stay typed columns. EAV loses types and needs a join per attribute.VI: jsonb giữ phần thay đổi linh hoạt trong khi price, stock, category vẫn là cột có kiểu. EAV mất kiểu và cần một phép nối cho mỗi thuộc tính.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> {\"a\": 3, \"b\": 1} — keys reordered, the last duplicate wins</p><p>jsonb stores a parsed, normalized value; json stores the text as typed. jsonb is what you index and query.</p><p><i>VI: jsonb lưu giá trị đã phân tích, chuẩn hoá; json lưu nguyên văn chữ. jsonb là thứ bạn đánh chỉ mục và truy vấn.</i></p></li><li><p><b>c)</b> a real column with a foreign key</p><p>Anything you join on, constrain, or always query belongs in a column; JSONB is for the varying rest.</p><p><i>VI: Thứ gì bạn nối theo, ràng buộc, hay luôn truy vấn thì thuộc về cột; JSONB dành cho phần còn lại hay thay đổi.</i></p></li><li><p><b>a)</b> common columns + one jsonb attrs column (CT Shop's choice)</p><p>jsonb keeps the varying part flexible while price, stock, category stay typed columns. EAV loses types and needs a join per attribute.</p><p><i>VI: jsonb giữ phần thay đổi linh hoạt trong khi price, stock, category vẫn là cột có kiểu. EAV mất kiểu và cần một phép nối cho mỗi thuộc tính.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p><code>SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb;</code> returns…</p><p style=\"opacity:.75;font-size:.92em\"><i><code>SELECT '{\"b\":1,\"a\":2,\"a\":3}'::jsonb;</code> trả về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"b\": 1, \"a\": 2}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"a\": 3, \"b\": 1} — keys reordered, the last duplicate wins"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"b\":1,\"a\":2,\"a\":3} — kept exactly as typed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an error: duplicate key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>jsonb stores a parsed, normalized value; json stores the text as typed. jsonb is what you index and query.</p><p><i>VI: jsonb lưu giá trị đã phân tích, chuẩn hoá; json lưu nguyên văn chữ. jsonb là thứ bạn đánh chỉ mục và truy vấn.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Every order has a customer_id that must reference customer. Where does it belong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi đơn có customer_id phải trỏ tới customer. Nó thuộc về đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a jsonb array of ids"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a text column with JSON"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a real column with a foreign key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a key in a jsonb document"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Anything you join on, constrain, or always query belongs in a column; JSONB is for the varying rest.</p><p><i>VI: Thứ gì bạn nối theo, ràng buộc, hay luôn truy vấn thì thuộc về cột; JSONB dành cho phần còn lại hay thay đổi.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Product attributes differ per category (ink colour, pages, calculator functions). Best model?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính sản phẩm khác nhau theo danh mục (màu mực, số trang, chức năng máy tính). Mô hình tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "common columns + one jsonb attrs column (CT Shop's choice)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a text column with comma-separated values"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one table per category"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an EAV table (product_id, key, value text)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>jsonb keeps the varying part flexible while price, stock, category stay typed columns. EAV loses types and needs a join per attribute.</p><p><i>VI: jsonb giữ phần thay đổi linh hoạt trong khi price, stock, category vẫn là cột có kiểu. EAV mất kiểu và cần một phép nối cho mỗi thuộc tính.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using json (text) and wondering why containment and GIN do not work.|||Dùng json (chữ) rồi thắc mắc vì sao phép chứa và GIN không chạy."
+        },
+        {
+          "loi": "Putting foreign keys inside JSON.|||Đặt khoá ngoại vào trong JSON."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb",
+          "vi": "JSON nhị phân",
+          "giaiThich": "Kiểu tài liệu JSON lưu dạng đã phân tích: so sánh, chứa (@>), đánh chỉ mục GIN được."
+        }
+      ]
+    }
+  ]
+}

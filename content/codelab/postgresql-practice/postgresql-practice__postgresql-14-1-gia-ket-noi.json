@@ -1,0 +1,605 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-14-1-gia-ket-noi",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-14-1-gia-ket-noi"
+  },
+  "exercises": [
+    {
+      "title": "Measure the 15.9×, then hit the wall on purpose",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "process per connection",
+        "connection setup cost",
+        "max_connections",
+        "error 53300"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "connections",
+        "node"
+      ],
+      "problemHtml": "<p>Run the script of lesson 14.1 against your own PostgreSQL (lesson 0.3) with Node.js and the <code>pg</code> driver:</p><pre>// measure.mjs — node measure.mjs   (npm i pg; PostgreSQL of lesson 0.3 on port 5444)\nimport pg from 'pg';\nconst CFG = { host: 'localhost', port: 5444, user: 'postgres', password: 'postgres', database: 'postgres' };\nconst N = 50;\nconst time = async (label, fn) =&gt; { const t = performance.now(); await fn(); const ms = performance.now() - t;\n  console.log(`${label.padEnd(28)}: ${ms.toFixed(2).padStart(8)} ms for ${N} → ${(ms / N).toFixed(3)} ms/query`); return ms; };\n\nconst a = await time('A. new connection per query', async () =&gt; {\n  for (let i = 0; i &lt; N; i++) { const c = new pg.Client(CFG); await c.connect(); await c.query('SELECT 1'); await c.end(); }\n});\nconst b = await time('B. one connection, reused', async () =&gt; {\n  const c = new pg.Client(CFG); await c.connect(); for (let i = 0; i &lt; N; i++) await c.query('SELECT 1'); await c.end();\n});\nawait time('C. pool (max 10)', async () =&gt; {\n  const p = new pg.Pool({ ...CFG, max: 10 }); for (let i = 0; i &lt; N; i++) await p.query('SELECT 1'); await p.end();\n});\nconsole.log(`→ opening a new connection costs ${(a / b).toFixed(1)}× a reused one`);\n\n// hit the wall on purpose: open connections until the server refuses\nconst held = [];\ntry { for (;;) { const c = new pg.Client(CFG); await c.connect(); held.push(c); } }\ncatch (e) { console.log(`[postgres] opened ${held.length} connections before failing\\nERROR ${e.code}: ${e.message}`); }\nawait Promise.all(held.map((c) =&gt; c.end()));</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> It needs a real server that accepts many connections; the browser grader is a single in-page PostgreSQL session. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A is roughly 10–20× slower per query than B; C is about the same as B.</li>\n  <li>The loop stops at about max_connections with <code>53300 sorry, too many clients already</code>.</li>\n  <li>While it holds them, <code>ps aux | grep postgres</code> (inside the container) shows one process per connection.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy script của bài 14.1 với PostgreSQL của bạn (bài 0.3), bằng Node.js và driver <code>pg</code>:</p><pre>// measure.mjs — node measure.mjs   (npm i pg; PostgreSQL of lesson 0.3 on port 5444)\nimport pg from 'pg';\nconst CFG = { host: 'localhost', port: 5444, user: 'postgres', password: 'postgres', database: 'postgres' };\nconst N = 50;\nconst time = async (label, fn) =&gt; { const t = performance.now(); await fn(); const ms = performance.now() - t;\n  console.log(`${label.padEnd(28)}: ${ms.toFixed(2).padStart(8)} ms for ${N} → ${(ms / N).toFixed(3)} ms/query`); return ms; };\n\nconst a = await time('A. new connection per query', async () =&gt; {\n  for (let i = 0; i &lt; N; i++) { const c = new pg.Client(CFG); await c.connect(); await c.query('SELECT 1'); await c.end(); }\n});\nconst b = await time('B. one connection, reused', async () =&gt; {\n  const c = new pg.Client(CFG); await c.connect(); for (let i = 0; i &lt; N; i++) await c.query('SELECT 1'); await c.end();\n});\nawait time('C. pool (max 10)', async () =&gt; {\n  const p = new pg.Pool({ ...CFG, max: 10 }); for (let i = 0; i &lt; N; i++) await p.query('SELECT 1'); await p.end();\n});\nconsole.log(`→ opening a new connection costs ${(a / b).toFixed(1)}× a reused one`);\n\n// hit the wall on purpose: open connections until the server refuses\nconst held = [];\ntry { for (;;) { const c = new pg.Client(CFG); await c.connect(); held.push(c); } }\ncatch (e) { console.log(`[postgres] opened ${held.length} connections before failing\\nERROR ${e.code}: ${e.message}`); }\nawait Promise.all(held.map((c) =&gt; c.end()));</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> Bài cần máy chủ thật nhận nhiều kết nối; máy chấm trình duyệt chỉ là một phiên PostgreSQL trong trang. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>A chậm hơn B khoảng 10–20 lần mỗi truy vấn; C xấp xỉ B.</li>\n  <li>Vòng lặp dừng ở khoảng max_connections với <code>53300 sorry, too many clients already</code>.</li>\n  <li>Trong lúc giữ chúng, <code>ps aux | grep postgres</code> (trong container) hiện mỗi kết nối một tiến trình.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "node measure.mjs|||node measure.mjs",
+          "output": "→ opening a new connection costs ~15× a reused one|||→ mở kết nối mới tốn ~15× kết nối tái dùng",
+          "explanation": "Most of A is fork + authentication, not the query.|||Phần lớn thời gian của A là fork + xác thực, không phải truy vấn."
+        }
+      ],
+      "hintsJson": [
+        "Run it twice: the first run also warms caches.|||Chạy hai lần: lần đầu còn tốn thời gian làm ấm bộ đệm.",
+        "Connect as a normal role to see the superuser reserve kick in 3 connections earlier.|||Kết nối bằng role thường để thấy phần dự trữ cho superuser chặn sớm hơn 3 kết nối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "measure.mjs",
+          "language": "javascript",
+          "code": "// measure.mjs — node measure.mjs   (npm i pg; PostgreSQL of lesson 0.3 on port 5444)\nimport pg from 'pg';\nconst CFG = { host: 'localhost', port: 5444, user: 'postgres', password: 'postgres', database: 'postgres' };\nconst N = 50;\nconst time = async (label, fn) => { const t = performance.now(); await fn(); const ms = performance.now() - t;\n  console.log(`${label.padEnd(28)}: ${ms.toFixed(2).padStart(8)} ms for ${N} → ${(ms / N).toFixed(3)} ms/query`); return ms; };\n\nconst a = await time('A. new connection per query', async () => {\n  for (let i = 0; i < N; i++) { const c = new pg.Client(CFG); await c.connect(); await c.query('SELECT 1'); await c.end(); }\n});\nconst b = await time('B. one connection, reused', async () => {\n  const c = new pg.Client(CFG); await c.connect(); for (let i = 0; i < N; i++) await c.query('SELECT 1'); await c.end();\n});\nawait time('C. pool (max 10)', async () => {\n  const p = new pg.Pool({ ...CFG, max: 10 }); for (let i = 0; i < N; i++) await p.query('SELECT 1'); await p.end();\n});\nconsole.log(`→ opening a new connection costs ${(a / b).toFixed(1)}× a reused one`);\n\n// hit the wall on purpose: open connections until the server refuses\nconst held = [];\ntry { for (;;) { const c = new pg.Client(CFG); await c.connect(); held.push(c); } }\ncatch (e) { console.log(`[postgres] opened ${held.length} connections before failing\\nERROR ${e.code}: ${e.message}`); }\nawait Promise.all(held.map((c) => c.end()));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "measure.mjs",
+          "language": "javascript",
+          "code": "// measure.mjs — node measure.mjs   (npm i pg; PostgreSQL of lesson 0.3 on port 5444)\nimport pg from 'pg';\nconst CFG = { host: 'localhost', port: 5444, user: 'postgres', password: 'postgres', database: 'postgres' };\nconst N = 50;\nconst time = async (label, fn) => { const t = performance.now(); await fn(); const ms = performance.now() - t;\n  console.log(`${label.padEnd(28)}: ${ms.toFixed(2).padStart(8)} ms for ${N} → ${(ms / N).toFixed(3)} ms/query`); return ms; };\n\nconst a = await time('A. new connection per query', async () => {\n  for (let i = 0; i < N; i++) { const c = new pg.Client(CFG); await c.connect(); await c.query('SELECT 1'); await c.end(); }\n});\nconst b = await time('B. one connection, reused', async () => {\n  const c = new pg.Client(CFG); await c.connect(); for (let i = 0; i < N; i++) await c.query('SELECT 1'); await c.end();\n});\nawait time('C. pool (max 10)', async () => {\n  const p = new pg.Pool({ ...CFG, max: 10 }); for (let i = 0; i < N; i++) await p.query('SELECT 1'); await p.end();\n});\nconsole.log(`→ opening a new connection costs ${(a / b).toFixed(1)}× a reused one`);\n\n// hit the wall on purpose: open connections until the server refuses\nconst held = [];\ntry { for (;;) { const c = new pg.Client(CFG); await c.connect(); held.push(c); } }\ncatch (e) { console.log(`[postgres] opened ${held.length} connections before failing\\nERROR ${e.code}: ${e.message}`); }\nawait Promise.all(held.map((c) => c.end()));\n\n/* Expected (PostgreSQL 17.11 in Docker, node-postgres 8.13, same machine):\nA. new connection per query :   338.25 ms for 50 → 6.765 ms/query\nB. one connection, reused   :    21.27 ms for 50 → 0.425 ms/query\nC. pool (max 10)            :    22.09 ms for 50 → 0.442 ms/query\n→ opening a new connection costs 15.9× a reused one\n[postgres] opened 100 connections before failing\nERROR 53300: sorry, too many clients already\n   (as a non-superuser role it stops 3 earlier: \"remaining connection slots are reserved …\") */\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL forks one OS process per connection, so opening one costs milliseconds while a query on an open one costs a fraction of that. A pool keeps the setup cost at zero and caps the number of processes.</p>",
+      "solutionExplanationHtmlVi": "<p>PostgreSQL fork một tiến trình hệ điều hành cho mỗi kết nối, nên mở một kết nối tốn vài mili giây trong khi truy vấn trên kết nối đang mở chỉ tốn một phần nhỏ. Pool giữ chi phí dựng bằng 0 và chặn trần số tiến trình.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "npm i pg && node measure.mjs",
+          "lyDo": "It needs a real server that accepts many connections; the browser grader is a single in-page PostgreSQL session.|||Bài cần máy chủ thật nhận nhiều kết nối; máy chấm trình duyệt chỉ là một phiên PostgreSQL trong trang."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving the held connections open after the test — your psql cannot connect any more either.|||Để nguyên các kết nối đang giữ sau khi thử — chính psql của bạn cũng không vào được nữa."
+        },
+        {
+          "loi": "Concluding \"raise max_connections\" — every slot costs memory; the fix is fewer connections.|||Kết luận \"tăng max_connections\" — mỗi suất tốn bộ nhớ; cách sửa là ít kết nối hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connection pool",
+          "vi": "bể kết nối"
+        },
+        {
+          "en": "max_connections",
+          "vi": "số kết nối tối đa"
+        }
+      ]
+    },
+    {
+      "title": "The connection budget: does the fleet fit?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "processes × pool size",
+        "superuser_reserved_connections",
+        "headroom"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "connections",
+        "capacity"
+      ],
+      "problemHtml": "<p>Return one row <code>needed, available, headroom, verdict</code>: needed = Σ processes × pool_size; available = max_connections − superuser_reserved_connections <b>read from server_setting</b> (cast the text); headroom = available − needed; verdict = <code>'fits'</code> when headroom ≥ 0, else <code>'over'</code>.</p>\n<h4>Tables</h4><pre>server_setting (name, setting text)   -- copied from pg_settings: max_connections = 100, superuser_reserved_connections = 3\nconn_client (name, processes, pool_size)  -- web 6×10 · worker 3×10 · cron 1×10 · relay 1×10 · migrate 1×10</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not hard-code 100 or 97 — the setting can change.</li>\n  <li><code>setting::int</code> to turn the text into a number.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về một dòng <code>needed, available, headroom, verdict</code>: needed = Σ processes × pool_size; available = max_connections − superuser_reserved_connections <b>đọc từ server_setting</b> (ép kiểu chữ); headroom = available − needed; verdict = <code>'fits'</code> khi headroom ≥ 0, ngược lại <code>'over'</code>.</p>\n<h4>Bảng</h4><pre>server_setting (name, setting text)   -- chép từ pg_settings: max_connections = 100, superuser_reserved_connections = 3\nconn_client (name, processes, pool_size)  -- web 6×10 · worker 3×10 · cron 1×10 · relay 1×10 · migrate 1×10</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đừng viết cứng 100 hay 97 — thiết lập có thể đổi.</li>\n  <li><code>setting::int</code> để biến chữ thành số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "needed | available | headroom | verdict\n-------+-----------+----------+--------\n120    | 97        | -23      | over   ",
+          "explanation": "Expected result of check \"12 processes × pool 10 against 97 slots\" (row order does not matter).|||Kết quả mong đợi của kiểm \"12 tiến trình × pool 10 so với 97 suất\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A pool of 10 is per Node.js process: 6 web containers open up to 60.|||Pool 10 là cho MỖI tiến trình Node.js: 6 container web mở tới 60.",
+        "Conditional aggregation (FILTER) turns two setting rows into two numbers.|||Tổng hợp có điều kiện (FILTER) biến hai dòng thiết lập thành hai con số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "budget.sql",
+          "language": "sql",
+          "code": "-- budget.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- budget.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES\n  ('web',      6, 10),\n  ('worker',   3, 10),\n  ('cron',     1, 10),\n  ('relay',    1, 10),\n  ('migrate',  1, 10);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH need AS (\n  SELECT sum(processes * pool_size) AS needed FROM conn_client          -- the pool is PER PROCESS\n), cap AS (\n  SELECT max(setting::int) FILTER (WHERE name = 'max_connections')\n       - max(setting::int) FILTER (WHERE name = 'superuser_reserved_connections') AS available\n  FROM server_setting\n)\nSELECT needed, available, available - needed AS headroom,\n       CASE WHEN available - needed >= 0 THEN 'fits' ELSE 'over' END AS verdict\nFROM need, cap;\n"
+        },
+        {
+          "name": "budget.sql",
+          "language": "sql",
+          "code": "-- budget.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- budget.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES\n  ('web',      6, 10),\n  ('worker',   3, 10),\n  ('cron',     1, 10),\n  ('relay',    1, 10),\n  ('migrate',  1, 10);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The total is processes × pool per process, and the ceiling an application role can reach is max_connections − superuser_reserved_connections. The fleet of the lesson needs 120 of 97: over-subscribed at rest, and it fails the first time every pool is busy at once.</p>",
+      "solutionExplanationHtmlVi": "<p>Tổng là số tiến trình × pool mỗi tiến trình, còn trần mà role ứng dụng chạm được là max_connections − superuser_reserved_connections. Hệ thống trong bài cần 120 trên 97: quá tải ngay lúc yên, và sụp lần đầu tiên mọi pool cùng bận.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE server_setting (name text PRIMARY KEY, setting text NOT NULL);\nINSERT INTO server_setting VALUES ('max_connections', '100'), ('superuser_reserved_connections', '3');\nCREATE TABLE conn_client (name text PRIMARY KEY, processes int NOT NULL, pool_size int NOT NULL);\nINSERT INTO conn_client VALUES\n  ('web',      6, 10),\n  ('worker',   3, 10),\n  ('cron',     1, 10),\n  ('relay',    1, 10),\n  ('migrate',  1, 10);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "12 processes × pool 10 against 97 slots|||12 tiến trình × pool 10 so với 97 suất",
+            "mongDoi": {
+              "cot": [
+                "needed",
+                "available",
+                "headroom",
+                "verdict"
+              ],
+              "hang": [
+                [
+                  120,
+                  97,
+                  -23,
+                  "over"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "After shrinking every pool to 6|||Sau khi thu mọi pool về 6",
+            "an": true,
+            "themCsdl": "UPDATE conn_client SET pool_size = 6",
+            "mongDoi": {
+              "cot": [
+                "needed",
+                "available",
+                "headroom",
+                "verdict"
+              ],
+              "hang": [
+                [
+                  72,
+                  97,
+                  25,
+                  "fits"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "The DBA raised max_connections to 200|||DBA tăng max_connections lên 200",
+            "an": true,
+            "themCsdl": "UPDATE server_setting SET setting = '200' WHERE name = 'max_connections'",
+            "mongDoi": {
+              "cot": [
+                "needed",
+                "available",
+                "headroom",
+                "verdict"
+              ],
+              "hang": [
+                [
+                  120,
+                  197,
+                  77,
+                  "fits"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Summing pool_size only — forgetting that every process has its own pool.|||Chỉ cộng pool_size — quên rằng mỗi tiến trình có pool riêng."
+        },
+        {
+          "loi": "Comparing with max_connections itself — 3 slots are reserved for superusers.|||So với chính max_connections — 3 suất dành riêng cho superuser."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "headroom",
+          "vi": "khoảng dư"
+        },
+        {
+          "en": "superuser_reserved_connections",
+          "vi": "suất dành cho superuser"
+        }
+      ]
+    },
+    {
+      "title": "Who holds the connections? (a pg_stat_activity snapshot)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "pg_stat_activity",
+        "backend_type = 'client backend'",
+        "conditional counts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "connections",
+        "monitoring"
+      ],
+      "problemHtml": "<p>On the snapshot, count the <b>client</b> connections per application: <code>app, conns, active, idle, idle_in_txn</code> (idle_in_txn counts both \"idle in transaction\" and \"idle in transaction (aborted)\"), most connections first, ties by app. PostgreSQL's own helper processes must not be counted.</p>\n<h4>Table</h4><pre>activity (pid, backend_type, application_name, state)\n-- 19 rows copied from pg_stat_activity of a real server: 14 client backends + 5 PostgreSQL helper processes (state NULL, app '')</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>WHERE backend_type = 'client backend'</code>.</li>\n  <li><code>count(*) FILTER (WHERE state LIKE 'idle in transaction%')</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên ảnh chụp, đếm kết nối <b>của client</b> theo từng ứng dụng: <code>app, conns, active, idle, idle_in_txn</code> (idle_in_txn đếm cả \"idle in transaction\" lẫn \"idle in transaction (aborted)\"), nhiều kết nối trước, bằng nhau theo app. Không được đếm các tiến trình phụ của PostgreSQL.</p>\n<h4>Bảng</h4><pre>activity (pid, backend_type, application_name, state)\n-- 19 dòng chép từ pg_stat_activity của một máy chủ thật: 14 client backend + 5 tiến trình phụ của PostgreSQL (state NULL, app '')</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>WHERE backend_type = 'client backend'</code>.</li>\n  <li><code>count(*) FILTER (WHERE state LIKE 'idle in transaction%')</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "app     | conns | active | idle | idle_in_txn\n--------+-------+--------+------+------------\nweb     | 8     | 3      | 5    | 0          \nworker  | 4     | 1      | 2    | 1          \nmetrics | 1     | 0      | 1    | 0          \npsql    | 1     | 1      | 0    | 0          ",
+          "explanation": "Expected result of check \"Connections per app\" (row order matters).|||Kết quả mong đợi của kiểm \"Kết nối theo app\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Unfiltered, pg_stat_activity also lists autovacuum, checkpointer, walwriter…|||Không lọc, pg_stat_activity còn liệt kê autovacuum, checkpointer, walwriter…",
+        "On a live server, also exclude your own session: <code>pid &lt;&gt; pg_backend_pid()</code>.|||Trên máy thật, loại cả phiên của chính bạn: <code>pid &lt;&gt; pg_backend_pid()</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "activity.sql",
+          "language": "sql",
+          "code": "-- activity.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- activity.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE activity (            -- a snapshot of pg_stat_activity taken on a real server\n  pid int PRIMARY KEY, backend_type text NOT NULL, application_name text NOT NULL, state text);\nINSERT INTO activity VALUES\n  (101, 'client backend', 'web', 'active'), (102, 'client backend', 'web', 'active'), (103, 'client backend', 'web', 'idle'),\n  (104, 'client backend', 'web', 'idle'), (105, 'client backend', 'web', 'idle'), (106, 'client backend', 'web', 'idle'),\n  (107, 'client backend', 'web', 'idle'), (108, 'client backend', 'web', 'active'),\n  (201, 'client backend', 'worker', 'active'), (202, 'client backend', 'worker', 'idle'), (203, 'client backend', 'worker', 'idle'),\n  (204, 'client backend', 'worker', 'idle in transaction'),\n  (301, 'client backend', 'psql', 'active'), (401, 'client backend', 'metrics', 'idle'),\n  (11, 'autovacuum launcher', '', NULL), (12, 'logical replication launcher', '', NULL), (13, 'background writer', '', NULL),\n  (14, 'checkpointer', '', NULL), (15, 'walwriter', '', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT application_name AS app,\n       count(*) AS conns,\n       count(*) FILTER (WHERE state = 'active') AS active,\n       count(*) FILTER (WHERE state = 'idle') AS idle,\n       count(*) FILTER (WHERE state LIKE 'idle in transaction%') AS idle_in_txn\nFROM activity\nWHERE backend_type = 'client backend'          -- the 5 helper processes are not your clients\nGROUP BY application_name\nORDER BY conns DESC, app;\n"
+        },
+        {
+          "name": "activity.sql",
+          "language": "sql",
+          "code": "-- activity.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- activity.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE activity (            -- a snapshot of pg_stat_activity taken on a real server\n  pid int PRIMARY KEY, backend_type text NOT NULL, application_name text NOT NULL, state text);\nINSERT INTO activity VALUES\n  (101, 'client backend', 'web', 'active'), (102, 'client backend', 'web', 'active'), (103, 'client backend', 'web', 'idle'),\n  (104, 'client backend', 'web', 'idle'), (105, 'client backend', 'web', 'idle'), (106, 'client backend', 'web', 'idle'),\n  (107, 'client backend', 'web', 'idle'), (108, 'client backend', 'web', 'active'),\n  (201, 'client backend', 'worker', 'active'), (202, 'client backend', 'worker', 'idle'), (203, 'client backend', 'worker', 'idle'),\n  (204, 'client backend', 'worker', 'idle in transaction'),\n  (301, 'client backend', 'psql', 'active'), (401, 'client backend', 'metrics', 'idle'),\n  (11, 'autovacuum launcher', '', NULL), (12, 'logical replication launcher', '', NULL), (13, 'background writer', '', NULL),\n  (14, 'checkpointer', '', NULL), (15, 'walwriter', '', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the query to run in production when the limit gets close: it tells you which process type holds the slots and in which state. The browser grader has a single session, so the data is a snapshot copied from a real server — on yours, replace <code>activity</code> with <code>pg_stat_activity</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là truy vấn chạy trên production khi sắp chạm trần: nó cho biết loại tiến trình nào giữ suất và ở trạng thái nào. Máy chấm trình duyệt chỉ có một phiên, nên dữ liệu là ảnh chụp từ một máy chủ thật — trên máy bạn, thay <code>activity</code> bằng <code>pg_stat_activity</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE activity (            -- a snapshot of pg_stat_activity taken on a real server\n  pid int PRIMARY KEY, backend_type text NOT NULL, application_name text NOT NULL, state text);\nINSERT INTO activity VALUES\n  (101, 'client backend', 'web', 'active'), (102, 'client backend', 'web', 'active'), (103, 'client backend', 'web', 'idle'),\n  (104, 'client backend', 'web', 'idle'), (105, 'client backend', 'web', 'idle'), (106, 'client backend', 'web', 'idle'),\n  (107, 'client backend', 'web', 'idle'), (108, 'client backend', 'web', 'active'),\n  (201, 'client backend', 'worker', 'active'), (202, 'client backend', 'worker', 'idle'), (203, 'client backend', 'worker', 'idle'),\n  (204, 'client backend', 'worker', 'idle in transaction'),\n  (301, 'client backend', 'psql', 'active'), (401, 'client backend', 'metrics', 'idle'),\n  (11, 'autovacuum launcher', '', NULL), (12, 'logical replication launcher', '', NULL), (13, 'background writer', '', NULL),\n  (14, 'checkpointer', '', NULL), (15, 'walwriter', '', NULL);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Connections per app|||Kết nối theo app",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "app",
+                "conns",
+                "active",
+                "idle",
+                "idle_in_txn"
+              ],
+              "hang": [
+                [
+                  "web",
+                  8,
+                  3,
+                  5,
+                  0
+                ],
+                [
+                  "worker",
+                  4,
+                  1,
+                  2,
+                  1
+                ],
+                [
+                  "metrics",
+                  1,
+                  0,
+                  1,
+                  0
+                ],
+                [
+                  "psql",
+                  1,
+                  1,
+                  0,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A failed transaction left idle|||Một giao dịch đã hỏng bị bỏ treo",
+            "an": true,
+            "themCsdl": "INSERT INTO activity VALUES (205, 'client backend', 'worker', 'idle in transaction (aborted)'), (302, 'client backend', 'psql', 'idle')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "app",
+                "conns",
+                "active",
+                "idle",
+                "idle_in_txn"
+              ],
+              "hang": [
+                [
+                  "web",
+                  8,
+                  3,
+                  5,
+                  0
+                ],
+                [
+                  "worker",
+                  5,
+                  1,
+                  2,
+                  2
+                ],
+                [
+                  "psql",
+                  2,
+                  1,
+                  1,
+                  0
+                ],
+                [
+                  "metrics",
+                  1,
+                  0,
+                  1,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Filters on backend_type|||Lọc theo backend_type",
+            "khop": "backend_type",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the helpers — an empty-named \"app\" with 5 connections appears.|||Đếm cả tiến trình phụ — xuất hiện một \"app\" tên rỗng với 5 kết nối."
+        },
+        {
+          "loi": "<code>state = 'idle in transaction'</code> — misses the aborted ones, which are just as stuck.|||<code>state = 'idle in transaction'</code> — sót các phiên đã hỏng, vốn kẹt y như vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pg_stat_activity",
+          "vi": "bảng phiên đang chạy"
+        },
+        {
+          "en": "client backend",
+          "vi": "tiến trình phục vụ client"
+        }
+      ]
+    },
+    {
+      "title": "One connection, one process — consequences",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "process model",
+        "error 53300",
+        "raising max_connections"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "connections"
+      ],
+      "problemHtml": "<p>Lesson 14.1 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 14.1 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think \"process\", not \"thread\".|||Hãy nghĩ \"tiến trình\", không phải \"luồng\".",
+        "Multiply before comparing with the limit.|||Nhân trước khi so với trần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One connection, one process — consequences\n\nAnswer in the answer panel (no code needed).\n\n1. What does PostgreSQL create for each new client connection?PostgreSQL tạo gì cho mỗi kết nối client mới?\n2. The app logs 53300 sorry, too many clients already. What is happening to new requests?App ghi log 53300 sorry, too many clients already. Yêu cầu mới đang ra sao?\n3. Why is \"just raise max_connections to 1000\" usually wrong?Vì sao \"cứ tăng max_connections lên 1000\" thường sai?\n4. Twelve Node.js containers each use a pool of 10. How many connections can they open?Mười hai container Node.js, mỗi cái pool 10. Chúng mở được bao nhiêu kết nối?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# One connection, one process — consequences — answer key\n\n1. What does PostgreSQL create for each new client connection?PostgreSQL tạo gì cho mỗi kết nối client mới?\n   Answer: a) an operating-system process (forked backend)\n   One backend process per connection: isolation between sessions, but expensive to create and to keep.VI: Mỗi kết nối một tiến trình backend: các phiên cách ly nhau, nhưng tốn kém để tạo và để giữ.\n\n2. The app logs 53300 sorry, too many clients already. What is happening to new requests?App ghi log 53300 sorry, too many clients already. Yêu cầu mới đang ra sao?\n   Answer: b) every new connection fails at once, including the one you would use to investigate\n   There is no queue on the server side: it refuses. Only the superuser reserve still lets an admin in.VI: Phía máy chủ không có hàng đợi: nó từ chối. Chỉ phần dự trữ cho superuser còn cho quản trị viên vào.\n\n3. Why is \"just raise max_connections to 1000\" usually wrong?Vì sao \"cứ tăng max_connections lên 1000\" thường sai?\n   Answer: a) each slot costs memory, and 1000 busy processes fight over few cores\n   More processes than cores means contention, not throughput. Fewer, pooled connections is the fix.VI: Nhiều tiến trình hơn số nhân là tranh chấp, không phải thông lượng. Ít kết nối hơn, có pool, mới là cách sửa.\n\n4. Twelve Node.js containers each use a pool of 10. How many connections can they open?Mười hai container Node.js, mỗi cái pool 10. Chúng mở được bao nhiêu kết nối?\n   Answer: b) 120\n   The pool is per process: 12 × 10.VI: Pool là cho mỗi tiến trình: 12 × 10.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> an operating-system process (forked backend)</p><p>One backend process per connection: isolation between sessions, but expensive to create and to keep.</p><p><i>VI: Mỗi kết nối một tiến trình backend: các phiên cách ly nhau, nhưng tốn kém để tạo và để giữ.</i></p></li><li><p><b>b)</b> every new connection fails at once, including the one you would use to investigate</p><p>There is no queue on the server side: it refuses. Only the superuser reserve still lets an admin in.</p><p><i>VI: Phía máy chủ không có hàng đợi: nó từ chối. Chỉ phần dự trữ cho superuser còn cho quản trị viên vào.</i></p></li><li><p><b>a)</b> each slot costs memory, and 1000 busy processes fight over few cores</p><p>More processes than cores means contention, not throughput. Fewer, pooled connections is the fix.</p><p><i>VI: Nhiều tiến trình hơn số nhân là tranh chấp, không phải thông lượng. Ít kết nối hơn, có pool, mới là cách sửa.</i></p></li><li><p><b>b)</b> 120</p><p>The pool is per process: 12 × 10.</p><p><i>VI: Pool là cho mỗi tiến trình: 12 × 10.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>What does PostgreSQL create for each new client connection?</p><p style=\"opacity:.75;font-size:.92em\"><i>PostgreSQL tạo gì cho mỗi kết nối client mới?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an operating-system process (forked backend)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a coroutine on an event loop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a thread inside one server process"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing until the first query arrives"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One backend process per connection: isolation between sessions, but expensive to create and to keep.</p><p><i>VI: Mỗi kết nối một tiến trình backend: các phiên cách ly nhau, nhưng tốn kém để tạo và để giữ.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The app logs <code>53300 sorry, too many clients already</code>. What is happening to new requests?</p><p style=\"opacity:.75;font-size:.92em\"><i>App ghi log <code>53300 sorry, too many clients already</code>. Yêu cầu mới đang ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "they are served more slowly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every new connection fails at once, including the one you would use to investigate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "they queue on the server until a slot frees up"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only superuser queries fail"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>There is no queue on the server side: it refuses. Only the superuser reserve still lets an admin in.</p><p><i>VI: Phía máy chủ không có hàng đợi: nó từ chối. Chỉ phần dự trữ cho superuser còn cho quản trị viên vào.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why is \"just raise max_connections to 1000\" usually wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"cứ tăng max_connections lên 1000\" thường sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "each slot costs memory, and 1000 busy processes fight over few cores"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it only takes effect after a major version upgrade"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it silently disables every connection pool in the app"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL refuses any value above 100 connections"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>More processes than cores means contention, not throughput. Fewer, pooled connections is the fix.</p><p><i>VI: Nhiều tiến trình hơn số nhân là tranh chấp, không phải thông lượng. Ít kết nối hơn, có pool, mới là cách sửa.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Twelve Node.js containers each use a pool of 10. How many connections can they open?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mười hai container Node.js, mỗi cái pool 10. Chúng mở được bao nhiêu kết nối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "22"
+              },
+              {
+                "ma": "b",
+                "noiDung": "120"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The pool is per process: 12 × 10.</p><p><i>VI: Pool là cho mỗi tiến trình: 12 × 10.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming the server queues connections like a pool does.|||Tưởng máy chủ xếp hàng kết nối như pool."
+        },
+        {
+          "loi": "Treating pool size as an application-wide number.|||Coi cỡ pool là con số cho cả ứng dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backend process",
+          "vi": "tiến trình phục vụ"
+        }
+      ]
+    }
+  ]
+}

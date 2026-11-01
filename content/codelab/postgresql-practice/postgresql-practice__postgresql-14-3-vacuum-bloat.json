@@ -1,0 +1,888 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-14-3-vacuum-bloat",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-14-3-vacuum-bloat"
+  },
+  "exercises": [
+    {
+      "title": "Which tables has autovacuum already picked?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "autovacuum threshold",
+        "threshold + scale_factor × rows"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "vacuum",
+        "autovacuum"
+      ],
+      "problemHtml": "<p>For every table return <code>relname, n_live_tup, n_dead_tup, threshold, due</code>: threshold = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × n_live_tup (settings <b>read from av_setting</b>), due = n_dead_tup &gt; threshold. Most dead rows first.</p>\n<h4>Tables (snapshot of a real server)</h4><pre>av_setting (name, setting text)                 -- threshold 50, scale_factor 0.2, naptime 60\ntable_stat (relname, n_live_tup, n_dead_tup)    -- 6 tables</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Cast the settings: <code>setting::numeric</code>.</li>\n  <li>Strictly greater: autovacuum fires when dead tuples EXCEED the threshold.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi bảng trả về <code>relname, n_live_tup, n_dead_tup, threshold, due</code>: threshold = autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × n_live_tup (thiết lập <b>đọc từ av_setting</b>), due = n_dead_tup &gt; threshold. Nhiều dòng chết trước.</p>\n<h4>Bảng (ảnh chụp một máy chủ thật)</h4><pre>av_setting (name, setting text)                 -- threshold 50, scale_factor 0.2, naptime 60\ntable_stat (relname, n_live_tup, n_dead_tup)    -- 6 bảng</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ép kiểu thiết lập: <code>setting::numeric</code>.</li>\n  <li>Lớn hơn hẳn: autovacuum chạy khi số dòng chết VƯỢT ngưỡng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "relname    | n_live_tup | n_dead_tup | threshold | due  \n-----------+------------+------------+-----------+------\nevent      | 1000000    | 150000     | 200050    | false\ndon_hang   | 200000     | 50000      | 40050     | true \ncustomer   | 5000       | 900        | 1050      | false\nav_demo    | 1000       | 300        | 250       | true \nsetting_kv | 10         | 55         | 52        | true \ncountry    | 250        | 0          | 100       | false",
+          "explanation": "Expected result of check \"Default settings: event (15% dead) is not due yet\" (row order matters).|||Kết quả mong đợi của kiểm \"Thiết lập mặc định: event (15% chết) chưa tới lượt\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "1,000,000 rows ⇒ 200,050 dead rows before autovacuum even looks.|||1.000.000 dòng ⇒ 200.050 dòng chết thì autovacuum mới để ý.",
+        "Real PostgreSQL uses reltuples (the planner's estimate); n_live_tup is close enough here.|||PostgreSQL thật dùng reltuples (ước lượng của planner); ở đây n_live_tup đủ sát."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "autovacuum.sql",
+          "language": "sql",
+          "code": "-- autovacuum.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- autovacuum.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE av_setting (name text PRIMARY KEY, setting text NOT NULL);   -- copied from pg_settings\nINSERT INTO av_setting VALUES ('autovacuum_vacuum_threshold', '50'), ('autovacuum_vacuum_scale_factor', '0.2'), ('autovacuum_naptime', '60');\nCREATE TABLE table_stat (relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL);   -- from pg_stat_user_tables\nINSERT INTO table_stat VALUES\n  ('don_hang', 200000, 50000), ('event', 1000000, 150000), ('customer', 5000, 900),\n  ('av_demo', 1000, 300), ('setting_kv', 10, 55), ('country', 250, 0);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH s AS (\n  SELECT max(setting::numeric) FILTER (WHERE name = 'autovacuum_vacuum_threshold')    AS base,\n         max(setting::numeric) FILTER (WHERE name = 'autovacuum_vacuum_scale_factor') AS scale\n  FROM av_setting\n)\nSELECT t.relname, t.n_live_tup, t.n_dead_tup,\n       s.base + s.scale * t.n_live_tup AS threshold,\n       t.n_dead_tup > s.base + s.scale * t.n_live_tup AS due\nFROM table_stat t, s\nORDER BY t.n_dead_tup DESC, t.relname;\n"
+        },
+        {
+          "name": "autovacuum.sql",
+          "language": "sql",
+          "code": "-- autovacuum.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- autovacuum.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE av_setting (name text PRIMARY KEY, setting text NOT NULL);   -- copied from pg_settings\nINSERT INTO av_setting VALUES ('autovacuum_vacuum_threshold', '50'), ('autovacuum_vacuum_scale_factor', '0.2'), ('autovacuum_naptime', '60');\nCREATE TABLE table_stat (relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL);   -- from pg_stat_user_tables\nINSERT INTO table_stat VALUES\n  ('don_hang', 200000, 50000), ('event', 1000000, 150000), ('customer', 5000, 900),\n  ('av_demo', 1000, 300), ('setting_kv', 10, 55), ('country', 250, 0);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The scale factor is why large tables bloat: 20% of a million rows is 200,000 dead versions before the first pass, and each pass then has more work. The usual fix is per-table settings on the few tables that churn — the next exercise.</p>",
+      "solutionExplanationHtmlVi": "<p>Hệ số tỉ lệ là lý do bảng lớn phình: 20% của một triệu dòng là 200.000 phiên bản chết trước lượt đầu, và mỗi lượt sau càng nhiều việc. Cách sửa thường gặp là thiết lập riêng cho vài bảng biến động nhiều — bài tiếp theo.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE av_setting (name text PRIMARY KEY, setting text NOT NULL);   -- copied from pg_settings\nINSERT INTO av_setting VALUES ('autovacuum_vacuum_threshold', '50'), ('autovacuum_vacuum_scale_factor', '0.2'), ('autovacuum_naptime', '60');\nCREATE TABLE table_stat (relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL);   -- from pg_stat_user_tables\nINSERT INTO table_stat VALUES\n  ('don_hang', 200000, 50000), ('event', 1000000, 150000), ('customer', 5000, 900),\n  ('av_demo', 1000, 300), ('setting_kv', 10, 55), ('country', 250, 0);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Default settings: event (15% dead) is not due yet|||Thiết lập mặc định: event (15% chết) chưa tới lượt",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "n_live_tup",
+                "n_dead_tup",
+                "threshold",
+                "due"
+              ],
+              "hang": [
+                [
+                  "event",
+                  1000000,
+                  150000,
+                  200050,
+                  false
+                ],
+                [
+                  "don_hang",
+                  200000,
+                  50000,
+                  40050,
+                  true
+                ],
+                [
+                  "customer",
+                  5000,
+                  900,
+                  1050,
+                  false
+                ],
+                [
+                  "av_demo",
+                  1000,
+                  300,
+                  250,
+                  true
+                ],
+                [
+                  "setting_kv",
+                  10,
+                  55,
+                  52,
+                  true
+                ],
+                [
+                  "country",
+                  250,
+                  0,
+                  100,
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "scale_factor lowered to 0.05|||Hạ scale_factor xuống 0.05",
+            "an": true,
+            "themCsdl": "UPDATE av_setting SET setting = '0.05' WHERE name = 'autovacuum_vacuum_scale_factor'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "n_live_tup",
+                "n_dead_tup",
+                "threshold",
+                "due"
+              ],
+              "hang": [
+                [
+                  "event",
+                  1000000,
+                  150000,
+                  50050,
+                  true
+                ],
+                [
+                  "don_hang",
+                  200000,
+                  50000,
+                  10050,
+                  true
+                ],
+                [
+                  "customer",
+                  5000,
+                  900,
+                  300,
+                  true
+                ],
+                [
+                  "av_demo",
+                  1000,
+                  300,
+                  100,
+                  true
+                ],
+                [
+                  "setting_kv",
+                  10,
+                  55,
+                  50.5,
+                  true
+                ],
+                [
+                  "country",
+                  250,
+                  0,
+                  62.5,
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A table exactly at its threshold is not due|||Bảng đúng bằng ngưỡng thì chưa tới lượt",
+            "an": true,
+            "themCsdl": "INSERT INTO table_stat VALUES ('edge', 500, 150)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "n_live_tup",
+                "n_dead_tup",
+                "threshold",
+                "due"
+              ],
+              "hang": [
+                [
+                  "event",
+                  1000000,
+                  150000,
+                  200050,
+                  false
+                ],
+                [
+                  "don_hang",
+                  200000,
+                  50000,
+                  40050,
+                  true
+                ],
+                [
+                  "customer",
+                  5000,
+                  900,
+                  1050,
+                  false
+                ],
+                [
+                  "av_demo",
+                  1000,
+                  300,
+                  250,
+                  true
+                ],
+                [
+                  "edge",
+                  500,
+                  150,
+                  150,
+                  false
+                ],
+                [
+                  "setting_kv",
+                  10,
+                  55,
+                  52,
+                  true
+                ],
+                [
+                  "country",
+                  250,
+                  0,
+                  100,
+                  false
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hard-coding 50 and 0.2 — the per-server (and per-table) settings differ.|||Viết cứng 50 và 0.2 — thiết lập khác nhau theo máy chủ (và theo bảng)."
+        },
+        {
+          "loi": "&gt;= instead of &gt;.|||&gt;= thay vì &gt;."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "autovacuum",
+          "vi": "tự dọn dẹp"
+        },
+        {
+          "en": "dead tuple",
+          "vi": "dòng chết"
+        }
+      ]
+    },
+    {
+      "title": "Tune autovacuum per table (and undo a bad tweak)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ALTER TABLE … SET (storage parameters)",
+        "ALTER TABLE … RESET",
+        "pg_class.reloptions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "vacuum",
+        "autovacuum",
+        "ctshop"
+      ],
+      "problemHtml": "<p>In CT Shop, <code>orders</code> and <code>stock_movement</code> churn: give both <code>autovacuum_vacuum_scale_factor = 0.01</code> and <code>autovacuum_vacuum_threshold = 1000</code>. Someone also set <code>autovacuum_enabled = false</code> on <code>customer</code> a year ago — put it back to the default. Leave every other table alone.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ALTER TABLE orders SET (autovacuum_vacuum_scale_factor = 0.01, autovacuum_vacuum_threshold = 1000);</code></li>\n  <li><code>ALTER TABLE customer RESET (autovacuum_enabled);</code> — RESET removes the option instead of writing a value.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong CT Shop, <code>orders</code> và <code>stock_movement</code> biến động nhiều: đặt cho cả hai <code>autovacuum_vacuum_scale_factor = 0.01</code> và <code>autovacuum_vacuum_threshold = 1000</code>. Một năm trước còn có người đặt <code>autovacuum_enabled = false</code> cho <code>customer</code> — trả nó về mặc định. Không đụng các bảng khác.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ALTER TABLE orders SET (autovacuum_vacuum_scale_factor = 0.01, autovacuum_vacuum_threshold = 1000);</code></li>\n  <li><code>ALTER TABLE customer RESET (autovacuum_enabled);</code> — RESET xoá tuỳ chọn thay vì ghi một giá trị.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "relname        | options                     \n---------------+-----------------------------\ncustomer       | NULL                        \norders         | {autovacuum_vacuum_scale_fa…\nproduct        | NULL                        \nstock_movement | {autovacuum_vacuum_scale_fa…",
+          "explanation": "Expected result of check \"The storage parameters of the four tables\" (row order matters).|||Kết quả mong đợi của kiểm \"Tham số lưu trữ của bốn bảng\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Per-table settings live in pg_class.reloptions as text like <code>autovacuum_vacuum_threshold=1000</code>.|||Thiết lập theo bảng nằm trong pg_class.reloptions dạng chữ như <code>autovacuum_vacuum_threshold=1000</code>.",
+        "\\d+ orders in psql shows them under \"Options\".|||\\d+ orders trong psql hiện chúng ở mục \"Options\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nALTER TABLE customer SET (autovacuum_enabled = false);   -- someone \"fixed\" a slow import last year\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE orders         SET (autovacuum_vacuum_scale_factor = 0.01, autovacuum_vacuum_threshold = 1000);\nALTER TABLE stock_movement SET (autovacuum_vacuum_scale_factor = 0.01, autovacuum_vacuum_threshold = 1000);\nALTER TABLE customer RESET (autovacuum_enabled);     -- back to the server default (on)\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nALTER TABLE customer SET (autovacuum_enabled = false);   -- someone \"fixed\" a slow import last year\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Per-table autovacuum settings are the right tool for the few tables that churn: about 1% churn triggers a small pass instead of waiting for 20%. RESET returns an option to the server default, which is what you want for the forgotten <code>autovacuum_enabled = false</code> — a table that is never vacuumed bloats and eventually risks wraparound.</p>",
+      "solutionExplanationHtmlVi": "<p>Thiết lập autovacuum theo bảng là công cụ đúng cho vài bảng biến động nhiều: khoảng 1% thay đổi là chạy một lượt nhỏ thay vì đợi tới 20%. RESET trả tuỳ chọn về mặc định của máy chủ — đúng điều cần cho <code>autovacuum_enabled = false</code> bị bỏ quên: bảng không bao giờ được dọn sẽ phình và cuối cùng có nguy cơ wraparound.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\nALTER TABLE customer SET (autovacuum_enabled = false);   -- someone \"fixed\" a slow import last year",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The storage parameters of the four tables|||Tham số lưu trữ của bốn bảng",
+            "kiemTra": "SELECT relname, (SELECT array_agg(o ORDER BY o) FROM unnest(reloptions) o)::text AS options FROM pg_class WHERE relname IN ('orders', 'stock_movement', 'customer', 'product') ORDER BY relname",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "options"
+              ],
+              "hang": [
+                [
+                  "customer",
+                  null
+                ],
+                [
+                  "orders",
+                  "{autovacuum_vacuum_scale_factor=0.01,autovacuum_vacuum_threshold=1000}"
+                ],
+                [
+                  "product",
+                  null
+                ],
+                [
+                  "stock_movement",
+                  "{autovacuum_vacuum_scale_factor=0.01,autovacuum_vacuum_threshold=1000}"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "No other table was touched|||Không bảng nào khác bị đụng",
+            "kiemTra": "SELECT count(*) AS tuned FROM pg_class WHERE relkind = 'r' AND reloptions IS NOT NULL AND relnamespace = 'public'::regnamespace",
+            "mongDoi": {
+              "cot": [
+                "tuned"
+              ],
+              "hang": [
+                [
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "customer is RESET, not set to true|||customer được RESET, không đặt true",
+            "khop": "RESET\\s*\\(\\s*autovacuum_enabled",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SET (autovacuum_enabled = true) — it works today, but the table keeps a hard-coded override nobody remembers.|||SET (autovacuum_enabled = true) — hôm nay chạy được, nhưng bảng giữ một ghi đè cứng mà không ai nhớ."
+        },
+        {
+          "loi": "Tuning every table \"to be safe\" — more frequent passes everywhere cost I/O for nothing.|||Chỉnh mọi bảng \"cho chắc\" — lượt dọn dày hơn ở khắp nơi tốn I/O vô ích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "storage parameter",
+          "vi": "tham số lưu trữ"
+        },
+        {
+          "en": "reloptions",
+          "vi": "tuỳ chọn của bảng"
+        }
+      ]
+    },
+    {
+      "title": "Find the bloated tables",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "dead-tuple ratio",
+        "division by zero guard",
+        "pg_size_pretty"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "vacuum",
+        "bloat",
+        "monitoring"
+      ],
+      "problemHtml": "<p>The lesson's bloat query, on a snapshot: return <code>relname, n_live_tup, n_dead_tup, dead_pct, size, last_autovacuum</code> for the <b>5</b> tables with the most dead rows (only tables that have any). dead_pct = 100 × dead / live rounded to 1 decimal, <b>0 when n_live_tup = 0</b>; size = <code>pg_size_pretty(size_bytes)</code>.</p>\n<h4>Table (snapshot)</h4><pre>user_tables (relname, n_live_tup, n_dead_tup, size_bytes, last_autovacuum)   -- 8 tables, 7 with dead rows</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CASE WHEN n_live_tup &gt; 0 THEN round(100.0 * n_dead_tup / n_live_tup, 1) ELSE 0 END</code>.</li>\n  <li><code>WHERE n_dead_tup &gt; 0 ORDER BY n_dead_tup DESC LIMIT 5</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Truy vấn tìm bảng phình của bài học, trên ảnh chụp: trả về <code>relname, n_live_tup, n_dead_tup, dead_pct, size, last_autovacuum</code> cho <b>5</b> bảng nhiều dòng chết nhất (chỉ bảng có dòng chết). dead_pct = 100 × chết / sống làm tròn 1 chữ số, <b>0 khi n_live_tup = 0</b>; size = <code>pg_size_pretty(size_bytes)</code>.</p>\n<h4>Bảng (ảnh chụp)</h4><pre>user_tables (relname, n_live_tup, n_dead_tup, size_bytes, last_autovacuum)   -- 8 bảng, 7 bảng có dòng chết</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CASE WHEN n_live_tup &gt; 0 THEN round(100.0 * n_dead_tup / n_live_tup, 1) ELSE 0 END</code>.</li>\n  <li><code>WHERE n_dead_tup &gt; 0 ORDER BY n_dead_tup DESC LIMIT 5</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "relname        | n_live_tup | n_dead_tup | dead_pct | size    | last_autovacuum    \n---------------+------------+------------+----------+---------+--------------------\ndon_hang       | 200000     | 50000      | 25       | 14 MB   | NULL               \nstock_movement | 90000      | 8000       | 8.9      | 6144 kB | 2026-10-26 01:02:00\npayment        | 40000      | 2500       | 6.3      | 3072 kB | 2026-10-26 00:55:00\ncustomer       | 5000       | 900        | 18       | 1152 kB | 2026-10-26 00:40:00\nav_demo        | 1000       | 300        | 30       | 104 kB  | 2026-10-26 01:15:43",
+          "explanation": "Expected result of check \"The five tables with the most dead rows\" (row order matters).|||Kết quả mong đợi của kiểm \"Năm bảng nhiều dòng chết nhất\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "100.0 (not 100) makes the division decimal.|||100.0 (không phải 100) để phép chia ra số thập phân.",
+        "On a live server: FROM pg_stat_user_tables, size = pg_relation_size(relid).|||Trên máy thật: FROM pg_stat_user_tables, size = pg_relation_size(relid)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "stats.sql",
+          "language": "sql",
+          "code": "-- stats.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- stats.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE user_tables (            -- a snapshot of pg_stat_user_tables + pg_relation_size(relid)\n  relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL,\n  size_bytes bigint NOT NULL, last_autovacuum timestamptz);\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nINSERT INTO user_tables VALUES\n  ('don_hang',      200000, 50000, 14680064, NULL),\n  ('av_demo',         1000,   300,   106496, '2026-10-26 01:15:43+07'),\n  ('session_store',      0,    40,    65536, '2026-10-25 22:00:00+07'),\n  ('customer',        5000,   900,  1179648, '2026-10-26 00:40:00+07'),\n  ('product',          480,    12,   131072, '2026-10-25 23:10:00+07'),\n  ('stock_movement', 90000,  8000,  6291456, '2026-10-26 01:02:00+07'),\n  ('payment',        40000,  2500,  3145728, '2026-10-26 00:55:00+07'),\n  ('country',          250,     0,    16384, NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT relname, n_live_tup, n_dead_tup,\n       CASE WHEN n_live_tup > 0\n            THEN round(100.0 * n_dead_tup / n_live_tup, 1)\n            ELSE 0 END AS dead_pct,                          -- an emptied table would divide by zero\n       pg_size_pretty(size_bytes) AS size,\n       last_autovacuum\nFROM user_tables\nWHERE n_dead_tup > 0\nORDER BY n_dead_tup DESC\nLIMIT 5;\n"
+        },
+        {
+          "name": "stats.sql",
+          "language": "sql",
+          "code": "-- stats.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- stats.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE user_tables (            -- a snapshot of pg_stat_user_tables + pg_relation_size(relid)\n  relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL,\n  size_bytes bigint NOT NULL, last_autovacuum timestamptz);\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nINSERT INTO user_tables VALUES\n  ('don_hang',      200000, 50000, 14680064, NULL),\n  ('av_demo',         1000,   300,   106496, '2026-10-26 01:15:43+07'),\n  ('session_store',      0,    40,    65536, '2026-10-25 22:00:00+07'),\n  ('customer',        5000,   900,  1179648, '2026-10-26 00:40:00+07'),\n  ('product',          480,    12,   131072, '2026-10-25 23:10:00+07'),\n  ('stock_movement', 90000,  8000,  6291456, '2026-10-26 01:02:00+07'),\n  ('payment',        40000,  2500,  3145728, '2026-10-26 00:55:00+07'),\n  ('country',          250,     0,    16384, NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Absolute dead rows find the tables where vacuum matters; the ratio tells you whether autovacuum keeps up. A table with a high ratio and no last_autovacuum (don_hang here) is the one to tune.</p>",
+      "solutionExplanationHtmlVi": "<p>Số dòng chết tuyệt đối chỉ ra bảng mà vacuum quan trọng; tỉ lệ cho biết autovacuum có theo kịp không. Bảng tỉ lệ cao mà chưa có last_autovacuum (ở đây là don_hang) là bảng cần chỉnh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE user_tables (            -- a snapshot of pg_stat_user_tables + pg_relation_size(relid)\n  relname text PRIMARY KEY, n_live_tup bigint NOT NULL, n_dead_tup bigint NOT NULL,\n  size_bytes bigint NOT NULL, last_autovacuum timestamptz);\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nINSERT INTO user_tables VALUES\n  ('don_hang',      200000, 50000, 14680064, NULL),\n  ('av_demo',         1000,   300,   106496, '2026-10-26 01:15:43+07'),\n  ('session_store',      0,    40,    65536, '2026-10-25 22:00:00+07'),\n  ('customer',        5000,   900,  1179648, '2026-10-26 00:40:00+07'),\n  ('product',          480,    12,   131072, '2026-10-25 23:10:00+07'),\n  ('stock_movement', 90000,  8000,  6291456, '2026-10-26 01:02:00+07'),\n  ('payment',        40000,  2500,  3145728, '2026-10-26 00:55:00+07'),\n  ('country',          250,     0,    16384, NULL);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The five tables with the most dead rows|||Năm bảng nhiều dòng chết nhất",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "n_live_tup",
+                "n_dead_tup",
+                "dead_pct",
+                "size",
+                "last_autovacuum"
+              ],
+              "hang": [
+                [
+                  "don_hang",
+                  200000,
+                  50000,
+                  25,
+                  "14 MB",
+                  null
+                ],
+                [
+                  "stock_movement",
+                  90000,
+                  8000,
+                  8.9,
+                  "6144 kB",
+                  "2026-10-26 01:02:00"
+                ],
+                [
+                  "payment",
+                  40000,
+                  2500,
+                  6.3,
+                  "3072 kB",
+                  "2026-10-26 00:55:00"
+                ],
+                [
+                  "customer",
+                  5000,
+                  900,
+                  18,
+                  "1152 kB",
+                  "2026-10-26 00:40:00"
+                ],
+                [
+                  "av_demo",
+                  1000,
+                  300,
+                  30,
+                  "104 kB",
+                  "2026-10-26 01:15:43"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "An emptied table becomes the worst one|||Một bảng vừa bị xoá sạch thành bảng tệ nhất",
+            "an": true,
+            "themCsdl": "UPDATE user_tables SET n_live_tup = 0, n_dead_tup = 60000 WHERE relname = 'session_store'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "relname",
+                "n_live_tup",
+                "n_dead_tup",
+                "dead_pct",
+                "size",
+                "last_autovacuum"
+              ],
+              "hang": [
+                [
+                  "session_store",
+                  0,
+                  60000,
+                  0,
+                  "64 kB",
+                  "2026-10-25 22:00:00"
+                ],
+                [
+                  "don_hang",
+                  200000,
+                  50000,
+                  25,
+                  "14 MB",
+                  null
+                ],
+                [
+                  "stock_movement",
+                  90000,
+                  8000,
+                  8.9,
+                  "6144 kB",
+                  "2026-10-26 01:02:00"
+                ],
+                [
+                  "payment",
+                  40000,
+                  2500,
+                  6.3,
+                  "3072 kB",
+                  "2026-10-26 00:55:00"
+                ],
+                [
+                  "customer",
+                  5000,
+                  900,
+                  18,
+                  "1152 kB",
+                  "2026-10-26 00:40:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Guards the division|||Chặn phép chia cho 0",
+            "khop": "CASE|NULLIF|GREATEST",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No guard — the first table emptied by a DELETE crashes the dashboard with \"division by zero\".|||Không chặn — bảng đầu tiên bị DELETE sạch làm bảng giám sát sập với \"division by zero\"."
+        },
+        {
+          "loi": "Sorting by the ratio — a 40-row session table outranks a 14 MB order table.|||Sắp theo tỉ lệ — bảng session 40 dòng xếp trên bảng đơn hàng 14 MB."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bloat",
+          "vi": "phình bảng"
+        },
+        {
+          "en": "pg_stat_user_tables",
+          "vi": "thống kê bảng người dùng"
+        }
+      ]
+    },
+    {
+      "title": "VACUUM, VACUUM FULL, pg_repack, ANALYZE",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "VACUUM vs VACUUM FULL",
+        "ACCESS EXCLUSIVE",
+        "transaction ID wraparound"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "vacuum"
+      ],
+      "problemHtml": "<p>Lesson 14.3 in four questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 14.3 trong bốn câu.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate \"reusable\" from \"returned to the OS\".|||Tách \"dùng lại được\" khỏi \"trả về hệ điều hành\".",
+        "ANALYZE is statistics, VACUUM is space and freezing.|||ANALYZE là thống kê, VACUUM là chỗ trống và đóng băng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# VACUUM, VACUUM FULL, pg_repack, ANALYZE\n\nAnswer in the answer panel (no code needed).\n\n1. After a plain VACUUM of a bloated 13 MB table, its file is…Sau VACUUM thường trên bảng phình 13 MB, tệp của nó…\n2. Why is VACUUM FULL never routine on a busy table?Vì sao VACUUM FULL không bao giờ là việc thường ngày trên bảng bận?\n3. Plans are bad right after a bulk load of 2 million rows. The usual missing step is…Kế hoạch tệ ngay sau khi nạp lô 2 triệu dòng. Bước thường bị thiếu là…\n4. What happens if VACUUM can never freeze old rows (e.g. a transaction stays open for weeks)?Chuyện gì xảy ra nếu VACUUM không bao giờ đóng băng được dòng cũ (vd. một giao dịch mở suốt nhiều tuần)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# VACUUM, VACUUM FULL, pg_repack, ANALYZE — answer key\n\n1. After a plain VACUUM of a bloated 13 MB table, its file is…Sau VACUUM thường trên bảng phình 13 MB, tệp của nó…\n   Answer: a) still about 13 MB: the space is reusable, not returned to the OS\n   VACUUM marks space reusable for the same table; only a rewrite (VACUUM FULL, pg_repack) shrinks the file.VI: VACUUM đánh dấu chỗ trống để chính bảng đó dùng lại; chỉ việc viết lại (VACUUM FULL, pg_repack) mới thu nhỏ tệp.\n\n2. Why is VACUUM FULL never routine on a busy table?Vì sao VACUUM FULL không bao giờ là việc thường ngày trên bảng bận?\n   Answer: d) ACCESS EXCLUSIVE lock (even SELECT waits) plus room for a second copy\n   Use pg_repack to rewrite without the long exclusive lock.VI: Dùng pg_repack để viết lại mà không giữ khoá độc quyền lâu.\n\n3. Plans are bad right after a bulk load of 2 million rows. The usual missing step is…Kế hoạch tệ ngay sau khi nạp lô 2 triệu dòng. Bước thường bị thiếu là…\n   Answer: b) ANALYZE (fresh planner statistics)\n   Autovacuum also analyzes, but not instantly; run ANALYZE after a bulk load.VI: Autovacuum cũng analyze, nhưng không ngay lập tức; hãy chạy ANALYZE sau khi nạp lô.\n\n4. What happens if VACUUM can never freeze old rows (e.g. a transaction stays open for weeks)?Chuyện gì xảy ra nếu VACUUM không bao giờ đóng băng được dòng cũ (vd. một giao dịch mở suốt nhiều tuần)?\n   Answer: a) transaction ID wraparound protection eventually stops all writes\n   Visibility uses a 32-bit XID; without freezing, PostgreSQL refuses new XIDs to protect the data.VI: Tính hiển thị dùng XID 32 bit; không đóng băng thì PostgreSQL từ chối cấp XID mới để bảo vệ dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> still about 13 MB: the space is reusable, not returned to the OS</p><p>VACUUM marks space reusable for the same table; only a rewrite (VACUUM FULL, pg_repack) shrinks the file.</p><p><i>VI: VACUUM đánh dấu chỗ trống để chính bảng đó dùng lại; chỉ việc viết lại (VACUUM FULL, pg_repack) mới thu nhỏ tệp.</i></p></li><li><p><b>d)</b> ACCESS EXCLUSIVE lock (even SELECT waits) plus room for a second copy</p><p>Use pg_repack to rewrite without the long exclusive lock.</p><p><i>VI: Dùng pg_repack để viết lại mà không giữ khoá độc quyền lâu.</i></p></li><li><p><b>b)</b> ANALYZE (fresh planner statistics)</p><p>Autovacuum also analyzes, but not instantly; run ANALYZE after a bulk load.</p><p><i>VI: Autovacuum cũng analyze, nhưng không ngay lập tức; hãy chạy ANALYZE sau khi nạp lô.</i></p></li><li><p><b>a)</b> transaction ID wraparound protection eventually stops all writes</p><p>Visibility uses a 32-bit XID; without freezing, PostgreSQL refuses new XIDs to protect the data.</p><p><i>VI: Tính hiển thị dùng XID 32 bit; không đóng băng thì PostgreSQL từ chối cấp XID mới để bảo vệ dữ liệu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>After a plain VACUUM of a bloated 13 MB table, its file is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau VACUUM thường trên bảng phình 13 MB, tệp của nó…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "still about 13 MB: the space is reusable, not returned to the OS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deleted and recreated under a new file name"
+              },
+              {
+                "ma": "c",
+                "noiDung": "locked for writes until the next server restart"
+              },
+              {
+                "ma": "d",
+                "noiDung": "back to its original 4.6 MB, the dead space is returned"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>VACUUM marks space reusable for the same table; only a rewrite (VACUUM FULL, pg_repack) shrinks the file.</p><p><i>VI: VACUUM đánh dấu chỗ trống để chính bảng đó dùng lại; chỉ việc viết lại (VACUUM FULL, pg_repack) mới thu nhỏ tệp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Why is VACUUM FULL never routine on a busy table?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao VACUUM FULL không bao giờ là việc thường ngày trên bảng bận?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it turns autovacuum off for that table permanently"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it only works on tables that have no indexes at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it can delete live rows that are still being updated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ACCESS EXCLUSIVE lock (even SELECT waits) plus room for a second copy"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Use pg_repack to rewrite without the long exclusive lock.</p><p><i>VI: Dùng pg_repack để viết lại mà không giữ khoá độc quyền lâu.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Plans are bad right after a bulk load of 2 million rows. The usual missing step is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Kế hoạch tệ ngay sau khi nạp lô 2 triệu dòng. Bước thường bị thiếu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "VACUUM FULL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ANALYZE (fresh planner statistics)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a new index on every column"
+              },
+              {
+                "ma": "d",
+                "noiDung": "REINDEX"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Autovacuum also analyzes, but not instantly; run ANALYZE after a bulk load.</p><p><i>VI: Autovacuum cũng analyze, nhưng không ngay lập tức; hãy chạy ANALYZE sau khi nạp lô.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What happens if VACUUM can never freeze old rows (e.g. a transaction stays open for weeks)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuyện gì xảy ra nếu VACUUM không bao giờ đóng băng được dòng cũ (vd. một giao dịch mở suốt nhiều tuần)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "transaction ID wraparound protection eventually stops all writes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL truncates the oldest rows of the table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing — the transaction counter is 64-bit and never wraps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "queries get slightly slower, nothing more serious happens"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Visibility uses a 32-bit XID; without freezing, PostgreSQL refuses new XIDs to protect the data.</p><p><i>VI: Tính hiển thị dùng XID 32 bit; không đóng băng thì PostgreSQL từ chối cấp XID mới để bảo vệ dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running VACUUM FULL from a cron job.|||Chạy VACUUM FULL từ cron."
+        },
+        {
+          "loi": "Ignoring age(datfrozenxid) until it is an outage.|||Lờ age(datfrozenxid) cho tới khi thành sự cố."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wraparound",
+          "vi": "tràn vòng bộ đếm giao dịch"
+        }
+      ]
+    },
+    {
+      "title": "Watch autovacuum fire within a minute",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "per-table autovacuum_vacuum_threshold",
+        "autovacuum_naptime",
+        "pg_stat_user_tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "vacuum",
+        "autovacuum"
+      ],
+      "problemHtml": "<p>On your PostgreSQL (lesson 0.3), give a small table an aggressive threshold, make 1,000 rows dead and watch the counters:</p><pre>-- watch.sql — psql -f watch.sql, then keep the second query running with \\watch 5\nDROP TABLE IF EXISTS av_demo;\nCREATE TABLE av_demo (id int PRIMARY KEY, v text);\nINSERT INTO av_demo SELECT g, 'row ' || g FROM generate_series(1, 1000) g;\nALTER TABLE av_demo SET (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);\nSELECT pg_stat_force_next_flush();\nUPDATE av_demo SET v = v || '!';          -- 1000 dead row versions\n\nSELECT now()::time(0) AS t, n_live_tup, n_dead_tup, autovacuum_count, last_autovacuum\nFROM pg_stat_user_tables WHERE relname = 'av_demo';</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> Autovacuum is a background worker of a running server; the browser grader has no background processes and its statistics counters stay at zero. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Right after the UPDATE: n_dead_tup = 1000, autovacuum_count = 0.</li>\n  <li>Within about one autovacuum_naptime (60 s): autovacuum_count = 1, n_dead_tup = 0, last_autovacuum filled.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên PostgreSQL của bạn (bài 0.3), cho một bảng nhỏ ngưỡng gắt, tạo 1.000 dòng chết rồi theo dõi bộ đếm:</p><pre>-- watch.sql — psql -f watch.sql, then keep the second query running with \\watch 5\nDROP TABLE IF EXISTS av_demo;\nCREATE TABLE av_demo (id int PRIMARY KEY, v text);\nINSERT INTO av_demo SELECT g, 'row ' || g FROM generate_series(1, 1000) g;\nALTER TABLE av_demo SET (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);\nSELECT pg_stat_force_next_flush();\nUPDATE av_demo SET v = v || '!';          -- 1000 dead row versions\n\nSELECT now()::time(0) AS t, n_live_tup, n_dead_tup, autovacuum_count, last_autovacuum\nFROM pg_stat_user_tables WHERE relname = 'av_demo';</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> Autovacuum là tiến trình nền của một máy chủ đang chạy; máy chấm trình duyệt không có tiến trình nền và bộ đếm thống kê luôn bằng 0. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngay sau UPDATE: n_dead_tup = 1000, autovacuum_count = 0.</li>\n  <li>Trong khoảng một autovacuum_naptime (60 s): autovacuum_count = 1, n_dead_tup = 0, last_autovacuum có giá trị.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "\\watch 5|||\\watch 5",
+          "output": "n_dead_tup 1000 → 0 after ~50 s|||n_dead_tup 1000 → 0 sau ~50 s",
+          "explanation": "The threshold is 100 + 0 × 1000 = 100, so 1000 dead rows qualify at the next wake-up.|||Ngưỡng là 100 + 0 × 1000 = 100, nên 1000 dòng chết đủ điều kiện ở lần thức dậy kế tiếp."
+        }
+      ],
+      "hintsJson": [
+        "Statistics are flushed asynchronously; wait a few seconds before the first reading.|||Thống kê được đẩy bất đồng bộ; đợi vài giây trước lần đọc đầu.",
+        "Use \\watch 5 instead of a shell loop.|||Dùng \\watch 5 thay cho vòng lặp shell."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "watch.sql",
+          "language": "sql",
+          "code": "-- watch.sql — psql -f watch.sql, then keep the second query running with \\watch 5\nDROP TABLE IF EXISTS av_demo;\nCREATE TABLE av_demo (id int PRIMARY KEY, v text);\nINSERT INTO av_demo SELECT g, 'row ' || g FROM generate_series(1, 1000) g;\nALTER TABLE av_demo SET (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);\nSELECT pg_stat_force_next_flush();\nUPDATE av_demo SET v = v || '!';          -- 1000 dead row versions\n\nSELECT now()::time(0) AS t, n_live_tup, n_dead_tup, autovacuum_count, last_autovacuum\nFROM pg_stat_user_tables WHERE relname = 'av_demo';\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "watch.sql",
+          "language": "sql",
+          "code": "-- watch.sql — psql -f watch.sql, then keep the second query running with \\watch 5\nDROP TABLE IF EXISTS av_demo;\nCREATE TABLE av_demo (id int PRIMARY KEY, v text);\nINSERT INTO av_demo SELECT g, 'row ' || g FROM generate_series(1, 1000) g;\nALTER TABLE av_demo SET (autovacuum_vacuum_threshold = 100, autovacuum_vacuum_scale_factor = 0);\nSELECT pg_stat_force_next_flush();\nUPDATE av_demo SET v = v || '!';          -- 1000 dead row versions\n\nSELECT now()::time(0) AS t, n_live_tup, n_dead_tup, autovacuum_count, last_autovacuum\nFROM pg_stat_user_tables WHERE relname = 'av_demo';\n\n-- Expected (PostgreSQL 17.11, polled every 5 s):\n-- [0s]  autovacuum_count=0 · n_dead_tup=1000\n-- … nothing for ~45 s (autovacuum wakes every autovacuum_naptime = 60 s)\n-- [50s] autovacuum_count=1 · n_dead_tup=0 · last_autovacuum=01:15:43\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The run shows both halves of the lesson: the threshold formula with per-table overrides, and the naptime rhythm of autovacuum.</p>",
+      "solutionExplanationHtmlVi": "<p>Lượt chạy cho thấy cả hai nửa bài học: công thức ngưỡng với thiết lập riêng của bảng, và nhịp naptime của autovacuum.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "psql -h localhost -p 5444 -U postgres -f watch.sql   # then re-run the last query with \\watch 5",
+          "lyDo": "Autovacuum is a background worker of a running server; the browser grader has no background processes and its statistics counters stay at zero.|||Autovacuum là tiến trình nền của một máy chủ đang chạy; máy chấm trình duyệt không có tiến trình nền và bộ đếm thống kê luôn bằng 0."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting it to fire instantly — it is checked once per naptime.|||Mong nó chạy ngay — mỗi naptime mới kiểm một lần."
+        },
+        {
+          "loi": "Doing the UPDATE inside a transaction you leave open — the dead rows are not dead yet for anyone.|||Làm UPDATE trong giao dịch để ngỏ — các dòng đó chưa \"chết\" với ai cả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "autovacuum_naptime",
+          "vi": "khoảng nghỉ của autovacuum"
+        }
+      ]
+    }
+  ]
+}

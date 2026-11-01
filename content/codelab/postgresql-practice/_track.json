@@ -350,6 +350,60 @@
       "name": "12.5 Lab 6 — CT Shop: safe checkout — transactions, functions, triggers, views",
       "level": "ADVANCED",
       "description": "Luyện: Lab 6 — CT Shop: a checkout that can never half-happen"
+    },
+    {
+      "slug": "postgresql-13-1-jsonb",
+      "name": "13.1 JSONB: a document type that indexes",
+      "level": "ADVANCED",
+      "description": "Luyện: Three ways to reach inside a document · Change one key without rewriting the document: jsonb_set · Build JSON for the API: jsonb_agg per brand · Count products per tag (CT Shop attrs) · json or jsonb, column or document?"
+    },
+    {
+      "slug": "postgresql-13-2-gin-jsonb",
+      "name": "13.2 Querying JSONB and indexing it with GIN",
+      "level": "ADVANCED",
+      "description": "Luyện: Containment: light products of Acme · Existence: who has specs, who has storage? · jsonpath: products with at least 8 GB of RAM · A compact GIN index for the filter panel (jsonb_path_ops)"
+    },
+    {
+      "slug": "postgresql-13-3-full-text-search",
+      "name": "13.3 Full-text search: tsvector, tsquery and ranking",
+      "level": "ADVANCED",
+      "description": "Luyện: Match words, not substrings: @@ · A search box: websearch_to_tsquery and ranking · Search CT Shop product names (simple config + GIN) · Show where it matched: ts_headline"
+    },
+    {
+      "slug": "postgresql-13-4-trigram",
+      "name": "13.4 Trigram search: typos, partial names and ILIKE that flies",
+      "level": "ADVANCED",
+      "description": "Luyện: Trigrams in one page · pg_trgm on your own PostgreSQL: typos and a fast ILIKE · Accent-insensitive search without extensions"
+    },
+    {
+      "slug": "postgresql-lab-7-jsonb-tim-kiem-ct-shop",
+      "name": "13.5 Lab 7 — CT Shop: JSONB attributes and a search box that forgives",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 7 — CT Shop: a supplier feed in JSONB and a search box typed without accents"
+    },
+    {
+      "slug": "postgresql-14-1-gia-ket-noi",
+      "name": "14.1 What a connection costs",
+      "level": "ADVANCED",
+      "description": "Luyện: Measure the 15.9×, then hit the wall on purpose · The connection budget: does the fleet fit? · Who holds the connections? (a pg_stat_activity snapshot) · One connection, one process — consequences"
+    },
+    {
+      "slug": "postgresql-14-2-pool-pgbouncer",
+      "name": "14.2 Pooling: in the app, and in front of it",
+      "level": "ADVANCED",
+      "description": "Luyện: Shrink the pools until the fleet fits · What breaks in PgBouncer transaction mode · Sizing and deciding · Break a prepared statement behind PgBouncer, then fix it"
+    },
+    {
+      "slug": "postgresql-14-3-vacuum-bloat",
+      "name": "14.3 VACUUM, autovacuum and bloat",
+      "level": "ADVANCED",
+      "description": "Luyện: Which tables has autovacuum already picked? · Tune autovacuum per table (and undo a bad tweak) · Find the bloated tables · VACUUM, VACUUM FULL, pg_repack, ANALYZE · Watch autovacuum fire within a minute"
+    },
+    {
+      "slug": "postgresql-14-4-giam-sat",
+      "name": "14.4 Monitoring: answering \"why is it slow?\"",
+      "level": "ADVANCED",
+      "description": "Luyện: Find the stuck transactions (pg_stat_activity snapshot) · What has been expensive over time? (pg_stat_statements snapshot) · Indexes nobody uses — and the ones you must keep · Which view answers which question? · Run a mixed workload, then find the expensive query by total time"
     }
   ]
 }

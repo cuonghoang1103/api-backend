@@ -1,27 +1,30 @@
 'use client';
 
 /**
- * Trang /courses — CHƯƠNG TRÌNH ĐÀO TẠO (22/10/2026). Thay cho hero + lưới thẻ cũ.
+ * Trang /courses — CHƯƠNG TRÌNH ĐÀO TẠO. Làm lại 01/11/2026 theo ngôn ngữ hình ảnh của /academy (hero có quầng sáng,
+ * thẻ số liệu, thanh điều hướng học kỳ, lưới thẻ có ảnh bìa) — người dùng: "giao diện Courses khó nhìn, làm đẹp như Academy".
  *
- * Dữ liệu: MỘT lần gọi `GET /courses/chuong-trinh` (4 năm → 15 kỳ → khoá + `chuaXep`). Máy chủ Next dựng sẵn bản
- * công khai (SEO, không màn chờ); trình duyệt gọi lại khi người dùng đã đăng nhập để có tiến độ riêng.
+ * Dữ liệu: MỘT lần gọi `GET /courses/chuong-trinh` (4 năm → 15 kỳ → khoá + `chuaXep` + `sapRaMat`). Máy chủ Next dựng
+ * sẵn bản công khai (SEO, không màn chờ); trình duyệt gọi lại khi người dùng đã đăng nhập để có tiến độ riêng.
  * Ba cách xem dùng CHUNG dữ liệu đó — lọc/tìm chạy ngay trên máy, không gọi thêm:
- *   - Theo lộ trình (mặc định): bản đồ bốn năm + từng năm/kỳ, khoá theo thứ tự nên học
+ *   - Theo lộ trình (mặc định): thanh học kỳ (desktop) / bản đồ bốn năm (điện thoại) + từng năm → kỳ → thẻ khoá
  *   - Theo chuyên ngành: nhóm theo danh mục khoá học
  *   - Tất cả khoá: lưới thẻ
  * Khoá mới chưa gán kỳ (`chuaXep`) luôn hiện — ở mục "Khoá mới" (lộ trình) hoặc lẫn trong hai chế độ kia.
+ * Khoá mới có khung (`dangSoan`, backend `services/khoaDaSoan.ts`) mang nhãn "Đang soạn" ở mọi chế độ.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ArrowUpRight, Search, X } from 'lucide-react';
+import { ArrowRight, CheckCircle2, GraduationCap, Hourglass, Layers3, Search, Sparkles, X } from 'lucide-react';
 import type { ChuongTrinhDaoTao, MonChuongTrinh } from '@/types';
 import { coursesApi } from '@/lib/api';
 import { useTranslation } from '@/context/LocaleContext';
+import { useTheme } from '@/context/ThemeContext';
 import { useAuthStore } from '@/store/authStore';
-import { pickLang } from '@/lib/utils';
+import AcademyBackground from '@/components/academy/AcademyBackground';
 import { CHU, chonNgonNgu, khopTuKhoa, type BoChu, type CheDoXem, type NgonNgu } from './chu';
-import { HangKhoa, TheKhoa } from './KhoaHoc';
+import { TheHocTiep, TheKhoa } from './KhoaHoc';
 import s from './chuongTrinh.module.css';
 
 const CHE_DO: CheDoXem[] = ['lo-trinh', 'chuyen-nganh', 'tat-ca'];
@@ -34,7 +37,7 @@ export interface TrangThaiDau {
   category: string;
 }
 
-const pad2 = (n: number) => String(n).padStart(2, '0');
+const LUOI = 'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3';
 
 export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
   banDau: ChuongTrinhDaoTao | null;
@@ -46,6 +49,10 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
   const daDangNhap = useAuthStore((st) => st.isAuthenticated);
   const router = useRouter();
   const pathname = usePathname();
+  const { resolvedTheme } = useTheme();
+  // Nền sao của Academy chỉ vẽ ở giao diện tối, và chỉ sau khi gắn (canvas đọc kích thước cửa sổ).
+  const [daGan, setDaGan] = useState(false);
+  useEffect(() => setDaGan(true), []);
 
   const [duLieu, setDuLieu] = useState<ChuongTrinhDaoTao | null>(banDau);
   const [loi, setLoi] = useState(false);
@@ -123,9 +130,19 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
   const xoaLoc = () => { setOTim(''); setTuKhoa(''); setCapDo(''); setChuyenNganh(''); };
 
   return (
-    <div className={`${s.goc} min-h-screen`}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <DauTrang duLieu={duLieu} c={c} nn={nn} dangHoc={dangHoc} />
+    <div className={`${s.goc} min-h-screen pb-20 pt-20 sm:pt-24`}>
+      {daGan && resolvedTheme === 'dark' && <AcademyBackground />}
+      <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8">
+        <DauTrang duLieu={duLieu} c={c} nn={nn} />
+
+        {dangHoc.length > 0 && (
+          <section aria-labelledby="hoc-tiep">
+            <h2 id="hoc-tiep" className="mb-3 text-base font-semibold text-[var(--k-ink)]">{c.dangHoc}</h2>
+            <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {dangHoc.map((m) => <TheHocTiep key={m.id} m={m} nn={nn} c={c} />)}
+            </ul>
+          </section>
+        )}
 
         <ThanhCongCu
           c={c}
@@ -137,12 +154,16 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
           setCapDo={setCapDo}
         />
 
-        <main className="pb-24">
+        <main>
           {!duLieu ? (
             loi ? (
-              <div className="border-t border-[var(--p-rule)] py-16 text-center">
-                <p className="text-[var(--p-ink-2)]">{c.loi}</p>
-                <button onClick={tai} className="mt-4 border border-[var(--p-rule-strong)] px-4 py-2 text-sm font-medium hover:bg-[var(--p-ink)] hover:text-[var(--p-paper)]">
+              <div className={`${s.the} rounded-2xl px-4 py-14 text-center`}>
+                <p className="text-[var(--k-ink-2)]">{c.loi}</p>
+                <button
+                  onClick={tai}
+                  className="mt-4 inline-flex min-h-[44px] items-center rounded-xl px-5 text-sm font-semibold text-white"
+                  style={{ background: 'var(--k-grad)' }}
+                >
                   {c.thuLai}
                 </button>
               </div>
@@ -169,9 +190,7 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
 
 /* ───────────────────────────── Đầu trang ───────────────────────────── */
 
-function DauTrang({ duLieu, c, nn, dangHoc }: {
-  duLieu: ChuongTrinhDaoTao | null; c: BoChu; nn: NgonNgu; dangHoc: MonChuongTrinh[];
-}) {
+function DauTrang({ duLieu, c, nn }: { duLieu: ChuongTrinhDaoTao | null; c: BoChu; nn: NgonNgu }) {
   const soKy = duLieu ? duLieu.nam.reduce((t, n) => t + n.ky.length, 0) : null;
   const dinhSo = (n: number) => n.toLocaleString(nn === 'en' ? 'en-US' : 'vi-VN');
   const so: Array<[string, string]> = duLieu
@@ -182,68 +201,79 @@ function DauTrang({ duLieu, c, nn, dangHoc }: {
         ...(duLieu.tong.gio > 0 ? [[dinhSo(duLieu.tong.gio), c.soGio] as [string, string]] : []),
       ]
     : [];
-  return (
-    <header className="pt-16 sm:pt-20">
-      <nav aria-label="Breadcrumb" className="text-xs text-[var(--p-ink-3)]">
-        <ol className="flex items-center gap-2">
-          <li><Link href="/" className="hover:text-[var(--p-ink)] hover:underline">CuongThai</Link></li>
-          <li aria-hidden>/</li>
-          <li aria-current="page" className="text-[var(--p-ink-2)]">{c.duongDan}</li>
-        </ol>
-      </nav>
+  // Đếm khoá đã soạn trọn / đang soạn — chỉ khi máy chủ có trường `dangSoan` (bản cũ không có ⇒ không hiện).
+  const hocDuoc = duLieu ? [...duLieu.nam.flatMap((n) => n.ky.flatMap((k) => k.mon)), ...duLieu.chuaXep] : [];
+  const coCo = hocDuoc.some((m) => typeof m.dangSoan === 'boolean');
+  const soDangSoan = hocDuoc.filter((m) => m.dangSoan).length;
 
-      <div className="mt-6 grid gap-8 border-b border-[var(--p-rule-strong)] pb-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-end lg:gap-14 sm:pb-12">
+  return (
+    <header className={`${s.the} relative overflow-hidden rounded-3xl p-5 sm:p-8`}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(circle at top right, var(--k-glow-1), transparent 38%), radial-gradient(circle at bottom left, var(--k-glow-2), transparent 34%)' }}
+      />
+      <div className="relative grid items-center gap-6 lg:grid-cols-[1.35fr_0.85fr] lg:gap-8">
         <div className="min-w-0">
-          <h1 className={`${s.tieuDe} font-editorial text-[2.75rem] font-[420] leading-[1.02] tracking-[-0.022em] text-[var(--p-ink)] [text-wrap:balance] sm:text-6xl lg:text-[4.4rem]`}>
-            {c.tieuDe}
+          <nav aria-label="Breadcrumb" className="mb-4 text-xs text-[var(--k-ink-3)]">
+            <ol className="flex items-center gap-2">
+              <li><Link href="/" className="hover:text-[var(--k-ink)] hover:underline">CuongThai</Link></li>
+              <li aria-hidden>/</li>
+              <li aria-current="page" className="text-[var(--k-ink-2)]">{c.duongDan}</li>
+            </ol>
+          </nav>
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--k-accent-line)] bg-[var(--k-accent-soft)] px-3.5 py-1.5 text-sm font-medium text-[var(--k-accent)]">
+            <Layers3 aria-hidden className="h-4 w-4" /> {c.nhanTrang}
+          </div>
+          <h1 className={`${s.tieuDe} font-heading text-[2rem] font-bold leading-tight tracking-[-0.01em] text-[var(--k-ink)] [text-wrap:balance] sm:text-5xl`}>
+            {c.tieuDeTruoc} <span className={s.chuGrad}>{c.tieuDeNhan}</span>
           </h1>
-          <p className="mt-5 max-w-[36rem] text-base leading-relaxed text-[var(--p-ink-2)] sm:text-[17px]">{c.loiDan}</p>
+          <p className="mt-4 max-w-[42rem] text-base leading-relaxed text-[var(--k-ink-2)] sm:text-lg">{c.loiDan}</p>
+          {coCo && (
+            <ul className="mt-5 flex flex-wrap gap-2 text-sm">
+              <li className="inline-flex items-center gap-1.5 rounded-full bg-[var(--k-green-soft)] px-3 py-1.5 font-medium text-[var(--k-green)]">
+                <CheckCircle2 aria-hidden className="h-4 w-4" />
+                {c.daSoanTron(hocDuoc.length - soDangSoan)}
+              </li>
+              {soDangSoan > 0 && (
+                <li className="inline-flex items-center gap-1.5 rounded-full bg-[var(--k-amber-soft)] px-3 py-1.5 font-medium text-[var(--k-amber)]" title={c.dangSoanGiaiThich}>
+                  <Hourglass aria-hidden className="h-4 w-4" />
+                  {c.dangSoanDem(soDangSoan)}
+                </li>
+              )}
+            </ul>
+          )}
         </div>
 
-        <div className="min-w-0">
-          {so.length > 0 && (
-            <dl className="grid grid-cols-2 border-t border-[var(--p-rule)]">
-              {so.map(([gt, nhan], i) => (
-                <div
-                  key={nhan}
-                  className={`border-b border-[var(--p-rule)] py-3.5 ${i % 2 === 1 ? 'border-l pl-4 sm:pl-5' : 'pr-4'}`}
-                >
-                  <dt className="sr-only">{nhan}</dt>
-                  <dd>
-                    <span className={`${s.so} block font-editorial text-3xl leading-none text-[var(--p-ink)] sm:text-[2.1rem]`}>{gt}</span>
-                    <span className="mt-1.5 block text-xs text-[var(--p-ink-3)]">{nhan}</span>
-                  </dd>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          {so.length > 0
+            ? so.map(([gt, nhan]) => (
+                <div key={nhan} className={`${s.theTrong} rounded-2xl p-4 sm:p-5`}>
+                  <p className="text-sm text-[var(--k-ink-3)] first-letter:uppercase">{nhan}</p>
+                  <p className={`${s.so} mt-1.5 text-2xl font-bold text-[var(--k-ink)] sm:text-3xl`}>{gt}</p>
                 </div>
+              ))
+            : Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className={`${s.theTrong} h-[92px] rounded-2xl`} aria-hidden />
               ))}
-            </dl>
-          )}
-          <p className="mt-4 text-sm text-[var(--p-ink-2)]">
-            {c.academyHoi}{' '}
-            <Link href="/academy" className="font-medium text-[var(--p-accent)] underline decoration-1 underline-offset-4 hover:decoration-2">
-              {c.academyLink}
-              <ArrowUpRight aria-hidden className="ml-0.5 inline h-3.5 w-3.5 align-[-2px]" />
-            </Link>
-          </p>
+          <Link
+            href="/academy"
+            className={`${s.theTrong} group col-span-2 flex items-start gap-3 rounded-2xl p-4 transition-colors hover:border-[var(--k-accent-line)] sm:p-5`}
+          >
+            <span className={`${s.soKy} grid h-11 w-11 shrink-0 place-items-center rounded-xl`} aria-hidden>
+              <GraduationCap className="h-5 w-5" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-semibold text-[var(--k-ink)]">{c.academyTieuDe}</span>
+              <span className="mt-0.5 block text-[13px] leading-snug text-[var(--k-ink-2)]">{c.academyMoTa}</span>
+              <span className="mt-1.5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--k-accent)]">
+                {c.academyNut}
+                <ArrowRight aria-hidden className="h-4 w-4 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
+              </span>
+            </span>
+          </Link>
         </div>
       </div>
-
-      {dangHoc.length > 0 && (
-        <div className="flex flex-col gap-2 border-b border-[var(--p-rule)] py-4 sm:flex-row sm:items-center sm:gap-5">
-          <p className="shrink-0 text-xs font-semibold text-[var(--p-ink-2)]">{c.dangHoc}</p>
-          <ul className="flex min-w-0 flex-wrap gap-x-5 gap-y-1.5">
-            {dangHoc.map((m) => (
-              <li key={m.id} className="min-w-0">
-                <Link href={`/courses/${m.slug}`} className="group inline-flex max-w-full items-baseline gap-2 text-sm">
-                  <span className="truncate font-medium text-[var(--p-ink)] group-hover:underline group-hover:underline-offset-4">
-                    {pickLang(m.title, nn)}
-                  </span>
-                  <span className={`${s.so} shrink-0 text-xs text-[var(--p-accent)]`}>{m.progress}%</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </header>
   );
 }
@@ -255,20 +285,20 @@ function ThanhCongCu({ c, xem, setXem, oTim, setOTim, capDo, setCapDo }: {
   oTim: string; setOTim: (v: string) => void; capDo: string; setCapDo: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-3 py-6 md:flex-row md:items-center md:justify-between md:gap-6">
-      <div role="tablist" aria-label={c.xemTheo} className="grid grid-cols-3 border border-[var(--p-rule-strong)] md:inline-grid md:w-auto">
-        {CHE_DO.map((k, i) => (
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <div
+        role="tablist"
+        aria-label={c.xemTheo}
+        className={`${s.the} grid grid-cols-3 gap-1 rounded-2xl p-1 lg:inline-grid lg:w-auto`}
+      >
+        {CHE_DO.map((k) => (
           <button
             key={k}
             role="tab"
             type="button"
             aria-selected={xem === k}
             onClick={() => setXem(k)}
-            className={`whitespace-nowrap px-2 py-2.5 text-[13px] font-medium transition-colors sm:px-4 sm:text-sm ${i > 0 ? 'border-l border-[var(--p-rule-strong)]' : ''} ${
-              xem === k
-                ? 'bg-[var(--p-ink)] text-[var(--p-paper)]'
-                : 'text-[var(--p-ink-2)] hover:bg-[var(--p-paper-2)] hover:text-[var(--p-ink)]'
-            }`}
+            className={`${s.tab} min-h-[44px] whitespace-nowrap rounded-xl px-2 text-[13px] font-semibold text-[var(--k-ink-2)] transition-colors hover:bg-[var(--k-accent-soft)] hover:text-[var(--k-ink)] sm:px-5 sm:text-sm`}
           >
             <span className="sm:hidden">{c.cheDoNgan[k]}</span>
             <span className="hidden sm:inline">{c.cheDo[k]}</span>
@@ -276,23 +306,23 @@ function ThanhCongCu({ c, xem, setXem, oTim, setOTim, capDo, setCapDo }: {
         ))}
       </div>
 
-      <div className="flex gap-2 md:w-[26rem]">
+      <div className="flex gap-2 lg:w-[34rem]">
         <label className="relative min-w-0 flex-1">
           <span className="sr-only">{c.timKiem}</span>
-          <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--p-ink-3)]" />
+          <Search aria-hidden className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--k-ink-3)]" />
           <input
             type="search"
             value={oTim}
             onChange={(e) => setOTim(e.target.value)}
             placeholder={c.timGoiY}
-            className="h-11 w-full border border-[var(--p-rule)] bg-[var(--p-card)] pl-9 pr-9 text-sm text-[var(--p-ink)] placeholder:text-[var(--p-ink-3)] focus:border-[var(--p-ink-2)] [&::-webkit-search-cancel-button]:hidden"
+            className={`${s.the} h-12 w-full rounded-2xl pl-12 pr-10 text-sm text-[var(--k-ink)] placeholder:text-[var(--k-ink-3)] focus:border-[var(--k-accent-line)] [&::-webkit-search-cancel-button]:hidden`}
           />
           {oTim && (
             <button
               type="button"
               onClick={() => setOTim('')}
               aria-label={c.xoaTim}
-              className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center text-[var(--p-ink-3)] hover:text-[var(--p-ink)]"
+              className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-[var(--k-ink-3)] hover:text-[var(--k-ink)]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -303,7 +333,7 @@ function ThanhCongCu({ c, xem, setXem, oTim, setOTim, capDo, setCapDo }: {
           <select
             value={capDo}
             onChange={(e) => setCapDo(e.target.value)}
-            className="h-11 cursor-pointer border border-[var(--p-rule)] bg-[var(--p-card)] px-3 text-sm text-[var(--p-ink)]"
+            className={`${s.the} h-12 cursor-pointer rounded-2xl px-3 text-sm text-[var(--k-ink)] sm:px-4`}
           >
             <option value="">{c.moiCapDo}</option>
             {CAP_DO.map((l) => <option key={l} value={l}>{c.capDo[l]}</option>)}
@@ -323,18 +353,14 @@ function ChipNganh({ c, cacNganh, dangChon, onChon }: {
       type="button"
       aria-pressed={dangChon === slug}
       onClick={() => onChon(slug)}
-      className={`whitespace-nowrap border px-3 py-1.5 text-[13px] transition-colors ${
-        dangChon === slug
-          ? 'border-[var(--p-ink)] bg-[var(--p-ink)] text-[var(--p-paper)]'
-          : 'border-[var(--p-rule)] text-[var(--p-ink-2)] hover:border-[var(--p-ink-2)] hover:text-[var(--p-ink)]'
-      }`}
+      className={`${s.chipChon} inline-flex min-h-[40px] items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--k-border)] bg-[var(--k-card)] px-3.5 text-[13px] font-medium text-[var(--k-ink-2)] transition-colors hover:border-[var(--k-accent-line)] hover:text-[var(--k-ink)]`}
     >
       {nhan}
-      {so != null && <span className={`${s.so} ml-1.5 opacity-60`}>{so}</span>}
+      {so != null && <span className={`${s.so} opacity-70`}>{so}</span>}
     </button>
   );
   return (
-    <div className="-mt-1 mb-8 flex flex-wrap gap-2">
+    <div className="mb-6 flex flex-wrap gap-2">
       {chip('', c.moiChuyenNganh)}
       {cacNganh.map((n) => chip(n.slug, n.ten || c.chuyenNganhKhac, n.so))}
     </div>
@@ -343,32 +369,41 @@ function ChipNganh({ c, cacNganh, dangChon, onChon }: {
 
 function KhongCo({ c, xoaLoc }: { c: BoChu; xoaLoc: () => void }) {
   return (
-    <div className="border-t border-[var(--p-rule)] py-16 text-center">
-      <p className="text-[var(--p-ink-2)]">{c.khongCo}</p>
-      <button onClick={xoaLoc} className="mt-3 text-sm font-medium text-[var(--p-accent)] underline underline-offset-4">
+    <div className={`${s.the} rounded-2xl border-dashed px-4 py-14 text-center`}>
+      <p className="text-[var(--k-ink-2)]">{c.khongCo}</p>
+      <button onClick={xoaLoc} className="mt-3 min-h-[44px] text-sm font-semibold text-[var(--k-accent)] underline underline-offset-4">
         {c.boLocXoa}
       </button>
     </div>
   );
 }
 
+function DongKetQua({ so, c, xoaLoc }: { so: number; c: BoChu; xoaLoc?: () => void }) {
+  return (
+    <p className="mb-4 text-sm text-[var(--k-ink-2)]" aria-live="polite">
+      <span className={`${s.so} font-semibold text-[var(--k-ink)]`}>{c.ketQua(so)}</span>
+      {xoaLoc && (
+        <>
+          {' · '}
+          <button onClick={xoaLoc} className="font-medium text-[var(--k-accent)] underline underline-offset-4">{c.boLocXoa}</button>
+        </>
+      )}
+    </p>
+  );
+}
+
 function KhungCho({ c }: { c: BoChu }) {
   return (
-    <div aria-busy="true" aria-live="polite">
+    <div aria-busy="true" aria-live="polite" className={LUOI}>
       <p className="sr-only">{c.dangTai}</p>
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="border-t border-[var(--p-rule)] py-8">
-          <div className="shimmer-track h-3 w-24" />
-          <div className="shimmer-track mt-3 h-7 w-72 max-w-full" />
-          {Array.from({ length: 3 }).map((__, j) => (
-            <div key={j} className="mt-5 flex gap-4">
-              <div className="shimmer-track aspect-video w-24 shrink-0 sm:w-32" />
-              <div className="flex-1 space-y-2 pt-1">
-                <div className="shimmer-track h-4 w-2/3" />
-                <div className="shimmer-track h-3 w-1/3" />
-              </div>
-            </div>
-          ))}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className={`${s.the} overflow-hidden rounded-2xl`}>
+          <div className="shimmer-track aspect-video w-full" />
+          <div className="space-y-2 p-4">
+            <div className="shimmer-track h-5 w-24 rounded-full" />
+            <div className="shimmer-track h-5 w-3/4" />
+            <div className="shimmer-track h-3 w-full" />
+          </div>
         </div>
       ))}
     </div>
@@ -376,6 +411,12 @@ function KhungCho({ c }: { c: BoChu }) {
 }
 
 /* ───────────────────────────── Theo lộ trình ───────────────────────────── */
+
+function tomTatKy(mon: MonChuongTrinh[], c: BoChu): string[] {
+  const bai = mon.reduce((t, m) => t + m.totalLessons, 0);
+  const giay = mon.reduce((t, m) => t + m.totalDurationSeconds, 0);
+  return [c.khoa(mon.length), bai ? c.bai(bai) : '', c.gio(giay)].filter(Boolean);
+}
 
 function XemLoTrinh({ duLieu, c, nn, khop, coLoc, xoaLoc }: {
   duLieu: ChuongTrinhDaoTao; c: BoChu; nn: NgonNgu; khop: (m: MonChuongTrinh) => boolean; coLoc: boolean; xoaLoc: () => void;
@@ -385,149 +426,208 @@ function XemLoTrinh({ duLieu, c, nn, khop, coLoc, xoaLoc }: {
     .filter((n) => n.ky.some((k) => k.mon.length > 0));
   const moi = duLieu.chuaXep.filter(khop);
   const tuChon = (duLieu.sapRaMat ?? []).map((n) => ({ ...n, mon: n.mon.filter(khop) })).filter((n) => n.mon.length > 0);
-  const soKhop = nam.reduce((t, n) => t + n.ky.reduce((u, k) => u + k.mon.length, 0), 0) + moi.length
-    + tuChon.reduce((t, n) => t + n.mon.length, 0);
+  const soTuChon = tuChon.reduce((t, n) => t + n.mon.length, 0);
+  const soKhop = nam.reduce((t, n) => t + n.ky.reduce((u, k) => u + k.mon.length, 0), 0) + moi.length + soTuChon;
 
   if (coLoc && soKhop === 0) return <KhongCo c={c} xoaLoc={xoaLoc} />;
 
   return (
-    <>
-      {coLoc ? (
-        <p className="mb-2 text-sm text-[var(--p-ink-2)]" aria-live="polite">
-          <span className={`${s.so} font-semibold text-[var(--p-ink)]`}>{c.ketQua(soKhop)}</span>
-          {' · '}
-          <button onClick={xoaLoc} className="text-[var(--p-accent)] underline underline-offset-4">{c.boLocXoa}</button>
-        </p>
-      ) : (
-        <BanDo duLieu={duLieu} c={c} nn={nn} />
-      )}
-
-      {nam.map((n) => {
-        const dau = n.ky[0]?.so ?? 0;
-        const cuoi = n.ky[n.ky.length - 1]?.so ?? 0;
-        return (
-          <section key={n.so} aria-labelledby={`nam-${n.so}`} className="mt-16 sm:mt-24">
-            <div className="grid gap-4 border-t-[3px] border-[var(--p-rule-strong)] pt-5 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-16">
-              <div className="min-w-0">
-                <p className={`${s.so} text-sm text-[var(--p-ink-3)]`}>
-                  {c.nam(n.so)} <span aria-hidden>·</span> {c.kyTu(dau, cuoi)}
-                </p>
-                <h2 id={`nam-${n.so}`} className={`${s.tieuDe} mt-1 font-editorial text-[2.1rem] font-[440] leading-tight tracking-[-0.015em] sm:text-5xl`}>
-                  {chonNgonNgu(n.ten, n.tenEn, nn)}
-                </h2>
-              </div>
-              <p className="max-w-[34rem] self-end text-base leading-relaxed text-[var(--p-ink-2)]">
-                {chonNgonNgu(n.moTa, n.moTaEn, nn)}
+    <div className="grid gap-6 lg:grid-cols-[288px_minmax(0,1fr)] lg:gap-8">
+      {/* Thanh học kỳ — như "Semester navigator" của Academy. Cột dính PHẢI tự giới hạn chiều cao và cuộn bên trong
+          (15 kỳ cao hơn màn hình laptop: thiếu max-h thì phần dưới nằm mãi dưới mép). */}
+      <aside
+        aria-label={c.dieuHuong}
+        className={`${s.the} thin-scroll hidden h-fit overscroll-contain rounded-2xl p-4 lg:sticky lg:top-24 lg:block lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto`}
+      >
+        <div className="mb-3 flex items-center gap-2.5 px-1">
+          <Layers3 aria-hidden className="h-5 w-5 text-[var(--k-accent)]" />
+          <h2 className="text-base font-semibold text-[var(--k-ink)]">{c.dieuHuong}</h2>
+        </div>
+        <ol className="space-y-4">
+          {nam.map((n) => (
+            <li key={n.so}>
+              <p className="px-1 text-xs font-semibold text-[var(--k-ink-3)]">
+                {c.namNgan(n.so)} · {chonNgonNgu(n.ten, n.tenEn, nn)}
               </p>
-            </div>
+              <ol className="mt-1.5 space-y-0.5">
+                {n.ky.map((k) => (
+                  <li key={k.so}>
+                    <a href={`#ky-${k.so}`} className={`${s.hangKy} flex items-center gap-3 rounded-xl px-2 py-2`}>
+                      <span className={`${s.soKy} ${s.so} grid h-7 w-7 shrink-0 place-items-center rounded-lg text-xs font-bold`} aria-hidden>{k.so}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-[var(--k-ink)]">{chonNgonNgu(k.ten, k.tenEn, nn)}</span>
+                        <span className="block text-xs text-[var(--k-ink-3)]">{c.hocKy(k.so)} · {c.khoa(k.mon.length)}</span>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </li>
+          ))}
+          {(moi.length > 0 || soTuChon > 0) && (
+            <li className="space-y-0.5 border-t border-[var(--k-border)] pt-3">
+              {moi.length > 0 && (
+                <a href="#khoa-moi" className={`${s.hangKy} flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-[var(--k-ink)]`}>
+                  <Sparkles aria-hidden className="h-4 w-4 text-[var(--k-accent)]" /> {c.khoaMoi}
+                </a>
+              )}
+              {soTuChon > 0 && (
+                <a href="#tu-chon" className={`${s.hangKy} flex items-center gap-3 rounded-xl px-2 py-2 text-sm font-medium text-[var(--k-ink)]`}>
+                  <Sparkles aria-hidden className="h-4 w-4 text-[var(--k-accent-2)]" />
+                  <span className="min-w-0 flex-1">{c.tuChonTieuDe}</span>
+                  <span className={`${s.so} text-xs text-[var(--k-ink-3)]`}>{soTuChon}</span>
+                </a>
+              )}
+            </li>
+          )}
+        </ol>
+      </aside>
 
-            {n.ky.map((k) => {
-              const bai = k.mon.reduce((t, m) => t + m.totalLessons, 0);
-              const giay = k.mon.reduce((t, m) => t + m.totalDurationSeconds, 0);
-              const tomTat = [c.khoa(k.mon.length), bai ? c.bai(bai) : '', c.gio(giay)].filter(Boolean).join(' · ');
-              return (
-                <article key={k.so} id={`ky-${k.so}`} aria-labelledby={`ky-${k.so}-ten`} className={`${s.neo} mt-12 sm:mt-14`}>
-                  <header className="grid gap-x-10 gap-y-2 border-b border-[var(--p-rule)] pb-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-                    <div className="min-w-0">
-                      <p className={`${s.so} text-sm font-medium text-[var(--p-accent)]`}>
-                        {c.hocKy(k.so)}
-                      </p>
-                      <h3 id={`ky-${k.so}-ten`} className={`${s.tieuDe} mt-1.5 font-editorial text-2xl font-[460] leading-snug text-[var(--p-ink)] sm:text-[1.85rem]`}>
-                        {chonNgonNgu(k.ten, k.tenEn, nn)}
-                      </h3>
-                      <p className="mt-2 max-w-[44rem] text-[15px] leading-relaxed text-[var(--p-ink-2)]">
-                        {chonNgonNgu(k.moTa, k.moTaEn, nn)}
-                      </p>
+      <div className="min-w-0 space-y-8">
+        {coLoc ? <DongKetQua so={soKhop} c={c} xoaLoc={xoaLoc} /> : <BanDo duLieu={duLieu} c={c} nn={nn} soTuChon={soTuChon} />}
+
+        {nam.map((n) => {
+          const dau = n.ky[0]?.so ?? 0;
+          const cuoi = n.ky[n.ky.length - 1]?.so ?? 0;
+          return (
+            <section key={n.so} aria-labelledby={`nam-${n.so}`} className="space-y-5">
+              <div className="flex flex-col gap-2 pt-2 md:flex-row md:items-end md:justify-between md:gap-8">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[var(--k-accent)]">
+                    {c.nam(n.so)} · {c.kyTu(dau, cuoi)}
+                  </p>
+                  <h2 id={`nam-${n.so}`} className={`${s.tieuDe} mt-1 font-heading text-2xl font-bold text-[var(--k-ink)] sm:text-3xl`}>
+                    {chonNgonNgu(n.ten, n.tenEn, nn)}
+                  </h2>
+                </div>
+                <p className="max-w-[34rem] text-sm leading-relaxed text-[var(--k-ink-2)] md:text-right">
+                  {chonNgonNgu(n.moTa, n.moTaEn, nn)}
+                </p>
+              </div>
+
+              {n.ky.map((k) => (
+                <article
+                  key={k.so}
+                  id={`ky-${k.so}`}
+                  aria-labelledby={`ky-${k.so}-ten`}
+                  className={`${s.the} ${s.neo} rounded-2xl p-4 sm:p-5`}
+                >
+                  <header className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex min-w-0 items-start gap-3.5">
+                      <span className={`${s.soKy} ${s.so} grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-lg font-bold`} aria-hidden>
+                        {k.so}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-[var(--k-ink-3)]">{c.hocKy(k.so)}</p>
+                        <h3 id={`ky-${k.so}-ten`} className={`${s.tieuDe} font-heading text-xl font-bold leading-snug text-[var(--k-ink)] sm:text-2xl`}>
+                          {chonNgonNgu(k.ten, k.tenEn, nn)}
+                        </h3>
+                        <p className="mt-1 max-w-[46rem] text-sm leading-relaxed text-[var(--k-ink-2)]">{chonNgonNgu(k.moTa, k.moTaEn, nn)}</p>
+                      </div>
                     </div>
-                    <p className={`${s.so} text-xs text-[var(--p-ink-3)] md:text-right`}>{tomTat}</p>
+                    <p className="flex shrink-0 flex-wrap gap-1.5 sm:max-w-[13rem] sm:justify-end">
+                      {tomTatKy(k.mon, c).map((x) => (
+                        <span key={x} className={`${s.so} rounded-full border border-[var(--k-accent-line)] bg-[var(--k-accent-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--k-accent)]`}>
+                          {x}
+                        </span>
+                      ))}
+                    </p>
                   </header>
-                  <ol>
-                    {k.mon.map((m) => (
-                      <HangKhoa key={m.id} m={m} nn={nn} c={c} soThuTu={m.loTrinhThuTu ?? undefined} />
-                    ))}
+                  <ol className={LUOI}>
+                    {k.mon.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} thuTu={m.loTrinhThuTu ?? undefined} />)}
                   </ol>
                 </article>
-              );
-            })}
+              ))}
+            </section>
+          );
+        })}
+
+        {moi.length > 0 && (
+          <section id="khoa-moi" aria-labelledby="khoa-moi-tieu-de" className={`${s.the} ${s.neo} rounded-2xl p-4 sm:p-5`}>
+            <h2 id="khoa-moi-tieu-de" className="font-heading text-2xl font-bold text-[var(--k-ink)]">{c.khoaMoi}</h2>
+            <p className="mb-4 mt-1 max-w-[40rem] text-sm leading-relaxed text-[var(--k-ink-2)]">{c.khoaMoiMoTa}</p>
+            <ul className={LUOI}>
+              {moi.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} />)}
+            </ul>
           </section>
-        );
-      })}
+        )}
 
-      {moi.length > 0 && (
-        <section aria-labelledby="khoa-moi" className="mt-16 sm:mt-24">
-          <div className="border-t-[3px] border-[var(--p-rule-strong)] pt-5 sm:pt-6">
-            <h2 id="khoa-moi" className={`${s.tieuDe} font-editorial text-[2.1rem] font-[440] leading-tight sm:text-5xl`}>{c.khoaMoi}</h2>
-            <p className="mt-2 max-w-[36rem] text-base leading-relaxed text-[var(--p-ink-2)]">{c.khoaMoiMoTa}</p>
-          </div>
-          <ol className="mt-6 border-t border-[var(--p-rule)]">
-            {moi.map((m) => <HangKhoa key={m.id} m={m} nn={nn} c={c} />)}
-          </ol>
-        </section>
-      )}
-
-      {tuChon.length > 0 && (
-        <section id="tu-chon" aria-labelledby="tu-chon-tieu-de" className={`${s.neo} mt-16 sm:mt-24`}>
-          <div className="grid gap-4 border-t-[3px] border-[var(--p-rule-strong)] pt-5 sm:pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-16">
-            <h2 id="tu-chon-tieu-de" className={`${s.tieuDe} font-editorial text-[2.1rem] font-[440] leading-tight tracking-[-0.015em] [text-wrap:balance] sm:text-5xl`}>
-              {c.tuChonTieuDe}
-            </h2>
-            <p className="max-w-[34rem] self-end text-base leading-relaxed text-[var(--p-ink-2)]">{c.tuChonMoTa}</p>
-          </div>
-          {tuChon.map((n) => (
-            <div key={n.ma} className="mt-10 sm:mt-12">
-              <div className="flex items-baseline justify-between gap-4 border-b border-[var(--p-rule)] pb-3">
-                <h3 className={`${s.tieuDe} font-editorial text-2xl font-[460] leading-snug sm:text-[1.7rem]`}>
-                  {chonNgonNgu(n.ten, n.tenEn, nn)}
-                </h3>
-                <p className={`${s.so} shrink-0 text-xs text-[var(--p-ink-3)]`}>{c.khoa(n.mon.length)}</p>
+        {tuChon.length > 0 && (
+          <section id="tu-chon" aria-labelledby="tu-chon-tieu-de" className={`${s.the} ${s.neo} relative overflow-hidden rounded-2xl p-4 sm:p-5`}>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{ background: 'radial-gradient(circle at top right, var(--k-glow-2), transparent 40%)' }}
+            />
+            <div className="relative">
+              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-[var(--k-cyan-line)] bg-[var(--k-cyan-soft)] px-3 py-1 text-xs font-semibold text-[var(--k-accent-2)]">
+                <Sparkles aria-hidden className="h-3.5 w-3.5" /> {c.sapRaMat}
               </div>
-              <ol>
-                {n.mon.map((m) => <HangKhoa key={m.id} m={m} nn={nn} c={c} />)}
-              </ol>
+              <h2 id="tu-chon-tieu-de" className="font-heading text-2xl font-bold text-[var(--k-ink)]">{c.tuChonTieuDe}</h2>
+              <p className="mt-1 max-w-[44rem] text-sm leading-relaxed text-[var(--k-ink-2)]">{c.tuChonMoTa}</p>
+              {tuChon.map((n) => (
+                <div key={n.ma} className="mt-6">
+                  <div className="mb-3 flex items-baseline justify-between gap-4 border-b border-[var(--k-border)] pb-2">
+                    <h3 className="text-lg font-semibold text-[var(--k-ink)]">{chonNgonNgu(n.ten, n.tenEn, nn)}</h3>
+                    <p className={`${s.so} shrink-0 text-xs text-[var(--k-ink-3)]`}>{c.khoa(n.mon.length)}</p>
+                  </div>
+                  <ul className={LUOI}>
+                    {n.mon.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} />)}
+                  </ul>
+                </div>
+              ))}
             </div>
-          ))}
-        </section>
-      )}
-    </>
+          </section>
+        )}
+      </div>
+    </div>
   );
 }
 
-/** Bản đồ bốn năm — mỗi năm một cột, mỗi kỳ một liên kết neo tới phần chi tiết bên dưới. */
-function BanDo({ duLieu, c, nn }: { duLieu: ChuongTrinhDaoTao; c: BoChu; nn: NgonNgu }) {
-  const soTuChon = (duLieu.sapRaMat ?? []).reduce((t, n) => t + n.mon.length, 0);
+/** Bản đồ bốn năm — bốn thẻ năm, mỗi kỳ một ô bấm tới phần chi tiết. Là "lộ trình 15 kỳ" nhìn một lần. */
+function BanDo({ duLieu, c, nn, soTuChon }: { duLieu: ChuongTrinhDaoTao; c: BoChu; nn: NgonNgu; soTuChon: number }) {
   return (
-    <section aria-labelledby="ban-do" className="bg-[var(--p-paper-2)] px-4 py-7 sm:px-7 sm:py-9">
+    <section aria-labelledby="ban-do" className={`${s.the} rounded-2xl p-4 sm:p-5 lg:hidden`}>
       <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-        <h2 id="ban-do" className={`${s.tieuDe} font-editorial text-2xl font-[460]`}>{c.tongQuan}</h2>
-        <p className="text-sm text-[var(--p-ink-3)]">{c.tongQuanMoTa}</p>
+        <h2 id="ban-do" className="font-heading text-xl font-bold text-[var(--k-ink)]">{c.tongQuan}</h2>
+        <p className="text-sm text-[var(--k-ink-3)]">{c.tongQuanMoTa}</p>
       </div>
-      <ol className="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+      <ol className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         {duLieu.nam.map((n) => (
-          <li key={n.so} className="min-w-0 border-t-2 border-[var(--p-rule-strong)] pt-3">
-            <p className={`${s.so} text-xs text-[var(--p-ink-3)]`}>{c.nam(n.so)}</p>
-            <p className="font-editorial text-lg leading-snug">{chonNgonNgu(n.ten, n.tenEn, nn)}</p>
-            <ol className="mt-3">
-              {n.ky.map((k) => (
-                <li key={k.so} className="border-t border-[var(--p-rule)] first:border-t-0">
-                  <a href={`#ky-${k.so}`} className="group grid grid-cols-[1.9rem_minmax(0,1fr)] gap-2 py-2 text-sm">
-                    <span className={`${s.so} font-editorial text-[var(--p-accent)]`}>{pad2(k.so)}</span>
-                    <span className="leading-snug text-[var(--p-ink)] group-hover:underline group-hover:underline-offset-4">
-                      {chonNgonNgu(k.ten, k.tenEn, nn)}
-                    </span>
-                  </a>
-                </li>
-              ))}
+          <li key={n.so} className={`${s.theTrong} min-w-0 rounded-2xl p-3`}>
+            <div className="flex items-baseline justify-between gap-2 px-1">
+              <p className="font-semibold text-[var(--k-ink)]">{chonNgonNgu(n.ten, n.tenEn, nn)}</p>
+              <p className="shrink-0 text-xs font-medium text-[var(--k-ink-3)]">{c.namNgan(n.so)}</p>
+            </div>
+            <ol className="mt-2 space-y-0.5">
+              {n.ky.map((k) => {
+                const tt = tomTatKy(k.mon, c);
+                return (
+                  <li key={k.so}>
+                    <a href={`#ky-${k.so}`} className={`${s.hangKy} flex items-center gap-2.5 rounded-xl px-1.5 py-1.5`}>
+                      <span className={`${s.soKy} ${s.so} grid h-7 w-7 shrink-0 place-items-center rounded-lg text-xs font-bold`} aria-hidden>{k.so}</span>
+                      <span className="min-w-0 flex-1 text-sm leading-snug text-[var(--k-ink)]">
+                        <span className="sr-only">{c.hocKy(k.so)}: </span>
+                        {chonNgonNgu(k.ten, k.tenEn, nn)}
+                      </span>
+                      <span className={`${s.so} hidden shrink-0 text-xs text-[var(--k-ink-3)] sm:inline`}>{tt[0]}</span>
+                    </a>
+                  </li>
+                );
+              })}
             </ol>
           </li>
         ))}
       </ol>
       {soTuChon > 0 && (
-        <p className="mt-7 border-t border-[var(--p-rule)] pt-4 text-sm text-[var(--p-ink-2)]">
-          <a href="#tu-chon" className="font-medium text-[var(--p-accent)] underline decoration-1 underline-offset-4 hover:decoration-2">
-            {c.tuChonTieuDe}
-          </a>
-          <span className={`${s.so} text-[var(--p-ink-3)]`}> — {c.khoa(soTuChon)}</span>
-        </p>
+        <a
+          href="#tu-chon"
+          className={`${s.hangKy} mt-3 flex items-center gap-2 rounded-xl px-2 py-2 text-sm font-medium text-[var(--k-accent-2)]`}
+        >
+          <Sparkles aria-hidden className="h-4 w-4" />
+          <span className="min-w-0 flex-1">{c.tuChonTieuDe}</span>
+          <span className={`${s.so} text-xs text-[var(--k-ink-3)]`}>{c.khoa(soTuChon)}</span>
+        </a>
       )}
     </section>
   );
@@ -546,21 +646,23 @@ function XemChuyenNganh({ tatCa, cacNganh, c, nn, khop, xoaLoc }: {
     .filter((n) => n.mon.length > 0);
   if (nhom.length === 0) return <KhongCo c={c} xoaLoc={xoaLoc} />;
   return (
-    <>
+    <div className="space-y-6">
       {nhom.map((n) => (
-        <section key={n.slug || '_'} aria-labelledby={`nganh-${n.slug || 'khac'}`} className="mb-14">
-          <div className="flex items-baseline justify-between gap-4 border-b-2 border-[var(--p-rule-strong)] pb-3">
-            <h2 id={`nganh-${n.slug || 'khac'}`} className={`${s.tieuDe} font-editorial text-[1.75rem] font-[460] leading-tight sm:text-3xl`}>
+        <section key={n.slug || '_'} aria-labelledby={`nganh-${n.slug || 'khac'}`} className={`${s.the} rounded-2xl p-4 sm:p-5`}>
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <h2 id={`nganh-${n.slug || 'khac'}`} className={`${s.tieuDe} font-heading text-xl font-bold text-[var(--k-ink)] sm:text-2xl`}>
               {n.ten || c.chuyenNganhKhac}
             </h2>
-            <p className={`${s.so} shrink-0 text-xs text-[var(--p-ink-3)]`}>{c.khoa(n.mon.length)}</p>
+            <span className={`${s.so} shrink-0 rounded-full border border-[var(--k-accent-line)] bg-[var(--k-accent-soft)] px-3 py-1 text-sm font-semibold text-[var(--k-accent)]`}>
+              {c.khoa(n.mon.length)}
+            </span>
           </div>
-          <ol>
-            {n.mon.map((m) => <HangKhoa key={m.id} m={m} nn={nn} c={c} hienKy />)}
-          </ol>
+          <ul className={LUOI}>
+            {n.mon.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} hienKy />)}
+          </ul>
         </section>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -573,9 +675,9 @@ function XemTatCa({ tatCa, c, nn, khop, xoaLoc }: {
   if (ds.length === 0) return <KhongCo c={c} xoaLoc={xoaLoc} />;
   return (
     <>
-      <p className={`${s.so} mb-6 text-sm text-[var(--p-ink-2)]`} aria-live="polite">{c.ketQua(ds.length)}</p>
-      <ul className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {ds.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} />)}
+      <DongKetQua so={ds.length} c={c} />
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {ds.map((m) => <TheKhoa key={m.id} m={m} nn={nn} c={c} hienKy />)}
       </ul>
     </>
   );

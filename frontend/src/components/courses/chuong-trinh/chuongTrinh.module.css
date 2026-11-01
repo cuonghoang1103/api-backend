@@ -1,49 +1,102 @@
-/* Hallmark · macrostructure: Catalogue (numbered terms) · tone: editorial / university catalogue · anchor hue: ink-navy 260 + oxblood 25
- * Chỉ áp trong trang /courses (lớp .goc). Mọi màu dùng qua biến --p-* bên dưới — không viết màu trần trong JSX.
- * Giao diện tối của site là lớp `theme-dark` trên <html> (KHÔNG phải `dark` — xem CLAUDE.md, Known Error Patterns).
+/* /courses + /courses/<slug> (01/11/2026) — CÙNG ngôn ngữ hình ảnh với /academy: nền không gian tím–xanh, thẻ bo
+ * 2xl/3xl, hero có quầng sáng tím + xanh ngọc, chip mã/cấp độ, lưới thẻ có ảnh bìa.
+ * Khác Academy ở MỘT chỗ: chạy được cả giao diện SÁNG (Academy luôn tối) — bảng --k-* bên dưới có hai bản.
+ * Lớp tối của site là `theme-dark` trên <html> (KHÔNG BAO GIỜ `dark` — CLAUDE.md, Known Error Patterns).
+ * Trang tự tô nền đặc như /academy ⇒ nền mùa (chu-de-mua.css) không lộ sau chữ.
+ * Mọi màu trong JSX đi qua biến --k-*; không viết màu trần.
  */
 .goc {
-  --p-paper: oklch(97.6% 0.007 85);
-  --p-paper-2: oklch(95.2% 0.009 85);
-  --p-card: oklch(99.3% 0.003 85);
-  --p-ink: oklch(23% 0.035 262);
-  --p-ink-2: oklch(40% 0.025 262);
-  --p-ink-3: oklch(50% 0.02 262);
-  --p-rule: oklch(88.5% 0.01 85);
-  --p-rule-strong: oklch(23% 0.035 262);
-  --p-accent: oklch(44% 0.13 25);
-  --p-accent-soft: oklch(44% 0.13 25 / 0.08);
-  --p-accent-ink: oklch(98% 0.008 85);
-  --p-focus: oklch(50% 0.16 255);
-  --p-thumb: oklch(26% 0.04 262);
+  --k-bg: #f5f4fb;
+  --k-card: #ffffff;
+  --k-card-2: #f8f7fd;
+  --k-card-hover: #fbfaff;
+  --k-border: #e4e1f0;
+  --k-border-strong: #cfcae4;
+  --k-ink: #17142b;
+  --k-ink-2: #46425e;
+  --k-ink-3: #605c78; /* ≥ 4,5:1 trên --k-card và --k-bg */
+  --k-accent: #6d28d9;
+  --k-accent-2: #0e7490;
+  --k-accent-soft: rgba(124, 58, 237, 0.08);
+  --k-accent-line: rgba(124, 58, 237, 0.3);
+  --k-cyan-soft: rgba(8, 145, 178, 0.09);
+  --k-cyan-line: rgba(8, 145, 178, 0.3);
+  --k-amber: #92400e;
+  --k-amber-soft: rgba(245, 158, 11, 0.13);
+  --k-amber-line: rgba(217, 119, 6, 0.4);
+  --k-green: #047857;
+  --k-green-soft: rgba(16, 185, 129, 0.12);
+  --k-rose: #be123c;
+  --k-rose-soft: rgba(244, 63, 94, 0.1);
+  --k-glow-1: rgba(139, 92, 246, 0.16);
+  --k-glow-2: rgba(34, 211, 238, 0.13);
+  --k-shadow: 0 1px 2px rgba(23, 20, 43, 0.04), 0 10px 30px -18px rgba(23, 20, 43, 0.25);
+  --k-badge-ink: #ffffff;
+  --k-thumb: #1d1940;
+  --k-focus: #7c3aed;
+  --k-grad: linear-gradient(90deg, #4f46e5, #7c3aed);
+  --k-grad-text: linear-gradient(90deg, #4f46e5, #7c3aed);
 
-  --p-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --k-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  background: var(--p-paper);
-  color: var(--p-ink);
+  /* Thành phần dùng chung của site (khối đăng ký, thẻ lab, điều kiện tiên quyết, mô tả khoá) đọc token chung —
+     trỏ chúng về bảng --k-* để hoà vào trang ở cả hai giao diện. */
+  --bg-primary: var(--k-card-2);
+  --bg-card: var(--k-card);
+  --bg-surface: var(--k-card-2);
+  --bg-surface-hover: var(--k-accent-soft);
+  --border-color: var(--k-border);
+  --text-primary: var(--k-ink);
+  --text-secondary: var(--k-ink-2);
+  --text-muted: var(--k-ink-3);
+  --accent-color: #7c3aed;
+
+  position: relative;
+  isolation: isolate;
+  color: var(--k-ink);
+  background:
+    radial-gradient(1100px 520px at 12% -6%, var(--k-glow-1), transparent 62%),
+    radial-gradient(900px 480px at 96% 4%, var(--k-glow-2), transparent 58%),
+    var(--k-bg);
   overflow-x: clip;
-  font-feature-settings: 'kern', 'liga';
 }
 
 :global(html.theme-dark) .goc {
-  --p-paper: oklch(17.5% 0.012 262);
-  --p-paper-2: oklch(20.5% 0.014 262);
-  --p-card: oklch(21.5% 0.014 262);
-  --p-ink: oklch(94% 0.008 85);
-  --p-ink-2: oklch(81% 0.012 85);
-  --p-ink-3: oklch(69% 0.014 262);
-  --p-rule: oklch(30% 0.016 262);
-  --p-rule-strong: oklch(88% 0.01 85);
-  --p-accent: oklch(74% 0.11 32);
-  --p-accent-soft: oklch(74% 0.11 32 / 0.1);
-  --p-accent-ink: oklch(17% 0.012 262);
-  --p-focus: oklch(76% 0.12 255);
-  --p-thumb: oklch(24% 0.03 262);
+  --k-bg: #050314;
+  --k-card: rgba(20, 18, 38, 0.92);
+  --k-card-2: rgba(9, 8, 24, 0.72);
+  --k-card-hover: rgba(28, 25, 52, 0.95);
+  --k-border: rgba(148, 139, 205, 0.18);
+  --k-border-strong: rgba(167, 139, 250, 0.38);
+  --k-ink: #f2f0fb;
+  --k-ink-2: #c4c0da;
+  --k-ink-3: #9d99b8;
+  --k-accent: #b49cfc;
+  --k-accent-2: #67e8f9;
+  --k-accent-soft: rgba(139, 92, 246, 0.14);
+  --k-accent-line: rgba(139, 92, 246, 0.42);
+  --k-cyan-soft: rgba(34, 211, 238, 0.1);
+  --k-cyan-line: rgba(34, 211, 238, 0.32);
+  --k-amber: #fcd34d;
+  --k-amber-soft: rgba(245, 158, 11, 0.14);
+  --k-amber-line: rgba(245, 158, 11, 0.42);
+  --k-green: #6ee7b7;
+  --k-green-soft: rgba(16, 185, 129, 0.14);
+  --k-rose: #fda4af;
+  --k-rose-soft: rgba(244, 63, 94, 0.14);
+  --k-glow-1: rgba(139, 92, 246, 0.2);
+  --k-glow-2: rgba(34, 211, 238, 0.14);
+  --k-shadow: none;
+  --k-thumb: #1b1838;
+  --k-focus: #c4b5fd;
+  /* Nền nút/ô số mang chữ trắng ⇒ giữ đậm (≥ 4,5:1); chữ gradient trên nền tối thì sáng như "9 kỳ FPT" của Academy. */
+  --k-grad: linear-gradient(90deg, #4f46e5, #7c3aed);
+  --k-grad-text: linear-gradient(90deg, #818cf8, #c4b5fd);
 }
 
-/* Vòng focus: hiện NGAY (không chuyển động), tương phản ≥ 3:1 trên cả hai nền. */
-.goc :where(a, button, input, select):focus-visible {
-  outline: 2px solid var(--p-focus);
+/* Vòng focus: hiện NGAY, tương phản ≥ 3:1 trên cả hai nền. */
+.goc :where(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--k-focus);
   outline-offset: 2px;
 }
 
@@ -54,51 +107,82 @@
 .tieuDe {
   overflow-wrap: anywhere;
   min-width: 0;
-  font-style: normal;
 }
 
-/* Hàng khoá học: nền ngả nhẹ khi rê/focus, tên khoá gạch chân. Chỉ đổi màu nền — không dịch chuyển bố cục. */
-.hang {
-  transition: background-color 160ms var(--p-ease-out);
-}
-.hang:hover,
-.hang:focus-visible {
-  background: var(--p-accent-soft);
-}
-.hang:hover .tenKhoa,
-.hang:focus-visible .tenKhoa {
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-.hang:hover .muiTen {
-  transform: translateX(3px);
-  color: var(--p-accent);
-}
-.muiTen {
-  transition: transform 160ms var(--p-ease-out), color 160ms var(--p-ease-out);
+/* Chữ gradient như "9 kỳ FPT" của Academy. */
+.chuGrad {
+  background: var(--k-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.the:hover .anhThe {
-  transform: scale(1.025);
+/* Thẻ chung (hero, học kỳ, mục). */
+.the {
+  background: var(--k-card);
+  border: 1px solid var(--k-border);
+  box-shadow: var(--k-shadow);
 }
-.anhThe {
-  transition: transform 400ms var(--p-ease-out);
+.theTrong {
+  background: var(--k-card-2);
+  border: 1px solid var(--k-border);
+}
+
+/* Thẻ khoá học: viền sáng lên + ảnh phóng nhẹ khi rê/focus — không dịch bố cục. */
+.theKhoa {
+  background: var(--k-card);
+  border: 1px solid var(--k-border);
+  box-shadow: var(--k-shadow);
+  transition: border-color 160ms var(--k-ease), background-color 160ms var(--k-ease);
+}
+.theKhoa:hover,
+.theKhoa:focus-visible {
+  border-color: var(--k-accent-line);
+  background: var(--k-card-hover);
+}
+.anhKhoa {
+  transition: transform 450ms var(--k-ease);
+}
+.theKhoa:hover .anhKhoa {
+  transform: scale(1.03);
+}
+.theKhoa:hover .tenKhoa {
+  color: var(--k-accent);
+}
+
+/* Hàng điều hướng học kỳ (thanh bên + bản đồ bốn năm). */
+.hangKy {
+  transition: background-color 140ms var(--k-ease), color 140ms var(--k-ease);
+}
+.hangKy:hover {
+  background: var(--k-accent-soft);
+}
+
+.soKy {
+  background: var(--k-grad);
+  color: #fff;
+}
+
+/* Gấp đôi lớp để thắng `hover:` của Tailwind (cùng độ ưu tiên thì thứ tự tệp quyết định — không tin được). */
+.chipChon.chipChon[aria-pressed='true'],
+.tab.tab[aria-selected='true'] {
+  background-image: var(--k-grad);
+  color: #fff;
+  border-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hang,
-  .muiTen,
-  .anhThe {
+  .theKhoa,
+  .anhKhoa,
+  .hangKy {
     transition: none;
   }
-  .hang:hover .muiTen,
-  .the:hover .anhThe {
+  .theKhoa:hover .anhKhoa {
     transform: none;
   }
 }
 
 /* Neo cuộn tới học kỳ không bị thanh điều hướng cố định che mất. */
 .neo {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: 6.5rem;
 }

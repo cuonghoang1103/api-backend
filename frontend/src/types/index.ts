@@ -659,6 +659,24 @@ export interface Course {
   enrollmentSource?: string;
   enrollmentExpiresAt?: string;
   enrollmentDurationDays?: number;
+  /** Chỉ `GET /courses/:slug?gon=1` (01/11/2026): khoá gồm những gì + cờ đang soạn. Máy chủ cũ không có ⇒ undefined. */
+  baoGom?: BaoGomKhoa | null;
+}
+
+/** "Khoá học này gồm" — backend `src/services/khoaDaSoan.ts › tinhBaoGom`. */
+export interface BaoGomKhoa {
+  soChuong: number;
+  soBai: number;
+  soBaiDaSoan: number;
+  /** Khoá mới có khung: dưới 20% bài đã soạn nội dung thật. */
+  dangSoan: boolean;
+  soQuiz: number;
+  soBaiVideo: number;
+  giayVideo: number;
+  soBaiSlide: number;
+  soBaiCodeLab: number;
+  soDeFE: number;
+  soDePE: number;
 }
 
 export interface Enrollment {
@@ -1548,6 +1566,8 @@ export interface MonChuongTrinh {
   progress: number | null;
   /** Khoá "Sắp ra mắt" (status COMING_SOON): chỉ có khung, chưa học/mua được. */
   sapRaMat?: boolean;
+  /** Khoá học được nhưng mới có khung (dưới 20% bài đã soạn) — nhãn "Đang soạn". Máy chủ cũ không có ⇒ undefined. */
+  dangSoan?: boolean;
   /** Chỉ khoá sắp ra mắt: số phần (chương, gồm Mục 0) và số bài trong khung. */
   soChuongDuKien?: number;
   soBaiDuKien?: number;

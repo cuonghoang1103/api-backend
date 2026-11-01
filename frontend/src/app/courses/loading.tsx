@@ -1,32 +1,38 @@
 import s from '@/components/courses/chuong-trinh/chuongTrinh.module.css';
 
-// Khung chờ của /courses — cùng nhịp với trang Chương trình đào tạo (tiêu đề lớn, dải số, các học kỳ dạng hàng),
+// Khung chờ của /courses — cùng bố cục với trang thật (hero + thẻ số liệu, thanh công cụ, thanh học kỳ + lưới thẻ)
 // để lúc dữ liệu về không bị nhảy bố cục.
 export default function Loading() {
   return (
-    <div className={`${s.goc} min-h-screen`} aria-busy="true">
-      <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 sm:pt-16 lg:px-8">
-        <div className="shimmer-track h-3 w-28" />
-        <div className="mt-6 border-b border-[var(--p-rule-strong)] pb-10">
-          <div className="shimmer-track h-12 w-80 max-w-full sm:h-16" />
-          <div className="shimmer-track mt-5 h-4 w-[32rem] max-w-full" />
-          <div className="shimmer-track mt-2 h-4 w-[24rem] max-w-full" />
+    <div className={`${s.goc} min-h-screen pb-20 pt-20 sm:pt-24`} aria-busy="true">
+      <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8">
+        <div className={`${s.the} grid gap-6 rounded-3xl p-5 sm:p-8 lg:grid-cols-[1.35fr_0.85fr]`}>
+          <div>
+            <div className="shimmer-track h-8 w-44 rounded-full" />
+            <div className="shimmer-track mt-5 h-11 w-[28rem] max-w-full" />
+            <div className="shimmer-track mt-4 h-4 w-[34rem] max-w-full" />
+            <div className="shimmer-track mt-2 h-4 w-[26rem] max-w-full" />
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {Array.from({ length: 4 }).map((_, i) => <div key={i} className={`${s.theTrong} h-[92px] rounded-2xl`} />)}
+          </div>
         </div>
-        <div className="shimmer-track my-6 h-11 w-full md:w-[30rem]" />
-        {Array.from({ length: 2 }).map((_, i) => (
-          <div key={i} className="mt-10 border-t border-[var(--p-rule)] pt-6">
-            <div className="shimmer-track h-7 w-64 max-w-full" />
-            {Array.from({ length: 4 }).map((__, j) => (
-              <div key={j} className="mt-5 flex gap-4">
-                <div className="shimmer-track aspect-video w-24 shrink-0 sm:w-32" />
-                <div className="flex-1 space-y-2 pt-1">
-                  <div className="shimmer-track h-4 w-2/3" />
-                  <div className="shimmer-track h-3 w-1/3" />
+        <div className="shimmer-track h-12 w-full rounded-2xl lg:w-[30rem]" />
+        <div className="grid gap-6 lg:grid-cols-[288px_minmax(0,1fr)] lg:gap-8">
+          <div className={`${s.the} hidden h-[480px] rounded-2xl lg:block`} />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className={`${s.the} overflow-hidden rounded-2xl`}>
+                <div className="shimmer-track aspect-video w-full" />
+                <div className="space-y-2 p-4">
+                  <div className="shimmer-track h-5 w-24 rounded-full" />
+                  <div className="shimmer-track h-5 w-3/4" />
+                  <div className="shimmer-track h-3 w-full" />
                 </div>
               </div>
             ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

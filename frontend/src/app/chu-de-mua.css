@@ -273,27 +273,8 @@ html[data-mua]:not([data-mua-yen]) .app-main .min-h-screen[style*="var(--bg-prim
   background-color: transparent !important;
 }
 
-/* /courses (chuongTrinh.module.css) tự khai bảng --p-* riêng ⇒ trỏ chúng về token mùa. */
-html[data-mua] .app-main [class*="chuongTrinh_goc"] {
-  --p-paper: var(--bg-primary);
-  --p-paper-2: var(--bg-surface);
-  --p-card: var(--bg-card);
-  --p-ink: var(--text-primary);
-  --p-ink-2: var(--text-secondary);
-  --p-ink-3: var(--text-muted);
-  --p-rule: var(--border-color);
-  --p-rule-strong: var(--text-primary);
-  --p-accent: var(--accent-color);
-  --p-accent-soft: color-mix(in srgb, var(--accent-color) 9%, transparent);
-  --p-accent-ink: #ffffff;
-  --p-focus: var(--accent-color);
-}
-html.theme-dark[data-mua] .app-main [class*="chuongTrinh_goc"] {
-  --p-accent-ink: var(--bg-primary);
-}
-html[data-mua]:not([data-mua-yen]) .app-main [class*="chuongTrinh_goc"].min-h-screen {
-  background-color: transparent;
-}
+/* /courses + /courses/<slug> (chuongTrinh.module.css, 01/11/2026) tự tô nền đặc và bảng --k-* riêng như /academy
+   ⇒ KHÔNG trỏ về token mùa nữa (bảng --p-* cũ đã bỏ). Thanh điều hướng/khung app vẫn theo mùa. */
 
 /* Canvas hạt + trang trí góc (components/chuDeMua/NenMuaCanvas.tsx). */
 .nen-mua-canvas {

@@ -5,8 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Star, Users, Clock, BookOpen, Play, Lock, CheckCircle,
-  ChevronDown, ChevronUp, ChevronRight, Loader2, Award, Globe, Calendar, Download, ArrowLeft, CreditCard,
-  KeyRound,
+  ChevronDown, ChevronRight, Loader2, Award, Globe, ArrowLeft, CreditCard,
+  KeyRound, Layers3, CirclePlay as PlayCircle, Presentation, ListChecks, CodeXml as Code2, FileCode2, FileText,
+  ListTree, Hourglass,
 } from 'lucide-react';
 import { coursesApi, paymentApi } from '@/lib/api';
 import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
@@ -15,8 +16,6 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from '@/context/LocaleContext';
 import { pickLang } from '@/lib/utils';
 import { toast } from 'sonner';
-import { sanitizeHtml } from '@/lib/utils';
-import { SafeImage } from '@/components/ui/SafeImage';
 import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/lib/coursePrerequisites';
 import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import CourseLabCard from '@/components/labs/CourseLabCard';
@@ -25,17 +24,23 @@ import { CourseDescription } from '@/components/courses/CourseDescription';
 import { tachCauDai } from '@/lib/courseDescription';
 import { AnhDaiDien } from '@/components/ui/AnhDaiDien';
 import type { Course, CourseReview } from '@/types';
+import { CHU } from '@/components/courses/chuong-trinh/chu';
+import { CHU_KHOA } from '@/components/courses/chuong-trinh/chuKhoa';
+import { AnhBia, ChipCapDo, ChipNhan, NhanDangSoan, NhanSapRaMat, TienDo } from '@/components/courses/chuong-trinh/KhoaHoc';
+import s from '@/components/courses/chuong-trinh/chuongTrinh.module.css';
 
-function formatDuration(seconds: number): string {
-  if (!seconds) return '0 min';
+/** "2 giờ 15 phút" / "2h 15m" — dưới 1 phút trả chuỗi rỗng: KHÔNG BAO GIỜ in "0 min" (trước 01/11 trang in
+ *  "0 min · 0 students" cho mọi khoá chưa có video, trông như khoá chết). */
+function formatDuration(seconds: number, en = false): string {
+  if (!seconds || seconds < 60) return '';
   const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m} min`;
+  const m = Math.round((seconds % 3600) / 60);
+  if (h > 0) return en ? `${h}h${m ? ` ${m}m` : ''}` : `${h} giờ${m ? ` ${m} phút` : ''}`;
+  return en ? `${m} min` : `${m} phút`;
 }
 
-function formatPrice(price: number, isFree: boolean): string {
-  if (isFree) return 'Free';
+function formatPrice(price: number, isFree: boolean, en = false): string {
+  if (isFree) return en ? 'Free' : 'Miễn phí';
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 }
 
@@ -55,7 +60,9 @@ function OldCourseAccessOptions({
   handleEnroll,
   handleBuyCourse,
   handleActivateCode,
+  en = false,
 }: {
+  en?: boolean;
   course: Course;
   isAuthenticated: boolean;
   accessCode: string;
@@ -108,9 +115,11 @@ function OldCourseAccessOptions({
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
             <div className="text-left">
-              <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">Vào học ngay</p>
+              <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">{en ? 'Go to the course' : 'Vào học ngay'}</p>
               <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">
-                {isAdminViewer ? 'Truy cập admin — không cần đăng ký' : 'Bạn đã đăng ký khoá này'}
+                {isAdminViewer
+                  ? (en ? 'Admin access — no enrolment needed' : 'Truy cập admin — không cần đăng ký')
+                  : (en ? 'You are enrolled in this course' : 'Bạn đã đăng ký khoá này')}
               </p>
             </div>
           </div>
@@ -126,13 +135,13 @@ function OldCourseAccessOptions({
       return;
     }
     if (course.accessType !== 'FREE') {
-      toast.warning('Khoa hoc nay hien tai chua ap dung hinh thuc mien phi');
+      toast.warning(en ? 'This course is not free at the moment.' : 'Khoá học này hiện chưa áp dụng hình thức miễn phí.');
       return;
     }
     try {
       await handleEnroll();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Khong the dang ky mien phi');
+      toast.error(err?.response?.data?.message || (en ? 'Could not enrol you for free.' : 'Không thể đăng ký miễn phí.'));
     }
   };
 
@@ -155,13 +164,13 @@ function OldCourseAccessOptions({
             <Award className="w-5 h-5 text-green-700 [.theme-dark_&]:text-green-400" />
           )}
           <div className="text-left">
-            <p className={`text-sm font-semibold ${isPaidType ? 'text-text-muted' : 'text-green-700 [.theme-dark_&]:text-green-400'}`}>Miễn phí</p>
-            <p className={`text-xs ${isPaidType ? 'text-text-muted/60' : 'text-green-700 [.theme-dark_&]:text-green-400/60'}`}>
-              {isPaidType ? 'Không áp dụng' : 'Đăng ký & học ngay'}
+            <p className={`text-sm font-semibold ${isPaidType ? 'text-text-muted' : 'text-green-700 [.theme-dark_&]:text-green-400'}`}>{en ? 'Free' : 'Miễn phí'}</p>
+            <p className={`text-xs ${isPaidType ? 'text-text-muted' : 'text-green-700 [.theme-dark_&]:text-green-300'}`}>
+              {isPaidType ? (en ? 'Not available' : 'Không áp dụng') : (en ? 'Enrol and start now' : 'Đăng ký và học ngay')}
             </p>
           </div>
         </div>
-        <ChevronDown className="w-4 h-4 text-green-700 [.theme-dark_&]:text-green-400/60" />
+        <ChevronRight className="w-4 h-4 text-green-700 [.theme-dark_&]:text-green-400/60" aria-hidden />
       </button>
 
       {/* Trả phí or Mã kích hoạt — chỉ hiện khi PAID, 2 lựa chọn độc lập */}
@@ -240,7 +249,7 @@ function OldCourseAccessOptions({
             <>
               <div className="px-4 py-3 border-b border-neon-violet/20">
                 <p className="text-sm font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">
-                  {COURSE_PAYMENT_ENABLED ? 'Trả phí or Mã kích hoạt' : 'Mã kích hoạt'}
+                  {COURSE_PAYMENT_ENABLED ? 'Trả phí hoặc mã kích hoạt' : 'Mã kích hoạt'}
                 </p>
                 <p className="text-xs text-violet-700/80 [.theme-dark_&]:text-neon-violet/60">
                   {COURSE_PAYMENT_ENABLED
@@ -323,6 +332,9 @@ export default function CourseDetailPage() {
   const isAuthenticated = mounted && (isBackendAuth || status === 'authenticated');
 
   const { locale } = useTranslation();
+  const en = locale === 'en';
+  const t = CHU_KHOA[en ? 'en' : 'vi'];
+  const c = CHU[en ? 'en' : 'vi'];
   const [course, setCourse] = useState<Course | null>(null);
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -354,9 +366,6 @@ export default function CourseDetailPage() {
   // so it doesn't itself trigger a re-render). If we ever exceed 50
   // renders in 3 seconds the page is almost certainly stuck in a
   // re-render loop — the original symptom that motivated this code.
-  // Before 2026-06-17 this also printed every render; that turned
-  // out to be too noisy for normal debugging so the log is now
-  // silenced unless the threshold is crossed. Keep the counter.
   const renderCountRef = useRef(0);
   const renderWindowStartRef = useRef(Date.now());
   renderCountRef.current += 1;
@@ -402,28 +411,29 @@ export default function CourseDetailPage() {
       } catch (err: any) {
         // eslint-disable-next-line no-console
         console.error('[course-detail] Fetch error', err?.response?.status, err?.message);
-        toast.error('Course not found');
+        toast.error(en ? 'Course not found' : 'Không tìm thấy khoá học');
       } finally {
         setLoading(false);
       }
     };
     fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   const handleEnroll = async () => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${slug}`)}`);
       return;
     }
     if (!course) return;
     setEnrolling(true);
     try {
       await coursesApi.enroll(course.id);
-      toast.success('Registration successful! Start learning now.');
+      toast.success(en ? 'You are enrolled — start learning now.' : 'Đăng ký thành công! Bắt đầu học ngay.');
       router.push(`/courses/${slug}/learn`);
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } };
-      toast.error(e?.response?.data?.message || 'Registration failed');
+      toast.error(e?.response?.data?.message || (en ? 'Enrolment failed' : 'Đăng ký không thành công'));
     } finally {
       setEnrolling(false);
     }
@@ -458,7 +468,7 @@ export default function CourseDetailPage() {
       }
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } };
-      toast.error(e?.response?.data?.message || 'Khong the tao don thanh toan');
+      toast.error(e?.response?.data?.message || (en ? 'Could not create the payment order' : 'Không thể tạo đơn thanh toán'));
       setBuying(false);
     }
   };
@@ -466,7 +476,7 @@ export default function CourseDetailPage() {
   const handleActivateCode = async () => {
     const code = accessCode.trim().toUpperCase();
     if (!code || code.length < 4) {
-      setCodeError('Vui long nhap ma kich hoat (toi thieu 4 ky tu)');
+      setCodeError(en ? 'Enter an activation code (at least 4 characters)' : 'Vui lòng nhập mã kích hoạt (tối thiểu 4 ký tự)');
       return;
     }
     if (!isAuthenticated) {
@@ -480,11 +490,11 @@ export default function CourseDetailPage() {
       await coursesApi.activateCode(course.id, code);
       // Authorize this browser session so the learn page gate passes.
       sessionStorage.setItem(`code_session_${course.id}`, '1');
-      toast.success('Kich hoat thanh cong! Ban co the bat dau hoc ngay.');
+      toast.success(en ? 'Activated — you can start learning now.' : 'Kích hoạt thành công! Bạn có thể bắt đầu học ngay.');
       router.push(`/courses/${slug}/learn`);
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } };
-      const msg = e?.response?.data?.message || 'Ma kich hoat khong hop le';
+      const msg = e?.response?.data?.message || (en ? 'Invalid activation code' : 'Mã kích hoạt không hợp lệ');
       setCodeError(msg);
       toast.error(msg);
     } finally {
@@ -502,18 +512,18 @@ export default function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-violet-700 [.theme-dark_&]:text-neon-violet" />
+      <div className={`${s.goc} flex min-h-screen items-center justify-center`}>
+        <Loader2 className="h-10 w-10 animate-spin text-[var(--k-accent)]" aria-label={t.dangTai} />
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-text-primary mb-4">Course not found</h2>
-          <Link href="/courses" className="text-violet-700 [.theme-dark_&]:text-neon-violet hover:text-neon-indigo">Back to Courses</Link>
+      <div className={`${s.goc} flex min-h-screen items-center justify-center px-4`}>
+        <div className={`${s.the} rounded-2xl p-8 text-center`}>
+          <h2 className="mb-4 text-2xl font-bold text-[var(--k-ink)]">{t.khongThay}</h2>
+          <Link href="/courses" className="font-semibold text-[var(--k-accent)] underline underline-offset-4">{t.veCourses}</Link>
         </div>
       </div>
     );
@@ -531,20 +541,56 @@ export default function CourseDetailPage() {
   const isCodeCourse = accessType === 'CODE';
   const whatYouLearnList = tachGachDauDong(course.whatYouLearn);
   const requirementsList = tachCauDai(tachGachDauDong(course.requirements));
+  const isAdminViewer = Boolean((course as any).isAdmin);
+  const isAcademy = (course as { academyType?: string }).academyType === 'FPT' || course.semesterId != null;
 
   // Only enrolled learners (or admin/instructor) may post a review.
-  const canReview = Boolean(course.isEnrolled || course.hasPaidAccess || (course as any).isAdmin);
+  const canReview = Boolean(course.isEnrolled || course.hasPaidAccess || isAdminViewer);
   // Display rating: compute from the loaded reviews so it's accurate the
   // moment a new one is posted (falls back to the stored aggregate).
   const displayReviewCount = reviews.length || course.totalReviews || 0;
   const displayAvgRating = reviews.length
-    ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
+    ? reviews.reduce((tong, r) => tong + r.rating, 0) / reviews.length
     : Number(course.avgRating) || 0;
+
+  // ── Số liệu thật — số 0 KHÔNG hiện ("0 phút · 0 học viên" trông như khoá chết).
+  const sections = course.sections ?? [];
+  const allLessons = sections.flatMap((sec) => sec.lessons ?? []);
+  const firstLesson = allLessons[0];
+  const bg = course.baoGom ?? null;
+  const soChuong = sapRaMat ? (khungSRM.soChuongDuKien ?? sections.length) : sections.length;
+  const soBai = sapRaMat ? (khungSRM.soBaiDuKien ?? allLessons.length) : (allLessons.length || course.totalLessons || 0);
+  const giayVideo = bg?.giayVideo ?? (allLessons.reduce((tg, l) => tg + (l.videoDurationSeconds || 0), 0) || course.totalDurationSeconds || 0);
+  const soQuiz = bg?.soQuiz ?? allLessons.filter((l) => l.lessonType === 'QUIZ').length;
+  const dangSoan = !sapRaMat && Boolean(bg?.dangSoan);
+  const tienDo = course.enrollmentProgress ?? 0;
+
+  // Vào được bài học ngay (không cần bước đăng ký nữa).
+  const vaoDuoc = isAdminViewer
+    || (accessType === 'FREE' && Boolean(course.isEnrolled))
+    || (Boolean(course.hasPaidAccess) && course.enrollmentSource !== 'CODE');
+  const duongBai = (lessonId?: number) => `/courses/${course.slug}/learn${lessonId ? `?lessonId=${lessonId}` : ''}`;
+
+  const batDauHoc = async () => {
+    if (vaoDuoc) {
+      router.push(tienDo > 0 ? duongBai() : duongBai(firstLesson?.id));
+      return;
+    }
+    if (accessType === 'FREE') {
+      await handleEnroll();
+      return;
+    }
+    // Trả phí / mã kích hoạt: đưa người học tới khối đăng ký.
+    document.getElementById('dang-ky')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  const nhanNut = vaoDuoc && tienDo > 0 ? t.tiepTuc : (accessType === 'FREE' || vaoDuoc ? t.batDau : t.moKhoa);
+
+  const moTatCa = expandedSections.size < sections.length;
 
   const submitReview = async () => {
     if (!course || submittingReview) return;
     if (!(reviewRating >= 1 && reviewRating <= 5)) {
-      toast.error('Vui lòng chọn số sao (1–5)');
+      toast.error(en ? 'Choose a rating (1–5 stars)' : 'Vui lòng chọn số sao (1–5)');
       return;
     }
     setSubmittingReview(true);
@@ -553,16 +599,44 @@ export default function CourseDetailPage() {
       const rev = await coursesApi.getReviews(course.id);
       setReviews(rev.data.data || []);
       setReviewContent('');
-      toast.success('Cảm ơn bạn đã đánh giá khoá học!');
+      toast.success(en ? 'Thanks for reviewing the course!' : 'Cảm ơn bạn đã đánh giá khoá học!');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Không gửi được đánh giá');
+      toast.error(err?.response?.data?.message || (en ? 'Could not send your review' : 'Không gửi được đánh giá'));
     } finally {
       setSubmittingReview(false);
     }
   };
 
+  // "Khoá học này gồm" — chỉ những thứ thật sự có.
+  const baoGom: Array<{ icon: React.ReactNode; so: string; nhan: string }> = [
+    { icon: <Layers3 className="h-5 w-5" />, so: String(soChuong), nhan: t.chuong },
+    { icon: <BookOpen className="h-5 w-5" />, so: String(soBai), nhan: sapRaMat ? t.baiDuKien : t.baiHoc },
+    ...(giayVideo >= 60 ? [{ icon: <PlayCircle className="h-5 w-5" />, so: formatDuration(giayVideo, en), nhan: t.video }] : []),
+    ...(bg && bg.soBaiSlide > 0 ? [{ icon: <Presentation className="h-5 w-5" />, so: String(bg.soBaiSlide), nhan: t.baiCoSlide }] : []),
+    ...(soQuiz > 0 ? [{ icon: <ListChecks className="h-5 w-5" />, so: String(soQuiz), nhan: t.quiz }] : []),
+    ...(bg && bg.soBaiCodeLab > 0 ? [{ icon: <Code2 className="h-5 w-5" />, so: String(bg.soBaiCodeLab), nhan: t.codeLab }] : []),
+    ...(bg && bg.soDeFE > 0 ? [{ icon: <Award className="h-5 w-5" />, so: String(bg.soDeFE), nhan: t.deFE }] : []),
+    ...(bg && bg.soDePE > 0 ? [{ icon: <FileCode2 className="h-5 w-5" />, so: String(bg.soDePE), nhan: t.dePE }] : []),
+  ];
+
+  const metaHero: Array<{ icon: React.ReactNode; chu: string }> = [
+    ...(soChuong > 0 ? [{ icon: <Layers3 className="h-4 w-4" />, chu: t.soChuong(soChuong) }] : []),
+    ...(soBai > 0 ? [{ icon: <BookOpen className="h-4 w-4" />, chu: sapRaMat ? t.soBaiDuKien(soBai) : t.soBai(soBai) }] : []),
+    ...(giayVideo >= 60 ? [{ icon: <Clock className="h-4 w-4" />, chu: t.videoDai(formatDuration(giayVideo, en)) }] : []),
+    ...(course.totalStudents > 0 ? [{ icon: <Users className="h-4 w-4" />, chu: t.hocVien(course.totalStudents) }] : []),
+  ];
+
+  const ngonNgu = t.ngonNgu[course.language as keyof typeof t.ngonNgu] ?? course.language;
+
+  const kieuBai = (l: { lessonType: string; videoDurationSeconds: number }) =>
+    l.lessonType === 'QUIZ'
+      ? { icon: <ListChecks className="h-4 w-4" />, nhan: t.quizNgan }
+      : l.videoDurationSeconds > 0
+        ? { icon: <PlayCircle className="h-4 w-4" />, nhan: t.videoNgan }
+        : { icon: <FileText className="h-4 w-4" />, nhan: t.baiDoc };
+
   return (
-    <div className="[--text-muted:#65686d] [.theme-dark_&]:[--text-muted:#8a8d91] min-h-screen bg-[var(--bg-primary)]">
+    <div className={`${s.goc} min-h-screen pb-20 pt-20 sm:pt-24`}>
       {showPrereqModal && (
         <PrerequisiteModal
           courseTitle={course.title}
@@ -577,347 +651,373 @@ export default function CourseDetailPage() {
           }}
         />
       )}
-      {/* Hero */}
-      <section className="relative py-16 overflow-hidden bg-gradient-to-b from-neon-indigo/10 to-[var(--bg-primary)]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-neon-indigo/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-neon-violet/10 rounded-full blur-[150px]" />
-        </div>
-        <div className="relative max-w-6xl mx-auto px-4">
-          {(() => {
-            // Academy (FPTU) courses go back to the Academy overview; general
-            // marketplace courses go back to the Courses list.
-            const isAcademy = (course as { academyType?: string; semesterId?: number }).academyType === 'FPT'
-              || (course as { semesterId?: number }).semesterId != null;
-            return (
-              <Link href={isAcademy ? '/academy' : '/courses'} className="inline-flex items-center gap-2 text-text-muted hover:text-text-primary mb-6 text-sm transition-colors">
-                <ArrowLeft className="w-4 h-4" />
-                {isAcademy ? 'Back to Academy' : 'Back to Courses'}
-              </Link>
-            );
-          })()}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            {/* Left: Info */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                {sapRaMat && (
-                  <span className="px-3 py-1 rounded-full text-sm font-semibold bg-amber-500/15 text-amber-800 [.theme-dark_&]:text-amber-300">
-                    {locale === 'en' ? 'Coming soon' : 'Sắp ra mắt'}
-                  </span>
-                )}
-                {course.categoryName && (
-                  <span className="px-3 py-1 bg-neon-indigo/20 text-indigo-700 [.theme-dark_&]:text-neon-indigo text-sm rounded-full font-medium">
-                    {course.categoryName}
-                  </span>
-                )}
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  course.level === 'BEGINNER' ? 'bg-green-500/10 text-green-700 [.theme-dark_&]:text-green-400' :
-                  course.level === 'INTERMEDIATE' ? 'bg-yellow-500/10 text-amber-800 [.theme-dark_&]:text-yellow-400' :
-                  'bg-red-500/10 text-red-700 [.theme-dark_&]:text-red-400'
-                }`}>
-                  {course.level === 'BEGINNER' ? 'Beginner' :
-                   course.level === 'INTERMEDIATE' ? 'Intermediate' :
-                   course.level === 'ADVANCED' ? 'Advanced' : course.level}
-                </span>
-                <span className="flex items-center gap-1.5 text-text-muted text-sm">
-                  <Globe className="w-4 h-4" />
-                  {course.language}
+      <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-4 sm:space-y-8 sm:px-6 lg:px-8">
+        {/* Academy (FPTU) quay về Academy; khoá chung quay về Courses. */}
+        <Link
+          href={isAcademy ? '/academy' : '/courses'}
+          className="inline-flex min-h-[40px] items-center gap-2 rounded-xl text-sm font-medium text-[var(--k-ink-2)] transition-colors hover:text-[var(--k-ink)]"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          {isAcademy ? t.veAcademy : t.veCourses}
+        </Link>
+
+        {/* ── Hero ── */}
+        <header className={`${s.the} relative overflow-hidden rounded-3xl p-5 sm:p-8`}>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(circle at top right, var(--k-glow-1), transparent 40%), radial-gradient(circle at bottom left, var(--k-glow-2), transparent 36%)' }}
+          />
+          <div className="relative grid items-center gap-6 lg:grid-cols-[1.35fr_0.9fr] lg:gap-10">
+            <div className="min-w-0">
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                {sapRaMat && <NhanSapRaMat c={c} />}
+                {dangSoan && <NhanDangSoan c={c} />}
+                {course.courseCode && <ChipNhan>{course.courseCode}</ChipNhan>}
+                {course.loTrinhKy ? <ChipNhan>{c.hocKy(course.loTrinhKy)}</ChipNhan> : null}
+                <ChipCapDo level={course.level} c={c} />
+                {course.categoryName && <ChipNhan tone="cyan">{course.categoryName}</ChipNhan>}
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--k-ink-3)]">
+                  <Globe className="h-3.5 w-3.5" aria-hidden />
+                  {ngonNgu}
                 </span>
               </div>
 
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 leading-tight">
+              <h1 className={`${s.tieuDe} font-heading text-[1.9rem] font-bold leading-tight text-[var(--k-ink)] [text-wrap:balance] sm:text-[2.6rem]`}>
                 {pickLang(course.title, locale)}
               </h1>
 
               {course.shortDescription && (
-                <p className="text-text-secondary text-lg mb-6 leading-relaxed">
+                <p className="mt-4 max-w-[44rem] text-base leading-relaxed text-[var(--k-ink-2)] sm:text-lg">
                   {pickLang(course.shortDescription, locale)}
                 </p>
               )}
 
-              <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
-              <CourseLabCard slug={course.slug} locale={locale} />
+              {metaHero.length > 0 && (
+                <ul className={`${s.so} mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-[var(--k-ink-2)]`}>
+                  {metaHero.map((m) => (
+                    <li key={m.chu} className="inline-flex items-center gap-1.5">
+                      <span className="text-[var(--k-accent)]" aria-hidden>{m.icon}</span>
+                      {m.chu}
+                    </li>
+                  ))}
+                  {displayAvgRating > 0 && (
+                    <li className="inline-flex items-center gap-1.5 text-[var(--k-amber)]">
+                      <Star className="h-4 w-4 fill-current" aria-hidden />
+                      {displayAvgRating.toFixed(1)} ({t.danhGiaDem(displayReviewCount)})
+                    </li>
+                  )}
+                </ul>
+              )}
 
-              {/* Instructor — ảnh & tên lấy từ TÀI KHOẢN thật (course.instructorId
-                  → users), nên admin đổi avatar là trang này đổi theo. Bấm vào
-                  dẫn sang hồ sơ, nơi đã có Kết bạn / Nhắn tin / Theo dõi. */}
-              <div className="flex items-center gap-3 mb-6">
-                {course.instructorId ? (
-                  <Link
-                    href={`/profile/${course.instructorId}`}
-                    className="flex items-center gap-3 group/gv rounded-xl -m-1 p-1 transition-colors hover:bg-[var(--bg-surface-hover)]"
-                    title={`Xem hồ sơ ${course.instructorName || 'giảng viên'}`}
-                  >
-                    <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName} className="w-10 h-10" />
-                    <div>
-                      <p className="text-text-primary font-medium text-sm">Instructor</p>
-                      <p className="text-text-muted text-sm group-hover/gv:text-neon-violet transition-colors">
-                        {course.instructorName}
-                      </p>
-                    </div>
-                  </Link>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                {sapRaMat ? (
+                  <span className="inline-flex min-h-[48px] items-center rounded-xl border border-[var(--k-border)] px-5 text-sm font-semibold text-[var(--k-ink-3)]">
+                    {t.chuaMo}
+                  </span>
                 ) : (
-                  <>
-                    <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName || 'CuongHoangDev'} className="w-10 h-10" />
-                    <div>
-                      <p className="text-text-primary font-medium text-sm">Instructor</p>
-                      <p className="text-text-muted text-sm">{course.instructorName || 'CuongHoangDev'}</p>
-                    </div>
-                  </>
+                  <button
+                    type="button"
+                    onClick={batDauHoc}
+                    disabled={enrolling}
+                    className="inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 text-[15px] font-semibold text-white shadow-lg shadow-violet-500/20 transition-opacity hover:opacity-90 disabled:opacity-60"
+                    style={{ background: 'var(--k-grad)' }}
+                  >
+                    {enrolling ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <Play className="h-5 w-5 fill-current" aria-hidden />}
+                    {nhanNut}
+                  </button>
                 )}
+                <a
+                  href="#noi-dung"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-[var(--k-border-strong)] px-5 text-[15px] font-semibold text-[var(--k-ink)] transition-colors hover:border-[var(--k-accent-line)] hover:bg-[var(--k-accent-soft)]"
+                >
+                  <ListTree className="h-5 w-5" aria-hidden />
+                  {t.xemMucLuc}
+                </a>
               </div>
-
-              {/* Stats */}
-              {sapRaMat ? (
-              <div className="flex flex-wrap items-center gap-6 text-text-muted text-sm">
-                <span className="flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4" />
-                  {locale === 'en'
-                    ? `${khungSRM.soChuongDuKien ?? 0} parts · ${khungSRM.soBaiDuKien ?? 0} planned lessons`
-                    : `${khungSRM.soChuongDuKien ?? 0} phần · ${khungSRM.soBaiDuKien ?? 0} bài dự kiến`}
-                </span>
-              </div>
-              ) : (
-              <div className="flex flex-wrap items-center gap-6 text-text-muted text-sm">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" />
-                  {formatDuration(course.totalDurationSeconds)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <BookOpen className="w-4 h-4" />
-                  {course.totalLessons} lessons
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4" />
-                  {course.totalStudents.toLocaleString('vi-VN')} students
-                </span>
-                {course.avgRating > 0 && (
-                  <span className="flex items-center gap-1.5 text-amber-700 [.theme-dark_&]:text-yellow-400">
-                    <Star className="w-4 h-4 fill-current" />
-                    {Number(course.avgRating).toFixed(1)} ({course.totalReviews} reviews)
-                  </span>
-                )}
-                {course.publishedAt && (
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" />
-                    {new Date(course.publishedAt).toLocaleDateString('vi-VN')}
-                  </span>
-                )}
-              </div>
+              {!sapRaMat && !vaoDuoc && accessType === 'FREE' && (
+                <p className="mt-2.5 text-xs text-[var(--k-ink-3)]">{isAuthenticated ? t.ghiChuMienPhi : t.ghiChuDangNhap}</p>
+              )}
+              {vaoDuoc && tienDo > 0 && (
+                <div className="mt-4 max-w-sm"><TienDo p={Math.round(tienDo)} c={c} /></div>
               )}
             </div>
 
-            {/* Right: Enrollment card */}
-            <div>
-              <div className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl overflow-hidden sticky top-6">
-                {course.thumbnailUrl && (
-                  <div className="aspect-video relative">
-                    <SafeImage
-                      src={course.thumbnailUrl}
-                      alt={pickLang(course.title, locale)}
-                      label={pickLang(course.title, locale)}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full bg-black/60 flex items-center justify-center cursor-pointer hover:bg-black/70 transition-colors">
-                        <Play className="w-7 h-7 text-white fill-white ml-1" />
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div className="p-6">
-                  {/* Price — hidden while course payment is disabled (lib/featureFlags.ts) */}
-                  {COURSE_PAYMENT_ENABLED && (
-                  <div className="flex items-center gap-3 mb-4">
-                    {hasDiscount ? (
-                      <>
-                        <span className="text-3xl font-bold text-violet-700 [.theme-dark_&]:text-neon-violet">
-                          {formatPrice(Number(course.discountPrice), false)}
-                        </span>
-                        <span className="text-lg text-text-muted line-through">
-                          {formatPrice(Number(course.price), false)}
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-3xl font-bold text-violet-700 [.theme-dark_&]:text-neon-violet">
-                        {formatPrice(Number(course.price), course.isFree)}
-                      </span>
-                    )}
-                  </div>
-                  )}
-
-                  {sapRaMat ? (
-                    <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm">
-                      <p className="font-semibold text-text-primary">{locale === 'en' ? 'Coming soon' : 'Sắp ra mắt'}</p>
-                      <p className="mt-1.5 leading-relaxed text-text-secondary">
-                        {locale === 'en'
-                          ? `The syllabus is ready: ${khungSRM.soChuongDuKien ?? 0} parts, ${khungSRM.soBaiDuKien ?? 0} lessons. Lessons open one by one as they are finished.`
-                          : `Khung chương trình đã sẵn: ${khungSRM.soChuongDuKien ?? 0} phần, ${khungSRM.soBaiDuKien ?? 0} bài. Bài học sẽ mở dần khi soạn xong.`}
-                      </p>
-                      <button type="button" disabled className="mt-3 w-full cursor-not-allowed rounded-lg border border-[var(--border-color)] px-4 py-2.5 text-sm font-semibold text-text-muted">
-                        {locale === 'en' ? 'Enrolment not open yet' : 'Chưa mở đăng ký'}
-                      </button>
-                    </div>
-                  ) : (
-                  <>
-                  <OldCourseAccessOptions
-                    course={course}
-                    isAuthenticated={!!isAuthenticated}
-                    accessCode={accessCode}
-                    setAccessCode={setAccessCode}
-                    codeError={codeError}
-                    setCodeError={setCodeError}
-                    enrolling={enrolling}
-                    setEnrolling={setEnrolling}
-                    buying={buying}
-                    setBuying={setBuying}
-                    activatingCode={activatingCode}
-                    setActivatingCode={setActivatingCode}
-                    handleEnroll={handleEnroll}
-                    handleBuyCourse={handleBuyCourse}
-                    handleActivateCode={handleActivateCode}
-                  />
-
-                  <p className="text-center text-text-muted text-xs mt-3">
-                    {course.hasPaidAccess
-                      ? 'Ban da dang ky khoa hoc nay'
-                      : isPaidCourse
-                        ? 'Thanh toan qua VNPay (QR / ATM / Visa)'
-                        : isCodeCourse
-                          ? 'Ma kich hoat: 4-10 ky tu (chu hoa, so)'
-                          : 'Truy cap mien phi'}
-                  </p>
-                  </>
-                  )}
-                </div>
+            <div className="order-first min-w-0 lg:order-none">
+              <div className="relative aspect-video overflow-hidden rounded-2xl border border-[var(--k-border)] bg-[var(--k-thumb)]">
+                <AnhBia
+                  m={{ thumbnailUrl: course.thumbnailUrl ?? null, courseCode: course.courseCode ?? null }}
+                  ten={pickLang(course.title, locale)}
+                  className="absolute inset-0 h-full w-full"
+                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-10">
+          {dangSoan && bg && (
+            <div className="relative mt-6 flex items-start gap-3 rounded-2xl border border-[var(--k-amber-line)] bg-[var(--k-amber-soft)] p-4 text-sm">
+              <Hourglass className="mt-0.5 h-5 w-5 shrink-0 text-[var(--k-amber)]" aria-hidden />
+              <p className="leading-relaxed text-[var(--k-ink)]">
+                <span className="font-semibold">{t.dangSoanTieuDe}</span> {t.dangSoanMoTa(bg.soBaiDaSoan, bg.soBai)}
+              </p>
+            </div>
+          )}
+        </header>
 
-            {/* What you'll learn */}
-            {whatYouLearnList.length > 0 && (
-              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-5 flex items-center gap-2">
-                  <Award className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
-                  Bạn sẽ học được gì
-                </h2>
-                <div
-                  className={`grid gap-x-6 gap-y-3 ${
-                    nenMotCot(whatYouLearnList) ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'
-                  }`}
-                >
-                  {whatYouLearnList.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed">
-                      <CheckCircle className="w-5 h-5 text-green-700 [.theme-dark_&]:text-green-400 shrink-0 mt-0.5" />
-                      <span className="min-w-0">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Description */}
-            {course.description && (
-              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Mô tả khoá học</h2>
-                <CourseDescription html={course.description} />
-              </section>
-            )}
-
-            {/* Curriculum */}
-            <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-5 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet" />
-                  Nội dung khoá học
-                </h2>
-              <div className="space-y-2">
-                {course.sections?.map((section) => (
-                  <div key={section.id} className="border border-[color-mix(in_srgb,var(--border-color)_30%,transparent)] rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => toggleSection(section.id)}
-                      className="w-full flex items-center justify-between p-4 bg-[color-mix(in_srgb,var(--bg-primary)_50%,transparent)] hover:bg-[var(--bg-primary)] transition-colors text-left"
-                    >
-                      <div>
-                        <h3 className="font-semibold text-text-primary">{pickLang(section.title, locale)}</h3>
-                        <p className="text-text-muted text-xs mt-1">
-                          {section.lessonCount} lessons • {formatDuration(section.totalDurationSeconds)}
-                        </p>
-                      </div>
-                      {expandedSections.has(section.id)
-                        ? <ChevronUp className="w-5 h-5 text-text-muted shrink-0" />
-                        : <ChevronDown className="w-5 h-5 text-text-muted shrink-0" />
-                      }
-                    </button>
-                    {expandedSections.has(section.id) && (
-                      <div className="divide-y divide-[color-mix(in_srgb,var(--border-color)_20%,transparent)]">
-                        {section.lessons?.map((lesson) => {
-                          const locked = section.isLocked && !course.hasPaidAccess;
-                          const isFree = lesson.isFreePreview;
-                          return (
-                            <div key={lesson.id} className="flex items-center gap-3 p-3 pl-4">
-                              <div className={`shrink-0 ${locked ? 'text-text-muted' : isFree ? 'text-green-700 [.theme-dark_&]:text-green-400' : 'text-neon-indigo'}`}>
-                                {locked ? <Lock className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm text-text-primary truncate">{pickLang(lesson.title, locale)}</p>
-                                <div className="flex items-center gap-3 mt-0.5">
-                                  {!sapRaMat && (
-                                  <span className="text-text-muted text-xs">
-                                    {formatDuration(lesson.videoDurationSeconds)}
-                                  </span>
-                                  )}
-                                  {isFree && !course.isEnrolled && (
-                                    <span className="text-xs text-green-700 [.theme-dark_&]:text-green-400 font-medium">Preview</span>
-                                  )}
-                                </div>
-                              </div>
-                              {lesson.lessonType === 'VIDEO' && !sapRaMat && (
-                                <span className="text-text-muted text-xs shrink-0">
-                                  Video
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
+          {/* ── Cột phải (điện thoại: lên trước) — đăng ký + "Khoá học này gồm" ── */}
+          <aside className="order-first space-y-6 lg:order-last">
+            <div className="space-y-6 lg:sticky lg:top-24">
+              <section id="dang-ky" aria-label={t.dangKy} className={`${s.the} scroll-mt-28 rounded-2xl p-5`}>
+                {/* Price — hidden while course payment is disabled (lib/featureFlags.ts). Khoá miễn phí: nút xanh
+                    "Miễn phí" bên dưới đã nói đủ — không in thêm chữ "Miễn phí" cỡ lớn lặp lại. */}
+                {COURSE_PAYMENT_ENABLED && !(course.isFree && accessType === 'FREE') && (
+                  <div className="mb-4 flex items-center gap-3">
+                    {hasDiscount ? (
+                      <>
+                        <span className="text-3xl font-bold text-[var(--k-accent)]">
+                          {formatPrice(Number(course.discountPrice), false, en)}
+                        </span>
+                        <span className="text-lg text-[var(--k-ink-3)] line-through">
+                          {formatPrice(Number(course.price), false, en)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-3xl font-bold text-[var(--k-accent)]">
+                        {formatPrice(Number(course.price), course.isFree, en)}
+                      </span>
                     )}
                   </div>
-                ))}
-              </div>
-              {!isAuthenticated && !sapRaMat && (
-                <div className="mt-4 rounded-xl border border-neon-violet/30 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 p-4 flex items-center justify-between gap-4 flex-wrap">
-                  <div className="flex items-center gap-3">
-                    <Lock className="w-5 h-5 text-violet-700 [.theme-dark_&]:text-neon-violet shrink-0" />
-                    <p className="text-sm text-text-secondary">
-                      Bạn cần <span className="font-semibold text-violet-700 [.theme-dark_&]:text-neon-violet">đăng nhập</span> để xem thêm nội dung khoá học chi tiết.
+                )}
+
+                {sapRaMat ? (
+                  <div className="rounded-xl border border-[var(--k-cyan-line)] bg-[var(--k-cyan-soft)] p-4 text-sm">
+                    <p className="font-semibold text-[var(--k-ink)]">{c.sapRaMat}</p>
+                    <p className="mt-1.5 leading-relaxed text-[var(--k-ink-2)]">
+                      {t.sapRaMatMoTa(khungSRM.soChuongDuKien ?? 0, khungSRM.soBaiDuKien ?? 0)}
                     </p>
+                    <button type="button" disabled className="mt-3 w-full cursor-not-allowed rounded-lg border border-[var(--k-border)] px-4 py-2.5 text-sm font-semibold text-[var(--k-ink-3)]">
+                      {t.chuaMo}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <OldCourseAccessOptions
+                      en={en}
+                      course={course}
+                      isAuthenticated={!!isAuthenticated}
+                      accessCode={accessCode}
+                      setAccessCode={setAccessCode}
+                      codeError={codeError}
+                      setCodeError={setCodeError}
+                      enrolling={enrolling}
+                      setEnrolling={setEnrolling}
+                      buying={buying}
+                      setBuying={setBuying}
+                      activatingCode={activatingCode}
+                      setActivatingCode={setActivatingCode}
+                      handleEnroll={handleEnroll}
+                      handleBuyCourse={handleBuyCourse}
+                      handleActivateCode={handleActivateCode}
+                    />
+                    <p className="mt-3 text-center text-xs text-[var(--k-ink-3)]">
+                      {course.hasPaidAccess
+                        ? t.daDangKy
+                        : isPaidCourse
+                          ? t.thanhToan
+                          : isCodeCourse
+                            ? t.maKichHoat
+                            : t.mienPhi}
+                    </p>
+                  </>
+                )}
+              </section>
+
+              <section aria-labelledby="bao-gom" className={`${s.the} rounded-2xl p-5`}>
+                <h2 id="bao-gom" className="mb-4 text-base font-semibold text-[var(--k-ink)]">{t.baoGom}</h2>
+                <ul className="grid grid-cols-2 gap-2.5">
+                  {baoGom.map((b) => (
+                    <li key={b.nhan} className={`${s.theTrong} rounded-xl p-3`}>
+                      <span className="text-[var(--k-accent)]" aria-hidden>{b.icon}</span>
+                      <p className={`${s.so} mt-1.5 text-lg font-bold leading-none text-[var(--k-ink)]`}>{b.so}</p>
+                      <p className="mt-1 text-xs leading-snug text-[var(--k-ink-3)]">{b.nhan}</p>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 flex items-center gap-3 border-t border-[var(--k-border)] pt-4">
+                  {course.instructorId ? (
+                    <Link
+                      href={`/profile/${course.instructorId}`}
+                      className="group/gv -m-1 flex items-center gap-3 rounded-xl p-1 transition-colors hover:bg-[var(--k-accent-soft)]"
+                    >
+                      <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName} className="h-10 w-10" />
+                      <span>
+                        <span className="block text-xs text-[var(--k-ink-3)]">{t.giangVien}</span>
+                        <span className="block text-sm font-semibold text-[var(--k-ink)] group-hover/gv:text-[var(--k-accent)]">{course.instructorName}</span>
+                      </span>
+                    </Link>
+                  ) : (
+                    <>
+                      <AnhDaiDien src={course.instructorAvatar} ten={course.instructorName || 'CuongHoangDev'} className="h-10 w-10" />
+                      <span>
+                        <span className="block text-xs text-[var(--k-ink-3)]">{t.giangVien}</span>
+                        <span className="block text-sm font-semibold text-[var(--k-ink)]">{course.instructorName || 'CuongHoangDev'}</span>
+                      </span>
+                    </>
+                  )}
+                </div>
+              </section>
+            </div>
+          </aside>
+
+          {/* ── Cột chính ── */}
+          <div className="min-w-0 space-y-6">
+            <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
+            <CourseLabCard slug={course.slug} locale={locale} />
+
+            {whatYouLearnList.length > 0 && (
+              <section aria-labelledby="hoc-duoc" className={`${s.the} rounded-2xl p-5 sm:p-6`}>
+                <h2 id="hoc-duoc" className="mb-5 flex items-center gap-2 font-heading text-xl font-bold text-[var(--k-ink)]">
+                  <Award className="h-5 w-5 text-[var(--k-accent)]" aria-hidden />
+                  {t.hocDuoc}
+                </h2>
+                <ul className={`grid gap-x-6 gap-y-3 ${nenMotCot(whatYouLearnList) ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
+                  {whatYouLearnList.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--k-ink-2)]">
+                      <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--k-green)]" aria-hidden />
+                      <span className="min-w-0">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* ── Mục lục: chương → bài ── */}
+            <section id="noi-dung" aria-labelledby="noi-dung-tieu-de" className={`${s.the} ${s.neo} rounded-2xl p-5 sm:p-6`}>
+              <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 id="noi-dung-tieu-de" className="flex items-center gap-2 font-heading text-xl font-bold text-[var(--k-ink)]">
+                    <ListTree className="h-5 w-5 text-[var(--k-accent)]" aria-hidden />
+                    {t.mucLuc}
+                  </h2>
+                  <p className={`${s.so} mt-1 text-sm text-[var(--k-ink-3)]`}>
+                    {[t.soChuong(soChuong), sapRaMat ? t.soBaiDuKien(soBai) : t.soBai(soBai), giayVideo >= 60 ? t.videoDai(formatDuration(giayVideo, en)) : '']
+                      .filter(Boolean).join(' · ')}
+                  </p>
+                </div>
+                {sections.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setExpandedSections(moTatCa ? new Set(sections.map((sec) => sec.id)) : new Set())}
+                    className="min-h-[40px] rounded-xl px-3 text-sm font-semibold text-[var(--k-accent)] hover:bg-[var(--k-accent-soft)]"
+                  >
+                    {moTatCa ? t.moTatCa : t.thuGon}
+                  </button>
+                )}
+              </div>
+
+              <ol className="space-y-2.5">
+                {sections.map((section) => {
+                  const mo = expandedSections.has(section.id);
+                  const baiChuong = section.lessons ?? [];
+                  const soBaiChuong = baiChuong.length || section.lessonCount || 0;
+                  const giayChuong = section.totalDurationSeconds || baiChuong.reduce((tg, l) => tg + (l.videoDurationSeconds || 0), 0);
+                  const locked = section.isLocked && !course.hasPaidAccess;
+                  const panelId = `chuong-${section.id}`;
+                  return (
+                    <li key={section.id} className={`${s.theTrong} overflow-hidden rounded-xl`}>
+                      <h3>
+                        <button
+                          type="button"
+                          onClick={() => toggleSection(section.id)}
+                          aria-expanded={mo}
+                          aria-controls={panelId}
+                          className={`${s.hangKy} flex w-full items-center gap-3 p-3.5 text-left sm:p-4`}
+                        >
+                          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[var(--k-accent-soft)] text-[var(--k-accent)]" aria-hidden>
+                            <Layers3 className="h-4 w-4" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-semibold leading-snug text-[var(--k-ink)]">{pickLang(section.title, locale)}</span>
+                            <span className={`${s.so} mt-0.5 block text-xs text-[var(--k-ink-3)]`}>
+                              {[t.soBai(soBaiChuong), giayChuong >= 60 ? formatDuration(giayChuong, en) : ''].filter(Boolean).join(' · ')}
+                            </span>
+                          </span>
+                          {locked && <Lock className="h-4 w-4 shrink-0 text-[var(--k-ink-3)]" aria-label={t.khoa} />}
+                          <ChevronDown className={`h-5 w-5 shrink-0 text-[var(--k-ink-3)] transition-transform motion-reduce:transition-none ${mo ? 'rotate-180' : ''}`} aria-hidden />
+                        </button>
+                      </h3>
+                      {mo && (
+                        <ol id={panelId} className="divide-y divide-[var(--k-border)] border-t border-[var(--k-border)]">
+                          {baiChuong.map((lesson) => {
+                            const kieu = kieuBai(lesson);
+                            const noiDung = (
+                              <>
+                                <span className={`shrink-0 ${locked ? 'text-[var(--k-ink-3)]' : 'text-[var(--k-accent)]'}`} aria-hidden>
+                                  {locked ? <Lock className="h-4 w-4" /> : kieu.icon}
+                                </span>
+                                <span className="min-w-0 flex-1">
+                                  <span className="block text-sm leading-snug text-[var(--k-ink)]">{pickLang(lesson.title, locale)}</span>
+                                  <span className="mt-0.5 flex flex-wrap items-center gap-x-2.5 text-xs text-[var(--k-ink-3)]">
+                                    {!sapRaMat && <span>{kieu.nhan}</span>}
+                                    {!sapRaMat && lesson.videoDurationSeconds >= 60 && <span className={s.so}>{formatDuration(lesson.videoDurationSeconds, en)}</span>}
+                                    {lesson.isFreePreview && !course.isEnrolled && <span className="font-semibold text-[var(--k-green)]">{t.hocThu}</span>}
+                                  </span>
+                                </span>
+                              </>
+                            );
+                            return (
+                              <li key={lesson.id}>
+                                {vaoDuoc && !locked && !sapRaMat ? (
+                                  <Link href={duongBai(lesson.id)} className={`${s.hangKy} flex items-center gap-3 px-4 py-3`}>
+                                    {noiDung}
+                                    <ChevronRight className="h-4 w-4 shrink-0 text-[var(--k-ink-3)]" aria-hidden />
+                                  </Link>
+                                ) : (
+                                  <div className="flex items-center gap-3 px-4 py-3">{noiDung}</div>
+                                )}
+                              </li>
+                            );
+                          })}
+                        </ol>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+
+              {!isAuthenticated && !sapRaMat && (
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[var(--k-accent-line)] bg-[var(--k-accent-soft)] p-4">
+                  <div className="flex items-center gap-3">
+                    <Lock className="h-5 w-5 shrink-0 text-[var(--k-accent)]" aria-hidden />
+                    <p className="text-sm text-[var(--k-ink-2)]">{t.canDangNhap}</p>
                   </div>
                   <button
                     onClick={() => router.push(`/login?callbackUrl=${encodeURIComponent(`/courses/${course.slug}`)}`)}
-                    className="shrink-0 px-4 py-2 rounded-lg bg-neon-violet/20 hover:bg-neon-violet/30 border border-neon-violet/40 text-violet-700 [.theme-dark_&]:text-neon-violet text-sm font-semibold transition-colors"
+                    className="min-h-[40px] shrink-0 rounded-lg px-4 text-sm font-semibold text-white"
+                    style={{ background: 'var(--k-grad)' }}
                   >
-                    Đăng nhập
+                    {t.dangNhap}
                   </button>
                 </div>
               )}
             </section>
 
-            {/* Requirements */}
+            {course.description && (
+              <section aria-labelledby="mo-ta" className={`${s.the} rounded-2xl p-5 sm:p-6`}>
+                <h2 id="mo-ta" className="mb-4 font-heading text-xl font-bold text-[var(--k-ink)]">{t.moTa}</h2>
+                <CourseDescription html={course.description} />
+              </section>
+            )}
+
             {requirementsList.length > 0 && (
-              <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
-                <h2 className="text-xl font-heading font-bold text-text-primary mb-4">Yêu cầu đầu vào</h2>
+              <section aria-labelledby="yeu-cau" className={`${s.the} rounded-2xl p-5 sm:p-6`}>
+                <h2 id="yeu-cau" className="mb-4 font-heading text-xl font-bold text-[var(--k-ink)]">{t.yeuCau}</h2>
                 <ul className="space-y-2">
                   {requirementsList.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-text-secondary text-sm leading-relaxed">
-                      <span className="text-violet-700 [.theme-dark_&]:text-neon-violet mt-1 shrink-0">•</span>
+                    <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--k-ink-2)]">
+                      <span className="mt-[0.55rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--k-accent)]" aria-hidden />
                       <span className="min-w-0">{item}</span>
                     </li>
                   ))}
@@ -926,29 +1026,29 @@ export default function CourseDetailPage() {
             )}
 
             {/* Reviews & ratings */}
-            <section className="bg-[var(--bg-card)] border border-[color-mix(in_srgb,var(--border-color)_50%,transparent)] rounded-2xl p-6">
-              <div className="flex items-center justify-between gap-4 mb-5 flex-wrap">
-                <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
-                  <Star className="w-5 h-5 text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400" />
-                  Đánh giá học viên
+            <section aria-labelledby="danh-gia" className={`${s.the} rounded-2xl p-5 sm:p-6`}>
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+                <h2 id="danh-gia" className="flex items-center gap-2 font-heading text-xl font-bold text-[var(--k-ink)]">
+                  <Star className="h-5 w-5 fill-amber-400 text-amber-400" aria-hidden />
+                  {t.danhGia}
                 </h2>
                 {displayReviewCount > 0 && (
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-0.5">
+                    <div className="flex items-center gap-0.5" aria-hidden>
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`w-4 h-4 ${i < Math.round(displayAvgRating) ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
+                        <Star key={i} className={`h-4 w-4 ${i < Math.round(displayAvgRating) ? 'fill-amber-400 text-amber-400' : 'text-[var(--k-border-strong)]'}`} />
                       ))}
                     </div>
-                    <span className="text-sm text-text-secondary">{displayAvgRating.toFixed(1)} · {displayReviewCount} đánh giá</span>
+                    <span className="text-sm text-[var(--k-ink-2)]">{displayAvgRating.toFixed(1)} · {t.danhGiaDem(displayReviewCount)}</span>
                   </div>
                 )}
               </div>
 
               {/* Review form — enrolled learners (or admin) only. Others read-only. */}
               {canReview ? (
-                <div className="mb-6 rounded-2xl border border-[var(--border-color)] bg-[color-mix(in_srgb,var(--bg-primary)_50%,transparent)] p-4">
-                  <p className="text-sm font-medium text-text-primary mb-2">Đánh giá của bạn</p>
-                  <div className="flex items-center gap-1 mb-3">
+                <div className={`${s.theTrong} mb-6 rounded-2xl p-4`}>
+                  <p className="mb-2 text-sm font-medium text-[var(--k-ink)]">{t.danhGiaCuaBan}</p>
+                  <div className="mb-3 flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => {
                       const val = i + 1;
                       return (
@@ -958,63 +1058,64 @@ export default function CourseDetailPage() {
                           onMouseEnter={() => setReviewHover(val)}
                           onMouseLeave={() => setReviewHover(0)}
                           onClick={() => setReviewRating(val)}
-                          className="p-0.5"
-                          aria-label={`${val} sao`}
+                          className="rounded p-0.5"
+                          aria-label={t.saoNhan(val)}
+                          aria-pressed={reviewRating === val}
                         >
-                          <Star className={`w-7 h-7 transition-colors ${val <= (reviewHover || reviewRating) ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
+                          <Star className={`h-7 w-7 transition-colors ${val <= (reviewHover || reviewRating) ? 'fill-amber-400 text-amber-400' : 'text-[var(--k-border-strong)]'}`} />
                         </button>
                       );
                     })}
-                    {reviewRating > 0 && <span className="ml-2 text-sm text-text-muted">{reviewRating}/5</span>}
+                    {reviewRating > 0 && <span className="ml-2 text-sm text-[var(--k-ink-3)]">{reviewRating}/5</span>}
                   </div>
+                  <label className="sr-only" htmlFor="noi-dung-danh-gia">{t.danhGiaCuaBan}</label>
                   <textarea
+                    id="noi-dung-danh-gia"
                     value={reviewContent}
                     onChange={(e) => setReviewContent(e.target.value)}
                     rows={3}
-                    placeholder="Share your thoughts on the course (optional)…"
-                    className="w-full px-4 py-3 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-none mb-3"
+                    placeholder={t.goiYDanhGia}
+                    className="mb-3 w-full resize-none rounded-xl border border-[var(--k-border)] bg-[var(--k-card)] px-4 py-3 text-[var(--k-ink)] placeholder:text-[var(--k-ink-3)] focus:border-[var(--k-accent-line)]"
                   />
                   <button
                     onClick={submitReview}
                     disabled={submittingReview || reviewRating < 1}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                    style={{ background: 'var(--k-grad)' }}
                   >
-                    {submittingReview ? <Loader2 className="w-4 h-4 animate-spin" /> : <Star className="w-4 h-4" />}
-                    Gửi đánh giá
+                    {submittingReview ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Star className="h-4 w-4" aria-hidden />}
+                    {t.guiDanhGia}
                   </button>
                 </div>
               ) : (
-                <div className="mb-6 rounded-xl border border-[var(--border-color)] bg-[color-mix(in_srgb,var(--bg-primary)_40%,transparent)] p-4 text-sm text-text-muted">
-                  Đăng ký và học khoá này để có thể đánh giá.
-                </div>
+                <div className={`${s.theTrong} mb-6 rounded-xl p-4 text-sm text-[var(--k-ink-3)]`}>{t.canHocDeDanhGia}</div>
               )}
 
-              {/* Review list */}
               {reviews.length > 0 ? (
-                <div className="space-y-4">
+                <ul className="space-y-4">
                   {reviews.map((review) => (
-                    <div key={review.id} className="border-b border-[color-mix(in_srgb,var(--border-color)_20%,transparent)] pb-4 last:border-0">
-                      <div className="flex items-center gap-3 mb-2">
-                        <AnhDaiDien src={review.userAvatar} ten={review.userFullName} className="w-9 h-9" />
+                    <li key={review.id} className="border-b border-[var(--k-border)] pb-4 last:border-0">
+                      <div className="mb-2 flex items-center gap-3">
+                        <AnhDaiDien src={review.userAvatar} ten={review.userFullName} className="h-9 w-9" />
                         <div>
-                          <p className="font-medium text-text-primary text-sm">{review.userFullName}</p>
-                          <div className="flex items-center gap-1">
+                          <p className="text-sm font-medium text-[var(--k-ink)]">{review.userFullName}</p>
+                          <div className="flex items-center gap-1" aria-label={t.saoNhan(review.rating)}>
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < review.rating ? 'text-amber-400 fill-amber-400 [.theme-dark_&]:text-yellow-400 [.theme-dark_&]:fill-yellow-400' : 'text-[var(--border-color)]'}`} />
+                              <Star key={i} aria-hidden className={`h-3.5 w-3.5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-[var(--k-border-strong)]'}`} />
                             ))}
                           </div>
                         </div>
-                        <span className="text-text-muted text-xs ml-auto">
-                          {new Date(review.createdAt).toLocaleDateString('vi-VN')}
+                        <span className="ml-auto text-xs text-[var(--k-ink-3)]">
+                          {new Date(review.createdAt).toLocaleDateString(en ? 'en-GB' : 'vi-VN')}
                         </span>
                       </div>
-                      {review.title && <p className="font-medium text-text-primary text-sm mb-1">{review.title}</p>}
-                      {review.content && <p className="text-text-secondary text-sm">{review.content}</p>}
-                    </div>
+                      {review.title && <p className="mb-1 text-sm font-medium text-[var(--k-ink)]">{review.title}</p>}
+                      {review.content && <p className="text-sm text-[var(--k-ink-2)]">{review.content}</p>}
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
-                <p className="text-sm text-text-muted">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+                <p className="text-sm text-[var(--k-ink-3)]">{t.chuaCoDanhGia}</p>
               )}
             </section>
           </div>

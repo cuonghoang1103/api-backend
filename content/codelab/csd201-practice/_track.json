@@ -376,6 +376,24 @@
       "description": "Luyện: Restore IP addresses — cut a digit string into 4 valid octets · All DISTINCT subsets when the input has duplicates — skip equal values at the same depth · Choose exactly k different digits 1–9 that sum to n — prune on the running sum · Beautiful arrangements — prune at the current position, not at the end · Walk over every empty cell exactly once — count Hamiltonian paths on a grid · Split into k subsets with equal sums — fill one bucket at a time"
     },
     {
+      "slug": "csd201-cs7-on",
+      "name": "10.7 ⭐ CS.7 Advanced trees — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: The k-th smallest value in a BST — iterative in-order, stop after k visits · Path sum III — downward paths with a given sum: prefix sums on a tree + backtracking · A word dictionary with \".\" wildcards — Trie + DFS · Maximum XOR of two numbers — a binary trie, greedy from the high bit · Count smaller numbers to the right — a Fenwick tree over compressed values · Nearby almost-duplicates — a sliding window kept in a TreeSet"
+    },
+    {
+      "slug": "csd201-cs8-on",
+      "name": "10.8 ⭐ CS.8 Advanced graphs — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Alien dictionary — recover the letter order with Kahn + a PriorityQueue · Cheapest flight with at most k stops — Bellman-Ford for k + 1 rounds, reading a copy · Shortest bridge between two islands — flood fill, then multi-source BFS · Eventually safe vertices — Kahn on the REVERSED graph · Fewest arrow changes to reach the corner — 0-1 BFS with a deque · Longest increasing path in a matrix — count the levels of Kahn’s algorithm"
+    },
+    {
+      "slug": "csd201-cs9-on",
+      "name": "10.9 ⭐ CS.9 Hashing, strings and bits — interview problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Equal values at most k apart — a HashMap of the last index · Count subarrays that sum to k — prefix sums + HashMap (negatives allowed) · The first non-repeating character — a counting array of 26 · Every number three times except one — add each bit position mod 3 · Count the 1-bits of every number 0…n — dp[i] = dp[i >> 1] + (i & 1) · Reverse the 32 bits of an int — shifts and the unsigned >>>"
+    },
+    {
       "slug": "csd201-on-pe",
       "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
       "level": "ADVANCED",

@@ -1593,6 +1593,147 @@
    "RANDOM -> 1500 random grids: all 1500 agree with the brute force\n"
   ]
  },
+ "csd201-cs7-count-smaller": {
+  "bam": "d6733b811bd40135",
+  "ra": [
+   "RUN 7,2,7,-4,5,1 -> [4, 2, 3, 0, 1, 0]\nRUN - -> []\nRUN -2147483648,2147483647 -> [0, 0]\nRUN 5,4,3,2,1 -> [4, 3, 2, 1, 0]\nRUN 2,2,2 -> [0, 0, 0]\n",
+   "RANDOM -> 3000 random arrays (duplicates, any int): all 3000 agree with the brute force\n",
+   "PERF -> 200,000 numbers: OK, total 10006243123\n"
+  ]
+ },
+ "csd201-cs7-kth-smallest": {
+  "bam": "e27420261c2e233b",
+  "ra": [
+   "RUN 50,30,70,20,40,60,80,10 1 -> 10\nRUN 50,30,70,20,40,60,80,10 4 -> 40\nRUN 50,30,70,20,40,60,80,10 8 -> 80\nRUN -5 1 -> -5\nRUN -5 2 -> THROWS IllegalArgumentException: k > n\n",
+   "RANDOM -> 3000 random BSTs vs sorting: all 3000 agree with the brute force\n",
+   "PERF -> chain of 100,000 + 200,000 small-k queries: OK, sum 2000000\n"
+  ]
+ },
+ "csd201-cs7-max-xor": {
+  "bam": "ec7c6790237552e6",
+  "ra": [
+   "RUN 6,17,9,30,4,12 -> 29\nRUN 7 -> 0\nRUN 0,2147483647 -> 2147483647\nRUN - -> 0\nRUN 8,10,2 -> 10\n",
+   "RANDOM -> 3000 random arrays (small and full 31-bit): all 3000 agree with the brute force\n",
+   "PERF -> 200,000 numbers: OK, max 1073741823\n"
+  ]
+ },
+ "csd201-cs7-nearby-almost-dup": {
+  "bam": "beae132ddd739883",
+  "ra": [
+   "RUN 8,1,14,5,9 3 1 -> false\nRUN 8,1,14,5,9 4 1 -> true\nRUN 8,1,14,5,9 1 4 -> true\nRUN 2147483647,-2147483648 1 0 -> false\nRUN - 1 1 -> false\nRUN 1,1 1 0 -> true\n",
+   "RANDOM -> 5000 random arrays (any int, huge t): all 5000 agree with the brute force\n",
+   "PERF -> n = 200,000, k = 50,000 (answer false) + one true case: OK, answers false and true\n"
+  ]
+ },
+ "csd201-cs7-path-sum-3": {
+  "bam": "925bef18fb1b7b1c",
+  "ra": [
+   "RUN 10,5,-3,3,2,#,11,3,-2,#,1 8 -> 3\nRUN 1,-1,1,-1 0 -> 1\nRUN 1000000000,1000000000,#,1000000000 3000000000 -> 1\nRUN - 0 -> 0\nRUN 0,0,0 0 -> 5\n",
+   "RANDOM -> 3000 random trees (negatives, target 0): all 3000 agree with the brute force\n",
+   "PERF -> about 248,000 nodes, height 8000: OK, paths 5359660\n"
+  ]
+ },
+ "csd201-cs7-wildcard-trie": {
+  "bam": "16de0c677a770f0c",
+  "ra": [
+   "ADD bad -> ok\nADD dad -> ok\nADD mad -> ok\nFIND pad -> false\nFIND bad -> true\nFIND .ad -> true\nFIND b.. -> true\nFIND ba -> false\nFIND ... -> true\nFIND .... -> false\nFIND . -> false\n",
+   "ADD apple -> ok\nFIND app -> false\nADD app -> ok\nFIND app -> true\nFIND a...e -> true\nFIND .....s -> false\n",
+   "RANDOM -> random dictionaries x 100 patterns: all 20000 agree with the brute force\n",
+   "PERF -> 100,000 adds + 100,000 searches: OK, found 71848\n"
+  ]
+ },
+ "csd201-cs8-alien-order": {
+  "bam": "658ea1277d48baac",
+  "ra": [
+   "RUN toc tob oa obb bnc -> \"acntob\"\nRUN z x z -> \"\"\nRUN abc ab -> \"\"\nRUN ab abc -> \"abc\"\nRUN z x -> \"zx\"\nRUN ba bc ac cab -> \"bac\"\n",
+   "RANDOM -> 3000 random word lists: all 3000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs8-arrow-grid": {
+  "bam": "b88a800671d30a5a",
+  "ra": [
+   "RUN 1,1,1,1 2,2,2,2 1,1,1,1 2,2,2,2 -> 3\nRUN 1,1,3 3,2,2 1,1,4 -> 0\nRUN 1,2 4,3 -> 1\nRUN 4 -> 0\nRUN 2,2,2 2,2,2 -> 3\n",
+   "RANDOM -> 3000 random arrow grids vs O(V^2) Dijkstra: all 3000 agree with the brute force\n",
+   "PERF -> 1000 x 1000 grid: OK, changes 523\n"
+  ]
+ },
+ "csd201-cs8-k-stops": {
+  "bam": "789bd49580f9de23",
+  "ra": [
+   "RUN 4 0 3 0 0,1,100 1,2,100 2,3,100 0,2,500 1,3,600 -> -1\nRUN 4 0 3 1 0,1,100 1,2,100 2,3,100 0,2,500 1,3,600 -> 600\nRUN 4 0 3 2 0,1,100 1,2,100 2,3,100 0,2,500 1,3,600 -> 300\nRUN 3 0 0 0 0,1,5 -> 0\nRUN 3 0 2 5 0,1,5 -> -1\n",
+   "RANDOM -> 3000 random flight maps vs every route: all 3000 agree with the brute force\n",
+   "PERF -> 2000 cities, 20,000 flights, k = 100: OK, prices 931 and -1\n"
+  ]
+ },
+ "csd201-cs8-longest-increasing-path": {
+  "bam": "d57b4e22e306ff99",
+  "ra": [
+   "RUN 9,9,4 6,6,8 2,1,1 -> 4\nRUN 3,4,5 3,2,6 2,2,1 -> 4\nRUN 7,7 7,7 -> 1\nRUN 1 -> 1\nRUN 1,2,3,4,5 -> 5\n",
+   "RANDOM -> 3000 random grids vs DFS from every cell: all 3000 agree with the brute force\n",
+   "PERF -> 1000 x 1000 snake: OK, longest 1000000\n"
+  ]
+ },
+ "csd201-cs8-safe-states": {
+  "bam": "9577fe153fbe409c",
+  "ra": [
+   "RUN 7 0,1 0,2 1,2 1,3 2,5 3,0 4,5 -> [2, 4, 5, 6]\nRUN 3 0,0 1,2 -> [1, 2]\nRUN 1 -> [0]\nRUN 4 0,1 1,2 2,3 3,1 -> []\n",
+   "RANDOM -> 3000 random graphs (self-loops, duplicate edges): all 3000 agree with the brute force\n",
+   "PERF -> 200,000 vertices, 400,000 edges: OK, safe vertices 31637\n"
+  ]
+ },
+ "csd201-cs8-shortest-bridge": {
+  "bam": "0cfd1f03b5cbbc37",
+  "ra": [
+   "RUN 0,1,0,0,0 0,1,0,0,0 0,0,0,0,1 -> 3\nRUN 0,1 1,0 -> 1\nRUN 1,1,1,1,1 1,0,0,0,1 1,0,1,0,1 1,0,0,0,1 1,1,1,1,1 -> 1\nRUN 1,0,0,0,0,1 -> 4\n",
+   "RANDOM -> random two-island grids vs the closest pair of cells: all 2000 agree with the brute force\n",
+   "PERF -> 1000 x 1000, two islands of 400,000 cells: OK, bridge 200\n"
+  ]
+ },
+ "csd201-cs9-counting-bits": {
+  "bam": "bdfa2065a67d6c2d",
+  "ra": [
+   "RUN 0 -> [0]\nRUN 5 -> [0, 1, 1, 2, 1, 2]\nRUN 15 -> [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4]\nRUN 16 -> [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1]\n",
+   "RANDOM -> every i = 0..2^20: all 1048577 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs9-first-unique-char": {
+  "bam": "6e642b516cbea208",
+  "ra": [
+   "RUN leetcode -> 0\nRUN loveleetcode -> 2\nRUN aabb -> -1\nRUN - -> -1\nRUN z -> 0\n",
+   "RANDOM -> 5000 random strings: all 5000 agree with the brute force\n",
+   "PERF -> 1,000,000 characters: OK, index 999999\n"
+  ]
+ },
+ "csd201-cs9-nearby-duplicate": {
+  "bam": "c1595764f6b8e72d",
+  "ra": [
+   "RUN 1,2,3,1 3 -> true\nRUN 1,0,1,1 1 -> true\nRUN 1,2,3,1,2,3 2 -> false\nRUN - 5 -> false\nRUN 7,7 0 -> false\n",
+   "RANDOM -> 5000 random arrays (k = 0 too): all 5000 agree with the brute force\n",
+   "PERF -> n = 1,000,000: OK, answers false and true\n"
+  ]
+ },
+ "csd201-cs9-reverse-bits": {
+  "bam": "bd4e9fae7f32aa9c",
+  "ra": [
+   "RUN 43261596 -> 964176192\nRUN 1 -> -2147483648\nRUN 0 -> 0\nRUN -1 -> -1\nRUN -2147483648 -> 1\nRUN -3 -> -1073741825\n",
+   "RANDOM -> 100,000 ints (0, -1, MIN, MAX too): all 100000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs9-single-number-2": {
+  "bam": "44a45b76afd2c03c",
+  "ra": [
+   "RUN 2,2,3,2 -> 3\nRUN 0,1,0,1,0,1,99 -> 99\nRUN -5,7,7,7 -> -5\nRUN 42 -> 42\nRUN -2147483648,1,1,1 -> -2147483648\n",
+   "RANDOM -> 2000 random arrays (negatives, MIN/MAX range): all 2000 agree with the brute force\n"
+  ]
+ },
+ "csd201-cs9-subarray-sum-k": {
+  "bam": "918abce6c009c6a6",
+  "ra": [
+   "RUN 1,1,1 2 -> 2\nRUN 1,2,3 3 -> 2\nRUN 1,-1,0 0 -> 3\nRUN - 0 -> 0\nRUN 3,4,7,2,-3,1,4,2 7 -> 4\n",
+   "RANDOM -> 5000 random arrays with negatives: all 5000 agree with the brute force\n",
+   "PERF -> 1,000,000 elements (random) + 1,000,000 zeros: OK, answers 5645952 and 500000500000\n"
+  ]
+ },
  "csd201-pe-sp26-b5p4-q1-mylist": {
   "bam": "2182e62fb9c36da9",
   "ra": [

@@ -316,10 +316,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Surrogate or natural key? — answer key\n\n1. customer — people can change their email.customer — người dùng có thể đổi email.\n   Answer: a) an identity column id; email gets its own UNIQUE constraint\n   A key should never change. Email changes ⇒ every foreign key pointing at it would have to change too. Keep it unique, but identify the row with a surrogate id.VI: Khoá không bao giờ nên đổi. Email đổi ⇒ mọi khoá ngoại trỏ tới nó cũng phải đổi theo. Giữ nó UNIQUE, còn định danh dòng bằng id thay thế.\n\n2. country reference table with ISO codes like VN, JP, US.Bảng tham chiếu country với mã ISO như VN, JP, US.\n   Answer: c) the ISO code itself (short, standard, stable)\n   A short, stable, externally defined code is a perfect natural key; joins become readable (country_code = 'VN').VI: Mã ngắn, ổn định, do bên ngoài định nghĩa là khoá tự nhiên lý tưởng; phép nối dễ đọc (country_code = 'VN').\n\n3. order_item — one product at most once per order.order_item — mỗi sản phẩm tối đa một lần trong một đơn.\n   Answer: d) the composite key (order_id, product_id)\n   The pair is what must be unique. CT Shop's lab schema uses exactly PRIMARY KEY (order_id, product_id).VI: Cặp đó mới là thứ phải duy nhất. Lược đồ lab CT Shop dùng đúng PRIMARY KEY (order_id, product_id).\n\n4. Why prefer GENERATED ALWAYS AS IDENTITY over serial?Vì sao nên dùng GENERATED ALWAYS AS IDENTITY thay vì serial?\n   Answer: b) it is SQL-standard and refuses hand-written ids unless you say OVERRIDING SYSTEM VALUE\n   Both draw from a sequence; identity is the standard form and protects the sequence from silent collisions with hand-typed ids.VI: Cả hai đều lấy số từ sequence; identity là dạng chuẩn và bảo vệ sequence khỏi va chạm âm thầm với id gõ tay.\n"
+          "code": "# Surrogate or natural key? — answer key\n\n1. customer — people can change their email.customer — người dùng có thể đổi email.\n   Answer: d) an identity id, with email UNIQUE on its own\n   A key should never change. Email changes ⇒ every foreign key pointing at it would have to change too. Keep it unique, but identify the row with a surrogate id.VI: Khoá không bao giờ nên đổi. Email đổi ⇒ mọi khoá ngoại trỏ tới nó cũng phải đổi theo. Giữ nó UNIQUE, còn định danh dòng bằng id thay thế.\n\n2. country reference table with ISO codes like VN, JP, US.Bảng tham chiếu country với mã ISO như VN, JP, US.\n   Answer: c) the ISO code itself (short, standard, stable)\n   A short, stable, externally defined code is a perfect natural key; joins become readable (country_code = 'VN').VI: Mã ngắn, ổn định, do bên ngoài định nghĩa là khoá tự nhiên lý tưởng; phép nối dễ đọc (country_code = 'VN').\n\n3. order_item — one product at most once per order.order_item — mỗi sản phẩm tối đa một lần trong một đơn.\n   Answer: a) the composite key (order_id, product_id)\n   The pair is what must be unique. CT Shop's lab schema uses exactly PRIMARY KEY (order_id, product_id).VI: Cặp đó mới là thứ phải duy nhất. Lược đồ lab CT Shop dùng đúng PRIMARY KEY (order_id, product_id).\n\n4. Why prefer GENERATED ALWAYS AS IDENTITY over serial?Vì sao nên dùng GENERATED ALWAYS AS IDENTITY thay vì serial?\n   Answer: d) standard SQL, and it refuses hand-written ids by default\n   Both draw from a sequence; identity is the standard form and protects the sequence from silent collisions with hand-typed ids.VI: Cả hai đều lấy số từ sequence; identity là dạng chuẩn và bảo vệ sequence khỏi va chạm âm thầm với id gõ tay.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> an identity column <code>id</code>; email gets its own UNIQUE constraint</p><p>A key should never change. Email changes ⇒ every foreign key pointing at it would have to change too. Keep it unique, but identify the row with a surrogate id.</p><p><i>VI: Khoá không bao giờ nên đổi. Email đổi ⇒ mọi khoá ngoại trỏ tới nó cũng phải đổi theo. Giữ nó UNIQUE, còn định danh dòng bằng id thay thế.</i></p></li><li><p><b>c)</b> the ISO code itself (short, standard, stable)</p><p>A short, stable, externally defined code is a perfect natural key; joins become readable (country_code = 'VN').</p><p><i>VI: Mã ngắn, ổn định, do bên ngoài định nghĩa là khoá tự nhiên lý tưởng; phép nối dễ đọc (country_code = 'VN').</i></p></li><li><p><b>d)</b> the composite key (order_id, product_id)</p><p>The pair is what must be unique. CT Shop's lab schema uses exactly PRIMARY KEY (order_id, product_id).</p><p><i>VI: Cặp đó mới là thứ phải duy nhất. Lược đồ lab CT Shop dùng đúng PRIMARY KEY (order_id, product_id).</i></p></li><li><p><b>b)</b> it is SQL-standard and refuses hand-written ids unless you say OVERRIDING SYSTEM VALUE</p><p>Both draw from a sequence; identity is the standard form and protects the sequence from silent collisions with hand-typed ids.</p><p><i>VI: Cả hai đều lấy số từ sequence; identity là dạng chuẩn và bảo vệ sequence khỏi va chạm âm thầm với id gõ tay.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> an identity <code>id</code>, with email UNIQUE on its own</p><p>A key should never change. Email changes ⇒ every foreign key pointing at it would have to change too. Keep it unique, but identify the row with a surrogate id.</p><p><i>VI: Khoá không bao giờ nên đổi. Email đổi ⇒ mọi khoá ngoại trỏ tới nó cũng phải đổi theo. Giữ nó UNIQUE, còn định danh dòng bằng id thay thế.</i></p></li><li><p><b>c)</b> the ISO code itself (short, standard, stable)</p><p>A short, stable, externally defined code is a perfect natural key; joins become readable (country_code = 'VN').</p><p><i>VI: Mã ngắn, ổn định, do bên ngoài định nghĩa là khoá tự nhiên lý tưởng; phép nối dễ đọc (country_code = 'VN').</i></p></li><li><p><b>a)</b> the composite key (order_id, product_id)</p><p>The pair is what must be unique. CT Shop's lab schema uses exactly PRIMARY KEY (order_id, product_id).</p><p><i>VI: Cặp đó mới là thứ phải duy nhất. Lược đồ lab CT Shop dùng đúng PRIMARY KEY (order_id, product_id).</i></p></li><li><p><b>d)</b> standard SQL, and it refuses hand-written ids by default</p><p>Both draw from a sequence; identity is the standard form and protects the sequence from silent collisions with hand-typed ids.</p><p><i>VI: Cả hai đều lấy số từ sequence; identity là dạng chuẩn và bảo vệ sequence khỏi va chạm âm thầm với id gõ tay.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -332,23 +332,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an identity column <code>id</code>; email gets its own UNIQUE constraint"
+                "noiDung": "the phone number as the primary key"
               },
               {
                 "ma": "b",
-                "noiDung": "(full_name, city)"
+                "noiDung": "the pair (full_name, city) as the key"
               },
               {
                 "ma": "c",
-                "noiDung": "phone number"
+                "noiDung": "email itself as the primary key"
               },
               {
                 "ma": "d",
-                "noiDung": "email as the primary key"
+                "noiDung": "an identity <code>id</code>, with email UNIQUE on its own"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>A key should never change. Email changes ⇒ every foreign key pointing at it would have to change too. Keep it unique, but identify the row with a surrogate id.</p><p><i>VI: Khoá không bao giờ nên đổi. Email đổi ⇒ mọi khoá ngoại trỏ tới nó cũng phải đổi theo. Giữ nó UNIQUE, còn định danh dòng bằng id thay thế.</i></p>"
           },
@@ -384,23 +384,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an identity id only"
+                "noiDung": "the composite key (order_id, product_id)"
               },
               {
                 "ma": "b",
-                "noiDung": "order_id"
+                "noiDung": "order_id alone as the primary key"
               },
               {
                 "ma": "c",
-                "noiDung": "product_id"
+                "noiDung": "an identity id column and nothing else"
               },
               {
                 "ma": "d",
-                "noiDung": "the composite key (order_id, product_id)"
+                "noiDung": "product_id alone as the primary key"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The pair is what must be unique. CT Shop's lab schema uses exactly PRIMARY KEY (order_id, product_id).</p><p><i>VI: Cặp đó mới là thứ phải duy nhất. Lược đồ lab CT Shop dùng đúng PRIMARY KEY (order_id, product_id).</i></p>"
           },
@@ -410,23 +410,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "serial cannot be a primary key"
+                "noiDung": "it is faster to insert into than a serial column"
               },
               {
                 "ma": "b",
-                "noiDung": "it is SQL-standard and refuses hand-written ids unless you say OVERRIDING SYSTEM VALUE"
+                "noiDung": "a serial column cannot be used as a primary key"
               },
               {
                 "ma": "c",
-                "noiDung": "identity values are random"
+                "noiDung": "identity values are random, so they cannot be guessed"
               },
               {
                 "ma": "d",
-                "noiDung": "it is faster"
+                "noiDung": "standard SQL, and it refuses hand-written ids by default"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Both draw from a sequence; identity is the standard form and protects the sequence from silent collisions with hand-typed ids.</p><p><i>VI: Cả hai đều lấy số từ sequence; identity là dạng chuẩn và bảo vệ sequence khỏi va chạm âm thầm với id gõ tay.</i></p>"
           }

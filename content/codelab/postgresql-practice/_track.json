@@ -136,6 +136,60 @@
       "description": "Luyện: Lab 2 — CT Shop: a price list, four questions and one safe clean-up"
     },
     {
+      "slug": "postgresql-5-1-inner-join",
+      "name": "5.1 INNER JOIN: putting rows back together",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Every note with its author · USING when both columns share a name · Order 5, line by line · Paid and shipped orders of Hà Nội customers"
+    },
+    {
+      "slug": "postgresql-5-2-outer-join",
+      "name": "5.2 OUTER JOINs: keeping the unmatched rows",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Every user, with or without notes · Anti-join: users who never wrote a note · Products nobody has ever ordered · FULL JOIN: nobody left behind on either side"
+    },
+    {
+      "slug": "postgresql-5-3-multi-self-join",
+      "name": "5.3 Joining many tables & the self-join",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Employee and manager: a self-join · Comments with the note, its author and the commenter · Category with its parent name (CT Shop tree) · Shipped lines with customer and category: five tables"
+    },
+    {
+      "slug": "postgresql-5-4-cross-join-traps",
+      "name": "5.4 CROSS JOIN & the join traps",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Every size in every colour · Users with their sql notes — without losing anyone · Recommend books customers have not bought yet · Name the join trap"
+    },
+    {
+      "slug": "postgresql-6-1-ham-tong-hop",
+      "name": "6.1 Aggregate functions: many rows into one number",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The five aggregates in one row · Average views: ignore the unknown, or count it as zero? · Shelf summary of CT Shop · One-line order summary with string_agg"
+    },
+    {
+      "slug": "postgresql-6-2-group-by",
+      "name": "6.2 GROUP BY: a summary per group",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Notes and average views per tag · Group by two columns: city × tag · Products and stock per category · Monthly revenue — at the right grain"
+    },
+    {
+      "slug": "postgresql-6-3-having-filter",
+      "name": "6.3 HAVING vs WHERE, and FILTER",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Authors with at least two notes · WHERE first, HAVING after · Four totals in one pass with FILTER · Customer health: FILTER + HAVING on CT Shop"
+    },
+    {
+      "slug": "postgresql-6-4-tong-hop-tren-join",
+      "name": "6.4 Aggregating over joins: taming fan-out",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Notes and comments per author, counted right · count(*) vs count(col) after a LEFT JOIN · Paid amount and units per customer — aggregate before you join · Two orders of operations, two different numbers"
+    },
+    {
+      "slug": "postgresql-lab-3-bao-cao-doanh-thu-ct-shop",
+      "name": "6.5 Lab 3 — CT Shop: the revenue report (JOIN + GROUP BY)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 3 — CT Shop: the two-month revenue report"
+    },
+    {
       "slug": "postgresql-7-4-recursive-cte",
       "name": "7.4 Recursive CTEs: walking a hierarchy",
       "level": "INTERMEDIATE",

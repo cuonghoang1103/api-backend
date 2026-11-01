@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Tables, rows, keys — the vocabulary — answer key\n\n1. In table notes, what is one row?Trong bảng notes, một dòng là gì?\n   Answer: d) one note, with a value for every column\n   A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.\n\n2. What does notes.user_id REFERENCES users(id) guarantee?notes.user_id REFERENCES users(id) bảo đảm điều gì?\n   Answer: d) every note points to a user that really exists\n   A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).\n\n3. Why store the username once in users instead of in every note?Vì sao lưu username một lần ở users thay vì trong mọi ghi chú?\n   Answer: b) renaming a user is then one UPDATE of one row, with no copy left behind\n   One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).\n\n4. What is the primary key for?Khoá chính dùng để làm gì?\n   Answer: a) to name each row uniquely so other rows can point at it\n   A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.\n\n5. The relational model \"won\" mainly because…Mô hình quan hệ \"thắng\" chủ yếu vì…\n   Answer: c) you ask questions in a declarative language and the database enforces the rules for every app\n   SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.\n"
+          "code": "# Tables, rows, keys — the vocabulary — answer key\n\n1. In table notes, what is one row?Trong bảng notes, một dòng là gì?\n   Answer: d) one note, with a value for every column\n   A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.\n\n2. What does notes.user_id REFERENCES users(id) guarantee?notes.user_id REFERENCES users(id) bảo đảm điều gì?\n   Answer: d) every note points to a user that really exists\n   A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).\n\n3. Why store the username once in users instead of in every note?Vì sao lưu username một lần ở users thay vì trong mọi ghi chú?\n   Answer: b) renaming a user is then one UPDATE of one row, with no copy left behind\n   One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).\n\n4. What is the primary key for?Khoá chính dùng để làm gì?\n   Answer: b) to name each row uniquely so others can point at it\n   A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.\n\n5. The relational model \"won\" mainly because…Mô hình quan hệ \"thắng\" chủ yếu vì…\n   Answer: a) declarative questions + rules enforced for every app\n   SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> one note, with a value for every column</p><p>A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.</p><p><i>VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.</i></p></li><li><p><b>d)</b> every note points to a user that really exists</p><p>A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).</p><p><i>VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).</i></p></li><li><p><b>b)</b> renaming a user is then one UPDATE of one row, with no copy left behind</p><p>One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).</p><p><i>VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).</i></p></li><li><p><b>a)</b> to name each row uniquely so other rows can point at it</p><p>A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.</p><p><i>VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.</i></p></li><li><p><b>c)</b> you ask questions in a declarative language and the database enforces the rules for every app</p><p>SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.</p><p><i>VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> one note, with a value for every column</p><p>A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.</p><p><i>VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.</i></p></li><li><p><b>d)</b> every note points to a user that really exists</p><p>A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).</p><p><i>VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).</i></p></li><li><p><b>b)</b> renaming a user is then one UPDATE of one row, with no copy left behind</p><p>One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).</p><p><i>VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).</i></p></li><li><p><b>b)</b> to name each row uniquely so others can point at it</p><p>A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.</p><p><i>VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.</i></p></li><li><p><b>a)</b> declarative questions + rules enforced for every app</p><p>SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.</p><p><i>VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -143,23 +143,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "to name each row uniquely so other rows can point at it"
+                "noiDung": "to make every query on the table faster"
               },
               {
                 "ma": "b",
-                "noiDung": "to store the creation order"
+                "noiDung": "to name each row uniquely so others can point at it"
               },
               {
                 "ma": "c",
-                "noiDung": "to speed up every query"
+                "noiDung": "to keep the table sorted on disk by that column"
               },
               {
                 "ma": "d",
-                "noiDung": "to sort the table on disk"
+                "noiDung": "to remember the order in which rows were created"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.</p><p><i>VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.</i></p>"
           },
@@ -169,23 +169,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it was the first database model ever"
+                "noiDung": "declarative questions + rules enforced for every app"
               },
               {
                 "ma": "b",
-                "noiDung": "tables are the fastest data structure"
+                "noiDung": "tables are the fastest structure for any kind of data"
               },
               {
                 "ma": "c",
-                "noiDung": "you ask questions in a declarative language and the database enforces the rules for every app"
+                "noiDung": "it was the very first database model ever invented"
               },
               {
                 "ma": "d",
-                "noiDung": "it needs no schema"
+                "noiDung": "it needs no schema, so apps can store anything"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.</p><p><i>VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.</i></p>"
           }

@@ -570,10 +570,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Which ALTER is instant, which rewrites, which scans? — answer key\n\n1. ALTER TABLE t ADD COLUMN note text;ALTER TABLE t ADD COLUMN note text;\n   Answer: c) instant — only the catalog changes\n   A nullable column without default is metadata only; old rows simply read NULL.VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.\n\n2. ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';\n   Answer: a) instant — a constant default is stored once in the catalog\n   Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.\n\n3. ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (was numeric(12,2))ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (trước là numeric(12,2))\n   Answer: b) instant in modern PostgreSQL — widening numeric precision needs no rewrite\n   Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.\n\n4. ALTER TABLE t ALTER COLUMN email SET NOT NULL;ALTER TABLE t ALTER COLUMN email SET NOT NULL;\n   Answer: a) scans the whole table under an exclusive lock (unless a validated CHECK already proves it)\n   PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.\n"
+          "code": "# Which ALTER is instant, which rewrites, which scans? — answer key\n\n1. ALTER TABLE t ADD COLUMN note text;ALTER TABLE t ADD COLUMN note text;\n   Answer: c) instant — only the catalog changes\n   A nullable column without default is metadata only; old rows simply read NULL.VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.\n\n2. ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';\n   Answer: a) instant — a constant default is stored once in the catalog\n   Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.\n\n3. ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (was numeric(12,2))ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (trước là numeric(12,2))\n   Answer: c) instant — widening numeric precision needs no rewrite\n   Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.\n\n4. ALTER TABLE t ALTER COLUMN email SET NOT NULL;ALTER TABLE t ALTER COLUMN email SET NOT NULL;\n   Answer: c) a full scan under an exclusive lock (unless a CHECK proves it)\n   PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> instant — only the catalog changes</p><p>A nullable column without default is metadata only; old rows simply read NULL.</p><p><i>VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.</i></p></li><li><p><b>a)</b> instant — a constant default is stored once in the catalog</p><p>Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.</p><p><i>VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.</i></p></li><li><p><b>b)</b> instant in modern PostgreSQL — widening numeric precision needs no rewrite</p><p>Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.</p><p><i>VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.</i></p></li><li><p><b>a)</b> scans the whole table under an exclusive lock (unless a validated CHECK already proves it)</p><p>PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.</p><p><i>VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> instant — only the catalog changes</p><p>A nullable column without default is metadata only; old rows simply read NULL.</p><p><i>VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.</i></p></li><li><p><b>a)</b> instant — a constant default is stored once in the catalog</p><p>Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.</p><p><i>VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.</i></p></li><li><p><b>c)</b> instant — widening numeric precision needs no rewrite</p><p>Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.</p><p><i>VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.</i></p></li><li><p><b>c)</b> a full scan under an exclusive lock (unless a CHECK proves it)</p><p>PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.</p><p><i>VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -638,23 +638,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only changes new rows"
+                "noiDung": "impossible while the table contains rows"
               },
               {
                 "ma": "b",
-                "noiDung": "instant in modern PostgreSQL — widening numeric precision needs no rewrite"
+                "noiDung": "always a full rewrite of every row under a lock"
               },
               {
                 "ma": "c",
-                "noiDung": "always a full rewrite"
+                "noiDung": "instant — widening numeric precision needs no rewrite"
               },
               {
                 "ma": "d",
-                "noiDung": "impossible"
+                "noiDung": "only changes new rows; old rows keep (12,2)"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.</p><p><i>VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.</i></p>"
           },
@@ -664,23 +664,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "scans the whole table under an exclusive lock (unless a validated CHECK already proves it)"
+                "noiDung": "a rewrite of every row into new pages"
               },
               {
                 "ma": "b",
-                "noiDung": "locks nothing"
+                "noiDung": "instant: only the catalog changes"
               },
               {
                 "ma": "c",
-                "noiDung": "rewrites every row"
+                "noiDung": "a full scan under an exclusive lock (unless a CHECK proves it)"
               },
               {
                 "ma": "d",
-                "noiDung": "instant"
+                "noiDung": "no lock at all, readers and writers go on"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.</p><p><i>VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.</i></p>"
           }

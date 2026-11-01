@@ -1,0 +1,691 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-6-4-tong-hop-tren-join",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-6-4-tong-hop-tren-join"
+  },
+  "exercises": [
+    {
+      "title": "Notes and comments per author, counted right",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "fan-out",
+        "count(DISTINCT)",
+        "LEFT JOIN + count(col)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "aggregate",
+        "join",
+        "fan-out"
+      ],
+      "problemHtml": "<p>For every author who wrote notes, return <code>name, notes, comments</code>: how many notes they wrote and how many comments those notes received in total. Notes without comments still count as notes. Order by name.</p>\n<h4>Sample tables: the Notes app of chapters 5–6</h4><pre>app_user  (id PK, name, city)                    1 Cuong Hanoi · 2 Lan Danang · 3 Minh Hanoi · 4 Hoa Hue (no notes)\nnote      (id PK, user_id → app_user NULL, title, tag NULL, views NULL, pinned)\n          1 Intro to SQL (1, sql, 120, pinned) · 2 Indexes (1, sql, 90) · 3 Timezones (2, date, 45) · 4 Backup (3, ops, 12, pinned)\n          5 Orphan draft (no user, no tag, views NULL) · 6 JSONB tips (1, sql, 30) · 7 Date math (2, date, views NULL)\nnote_stat (id PK → note.id, reads)              notes 1–6 (note 7 has no stat row)\ncomment   (id PK, note_id → note, user_id → app_user, body)   6 comments: 3 on note 1, 1 each on notes 2, 3, 4\nemployee  (id PK, name, manager_id → employee)  An (boss) ← Binh, Chi · Binh ← Dung, Em · Dung ← Giang\nsz (size) S, M, L · col (color) black, white</pre><p>Full script: the <code>notes-app.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>JOIN note</code>, <code>LEFT JOIN comment</code>.</li>\n  <li><code>count(DISTINCT n.id)</code> for notes, <code>count(c.id)</code> for comments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi tác giả đã viết ghi chú, trả về <code>name, notes, comments</code>: họ viết bao nhiêu ghi chú và các ghi chú đó nhận tổng cộng bao nhiêu bình luận. Ghi chú không có bình luận vẫn tính là ghi chú. Sắp theo tên.</p>\n<h4>Bảng mẫu: app ghi chú của chương 5–6</h4><pre>app_user  (id PK, name, city)                    1 Cuong Hanoi · 2 Lan Danang · 3 Minh Hanoi · 4 Hoa Hue (no notes)\nnote      (id PK, user_id → app_user NULL, title, tag NULL, views NULL, pinned)\n          1 Intro to SQL (1, sql, 120, pinned) · 2 Indexes (1, sql, 90) · 3 Timezones (2, date, 45) · 4 Backup (3, ops, 12, pinned)\n          5 Orphan draft (no user, no tag, views NULL) · 6 JSONB tips (1, sql, 30) · 7 Date math (2, date, views NULL)\nnote_stat (id PK → note.id, reads)              notes 1–6 (note 7 has no stat row)\ncomment   (id PK, note_id → note, user_id → app_user, body)   6 comments: 3 on note 1, 1 each on notes 2, 3, 4\nemployee  (id PK, name, manager_id → employee)  An (boss) ← Binh, Chi · Binh ← Dung, Em · Dung ← Giang\nsz (size) S, M, L · col (color) black, white</pre><p>Script đầy đủ: tab <code>notes-app.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>JOIN note</code>, <code>LEFT JOIN comment</code>.</li>\n  <li><code>count(DISTINCT n.id)</code> cho notes, <code>count(c.id)</code> cho comments.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name  | notes | comments\n------+-------+---------\nCuong | 3     | 4       \nLan   | 2     | 1       \nMinh  | 1     | 1       ",
+          "explanation": "Expected result of check \"Cuong 3/4, Lan 2/1, Minh 1/1\" (row order matters).|||Kết quả mong đợi của kiểm \"Cuong 3/4, Lan 2/1, Minh 1/1\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Write the joined rows out for Cuong first: how many rows does \"Intro to SQL\" produce?|||Viết ra các dòng đã nối cho Cuong trước: \"Intro to SQL\" sinh ra bao nhiêu dòng?",
+        "A note with no comment still needs one row: LEFT JOIN.|||Ghi chú không có bình luận vẫn cần một dòng: LEFT JOIN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes-app.sql",
+          "language": "sql",
+          "code": "-- notes-app.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes-app.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT u.name,\n       count(DISTINCT n.id) AS notes,       -- the comment join repeats each note once per comment\n       count(c.id)          AS comments     -- NULL (no comment) is not counted\nFROM app_user u\nJOIN note n         ON n.user_id = u.id\nLEFT JOIN comment c ON c.note_id = n.id\nGROUP BY u.name\nORDER BY u.name;\n"
+        },
+        {
+          "name": "notes-app.sql",
+          "language": "sql",
+          "code": "-- notes-app.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes-app.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Joining a one-to-many table repeats the \"one\" side. count(DISTINCT key) counts each note once; count(col) on the LEFT-joined side counts only real comments.</p>",
+      "solutionExplanationHtmlVi": "<p>Nối với bảng một–nhiều làm lặp phía \"một\". count(DISTINCT khoá) đếm mỗi ghi chú một lần; count(cột) ở phía LEFT JOIN chỉ đếm bình luận thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Cuong 3/4, Lan 2/1, Minh 1/1|||Cuong 3/4, Lan 2/1, Minh 1/1",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "notes",
+                "comments"
+              ],
+              "hang": [
+                [
+                  "Cuong",
+                  3,
+                  4
+                ],
+                [
+                  "Lan",
+                  2,
+                  1
+                ],
+                [
+                  "Minh",
+                  1,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More comments on one note|||Thêm bình luận trên một ghi chú",
+            "an": true,
+            "themCsdl": "INSERT INTO comment VALUES (7, 3, 3, 'Thanks'), (8, 3, 4, 'Bookmarked')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "notes",
+                "comments"
+              ],
+              "hang": [
+                [
+                  "Cuong",
+                  3,
+                  4
+                ],
+                [
+                  "Lan",
+                  2,
+                  3
+                ],
+                [
+                  "Minh",
+                  1,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "count(DISTINCT …)|||count(DISTINCT …)",
+            "khop": "count\\s*\\(\\s*DISTINCT",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "count(*) for notes — Intro to SQL is counted three times (one per comment).|||count(*) cho notes — Intro to SQL bị đếm ba lần (mỗi bình luận một lần)."
+        },
+        {
+          "loi": "INNER JOIN comment — notes without comments vanish from both counts (Cuong shows 2 notes).|||INNER JOIN comment — ghi chú không bình luận biến mất khỏi cả hai số đếm (Cuong còn 2 ghi chú)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fan-out",
+          "vi": "nhân dòng"
+        }
+      ]
+    },
+    {
+      "title": "count(*) vs count(col) after a LEFT JOIN",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "LEFT JOIN + GROUP BY",
+        "count(n.id) gives 0"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "aggregate",
+        "join"
+      ],
+      "problemHtml": "<p>Return every user with the number of notes they wrote: <code>name, notes</code>. A user with no note must show <b>0</b>. Order by notes descending, then name.</p>\n<h4>Sample tables: the Notes app of chapters 5–6</h4><pre>app_user  (id PK, name, city)                    1 Cuong Hanoi · 2 Lan Danang · 3 Minh Hanoi · 4 Hoa Hue (no notes)\nnote      (id PK, user_id → app_user NULL, title, tag NULL, views NULL, pinned)\n          1 Intro to SQL (1, sql, 120, pinned) · 2 Indexes (1, sql, 90) · 3 Timezones (2, date, 45) · 4 Backup (3, ops, 12, pinned)\n          5 Orphan draft (no user, no tag, views NULL) · 6 JSONB tips (1, sql, 30) · 7 Date math (2, date, views NULL)\nnote_stat (id PK → note.id, reads)              notes 1–6 (note 7 has no stat row)\ncomment   (id PK, note_id → note, user_id → app_user, body)   6 comments: 3 on note 1, 1 each on notes 2, 3, 4\nemployee  (id PK, name, manager_id → employee)  An (boss) ← Binh, Chi · Binh ← Dung, Em · Dung ← Giang\nsz (size) S, M, L · col (color) black, white</pre><p>Full script: the <code>notes-app.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>LEFT JOIN note.</li>\n  <li><code>count(n.id)</code>, not <code>count(*)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về mọi user kèm số ghi chú họ viết: <code>name, notes</code>. User chưa có ghi chú phải hiện <b>0</b>. Sắp số ghi chú giảm dần, rồi theo tên.</p>\n<h4>Bảng mẫu: app ghi chú của chương 5–6</h4><pre>app_user  (id PK, name, city)                    1 Cuong Hanoi · 2 Lan Danang · 3 Minh Hanoi · 4 Hoa Hue (no notes)\nnote      (id PK, user_id → app_user NULL, title, tag NULL, views NULL, pinned)\n          1 Intro to SQL (1, sql, 120, pinned) · 2 Indexes (1, sql, 90) · 3 Timezones (2, date, 45) · 4 Backup (3, ops, 12, pinned)\n          5 Orphan draft (no user, no tag, views NULL) · 6 JSONB tips (1, sql, 30) · 7 Date math (2, date, views NULL)\nnote_stat (id PK → note.id, reads)              notes 1–6 (note 7 has no stat row)\ncomment   (id PK, note_id → note, user_id → app_user, body)   6 comments: 3 on note 1, 1 each on notes 2, 3, 4\nemployee  (id PK, name, manager_id → employee)  An (boss) ← Binh, Chi · Binh ← Dung, Em · Dung ← Giang\nsz (size) S, M, L · col (color) black, white</pre><p>Script đầy đủ: tab <code>notes-app.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>LEFT JOIN note.</li>\n  <li><code>count(n.id)</code>, không phải <code>count(*)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name  | notes\n------+------\nCuong | 3    \nLan   | 2    \nMinh  | 1    \nHoa   | 0    ",
+          "explanation": "Expected result of check \"Cuong 3, Lan 2, Minh 1, Hoa 0\" (row order matters).|||Kết quả mong đợi của kiểm \"Cuong 3, Lan 2, Minh 1, Hoa 0\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "The LEFT JOIN gives Hoa one row with n.* = NULL.|||LEFT JOIN cho Hoa một dòng với n.* = NULL.",
+        "count(*) counts that row; count(n.id) does not.|||count(*) đếm dòng đó; count(n.id) thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes-app.sql",
+          "language": "sql",
+          "code": "-- notes-app.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes-app.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT u.name, count(n.id) AS notes      -- the NULL row of Hoa is not counted ⇒ 0\nFROM app_user u\nLEFT JOIN note n ON n.user_id = u.id\nGROUP BY u.name\nORDER BY notes DESC, u.name;\n"
+        },
+        {
+          "name": "notes-app.sql",
+          "language": "sql",
+          "code": "-- notes-app.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes-app.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>After a LEFT JOIN, an unmatched row exists but its right-hand columns are NULL. Counting a right-hand column turns \"no partner\" into 0 — the standard way to get zero counts.</p>",
+      "solutionExplanationHtmlVi": "<p>Sau LEFT JOIN, dòng không khớp vẫn tồn tại nhưng các cột phía phải là NULL. Đếm một cột phía phải biến \"không có cặp\" thành 0 — cách chuẩn để có số đếm bằng 0.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE app_user (id int PRIMARY KEY, name text NOT NULL, city text);\nINSERT INTO app_user VALUES (1, 'Cuong', 'Hanoi'), (2, 'Lan', 'Danang'), (3, 'Minh', 'Hanoi'), (4, 'Hoa', 'Hue');\nCREATE TABLE note (\n  id      int PRIMARY KEY,\n  user_id int REFERENCES app_user(id),      -- NULL = orphan draft (no author yet)\n  title   text NOT NULL,\n  tag     text,\n  views   int,                              -- NULL = not measured yet\n  pinned  boolean NOT NULL DEFAULT false\n);\nINSERT INTO note VALUES\n  (1, 1, 'Intro to SQL', 'sql', 120, true), (2, 1, 'Indexes', 'sql', 90, false), (3, 2, 'Timezones', 'date', 45, false),\n  (4, 3, 'Backup', 'ops', 12, true), (5, NULL, 'Orphan draft', NULL, NULL, false), (6, 1, 'JSONB tips', 'sql', 30, false),\n  (7, 2, 'Date math', 'date', NULL, false);\nCREATE TABLE note_stat (id int PRIMARY KEY REFERENCES note(id), reads int NOT NULL);\nINSERT INTO note_stat VALUES (1, 500), (2, 300), (3, 120), (4, 60), (5, 5), (6, 40);\nCREATE TABLE comment (id int PRIMARY KEY, note_id int NOT NULL REFERENCES note(id), user_id int NOT NULL REFERENCES app_user(id), body text NOT NULL);\nINSERT INTO comment VALUES (1, 1, 2, 'Great intro'), (2, 1, 3, 'Thanks!'), (3, 1, 4, 'Bookmarked'), (4, 3, 1, 'Very useful'),\n  (5, 2, 2, 'Saved'), (6, 4, 1, 'Do you test restores?');\nCREATE TABLE employee (id int PRIMARY KEY, name text NOT NULL, manager_id int REFERENCES employee(id));\nINSERT INTO employee VALUES (1, 'An', NULL), (2, 'Binh', 1), (3, 'Chi', 1), (4, 'Dung', 2), (5, 'Em', 2), (6, 'Giang', 4);\nCREATE TABLE sz (size text PRIMARY KEY);\nINSERT INTO sz VALUES ('S'), ('M'), ('L');\nCREATE TABLE col (color text PRIMARY KEY);\nINSERT INTO col VALUES ('black'), ('white');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Cuong 3, Lan 2, Minh 1, Hoa 0|||Cuong 3, Lan 2, Minh 1, Hoa 0",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "notes"
+              ],
+              "hang": [
+                [
+                  "Cuong",
+                  3
+                ],
+                [
+                  "Lan",
+                  2
+                ],
+                [
+                  "Minh",
+                  1
+                ],
+                [
+                  "Hoa",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new user with no notes|||User mới chưa có ghi chú",
+            "an": true,
+            "themCsdl": "INSERT INTO app_user VALUES (5, 'Khoa', 'Hanoi')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "notes"
+              ],
+              "hang": [
+                [
+                  "Cuong",
+                  3
+                ],
+                [
+                  "Lan",
+                  2
+                ],
+                [
+                  "Minh",
+                  1
+                ],
+                [
+                  "Hoa",
+                  0
+                ],
+                [
+                  "Khoa",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "count on a column of note|||count trên một cột của note",
+            "khop": "count\\s*\\(\\s*n\\.\\w+\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "count(*): Hoa shows 1 note.|||count(*): Hoa hiện 1 ghi chú."
+        },
+        {
+          "loi": "INNER JOIN: Hoa disappears instead of showing 0.|||INNER JOIN: Hoa biến mất thay vì hiện 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "count(col)",
+          "vi": "đếm giá trị khác NULL"
+        }
+      ]
+    },
+    {
+      "title": "Paid amount and units per customer — aggregate before you join",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "pre-aggregation in a derived table",
+        "fan-out of payment × order_item"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "aggregate",
+        "join",
+        "fan-out",
+        "ctshop"
+      ],
+      "problemHtml": "<p>For every customer who paid at least once, return <code>customer_id, paid_orders, paid_amount, units</code>: number of paid orders, Σ payment.amount, and Σ qty of the lines of those orders. Order by customer_id. Joining payment straight to order_item multiplies each amount by the number of lines — avoid it.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Aggregate order_item to ONE row per order first (derived table or CTE), then join it to payment and orders.</li>\n  <li>Columns exactly <code>customer_id, paid_orders, paid_amount, units</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi khách đã trả tiền ít nhất một lần, trả về <code>customer_id, paid_orders, paid_amount, units</code>: số đơn đã trả, Σ payment.amount, và Σ qty của các dòng của những đơn đó. Sắp theo customer_id. Nối thẳng payment với order_item sẽ nhân mỗi khoản tiền theo số dòng — hãy tránh.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tổng hợp order_item về MỘT dòng mỗi đơn trước (bảng dẫn xuất hoặc CTE), rồi nối với payment và orders.</li>\n  <li>Cột đúng <code>customer_id, paid_orders, paid_amount, units</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "customer_id | paid_orders | paid_amount | units\n------------+-------------+-------------+------\n1           | 3           | 936000      | 18   \n2           | 1           | 139000      | 3    \n3           | 2           | 370000      | 16   \n4           | 1           | 162000      | 14   \n5           | 2           | 863000      | 15   \n7           | 1           | 237000      | 3    ",
+          "explanation": "Expected result of check \"Six paying customers\" (row order matters).|||Kết quả mong đợi của kiểm \"Sáu khách đã trả tiền\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Look at order 1: one payment, three lines ⇒ the naive join repeats 134 000 three times.|||Xem đơn 1: một thanh toán, ba dòng ⇒ phép nối ngây thơ lặp 134 000 ba lần.",
+        "<code>(SELECT order_id, sum(qty) AS units FROM order_item GROUP BY order_id)</code> has one row per order.|||<code>(SELECT order_id, sum(qty) AS units FROM order_item GROUP BY order_id)</code> có một dòng mỗi đơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT o.customer_id,\n       count(*)       AS paid_orders,\n       sum(p.amount)  AS paid_amount,\n       sum(i.units)   AS units\nFROM payment p\nJOIN orders o ON o.id = p.order_id\nJOIN (SELECT order_id, sum(qty) AS units        -- one row per order ⇒ no fan-out\n      FROM order_item\n      GROUP BY order_id) i ON i.order_id = p.order_id\nGROUP BY o.customer_id\nORDER BY o.customer_id;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>When two one-to-many relations hang off the same row, aggregate the many side down to the grain you join at. Then every join is one-to-one and every sum is right (lab 3 R4).</p>",
+      "solutionExplanationHtmlVi": "<p>Khi hai quan hệ một–nhiều cùng treo vào một dòng, hãy tổng hợp phía \"nhiều\" về đúng hạt bạn sẽ nối. Khi đó mọi phép nối là một–một và mọi tổng đều đúng (Lab 3 R4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Six paying customers|||Sáu khách đã trả tiền",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "customer_id",
+                "paid_orders",
+                "paid_amount",
+                "units"
+              ],
+              "hang": [
+                [
+                  1,
+                  3,
+                  936000,
+                  18
+                ],
+                [
+                  2,
+                  1,
+                  139000,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  370000,
+                  16
+                ],
+                [
+                  4,
+                  1,
+                  162000,
+                  14
+                ],
+                [
+                  5,
+                  2,
+                  863000,
+                  15
+                ],
+                [
+                  7,
+                  1,
+                  237000,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Order 7 is paid (two lines)|||Đơn 7 được trả (hai dòng)",
+            "an": true,
+            "themCsdl": "UPDATE orders SET status = 'paid' WHERE id = 7; INSERT INTO payment (order_id, amount, method, paid_at) VALUES (7, 95000, 'cod', '2026-10-02 08:00+07')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "customer_id",
+                "paid_orders",
+                "paid_amount",
+                "units"
+              ],
+              "hang": [
+                [
+                  1,
+                  3,
+                  936000,
+                  18
+                ],
+                [
+                  2,
+                  1,
+                  139000,
+                  3
+                ],
+                [
+                  3,
+                  3,
+                  465000,
+                  19
+                ],
+                [
+                  4,
+                  1,
+                  162000,
+                  14
+                ],
+                [
+                  5,
+                  2,
+                  863000,
+                  15
+                ],
+                [
+                  7,
+                  1,
+                  237000,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Pre-aggregates order_item|||Tổng hợp order_item trước",
+            "khop": "\\(\\s*SELECT[\\s\\S]*FROM\\s+order_item[\\s\\S]*GROUP\\s+BY|WITH\\s+\\w+\\s+AS\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Joining payment to order_item directly — paid_amount ×3 for order 1, and paid_orders counts lines.|||Nối payment thẳng với order_item — paid_amount ×3 ở đơn 1, và paid_orders đếm dòng."
+        },
+        {
+          "loi": "<code>sum(DISTINCT p.amount)</code> — \"fixes\" the sample, then two different orders of the same amount are added once.|||<code>sum(DISTINCT p.amount)</code> — \"sửa\" được mẫu, rồi hai đơn khác nhau cùng số tiền chỉ được cộng một lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pre-aggregation",
+          "vi": "tổng hợp trước khi nối"
+        },
+        {
+          "en": "derived table",
+          "vi": "bảng dẫn xuất"
+        }
+      ]
+    },
+    {
+      "title": "Two orders of operations, two different numbers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "fan-out diagnosis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "aggregate",
+        "fan-out"
+      ],
+      "problemHtml": "<p>Reason about joins and aggregates without running anything.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Suy luận về phép nối và tổng hợp mà không cần chạy gì.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the rows the join produces for one parent.|||Đếm số dòng phép nối sinh ra cho một dòng cha.",
+        "DISTINCT acts on values, not identities.|||DISTINCT tác động lên giá trị, không lên danh tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Two orders of operations, two different numbers\n\nAnswer in the answer panel (no code needed).\n\n1. An order has 1 payment of 300 000 đ and 4 order lines. SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87 returns…Một đơn có 1 thanh toán 300 000 đ và 4 dòng đơn. SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87 trả về…\n2. The quickest test that a join fanned out:Cách nhanh nhất để biết phép nối đã nhân dòng:\n3. Which fix is correct for \"revenue AND units per month\"?Cách sửa nào đúng cho \"doanh thu VÀ số món theo tháng\"?\n4. count(DISTINCT n.id) fixes the NOTE count after joining comments. Why does the same trick not fix sum(n.views)?count(DISTINCT n.id) sửa được số GHI CHÚ sau khi nối bình luận. Vì sao mẹo đó không sửa được sum(n.views)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Two orders of operations, two different numbers — answer key\n\n1. An order has 1 payment of 300 000 đ and 4 order lines. SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87 returns…Một đơn có 1 thanh toán 300 000 đ và 4 dòng đơn. SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87 trả về…\n   Answer: c) 1 200 000 — the payment repeats once per line\n   The join produces 4 rows, each carrying the same amount.VI: Phép nối sinh 4 dòng, dòng nào cũng mang cùng số tiền.\n\n2. The quickest test that a join fanned out:Cách nhanh nhất để biết phép nối đã nhân dòng:\n   Answer: a) compare count(*) with count(DISTINCT payment.id)\n   If count(*) > count(DISTINCT payment.id), each payment appears more than once.VI: Nếu count(*) > count(DISTINCT payment.id) thì mỗi thanh toán xuất hiện nhiều hơn một lần.\n\n3. Which fix is correct for \"revenue AND units per month\"?Cách sửa nào đúng cho \"doanh thu VÀ số món theo tháng\"?\n   Answer: b) aggregate order_item per order, then join\n   Pre-aggregation removes the multiplication at its source. DISTINCT tricks collapse legitimately equal values; LEFT JOIN changes nothing about multiplicity.VI: Tổng hợp trước loại bỏ phép nhân tận gốc. Mẹo DISTINCT gộp cả các giá trị bằng nhau hợp lệ; LEFT JOIN không đổi gì về số lần lặp.\n\n4. count(DISTINCT n.id) fixes the NOTE count after joining comments. Why does the same trick not fix sum(n.views)?count(DISTINCT n.id) sửa được số GHI CHÚ sau khi nối bình luận. Vì sao mẹo đó không sửa được sum(n.views)?\n   Answer: d) it would merge two notes that have equal views\n   DISTINCT works on values, not on rows: 45 + 45 from two notes would become 45. Sum per note first, or use a subquery.VI: DISTINCT làm việc trên giá trị, không trên dòng: 45 + 45 của hai ghi chú thành 45. Hãy cộng theo từng ghi chú trước, hoặc dùng truy vấn con.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 1 200 000 — the payment repeats once per line</p><p>The join produces 4 rows, each carrying the same amount.</p><p><i>VI: Phép nối sinh 4 dòng, dòng nào cũng mang cùng số tiền.</i></p></li><li><p><b>a)</b> compare count(*) with count(DISTINCT payment.id)</p><p>If count(*) &gt; count(DISTINCT payment.id), each payment appears more than once.</p><p><i>VI: Nếu count(*) &gt; count(DISTINCT payment.id) thì mỗi thanh toán xuất hiện nhiều hơn một lần.</i></p></li><li><p><b>b)</b> aggregate order_item per order, then join</p><p>Pre-aggregation removes the multiplication at its source. DISTINCT tricks collapse legitimately equal values; LEFT JOIN changes nothing about multiplicity.</p><p><i>VI: Tổng hợp trước loại bỏ phép nhân tận gốc. Mẹo DISTINCT gộp cả các giá trị bằng nhau hợp lệ; LEFT JOIN không đổi gì về số lần lặp.</i></p></li><li><p><b>d)</b> it would merge two notes that have equal views</p><p>DISTINCT works on values, not on rows: 45 + 45 from two notes would become 45. Sum per note first, or use a subquery.</p><p><i>VI: DISTINCT làm việc trên giá trị, không trên dòng: 45 + 45 của hai ghi chú thành 45. Hãy cộng theo từng ghi chú trước, hoặc dùng truy vấn con.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>An order has 1 payment of 300 000 đ and 4 order lines. <code>SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87</code> returns…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đơn có 1 thanh toán 300 000 đ và 4 dòng đơn. <code>SELECT sum(p.amount) FROM payment p JOIN order_item oi ON oi.order_id = p.order_id WHERE p.order_id = 87</code> trả về…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an error: sum() is not allowed after a join"
+              },
+              {
+                "ma": "b",
+                "noiDung": "300 000 — the join does not change the sum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 200 000 — the payment repeats once per line"
+              },
+              {
+                "ma": "d",
+                "noiDung": "75 000 — the amount is split across 4 lines"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The join produces 4 rows, each carrying the same amount.</p><p><i>VI: Phép nối sinh 4 dòng, dòng nào cũng mang cùng số tiền.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>The quickest test that a join fanned out:</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách nhanh nhất để biết phép nối đã nhân dòng:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "compare count(*) with count(DISTINCT payment.id)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "add DISTINCT to the SELECT and compare totals"
+              },
+              {
+                "ma": "c",
+                "noiDung": "check the joined columns for NULL values"
+              },
+              {
+                "ma": "d",
+                "noiDung": "run EXPLAIN and look for a Nested Loop node"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>If count(*) &gt; count(DISTINCT payment.id), each payment appears more than once.</p><p><i>VI: Nếu count(*) &gt; count(DISTINCT payment.id) thì mỗi thanh toán xuất hiện nhiều hơn một lần.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which fix is correct for \"revenue AND units per month\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách sửa nào đúng cho \"doanh thu VÀ số món theo tháng\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "replace the JOIN with a LEFT JOIN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "aggregate order_item per order, then join"
+              },
+              {
+                "ma": "c",
+                "noiDung": "use sum(DISTINCT p.amount) for revenue"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SELECT DISTINCT rows first, then sum()"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Pre-aggregation removes the multiplication at its source. DISTINCT tricks collapse legitimately equal values; LEFT JOIN changes nothing about multiplicity.</p><p><i>VI: Tổng hợp trước loại bỏ phép nhân tận gốc. Mẹo DISTINCT gộp cả các giá trị bằng nhau hợp lệ; LEFT JOIN không đổi gì về số lần lặp.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p><code>count(DISTINCT n.id)</code> fixes the NOTE count after joining comments. Why does the same trick not fix <code>sum(n.views)</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>count(DISTINCT n.id)</code> sửa được số GHI CHÚ sau khi nối bình luận. Vì sao mẹo đó không sửa được <code>sum(n.views)</code>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "views can be NULL, and DISTINCT drops them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DISTINCT is not allowed inside sum()"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sum() cannot be used at all after a join"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it would merge two notes that have equal views"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>DISTINCT works on values, not on rows: 45 + 45 from two notes would become 45. Sum per note first, or use a subquery.</p><p><i>VI: DISTINCT làm việc trên giá trị, không trên dòng: 45 + 45 của hai ghi chú thành 45. Hãy cộng theo từng ghi chú trước, hoặc dùng truy vấn con.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Fixing\" a doubled sum with DISTINCT.|||\"Sửa\" tổng bị nhân đôi bằng DISTINCT."
+        },
+        {
+          "loi": "Trusting a total without comparing count(*) and count(DISTINCT).|||Tin một con số tổng mà không so count(*) với count(DISTINCT)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fan-out",
+          "vi": "nhân dòng"
+        }
+      ]
+    }
+  ]
+}

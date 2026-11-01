@@ -50,10 +50,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Rejects or truncates? Predict before you run — answer key\n\n1. INSERT INTO t_vc VALUES ('abcdef');INSERT INTO t_vc VALUES ('abcdef');\n   Answer: d) ERROR: value too long for type character varying(3)\n   Assigning a too-long value to varchar(n) is an error — PostgreSQL never truncates data you are storing.VI: Gán giá trị quá dài vào varchar(n) là lỗi — PostgreSQL không bao giờ cắt dữ liệu bạn đang lưu.\n\n2. SELECT 'abcdef'::varchar(3);SELECT 'abcdef'::varchar(3);\n   Answer: d) abc — an explicit cast truncates, by the SQL standard\n   An explicit cast is a request to convert, so the standard says truncate. This is why \"it worked in my SELECT\" proves nothing about INSERT.VI: Ép kiểu tường minh là yêu cầu chuyển đổi nên chuẩn SQL bảo cắt. Vì vậy \"SELECT chạy được\" không chứng minh gì cho INSERT.\n\n3. SELECT ('hi'::char(5)) || '|';SELECT ('hi'::char(5)) || '|';\n   Answer: a) hi| — trailing spaces of char(n) are dropped when converted to text\n   char(n) is stored padded but its trailing spaces are \"insignificant\": they disappear when the value becomes text (|| converts). length() also ignores them.VI: char(n) lưu có đệm nhưng khoảng trắng cuối là \"không đáng kể\": chúng biến mất khi giá trị thành text (|| chuyển đổi). length() cũng bỏ qua chúng.\n\n4. SELECT length('café'), octet_length('café'); in a UTF-8 databaseSELECT length('café'), octet_length('café'); trong database UTF-8\n   Answer: d) 4 and 5\n   length() counts characters; é takes 2 bytes in UTF-8, so octet_length is 5. Vietnamese letters like ộ take 3 bytes.VI: length() đếm ký tự; é tốn 2 byte trong UTF-8 nên octet_length là 5. Chữ Việt như ộ tốn 3 byte.\n\n5. Which type does lesson 2.2 recommend for a product name with no natural length limit?Bài 2.2 khuyên kiểu nào cho tên sản phẩm không có giới hạn độ dài tự nhiên?\n   Answer: a) text (add a CHECK if a real limit exists)\n   In PostgreSQL text and varchar are the same storage and speed. A length limit is a business rule — write it as CHECK (char_length(x) <= n) when there is one.VI: Trong PostgreSQL text và varchar lưu và chạy như nhau. Giới hạn độ dài là luật nghiệp vụ — khi có thì viết CHECK (char_length(x) <= n).\n"
+          "code": "# Rejects or truncates? Predict before you run — answer key\n\n1. INSERT INTO t_vc VALUES ('abcdef');INSERT INTO t_vc VALUES ('abcdef');\n   Answer: a) ERROR: value too long for type character varying(3)\n   Assigning a too-long value to varchar(n) is an error — PostgreSQL never truncates data you are storing.VI: Gán giá trị quá dài vào varchar(n) là lỗi — PostgreSQL không bao giờ cắt dữ liệu bạn đang lưu.\n\n2. SELECT 'abcdef'::varchar(3);SELECT 'abcdef'::varchar(3);\n   Answer: d) abc — an explicit cast truncates, by the SQL standard\n   An explicit cast is a request to convert, so the standard says truncate. This is why \"it worked in my SELECT\" proves nothing about INSERT.VI: Ép kiểu tường minh là yêu cầu chuyển đổi nên chuẩn SQL bảo cắt. Vì vậy \"SELECT chạy được\" không chứng minh gì cho INSERT.\n\n3. SELECT ('hi'::char(5)) || '|';SELECT ('hi'::char(5)) || '|';\n   Answer: a) hi| — char(n) padding is dropped when it becomes text\n   char(n) is stored padded but its trailing spaces are \"insignificant\": they disappear when the value becomes text (|| converts). length() also ignores them.VI: char(n) lưu có đệm nhưng khoảng trắng cuối là \"không đáng kể\": chúng biến mất khi giá trị thành text (|| chuyển đổi). length() cũng bỏ qua chúng.\n\n4. SELECT length('café'), octet_length('café'); in a UTF-8 databaseSELECT length('café'), octet_length('café'); trong database UTF-8\n   Answer: d) 4 and 5\n   length() counts characters; é takes 2 bytes in UTF-8, so octet_length is 5. Vietnamese letters like ộ take 3 bytes.VI: length() đếm ký tự; é tốn 2 byte trong UTF-8 nên octet_length là 5. Chữ Việt như ộ tốn 3 byte.\n\n5. Which type does lesson 2.2 recommend for a product name with no natural length limit?Bài 2.2 khuyên kiểu nào cho tên sản phẩm không có giới hạn độ dài tự nhiên?\n   Answer: a) text (add a CHECK if a real limit exists)\n   In PostgreSQL text and varchar are the same storage and speed. A length limit is a business rule — write it as CHECK (char_length(x) <= n) when there is one.VI: Trong PostgreSQL text và varchar lưu và chạy như nhau. Giới hạn độ dài là luật nghiệp vụ — khi có thì viết CHECK (char_length(x) <= n).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> ERROR: value too long for type character varying(3)</p><p>Assigning a too-long value to varchar(n) is an error — PostgreSQL never truncates data you are storing.</p><p><i>VI: Gán giá trị quá dài vào varchar(n) là lỗi — PostgreSQL không bao giờ cắt dữ liệu bạn đang lưu.</i></p></li><li><p><b>d)</b> abc — an explicit cast truncates, by the SQL standard</p><p>An explicit cast is a request to convert, so the standard says truncate. This is why \"it worked in my SELECT\" proves nothing about INSERT.</p><p><i>VI: Ép kiểu tường minh là yêu cầu chuyển đổi nên chuẩn SQL bảo cắt. Vì vậy \"SELECT chạy được\" không chứng minh gì cho INSERT.</i></p></li><li><p><b>a)</b> hi| — trailing spaces of char(n) are dropped when converted to text</p><p>char(n) is stored padded but its trailing spaces are \"insignificant\": they disappear when the value becomes text (|| converts). length() also ignores them.</p><p><i>VI: char(n) lưu có đệm nhưng khoảng trắng cuối là \"không đáng kể\": chúng biến mất khi giá trị thành text (|| chuyển đổi). length() cũng bỏ qua chúng.</i></p></li><li><p><b>d)</b> 4 and 5</p><p>length() counts characters; é takes 2 bytes in UTF-8, so octet_length is 5. Vietnamese letters like ộ take 3 bytes.</p><p><i>VI: length() đếm ký tự; é tốn 2 byte trong UTF-8 nên octet_length là 5. Chữ Việt như ộ tốn 3 byte.</i></p></li><li><p><b>a)</b> text (add a CHECK if a real limit exists)</p><p>In PostgreSQL text and varchar are the same storage and speed. A length limit is a business rule — write it as CHECK (char_length(x) &lt;= n) when there is one.</p><p><i>VI: Trong PostgreSQL text và varchar lưu và chạy như nhau. Giới hạn độ dài là luật nghiệp vụ — khi có thì viết CHECK (char_length(x) &lt;= n).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ERROR: value too long for type character varying(3)</p><p>Assigning a too-long value to varchar(n) is an error — PostgreSQL never truncates data you are storing.</p><p><i>VI: Gán giá trị quá dài vào varchar(n) là lỗi — PostgreSQL không bao giờ cắt dữ liệu bạn đang lưu.</i></p></li><li><p><b>d)</b> abc — an explicit cast truncates, by the SQL standard</p><p>An explicit cast is a request to convert, so the standard says truncate. This is why \"it worked in my SELECT\" proves nothing about INSERT.</p><p><i>VI: Ép kiểu tường minh là yêu cầu chuyển đổi nên chuẩn SQL bảo cắt. Vì vậy \"SELECT chạy được\" không chứng minh gì cho INSERT.</i></p></li><li><p><b>a)</b> hi| — char(n) padding is dropped when it becomes text</p><p>char(n) is stored padded but its trailing spaces are \"insignificant\": they disappear when the value becomes text (|| converts). length() also ignores them.</p><p><i>VI: char(n) lưu có đệm nhưng khoảng trắng cuối là \"không đáng kể\": chúng biến mất khi giá trị thành text (|| chuyển đổi). length() cũng bỏ qua chúng.</i></p></li><li><p><b>d)</b> 4 and 5</p><p>length() counts characters; é takes 2 bytes in UTF-8, so octet_length is 5. Vietnamese letters like ộ take 3 bytes.</p><p><i>VI: length() đếm ký tự; é tốn 2 byte trong UTF-8 nên octet_length là 5. Chữ Việt như ộ tốn 3 byte.</i></p></li><li><p><b>a)</b> text (add a CHECK if a real limit exists)</p><p>In PostgreSQL text and varchar are the same storage and speed. A length limit is a business rule — write it as CHECK (char_length(x) &lt;= n) when there is one.</p><p><i>VI: Trong PostgreSQL text và varchar lưu và chạy như nhau. Giới hạn độ dài là luật nghiệp vụ — khi có thì viết CHECK (char_length(x) &lt;= n).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,23 +66,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "stores NULL"
+                "noiDung": "ERROR: value too long for type character varying(3)"
               },
               {
                 "ma": "b",
-                "noiDung": "stores 'abc' silently"
+                "noiDung": "stores 'abcdef' because text has no real limit"
               },
               {
                 "ma": "c",
-                "noiDung": "stores 'abcdef'"
+                "noiDung": "stores NULL because the value does not fit"
               },
               {
                 "ma": "d",
-                "noiDung": "ERROR: value too long for type character varying(3)"
+                "noiDung": "stores 'abc' silently and returns INSERT 0 1"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Assigning a too-long value to varchar(n) is an error — PostgreSQL never truncates data you are storing.</p><p><i>VI: Gán giá trị quá dài vào varchar(n) là lỗi — PostgreSQL không bao giờ cắt dữ liệu bạn đang lưu.</i></p>"
           },
@@ -92,15 +92,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "abcdef"
+                "noiDung": "ERROR: value too long for type varchar(3)"
               },
               {
                 "ma": "b",
-                "noiDung": "NULL"
+                "noiDung": "abcdef — a cast never changes the value"
               },
               {
                 "ma": "c",
-                "noiDung": "ERROR: value too long"
+                "noiDung": "NULL — the value does not fit in 3 characters"
               },
               {
                 "ma": "d",
@@ -118,19 +118,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "hi| — trailing spaces of char(n) are dropped when converted to text"
+                "noiDung": "hi| — char(n) padding is dropped when it becomes text"
               },
               {
                 "ma": "b",
-                "noiDung": "hi   | (three spaces)"
+                "noiDung": "hi — the | is swallowed by the padding"
               },
               {
                 "ma": "c",
-                "noiDung": "ERROR"
+                "noiDung": "hi   | — the three padding spaces are kept"
               },
               {
                 "ma": "d",
-                "noiDung": "hi"
+                "noiDung": "ERROR — char and text cannot be concatenated"
               }
             ],
             "dapAn": [

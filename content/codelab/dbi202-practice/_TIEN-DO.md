@@ -35,7 +35,7 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | Ch4 | slide-dbi4-1..4, chuan-hoa, bao-dong-tim-khoa, phan-ra, chuan-hoa-vi-du, on-ch4 + Lab 4 (đơn hàng → BCNF) | 0 → 32 | ✅ (đáp án bao đóng/khoá/dạng chuẩn/chase TÍNH BẰNG `nguon/_fd.mjs`, không tính nhẩm; phân rã làm thật bằng CREATE TABLE + INSERT … SELECT DISTINCT) |
 | Ch5 | slide-dbi7-1/7-2, kieu-du-lieu, on-ch5 (+ sql-ddl, rang-buoc-sql, Lab 5 có sẵn) | 11 → 30 (+ Lab 5) | ✅ (4 đề tay: kiểu SQL Server + IDENTITY, CSDL bán hàng có UNIQUE lọc NULL, CLB với LIKE '[0-9]') |
 | Ch6 | slide-dbi7-3/7-5/7-6, on-ch6 (+ 6 module + Lab 6 có sẵn) | 36 → 58 (+ Lab 6) | ✅ (1 đề tay: TOP 1 WITH TIES trong view) |
-| Ch7 | slide-dbi9-1..3, plsql, proc-function, trigger-cursor, on-ch7 + Lab 7 (+ view có sẵn) | 4 → … | ⏳ |
+| Ch7 | slide-dbi9-1..3, plsql, proc-function, trigger-cursor, on-ch7 + Lab 7 thư viện (+ view có sẵn) | 4 → 34 | ✅ (22 đề tay T-SQL: biến/IF/WHILE/TRY, procedure OUTPUT + RETURN, giao dịch trong procedure, hàm vô hướng/TVF, trigger hiện dòng/luật nhiều dòng/kiểm toán/đếm/INSTEAD OF, cursor; 3 đề trình duyệt: view, UPDATE thay cursor) |
 | Ch8 | slide-dbi8-1/8-2, chi-muc, execution-plan, transaction-acid, on-ch8 + Lab 8 | 0 → … | ⏳ |
 | ⭐ CS.1–CS.8 + cầu nối | 3 bài/chủ đề + cau-noi-di-lam | 0 → … | ⏳ |
 | Ôn thi | on-pe, ngan-hang-cau-hoi, PE 1–3 chữa đề, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |

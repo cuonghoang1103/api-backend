@@ -362,3 +362,21 @@ export const mod = (slug, ten, deDs, baiHoc = slug) => doiDau({ slug, ten, khoa:
 export const cot = (ds) => `SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN (${ds.map((t) => `'${t.toLowerCase()}'`).join(', ')})`;
 /** Câu nhắc chung cho đề DDL chấm trong trình duyệt: VARCHAR thay NVARCHAR, DATE thay DATETIME. */
 export const YC_DDL = ['Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.', 'Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.'];
+
+/* ─── thân kiểm T-SQL hay dùng (cho ck()) ─── */
+/** Mọi lệnh trong `lenh` phải bị SQL Server từ chối (chạy trong một giao dịch rồi huỷ). */
+export const tuChoi = (lenh) => `DECLARE @n INT = 0;
+BEGIN TRAN;
+${lenh.map((l) => `BEGIN TRY ${l}; END TRY BEGIN CATCH SET @n += 1; END CATCH;`).join('\n')}
+IF @@TRANCOUNT > 0 ROLLBACK;
+SET @ok = IIF(@n = ${lenh.length}, 1, 0); SET @info = CONCAT(@n, N' of ${lenh.length} invalid statements were rejected');`;
+/**
+ * Hai truy vấn phải cho CÙNG một túi dòng (so bằng EXCEPT hai chiều + đếm). `truoc` chạy trước (trong giao dịch, huỷ sau).
+ * thucTe = truy vấn trên đối tượng của người học; mongDoi = truy vấn tham chiếu viết độc lập. MỌI cột phải có tên (bí danh) — chúng thành bảng dẫn xuất.
+ */
+export const giongNhau = (thucTe, mongDoi, truoc = '') => `BEGIN TRAN;
+${truoc}
+DECLARE @a INT = (SELECT COUNT(*) FROM (${thucTe}) AS a_), @b INT = (SELECT COUNT(*) FROM (${mongDoi}) AS b_);
+SET @ok = IIF(@a = @b AND NOT EXISTS (${thucTe} EXCEPT ${mongDoi}) AND NOT EXISTS (${mongDoi} EXCEPT ${thucTe}), 1, 0);
+SET @info = CONCAT(N'your result: ', @a, N' rows; expected: ', @b, N' rows', IIF(@a = @b, N' (same count, different values)', N''));
+IF @@TRANCOUNT > 0 ROLLBACK;`;

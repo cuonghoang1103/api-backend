@@ -322,10 +322,58 @@
       "description": "Lab 6 (bản in): 8 báo cáo quản trị trên FUHCompany theo quy định PE (Q1.sql … Q8.sql), thang 10, kiểm ẩn đổi dữ liệu."
     },
     {
+      "slug": "dbi202-slide-dbi9-1",
+      "name": "7.A T-SQL basics: variables, IF, CASE, WHILE, errors (slides 1–19)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Variables and IF … ELSE IF: a salary grade · WHILE: raise salaries until the average reaches a target · TRY … CATCH and @@ROWCOUNT: a delete that never crashes · T-SQL basics in five questions"
+    },
+    {
+      "slug": "dbi202-slide-dbi9-2",
+      "name": "7.B Three tiers, stored procedures & functions (slides 20–34)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A procedure with two OUTPUT parameters and a return code · A scalar function used inside a query: exact age · An inline table-valued function: staff of a project · Procedure or function? Decide in 10 seconds"
+    },
+    {
+      "slug": "dbi202-slide-dbi9-3",
+      "name": "7.C Triggers, inserted/deleted & cursors (slides 35–51)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: AFTER INSERT trigger that shows the inserted rows (PE question 9 style) · A rule trigger: at most 60 hours per employee across all projects · A cursor, once: build a department report row by row · inserted and deleted: what is in them?"
+    },
+    {
+      "slug": "dbi202-plsql",
+      "name": "7.1 Views, stored procedures, functions & triggers",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Which programmable object fits the requirement? · A view that hides the salary · A procedure with a parameter on top of the view · Logic in the database: good and bad reasons"
+    },
+    {
       "slug": "dbi202-view",
       "name": "7.2 Views: virtual tables that hide complexity",
       "level": "INTERMEDIATE",
       "description": "CREATE VIEW: che cột, gói phép nối, gói phép gộp, WITH CHECK OPTION."
+    },
+    {
+      "slug": "dbi202-proc-function",
+      "name": "7.3 Stored procedures & functions",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A complete procedure: validate, transact, catch, return a code · A scalar function and an inline table-valued function · The procedure / function decision table"
+    },
+    {
+      "slug": "dbi202-trigger-cursor",
+      "name": "7.4 Triggers & cursors (and when not to use them)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Audit trigger: log every real grade change (inserted ⋈ deleted) · Keep a denormalised counter right for any number of rows · INSTEAD OF DELETE: soft-delete projects · Replace the cursor with one UPDATE"
+    },
+    {
+      "slug": "dbi202-on-ch7",
+      "name": "7.5 Practice: procedures, functions, triggers & cursors (PE style)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exercise 1 — procedure with OUTPUT parameters: total salary of a department · Exercise 2 — procedure with a transaction: add an employee to a project, all or nothing · Exercises 3–4 — a scalar function and a table-valued function · Exercise 5 — trigger: no employee may earn more than his manager · Exercise 6 — trigger: keep a log of deletions and salary changes · Exercise 7 — cursor: raise salaries by working hours"
+    },
+    {
+      "slug": "dbi202-7-lab-lap-trinh-thu-vien",
+      "name": "Lab 7 — Program the CT Library: procedures, functions, triggers",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 7 — CT Library programmability (5 questions, PE questions 8–10 style)"
     },
     {
       "slug": "dbi202-9-pe-1-ct-rent",

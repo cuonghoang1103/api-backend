@@ -1,0 +1,377 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-proc-function",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-proc-function"
+  },
+  "exercises": [
+    {
+      "title": "A complete procedure: validate, transact, catch, return a code",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "parameter validation",
+        "BEGIN TRANSACTION … COMMIT",
+        "TRY … CATCH + ROLLBACK",
+        "RETURN code"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "procedure",
+        "transaction"
+      ],
+      "problemHtml": "<p>The lesson's <code>sp_EnrolStudent @sid INT, @cid CHAR(6), @result NVARCHAR(200) OUTPUT</code>: enrolling inserts a row into Enrolment <b>and</b> decreases <code>Course.seats</code> by 1 — both or neither. Return <b>1</b> + \"Student not found\", <b>2</b> + \"Course not found\", <b>0</b> + \"OK\" on success, and <b>-1</b> + the error message when something fails (already enrolled, no seat left: the CHECK seats ≥ 0).</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 5 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (5 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 5 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Validate first (RETURN early), then BEGIN TRANSACTION … COMMIT inside TRY.</li>\n  <li>In CATCH: IF @@TRANCOUNT &gt; 0 ROLLBACK, @result = ERROR_MESSAGE(), RETURN -1.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>sp_EnrolStudent @sid INT, @cid CHAR(6), @result NVARCHAR(200) OUTPUT</code> của bài: đăng ký là chèn một dòng Enrolment <b>và</b> giảm <code>Course.seats</code> đi 1 — cả hai hoặc không gì. Trả <b>1</b> + \"Student not found\", <b>2</b> + \"Course not found\", <b>0</b> + \"OK\" khi thành công, và <b>-1</b> + thông báo lỗi khi có gì hỏng (đã đăng ký rồi, hết chỗ: CHECK seats ≥ 0).</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 5 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (5 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 5 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm trước (RETURN sớm), rồi BEGIN TRANSACTION … COMMIT trong TRY.</li>\n  <li>Trong CATCH: IF @@TRANCOUNT &gt; 0 ROLLBACK, @result = ERROR_MESSAGE(), RETURN -1.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. Success: row inserted, one seat taken, code 0\nPASS 2. Unknown student → 1, unknown course → 2, nothing changes\nPASS 3. Full course (0 seats): code -1 and NO enrolment row left behind\nPASS 4. Already enrolled: code -1, seats unchanged\nPASS 5. No transaction is left open after a failure\nALL 5 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Validation errors are business answers (codes 1, 2) — no transaction needed yet.|||Lỗi kiểm tra là câu trả lời nghiệp vụ (mã 1, 2) — chưa cần giao dịch.",
+        "The two writes go inside BEGIN TRANSACTION … COMMIT; any error jumps to CATCH, which rolls back.|||Hai lệnh ghi nằm trong BEGIN TRANSACTION … COMMIT; lỗi nào cũng nhảy sang CATCH, nơi huỷ giao dịch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: A complete procedure: validate, transact, catch, return a code\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE OR ALTER PROCEDURE sp_EnrolStudent @sid INT, @cid CHAR(6), @result NVARCHAR(200) OUTPUT AS\n-- BEGIN ... END\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: A complete procedure: validate, transact, catch, return a code\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Student (sid INT NOT NULL PRIMARY KEY, fullName NVARCHAR(50) NOT NULL);\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL CHECK (seats >= 0));\nCREATE TABLE Enrolment (sid INT NOT NULL REFERENCES Student (sid), cid CHAR(6) NOT NULL REFERENCES Course (cid),\n                        grade DECIMAL(4,2) NULL, PRIMARY KEY (sid, cid));\nINSERT INTO Student VALUES (1, N'An'), (2, N'Bình'), (3, N'Chi');\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 2), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nINSERT INTO Enrolment VALUES (2, 'DBI202', 8.5), (3, 'PRF192', 6.0), (2, 'PRF192', 9.0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: A complete procedure: validate, transact, catch, return a code\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: Success: row inserted, one seat taken, code 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''DBI202'', @m OUTPUT;\nSET @ok = IIF(@rc = 0 AND @m = N''OK'' AND EXISTS (SELECT 1 FROM Enrolment WHERE sid = 1 AND cid = ''DBI202'') AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 1, 1, 0);\nSET @info = CONCAT(N''rc='', @rc, N'' msg='', @m); IF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Success: row inserted, one seat taken, code 0 | Thành công: thêm dòng, trừ một chỗ, mã 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Success: row inserted, one seat taken, code 0 | Thành công: thêm dòng, trừ một chỗ, mã 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Unknown student → 1, unknown course → 2, nothing changes\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m1 NVARCHAR(200), @r1 INT, @m2 NVARCHAR(200), @r2 INT;\nEXEC @r1 = dbo.sp_EnrolStudent 99, ''DBI202'', @m1 OUTPUT; EXEC @r2 = dbo.sp_EnrolStudent 1, ''XXX999'', @m2 OUTPUT;\nSET @ok = IIF(@r1 = 1 AND @m1 = N''Student not found'' AND @r2 = 2 AND @m2 = N''Course not found'' AND (SELECT COUNT(*) FROM Enrolment) = 3, 1, 0);\nSET @info = CONCAT(N''got '', @r1, N''/'', @m1, N'' and '', @r2, N''/'', @m2);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Unknown student → 1, unknown course → 2, nothing changes | Sinh viên lạ → 1, môn lạ → 2, không đổi gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Unknown student → 1, unknown course → 2, nothing changes | Sinh viên lạ → 1, môn lạ → 2, không đổi gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Full course (0 seats): code -1 and NO enrolment row left behind\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''CSD201'', @m OUTPUT;   -- no outer transaction: the procedure''s ROLLBACK would end it (error 266)\nSET @ok = IIF(@rc = -1 AND NOT EXISTS (SELECT 1 FROM Enrolment WHERE sid = 1 AND cid = ''CSD201'') AND (SELECT seats FROM Course WHERE cid = ''CSD201'') = 0, 1, 0);\nSET @info = CONCAT(N''rc='', @rc, N'', enrolment rows for (1, CSD201): '', (SELECT COUNT(*) FROM Enrolment WHERE sid = 1 AND cid = ''CSD201''));\nDELETE FROM Enrolment WHERE sid = 1 AND cid = ''CSD201''; UPDATE Course SET seats = 0 WHERE cid = ''CSD201'';   -- clean up for the next checks',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Full course (0 seats): code -1 and NO enrolment row left behind | Môn hết chỗ (0 chỗ): mã -1 và KHÔNG còn dòng đăng ký nào sót lại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Full course (0 seats): code -1 and NO enrolment row left behind | Môn hết chỗ (0 chỗ): mã -1 và KHÔNG còn dòng đăng ký nào sót lại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Already enrolled: code -1, seats unchanged\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 2, ''DBI202'', @m OUTPUT;\nSET @ok = IIF(@rc = -1 AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 2, 1, 0); SET @info = CONCAT(N''rc='', @rc, N'', seats='', (SELECT seats FROM Course WHERE cid = ''DBI202''));\nUPDATE Course SET seats = 2 WHERE cid = ''DBI202'';   -- clean up',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Already enrolled: code -1, seats unchanged | Đã đăng ký rồi: mã -1, số chỗ không đổi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Already enrolled: code -1, seats unchanged | Đã đăng ký rồi: mã -1, số chỗ không đổi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: No transaction is left open after a failure\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''CSD201'', @m OUTPUT;\nSET @ok = IIF(@@TRANCOUNT = 0, 1, 0); SET @info = CONCAT(N''@@TRANCOUNT after the call = '', @@TRANCOUNT);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. No transaction is left open after a failure | Không để giao dịch nào mở sau khi lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. No transaction is left open after a failure | Không để giao dịch nào mở sau khi lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: A complete procedure: validate, transact, catch, return a code\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER PROCEDURE sp_EnrolStudent\n    @sid    INT,\n    @cid    CHAR(6),\n    @result NVARCHAR(200) OUTPUT\nAS\nBEGIN\n    SET NOCOUNT ON;\n    BEGIN TRY\n        IF NOT EXISTS (SELECT 1 FROM Student WHERE sid = @sid)\n        BEGIN SET @result = N'Student not found'; RETURN 1; END\n        IF NOT EXISTS (SELECT 1 FROM Course WHERE cid = @cid)\n        BEGIN SET @result = N'Course not found'; RETURN 2; END\n        BEGIN TRANSACTION;\n            INSERT INTO Enrolment (sid, cid) VALUES (@sid, @cid);\n            UPDATE Course SET seats = seats - 1 WHERE cid = @cid;     -- seats >= 0 CHECK fails when full\n        COMMIT TRANSACTION;\n        SET @result = N'OK';\n        RETURN 0;\n    END TRY\n    BEGIN CATCH\n        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;                     -- undo BOTH statements\n        SET @result = ERROR_MESSAGE();\n        RETURN -1;\n    END CATCH\nEND\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: A complete procedure: validate, transact, catch, return a code\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Student (sid INT NOT NULL PRIMARY KEY, fullName NVARCHAR(50) NOT NULL);\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL CHECK (seats >= 0));\nCREATE TABLE Enrolment (sid INT NOT NULL REFERENCES Student (sid), cid CHAR(6) NOT NULL REFERENCES Course (cid),\n                        grade DECIMAL(4,2) NULL, PRIMARY KEY (sid, cid));\nINSERT INTO Student VALUES (1, N'An'), (2, N'Bình'), (3, N'Chi');\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 2), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nINSERT INTO Enrolment VALUES (2, 'DBI202', 8.5), (3, 'PRF192', 6.0), (2, 'PRF192', 9.0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: A complete procedure: validate, transact, catch, return a code\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 5 checks ──────────';\n\n-- CHECK 1: Success: row inserted, one seat taken, code 0\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''DBI202'', @m OUTPUT;\nSET @ok = IIF(@rc = 0 AND @m = N''OK'' AND EXISTS (SELECT 1 FROM Enrolment WHERE sid = 1 AND cid = ''DBI202'') AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 1, 1, 0);\nSET @info = CONCAT(N''rc='', @rc, N'' msg='', @m); IF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. Success: row inserted, one seat taken, code 0 | Thành công: thêm dòng, trừ một chỗ, mã 0'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. Success: row inserted, one seat taken, code 0 | Thành công: thêm dòng, trừ một chỗ, mã 0', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Unknown student → 1, unknown course → 2, nothing changes\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m1 NVARCHAR(200), @r1 INT, @m2 NVARCHAR(200), @r2 INT;\nEXEC @r1 = dbo.sp_EnrolStudent 99, ''DBI202'', @m1 OUTPUT; EXEC @r2 = dbo.sp_EnrolStudent 1, ''XXX999'', @m2 OUTPUT;\nSET @ok = IIF(@r1 = 1 AND @m1 = N''Student not found'' AND @r2 = 2 AND @m2 = N''Course not found'' AND (SELECT COUNT(*) FROM Enrolment) = 3, 1, 0);\nSET @info = CONCAT(N''got '', @r1, N''/'', @m1, N'' and '', @r2, N''/'', @m2);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Unknown student → 1, unknown course → 2, nothing changes | Sinh viên lạ → 1, môn lạ → 2, không đổi gì'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Unknown student → 1, unknown course → 2, nothing changes | Sinh viên lạ → 1, môn lạ → 2, không đổi gì', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Full course (0 seats): code -1 and NO enrolment row left behind\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''CSD201'', @m OUTPUT;   -- no outer transaction: the procedure''s ROLLBACK would end it (error 266)\nSET @ok = IIF(@rc = -1 AND NOT EXISTS (SELECT 1 FROM Enrolment WHERE sid = 1 AND cid = ''CSD201'') AND (SELECT seats FROM Course WHERE cid = ''CSD201'') = 0, 1, 0);\nSET @info = CONCAT(N''rc='', @rc, N'', enrolment rows for (1, CSD201): '', (SELECT COUNT(*) FROM Enrolment WHERE sid = 1 AND cid = ''CSD201''));\nDELETE FROM Enrolment WHERE sid = 1 AND cid = ''CSD201''; UPDATE Course SET seats = 0 WHERE cid = ''CSD201'';   -- clean up for the next checks',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Full course (0 seats): code -1 and NO enrolment row left behind | Môn hết chỗ (0 chỗ): mã -1 và KHÔNG còn dòng đăng ký nào sót lại'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Full course (0 seats): code -1 and NO enrolment row left behind | Môn hết chỗ (0 chỗ): mã -1 và KHÔNG còn dòng đăng ký nào sót lại', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Already enrolled: code -1, seats unchanged\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 2, ''DBI202'', @m OUTPUT;\nSET @ok = IIF(@rc = -1 AND (SELECT seats FROM Course WHERE cid = ''DBI202'') = 2, 1, 0); SET @info = CONCAT(N''rc='', @rc, N'', seats='', (SELECT seats FROM Course WHERE cid = ''DBI202''));\nUPDATE Course SET seats = 2 WHERE cid = ''DBI202'';   -- clean up',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Already enrolled: code -1, seats unchanged | Đã đăng ký rồi: mã -1, số chỗ không đổi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Already enrolled: code -1, seats unchanged | Đã đăng ký rồi: mã -1, số chỗ không đổi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 5: No transaction is left open after a failure\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(200), @rc INT; EXEC @rc = dbo.sp_EnrolStudent 1, ''CSD201'', @m OUTPUT;\nSET @ok = IIF(@@TRANCOUNT = 0, 1, 0); SET @info = CONCAT(N''@@TRANCOUNT after the call = '', @@TRANCOUNT);',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 5. No transaction is left open after a failure | Không để giao dịch nào mở sau khi lỗi'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 5. No transaction is left open after a failure | Không để giao dịch nào mở sau khi lỗi', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Return codes for expected outcomes, CATCH for unexpected errors, and a transaction around every group of writes that must succeed together (lesson 8.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Mã trả về cho kết quả đã lường trước, CATCH cho lỗi bất ngờ, và một giao dịch bao mọi nhóm lệnh ghi phải thành công cùng nhau (bài 8.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…).|||Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. Success: row inserted, one seat taken, code 0",
+            "2. Unknown student → 1, unknown course → 2, nothing changes",
+            "3. Full course (0 seats): code -1 and NO enrolment row left behind",
+            "4. Already enrolled: code -1, seats unchanged",
+            "5. No transaction is left open after a failure"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No transaction: the INSERT succeeds, the UPDATE fails on the CHECK, and an enrolment exists without a seat.|||Không giao dịch: INSERT thành công, UPDATE lỗi CHECK, và có dòng đăng ký mà không trừ chỗ."
+        },
+        {
+          "loi": "Not checking the course: an unknown course hits the foreign key and returns -1 instead of 2.|||Không kiểm môn: môn lạ chạm khoá ngoại và trả -1 thay vì 2."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch"
+        },
+        {
+          "en": "return code",
+          "vi": "mã trả về"
+        }
+      ]
+    },
+    {
+      "title": "A scalar function and an inline table-valued function",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "scalar function",
+        "inline TVF",
+        "NULL result"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "tsql",
+        "function"
+      ],
+      "problemHtml": "<p>On the same database write (1) <code>dbo.fn_GPA(@sid INT) RETURNS DECIMAL(4,2)</code> — the average grade of the student (NULL when no grade), and (2) <code>dbo.fn_StudentsOf(@cid CHAR(6)) RETURNS TABLE</code> — <code>sid, fullName, grade</code> of the students enrolled in the course.</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…). Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 4 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (4 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 4 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Separate the two CREATE FUNCTION statements with GO.</li>\n  <li>The TVF is one RETURN (SELECT …).</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên cùng CSDL viết (1) <code>dbo.fn_GPA(@sid INT) RETURNS DECIMAL(4,2)</code> — điểm trung bình của sinh viên (NULL khi chưa có điểm), và (2) <code>dbo.fn_StudentsOf(@cid CHAR(6)) RETURNS TABLE</code> — <code>sid, fullName, grade</code> của các sinh viên đăng ký môn.</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…). Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 4 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (4 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 4 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách hai câu CREATE FUNCTION bằng GO.</li>\n  <li>TVF là một RETURN (SELECT …).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00\nPASS 2. fn_GPA of a student with no grade is NULL\nPASS 3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades\nPASS 4. Both stay right after new data (one grade still NULL)\nALL 4 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "Scalar: RETURNS type AS BEGIN … RETURN (…) END. Inline TVF: RETURNS TABLE AS RETURN (SELECT …).|||Vô hướng: RETURNS kiểu AS BEGIN … RETURN (…) END. TVF nội tuyến: RETURNS TABLE AS RETURN (SELECT …).",
+        "AVG over no rows is NULL — keep it: \"no grade yet\" is not 0.|||AVG trên không dòng là NULL — giữ nguyên: \"chưa có điểm\" không phải 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: A scalar function and an inline table-valued function\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- CREATE OR ALTER FUNCTION dbo.fn_GPA (@sid INT) RETURNS DECIMAL(4,2) AS BEGIN ... END\n-- GO\n-- CREATE OR ALTER FUNCTION dbo.fn_StudentsOf (@cid CHAR(6)) RETURNS TABLE AS RETURN (...);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: A scalar function and an inline table-valued function\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Student (sid INT NOT NULL PRIMARY KEY, fullName NVARCHAR(50) NOT NULL);\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL CHECK (seats >= 0));\nCREATE TABLE Enrolment (sid INT NOT NULL REFERENCES Student (sid), cid CHAR(6) NOT NULL REFERENCES Course (cid),\n                        grade DECIMAL(4,2) NULL, PRIMARY KEY (sid, cid));\nINSERT INTO Student VALUES (1, N'An'), (2, N'Bình'), (3, N'Chi');\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 2), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nINSERT INTO Enrolment VALUES (2, 'DBI202', 8.5), (3, 'PRF192', 6.0), (2, 'PRF192', 9.0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: A scalar function and an inline table-valued function\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: fn_GPA(2) = 8.75, fn_GPA(3) = 6.00\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(dbo.fn_GPA(2) = 8.75 AND dbo.fn_GPA(3) = 6.00, 1, 0); SET @info = CONCAT(N''got '', dbo.fn_GPA(2), N'' and '', dbo.fn_GPA(3));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00 | fn_GPA(2) = 8,75, fn_GPA(3) = 6,00'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00 | fn_GPA(2) = 8,75, fn_GPA(3) = 6,00', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: fn_GPA of a student with no grade is NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(dbo.fn_GPA(1) IS NULL, 1, 0); SET @info = CONCAT(N''got '', dbo.fn_GPA(1));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. fn_GPA of a student with no grade is NULL | fn_GPA của sinh viên chưa có điểm là NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. fn_GPA of a student with no grade is NULL | fn_GPA của sinh viên chưa có điểm là NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: fn_StudentsOf(PRF192) = students 2 and 3 with their grades\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\n\nDECLARE @a INT = (SELECT COUNT(*) FROM (SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'')) AS a_), @b INT = (SELECT COUNT(*) FROM (SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'') AS b_);\nSET @ok = IIF(@a = @b AND NOT EXISTS (SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'') EXCEPT SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'') AND NOT EXISTS (SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'' EXCEPT SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'')), 1, 0);\nSET @info = CONCAT(N''your result: '', @a, N'' rows; expected: '', @b, N'' rows'', IIF(@a = @b, N'' (same count, different values)'', N''''));\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades | fn_StudentsOf(PRF192) = sinh viên 2 và 3 kèm điểm'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades | fn_StudentsOf(PRF192) = sinh viên 2 và 3 kèm điểm', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Both stay right after new data (one grade still NULL)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; INSERT INTO Enrolment VALUES (1, ''DBI202'', 7.0), (1, ''PRF192'', NULL);   -- a student not graded yet is still enrolled\nSET @ok = IIF(dbo.fn_GPA(1) = 7.00 AND (SELECT COUNT(*) FROM dbo.fn_StudentsOf(''PRF192'')) = 3, 1, 0); SET @info = CONCAT(N''fn_GPA(1)='', dbo.fn_GPA(1)); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Both stay right after new data (one grade still NULL) | Cả hai vẫn đúng sau khi thêm dữ liệu (một điểm còn NULL)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Both stay right after new data (one grade still NULL) | Cả hai vẫn đúng sau khi thêm dữ liệu (một điểm còn NULL)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: A scalar function and an inline table-valued function\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE OR ALTER FUNCTION dbo.fn_GPA (@sid INT)\nRETURNS DECIMAL(4,2)\nAS\nBEGIN\n    RETURN (SELECT AVG(grade) FROM Enrolment WHERE sid = @sid);   -- NULL when no graded course\nEND\nGO\nCREATE OR ALTER FUNCTION dbo.fn_StudentsOf (@cid CHAR(6))\nRETURNS TABLE\nAS\nRETURN (SELECT s.sid, s.fullName, e.grade\n        FROM Student s JOIN Enrolment e ON e.sid = s.sid\n        WHERE e.cid = @cid);\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: A scalar function and an inline table-valued function\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\nCREATE TABLE Student (sid INT NOT NULL PRIMARY KEY, fullName NVARCHAR(50) NOT NULL);\nCREATE TABLE Course (cid CHAR(6) NOT NULL PRIMARY KEY, title NVARCHAR(60) NOT NULL, seats INT NOT NULL CHECK (seats >= 0));\nCREATE TABLE Enrolment (sid INT NOT NULL REFERENCES Student (sid), cid CHAR(6) NOT NULL REFERENCES Course (cid),\n                        grade DECIMAL(4,2) NULL, PRIMARY KEY (sid, cid));\nINSERT INTO Student VALUES (1, N'An'), (2, N'Bình'), (3, N'Chi');\nINSERT INTO Course VALUES ('DBI202', N'Database Systems', 2), ('CSD201', N'Data Structures', 0), ('PRF192', N'Programming', 30);\nINSERT INTO Enrolment VALUES (2, 'DBI202', 8.5), (3, 'PRF192', 6.0), (2, 'PRF192', 9.0);\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: A scalar function and an inline table-valued function\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 4 checks ──────────';\n\n-- CHECK 1: fn_GPA(2) = 8.75, fn_GPA(3) = 6.00\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(dbo.fn_GPA(2) = 8.75 AND dbo.fn_GPA(3) = 6.00, 1, 0); SET @info = CONCAT(N''got '', dbo.fn_GPA(2), N'' and '', dbo.fn_GPA(3));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00 | fn_GPA(2) = 8,75, fn_GPA(3) = 6,00'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00 | fn_GPA(2) = 8,75, fn_GPA(3) = 6,00', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: fn_GPA of a student with no grade is NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(dbo.fn_GPA(1) IS NULL, 1, 0); SET @info = CONCAT(N''got '', dbo.fn_GPA(1));',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. fn_GPA of a student with no grade is NULL | fn_GPA của sinh viên chưa có điểm là NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. fn_GPA of a student with no grade is NULL | fn_GPA của sinh viên chưa có điểm là NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: fn_StudentsOf(PRF192) = students 2 and 3 with their grades\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN;\n\nDECLARE @a INT = (SELECT COUNT(*) FROM (SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'')) AS a_), @b INT = (SELECT COUNT(*) FROM (SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'') AS b_);\nSET @ok = IIF(@a = @b AND NOT EXISTS (SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'') EXCEPT SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'') AND NOT EXISTS (SELECT s.sid, s.fullName, e.grade FROM Student s JOIN Enrolment e ON e.sid = s.sid WHERE e.cid = ''PRF192'' EXCEPT SELECT sid, fullName, grade FROM dbo.fn_StudentsOf(''PRF192'')), 1, 0);\nSET @info = CONCAT(N''your result: '', @a, N'' rows; expected: '', @b, N'' rows'', IIF(@a = @b, N'' (same count, different values)'', N''''));\nIF @@TRANCOUNT > 0 ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades | fn_StudentsOf(PRF192) = sinh viên 2 và 3 kèm điểm'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades | fn_StudentsOf(PRF192) = sinh viên 2 và 3 kèm điểm', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 4: Both stay right after new data (one grade still NULL)\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'BEGIN TRAN; INSERT INTO Enrolment VALUES (1, ''DBI202'', 7.0), (1, ''PRF192'', NULL);   -- a student not graded yet is still enrolled\nSET @ok = IIF(dbo.fn_GPA(1) = 7.00 AND (SELECT COUNT(*) FROM dbo.fn_StudentsOf(''PRF192'')) = 3, 1, 0); SET @info = CONCAT(N''fn_GPA(1)='', dbo.fn_GPA(1)); ROLLBACK;',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 4. Both stay right after new data (one grade still NULL) | Cả hai vẫn đúng sau khi thêm dữ liệu (một điểm còn NULL)'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 4. Both stay right after new data (one grade still NULL) | Cả hai vẫn đúng sau khi thêm dữ liệu (một điểm còn NULL)', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>WHERE dbo.fn_GPA(sid) &gt; 8 runs the function once per row; joining fn_StudentsOf or a GROUP BY query lets the optimizer work on sets — the \"mysteriously slow\" warning of the lesson.</p>",
+      "solutionExplanationHtmlVi": "<p>WHERE dbo.fn_GPA(sid) &gt; 8 chạy hàm một lần mỗi dòng; nối với fn_StudentsOf hoặc một truy vấn GROUP BY cho bộ tối ưu làm việc theo tập — lời cảnh báo \"chậm bí ẩn\" của bài.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "The in-browser grader runs PostgreSQL (WASM) in a SQL Server–like mode and can only check portable SQL; this task needs T-SQL that only a real SQL Server runs (stored procedures, functions, triggers, variables, TRY/CATCH, transactions…).|||Máy chấm trong trình duyệt chạy PostgreSQL (WASM) ở chế độ giống SQL Server nên chỉ chấm được SQL chung; bài này cần T-SQL mà chỉ SQL Server thật chạy được (stored procedure, function, trigger, biến, TRY/CATCH, giao dịch…).",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. fn_GPA(2) = 8.75, fn_GPA(3) = 6.00",
+            "2. fn_GPA of a student with no grade is NULL",
+            "3. fn_StudentsOf(PRF192) = students 2 and 3 with their grades",
+            "4. Both stay right after new data (one grade still NULL)"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "COALESCE(AVG(grade), 0) — a student with no grade looks like a student who failed everything.|||COALESCE(AVG(grade), 0) — sinh viên chưa có điểm trông như người trượt hết."
+        },
+        {
+          "loi": "Filtering passed students in fn_StudentsOf — the task asks for everyone enrolled.|||Lọc sinh viên qua môn trong fn_StudentsOf — đề hỏi mọi người đã đăng ký."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inline table-valued function",
+          "vi": "hàm trả bảng nội tuyến"
+        }
+      ]
+    },
+    {
+      "title": "The procedure / function decision table",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "procedure vs function"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "design"
+      ],
+      "problemHtml": "<p>Fill the decision table of lesson 7.3.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền bảng quyết định của bài 7.3.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Inside a query\" ⇒ function only.|||\"Trong truy vấn\" ⇒ chỉ hàm.",
+        "\"Changes data\" ⇒ procedure only.|||\"Đổi dữ liệu\" ⇒ chỉ procedure."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The procedure / function decision table\n\nAnswer in the answer panel (no code needed).\n\n1. Procedure vs functionProcedure và function\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The procedure / function decision table — answer key\n\n1. Procedure vs functionProcedure và function\n   - r1.sp: no\n   - r1.fn: yes\n   - r2.sp: yes\n   - r2.fn: no\n   - r3.sp: yes\n   - r3.fn: no\n   - r4.sp: yes\n   - r4.fn: no\n   - r5.sp: yes\n   - r5.fn: no\n   Functions are side-effect free and return one value or one table; procedures do work: data changes, transactions, error handling, OUTPUT parameters, result sets.VI: Hàm không có tác dụng phụ và trả một giá trị hoặc một bảng; procedure làm việc: đổi dữ liệu, giao dịch, xử lý lỗi, tham số OUTPUT, tập kết quả.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Functions are side-effect free and return one value or one table; procedures do work: data changes, transactions, error handling, OUTPUT parameters, result sets.</p><p><i>VI: Hàm không có tác dụng phụ và trả một giá trị hoặc một bảng; procedure làm việc: đổi dữ liệu, giao dịch, xử lý lỗi, tham số OUTPUT, tập kết quả.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Procedure vs function</p><p style=\"opacity:.75;font-size:.92em\"><i>Procedure và function</i></p>",
+            "cot": [
+              {
+                "ma": "tc",
+                "ten": "Property / Tính chất"
+              },
+              {
+                "ma": "sp",
+                "ten": "Stored procedure",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "fn",
+                "ten": "Function",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tc": "Can be called inside a SELECT / WHERE"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tc": "Can INSERT / UPDATE / DELETE table data"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tc": "Can use BEGIN TRANSACTION / COMMIT"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tc": "Can use TRY … CATCH"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tc": "Can have OUTPUT parameters"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.sp": "no",
+              "r1.fn": "yes",
+              "r2.sp": "yes",
+              "r2.fn": "no",
+              "r3.sp": "yes",
+              "r3.fn": "no",
+              "r4.sp": "yes",
+              "r4.fn": "no",
+              "r5.sp": "yes",
+              "r5.fn": "no"
+            },
+            "giaiThich": "<p>Functions are side-effect free and return one value or one table; procedures do work: data changes, transactions, error handling, OUTPUT parameters, result sets.</p><p><i>VI: Hàm không có tác dụng phụ và trả một giá trị hoặc một bảng; procedure làm việc: đổi dữ liệu, giao dịch, xử lý lỗi, tham số OUTPUT, tập kết quả.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing functions can UPDATE tables.|||Tin rằng hàm UPDATE được bảng."
+        },
+        {
+          "loi": "Believing procedures can be used in WHERE.|||Tin rằng procedure dùng được trong WHERE."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side effect",
+          "vi": "tác dụng phụ"
+        }
+      ]
+    }
+  ]
+}

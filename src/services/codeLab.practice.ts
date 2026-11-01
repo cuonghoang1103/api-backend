@@ -52,6 +52,9 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   // PRO192 (01/11/2026): Java OOP — đề chạy & tự chấm TRÊN MÁY người học (manual + cham.mjs: javac, ca ẩn, reflection,
   // luật review LAB211), content/codelab/pro192-practice. Module slug = slug bài học ⇒ thẻ "🏋️ Luyện tập" dưới mỗi bài.
   'object-oriented-programming': 'pro192-practice',
+  // CSD201 (01/11/2026): CTDL & GT bằng Java — đề chạy & tự chấm TRÊN MÁY người học (manual + cham.mjs: javac --release 8, ca ẩn,
+  // soi liên kết thật bằng reflection, kiểm độ phức tạp có hạn giờ, đề đúng khuôn PE data.txt → f1.txt), content/codelab/csd201-practice.
+  'data-structures-and-algorithms': 'csd201-practice',
 });
 
 /**

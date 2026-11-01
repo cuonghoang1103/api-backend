@@ -73,3 +73,23 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 | Ch12 | 12.1–12.4 | ✅ 01/11 — bài 34–36k chữ, ảnh chụp thật trong deck wf-12-1…4 (46 slide, WF/v1), Code Lab 4 module × 6 đề (dom + 2 js; kiểm `chiTrinhDuyet` cho var/@layer), máy chấm trình duyệt 194/194 |
 | Ch13 | 13.1–13.4 | ✅ 01/11 — bài 28–33k chữ; dự án Vitest `_demo/_t13` (Vitest 5.0.5, jsdom 30.1.3, Testing Library 10.4.2, user-event 14.6.8, Node 22.23.3, actionlint) chạy thật, output ở `_t13/out/`; deck wf-13-1…4 (47 slide); Code Lab 4 module × 6 đề (js + dom), máy chấm trình duyệt 218/218 |
 | Ch14 | 14.1–14.4 | ✅ 01/11 — bài 25–35k chữ; dự án Vite `_demo/_t14` (Vite 8.3.5, Node 22.23.3, Lighthouse 13.6.0) dựng/đo thật: dev 6 req/224,9 KB vs build 3 req/1,4 KB, lộ VITE_ trong bundle, fail-fast config, lịch sử git giữ bí mật, máy chủ tĩnh + SPA fallback + smoke-test, 3 phiên bản trang đo LCP/CLS/TBT; deck wf-14-1…4 (44 slide); Code Lab 4 module (6+6+6+7 đề, js), máy chấm trình duyệt 243/243 · 1440 kiểm |
+| Ch1 | 1.2, 1.4 | ✅ 01/11 — bài 1.2 VS Code (40,6k chữ) + 1.4 GitHub (41,9k chữ), giữ video YouTube cũ; demo `_demo/_t1/vscode` (Prettier 3.9.10, ESLint 10.14.0, TypeScript 5.9.3 cho F2) và `_demo/_t1/github` (`sim.sh`: kho trần đóng vai github.com, git 2.51.1; `ssh.sh`: khoá tạo trong thư mục tạm rồi xoá); deck wf-1-2, wf-1-4 (22 slide, WF/v1). ⏳ CHƯA có Code Lab cho 1.2/1.4 |
+
+
+## ⏸ ĐIỂM DỪNG 01/11 (tối) — việc còn lại, theo thứ tự
+
+1. **Code Lab Ch1** (`nguon/wf-1-2-vscode.mjs`, `nguon/wf-1-4-github.mjs`, loại `js`, 6 đề/module). Ý tưởng đã chốt:
+   - 1.2: khớp tên file kiểu Ctrl+P (fuzzy + xếp hạng), bật/tắt chú thích dòng (Ctrl+/), dời dòng (Alt+↑↓), chọn lần xuất hiện kế (Ctrl+D),
+     đổi tên định danh bỏ qua chuỗi/chú thích, đọc JSONC (settings.json: bỏ chú thích + dấu phẩy cuối).
+   - 1.4: tách URL remote HTTPS/SSH → {host, owner, repo}; đếm ahead/behind từ hai danh sách commit; quyết định push
+     (up-to-date / fast-forward / rejected fetch first); khớp mẫu .gitignore (`dir/`, `*.log`, `!keep.log`, `.env*`); kiểm lời nhắn commit.
+   - Rồi `node scripts/codelab-kiem-de-web.mjs --xuat` + `npx tsx scripts/codelab-kiem-cham-trinh-duyet.mjs --track web-foundations-practice` (đang 243/243 · 1440 kiểm).
+   - Bài 1.2 và 1.4 đã hứa "Code Lab module 1.2/1.4" trong phần Luyện tập.
+2. **15 bài slide x.0** (chữ < 6000): thêm lời giảng từng slide (đọc deck chương `scripts/slides-src/wf-*.mjs` tương ứng) cho đủ ≥ 6000 chữ.
+3. **14 bài quiz**: thêm tờ ôn tập (tóm tắt chương + câu hỏi tự kiểm có đáp án gập) cho đủ ≥ 6000 chữ.
+4. **Liên kết chéo**: tạo `content/_LIEN-KET-CHEO/web-foundations.md` (bảng mọi lienKet() đã đặt trong Ch1, Ch11–14) và thêm thẻ chiều ngược
+   ở bài đích (git 14.1/5.1/5.2/6.1/15.1, nextjs 20.1, deploy-vps 1.3, react, testing…) — kiểm `git status` + đầu file
+   "FILE SINH TỰ ĐỘNG" trước khi sửa (academy ⇒ sửa ở flm-nguon).
+5. Kiểm cuối: `node scripts/course-content-check.mjs ./content/courses/web-foundations.mjs` (0 lỗi), `node scripts/wf/do-bai.mjs` (đang 29 bài mỏng = 15 slide + 14 quiz).
+
+Ghi chú: bài nâng cấp hơi vượt 35k chữ (đo gộp EN+VI + lời giảng slide; mỗi ngôn ngữ ~20k).

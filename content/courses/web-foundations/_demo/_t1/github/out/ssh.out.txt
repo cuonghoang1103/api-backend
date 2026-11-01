@@ -1,0 +1,25 @@
+$ ssh-keygen -t ed25519 -C "an@example.com" -f ./id_ed25519 -N ""
+Generating public/private ed25519 key pair.
+Your identification has been saved in ./id_ed25519
+Your public key has been saved in ./id_ed25519.pub
+The key fingerprint is:
+SHA256:cOhyOTi6SJhWYI2vZ9wNCjZ3rY4KV6hJuOIbo2Ghjzs an@example.com
+The key's randomart image is:
++--[ED25519 256]--+
+|                 |
+|  o    .         |
+| + .  o .        |
+|o o. o.+         |
+|.*.+=o=.S        |
+|==Oo+++.         |
+|@Bo= o .         |
+|E*=.o            |
+|=*=. .           |
++----[SHA256]-----+
+
+$ ls -l id_ed25519*
+-rw------- 411 id_ed25519
+-rw-r--r-- 96 id_ed25519.pub
+
+$ cat id_ed25519.pub        # this public line is what you paste into GitHub → Settings → SSH keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODh8kdzNspDcKbusUSOmNPXx3R+1IEX6GEMkIpefKUI an@example.com

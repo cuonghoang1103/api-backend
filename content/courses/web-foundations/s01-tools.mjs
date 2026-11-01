@@ -5,6 +5,8 @@
  */
 
 import { gallery } from './_slides.mjs';
+import L14 from './s01/wf-1-4-github.mjs';
+import L12 from './s01/wf-1-2-vscode.mjs';
 
 export default {
   title: 'Chapter 1 — Your toolbox: terminal, VS Code, Git, npm|||Chương 1 — Bộ công cụ: terminal, VS Code, Git, npm',
@@ -169,95 +171,7 @@ console.log('hello');</div>
     },
 
     /* ─────────────────────────── 1.2 ─────────────────────────── */
-    {
-      title: '1.2 — VS Code: your workshop|||1.2 — VS Code: xưởng làm việc của bạn',
-      slug: 'wf-1-2-vscode',
-      type: 'VIDEO',
-      video: { url: 'https://youtu.be/B-s71n0dHUk', durationSeconds: 0 },
-      description: 'Mở một thư mục làm workspace, dùng terminal tích hợp, cài extension hữu ích, và những phím tắt tiết kiệm hàng giờ.',
-      content: `
-<div class="ml-en">
-<span class="eyebrow">Chapter 1 · Lesson 1.2</span>
-<h2>Open a folder, not a file</h2>
-<p class="lead">The single most important VS Code habit: open your whole <strong>project folder</strong> (File → Open Folder), not individual files. VS Code then understands the project, gives you a file tree on the left, and its terminal opens right inside that folder.</p>
-
-<h3>The four areas you will use</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Explorer (left)</span><span class="v">The file tree of your project. Click to open, right-click to create/rename/delete.</span></div>
-  <div class="kv"><span class="k">Editor (center)</span><span class="v">Where you write. Open several files as tabs; split the view side by side.</span></div>
-  <div class="kv"><span class="k">Integrated terminal</span><span class="v">Ctrl+&#96; (backtick) opens a terminal already inside your project — no cd needed.</span></div>
-  <div class="kv"><span class="k">Command Palette</span><span class="v">Ctrl/Cmd+Shift+P — search every command by name. When lost, start here.</span></div>
-</div>
-
-<h3>Extensions worth installing on day one</h3>
-<ul>
-  <li><strong>Prettier</strong> — formats your code automatically. Turn on "Format On Save" so messy code fixes itself.</li>
-  <li><strong>ESLint</strong> — underlines likely mistakes as you type (you will use it heavily in the JS chapters).</li>
-  <li><strong>Live Server</strong> — right-click an HTML file → "Open with Live Server" to preview in the browser and auto-reload on save.</li>
-</ul>
-
-<h3>Shortcuts that save hours</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Ctrl/Cmd + P</span><span class="v">Jump to any file by typing part of its name.</span></div>
-  <div class="kv"><span class="k">Ctrl/Cmd + /</span><span class="v">Comment or uncomment the current line.</span></div>
-  <div class="kv"><span class="k">Ctrl/Cmd + D</span><span class="v">Select the next occurrence of the word — edit many at once.</span></div>
-  <div class="kv"><span class="k">Alt + ↑ / ↓</span><span class="v">Move the current line up or down.</span></div>
-</div>
-
-<p class="note-ct"><strong>Do not memorize all of these.</strong> Pick two, use them until they are automatic, then add more. Fluency in your editor is a real productivity multiplier — but it grows slowly and that is fine.</p>
-<h3>The four editor features that actually save time</h3>
-<div class="lz-map">
-<div class="lz-node"><span class="lz-k">Ctrl/Cmd + P</span><span class="lz-t">Jump to any file by name</span><span class="lz-d">Type three letters of the filename instead of clicking through folders. On a real project this replaces the file tree almost entirely.</span></div>
-<div class="lz-node"><span class="lz-k">Ctrl/Cmd + Shift + F</span><span class="lz-t">Search the whole project</span><span class="lz-d">Find every place a function is called before you rename it. This is how you answer "what breaks if I change this?" — the most common real question.</span></div>
-<div class="lz-node"><span class="lz-k">F2 — rename symbol</span><span class="lz-t">Rename everywhere at once</span><span class="lz-d">Unlike find-and-replace, it understands scope: it renames the variable, not every string that happens to match its letters.</span></div>
-<div class="lz-node"><span class="lz-k">Format on save</span><span class="lz-t">Stop arguing with whitespace</span><span class="lz-d">Turn it on once in Settings. Consistent formatting also makes Git diffs readable, because only real changes show up.</span></div>
-</div>
-<div class="pitfall"><p><strong>Trap — installing twenty extensions in the first week.</strong> Each one adds behaviour you did not choose and cannot attribute: your code reformats itself in a way you did not ask for, an unexpected autocompletion inserts an import from the wrong package, the editor gets slow and you assume that is normal. When something odd happens, you have twenty suspects and no way to tell which. Start with the language extension for what you are writing and a formatter, and add anything else only when you have felt the specific pain it solves. If the editor starts behaving strangely, the first debugging step is to disable extensions and re-enable them one at a time.</p></div>
-<div class="link-card"><a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">VS Code — official tips &amp; tricks</a></div>
-<div class="link-card"><a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf" target="_blank" rel="noopener">Keyboard shortcut cheat sheet (PDF)</a></div>
-</div>
-<div class="ml-vi">
-<span class="eyebrow">Chương 1 · Bài 1.2</span>
-<h2>Hãy mở một thư mục, đừng mở một file</h2>
-<p class="lead">Thói quen VS Code quan trọng nhất: mở cả <strong>thư mục dự án</strong> (File → Open Folder), không phải từng file lẻ. Khi đó VS Code hiểu dự án, cho bạn cây thư mục bên trái, và terminal của nó mở ngay trong thư mục đó.</p>
-
-<h3>Bốn vùng bạn sẽ dùng</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Explorer (trái)</span><span class="v">Cây file của dự án. Bấm để mở, chuột phải để tạo/đổi tên/xoá.</span></div>
-  <div class="kv"><span class="k">Editor (giữa)</span><span class="v">Nơi bạn viết. Mở nhiều file thành các tab; chia đôi màn hình cạnh nhau.</span></div>
-  <div class="kv"><span class="k">Terminal tích hợp</span><span class="v">Ctrl+&#96; (dấu huyền) mở một terminal sẵn trong dự án — khỏi cần cd.</span></div>
-  <div class="kv"><span class="k">Command Palette</span><span class="v">Ctrl/Cmd+Shift+P — tìm mọi lệnh theo tên. Khi lạc, bắt đầu từ đây.</span></div>
-</div>
-
-<h3>Extension đáng cài ngay ngày đầu</h3>
-<ul>
-  <li><strong>Prettier</strong> — tự định dạng mã. Bật "Format On Save" để mã lộn xộn tự chỉnh.</li>
-  <li><strong>ESLint</strong> — gạch chân các lỗi khả dĩ ngay khi bạn gõ (dùng nhiều ở các chương JS).</li>
-  <li><strong>Live Server</strong> — chuột phải một file HTML → "Open with Live Server" để xem trên trình duyệt và tự tải lại khi lưu.</li>
-</ul>
-
-<h3>Phím tắt tiết kiệm hàng giờ</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Ctrl/Cmd + P</span><span class="v">Nhảy tới file bất kỳ bằng cách gõ một phần tên.</span></div>
-  <div class="kv"><span class="k">Ctrl/Cmd + /</span><span class="v">Ghi chú (comment) hoặc bỏ ghi chú dòng hiện tại.</span></div>
-  <div class="kv"><span class="k">Ctrl/Cmd + D</span><span class="v">Chọn lần xuất hiện kế của từ — sửa nhiều chỗ cùng lúc.</span></div>
-  <div class="kv"><span class="k">Alt + ↑ / ↓</span><span class="v">Di chuyển dòng hiện tại lên hoặc xuống.</span></div>
-</div>
-
-<p class="note-ct"><strong>Đừng học thuộc hết.</strong> Chọn hai cái, dùng tới khi thành phản xạ, rồi thêm. Thành thạo trình soạn thảo là một cấp số nhân năng suất thật — nhưng nó lớn chậm, và điều đó không sao.</p>
-<h3>Bốn tính năng của trình soạn thảo thật sự tiết kiệm thời gian</h3>
-<div class="lz-map">
-<div class="lz-node"><span class="lz-k">Ctrl/Cmd + P</span><span class="lz-t">Nhảy tới file bất kỳ bằng tên</span><span class="lz-d">Gõ ba chữ cái của tên file thay vì bấm lần qua các thư mục. Trên một dự án thật, cái này gần như thay hẳn cây thư mục.</span></div>
-<div class="lz-node"><span class="lz-k">Ctrl/Cmd + Shift + F</span><span class="lz-t">Tìm khắp dự án</span><span class="lz-d">Tìm mọi chỗ gọi một hàm trước khi bạn đổi tên nó. Đây là cách trả lời "đổi cái này thì hỏng cái gì?" — câu hỏi thật hay gặp nhất.</span></div>
-<div class="lz-node"><span class="lz-k">F2 — đổi tên ký hiệu</span><span class="lz-t">Đổi tên khắp nơi một lượt</span><span class="lz-d">Khác tìm-và-thay, nó hiểu phạm vi: nó đổi tên cái biến, chứ không đổi mọi chuỗi tình cờ trùng chữ.</span></div>
-<div class="lz-node"><span class="lz-k">Format khi lưu</span><span class="lz-t">Thôi cãi nhau với khoảng trắng</span><span class="lz-d">Bật một lần trong Settings. Định dạng nhất quán còn làm các diff Git đọc được, vì chỉ thay đổi thật mới hiện ra.</span></div>
-</div>
-<div class="pitfall"><p><strong>Bẫy — cài hai chục extension ngay tuần đầu.</strong> Mỗi cái thêm một hành vi bạn không chọn và không quy trách nhiệm được: mã tự định dạng lại theo kiểu bạn chẳng yêu cầu, một gợi ý tự động bất ngờ chèn import từ sai package, trình soạn thảo chậm đi và bạn tưởng thế là bình thường. Khi có chuyện lạ, bạn có hai chục kẻ tình nghi và không cách nào biết là ai. Hãy bắt đầu với extension của ngôn ngữ bạn đang viết cộng một bộ định dạng, và chỉ thêm thứ khác khi bạn đã thật sự thấy đau vì thiếu nó. Nếu trình soạn thảo bắt đầu cư xử lạ, bước gỡ lỗi đầu tiên là tắt hết extension rồi bật lại từng cái một.</p></div>
-<div class="link-card"><a href="https://code.visualstudio.com/docs/getstarted/tips-and-tricks" target="_blank" rel="noopener">VS Code — mẹo &amp; thủ thuật chính thức</a></div>
-<div class="link-card"><a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf" target="_blank" rel="noopener">Bảng tra phím tắt (PDF)</a></div>
-</div>
-`,
-    },
+    L12,
 
     /* ─────────────────────────── 1.3 ─────────────────────────── */
     {
@@ -385,93 +299,7 @@ Untracked files:
     },
 
     /* ─────────────────────────── 1.4 ─────────────────────────── */
-    {
-      title: '1.4 — GitHub: your code in the cloud|||1.4 — GitHub: mã của bạn trên đám mây',
-      slug: 'wf-1-4-github',
-      type: 'VIDEO',
-      video: { url: 'https://youtu.be/RGOj5yH7evk', durationSeconds: 0 },
-      description: 'Remote, push/pull, clone, và vì sao GitHub vừa là bản sao lưu, vừa là hồ sơ nghề nghiệp, vừa là nơi cộng tác.',
-      content: `
-<div class="ml-en">
-<span class="eyebrow">Chapter 1 · Lesson 1.4</span>
-<h2>Git is local; GitHub puts it online</h2>
-<p class="lead">Git lives on your machine. <strong>GitHub</strong> is a website that hosts Git repositories, so your snapshots have an off-site backup, others can collaborate, and — importantly for a beginner — it becomes your public portfolio. Recruiters really do look.</p>
-
-<h3>The word to learn: "remote"</h3>
-<p>A <strong>remote</strong> is a copy of your repository somewhere else (on GitHub). By convention it is named <code>origin</code>. You <strong>push</strong> your local commits up to it and <strong>pull</strong> others' commits down.</p>
-<pre><code class="language-bash"># first time: connect your local repo to a GitHub repo you created
-git remote add origin https://github.com/you/my-project.git
-git branch -M main
-git push -u origin main         # upload commits; -u links the branches
-
-# from then on, the daily loop:
-git add .
-git commit -m "Describe what changed"
-git push                        # send today's commits to GitHub</code></pre>
-
-<h3>Clone vs pull</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">git clone URL</span><span class="v">Download an entire repo you do not have yet (once, to start).</span></div>
-  <div class="kv"><span class="k">git pull</span><span class="v">Fetch and merge new commits into a repo you already have (keep in sync).</span></div>
-</div>
-
-<h3>A pull request, briefly</h3>
-<p>When collaborating, you push a branch and open a <strong>pull request (PR)</strong> — a proposal to merge your changes into <code>main</code>, where teammates review and discuss before it lands. You will not need PRs to learn solo, but knowing the word helps: it is how nearly all team software gets built.</p>
-
-<p class="note-ct"><strong>Portfolio tip:</strong> push your practice projects to public GitHub repos with a short README explaining each. Six months from now that is real, browsable proof of what you can do — far more convincing than a line on a CV.</p>
-
-<h3>Local Git and GitHub are two different things</h3>
-<div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">git commit is local and instant</span><span class="lz-d">It writes to a <code>.git</code> folder on your own disk. No network involved, and nobody else can see it — you can commit on a plane.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">git push sends commits to GitHub</span><span class="lz-d">Only now does anything leave your machine. "I committed it" and "it is on GitHub" are different claims, and confusing them loses work when a laptop dies.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">git pull brings others' commits down</span><span class="lz-d">Fetches what changed and merges it into your branch. Do it before you start work, not after you have written for three hours.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">GitHub adds the collaboration layer</span><span class="lz-d">Pull requests, issues, review, CI. None of that is Git — it is GitHub's product built on top of Git's timeline.</span></div>
-</div>
-<div class="pitfall"><p><strong>Trap — a repository that is public when you thought it was private.</strong> GitHub asks once, in a small radio button, and the default has changed over the years. A public repo is indexed by search engines within hours and scraped continuously by bots looking for exactly one thing: API keys committed by accident. People have woken up to thousands of dollars of cloud charges from a key pushed the night before. Check the badge next to the repository name — it says Public or Private — before your first push, and if a secret ever does get pushed, rotate the key immediately rather than deleting the commit; assume it was read within minutes.</p></div>
-<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub Hello World — the official 10-minute first repository</a></div>
-<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub — Hello World quickstart</a></div>
-</div>
-<div class="ml-vi">
-<span class="eyebrow">Chương 1 · Bài 1.4</span>
-<h2>Git ở máy bạn; GitHub đưa nó lên mạng</h2>
-<p class="lead">Git sống trên máy của bạn. <strong>GitHub</strong> là một website lưu trữ các repository Git, để ảnh chụp của bạn có bản sao lưu ngoài máy, người khác cộng tác được, và — quan trọng với người mới — nó thành hồ sơ nghề nghiệp công khai. Nhà tuyển dụng thật sự có xem.</p>
-
-<h3>Từ cần học: "remote"</h3>
-<p>Một <strong>remote</strong> là một bản sao repository của bạn ở nơi khác (trên GitHub). Theo quy ước nó tên là <code>origin</code>. Bạn <strong>push</strong> các commit local lên nó và <strong>pull</strong> commit của người khác về.</p>
-<pre><code class="language-bash"># lần đầu: nối repo local với một repo GitHub bạn đã tạo
-git remote add origin https://github.com/ban/my-project.git
-git branch -M main
-git push -u origin main         # tải commit lên; -u liên kết hai nhánh
-
-# từ đó về sau, vòng lặp hằng ngày:
-git add .
-git commit -m "Mo ta thay doi"
-git push                        # gửi commit hôm nay lên GitHub</code></pre>
-
-<h3>Clone và pull</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k">git clone URL</span><span class="v">Tải toàn bộ một repo bạn chưa có (một lần, để bắt đầu).</span></div>
-  <div class="kv"><span class="k">git pull</span><span class="v">Lấy về và gộp các commit mới vào repo bạn đã có (giữ đồng bộ).</span></div>
-</div>
-
-<h3>Pull request, ngắn gọn</h3>
-<p>Khi cộng tác, bạn push một branch và mở một <strong>pull request (PR)</strong> — một đề xuất gộp thay đổi của bạn vào <code>main</code>, nơi đồng đội xem xét và thảo luận trước khi nó vào. Bạn chưa cần PR để tự học, nhưng biết từ này rất hữu ích: gần như mọi phần mềm làm theo nhóm đều được dựng theo cách đó.</p>
-
-<p class="note-ct"><strong>Mẹo hồ sơ:</strong> hãy push các dự án luyện tập lên repo GitHub công khai kèm một README ngắn giải thích từng cái. Sáu tháng sau đó là bằng chứng thật, xem được về khả năng của bạn — thuyết phục hơn nhiều một dòng trong CV.</p>
-
-<h3>Git ở máy và GitHub là hai thứ khác nhau</h3>
-<div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">git commit là cục bộ và tức thì</span><span class="lz-d">Nó ghi vào một thư mục <code>.git</code> trên đĩa của chính bạn. Không dính gì tới mạng, và không ai khác thấy được — bạn commit được cả khi đang trên máy bay.</span></div>
-<div class="lz-step"><span class="lz-k">2</span><span class="lz-t">git push mới gửi commit lên GitHub</span><span class="lz-d">Chỉ tới lúc này mới có thứ gì rời khỏi máy bạn. "Tôi commit rồi" và "nó có trên GitHub rồi" là hai khẳng định khác nhau, và lẫn lộn chúng là mất việc khi cái laptop chết.</span></div>
-<div class="lz-step"><span class="lz-k">3</span><span class="lz-t">git pull kéo commit của người khác về</span><span class="lz-d">Lấy phần đã đổi rồi trộn vào nhánh của bạn. Hãy làm trước khi bắt tay vào việc, đừng làm sau khi đã viết ba tiếng.</span></div>
-<div class="lz-step"><span class="lz-k">4</span><span class="lz-t">GitHub thêm vào tầng cộng tác</span><span class="lz-d">Pull request, issue, review, CI. Không cái nào là Git cả — đó là sản phẩm của GitHub dựng trên dòng thời gian của Git.</span></div>
-</div>
-<div class="pitfall"><p><strong>Bẫy — một kho công khai trong khi bạn tưởng nó riêng tư.</strong> GitHub hỏi đúng một lần, ở một nút radio bé tí, và giá trị mặc định đã đổi qua nhiều năm. Một kho công khai bị công cụ tìm kiếm lập chỉ mục trong vài giờ và bị bot quét liên tục để tìm đúng một thứ: khoá API lỡ tay commit. Đã có người thức dậy với hàng nghìn đô tiền dịch vụ đám mây từ một cái khoá đẩy lên đêm hôm trước. Hãy kiểm cái nhãn cạnh tên kho — nó ghi Public hay Private — trước lần push đầu tiên, và nếu đã lỡ đẩy một bí mật lên thì hãy đổi khoá ngay lập tức thay vì đi xoá commit; cứ coi như nó đã bị đọc trong vòng vài phút.</p></div>
-<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub Hello World — kho đầu tiên trong 10 phút, chính thức</a></div>
-<div class="link-card"><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener">GitHub — Hello World quickstart</a></div>
-</div>
-`,
-    },
+    L14,
 
     /* ─────────────────────────── 1.5 ─────────────────────────── */
     {

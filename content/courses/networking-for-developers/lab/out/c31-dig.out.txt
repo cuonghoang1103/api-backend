@@ -1,0 +1,29 @@
+# Ch3 · 3.1 — laptop hỏi một tên: stub (dig) ⇒ resolver nhà mạng 198.51.100.1. Đọc từng phần câu trả lời; hỏi lần hai (đã có trong cache)
+$ cat /etc/resolv.conf
+nameserver 198.51.100.1
+$ dig www.labflow.test
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> www.labflow.test
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 45418
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;www.labflow.test.		IN	A
+
+;; ANSWER SECTION:
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+
+;; Query time: 13 msec
+;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)
+;; WHEN: Sun Nov 01 16:10:11 +07 2026
+;; MSG SIZE  rcvd: 75
+
+$ dig www.labflow.test | grep -E 'Query time|^www|^labflow'
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+;; Query time: 0 msec

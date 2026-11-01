@@ -1,0 +1,4 @@
+# Lab 3 · R3 — bước 1 trên ns1: chỉ HẠ TTL của api (120 → 10), chưa đổi IP
+date +%T
+sed -i -e 's/^api       120  IN A/api        10  IN A/' -e 's/2026110102 3600/2026110103 3600/' /dnsz/src/labflow.test.zone
+bash /lab/k/moi-truong/dns/ky.sh labflow.test && rndc reload labflow.test

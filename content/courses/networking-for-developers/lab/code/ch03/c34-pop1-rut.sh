@@ -1,0 +1,3 @@
+# Ch3 · 3.4 — trên pop1 (Hà Nội): rút quảng bá anycast — như khi bảo trì một điểm, hoặc điểm đó hỏng
+date +%T
+vtysh -c 'configure terminal' -c 'router bgp 64530' -c 'address-family ipv4 unicast' -c 'no network 198.19.1.0/24'

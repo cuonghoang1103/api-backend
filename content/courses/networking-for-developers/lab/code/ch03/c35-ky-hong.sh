@@ -1,0 +1,3 @@
+# Ch3 · 3.5 — trên ns1: SỰ CỐ — vùng được ký lại với chữ ký đã HẾT HẠN (kiểu cron ký lại bị chết cả tháng) — serial tăng để ns2 chép theo
+sed -i 's/2026110101 3600/2026110107 3600/' /dnsz/src/labflow.test.zone
+KY_TU=now-2592000 KY_DEN=now-172800 bash /lab/k/moi-truong/dns/ky.sh labflow.test && rndc reload labflow.test

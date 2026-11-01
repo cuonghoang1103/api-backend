@@ -1,0 +1,8 @@
+# Ch3 · 3.4 — từ laptop ở nhà: DNS công cộng 198.19.1.1 — "anh là máy nào?" (id.server) và gói đi đường nào
+$ dig @198.19.1.1 id.server CH TXT +short
+"pop1.hn (public DNS 198.19.1.1, Hanoi)"
+$ traceroute -n -q 1 198.19.1.1
+traceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets
+ 1  192.168.50.1  0.554 ms
+ 2  198.51.100.1  0.470 ms
+ 3  198.19.1.1  0.359 ms

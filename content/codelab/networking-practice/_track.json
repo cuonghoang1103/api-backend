@@ -104,6 +104,42 @@
       "name": "Lab 2 — The road into LabFlow",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 2 — The road into LabFlow"
+    },
+    {
+      "slug": "netdev-3-1-phan-giai",
+      "name": "3.1 Resolution: stub, recursive resolver, root, TLD, authoritative",
+      "level": "BEGINNER",
+      "description": "Luyện: DNS 1 — Read one dig answer, line by line · DNS 2 — Follow the resolver, packet by packet · DNS 3 — Do the resolver's job by hand · DNS 4 — The stub side: hosts file, search domains, local caches · DNS 5 — Write searchOrder() and queriesFor(): what ndots costs · DNS 6 — Write clientWaits(): how long did the client wait, and why?"
+    },
+    {
+      "slug": "netdev-3-2-ban-ghi",
+      "name": "3.2 Record types that developers touch",
+      "level": "BEGINNER",
+      "description": "Luyện: Records 1 — Which record answers which question? · Records 2 — Read the SOA and the names of a zone file · Records 3 — named-checkzone and four classic mistakes · Records 4 — Two name servers, one serial · Records 5 — Write parseZone(): turn a zone file into full records · Records 6 — Write checkZone(): catch the mistakes before reload"
+    },
+    {
+      "slug": "netdev-3-3-ttl-cache",
+      "name": "3.3 TTL, caching and why DNS changes are slow",
+      "level": "BEGINNER",
+      "description": "Luyện: TTL 1 — The countdown, and who keeps the copy · TTL 2 — The server move that was done in the wrong order · TTL 3 — \"It does not exist\" is cached too · TTL 4 — Caches inside your app, and Node's thread pool · TTL 5 — Write pollResolver(): reproduce the real timeline · TTL 6 — Write negativeProbe(): when does a new name become visible?"
+    },
+    {
+      "slug": "netdev-3-4-anycast-geodns",
+      "name": "3.4 Anycast, GeoDNS and DNS-based load balancing",
+      "level": "BEGINNER",
+      "description": "Luyện: Anycast 1 — One address, two cities · Anycast 2 — GeoDNS: who gets which edge? · Anycast 3 — Round-robin DNS with a dead server · Anycast 4 — The orange cloud, seen from DNS · Anycast 5 — Write bgpBest(): read a BGP table entry · Anycast 6 — Write geoAnswer(): how a GeoDNS server chooses"
+    },
+    {
+      "slug": "netdev-3-5-dns-an-toan",
+      "name": "3.5 DNSSEC, DoH/DoT and DNS failure modes",
+      "level": "BEGINNER",
+      "description": "Luyện: DNSSEC 1 — Read the real chain of trust · DNSSEC 2 — The order of the checks, and of the diagnosis · DNSSEC 3 — Secure, insecure or bogus? · DNSSEC 4 — Encrypted DNS, and three failures you will meet · DNSSEC 5 — Write rrsigStatus(): is this signature still valid? · DNSSEC 6 — Write dnsVerdict(): is it DNSSEC, the name, or the server?"
+    },
+    {
+      "slug": "netdev-3-6-lab-dns-labflow",
+      "name": "Lab 3 — LabFlow’s DNS: audit, a server move and two incidents",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 3 — LabFlow's DNS: the toolkit behind the report"
     }
   ]
 }

@@ -1,0 +1,13 @@
+# Lab 3 · R4 — trên máy chủ TLD (= việc nhà đăng ký làm theo phiếu đúng): ủy quyền lại cho ns2, tăng serial, ký lại vùng test
+$ sed -i -e 's/IN NS  ns3.labflow.test./IN NS  ns2.labflow.test./' -e 's/^ns3.labflow.test.     172800  IN A   203.0.113.55/ns2.labflow.test.     172800  IN A   203.0.113.54/' -e 's/2026110102 1800 900/2026110103 1800 900/' /dnsz/src/test.zone
+$ grep -E 'labflow' /dnsz/src/test.zone
+; labflow.test — LabFlow's domain, two name servers in the DC, signed with DNSSEC (has a DS)
+labflow.test.         172800  IN NS  ns1.labflow.test.
+labflow.test.         172800  IN NS  ns2.labflow.test.
+ns1.labflow.test.     172800  IN A   203.0.113.53
+ns2.labflow.test.     172800  IN A   203.0.113.54
+$INCLUDE /dnsz/ds/labflow.test.ds
+; dead.test — a domain whose name server NEVER answers: NS = ns9.labflow.test (203.0.113.99), the DC router drops packets to it — lessons 3.3/3.5
+dead.test.            172800  IN NS  ns9.labflow.test.
+$ bash /lab/k/moi-truong/dns/ky.sh test && rndc reload test
+zone reload queued

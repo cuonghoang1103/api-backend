@@ -1,0 +1,25 @@
+# Ch3 · 3.1 — đọc lại các gói DNS resolver nhà mạng đã gửi/nhận khi laptop hỏi www.labflow.test hai lần (dnsgoi.sh = tshark gọn một dòng/gói)
+$ ./dnsgoi.sh /tmp/r.pcap
+   t(s)  from              to              msg     name                 type   result
+ 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A      
+ 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS     
+ 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2
+ 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A      
+ 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral
+ 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A      
+ 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral
+ 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A      
+ 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4
+ 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A      
+ 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2
+ 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY 
+ 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A      
+ 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa
+ 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4
+ 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY 
+ 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4
+ 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY 
+ 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4
+ 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2
+ 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A      
+ 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2

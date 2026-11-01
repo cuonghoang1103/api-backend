@@ -1,0 +1,1362 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-3-3-ttl-cache",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-3-3-ttl-cache"
+  },
+  "exercises": [
+    {
+      "title": "TTL 1 — The countdown, and who keeps the copy",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "TTL",
+        "caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output (lab/out/c33-dem on the laptop, c33-isp-cache inside the ISP's resolver, c33-that on the real Internet):<pre>$ dig +noall +answer api.labflow.test\napi.labflow.test.\t120\tIN\tA\t203.0.113.10\n$ sleep 5\n$ dig +noall +answer api.labflow.test\napi.labflow.test.\t115\tIN\tA\t203.0.113.10\n$ dig +noall +answer api.labflow.test @203.0.113.53\napi.labflow.test.\t120\tIN\tA\t203.0.113.10\n\n# inside the resolver\n$ unbound-control dump_cache | grep -E '^api\\.labflow\\.test\\.[[:space:]]+[0-9]+[[:space:]]+IN[[:space:]]+A'\napi.labflow.test.\t115\tIN\tA\t203.0.113.10\n$ unbound-control stats_noreset | grep -E '^total\\.num\\.(queries|cachehits|cachemiss)='\ntotal.num.queries=2\ntotal.num.cachehits=1\ntotal.num.cachemiss=1\n\n# the real Internet\n$ dig +noall +answer cuongthai.com @kyrie.ns.cloudflare.com\ncuongthai.com.\t\t300\tIN\tA\t160.187.1.208\n$ dig chua-co-ten-nay.cuongthai.com @kyrie.ns.cloudflare.com | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 7876\ncuongthai.com.\t\t1800\tIN\tSOA\tkyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật (lab/out/c33-dem trên laptop, c33-isp-cache bên trong resolver nhà mạng, c33-that trên Internet thật):<pre>$ dig +noall +answer api.labflow.test\napi.labflow.test.\t120\tIN\tA\t203.0.113.10\n$ sleep 5\n$ dig +noall +answer api.labflow.test\napi.labflow.test.\t115\tIN\tA\t203.0.113.10\n$ dig +noall +answer api.labflow.test @203.0.113.53\napi.labflow.test.\t120\tIN\tA\t203.0.113.10\n\n# bên trong resolver\n$ unbound-control dump_cache | grep -E '^api\\.labflow\\.test\\.[[:space:]]+[0-9]+[[:space:]]+IN[[:space:]]+A'\napi.labflow.test.\t115\tIN\tA\t203.0.113.10\n$ unbound-control stats_noreset | grep -E '^total\\.num\\.(queries|cachehits|cachemiss)='\ntotal.num.queries=2\ntotal.num.cachehits=1\ntotal.num.cachemiss=1\n\n# Internet thật\n$ dig +noall +answer cuongthai.com @kyrie.ns.cloudflare.com\ncuongthai.com.\t\t300\tIN\tA\t160.187.1.208\n$ dig chua-co-ten-nay.cuongthai.com @kyrie.ns.cloudflare.com | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 7876\ncuongthai.com.\t\t1800\tIN\tSOA\tkyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Authoritative = full TTL every time; cache = time left.|||Có thẩm quyền = TTL đầy đủ mọi lần; cache = thời gian còn lại.",
+        "Negative TTL: look at the SOA in the AUTHORITY part of an NXDOMAIN answer.|||TTL âm: nhìn SOA trong phần AUTHORITY của câu trả lời NXDOMAIN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 1 — The countdown, and who keeps the copy\n\nAnswer in the answer panel (no code needed).\n\n1. Five seconds later the resolver says 115, while ns1 (@203.0.113.53) still says 120. Why?Năm giây sau resolver nói 115, còn ns1 (@203.0.113.53) vẫn nói 120. Vì sao?\n2. The resolver counted 2 queries, 1 cache hit, 1 miss. Which query was the miss?Resolver đếm 2 câu hỏi, 1 trúng, 1 trượt cache. Câu nào trượt?\n3. Cloudflare sets 300 s on cuongthai.com. In the worst case, how long can a resolver keep giving the old IP after a change?Cloudflare đặt 300 s cho cuongthai.com. Trong trường hợp xấu nhất, resolver có thể tiếp tục trả IP cũ bao lâu sau khi đổi?\n4. The NXDOMAIN answer carries \"cuongthai.com. 1800 IN SOA … 1800\". For how long may a resolver remember that the name does not exist?Câu trả lời NXDOMAIN kèm \"cuongthai.com. 1800 IN SOA … 1800\". Resolver được nhớ \"tên không tồn tại\" bao lâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 1 — The countdown, and who keeps the copy — answer key\n\n1. Five seconds later the resolver says 115, while ns1 (@203.0.113.53) still says 120. Why?Năm giây sau resolver nói 115, còn ns1 (@203.0.113.53) vẫn nói 120. Vì sao?\n   Answer: b) The resolver shows the time left on its copy; ns1 shows the full TTL\n   A cache counts down from the TTL it received. The zone's own server has no countdown: it publishes the value from the zone file.VI: Cache đếm ngược từ TTL nó nhận được. Máy chủ của chính vùng không đếm ngược: nó công bố giá trị trong tệp vùng.\n\n2. The resolver counted 2 queries, 1 cache hit, 1 miss. Which query was the miss?Resolver đếm 2 câu hỏi, 1 trúng, 1 trượt cache. Câu nào trượt?\n   Answer: b) The first one: the cache was empty, so the resolver had to ask ns1\n   A miss = the resolver had to go upstream. The query to @203.0.113.53 never reached the resolver at all.VI: Trượt = resolver phải đi hỏi lên trên. Câu hỏi tới @203.0.113.53 không hề đi qua resolver.\n\n3. Cloudflare sets 300 s on cuongthai.com. In the worst case, how long can a resolver keep giving the old IP after a change?Cloudflare đặt 300 s cho cuongthai.com. Trong trường hợp xấu nhất, resolver có thể tiếp tục trả IP cũ bao lâu sau khi đổi?\n   Answer: b) About 5 minutes, if it fetched the record just before the change\n   Each resolver fetched at a different moment, so the delay ranges from 0 to the TTL. Apps and OS caches can add their own layer on top.VI: Mỗi resolver lấy bản ghi ở một thời điểm khác nhau, nên độ trễ chạy từ 0 tới TTL. Ứng dụng và cache của hệ điều hành có thể chồng thêm một lớp.\n\n4. The NXDOMAIN answer carries \"cuongthai.com. 1800 IN SOA … 1800\". For how long may a resolver remember that the name does not exist?Câu trả lời NXDOMAIN kèm \"cuongthai.com. 1800 IN SOA … 1800\". Resolver được nhớ \"tên không tồn tại\" bao lâu?\n   Answer: c) 1800 s = 30 minutes: the smaller of the SOA record's TTL and its last field\n   RFC 2308: negative TTL = min(SOA TTL, SOA minimum). Here both are 1800. Create records before anyone queries them.VI: RFC 2308: TTL âm = min(TTL của SOA, trường minimum của SOA). Ở đây cả hai là 1800. Hãy tạo bản ghi trước khi có ai hỏi tới.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The resolver shows the time left on its copy; ns1 shows the full TTL</p><p>A cache counts down from the TTL it received. The zone's own server has no countdown: it publishes the value from the zone file.</p><p><i>VI: Cache đếm ngược từ TTL nó nhận được. Máy chủ của chính vùng không đếm ngược: nó công bố giá trị trong tệp vùng.</i></p></li><li><p><b>b)</b> The first one: the cache was empty, so the resolver had to ask ns1</p><p>A miss = the resolver had to go upstream. The query to @203.0.113.53 never reached the resolver at all.</p><p><i>VI: Trượt = resolver phải đi hỏi lên trên. Câu hỏi tới @203.0.113.53 không hề đi qua resolver.</i></p></li><li><p><b>b)</b> About 5 minutes, if it fetched the record just before the change</p><p>Each resolver fetched at a different moment, so the delay ranges from 0 to the TTL. Apps and OS caches can add their own layer on top.</p><p><i>VI: Mỗi resolver lấy bản ghi ở một thời điểm khác nhau, nên độ trễ chạy từ 0 tới TTL. Ứng dụng và cache của hệ điều hành có thể chồng thêm một lớp.</i></p></li><li><p><b>c)</b> 1800 s = 30 minutes: the smaller of the SOA record's TTL and its last field</p><p>RFC 2308: negative TTL = min(SOA TTL, SOA minimum). Here both are 1800. Create records before anyone queries them.</p><p><i>VI: RFC 2308: TTL âm = min(TTL của SOA, trường minimum của SOA). Ở đây cả hai là 1800. Hãy tạo bản ghi trước khi có ai hỏi tới.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Five seconds later the resolver says 115, while ns1 (@203.0.113.53) still says 120. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Năm giây sau resolver nói 115, còn ns1 (@203.0.113.53) vẫn nói 120. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The laptop subtracts the time since the last query"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver shows the time left on its copy; ns1 shows the full TTL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The record was changed on ns1 during those 5 seconds"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ns1 is slower to update than the resolver, so it lags behind"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A cache counts down from the TTL it received. The zone's own server has no countdown: it publishes the value from the zone file.</p><p><i>VI: Cache đếm ngược từ TTL nó nhận được. Máy chủ của chính vùng không đếm ngược: nó công bố giá trị trong tệp vùng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The resolver counted 2 queries, 1 cache hit, 1 miss. Which query was the miss?</p><p style=\"opacity:.75;font-size:.92em\"><i>Resolver đếm 2 câu hỏi, 1 trúng, 1 trượt cache. Câu nào trượt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The query sent directly to ns1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The first one: the cache was empty, so the resolver had to ask ns1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Neither: misses count only failed lookups"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The second one: the TTL had changed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A miss = the resolver had to go upstream. The query to @203.0.113.53 never reached the resolver at all.</p><p><i>VI: Trượt = resolver phải đi hỏi lên trên. Câu hỏi tới @203.0.113.53 không hề đi qua resolver.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Cloudflare sets 300 s on cuongthai.com. In the worst case, how long can a resolver keep giving the old IP after a change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cloudflare đặt 300 s cho cuongthai.com. Trong trường hợp xấu nhất, resolver có thể tiếp tục trả IP cũ bao lâu sau khi đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Exactly 300 s for every resolver, no more, no less"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 5 minutes, if it fetched the record just before the change"
+              },
+              {
+                "ma": "c",
+                "noiDung": "24 hours, because resolvers ignore short TTLs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0 s: Cloudflare pushes changes to every resolver"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each resolver fetched at a different moment, so the delay ranges from 0 to the TTL. Apps and OS caches can add their own layer on top.</p><p><i>VI: Mỗi resolver lấy bản ghi ở một thời điểm khác nhau, nên độ trễ chạy từ 0 tới TTL. Ứng dụng và cache của hệ điều hành có thể chồng thêm một lớp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The NXDOMAIN answer carries \"cuongthai.com. 1800 IN SOA … 1800\". For how long may a resolver remember that the name does not exist?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu trả lời NXDOMAIN kèm \"cuongthai.com. 1800 IN SOA … 1800\". Resolver được nhớ \"tên không tồn tại\" bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "604800 s, the expire field"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is never cached: NXDOMAIN is always rechecked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1800 s = 30 minutes: the smaller of the SOA record's TTL and its last field"
+              },
+              {
+                "ma": "d",
+                "noiDung": "300 s, the TTL of the A record"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>RFC 2308: negative TTL = min(SOA TTL, SOA minimum). Here both are 1800. Create records before anyone queries them.</p><p><i>VI: RFC 2308: TTL âm = min(TTL của SOA, trường minimum của SOA). Ở đây cả hai là 1800. Hãy tạo bản ghi trước khi có ai hỏi tới.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting every resolver to switch at the same moment.|||Mong mọi resolver chuyển cùng một lúc."
+        },
+        {
+          "loi": "Forgetting that \"does not exist\" is cached too.|||Quên rằng \"không tồn tại\" cũng được cache."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache hit / miss",
+          "vi": "trúng / trượt cache"
+        },
+        {
+          "en": "remaining TTL",
+          "vi": "TTL còn lại"
+        },
+        {
+          "en": "negative caching",
+          "vi": "cache âm"
+        }
+      ]
+    },
+    {
+      "title": "TTL 2 — The server move that was done in the wrong order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "TTL planning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>On ns1 the TTL of api was lowered from 120 to 10 at <b>16:10:51</b>, the IP was changed to .11 only 11 s later at <b>16:11:02</b>, and changed back to .10 at <b>16:13:07</b> (lab/out/c33-ns-ha, c33-ns-doi, c33-ns-doi2). Meanwhile the laptop asked the resolver every 15 s (c33-theo-doc):<pre>16:10:46  TTL 120  203.0.113.10\n16:11:01  TTL 105  203.0.113.10\n16:11:16  TTL 90   203.0.113.10\n16:11:31  TTL 75   203.0.113.10\n16:11:46  TTL 60   203.0.113.10\n16:12:01  TTL 45   203.0.113.10\n16:12:16  TTL 30   203.0.113.10\n16:12:32  TTL 14   203.0.113.10\n16:12:47  TTL 10   203.0.113.11\n16:13:02  TTL 10   203.0.113.11\n16:13:17  TTL 10   203.0.113.10\n16:13:32  TTL 10   203.0.113.10\n16:13:47  TTL 10   203.0.113.10</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên ns1, TTL của api được hạ từ 120 xuống 10 lúc <b>16:10:51</b>, IP đổi sang .11 chỉ 11 s sau đó lúc <b>16:11:02</b>, rồi đổi về .10 lúc <b>16:13:07</b> (lab/out/c33-ns-ha, c33-ns-doi, c33-ns-doi2). Trong lúc đó laptop hỏi resolver 15 s một lần (c33-theo-doc):<pre>16:10:46  TTL 120  203.0.113.10\n16:11:01  TTL 105  203.0.113.10\n16:11:16  TTL 90   203.0.113.10\n16:11:31  TTL 75   203.0.113.10\n16:11:46  TTL 60   203.0.113.10\n16:12:01  TTL 45   203.0.113.10\n16:12:16  TTL 30   203.0.113.10\n16:12:32  TTL 14   203.0.113.10\n16:12:47  TTL 10   203.0.113.11\n16:13:02  TTL 10   203.0.113.11\n16:13:17  TTL 10   203.0.113.10\n16:13:32  TTL 10   203.0.113.10\n16:13:47  TTL 10   203.0.113.10</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Fetched at the poll where TTL equals the full value; expiry = fetch time + TTL.|||Lấy về ở lượt hỏi có TTL bằng giá trị đầy đủ; hết hạn = lúc lấy + TTL.",
+        "16:11:02 → 16:12:47 = 1 min 45 s.|||16:11:02 → 16:12:47 = 1 phút 45 giây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 2 — The server move that was done in the wrong order\n\nAnswer in the answer panel (no code needed).\n\n1. Read the timelineĐọc dòng thời gian\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 2 — The server move that was done in the wrong order — answer key\n\n1. Read the timelineĐọc dòng thời gian\n   - r1.v: 16:10:46\n   - r2.v: 16:12:46\n   - r3.v: 16:12:47\n   - r4.v: 105\n   - r5.v: 10\n   - r6.v: 120\n   The copy fetched at 16:10:46 with TTL 120 lives until 16:12:46, whatever ns1 does in the meantime — lowering the TTL at 16:10:51 changed nothing for it. So the first move took 105 s (16:11:02 → 16:12:47). The second move, made when caches held the 10-s TTL, showed up after 10 s. Rule: worst-case delay = the TTL in caches when you change, so lower the TTL at least one old TTL before the move.VI: Bản lấy lúc 16:10:46 với TTL 120 sống tới 16:12:46, bất kể ns1 làm gì trong lúc đó — hạ TTL lúc 16:10:51 không đổi gì với nó. Nên lần chuyển đầu mất 105 s (16:11:02 → 16:12:47). Lần chuyển thứ hai, làm khi cache đã giữ TTL 10 s, hiện ra sau 10 s. Quy tắc: độ trễ xấu nhất = TTL đang nằm trong cache lúc bạn đổi, nên hãy hạ TTL trước khi chuyển ít nhất một TTL cũ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The copy fetched at 16:10:46 with TTL 120 lives until 16:12:46, whatever ns1 does in the meantime — lowering the TTL at 16:10:51 changed nothing for it. So the first move took 105 s (16:11:02 → 16:12:47). The second move, made when caches held the 10-s TTL, showed up after 10 s. Rule: worst-case delay = the TTL in caches when you change, so lower the TTL at least one old TTL before the move.</p><p><i>VI: Bản lấy lúc 16:10:46 với TTL 120 sống tới 16:12:46, bất kể ns1 làm gì trong lúc đó — hạ TTL lúc 16:10:51 không đổi gì với nó. Nên lần chuyển đầu mất 105 s (16:11:02 → 16:12:47). Lần chuyển thứ hai, làm khi cache đã giữ TTL 10 s, hiện ra sau 10 s. Quy tắc: độ trễ xấu nhất = TTL đang nằm trong cache lúc bạn đổi, nên hãy hạ TTL trước khi chuyển ít nhất một TTL cũ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Read the timeline</p><p style=\"opacity:.75;font-size:.92em\"><i>Đọc dòng thời gian</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Question"
+              },
+              {
+                "ma": "v",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "At what time did the resolver fetch the copy it kept until 16:12:32? (HH:MM:SS)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "At what time did that copy expire? (HH:MM:SS)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "First poll that shows .11 (HH:MM:SS)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Seconds between the IP change and the first .11"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Seconds between the second change (16:13:07) and the first .10"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "TTL that was in the cache when the IP changed at 16:11:02 (the original value, s)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "16:10:46"
+              ],
+              "r2.v": [
+                "16:12:46"
+              ],
+              "r3.v": [
+                "16:12:47"
+              ],
+              "r4.v": [
+                "105"
+              ],
+              "r5.v": [
+                "10"
+              ],
+              "r6.v": [
+                "120"
+              ]
+            },
+            "giaiThich": "<p>The copy fetched at 16:10:46 with TTL 120 lives until 16:12:46, whatever ns1 does in the meantime — lowering the TTL at 16:10:51 changed nothing for it. So the first move took 105 s (16:11:02 → 16:12:47). The second move, made when caches held the 10-s TTL, showed up after 10 s. Rule: worst-case delay = the TTL in caches when you change, so lower the TTL at least one old TTL before the move.</p><p><i>VI: Bản lấy lúc 16:10:46 với TTL 120 sống tới 16:12:46, bất kể ns1 làm gì trong lúc đó — hạ TTL lúc 16:10:51 không đổi gì với nó. Nên lần chuyển đầu mất 105 s (16:11:02 → 16:12:47). Lần chuyển thứ hai, làm khi cache đã giữ TTL 10 s, hiện ra sau 10 s. Quy tắc: độ trễ xấu nhất = TTL đang nằm trong cache lúc bạn đổi, nên hãy hạ TTL trước khi chuyển ít nhất một TTL cũ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Changing the IP right after lowering the TTL.|||Đổi IP ngay sau khi hạ TTL."
+        },
+        {
+          "loi": "Believing the new TTL applies to copies already cached.|||Tin rằng TTL mới áp dụng cho các bản đã nằm trong cache."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lower the TTL first",
+          "vi": "hạ TTL trước"
+        },
+        {
+          "en": "propagation",
+          "vi": "lan truyền (thật ra là hết hạn cache)"
+        }
+      ]
+    },
+    {
+      "title": "TTL 3 — \"It does not exist\" is cached too",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "negative caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Someone asked for new.labflow.test before it existed; then it was created on ns1 (lab/out/c33-am, c33-am2), then we tried to flush the ISP's resolver (c33-am-xoa1, c33-am3b, c33-am-xoa2, c33-am3):<pre># laptop, before the record exists\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 50830\nlabflow.test.\t\t300\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n# (record created on ns1, serial bumped, reloaded)\n# laptop\n$ dig +short new.labflow.test @203.0.113.53\n203.0.113.10\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 29011\nlabflow.test.\t\t298\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n\n# ISP resolver: flush only that name\n$ unbound-control flush new.labflow.test\nok\n# laptop\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 1929\nlabflow.test.\t\t298\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n# ISP resolver\n$ unbound-control get_option aggressive-nsec\nyes\n$ unbound-control flush_zone labflow.test\nok removed 9 rrsets, 2 messages and 1 key entries\n# laptop\n$ dig +short new.labflow.test\n203.0.113.10</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Có người hỏi new.labflow.test trước khi nó tồn tại; rồi nó được tạo trên ns1 (lab/out/c33-am, c33-am2), rồi ta thử xoá cache của resolver nhà mạng (c33-am-xoa1, c33-am3b, c33-am-xoa2, c33-am3):<pre># laptop, trước khi có bản ghi\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 50830\nlabflow.test.\t\t300\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n# (tạo bản ghi trên ns1, tăng serial, nạp lại)\n# laptop\n$ dig +short new.labflow.test @203.0.113.53\n203.0.113.10\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 29011\nlabflow.test.\t\t298\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n\n# resolver nhà mạng: chỉ xoá đúng tên đó\n$ unbound-control flush new.labflow.test\nok\n# laptop\n$ dig new.labflow.test | grep -E 'status|SOA'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 1929\nlabflow.test.\t\t298\tIN\tSOA\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\n# resolver nhà mạng\n$ unbound-control get_option aggressive-nsec\nyes\n$ unbound-control flush_zone labflow.test\nok removed 9 rrsets, 2 messages and 1 key entries\n# laptop\n$ dig +short new.labflow.test\n203.0.113.10</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Negative TTL = min(SOA TTL, SOA minimum).|||TTL âm = min(TTL của SOA, minimum của SOA).",
+        "Signed zones have NSEC records that cover ranges of names.|||Vùng có ký có bản ghi NSEC phủ cả một dải tên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 3 — \"It does not exist\" is cached too\n\nAnswer in the answer panel (no code needed).\n\n1. The zone's SOA has TTL 3600 and minimum 300. Why does the NXDOMAIN answer show 300?SOA của vùng có TTL 3600 và minimum 300. Vì sao câu trả lời NXDOMAIN ghi 300?\n2. ns1 answers 203.0.113.10, the resolver still NXDOMAIN. What do users of that resolver see, and for how long?ns1 trả lời 203.0.113.10, resolver vẫn NXDOMAIN. Người dùng resolver đó thấy gì, và bao lâu?\n3. After \"unbound-control flush new.labflow.test\" the answer is still NXDOMAIN. Why?Sau \"unbound-control flush new.labflow.test\" câu trả lời vẫn NXDOMAIN. Vì sao?\n4. A Let's Encrypt DNS-01 check queries _acme-challenge.cuongthai.com before your script published the TXT. What happens next?Phép kiểm DNS-01 của Let's Encrypt hỏi _acme-challenge.cuongthai.com trước khi script của bạn công bố TXT. Chuyện gì xảy ra tiếp?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 3 — \"It does not exist\" is cached too — answer key\n\n1. The zone's SOA has TTL 3600 and minimum 300. Why does the NXDOMAIN answer show 300?SOA của vùng có TTL 3600 và minimum 300. Vì sao câu trả lời NXDOMAIN ghi 300?\n   Answer: a) A negative answer may be cached for min(SOA TTL, minimum) = 300 s\n   The authoritative server already sends the SOA with that smaller TTL. 298 a moment later = the countdown of the \"does not exist\" memory.VI: Máy chủ có thẩm quyền đã gửi SOA với TTL nhỏ hơn đó. 298 một lúc sau = đếm ngược của trí nhớ \"không tồn tại\".\n\n2. ns1 answers 203.0.113.10, the resolver still NXDOMAIN. What do users of that resolver see, and for how long?ns1 trả lời 203.0.113.10, resolver vẫn NXDOMAIN. Người dùng resolver đó thấy gì, và bao lâu?\n   Answer: c) \"Name not found\" for up to the 298 s left, then the new address\n   The resolver will not ask again while its negative entry lives. Checking on the authoritative server (@ns1) shows the truth; checking through a resolver shows the cache.VI: Resolver không hỏi lại khi mục âm còn sống. Kiểm trên máy chủ có thẩm quyền (@ns1) thấy sự thật; kiểm qua resolver thấy cache.\n\n3. After \"unbound-control flush new.labflow.test\" the answer is still NXDOMAIN. Why?Sau \"unbound-control flush new.labflow.test\" câu trả lời vẫn NXDOMAIN. Vì sao?\n   Answer: c) Cached NSEC records still prove the name absent (aggressive NSEC)\n   NSEC says \"after mail comes ns1\" — so no \"new\" exists. With aggressive-nsec (RFC 8198) the resolver answers from that proof without asking; flush_zone removed it. This only happens with DNSSEC-signed zones.VI: NSEC nói \"sau mail là ns1\" — vậy không có \"new\". Với aggressive-nsec (RFC 8198) resolver trả lời từ bằng chứng đó mà không hỏi; flush_zone gỡ nó đi. Chuyện này chỉ có ở vùng có ký DNSSEC.\n\n4. A Let's Encrypt DNS-01 check queries _acme-challenge.cuongthai.com before your script published the TXT. What happens next?Phép kiểm DNS-01 của Let's Encrypt hỏi _acme-challenge.cuongthai.com trước khi script của bạn công bố TXT. Chuyện gì xảy ra tiếp?\n   Answer: d) Resolvers keep that NXDOMAIN up to 1800 s: publish and verify first\n   The negative TTL of cuongthai.com is 1800 s (exercise 1). Order matters: create → dig @kyrie.ns.cloudflare.com → then ask the CA to check.VI: TTL âm của cuongthai.com là 1800 s (bài 1). Thứ tự quan trọng: tạo → dig @kyrie.ns.cloudflare.com → rồi mới bảo CA kiểm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> A negative answer may be cached for min(SOA TTL, minimum) = 300 s</p><p>The authoritative server already sends the SOA with that smaller TTL. 298 a moment later = the countdown of the \"does not exist\" memory.</p><p><i>VI: Máy chủ có thẩm quyền đã gửi SOA với TTL nhỏ hơn đó. 298 một lúc sau = đếm ngược của trí nhớ \"không tồn tại\".</i></p></li><li><p><b>c)</b> \"Name not found\" for up to the 298 s left, then the new address</p><p>The resolver will not ask again while its negative entry lives. Checking on the authoritative server (@ns1) shows the truth; checking through a resolver shows the cache.</p><p><i>VI: Resolver không hỏi lại khi mục âm còn sống. Kiểm trên máy chủ có thẩm quyền (@ns1) thấy sự thật; kiểm qua resolver thấy cache.</i></p></li><li><p><b>c)</b> Cached NSEC records still prove the name absent (aggressive NSEC)</p><p>NSEC says \"after mail comes ns1\" — so no \"new\" exists. With aggressive-nsec (RFC 8198) the resolver answers from that proof without asking; flush_zone removed it. This only happens with DNSSEC-signed zones.</p><p><i>VI: NSEC nói \"sau mail là ns1\" — vậy không có \"new\". Với aggressive-nsec (RFC 8198) resolver trả lời từ bằng chứng đó mà không hỏi; flush_zone gỡ nó đi. Chuyện này chỉ có ở vùng có ký DNSSEC.</i></p></li><li><p><b>d)</b> Resolvers keep that NXDOMAIN up to 1800 s: publish and verify first</p><p>The negative TTL of cuongthai.com is 1800 s (exercise 1). Order matters: create → dig @kyrie.ns.cloudflare.com → then ask the CA to check.</p><p><i>VI: TTL âm của cuongthai.com là 1800 s (bài 1). Thứ tự quan trọng: tạo → dig @kyrie.ns.cloudflare.com → rồi mới bảo CA kiểm.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The zone's SOA has TTL 3600 and minimum 300. Why does the NXDOMAIN answer show 300?</p><p style=\"opacity:.75;font-size:.92em\"><i>SOA của vùng có TTL 3600 và minimum 300. Vì sao câu trả lời NXDOMAIN ghi 300?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A negative answer may be cached for min(SOA TTL, minimum) = 300 s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver caps every answer at 300 s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The laptop asked with +ttl=300"
+              },
+              {
+                "ma": "d",
+                "noiDung": "300 is the TTL of the A record that will be created"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The authoritative server already sends the SOA with that smaller TTL. 298 a moment later = the countdown of the \"does not exist\" memory.</p><p><i>VI: Máy chủ có thẩm quyền đã gửi SOA với TTL nhỏ hơn đó. 298 một lúc sau = đếm ngược của trí nhớ \"không tồn tại\".</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>ns1 answers 203.0.113.10, the resolver still NXDOMAIN. What do users of that resolver see, and for how long?</p><p style=\"opacity:.75;font-size:.92em\"><i>ns1 trả lời 203.0.113.10, resolver vẫn NXDOMAIN. Người dùng resolver đó thấy gì, và bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The new address immediately, because ns1 has it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The old address of labflow.test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Name not found\" for up to the 298 s left, then the new address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SERVFAIL until the serial reaches every resolver"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The resolver will not ask again while its negative entry lives. Checking on the authoritative server (@ns1) shows the truth; checking through a resolver shows the cache.</p><p><i>VI: Resolver không hỏi lại khi mục âm còn sống. Kiểm trên máy chủ có thẩm quyền (@ns1) thấy sự thật; kiểm qua resolver thấy cache.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After \"unbound-control flush new.labflow.test\" the answer is still NXDOMAIN. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau \"unbound-control flush new.labflow.test\" câu trả lời vẫn NXDOMAIN. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ns2 has not copied the new record yet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "flush only takes effect after the resolver is restarted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Cached NSEC records still prove the name absent (aggressive NSEC)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The laptop keeps its own negative cache of the name"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>NSEC says \"after mail comes ns1\" — so no \"new\" exists. With aggressive-nsec (RFC 8198) the resolver answers from that proof without asking; flush_zone removed it. This only happens with DNSSEC-signed zones.</p><p><i>VI: NSEC nói \"sau mail là ns1\" — vậy không có \"new\". Với aggressive-nsec (RFC 8198) resolver trả lời từ bằng chứng đó mà không hỏi; flush_zone gỡ nó đi. Chuyện này chỉ có ở vùng có ký DNSSEC.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A Let's Encrypt DNS-01 check queries _acme-challenge.cuongthai.com before your script published the TXT. What happens next?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phép kiểm DNS-01 của Let's Encrypt hỏi _acme-challenge.cuongthai.com trước khi script của bạn công bố TXT. Chuyện gì xảy ra tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Let's Encrypt bypasses caches, so retrying immediately works"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TXT replaces the NXDOMAIN in every cache within seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing happens: TXT records are never cached by resolvers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Resolvers keep that NXDOMAIN up to 1800 s: publish and verify first"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The negative TTL of cuongthai.com is 1800 s (exercise 1). Order matters: create → dig @kyrie.ns.cloudflare.com → then ask the CA to check.</p><p><i>VI: TTL âm của cuongthai.com là 1800 s (bài 1). Thứ tự quan trọng: tạo → dig @kyrie.ns.cloudflare.com → rồi mới bảo CA kiểm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing a new name through a resolver before creating it.|||Thử một tên mới qua resolver trước khi tạo nó."
+        },
+        {
+          "loi": "Flushing one name in a signed zone and expecting it to work.|||Xoá một tên trong vùng có ký và mong nó có tác dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NXDOMAIN",
+          "vi": "tên không tồn tại"
+        },
+        {
+          "en": "NSEC",
+          "vi": "bản ghi chứng minh không tồn tại"
+        },
+        {
+          "en": "aggressive NSEC",
+          "vi": "dùng NSEC đã nhớ để trả lời \"không có\""
+        }
+      ]
+    },
+    {
+      "title": "TTL 4 — Caches inside your app, and Node's thread pool",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "app-level DNS caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Five lookups one second apart from Java and from Node, counting the questions that left the laptop (lab/out/c33-app); then four lookups of names whose server never answers, plus a file read (c33-treo, c33-treo8):<pre>$ java Hoi.java api.labflow.test 2&gt;&amp;1 | grep -v Picked\njava lookup 1: 203.0.113.10 in 10.5 ms\njava lookup 2: 203.0.113.10 in 0.5 ms\njava lookup 3: 203.0.113.10 in 1.5 ms\njava lookup 4: 203.0.113.10 in 0.1 ms\njava lookup 5: 203.0.113.10 in 0.2 ms\n$ tshark -r /tmp/a.pcap -Y 'dns.flags.response==0' 2&gt;/dev/null | wc -l\n2\n$ node hoi.mjs api.labflow.test\nnode lookup 1: 203.0.113.10 in 4.0 ms\nnode lookup 2: 203.0.113.10 in 6.2 ms\nnode lookup 3: 203.0.113.10 in 2.6 ms\nnode lookup 4: 203.0.113.10 in 2.8 ms\nnode lookup 5: 203.0.113.10 in 3.0 ms\n$ tshark -r /tmp/b.pcap -Y 'dns.flags.response==0' 2&gt;/dev/null | wc -l\n5\n\n$ node treo.mjs\n   72 ms  readFile /etc/hostname: laptop\n10086 ms  lookup x1.dead.test: EAI_AGAIN\n10086 ms  lookup x2.dead.test: EAI_AGAIN\n20093 ms  lookup x3.dead.test: EAI_AGAIN\n20096 ms  lookup x4.dead.test: EAI_AGAIN\n\n$ UV_THREADPOOL_SIZE=8 node treo.mjs\n    6 ms  readFile /etc/hostname: laptop\n10012 ms  lookup x3.dead.test: EAI_AGAIN\n10014 ms  lookup x1.dead.test: EAI_AGAIN\n10015 ms  lookup x2.dead.test: EAI_AGAIN\n10015 ms  lookup x4.dead.test: EAI_AGAIN</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm lần tra cách nhau một giây từ Java và từ Node, đếm câu hỏi thật sự rời laptop (lab/out/c33-app); rồi bốn lần tra những tên mà máy chủ không bao giờ trả lời, cộng một lần đọc tệp (c33-treo, c33-treo8):<pre>$ java Hoi.java api.labflow.test 2&gt;&amp;1 | grep -v Picked\njava lookup 1: 203.0.113.10 in 10.5 ms\njava lookup 2: 203.0.113.10 in 0.5 ms\njava lookup 3: 203.0.113.10 in 1.5 ms\njava lookup 4: 203.0.113.10 in 0.1 ms\njava lookup 5: 203.0.113.10 in 0.2 ms\n$ tshark -r /tmp/a.pcap -Y 'dns.flags.response==0' 2&gt;/dev/null | wc -l\n2\n$ node hoi.mjs api.labflow.test\nnode lookup 1: 203.0.113.10 in 4.0 ms\nnode lookup 2: 203.0.113.10 in 6.2 ms\nnode lookup 3: 203.0.113.10 in 2.6 ms\nnode lookup 4: 203.0.113.10 in 2.8 ms\nnode lookup 5: 203.0.113.10 in 3.0 ms\n$ tshark -r /tmp/b.pcap -Y 'dns.flags.response==0' 2&gt;/dev/null | wc -l\n5\n\n$ node treo.mjs\n   72 ms  readFile /etc/hostname: laptop\n10086 ms  lookup x1.dead.test: EAI_AGAIN\n10086 ms  lookup x2.dead.test: EAI_AGAIN\n20093 ms  lookup x3.dead.test: EAI_AGAIN\n20096 ms  lookup x4.dead.test: EAI_AGAIN\n\n$ UV_THREADPOOL_SIZE=8 node treo.mjs\n    6 ms  readFile /etc/hostname: laptop\n10012 ms  lookup x3.dead.test: EAI_AGAIN\n10014 ms  lookup x1.dead.test: EAI_AGAIN\n10015 ms  lookup x2.dead.test: EAI_AGAIN\n10015 ms  lookup x4.dead.test: EAI_AGAIN</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the tshark lines: that is what really left the laptop.|||Đếm dòng tshark: đó là thứ thật sự rời laptop.",
+        "The thread pool has 4 threads, and slow work may take at most half of them.|||Thread pool có 4 luồng, và việc chậm được dùng tối đa một nửa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 4 — Caches inside your app, and Node's thread pool\n\nAnswer in the answer panel (no code needed).\n\n1. Java sent 2 DNS questions for 5 lookups, Node sent 5. Why?Java gửi 2 câu hỏi DNS cho 5 lần tra, Node gửi 5. Vì sao?\n2. A Java service still calls the old IP an hour after a DNS change. What is the likely setting?Một dịch vụ Java vẫn gọi IP cũ một giờ sau khi đổi DNS. Cấu hình nào có khả năng nhất?\n3. With the default pool, lookups ended at 10 s, 10 s, 20 s, 20 s. Why not all at 10 s?Với pool mặc định, các lần tra kết thúc ở 10 s, 10 s, 20 s, 20 s. Vì sao không cùng ở 10 s?\n4. Where do the 10 s per lookup come from?10 s mỗi lần tra từ đâu ra?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# TTL 4 — Caches inside your app, and Node's thread pool — answer key\n\n1. Java sent 2 DNS questions for 5 lookups, Node sent 5. Why?Java gửi 2 câu hỏi DNS cho 5 lần tra, Node gửi 5. Vì sao?\n   Answer: d) The JVM caches successful lookups (30 s by default); Node has no DNS cache\n   Java asked once (A + AAAA = 2 packets) and answered four times from memory in under 2 ms. Node calls getaddrinfo every time.VI: Java hỏi một lần (A + AAAA = 2 gói) và trả lời bốn lần từ bộ nhớ dưới 2 ms. Node gọi getaddrinfo mỗi lần.\n\n2. A Java service still calls the old IP an hour after a DNS change. What is the likely setting?Một dịch vụ Java vẫn gọi IP cũ một giờ sau khi đổi DNS. Cấu hình nào có khả năng nhất?\n   Answer: b) networkaddress.cache.ttl=-1 (cache forever) in java.security\n   -1 means \"until restart\", whatever DNS says. Set it explicitly in containers, for example 30–60.VI: -1 nghĩa là \"tới khi khởi động lại\", bất kể DNS nói gì. Hãy đặt rõ trong container, ví dụ 30–60.\n\n3. With the default pool, lookups ended at 10 s, 10 s, 20 s, 20 s. Why not all at 10 s?Với pool mặc định, các lần tra kết thúc ở 10 s, 10 s, 20 s, 20 s. Vì sao không cùng ở 10 s?\n   Answer: b) Slow work like getaddrinfo may use only half of the 4 threads\n   libuv caps \"slow I/O\" at (threads + 1) / 2 = 2 of 4, keeping room for file work — which is why readFile finished in 72 ms. With UV_THREADPOOL_SIZE=8, four lookups fit and all ended at 10 s.VI: libuv giới hạn \"I/O chậm\" ở (số luồng + 1) / 2 = 2 trên 4, chừa chỗ cho việc đọc tệp — vì thế readFile xong trong 72 ms. Với UV_THREADPOOL_SIZE=8, bốn lần tra lọt hết và cùng xong ở 10 s.\n\n4. Where do the 10 s per lookup come from?10 s mỗi lần tra từ đâu ra?\n   Answer: d) The stub gives up waiting on a resolver stuck on a dead server\n   The resolver keeps trying the dead server; the stub gives up (EAI_AGAIN = \"try again\"). Lesson 3.5 measures the resolver side: 20 s, then an instant SERVFAIL.VI: Resolver cứ thử máy chủ chết; stub bỏ cuộc (EAI_AGAIN = \"thử lại sau\"). Bài 3.5 đo phía resolver: 20 s, rồi SERVFAIL tức thì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The JVM caches successful lookups (30 s by default); Node has no DNS cache</p><p>Java asked once (A + AAAA = 2 packets) and answered four times from memory in under 2 ms. Node calls getaddrinfo every time.</p><p><i>VI: Java hỏi một lần (A + AAAA = 2 gói) và trả lời bốn lần từ bộ nhớ dưới 2 ms. Node gọi getaddrinfo mỗi lần.</i></p></li><li><p><b>b)</b> networkaddress.cache.ttl=-1 (cache forever) in java.security</p><p>-1 means \"until restart\", whatever DNS says. Set it explicitly in containers, for example 30–60.</p><p><i>VI: -1 nghĩa là \"tới khi khởi động lại\", bất kể DNS nói gì. Hãy đặt rõ trong container, ví dụ 30–60.</i></p></li><li><p><b>b)</b> Slow work like getaddrinfo may use only half of the 4 threads</p><p>libuv caps \"slow I/O\" at (threads + 1) / 2 = 2 of 4, keeping room for file work — which is why readFile finished in 72 ms. With UV_THREADPOOL_SIZE=8, four lookups fit and all ended at 10 s.</p><p><i>VI: libuv giới hạn \"I/O chậm\" ở (số luồng + 1) / 2 = 2 trên 4, chừa chỗ cho việc đọc tệp — vì thế readFile xong trong 72 ms. Với UV_THREADPOOL_SIZE=8, bốn lần tra lọt hết và cùng xong ở 10 s.</i></p></li><li><p><b>d)</b> The stub gives up waiting on a resolver stuck on a dead server</p><p>The resolver keeps trying the dead server; the stub gives up (EAI_AGAIN = \"try again\"). Lesson 3.5 measures the resolver side: 20 s, then an instant SERVFAIL.</p><p><i>VI: Resolver cứ thử máy chủ chết; stub bỏ cuộc (EAI_AGAIN = \"thử lại sau\"). Bài 3.5 đo phía resolver: 20 s, rồi SERVFAIL tức thì.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Java sent 2 DNS questions for 5 lookups, Node sent 5. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Java gửi 2 câu hỏi DNS cho 5 lần tra, Node gửi 5. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Java asks the authoritative server directly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Node asks for IPv6 only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Java uses TCP and Node uses UDP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The JVM caches successful lookups (30 s by default); Node has no DNS cache"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Java asked once (A + AAAA = 2 packets) and answered four times from memory in under 2 ms. Node calls getaddrinfo every time.</p><p><i>VI: Java hỏi một lần (A + AAAA = 2 gói) và trả lời bốn lần từ bộ nhớ dưới 2 ms. Node gọi getaddrinfo mỗi lần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A Java service still calls the old IP an hour after a DNS change. What is the likely setting?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dịch vụ Java vẫn gọi IP cũ một giờ sau khi đổi DNS. Cấu hình nào có khả năng nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The default of 30 seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "networkaddress.cache.ttl=-1 (cache forever) in java.security"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Keep-alive disabled in the HTTP client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The DNS TTL of 300 s"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>-1 means \"until restart\", whatever DNS says. Set it explicitly in containers, for example 30–60.</p><p><i>VI: -1 nghĩa là \"tới khi khởi động lại\", bất kể DNS nói gì. Hãy đặt rõ trong container, ví dụ 30–60.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With the default pool, lookups ended at 10 s, 10 s, 20 s, 20 s. Why not all at 10 s?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với pool mặc định, các lần tra kết thúc ở 10 s, 10 s, 20 s, 20 s. Vì sao không cùng ở 10 s?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The resolver answers only two questions at a time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Slow work like getaddrinfo may use only half of the 4 threads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The second pair asked a different, slower server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Node deliberately sends its DNS questions one by one"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>libuv caps \"slow I/O\" at (threads + 1) / 2 = 2 of 4, keeping room for file work — which is why readFile finished in 72 ms. With UV_THREADPOOL_SIZE=8, four lookups fit and all ended at 10 s.</p><p><i>VI: libuv giới hạn \"I/O chậm\" ở (số luồng + 1) / 2 = 2 trên 4, chừa chỗ cho việc đọc tệp — vì thế readFile xong trong 72 ms. Với UV_THREADPOOL_SIZE=8, bốn lần tra lọt hết và cùng xong ở 10 s.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Where do the 10 s per lookup come from?</p><p style=\"opacity:.75;font-size:.92em\"><i>10 s mỗi lần tra từ đâu ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The time the file read took to finish first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TTL of the dead.test records, counted down"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Node's default HTTP timeout, applied to every lookup"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The stub gives up waiting on a resolver stuck on a dead server"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The resolver keeps trying the dead server; the stub gives up (EAI_AGAIN = \"try again\"). Lesson 3.5 measures the resolver side: 20 s, then an instant SERVFAIL.</p><p><i>VI: Resolver cứ thử máy chủ chết; stub bỏ cuộc (EAI_AGAIN = \"thử lại sau\"). Bài 3.5 đo phía resolver: 20 s, rồi SERVFAIL tức thì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming every runtime respects the DNS TTL.|||Mặc định mọi runtime đều tôn trọng TTL của DNS."
+        },
+        {
+          "loi": "Blaming the event loop when lookups wait for the thread pool.|||Đổ lỗi cho event loop khi các lần tra phải chờ thread pool."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "getaddrinfo",
+          "vi": "hàm tra tên của hệ điều hành"
+        },
+        {
+          "en": "libuv thread pool",
+          "vi": "nhóm luồng của Node"
+        },
+        {
+          "en": "EAI_AGAIN",
+          "vi": "lỗi tra tên tạm thời"
+        }
+      ]
+    },
+    {
+      "title": "TTL 5 — Write pollResolver(): reproduce the real timeline",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "TTL",
+        "cache expiry"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write a tiny caching resolver and check it against reality. The real poll of exercise 2 (lab/out/c33-theo-doc):</p><pre>16:10:46  TTL 120  203.0.113.10\n16:11:01  TTL 105  203.0.113.10\n16:11:16  TTL 90   203.0.113.10\n16:11:31  TTL 75   203.0.113.10\n16:11:46  TTL 60   203.0.113.10\n16:12:01  TTL 45   203.0.113.10\n16:12:16  TTL 30   203.0.113.10\n16:12:32  TTL 14   203.0.113.10\n16:12:47  TTL 10   203.0.113.11\n16:13:02  TTL 10   203.0.113.11\n16:13:17  TTL 10   203.0.113.10\n16:13:32  TTL 10   203.0.113.10\n16:13:47  TTL 10   203.0.113.10</pre>\n<p><code>pollResolver(changes, polls)</code>:</p>\n<ul><li><code>changes</code> — what the authoritative server serves from a given moment, in time order: <code>[{ at: \"HH:MM:SS\", ip, ttl }]</code>;</li>\n<li><code>polls</code> — the times a client asks the resolver, in order;</li>\n<li>return one <code>{ at, ttl, ip }</code> per poll: <code>ttl</code> = the time left on the cached copy.</li></ul>\n<p>Cache rules (Unbound's, as measured): the cache starts empty; on a poll, if there is no copy or the copy is <b>older than its TTL</b> (more than <code>ttl</code> seconds since it was fetched), fetch the record the authoritative server serves at that second; a copy with exactly <b>0 s</b> left is still served (Lab 3 shows \"TTL 0\"). Nothing else refreshes the cache.</p>\n<p>The visible case feeds the real changes (16:10:51 TTL → 10, 16:11:02 → .11, 16:13:07 → .10) and the real poll times; your output must equal the 13 real lines. The hidden case is the real Lab 3 timeline (5-s polls, TTL lowered at 17:18:12, IP changed at 17:20:17) — 34 real lines including the \"TTL 0\" ones. The model matches all of them but one, by 1 s: the poll printed as 17:19:50 really ran at about 17:19:50.9 (the clock prints whole seconds), so the real resolver said 19 where whole-second arithmetic says 20. The checker expects the whole-second answer.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết một resolver có cache tí hon rồi đối chiếu với thực tế. Lượt hỏi thật của bài 2 (lab/out/c33-theo-doc):</p><pre>16:10:46  TTL 120  203.0.113.10\n16:11:01  TTL 105  203.0.113.10\n16:11:16  TTL 90   203.0.113.10\n16:11:31  TTL 75   203.0.113.10\n16:11:46  TTL 60   203.0.113.10\n16:12:01  TTL 45   203.0.113.10\n16:12:16  TTL 30   203.0.113.10\n16:12:32  TTL 14   203.0.113.10\n16:12:47  TTL 10   203.0.113.11\n16:13:02  TTL 10   203.0.113.11\n16:13:17  TTL 10   203.0.113.10\n16:13:32  TTL 10   203.0.113.10\n16:13:47  TTL 10   203.0.113.10</pre>\n<p><code>pollResolver(changes, polls)</code>:</p>\n<ul><li><code>changes</code> — thứ máy chủ có thẩm quyền phục vụ kể từ một thời điểm, theo thứ tự thời gian: <code>[{ at: \"HH:MM:SS\", ip, ttl }]</code>;</li>\n<li><code>polls</code> — các thời điểm client hỏi resolver, theo thứ tự;</li>\n<li>trả về mỗi lượt hỏi một <code>{ at, ttl, ip }</code>: <code>ttl</code> = thời gian còn lại của bản trong cache.</li></ul>\n<p>Luật cache (của Unbound, như đã đo): cache ban đầu rỗng; ở mỗi lượt hỏi, nếu chưa có bản nào hoặc bản đó <b>đã quá TTL</b> (hơn <code>ttl</code> giây kể từ lúc lấy), lấy bản ghi mà máy chủ có thẩm quyền phục vụ ở giây đó; bản còn đúng <b>0 s</b> vẫn được trả (Lab 3 có \"TTL 0\"). Không có gì khác làm mới cache.</p>\n<p>Ca hiện đưa vào các lần đổi thật (16:10:51 TTL → 10, 16:11:02 → .11, 16:13:07 → .10) và các thời điểm hỏi thật; output phải bằng đúng 13 dòng thật. Ca ẩn là dòng thời gian thật của Lab 3 (hỏi 5 s một lần, hạ TTL lúc 17:18:12, đổi IP lúc 17:20:17) — 34 dòng thật, có cả các dòng \"TTL 0\". Mô hình khớp tất cả trừ một dòng, lệch 1 s: lượt in là 17:19:50 thật ra chạy khoảng 17:19:50.9 (đồng hồ in giây chẵn), nên resolver thật nói 19 trong khi tính theo giây chẵn ra 20. Máy chấm chờ đáp án tính theo giây chẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "changes — [{ at, ip, ttl }] in time order; polls — [\"HH:MM:SS\", …].|||changes — [{ at, ip, ttl }] theo thứ tự thời gian; polls — [\"HH:MM:SS\", …].",
+      "outputSpec": "[{ at, ttl, ip }], one per poll.|||[{ at, ttl, ip }], mỗi lượt hỏi một phần tử.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pollResolver([{\"at\":\"00:00:00\",\"ip\":\"203.0.113.10\",\"ttl\":120},{\"at\":\"16:10:51\",\"ip\":\"203.0.113.10\",\"ttl\":10},{\"at\":\"16:11:02\",\"ip\":\"203.0.113.11\",\"ttl\":10},{\"at\":\"16:13:07\",\"ip\":\"203.0.113.10\",\"ttl\":10}], [\"16:10:46\",\"16:11:01\",\"16:11:16\",\"16:11:31\",\"16:11:46\",\"16:12:01\",\"16:12:16\",\"16:12:32\",\"16:12:47\",\"16:13:02\",\"16:13:17\",\"16:13:32\",\"16:13:47\"])",
+          "output": "[{\"at\":\"16:10:46\",\"ttl\":120,\"ip\":\"203.0.113.10\"},{\"at\":\"16:11:01\",\"ttl\":105,\"ip\":\"203.0.113.10\"},{\"at\":\"16:11:16\",\"ttl\":90,\"ip\":\"203.0.113.10\"},{\"at\":\"16:11:31\",\"ttl\":75,\"ip\":\"203.0.113.10\"},{\"at\":\"16:11:46\",\"ttl\":60,\"ip\":\"203.0.113.10\"},{\"at\":\"16:12:01\",\"ttl\":45,\"ip\":\"203.0.113.10\"},{\"at\":\"16:12:16\",\"ttl\":30,\"ip\":\"203.0.113.10\"},{\"at\":\"16:12:32\",\"ttl\":14,\"ip\":\"203.0.113.10\"},{\"at\":\"16:12:47\",\"ttl\":10,\"ip\":\"203.0.113.11\"},{\"at\":\"16:13:02\",\"ttl\":10,\"ip\":\"203.0.113.11\"},{\"at\":\"16:13:17\",\"ttl\":10,\"ip\":\"203.0.113.10\"},{\"at\":\"16:13:32\",\"ttl\":10,\"ip\":\"203.0.113.10\"},{\"at\":\"16:13:47\",\"ttl\":10,\"ip\":\"203.0.113.10\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Convert \"HH:MM:SS\" to seconds once; keep the cache as { ip, ttl, fetchedAt }.|||Đổi \"HH:MM:SS\" ra giây một lần; giữ cache dạng { ip, ttl, fetchedAt }.",
+        "The record served at second t is the last change whose time is ≤ t.|||Bản ghi được phục vụ ở giây t là lần đổi cuối cùng có thời điểm ≤ t."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** changes [{ at, ip, ttl }], polls [\"HH:MM:SS\"] ⇒ [{ at, ttl, ip }] */\nfunction pollResolver(changes, polls) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pollResolver(changes, polls) {\n  var sec = function (s) { var p = s.split(':').map(Number); return p[0] * 3600 + p[1] * 60 + p[2]; };\n  var auth = function (t) {                                           // the record ns1 serves at second t\n    var cur = null;\n    changes.forEach(function (c) { if (sec(c.at) <= t) cur = c; });\n    return cur;\n  };\n  var cache = null;                                                   // { ip, ttl, at }\n  return polls.map(function (p) {\n    var t = sec(p);\n    if (!cache || t - cache.at > cache.ttl) {                         // empty, or expired (0 s left is still served)\n      var r = auth(t);\n      cache = { ip: r.ip, ttl: r.ttl, at: t };\n    }\n    return { at: p, ttl: cache.ttl - (t - cache.at), ip: cache.ip };\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A cache is a pure function of when it fetched and what the server said at that moment: nothing pushes changes to it. That is why the model reproduces both real timelines exactly, and why \"DNS propagation\" is really \"cache expiry\" — the worst case is decided by the TTL already cached at the moment you change, not by the TTL you set.</p>",
+      "solutionExplanationHtmlVi": "<p>Cache là một hàm thuần của lúc nó lấy về và thứ máy chủ nói ở lúc đó: không có gì đẩy thay đổi tới nó. Vì thế mô hình tái hiện chính xác cả hai dòng thời gian thật, và vì thế \"DNS lan truyền\" thật ra là \"cache hết hạn\" — trường hợp xấu nhất do TTL đã nằm trong cache lúc bạn đổi quyết định, không phải TTL bạn đặt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real timeline of c33-theo-doc (13 lines)",
+              "vi": "Dòng thời gian thật của c33-theo-doc (13 dòng)"
+            },
+            "goi": "pollResolver([{\"at\":\"00:00:00\",\"ip\":\"203.0.113.10\",\"ttl\":120},{\"at\":\"16:10:51\",\"ip\":\"203.0.113.10\",\"ttl\":10},{\"at\":\"16:11:02\",\"ip\":\"203.0.113.11\",\"ttl\":10},{\"at\":\"16:13:07\",\"ip\":\"203.0.113.10\",\"ttl\":10}], [\"16:10:46\",\"16:11:01\",\"16:11:16\",\"16:11:31\",\"16:11:46\",\"16:12:01\",\"16:12:16\",\"16:12:32\",\"16:12:47\",\"16:13:02\",\"16:13:17\",\"16:13:32\",\"16:13:47\"])",
+            "mongDoi": [
+              {
+                "at": "16:10:46",
+                "ttl": 120,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:11:01",
+                "ttl": 105,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:11:16",
+                "ttl": 90,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:11:31",
+                "ttl": 75,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:11:46",
+                "ttl": 60,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:12:01",
+                "ttl": 45,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:12:16",
+                "ttl": 30,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:12:32",
+                "ttl": 14,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:12:47",
+                "ttl": 10,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "16:13:02",
+                "ttl": 10,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "16:13:17",
+                "ttl": 10,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:13:32",
+                "ttl": 10,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "16:13:47",
+                "ttl": 10,
+                "ip": "203.0.113.10"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One record, TTL 30: served with 0 s left, refetched after",
+              "vi": "Một bản ghi, TTL 30: còn 0 s vẫn trả, quá hạn mới lấy lại"
+            },
+            "goi": "pollResolver([{\"at\":\"10:00:00\",\"ip\":\"192.0.2.1\",\"ttl\":30}], [\"10:00:05\",\"10:00:20\",\"10:00:35\",\"10:00:36\"])",
+            "mongDoi": [
+              {
+                "at": "10:00:05",
+                "ttl": 30,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "10:00:20",
+                "ttl": 15,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "10:00:35",
+                "ttl": 0,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "10:00:36",
+                "ttl": 30,
+                "ip": "192.0.2.1"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pollResolver([{\"at\":\"00:00:00\",\"ip\":\"203.0.113.10\",\"ttl\":120},{\"at\":\"17:18:12\",\"ip\":\"203.0.113.10\",\"ttl\":10},{\"at\":\"17:20:17\",\"ip\":\"203.0.113.11\",\"ttl\":10}], [\"17:18:10\",\"17:18:15\",\"17:18:20\",\"17:18:25\",\"17:18:30\",\"17:18:35\",\"17:18:40\",\"17:18:45\",\"17:18:50\",\"17:18:55\",\"17:19:00\",\"17:19:05\",\"17:19:10\",\"17:19:15\",\"17:19:20\",\"17:19:25\",\"17:19:30\",\"17:19:35\",\"17:19:40\",\"17:19:45\",\"17:19:50\",\"17:19:56\",\"17:20:01\",\"17:20:06\",\"17:20:11\",\"17:20:16\",\"17:20:21\",\"17:20:26\",\"17:20:31\",\"17:20:36\",\"17:20:41\",\"17:20:46\",\"17:20:51\",\"17:20:56\"])",
+            "mongDoi": [
+              {
+                "at": "17:18:10",
+                "ttl": 120,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:15",
+                "ttl": 115,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:20",
+                "ttl": 110,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:25",
+                "ttl": 105,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:30",
+                "ttl": 100,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:35",
+                "ttl": 95,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:40",
+                "ttl": 90,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:45",
+                "ttl": 85,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:50",
+                "ttl": 80,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:18:55",
+                "ttl": 75,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:00",
+                "ttl": 70,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:05",
+                "ttl": 65,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:10",
+                "ttl": 60,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:15",
+                "ttl": 55,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:20",
+                "ttl": 50,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:25",
+                "ttl": 45,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:30",
+                "ttl": 40,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:35",
+                "ttl": 35,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:40",
+                "ttl": 30,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:45",
+                "ttl": 25,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:50",
+                "ttl": 20,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:19:56",
+                "ttl": 14,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:01",
+                "ttl": 9,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:06",
+                "ttl": 4,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:11",
+                "ttl": 10,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:16",
+                "ttl": 5,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:21",
+                "ttl": 0,
+                "ip": "203.0.113.10"
+              },
+              {
+                "at": "17:20:26",
+                "ttl": 10,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:31",
+                "ttl": 5,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:36",
+                "ttl": 0,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:41",
+                "ttl": 10,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:46",
+                "ttl": 5,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:51",
+                "ttl": 0,
+                "ip": "203.0.113.11"
+              },
+              {
+                "at": "17:20:56",
+                "ttl": 10,
+                "ip": "203.0.113.11"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pollResolver([{\"at\":\"08:00:00\",\"ip\":\"192.0.2.1\",\"ttl\":3600},{\"at\":\"08:00:10\",\"ip\":\"192.0.2.2\",\"ttl\":60}], [\"08:00:05\",\"08:30:00\",\"09:00:05\",\"09:00:06\",\"09:01:06\",\"09:01:07\"])",
+            "mongDoi": [
+              {
+                "at": "08:00:05",
+                "ttl": 3600,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "08:30:00",
+                "ttl": 1805,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "09:00:05",
+                "ttl": 0,
+                "ip": "192.0.2.1"
+              },
+              {
+                "at": "09:00:06",
+                "ttl": 60,
+                "ip": "192.0.2.2"
+              },
+              {
+                "at": "09:01:06",
+                "ttl": 0,
+                "ip": "192.0.2.2"
+              },
+              {
+                "at": "09:01:07",
+                "ttl": 60,
+                "ip": "192.0.2.2"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Refreshing when 0 s are left: Lab 3 shows a copy served with TTL 0.|||Làm mới khi còn 0 s: Lab 3 cho thấy bản còn TTL 0 vẫn được trả."
+        },
+        {
+          "loi": "Applying a change to the cached copy immediately — caches do not hear about changes.|||Áp lần đổi vào bản trong cache ngay lập tức — cache không hề nghe tin có đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fetch",
+          "vi": "lấy bản ghi từ máy chủ"
+        },
+        {
+          "en": "expiry",
+          "vi": "hết hạn"
+        },
+        {
+          "en": "propagation",
+          "vi": "lan truyền"
+        }
+      ]
+    },
+    {
+      "title": "TTL 6 — Write negativeProbe(): when does a new name become visible?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "negative caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A monitoring probe (or a certificate tool) asks a resolver for a name every so often; the name is created at some second. Write <code>negativeProbe({ soa, probes, createdAt, cap })</code>:</p>\n<ul><li><code>soa</code> — the zone's SOA record line as the authoritative server serves it (e.g. LabFlow's <code>labflow.test. 3600 IN SOA ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300</code>, or the real cuongthai.com one: <code>cuongthai.com. 1800 IN SOA kyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800</code>);</li>\n<li>negative TTL = min(the SOA record's TTL — the 2nd word —, the SOA minimum — the last word —), and also ≤ <code>cap</code> if given (resolvers have a ceiling, e.g. Unbound's cache-max-negative-ttl);</li>\n<li><code>probes</code> — seconds when the resolver is asked (ascending); <code>createdAt</code> — the second the record appears on the authoritative server;</li>\n<li>at each probe: if the resolver holds a negative entry that is at most <code>negTtl</code> seconds old ⇒ <code>\"NXDOMAIN\"</code> (from cache); otherwise it asks: name exists (<code>t &gt;= createdAt</code>) ⇒ <code>\"NOERROR\"</code>, else <code>\"NXDOMAIN\"</code> and the entry is cached from <code>t</code>.</li></ul>\n<p>Return <code>{ negTtl, results, firstOk }</code> — <code>firstOk</code> = the first probe second with NOERROR, or <code>null</code>. Real lesson case (lab/out/c33-am, c33-am2): asked at 0, created at 1, asked again at 2 ⇒ <code>{ negTtl: 300, results: [\"NXDOMAIN\", \"NXDOMAIN\"], firstOk: null }</code> — the resolver showed 298 s left.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một máy giám sát (hay công cụ cấp chứng chỉ) hỏi resolver một tên theo chu kỳ; tên được tạo ở một giây nào đó. Viết <code>negativeProbe({ soa, probes, createdAt, cap })</code>:</p>\n<ul><li><code>soa</code> — dòng bản ghi SOA của vùng như máy chủ có thẩm quyền phục vụ (ví dụ của LabFlow <code>labflow.test. 3600 IN SOA ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300</code>, hoặc của cuongthai.com thật: <code>cuongthai.com. 1800 IN SOA kyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800</code>);</li>\n<li>TTL âm = min(TTL của bản ghi SOA — chữ thứ 2 —, minimum của SOA — chữ cuối —), và ≤ <code>cap</code> nếu có (resolver có trần, ví dụ cache-max-negative-ttl của Unbound);</li>\n<li><code>probes</code> — các giây resolver được hỏi (tăng dần); <code>createdAt</code> — giây bản ghi xuất hiện trên máy chủ có thẩm quyền;</li>\n<li>ở mỗi lượt: nếu resolver đang giữ một mục âm chưa quá <code>negTtl</code> giây ⇒ <code>\"NXDOMAIN\"</code> (từ cache); ngược lại nó hỏi: tên đã có (<code>t &gt;= createdAt</code>) ⇒ <code>\"NOERROR\"</code>, chưa có ⇒ <code>\"NXDOMAIN\"</code> và mục được cache từ <code>t</code>.</li></ul>\n<p>Trả <code>{ negTtl, results, firstOk }</code> — <code>firstOk</code> = giây đầu tiên có NOERROR, hoặc <code>null</code>. Ca thật của bài (lab/out/c33-am, c33-am2): hỏi lúc 0, tạo lúc 1, hỏi lại lúc 2 ⇒ <code>{ negTtl: 300, results: [\"NXDOMAIN\", \"NXDOMAIN\"], firstOk: null }</code> — resolver báo còn 298 s.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "{ soa, probes, createdAt, cap? }",
+      "outputSpec": "{ negTtl, results, firstOk }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "negativeProbe({\"soa\":\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\",\"probes\":[0,2],\"createdAt\":1})",
+          "output": "{\"negTtl\":300,\"results\":[\"NXDOMAIN\",\"NXDOMAIN\"],\"firstOk\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split the SOA line on whitespace: word 2 is the record TTL, the last word is the minimum.|||Tách dòng SOA theo khoảng trắng: chữ 2 là TTL của bản ghi, chữ cuối là minimum.",
+        "Keep only one thing in memory: the second the negative entry was cached (or null).|||Chỉ cần nhớ một thứ: giây mục âm được cache (hoặc null)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** { soa, probes, createdAt, cap? } ⇒ { negTtl, results, firstOk } */\nfunction negativeProbe(o) {\n  // Write your solution here\n  return { negTtl: 0, results: [], firstOk: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function negativeProbe(o) {\n  var w = o.soa.trim().split(/\\s+/);                                   // name ttl IN SOA mname rname serial refresh retry expire minimum\n  var neg = Math.min(Number(w[1]), Number(w[w.length - 1]));\n  if (o.cap !== undefined) neg = Math.min(neg, o.cap);\n  var cachedAt = null, firstOk = null;\n  var results = o.probes.map(function (t) {\n    if (cachedAt !== null && t - cachedAt <= neg) return 'NXDOMAIN';   // still remembered\n    if (t >= o.createdAt) { if (firstOk === null) firstOk = t; cachedAt = null; return 'NOERROR'; }\n    cachedAt = t;\n    return 'NXDOMAIN';\n  });\n  return { negTtl: neg, results: results, firstOk: firstOk };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One early question is enough to hide a new name for the whole negative TTL: for cuongthai.com a record created 30 s after a probe stays invisible for 31 minutes. That is why the order \"create, verify on the authoritative server, then let anyone query\" matters, and why a shorter SOA minimum helps zones that create names often.</p>",
+      "solutionExplanationHtmlVi": "<p>Chỉ một câu hỏi sớm là đủ giấu một tên mới suốt TTL âm: với cuongthai.com, bản ghi tạo 30 s sau một lượt thăm dò sẽ vô hình 31 phút. Vì thế thứ tự \"tạo, kiểm trên máy chủ có thẩm quyền, rồi mới cho người khác hỏi\" quan trọng, và vì thế SOA minimum ngắn hơn có ích cho vùng hay tạo tên mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: the lesson's new.labflow.test",
+              "vi": "Thật: new.labflow.test của bài học"
+            },
+            "goi": "negativeProbe({\"soa\":\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\",\"probes\":[0,2],\"createdAt\":1})",
+            "mongDoi": {
+              "negTtl": 300,
+              "results": [
+                "NXDOMAIN",
+                "NXDOMAIN"
+              ],
+              "firstOk": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Same zone: visible only after 300 s",
+              "vi": "Cùng vùng: chỉ thấy sau 300 s"
+            },
+            "goi": "negativeProbe({\"soa\":\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\",\"probes\":[0,2,300,301],\"createdAt\":1})",
+            "mongDoi": {
+              "negTtl": 300,
+              "results": [
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NOERROR"
+              ],
+              "firstOk": 301
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "negativeProbe({\"soa\":\"cuongthai.com.\\t\\t1800\\tIN\\tSOA\\tkyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800\",\"probes\":[0,60,120,180,240,300,360,420,480,540,600,660,720,780,840,900,960,1020,1080,1140,1200,1260,1320,1380,1440,1500,1560,1620,1680,1740,1800,1860,1920,1980,2040,2100,2160,2220,2280,2340],\"createdAt\":30})",
+            "mongDoi": {
+              "negTtl": 1800,
+              "results": [
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR"
+              ],
+              "firstOk": 1860
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "negativeProbe({\"soa\":\"cuongthai.com.\\t\\t1800\\tIN\\tSOA\\tkyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800\",\"probes\":[0,60,120,180,240,300,360,420,480,540,600,660,720,780,840,900,960,1020,1080,1140,1200,1260,1320,1380,1440,1500,1560,1620,1680,1740,1800,1860,1920,1980,2040,2100,2160,2220,2280,2340],\"createdAt\":30,\"cap\":900})",
+            "mongDoi": {
+              "negTtl": 900,
+              "results": [
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR",
+                "NOERROR"
+              ],
+              "firstOk": 960
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "negativeProbe({\"soa\":\"example.org. 60 IN SOA ns1.example.org. h.example.org. 9 3600 600 1209600 3600\",\"probes\":[0,30,61,200],\"createdAt\":100})",
+            "mongDoi": {
+              "negTtl": 60,
+              "results": [
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NXDOMAIN",
+                "NOERROR"
+              ],
+              "firstOk": 200
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "negativeProbe({\"soa\":\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300\",\"probes\":[5,10],\"createdAt\":0})",
+            "mongDoi": {
+              "negTtl": 300,
+              "results": [
+                "NOERROR",
+                "NOERROR"
+              ],
+              "firstOk": 5
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the SOA minimum alone and forgetting the SOA record's own TTL.|||Chỉ dùng minimum của SOA mà quên TTL của chính bản ghi SOA."
+        },
+        {
+          "loi": "Re-caching on every NXDOMAIN served from cache — the clock does not restart.|||Cache lại mỗi lần trả NXDOMAIN từ cache — đồng hồ không chạy lại từ đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "negative TTL",
+          "vi": "TTL âm"
+        },
+        {
+          "en": "probe",
+          "vi": "lượt thăm dò"
+        },
+        {
+          "en": "cache-max-negative-ttl",
+          "vi": "trần TTL âm của resolver"
+        }
+      ]
+    }
+  ]
+}

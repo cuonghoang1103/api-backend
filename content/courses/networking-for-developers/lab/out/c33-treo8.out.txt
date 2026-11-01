@@ -1,0 +1,7 @@
+# Ch3 · 3.3 — y hệt, nhưng pool 8 luồng (resolver đã được cho "quên" máy chủ chết trước lần chạy này)
+$ UV_THREADPOOL_SIZE=8 node treo.mjs
+    6 ms  readFile /etc/hostname: laptop
+10012 ms  lookup x3.dead.test: EAI_AGAIN
+10014 ms  lookup x1.dead.test: EAI_AGAIN
+10015 ms  lookup x2.dead.test: EAI_AGAIN
+10015 ms  lookup x4.dead.test: EAI_AGAIN

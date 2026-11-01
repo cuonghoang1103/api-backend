@@ -1,0 +1,20 @@
+# Lab 3 · R4 (sự cố A) — laptop: so ủy quyền ở vùng cha với NS của chính vùng, rồi chạy bộ kiểm
+$ dig +noall +authority +additional labflow.test NS @192.0.2.20 +norecurse
+labflow.test.		172800	IN	NS	ns1.labflow.test.
+labflow.test.		172800	IN	NS	ns3.labflow.test.
+ns1.labflow.test.	172800	IN	A	203.0.113.53
+ns3.labflow.test.	172800	IN	A	203.0.113.55
+$ dig +short NS labflow.test @203.0.113.53
+ns1.labflow.test.
+ns2.labflow.test.
+$ dig +time=2 +tries=1 labflow.test SOA @203.0.113.55 | grep -E 'timed out|no servers'
+;; communications error to 203.0.113.55#53: timed out
+;; no servers could be reached
+$ ./kiem-dns.sh
+[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test. 
+[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104
+[FAIL] ns3.labflow.test. 203.0.113.55 does not answer
+[OK]   all name servers have the same serial
+[FAIL] child NS (ns1.labflow.test. ns2.labflow.test. ) != parent NS (ns1.labflow.test. ns3.labflow.test. )
+[OK]   DNSSEC: fully validated (delv)
+[OK]   signatures expire in 30.0 days

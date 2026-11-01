@@ -1,0 +1,6 @@
+# Ch3 · 3.3 — laptop: máy chủ tên đã có tên mới, nhưng resolver vẫn trả NXDOMAIN cho tới khi hết TTL âm
+$ dig +short new.labflow.test @203.0.113.53
+203.0.113.10
+$ dig new.labflow.test | grep -E 'status|SOA'
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 29011
+labflow.test.		298	IN	SOA	ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300

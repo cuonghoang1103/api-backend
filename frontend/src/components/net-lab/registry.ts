@@ -73,4 +73,40 @@ export const NET_LABS: Record<string, LabDef> = {
     presets: ['announce', 'hijack', 'withdraw'],
     load: () => import('./BgpSim'),
   },
+  // ── Chương 3: DNS — cây DNS riêng của lab (dns.yml), số liệu engine/capture3.ts ──
+  dns: {
+    en: 'DNS: who answers a name?', vi: 'DNS: ai trả lời một cái tên?', chapterEn: 'DNS', chapterVi: 'DNS',
+    descEn: 'Replay every packet the ISP’s resolver sent for one lookup — priming, QNAME minimisation, referrals, the aa answer, DNSSEC keys — then the second lookup from cache (9 questions vs 0); ask, wait and flush a cache; see why /etc/hosts and search/ndots make your program disagree with dig.',
+    descVi: 'Phát lại từng gói resolver nhà mạng gửi cho một lần tra — mồi gốc, QNAME minimisation, lời giới thiệu, câu trả lời aa, khoá DNSSEC — rồi lần tra thứ hai từ cache (9 câu so với 0); tự hỏi, chờ và xoá cache; thấy vì sao /etc/hosts và search/ndots làm chương trình của bạn nói khác dig.',
+    presets: ['trace', 'cache', 'stub'],
+    load: () => import('./DnsSim'),
+  },
+  zone: {
+    en: 'Zone files: records, rules, secondaries', vi: 'Tệp vùng: bản ghi, quy tắc, máy phụ', chapterEn: 'DNS', chapterVi: 'DNS',
+    descEn: 'Eleven record types with real dig answers and their rules; four classic mistakes through named-checkzone — a CNAME at the apex, CNAME next to A, MX to an IP, the missing final dot that still loads “OK”; a forgotten SOA serial that splits ns1 and ns2 until NOTIFY + AXFR.',
+    descVi: 'Mười một loại bản ghi kèm câu trả lời dig thật và quy tắc của chúng; bốn lỗi kinh điển qua named-checkzone — CNAME ở đỉnh, CNAME cạnh A, MX trỏ IP, quên dấu chấm cuối mà vẫn nạp “OK”; quên serial SOA làm ns1 và ns2 nói khác nhau tới khi NOTIFY + AXFR.',
+    presets: ['records', 'apex', 'serial'],
+    load: () => import('./ZoneSim'),
+  },
+  ttl: {
+    en: 'TTL: why DNS changes are slow', vi: 'TTL: vì sao đổi DNS lại chậm', chapterEn: 'DNS', chapterVi: 'DNS',
+    descEn: 'Drag time and watch a resolver count a TTL down while the authoritative server always says 120; move a server in the wrong order (old IP for 1 min 45 s, measured) and the right one; a name that “does not exist” after you created it — negative caching and aggressive NSEC.',
+    descVi: 'Kéo thời gian và xem resolver đếm ngược TTL trong khi máy chủ tên luôn nói 120; chuyển máy chủ sai thứ tự (IP cũ còn 1 phút 45 giây, đo thật) và đúng thứ tự; một cái tên “không tồn tại” sau khi bạn đã tạo — cache âm và aggressive NSEC.',
+    presets: ['countdown', 'change', 'negative'],
+    load: () => import('./TtlSim'),
+  },
+  anycast: {
+    en: 'Anycast, GeoDNS and round-robin DNS', vi: 'Anycast, GeoDNS và DNS round-robin', chapterEn: 'DNS', chapterVi: 'DNS',
+    descEn: 'One public-DNS address announced from Hanoi and Singapore with real BGP: who reaches which site, and failover in one second; a CDN’s GeoDNS that follows the resolver, not the user; two A records with a dead server — curl 0.2 s, Node 0.26 s, Python 3 s.',
+    descVi: 'Một địa chỉ DNS công cộng được quảng bá từ Hà Nội và Singapore bằng BGP thật: ai tới điểm nào, và chuyển dự phòng trong một giây; GeoDNS của CDN đi theo resolver chứ không theo người dùng; hai bản ghi A với một máy chết — curl 0,2 s, Node 0,26 s, Python 3 s.',
+    presets: ['anycast', 'geodns', 'roundrobin'],
+    load: () => import('./AnycastSim'),
+  },
+  dnssec: {
+    en: 'DNSSEC and encrypted DNS', vi: 'DNSSEC và DNS mã hoá', chapterEn: 'DNS', chapterVi: 'DNS',
+    descEn: 'Walk a real chain of trust from the root anchor to an A record (the parent’s DS = the hash we compute); break it the way operators do — expired signatures, SERVFAIL with EDE 7, +cd, the bogus cache; and see what plain DNS, DoT and DoH reveal on the wire.',
+    descVi: 'Đi một chuỗi tin cậy thật từ mỏ neo gốc tới bản ghi A (DS của vùng cha = mã băm ta tự tính); làm hỏng nó như người vận hành hay làm — chữ ký hết hạn, SERVFAIL kèm EDE 7, +cd, cache bogus; và xem DNS thường, DoT, DoH để lộ gì trên dây.',
+    presets: ['chain', 'expired', 'private'],
+    load: () => import('./DnssecSim'),
+  },
 };

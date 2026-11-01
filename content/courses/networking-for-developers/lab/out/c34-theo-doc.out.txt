@@ -1,0 +1,12 @@
+# Ch3 · 3.4 — laptop: ai trả lời 198.19.1.1, từng giây, trước và sau khi pop1 rút
+$ cat /tmp/any.txt
+16:22:53  "pop1.hn (public DNS 198.19.1.1, Hanoi)"
+16:22:54  "pop1.hn (public DNS 198.19.1.1, Hanoi)"
+16:22:55  "pop1.hn (public DNS 198.19.1.1, Hanoi)"
+16:22:56  "pop1.hn (public DNS 198.19.1.1, Hanoi)"
+16:22:57  "pop2.sg (public DNS 198.19.1.1, Singapore)"
+16:22:58  "pop2.sg (public DNS 198.19.1.1, Singapore)"
+16:22:59  "pop2.sg (public DNS 198.19.1.1, Singapore)"
+16:23:00  "pop2.sg (public DNS 198.19.1.1, Singapore)"
+16:23:01  "pop2.sg (public DNS 198.19.1.1, Singapore)"
+16:23:02  "pop2.sg (public DNS 198.19.1.1, Singapore)"

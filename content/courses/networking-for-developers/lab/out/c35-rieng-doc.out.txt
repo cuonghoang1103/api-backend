@@ -1,0 +1,12 @@
+# Ch3 · 3.5 — trên router nhà (= chỗ nhà mạng, quán cà phê, ai đứng giữa cũng thấy): bắt được gì từ ba câu hỏi đó?
+$ tshark -r /tmp/w.pcap -Y 'ip.dst == 198.51.100.1 && (dns || tls.handshake.type == 1 || tls.app_data)' -T fields -e _ws.col.Protocol -e tcp.dstport -e udp.dstport -e dns.qry.name -e tls.handshake.extensions_alpn_str -e tls.app_data 2>/dev/null | awk -F'\t' '{ printf "%-4s port %-4s %s\n", ($4 != "" ? "DNS" : "TLS"), $2 $3, ($4 != "" ? "query name: " $4 : ($5 != "" ? "TLS hello, alpn=" $5 : "TLS application data (" length($6)/2 " bytes, encrypted)")) }'
+DNS  port 53   query name: labflow.test
+TLS  port 853  TLS hello, alpn=dot
+TLS  port 853  TLS application data (69 bytes, encrypted)
+TLS  port 853  TLS application data (72 bytes, encrypted)
+TLS  port 853  TLS application data (19 bytes, encrypted)
+TLS  port 443  TLS hello, alpn=h2
+TLS  port 443  TLS application data (69 bytes, encrypted)
+TLS  port 443  TLS application data (56 bytes, encrypted)
+TLS  port 443  TLS application data (182 bytes, encrypted)
+TLS  port 443  TLS application data (26 bytes, encrypted)

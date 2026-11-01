@@ -52,6 +52,12 @@ export const NET_SIMS = {
   nat: ['home', 'inbound', 'cgnat'],
   ipv6: ['addr', 'happy', 'localhost'],
   bgp: ['announce', 'hijack', 'withdraw'],
+  // Chương 3 — DNS (01/11/2026): cây DNS riêng của lab (dns.yml), số liệu frontend/src/components/net-lab/engine/capture3.ts
+  dns: ['trace', 'cache', 'stub'],
+  zone: ['records', 'apex', 'serial'],
+  ttl: ['countdown', 'change', 'negative'],
+  anycast: ['anycast', 'geodns', 'roundrobin'],
+  dnssec: ['chain', 'expired', 'private'],
 };
 export const NET_TOURS = {
   encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
@@ -63,6 +69,11 @@ export const NET_TOURS = {
   nat: ['nat-home', 'nat-inbound', 'nat-start'],
   ipv6: ['ipv6-compress', 'ipv6-happy', 'ipv6-start'],
   bgp: ['bgp-path', 'bgp-hijack', 'bgp-start'],
+  dns: ['dns-trace', 'dns-stub', 'dns-start'],
+  zone: ['zone-records', 'zone-serial', 'zone-start'],
+  ttl: ['ttl-change', 'ttl-negative', 'ttl-start'],
+  anycast: ['anycast-withdraw', 'anycast-geodns', 'anycast-start'],
+  dnssec: ['dnssec-chain', 'dnssec-expired', 'dnssec-start'],
 };
 
 export const LAB_NS = {

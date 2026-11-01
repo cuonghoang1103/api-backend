@@ -1,0 +1,12 @@
+# Ch3 · 3.2 — trên ns2: ns2 được phép chép (bỏ chữ ký DNSSEC cho gọn) và đang giữ cùng serial với ns1
+$ dig @203.0.113.53 labflow.test AXFR +nodnssec | grep -v -E 'RRSIG|NSEC|DNSKEY|^;|^$' | head -8
+labflow.test.		3600	IN	SOA	ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300
+labflow.test.		86400	IN	NS	ns1.labflow.test.
+labflow.test.		86400	IN	NS	ns2.labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+labflow.test.		300	IN	MX	10 mail.labflow.test.
+labflow.test.		300	IN	TXT	"v=spf1 mx -all"
+labflow.test.		300	IN	TXT	"labflow-verify=7f3c9a1e"
+labflow.test.		300	IN	AAAA	2001:db8:d::10
+$ dig +short @127.0.0.1 labflow.test SOA
+ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300

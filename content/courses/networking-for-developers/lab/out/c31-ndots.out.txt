@@ -1,0 +1,13 @@
+# Ch3 · 3.1 — search + ndots: tên "ít dấu chấm" bị ghép đuôi search TRƯỚC (kiểu Kubernetes ndots:5) — đếm câu hỏi thật bằng tshark
+$ printf 'nameserver 198.51.100.1\nsearch labflow.test\noptions ndots:5\n' > /etc/resolv.conf
+$ getent ahostsv4 api | head -1
+203.0.113.10    STREAM api.labflow.test
+$ getent ahostsv4 labflow.cdn.test | head -1
+203.0.113.10    STREAM labflow.cdn.test
+$ getent ahostsv4 labflow.cdn.test. | head -1
+203.0.113.10    STREAM labflow.cdn.test
+$ tshark -r /tmp/n.pcap -Y 'dns.flags.response==1' -T fields -e dns.qry.name -e dns.qry.type -e dns.flags.rcode 2>/dev/null | awk '{ print ($3=="3"?"NXDOMAIN":"NOERROR "), $1 }'
+NOERROR  api.labflow.test
+NXDOMAIN labflow.cdn.test.labflow.test
+NOERROR  labflow.cdn.test
+NOERROR  labflow.cdn.test

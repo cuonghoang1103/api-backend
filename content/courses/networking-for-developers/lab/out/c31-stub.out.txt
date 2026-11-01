@@ -1,0 +1,14 @@
+# Ch3 · 3.1 — phía STUB trên laptop: /etc/hosts đi TRƯỚC DNS (nsswitch.conf). getent/curl/Node dns.lookup hỏi qua getaddrinfo; dig/dns.resolve hỏi thẳng DNS
+$ grep '^hosts' /etc/nsswitch.conf
+hosts:          files dns
+$ echo '203.0.113.11 labflow.test   # added for testing, forgot to remove' >> /etc/hosts
+$ getent ahosts labflow.test | head -1
+203.0.113.11    STREAM labflow.test
+$ dig +short labflow.test
+203.0.113.10
+$ curl -s http://labflow.test/
+LabFlow edge Singapore (server 203.0.113.11)
+you came from 198.51.100.2 port 48998
+$ node -e "const d=require('dns'); d.lookup('labflow.test',(e,a)=>console.log('dns.lookup  ', a)); d.resolve4('labflow.test',(e,a)=>console.log('dns.resolve4', a))"
+dns.resolve4 [ '203.0.113.10' ]
+dns.lookup   203.0.113.11

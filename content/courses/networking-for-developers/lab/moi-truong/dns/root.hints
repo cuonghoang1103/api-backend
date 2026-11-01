@@ -1,0 +1,3 @@
+; Gợi ý máy chủ gốc (root hints) của lab — resolver đọc tệp này để biết hỏi ai ĐẦU TIÊN. Bản thật: https://www.internic.net/domain/named.root
+.                        3600000      NS    A.ROOT-SERVERS.TEST.
+A.ROOT-SERVERS.TEST.     3600000      A     192.0.2.10

@@ -8,6 +8,8 @@
  * web-foundations Ch6 (HTTP nhập môn). Khoá này dạy CƠ CHẾ giao thức bên dưới — mỗi chỗ chạm có bài "Nếu đã học …".
  * Không trùng network-security (Nhóm A — tường lửa, VPN, Zero Trust, tấn công mạng): ở đây chỉ nhắc và trỏ sang.
  *
+ * TRẠNG THÁI 01/11/2026 (tối): Chương 3 SOẠN TRỌN (lab DNS dns.yml: gốc/TLD/LabFlow/CDN, resolver kiểm DNSSEC, DNS công cộng anycast;
+ * slide NFD/v1, 5 mô phỏng mới dns/zone/ttl/anycast/dnssec).
  * TRẠNG THÁI 01/11/2026: Chương 2 SOẠN TRỌN (lab "Internet trong một hộp" internet.yml, slide NFD/v1, 5 mô phỏng mới).
  * TRẠNG THÁI 31/10/2026: Mục 0 + Chương 1 SOẠN TRỌN (slide NFD/v1 · bài EN/VI · phòng lab mạng /net-lab · lab chương ·
  * quiz · Code Lab track networking-practice). Hợp đồng soạn các chương sau: ./networking-for-developers/_HOP-DONG.md.
@@ -17,9 +19,10 @@ import { khung } from './_chung/khung.mjs';
 import s00 from './networking-for-developers/s00-gioi-thieu.mjs';
 import s01 from './networking-for-developers/s01-tang-goi-tin.mjs';
 import s02 from './networking-for-developers/s02-dia-chi-dinh-tuyen.mjs';
+import s03 from './networking-for-developers/s03-dns.mjs';
 
-/** Mục 0 + Chương 1 (31/10/2026) và Chương 2 (01/11/2026) đã soạn trọn ghi đè section khung — giữ nguyên title chương + slug bài cũ. */
-const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; return secs; };
+/** Mục 0 + Chương 1 (31/10/2026), Chương 2 và Chương 3 (01/11/2026) đã soạn trọn ghi đè section khung — giữ nguyên title chương + slug bài cũ. */
+const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; secs[3] = s03; return secs; };
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

@@ -1,0 +1,5 @@
+# Ch3 · 3.3 — trên ns1: giờ mới tạo bản ghi new.labflow.test
+$ printf 'new            IN A    203.0.113.10\n' >> /dnsz/src/labflow.test.zone
+$ sed -i 's/2026110101 3600/2026110105 3600/' /dnsz/src/labflow.test.zone
+$ bash /lab/k/moi-truong/dns/ky.sh labflow.test && rndc reload labflow.test
+zone reload queued

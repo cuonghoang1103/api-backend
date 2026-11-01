@@ -1,0 +1,7 @@
+# Ch3 · 3.3 — bên trong resolver nhà mạng: cache đang giữ gì cho labflow.test, và đếm trúng/trượt cache
+$ unbound-control dump_cache | grep -E '^api\.labflow\.test\.[[:space:]]+[0-9]+[[:space:]]+IN[[:space:]]+A'
+api.labflow.test.	115	IN	A	203.0.113.10
+$ unbound-control stats_noreset | grep -E '^total\.num\.(queries|cachehits|cachemiss)='
+total.num.queries=2
+total.num.cachehits=1
+total.num.cachemiss=1

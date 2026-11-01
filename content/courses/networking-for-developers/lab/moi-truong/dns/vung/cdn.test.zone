@@ -1,0 +1,7 @@
+; cdn.test — the CDN provider's DNS (ns1.cdn.test = 192.0.2.40). GeoDNS with BIND views: the answer for
+; labflow.cdn.test depends on the address of the RESOLVER asking (not of the user). This copy = Hanoi edge.
+$TTL 60
+@     3600  IN SOA ns1.cdn.test. ops.cdn.test. 2026110101 3600 600 1209600 60
+@    86400  IN NS  ns1
+ns1  86400  IN A   192.0.2.40
+labflow     IN A   203.0.113.10

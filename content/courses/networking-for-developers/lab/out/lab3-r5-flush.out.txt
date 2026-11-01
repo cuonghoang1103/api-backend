@@ -1,0 +1,5 @@
+# Lab 3 · R5 — trên resolver nhà mạng: xoá DS/khoá cũ đang cache (resolver công cộng: chỉ có thể chờ hết TTL)
+$ unbound-control flush_zone labflow.test
+ok removed 7 rrsets, 3 messages and 1 key entries
+$ unbound-control flush_bogus
+ok removed 0 rrsets, 0 messages and 0 key entries

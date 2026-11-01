@@ -41,6 +41,7 @@
  *    lesson.content là ARRAY và academy-ra-soat.mjs đổ ở dòng 52.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch15', {
   code: 'NWC204',
@@ -363,6 +364,7 @@ LISTEN 0 4096 127.0.0.1:5432   users:(("postgres",pid=944,fd=5))</code></pre>
 <p>Đây vẫn là độ trôi đã nêu từ buổi 19: cách đánh số câu hỏi kiến tạo chạy chậm hơn kế hoạch buổi học khoảng một chương, và ngay trong chương này thì nó còn lệch thêm một buổi nữa. Trả lời ngắn, để hôm nay bạn không bị bỏ trống: các biện pháp cơ bản là cần thiết vì mạng không bảo vệ nổi một thiết bị trước chính láng giềng của nó. Tường lửa chỉ soi lưu lượng đi qua nó, mà lưu lượng giữa hai máy trong cùng một phân đoạn thì không bao giờ đi qua. Thành thử bản thân thiết bị là tuyến phòng thủ cuối cùng, nên nó phải được cấu hình sao cho việc chỉ cần nằm cùng mạng là chưa đủ để đăng nhập — không còn thông tin đăng nhập mặc định, không còn dịch vụ thừa đang nghe, chỉ quản trị bằng kênh mã hoá, và một cơ chế đăng nhập đòi thứ không đoán được.</p>
 <p>Phần đầy đủ, kèm câu lệnh và phép nghiệm thu cho từng bước, nằm ở bài 15.2.</p></div>`,
     ),
+    sauHon({ bai: 'netdev-3-5-dns-an-toan', so: '3.5', ten: ['DNSSEC, DoH/DoT and DNS failure modes', 'DNSSEC, DoH/DoT và các kiểu hỏng của DNS'], them: ['why an unsigned DNS record can be forged and what DNSSEC adds — a real chain of trust read and recomputed, an expired-signature outage (SERVFAIL, EDE, +cd), and what DoT/DoH hide from someone on the path', 'vì sao một bản ghi DNS không ký có thể bị giả và DNSSEC thêm gì — một chuỗi tin cậy thật đọc và tính lại, một sự cố chữ ký hết hạn (SERVFAIL, EDE, +cd), và DoT/DoH che được gì trước người đứng giữa đường'] }),
   ].join('\n'),
 };
 

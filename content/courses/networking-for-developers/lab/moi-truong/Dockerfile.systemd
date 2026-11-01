@@ -1,0 +1,11 @@
+# net-lab-systemd — một "máy Ubuntu desktop/server" có systemd + systemd-resolved (bộ đệm DNS 127.0.0.53 của Ubuntu), cho bài 3.1/3.3.
+#   docker build -t net-lab-systemd -f Dockerfile.systemd .        (sau net-lab-dns)
+# Chạy: dns.yml không gồm máy này (systemd cần thêm quyền) — code/ch03/c31-ubuntu-dung.sh dựng nó vào mạng nhà 192.168.50.20:
+#   --cap-add SYS_ADMIN --security-opt seccomp=unconfined --tmpfs /run --tmpfs /run/lock --cgroupns=host -v /sys/fs/cgroup:/sys/fs/cgroup:rw
+# (vẫn KHÔNG --privileged; chỉ chạy trên máy của chính bạn).
+FROM net-lab-dns
+RUN apt-get update && apt-get install -y --no-install-recommends systemd systemd-sysv systemd-resolved \
+ && rm -rf /var/lib/apt/lists/* \
+ && printf '[Resolve]\nDNS=198.51.100.1\nDNSSEC=no\n' > /etc/systemd/resolved.conf.d-lab \
+ && mkdir -p /etc/systemd/resolved.conf.d && mv /etc/systemd/resolved.conf.d-lab /etc/systemd/resolved.conf.d/lab.conf
+CMD ["/sbin/init"]

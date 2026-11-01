@@ -1,0 +1,87 @@
+# Ch3 · 3.1 — tự làm việc của resolver: hỏi lần lượt máy chủ gốc ⇒ TLD ⇒ máy chủ của tên miền (+norecurse = "đừng đi hỏi hộ tôi")
+$ dig @192.0.2.10 www.labflow.test +norecurse
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> @192.0.2.10 www.labflow.test +norecurse
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 42499
+;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 9e0d131551e1b6e1010000006ae7117855a6453ae321a2d2 (good)
+;; QUESTION SECTION:
+;www.labflow.test.		IN	A
+
+;; AUTHORITY SECTION:
+test.			172800	IN	NS	ns1.nic.test.
+
+;; ADDITIONAL SECTION:
+ns1.nic.test.		172800	IN	A	192.0.2.20
+
+;; Query time: 1 msec
+;; SERVER: 192.0.2.10#53(192.0.2.10) (UDP)
+;; WHEN: Sun Nov 01 17:16:24 +07 2026
+;; MSG SIZE  rcvd: 111
+
+$ dig @192.0.2.20 www.labflow.test +norecurse
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> @192.0.2.20 www.labflow.test +norecurse
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15400
+;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 2, ADDITIONAL: 3
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: fe9256f1aefe8e1b010000006ae7117882548d18112292cd (good)
+;; QUESTION SECTION:
+;www.labflow.test.		IN	A
+
+;; AUTHORITY SECTION:
+labflow.test.		172800	IN	NS	ns1.labflow.test.
+labflow.test.		172800	IN	NS	ns2.labflow.test.
+
+;; ADDITIONAL SECTION:
+ns1.labflow.test.	172800	IN	A	203.0.113.53
+ns2.labflow.test.	172800	IN	A	203.0.113.54
+
+;; Query time: 0 msec
+;; SERVER: 192.0.2.20#53(192.0.2.20) (UDP)
+;; WHEN: Sun Nov 01 17:16:24 +07 2026
+;; MSG SIZE  rcvd: 141
+
+$ dig @203.0.113.53 www.labflow.test +norecurse
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> @203.0.113.53 www.labflow.test +norecurse
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 59680
+;; flags: qr aa; QUERY: 1, ANSWER: 2, AUTHORITY: 2, ADDITIONAL: 3
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: e79e6198fb084532010000006ae71178f10cc96fde35a3c8 (good)
+;; QUESTION SECTION:
+;www.labflow.test.		IN	A
+
+;; ANSWER SECTION:
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+
+;; AUTHORITY SECTION:
+labflow.test.		86400	IN	NS	ns1.labflow.test.
+labflow.test.		86400	IN	NS	ns2.labflow.test.
+
+;; ADDITIONAL SECTION:
+ns1.labflow.test.	86400	IN	A	203.0.113.53
+ns2.labflow.test.	86400	IN	A	203.0.113.54
+
+;; Query time: 1 msec
+;; SERVER: 203.0.113.53#53(203.0.113.53) (UDP)
+;; WHEN: Sun Nov 01 17:16:24 +07 2026
+;; MSG SIZE  rcvd: 171
+

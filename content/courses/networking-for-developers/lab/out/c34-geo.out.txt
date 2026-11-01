@@ -1,0 +1,10 @@
+# Ch3 · 3.4 — GeoDNS: static.labflow.test là CNAME sang DNS của CDN; CDN trả IP tuỳ resolver nào hỏi
+$ dig +short static.labflow.test
+labflow.cdn.test.
+203.0.113.10
+$ dig @198.19.1.1 +short static.labflow.test
+labflow.cdn.test.
+203.0.113.10
+$ curl -s http://static.labflow.test/
+LabFlow edge Hanoi (server 203.0.113.10)
+you came from 198.51.100.2 port 43978

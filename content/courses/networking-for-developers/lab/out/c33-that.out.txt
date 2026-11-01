@@ -1,0 +1,6 @@
+# Ch3 · 3.3 — Internet THẬT: TTL mà máy chủ tên của cuongthai.com (Cloudflare) đặt, và TTL ÂM khi hỏi một tên chưa có
+$ dig +noall +answer cuongthai.com @kyrie.ns.cloudflare.com
+cuongthai.com.		300	IN	A	160.187.1.208
+$ dig chua-co-ten-nay.cuongthai.com @kyrie.ns.cloudflare.com | grep -E 'status|SOA'
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 7876
+cuongthai.com.		1800	IN	SOA	kyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800

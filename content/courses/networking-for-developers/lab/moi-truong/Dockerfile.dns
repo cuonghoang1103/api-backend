@@ -1,0 +1,8 @@
+# net-lab-dns — ảnh net-lab-inet + BIND 9 (máy chủ tên authoritative, công cụ DNSSEC) + Unbound (resolver đệ quy có kiểm
+# DNSSEC, DoT, DoH) + kdig — cho phần DNS của "Internet trong một hộp" (Chương 3, dns.yml). Dựng SAU net-lab-inet:
+#   docker build -t net-lab-dns -f Dockerfile.dns .
+# Ảnh net-lab và net-lab-inet giữ nguyên ⇒ output Mục 0–Ch2 không đổi.
+FROM net-lab-inet
+RUN apt-get update && apt-get install -y --no-install-recommends bind9 bind9-utils unbound unbound-anchor knot-dnsutils \
+ && rm -rf /var/lib/apt/lists/* \
+ && systemctl disable named unbound 2>/dev/null || true

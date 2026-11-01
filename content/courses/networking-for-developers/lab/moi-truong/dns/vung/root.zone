@@ -1,0 +1,10 @@
+; The root zone "." of the Internet in a box (Chapter 3). Same structure and TTLs as the real root: NS 518400, TLDs 172800,
+; SOA minimum 86400. Root server: a.root-servers.test (192.0.2.10, at the exchange point like many real root copies).
+$TTL 86400
+.                        86400  IN SOA a.root-servers.test. nstld.root-servers.test. 2026110101 1800 900 604800 86400
+.                       518400  IN NS  a.root-servers.test.
+a.root-servers.test.    518400  IN A   192.0.2.10
+; TLD .test — the registry runs ns1.nic.test
+test.                   172800  IN NS  ns1.nic.test.
+ns1.nic.test.           172800  IN A   192.0.2.20
+$INCLUDE /dnsz/ds/test.ds

@@ -1,0 +1,697 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-3-6-lab-dns-labflow",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-3-6-lab-dns-labflow"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 — LabFlow's DNS: the toolkit behind the report",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 150,
+      "points": 60,
+      "concepts": [
+        "delegation",
+        "TTL planning",
+        "negative caching",
+        "DNS monitoring",
+        "DNSSEC DS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<h1>Lab 3 — LabFlow's DNS: the toolkit behind the report</h1>\n<p class=\"bi-phu\">Chapter 3 lab · course project part 3 · JavaScript, graded in the browser · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Situation.</b> LabFlow launches a status page, moves its API to the Singapore edge and survives two DNS incidents (lesson Lab 3). Your lead wants the report's numbers to come from code, not from eyeballing: a delegation map, a TTL plan checked against the real switch, the negative-TTL rule for the new name, a delegation checker and a DS comparison. Everything below is real output of the course lab (lab/out/lab3-*), unless marked <i>constructed</i>.</p>\n<p>R1, the delegation as dig +trace saw it:</p><pre>.\t\t\t86400\tIN\tNS\ta.root-servers.test.\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 4 ms\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\nlabflow.test.\t\t172800\tIN\tNS\tns2.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\n;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\nlabflow.test.\t\t86400\tIN\tNS\tns2.labflow.test.\nlabflow.test.\t\t86400\tIN\tNS\tns1.labflow.test.\n;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms</pre>\n<p>R3, the move: TTL lowered at 17:18:12, IP changed at 17:20:17; the laptop polled every 5 s:</p><pre>17:18:10  TTL 120  203.0.113.10\n17:18:15  TTL 115  203.0.113.10\n17:18:20  TTL 110  203.0.113.10\n17:18:25  TTL 105  203.0.113.10\n17:18:30  TTL 100  203.0.113.10\n17:18:35  TTL 95   203.0.113.10\n17:18:40  TTL 90   203.0.113.10\n17:18:45  TTL 85   203.0.113.10\n17:18:50  TTL 80   203.0.113.10\n17:18:55  TTL 75   203.0.113.10\n17:19:00  TTL 70   203.0.113.10\n17:19:05  TTL 65   203.0.113.10\n17:19:10  TTL 60   203.0.113.10\n17:19:15  TTL 55   203.0.113.10\n17:19:20  TTL 50   203.0.113.10\n17:19:25  TTL 45   203.0.113.10\n17:19:30  TTL 40   203.0.113.10\n17:19:35  TTL 35   203.0.113.10\n17:19:40  TTL 30   203.0.113.10\n17:19:45  TTL 25   203.0.113.10\n17:19:50  TTL 19   203.0.113.10\n17:19:56  TTL 14   203.0.113.10\n17:20:01  TTL 9    203.0.113.10\n17:20:06  TTL 4    203.0.113.10\n17:20:11  TTL 10   203.0.113.10\n17:20:16  TTL 5    203.0.113.10\n17:20:21  TTL 0    203.0.113.10\n17:20:26  TTL 10   203.0.113.11\n17:20:31  TTL 5    203.0.113.11\n17:20:36  TTL 0    203.0.113.11\n17:20:41  TTL 10   203.0.113.11\n17:20:46  TTL 5    203.0.113.11\n17:20:51  TTL 0    203.0.113.11\n17:20:56  TTL 10   203.0.113.11</pre>\n<p>R4, incident A (after <code>su-co-a.sh</code> on nfi-tld):</p><pre>$ dig +noall +authority +additional labflow.test NS @192.0.2.20 +norecurse\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns3.labflow.test.\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns3.labflow.test.\t172800\tIN\tA\t203.0.113.55\n$ dig +short NS labflow.test @203.0.113.53\nns1.labflow.test.\nns2.labflow.test.\n$ dig +time=2 +tries=1 labflow.test SOA @203.0.113.55 | grep -E 'timed out|no servers'\n;; communications error to 203.0.113.55#53: timed out\n;; no servers could be reached\n$ ./kiem-dns.sh\n[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.\n[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104\n[FAIL] ns3.labflow.test. 203.0.113.55 does not answer\n[OK]   all name servers have the same serial\n[FAIL] child NS (ns1.labflow.test. ns2.labflow.test. ) != parent NS (ns1.labflow.test. ns3.labflow.test. )\n[OK]   DNSSEC: fully validated (delv)\n[OK]   signatures expire in 30.0 days</pre>\n<p>R5, incident B (after <code>su-co-b.sh</code> on nfi-ns):</p><pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 45489\n; EDE: 6 (DNSSEC Bogus): (validation failure &lt;labflow.test. A IN&gt;: no keys have a DS with algorithm ECDSAP256SHA256 from 203.0.113.54 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +noall +answer labflow.test DS @192.0.2.20\nlabflow.test.\t\t3600\tIN\tDS\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | dnssec-dsfromkey -a SHA-256 -f - labflow.test\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\n$ ./kiem-dns.sh | grep -E 'DNSSEC|FAIL'\n[FAIL] DNSSEC: ;; resolution failed: failure</pre>\n<h3>Main features</h3>\n<ul>\n  <li><code>delegationMap(traceText)</code> — who holds each level, TTL of each referral, the final answer (R1).</li>\n  <li><code>ttlPlan(o)</code> + <code>measureSwitch(pollText, changeAt, newIp)</code> + <code>negativeWait(soaLine, queriedAt, createdAt)</code> — plan the move, measure it, and the negative-TTL rule (R2, R3).</li>\n  <li><code>checkDelegation({ parent, child, serials })</code> — the delegation checks of kiem-dns.sh (R4, R6).</li>\n  <li><code>dsMatch(parentText, publishedText)</code> — does the parent vouch for the key that is published? (R5)</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One file, <code>answer.js</code>, all functions at top level (the grader calls each one directly). Helpers are allowed — reuse your code from exercises 3.1–3.5.</li>\n  <li>Plain JavaScript, no libraries. Return values, do not print. Do not modify the arguments. Times are \"HH:MM:SS\" strings of one day.</li>\n  <li>Each function is graded on its own inputs, so a mistake in one does not cost the others.</li>\n</ul>\n<h2>2. Files</h2>\n<pre>answer.js        delegationMap · ttlPlan · measureSwitch · negativeWait · checkDelegation · dsMatch</pre>\n<h2>3. Data model</h2>\n<p><b>Inputs</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>traceText</code></td><td>string</td><td>output of dig +trace +nodnssec (records, then \";; Received … from IP#53(NAME) in N ms\" after each block)</td></tr><tr><td><code>o (ttlPlan)</code></td><td>{ oldTtl, newTtl, maxStale, lowerAt, safety? }</td><td>R3: 120, 10, 10, \"17:18:12\", 5</td></tr><tr><td><code>pollText</code></td><td>string</td><td>lines \"HH:MM:SS  TTL n  ip\" (lab/out/lab3-r3)</td></tr><tr><td><code>parent / child / serials</code></td><td>string / string / { ip: serial | null }</td><td>parent = dig +noall +authority +additional NS @TLD; child = dig +short NS @first server that answered; serials = SOA serial per IP (null = no answer)</td></tr><tr><td><code>parentText / publishedText</code></td><td>string / string</td><td>dig +noall +answer DS @TLD / dnssec-dsfromkey output (one or more DS lines each)</td></tr></tbody></table>\n<p><b>Outputs</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>delegationMap</code></td><td>{ levels: [{ zone, ttl, servers, from, ms }], answer: { from, records } | null }</td><td>one level per block that has NS lines; answer = the non-NS records of the last block, as \"name TYPE data\"</td></tr><tr><td><code>ttlPlan</code></td><td>{ changeAt, worstStale, ok, keepOldUntil }</td><td>times as \"HH:MM:SS\"</td></tr><tr><td><code>measureSwitch / negativeWait</code></td><td>{ lastOld, firstNew, delayS } / { negTtl, visibleFrom }</td><td>null when not seen</td></tr><tr><td><code>checkDelegation</code></td><td>[lines]</td><td>\"[OK]   …\" / \"[FAIL] …\" in the order of kiem-dns.sh</td></tr><tr><td><code>dsMatch</code></td><td>{ match, reason, parent, published }</td><td>reason \"ok\" | \"digest differs\" | \"key tag differs\" | \"no DS at parent (insecure)\"</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre># R4 — the parent and the child disagree (lab/out/lab3-r4-laptop)\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns3.labflow.test.\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns3.labflow.test.\t172800\tIN\tA\t203.0.113.55\n# child: dig +short NS labflow.test @203.0.113.53\nns1.labflow.test.\nns2.labflow.test.\n# serials: {\"203.0.113.53\":\"2026110104\",\"203.0.113.55\":null}\n\n# R5 — DS at the parent vs DS computed from the published DNSKEY (lab/out/lab3-r5-laptop)\nlabflow.test.\t\t3600\tIN\tDS\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185</pre>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. delegationMap() — R1 <span class=\"bi-diem\">2 marks</span></h3>\n<p>Turn a +trace into the delegation map of the report: one level per referral, with the TTL the parent gives, and the final answer.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A block = the record lines before a <code>;; Received … from IP#53(NAME) in N ms</code> line; <code>from</code> = the text in parentheses, <code>ms</code> = N. Other lines starting with \";\" and empty lines are ignored.</li>\n  <li>A block with NS lines gives a level: <code>zone</code> = owner of the first NS line, <code>ttl</code> = its TTL (number), <code>servers</code> = the NS targets sorted. Blocks without NS give no level.</li>\n  <li><code>answer</code>: the non-NS lines of the <b>last</b> block as <code>\"name TYPE data\"</code> (data words joined by one space), with that block's <code>from</code>; <code>null</code> if there are none.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>delegationMap(r1).levels.map(l =&gt; l.zone + \" \" + l.ttl)\n⇒ [\". 86400\", \"test. 172800\", \"labflow.test. 172800\", \"labflow.test. 86400\"]   // parent copy 2 days, child copy 1 day</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. ttlPlan(), measureSwitch(), negativeWait() — R2, R3 <span class=\"bi-diem\">2.5 marks</span></h3>\n<p>Plan the API move with the rule \"worst-case delay = TTL in caches when you change\", check it against the real poll, and compute when a resolver that asked too early sees the new status name.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>ttlPlan(o)</code>: <code>changeAt</code> = lowerAt + oldTtl + safety (default 0); <code>worstStale</code> = newTtl; <code>ok</code> = newTtl ≤ maxStale; <code>keepOldUntil</code> = changeAt + newTtl (the old server must keep answering until then).</li>\n  <li><code>measureSwitch(pollText, changeAt, newIp)</code>: among polls at or after changeAt, <code>firstNew</code> = the first showing newIp, <code>lastOld</code> = the last one before it showing another IP, <code>delayS</code> = firstNew − changeAt in seconds (all null when not seen).</li>\n  <li><code>negativeWait(soaLine, queriedAt, createdAt)</code>: negTtl = min(SOA record TTL, SOA minimum); a name asked before it was created becomes visible at max(createdAt, queriedAt + negTtl + 1); asked after creation ⇒ visible at queriedAt.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>ttlPlan({ oldTtl: 120, newTtl: 10, maxStale: 10, lowerAt: \"17:18:12\", safety: 5 }).changeAt ⇒ \"17:20:17\"   // the real change time\nmeasureSwitch(r3, \"17:20:17\", \"203.0.113.11\") ⇒ {\"lastOld\":\"17:20:21\",\"firstNew\":\"17:20:26\",\"delayS\":9}</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. checkDelegation() — R4, R6 <span class=\"bi-diem\">3 marks</span></h3>\n<p>The delegation part of kiem-dns.sh as a function — so it can run in CI or a cron job and print what the script printed during incident A (the bash script leaves a stray space before each \")\"; your lines must not).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Parent NS = the NS targets in <code>parent</code>, sorted; glue = its A lines. First line: <code>\"[OK]   delegation at the parent: \" + names joined by one space</code>.</li>\n  <li>Then one line per parent NS, in that order: no glue ⇒ <code>\"[FAIL] NS has no address at the parent\"</code>; serials[ip] present ⇒ <code>\"[OK]   NS IP answers, serial S\"</code>; else <code>\"[FAIL] NS IP does not answer\"</code>.</li>\n  <li>Then <code>\"[OK]   all name servers have the same serial\"</code> (at most one distinct serial among those that answered) or <code>\"[FAIL] serials differ: S1 S2 …\"</code> (in NS order); then <code>\"[OK]   child NS = parent NS\"</code> or <code>\"[FAIL] child NS (A B) != parent NS (C D)\"</code> with both lists sorted. Note the three spaces after [OK].</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>checkDelegation({ parent: r4Parent, child: r4Child, serials: {\"203.0.113.53\":\"2026110104\",\"203.0.113.55\":null} })\n⇒ [\"[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.\",\"[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104\",\"[FAIL] ns3.labflow.test. 203.0.113.55 does not answer\",\"[OK]   all name servers have the same serial\",\"[FAIL] child NS (ns1.labflow.test. ns2.labflow.test.) != parent NS (ns1.labflow.test. ns3.labflow.test.)\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. dsMatch() — R5 <span class=\"bi-diem\">2.5 marks</span></h3>\n<p>Compare what the parent publishes with what the zone's keys hash to. This is the one check that would have caught incident B before customers did.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Each line containing the word <code>DS</code> is one DS: after it come key tag, algorithm, digest type, then the digest — which dig may split with a space: join the remaining words and upper-case them. Return them as <code>parent</code> and <code>published</code>: <code>[{ keyTag, alg, digestType, digest }]</code>.</li>\n  <li><code>reason</code>: no DS at the parent ⇒ <code>\"no DS at parent (insecure)\"</code>; some parent DS equal (all four fields) to some published one ⇒ <code>\"ok\"</code>; else a shared key tag ⇒ <code>\"digest differs\"</code>; else <code>\"key tag differs\"</code>. <code>match</code> = reason is \"ok\".</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>dsMatch(r5Parent, r5Published).reason ⇒ \"key tag differs\"   // 50642 at the TLD, 30957 published</pre>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>delegationMap() — R1</td><td>2</td></tr><tr><td>2</td><td>ttlPlan(), measureSwitch(), negativeWait() — R2, R3</td><td>2.5</td></tr><tr><td>3</td><td>checkDelegation() — R4, R6</td><td>3</td></tr><tr><td>4</td><td>dsMatch() — R5</td><td>2.5</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Taking the child's NS TTL (86400) as the TTL of the delegation: the parent's copy (172800) is what resolvers keep after a referral.</li>\n  <li>Changing the IP right after lowering the TTL (lesson 3.3: 105 s of old answers).</li>\n  <li>Comparing DS digests as written: dig inserts a space inside long digests.</li>\n  <li>Fixing incident A in the zone file: the wrong NS list lives at the parent (the registrar).</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Press Submit. Every feature is graded by its own checks (visible ones on Run, hidden ones on Submit). Then paste the outputs into your Lab 3 report: the delegation map (R1), the plan next to the measured switch (R3), the checker lines before and after each fix (R4, R6) and the DS comparison (R5).</p>",
+      "problemHtmlVi": "<h1>Lab 3 — DNS của LabFlow: bộ công cụ đứng sau báo cáo</h1>\n<p class=\"bi-phu\">Lab chương 3 · phần 3 của dự án khoá · JavaScript, chấm trong trình duyệt · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Tình huống.</b> LabFlow ra mắt trang trạng thái, chuyển API sang máy biên Singapore và vượt qua hai sự cố DNS (bài Lab 3). Trưởng nhóm muốn các con số trong báo cáo đến từ mã, không phải nhìn bằng mắt: bản đồ ủy quyền, kế hoạch TTL đối chiếu với lần chuyển thật, quy tắc TTL âm cho tên mới, bộ kiểm ủy quyền và phép so DS. Mọi thứ dưới đây là output thật của phòng lab (lab/out/lab3-*), trừ chỗ ghi <i>dựng</i>.</p>\n<p>R1, ủy quyền như dig +trace thấy:</p><pre>.\t\t\t86400\tIN\tNS\ta.root-servers.test.\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 4 ms\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\nlabflow.test.\t\t172800\tIN\tNS\tns2.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\n;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\nlabflow.test.\t\t86400\tIN\tNS\tns2.labflow.test.\nlabflow.test.\t\t86400\tIN\tNS\tns1.labflow.test.\n;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms</pre>\n<p>R3, lần chuyển: hạ TTL lúc 17:18:12, đổi IP lúc 17:20:17; laptop hỏi 5 s một lần:</p><pre>17:18:10  TTL 120  203.0.113.10\n17:18:15  TTL 115  203.0.113.10\n17:18:20  TTL 110  203.0.113.10\n17:18:25  TTL 105  203.0.113.10\n17:18:30  TTL 100  203.0.113.10\n17:18:35  TTL 95   203.0.113.10\n17:18:40  TTL 90   203.0.113.10\n17:18:45  TTL 85   203.0.113.10\n17:18:50  TTL 80   203.0.113.10\n17:18:55  TTL 75   203.0.113.10\n17:19:00  TTL 70   203.0.113.10\n17:19:05  TTL 65   203.0.113.10\n17:19:10  TTL 60   203.0.113.10\n17:19:15  TTL 55   203.0.113.10\n17:19:20  TTL 50   203.0.113.10\n17:19:25  TTL 45   203.0.113.10\n17:19:30  TTL 40   203.0.113.10\n17:19:35  TTL 35   203.0.113.10\n17:19:40  TTL 30   203.0.113.10\n17:19:45  TTL 25   203.0.113.10\n17:19:50  TTL 19   203.0.113.10\n17:19:56  TTL 14   203.0.113.10\n17:20:01  TTL 9    203.0.113.10\n17:20:06  TTL 4    203.0.113.10\n17:20:11  TTL 10   203.0.113.10\n17:20:16  TTL 5    203.0.113.10\n17:20:21  TTL 0    203.0.113.10\n17:20:26  TTL 10   203.0.113.11\n17:20:31  TTL 5    203.0.113.11\n17:20:36  TTL 0    203.0.113.11\n17:20:41  TTL 10   203.0.113.11\n17:20:46  TTL 5    203.0.113.11\n17:20:51  TTL 0    203.0.113.11\n17:20:56  TTL 10   203.0.113.11</pre>\n<p>R4, sự cố A (sau <code>su-co-a.sh</code> trên nfi-tld):</p><pre>$ dig +noall +authority +additional labflow.test NS @192.0.2.20 +norecurse\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns3.labflow.test.\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns3.labflow.test.\t172800\tIN\tA\t203.0.113.55\n$ dig +short NS labflow.test @203.0.113.53\nns1.labflow.test.\nns2.labflow.test.\n$ dig +time=2 +tries=1 labflow.test SOA @203.0.113.55 | grep -E 'timed out|no servers'\n;; communications error to 203.0.113.55#53: timed out\n;; no servers could be reached\n$ ./kiem-dns.sh\n[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.\n[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104\n[FAIL] ns3.labflow.test. 203.0.113.55 does not answer\n[OK]   all name servers have the same serial\n[FAIL] child NS (ns1.labflow.test. ns2.labflow.test. ) != parent NS (ns1.labflow.test. ns3.labflow.test. )\n[OK]   DNSSEC: fully validated (delv)\n[OK]   signatures expire in 30.0 days</pre>\n<p>R5, sự cố B (sau <code>su-co-b.sh</code> trên nfi-ns):</p><pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 45489\n; EDE: 6 (DNSSEC Bogus): (validation failure &lt;labflow.test. A IN&gt;: no keys have a DS with algorithm ECDSAP256SHA256 from 203.0.113.54 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +noall +answer labflow.test DS @192.0.2.20\nlabflow.test.\t\t3600\tIN\tDS\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | dnssec-dsfromkey -a SHA-256 -f - labflow.test\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\n$ ./kiem-dns.sh | grep -E 'DNSSEC|FAIL'\n[FAIL] DNSSEC: ;; resolution failed: failure</pre>\n<h3>Chức năng chính</h3>\n<ul>\n  <li><code>delegationMap(traceText)</code> — ai giữ từng cấp, TTL của từng referral, câu trả lời cuối (R1).</li>\n  <li><code>ttlPlan(o)</code> + <code>measureSwitch(pollText, changeAt, newIp)</code> + <code>negativeWait(soaLine, queriedAt, createdAt)</code> — lên kế hoạch chuyển, đo nó, và quy tắc TTL âm (R2, R3).</li>\n  <li><code>checkDelegation({ parent, child, serials })</code> — các phép kiểm ủy quyền của kiem-dns.sh (R4, R6).</li>\n  <li><code>dsMatch(parentText, publishedText)</code> — vùng cha có bảo lãnh đúng khoá đang công bố không? (R5)</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Một tệp <code>answer.js</code>, mọi hàm ở cấp cao nhất (máy chấm gọi trực tiếp từng hàm). Được viết hàm phụ — dùng lại code của bạn từ các bài 3.1–3.5.</li>\n  <li>JavaScript thuần, không thư viện. Trả về giá trị, đừng in. Không sửa các đối số. Thời gian là chuỗi \"HH:MM:SS\" trong một ngày.</li>\n  <li>Mỗi hàm được chấm bằng đầu vào riêng, nên lỗi ở hàm này không làm mất điểm hàm khác.</li>\n</ul>\n<h2>2. Tệp</h2>\n<pre>answer.js        delegationMap · ttlPlan · measureSwitch · negativeWait · checkDelegation · dsMatch</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Inputs</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>traceText</code></td><td>string</td><td>output của dig +trace +nodnssec (các bản ghi, rồi \";; Received … from IP#53(TÊN) in N ms\" sau mỗi khối)</td></tr><tr><td><code>o (ttlPlan)</code></td><td>{ oldTtl, newTtl, maxStale, lowerAt, safety? }</td><td>R3: 120, 10, 10, \"17:18:12\", 5</td></tr><tr><td><code>pollText</code></td><td>string</td><td>các dòng \"HH:MM:SS  TTL n  ip\" (lab/out/lab3-r3)</td></tr><tr><td><code>parent / child / serials</code></td><td>string / string / { ip: serial | null }</td><td>parent = dig +noall +authority +additional NS @TLD; child = dig +short NS @máy chủ đầu tiên trả lời; serials = serial SOA theo IP (null = không trả lời)</td></tr><tr><td><code>parentText / publishedText</code></td><td>string / string</td><td>dig +noall +answer DS @TLD / output dnssec-dsfromkey (mỗi bên một hoặc nhiều dòng DS)</td></tr></tbody></table>\n<p><b>Outputs</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>delegationMap</code></td><td>{ levels: [{ zone, ttl, servers, from, ms }], answer: { from, records } | null }</td><td>mỗi khối có dòng NS là một cấp; answer = các bản ghi không phải NS của khối cuối, dạng \"tên TYPE data\"</td></tr><tr><td><code>ttlPlan</code></td><td>{ changeAt, worstStale, ok, keepOldUntil }</td><td>thời gian dạng \"HH:MM:SS\"</td></tr><tr><td><code>measureSwitch / negativeWait</code></td><td>{ lastOld, firstNew, delayS } / { negTtl, visibleFrom }</td><td>null khi không thấy</td></tr><tr><td><code>checkDelegation</code></td><td>[lines]</td><td>\"[OK]   …\" / \"[FAIL] …\" theo thứ tự của kiem-dns.sh</td></tr><tr><td><code>dsMatch</code></td><td>{ match, reason, parent, published }</td><td>reason \"ok\" | \"digest differs\" | \"key tag differs\" | \"no DS at parent (insecure)\"</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre># R4 — the parent and the child disagree (lab/out/lab3-r4-laptop)\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns3.labflow.test.\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns3.labflow.test.\t172800\tIN\tA\t203.0.113.55\n# child: dig +short NS labflow.test @203.0.113.53\nns1.labflow.test.\nns2.labflow.test.\n# serials: {\"203.0.113.53\":\"2026110104\",\"203.0.113.55\":null}\n\n# R5 — DS at the parent vs DS computed from the published DNSKEY (lab/out/lab3-r5-laptop)\nlabflow.test.\t\t3600\tIN\tDS\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185</pre>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. delegationMap() — R1 <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Biến một +trace thành bản đồ ủy quyền của báo cáo: mỗi referral một cấp, kèm TTL mà vùng cha đưa, và câu trả lời cuối.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Một khối = các dòng bản ghi đứng trước dòng <code>;; Received … from IP#53(TÊN) in N ms</code>; <code>from</code> = chữ trong ngoặc tròn, <code>ms</code> = N. Các dòng khác bắt đầu bằng \";\" và dòng trống bỏ qua.</li>\n  <li>Khối có dòng NS cho một cấp: <code>zone</code> = tên chủ của dòng NS đầu, <code>ttl</code> = TTL của nó (số), <code>servers</code> = các đích NS đã sắp xếp. Khối không có NS không cho cấp nào.</li>\n  <li><code>answer</code>: các dòng không phải NS của khối <b>cuối</b> dạng <code>\"tên TYPE data\"</code> (các chữ data nối bằng một dấu cách), kèm <code>from</code> của khối đó; <code>null</code> nếu không có.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>delegationMap(r1).levels.map(l =&gt; l.zone + \" \" + l.ttl)\n⇒ [\". 86400\", \"test. 172800\", \"labflow.test. 172800\", \"labflow.test. 86400\"]   // parent copy 2 days, child copy 1 day</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. ttlPlan(), measureSwitch(), negativeWait() — R2, R3 <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p>Lên kế hoạch chuyển API theo quy tắc \"độ trễ xấu nhất = TTL đang trong cache lúc đổi\", đối chiếu với lượt hỏi thật, và tính khi nào một resolver đã hỏi quá sớm thấy được tên status mới.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>ttlPlan(o)</code>: <code>changeAt</code> = lowerAt + oldTtl + safety (mặc định 0); <code>worstStale</code> = newTtl; <code>ok</code> = newTtl ≤ maxStale; <code>keepOldUntil</code> = changeAt + newTtl (máy cũ phải còn trả lời tới lúc đó).</li>\n  <li><code>measureSwitch(pollText, changeAt, newIp)</code>: trong các lượt hỏi từ changeAt trở đi, <code>firstNew</code> = lượt đầu thấy newIp, <code>lastOld</code> = lượt cuối trước nó thấy IP khác, <code>delayS</code> = firstNew − changeAt tính bằng giây (đều null khi không thấy).</li>\n  <li><code>negativeWait(soaLine, queriedAt, createdAt)</code>: negTtl = min(TTL của bản ghi SOA, minimum của SOA); tên bị hỏi trước khi tạo sẽ thấy được lúc max(createdAt, queriedAt + negTtl + 1); hỏi sau khi tạo ⇒ thấy ngay lúc queriedAt.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>ttlPlan({ oldTtl: 120, newTtl: 10, maxStale: 10, lowerAt: \"17:18:12\", safety: 5 }).changeAt ⇒ \"17:20:17\"   // the real change time\nmeasureSwitch(r3, \"17:20:17\", \"203.0.113.11\") ⇒ {\"lastOld\":\"17:20:21\",\"firstNew\":\"17:20:26\",\"delayS\":9}</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. checkDelegation() — R4, R6 <span class=\"bi-diem\">3 điểm</span></h3>\n<p>Phần kiểm ủy quyền của kiem-dns.sh viết thành hàm — để chạy trong CI hay cron và in đúng những gì script đã in trong sự cố A (script bash để thừa một dấu cách trước mỗi \")\"; dòng của bạn thì không).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>NS ở vùng cha = các đích NS trong <code>parent</code>, đã sắp xếp; glue = các dòng A của nó. Dòng đầu: <code>\"[OK]   delegation at the parent: \" + các tên nối bằng một dấu cách</code>.</li>\n  <li>Rồi mỗi NS của vùng cha một dòng, theo thứ tự đó: không có glue ⇒ <code>\"[FAIL] NS has no address at the parent\"</code>; có serials[ip] ⇒ <code>\"[OK]   NS IP answers, serial S\"</code>; ngược lại <code>\"[FAIL] NS IP does not answer\"</code>.</li>\n  <li>Rồi <code>\"[OK]   all name servers have the same serial\"</code> (tối đa một serial khác nhau trong số máy đã trả lời) hoặc <code>\"[FAIL] serials differ: S1 S2 …\"</code> (theo thứ tự NS); rồi <code>\"[OK]   child NS = parent NS\"</code> hoặc <code>\"[FAIL] child NS (A B) != parent NS (C D)\"</code> với cả hai danh sách đã sắp xếp. Để ý ba dấu cách sau [OK].</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>checkDelegation({ parent: r4Parent, child: r4Child, serials: {\"203.0.113.53\":\"2026110104\",\"203.0.113.55\":null} })\n⇒ [\"[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.\",\"[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104\",\"[FAIL] ns3.labflow.test. 203.0.113.55 does not answer\",\"[OK]   all name servers have the same serial\",\"[FAIL] child NS (ns1.labflow.test. ns2.labflow.test.) != parent NS (ns1.labflow.test. ns3.labflow.test.)\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. dsMatch() — R5 <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p>So thứ vùng cha công bố với băm từ các khoá của vùng. Đây là phép kiểm duy nhất bắt được sự cố B trước khi khách hàng phát hiện.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi dòng có chữ <code>DS</code> là một DS: sau nó là key tag, thuật toán, loại digest, rồi digest — mà dig có thể tách bằng dấu cách: nối các chữ còn lại và viết hoa. Trả chúng ra ở <code>parent</code> và <code>published</code>: <code>[{ keyTag, alg, digestType, digest }]</code>.</li>\n  <li><code>reason</code>: vùng cha không có DS ⇒ <code>\"no DS at parent (insecure)\"</code>; có DS của vùng cha bằng (cả bốn trường) một DS đang công bố ⇒ <code>\"ok\"</code>; ngược lại có key tag trùng ⇒ <code>\"digest differs\"</code>; còn lại <code>\"key tag differs\"</code>. <code>match</code> = reason là \"ok\".</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>dsMatch(r5Parent, r5Published).reason ⇒ \"key tag differs\"   // 50642 at the TLD, 30957 published</pre>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>delegationMap() — R1</td><td>2</td></tr><tr><td>2</td><td>ttlPlan(), measureSwitch(), negativeWait() — R2, R3</td><td>2.5</td></tr><tr><td>3</td><td>checkDelegation() — R4, R6</td><td>3</td></tr><tr><td>4</td><td>dsMatch() — R5</td><td>2.5</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Lấy TTL NS của vùng con (86400) làm TTL của ủy quyền: bản của vùng cha (172800) mới là thứ resolver giữ sau một referral.</li>\n  <li>Đổi IP ngay sau khi hạ TTL (bài 3.3: 105 s trả lời cũ).</li>\n  <li>So digest DS như được in: dig chèn dấu cách vào giữa digest dài.</li>\n  <li>Sửa sự cố A trong tệp vùng: danh sách NS sai nằm ở vùng cha (nhà đăng ký).</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Bấm Nộp. Mỗi chức năng được chấm bằng các kiểm riêng (kiểm hiện khi Chạy, kiểm ẩn khi Nộp). Rồi dán output vào báo cáo Lab 3: bản đồ ủy quyền (R1), kế hoạch đặt cạnh lần chuyển đo được (R3), các dòng của bộ kiểm trước và sau mỗi lần sửa (R4, R6) và phép so DS (R5).</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One file, <code>answer.js</code>, all functions at top level (the grader calls each one directly). Helpers are allowed — reuse your code from exercises 3.1–3.5.|||Một tệp <code>answer.js</code>, mọi hàm ở cấp cao nhất (máy chấm gọi trực tiếp từng hàm). Được viết hàm phụ — dùng lại code của bạn từ các bài 3.1–3.5.\nPlain JavaScript, no libraries. Return values, do not print. Do not modify the arguments. Times are \"HH:MM:SS\" strings of one day.|||JavaScript thuần, không thư viện. Trả về giá trị, đừng in. Không sửa các đối số. Thời gian là chuỗi \"HH:MM:SS\" trong một ngày.\nEach function is graded on its own inputs, so a mistake in one does not cost the others.|||Mỗi hàm được chấm bằng đầu vào riêng, nên lỗi ở hàm này không làm mất điểm hàm khác.",
+      "examplesJson": [
+        {
+          "input": "dsMatch(r5Parent, r5Published)   // incident B, real lines|||dsMatch(r5Parent, r5Published)   // sự cố B, dòng thật",
+          "output": "{\"match\":false,\"reason\":\"key tag differs\"} …",
+          "explanation": "The TLD still publishes the DS of the old key (50642); the zone now signs with 30957 — validators find no key matching the DS and answer SERVFAIL (EDE 6).|||TLD vẫn công bố DS của khoá cũ (50642); vùng giờ ký bằng 30957 — bộ kiểm không tìm thấy khoá khớp DS và trả SERVFAIL (EDE 6)."
+        }
+      ],
+      "hintsJson": [
+        "Hint 1 (after 15 minutes): reuse parseZone-style splitting — every record line is \"name ttl IN TYPE data…\"; the word at index 3 is the type.|||Gợi ý 1 (sau 15 phút): dùng lại cách tách kiểu parseZone — mọi dòng bản ghi là \"tên ttl IN TYPE data…\"; chữ ở vị trí 3 là loại.",
+        "Hint 2 (after 40 minutes): write hms(\"HH:MM:SS\") ⇒ seconds and its inverse once; ttlPlan, measureSwitch and negativeWait are then a few lines each.|||Gợi ý 2 (sau 40 phút): viết hms(\"HH:MM:SS\") ⇒ giây và hàm ngược một lần; ttlPlan, measureSwitch và negativeWait khi đó chỉ vài dòng mỗi hàm.",
+        "Hint 3 (after 60 minutes): in checkDelegation, build every list first (parent NS, glue, child NS), then produce the lines in order.|||Gợi ý 3 (sau 60 phút): trong checkDelegation, dựng mọi danh sách trước (NS vùng cha, glue, NS vùng con), rồi mới in các dòng theo thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * Lab 3 — LabFlow's DNS. Six functions, graded separately (see the brief).\n * Helpers are welcome: paste your code from exercises 3.1–3.5.\n */\nfunction delegationMap(traceText) {\n  // ⇒ { levels: [{ zone, ttl, servers, from, ms }], answer: { from, records } | null }\n  return { levels: [], answer: null };\n}\n\nfunction ttlPlan(o) {\n  // ⇒ { changeAt, worstStale, ok, keepOldUntil }\n  return { changeAt: o.lowerAt, worstStale: o.newTtl, ok: true, keepOldUntil: o.lowerAt };\n}\n\nfunction measureSwitch(pollText, changeAt, newIp) {\n  // ⇒ { lastOld, firstNew, delayS }\n  return { lastOld: null, firstNew: null, delayS: null };\n}\n\nfunction negativeWait(soaLine, queriedAt, createdAt) {\n  // ⇒ { negTtl, visibleFrom }\n  return { negTtl: 0, visibleFrom: createdAt };\n}\n\nfunction checkDelegation(d) {\n  // ⇒ [\"[OK]   delegation at the parent: …\", …]\n  return [];\n}\n\nfunction dsMatch(parentText, publishedText) {\n  // ⇒ { match, reason, parent, published }\n  return { match: false, reason: 'key tag differs', parent: [], published: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction delegationMap(text) {\n  var blocks = [], cur = [];\n  String(text).split('\\n').forEach(function (line) {\n    var r = /^;; Received \\d+ bytes from [^(]*\\(([^)]*)\\) in (\\d+) ms/.exec(line);\n    if (r) { blocks.push({ from: r[1], ms: Number(r[2]), lines: cur }); cur = []; return; }\n    if (line.trim() && line[0] !== ';') cur.push(line.trim().split(/\\s+/));\n  });\n  var levels = [];\n  blocks.forEach(function (b) {\n    var ns = b.lines.filter(function (w) { return w[3] === 'NS'; });\n    if (!ns.length) return;\n    levels.push({ zone: ns[0][0], ttl: Number(ns[0][1]), servers: ns.map(function (w) { return w[4]; }).sort(), from: b.from, ms: b.ms });\n  });\n  var last = blocks[blocks.length - 1];\n  var rest = last ? last.lines.filter(function (w) { return w[3] !== 'NS'; }) : [];\n  return {\n    levels: levels,\n    answer: rest.length ? { from: last.from, records: rest.map(function (w) { return w[0] + ' ' + w[3] + ' ' + w.slice(4).join(' '); }) } : null,\n  };\n}\n\nvar hms = function (s) { var p = s.split(':').map(Number); return p[0] * 3600 + p[1] * 60 + p[2]; };\n\nvar fmt = function (n) { var p = function (x) { return (x < 10 ? '0' : '') + x; }; return p(Math.floor(n / 3600) % 24) + ':' + p(Math.floor(n / 60) % 60) + ':' + p(n % 60); };\n\nfunction ttlPlan(o) {\n  var change = hms(o.lowerAt) + o.oldTtl + (o.safety || 0);\n  return { changeAt: fmt(change), worstStale: o.newTtl, ok: o.newTtl <= o.maxStale, keepOldUntil: fmt(change + o.newTtl) };\n}\n\nfunction measureSwitch(text, changeAt, newIp) {\n  var polls = String(text).split('\\n').map(function (l) { return l.trim().split(/\\s+/); }).filter(function (w) { return /^\\d\\d:\\d\\d:\\d\\d$/.test(w[0]); })\n    .map(function (w) { return { at: w[0], ip: w[w.length - 1] }; });\n  var c = hms(changeAt), first = null, lastOld = null;\n  polls.forEach(function (p) {\n    if (hms(p.at) < c || first) return;\n    if (p.ip === newIp) first = p; else lastOld = p;\n  });\n  return { lastOld: lastOld ? lastOld.at : null, firstNew: first ? first.at : null, delayS: first ? hms(first.at) - c : null };\n}\n\nfunction negativeWait(soaLine, queriedAt, createdAt) {\n  var w = soaLine.trim().split(/\\s+/);\n  var neg = Math.min(Number(w[1]), Number(w[w.length - 1]));\n  var q = hms(queriedAt), c = hms(createdAt);\n  return { negTtl: neg, visibleFrom: fmt(q >= c ? q : Math.max(c, q + neg + 1)) };\n}\n\nfunction checkDelegation(d) {\n  var rows = String(d.parent).split('\\n').map(function (l) { return l.trim().split(/\\s+/); });\n  var parentNs = rows.filter(function (w) { return w[3] === 'NS'; }).map(function (w) { return w[4]; }).sort();\n  var glue = {};\n  rows.forEach(function (w) { if (w[3] === 'A') glue[w[0]] = w[4]; });\n  var out = ['[OK]   delegation at the parent: ' + parentNs.join(' ')];\n  var serials = [];\n  parentNs.forEach(function (ns) {\n    var ip = glue[ns];\n    if (!ip) { out.push('[FAIL] ' + ns + ' has no address at the parent'); return; }\n    var s = d.serials[ip];\n    if (s) { out.push('[OK]   ' + ns + ' ' + ip + ' answers, serial ' + s); serials.push(s); }\n    else out.push('[FAIL] ' + ns + ' ' + ip + ' does not answer');\n  });\n  var uniq = serials.filter(function (s, i) { return serials.indexOf(s) === i; });\n  out.push(uniq.length <= 1 ? '[OK]   all name servers have the same serial' : '[FAIL] serials differ: ' + serials.join(' '));\n  var childNs = String(d.child).split('\\n').map(function (l) { return l.trim(); }).filter(Boolean).sort();\n  out.push(childNs.join(' ') === parentNs.join(' ') ? '[OK]   child NS = parent NS' : '[FAIL] child NS (' + childNs.join(' ') + ') != parent NS (' + parentNs.join(' ') + ')');\n  return out;\n}\n\nfunction dsMatch(parentText, publishedText) {\n  var parse = function (text) {\n    return String(text).split('\\n').map(function (l) { return l.trim().split(/\\s+/); }).filter(function (w) { return w.indexOf('DS') >= 0; }).map(function (w) {\n      var i = w.indexOf('DS');\n      return { keyTag: Number(w[i + 1]), alg: Number(w[i + 2]), digestType: Number(w[i + 3]), digest: w.slice(i + 4).join('').toUpperCase() };\n    });\n  };\n  var p = parse(parentText), k = parse(publishedText);\n  var same = function (a, b) { return a.keyTag === b.keyTag && a.alg === b.alg && a.digestType === b.digestType && a.digest === b.digest; };\n  var reason;\n  if (!p.length) reason = 'no DS at parent (insecure)';\n  else if (p.some(function (a) { return k.some(function (b) { return same(a, b); }); })) reason = 'ok';\n  else if (p.some(function (a) { return k.some(function (b) { return a.keyTag === b.keyTag; }); })) reason = 'digest differs';\n  else reason = 'key tag differs';\n  return { match: reason === 'ok', reason: reason, parent: p, published: k };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The chapter in one toolkit. R1 shows that each level knows one level down and that the parent's copy of the NS set (172800 s) outlives the child's (86400 s) — why incident A hurts for days. R3 turns the TTL rule into a schedule that matches the real change time to the second, and the measured 9 s stays within the 10 s promised. The checker reproduces the real kiem-dns.sh lines of incident A, and dsMatch names incident B in one word: the parent vouches for key 50642 while the zone publishes 30957.</p>",
+      "solutionExplanationHtmlVi": "<p>Cả chương trong một bộ công cụ. R1 cho thấy mỗi cấp biết một cấp bên dưới và bản NS của vùng cha (172800 s) sống lâu hơn bản của vùng con (86400 s) — vì sao sự cố A gây hại nhiều ngày. R3 biến quy tắc TTL thành lịch khớp giờ đổi thật tới từng giây, và 9 s đo được nằm trong 10 s đã hứa. Bộ kiểm tái hiện đúng các dòng kiem-dns.sh thật của sự cố A, và dsMatch gọi tên sự cố B trong một chữ: vùng cha bảo lãnh khoá 50642 trong khi vùng công bố 30957.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "delegationMap(the real R1 trace of www.labflow.test)",
+              "vi": "delegationMap(trace R1 thật của www.labflow.test)"
+            },
+            "goi": "delegationMap(\".\\t\\t\\t86400\\tIN\\tNS\\ta.root-servers.test.\\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 4 ms\\ntest.\\t\\t\\t172800\\tIN\\tNS\\tns1.nic.test.\\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\n;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms\\nwww.labflow.test.\\t300\\tIN\\tCNAME\\tlabflow.test.\\nlabflow.test.\\t\\t300\\tIN\\tA\\t203.0.113.10\\nlabflow.test.\\t\\t86400\\tIN\\tNS\\tns2.labflow.test.\\nlabflow.test.\\t\\t86400\\tIN\\tNS\\tns1.labflow.test.\\n;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms\")",
+            "mongDoi": {
+              "levels": [
+                {
+                  "zone": ".",
+                  "ttl": 86400,
+                  "servers": [
+                    "a.root-servers.test."
+                  ],
+                  "from": "198.51.100.1",
+                  "ms": 4
+                },
+                {
+                  "zone": "test.",
+                  "ttl": 172800,
+                  "servers": [
+                    "ns1.nic.test."
+                  ],
+                  "from": "a.root-servers.test",
+                  "ms": 0
+                },
+                {
+                  "zone": "labflow.test.",
+                  "ttl": 172800,
+                  "servers": [
+                    "ns1.labflow.test.",
+                    "ns2.labflow.test."
+                  ],
+                  "from": "ns1.nic.test",
+                  "ms": 0
+                },
+                {
+                  "zone": "labflow.test.",
+                  "ttl": 86400,
+                  "servers": [
+                    "ns1.labflow.test.",
+                    "ns2.labflow.test."
+                  ],
+                  "from": "ns2.labflow.test",
+                  "ms": 0
+                }
+              ],
+              "answer": {
+                "from": "ns2.labflow.test",
+                "records": [
+                  "www.labflow.test. CNAME labflow.test.",
+                  "labflow.test. A 203.0.113.10"
+                ]
+              }
+            },
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "The four levels and their TTLs",
+              "vi": "Bốn cấp và TTL của chúng"
+            },
+            "goi": "delegationMap(\".\\t\\t\\t86400\\tIN\\tNS\\ta.root-servers.test.\\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 4 ms\\ntest.\\t\\t\\t172800\\tIN\\tNS\\tns1.nic.test.\\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\n;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms\\nwww.labflow.test.\\t300\\tIN\\tCNAME\\tlabflow.test.\\nlabflow.test.\\t\\t300\\tIN\\tA\\t203.0.113.10\\nlabflow.test.\\t\\t86400\\tIN\\tNS\\tns2.labflow.test.\\nlabflow.test.\\t\\t86400\\tIN\\tNS\\tns1.labflow.test.\\n;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms\").levels.map(function (l) { return l.zone + ' ' + l.ttl; })",
+            "mongDoi": [
+              ". 86400",
+              "test. 172800",
+              "labflow.test. 172800",
+              "labflow.test. 86400"
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the real, cut static.labflow.test trace (first block has no records)",
+              "vi": "Ẩn: trace static.labflow.test thật đã bị cắt (khối đầu không có bản ghi)"
+            },
+            "goi": "delegationMap(\";; Received 114 bytes from 192.0.2.10#53(a.root-servers.test) in 1 ms\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\n;; Received 144 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms\\nstatic.labflow.test.\\t300\\tIN\\tCNAME\\tlabflow.cdn.test.\\n;; Received 102 bytes from 203.0.113.53#53(ns1.labflow.test) in 0 ms\")",
+            "mongDoi": {
+              "levels": [
+                {
+                  "zone": "labflow.test.",
+                  "ttl": 172800,
+                  "servers": [
+                    "ns1.labflow.test.",
+                    "ns2.labflow.test."
+                  ],
+                  "from": "ns1.nic.test",
+                  "ms": 0
+                }
+              ],
+              "answer": {
+                "from": "ns1.labflow.test",
+                "records": [
+                  "static.labflow.test. CNAME labflow.cdn.test."
+                ]
+              }
+            },
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the real Internet — cuongthai.com from the root",
+              "vi": "Ẩn: Internet thật — cuongthai.com từ máy chủ gốc"
+            },
+            "goi": "delegationMap(\".\\t\\t\\t555\\tIN\\tNS\\ta.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tb.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tc.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\td.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\te.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tf.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tg.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\th.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\ti.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tj.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tk.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tl.root-servers.net.\\n.\\t\\t\\t555\\tIN\\tNS\\tm.root-servers.net.\\n;; Received 420 bytes from 192.168.65.7#53(192.168.65.7) in 3 ms\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tl.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tg.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tb.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tm.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tc.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tk.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tj.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\td.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\th.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\tf.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\ti.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\te.gtld-servers.net.\\ncom.\\t\\t\\t172800\\tIN\\tNS\\ta.gtld-servers.net.\\n;; Received 866 bytes from 192.36.148.17#53(i.root-servers.net) in 206 ms\\ncuongthai.com.\\t\\t172800\\tIN\\tNS\\tmeilani.ns.cloudflare.com.\\ncuongthai.com.\\t\\t172800\\tIN\\tNS\\tkyrie.ns.cloudflare.com.\\n;; Received 362 bytes from 192.52.178.30#53(k.gtld-servers.net) in 225 ms\\ncuongthai.com.\\t\\t300\\tIN\\tA\\t160.187.1.208\\n;; Received 58 bytes from 108.162.195.38#53(kyrie.ns.cloudflare.com) in 43 ms\")",
+            "mongDoi": {
+              "levels": [
+                {
+                  "zone": ".",
+                  "ttl": 555,
+                  "servers": [
+                    "a.root-servers.net.",
+                    "b.root-servers.net.",
+                    "c.root-servers.net.",
+                    "d.root-servers.net.",
+                    "e.root-servers.net.",
+                    "f.root-servers.net.",
+                    "g.root-servers.net.",
+                    "h.root-servers.net.",
+                    "i.root-servers.net.",
+                    "j.root-servers.net.",
+                    "k.root-servers.net.",
+                    "l.root-servers.net.",
+                    "m.root-servers.net."
+                  ],
+                  "from": "192.168.65.7",
+                  "ms": 3
+                },
+                {
+                  "zone": "com.",
+                  "ttl": 172800,
+                  "servers": [
+                    "a.gtld-servers.net.",
+                    "b.gtld-servers.net.",
+                    "c.gtld-servers.net.",
+                    "d.gtld-servers.net.",
+                    "e.gtld-servers.net.",
+                    "f.gtld-servers.net.",
+                    "g.gtld-servers.net.",
+                    "h.gtld-servers.net.",
+                    "i.gtld-servers.net.",
+                    "j.gtld-servers.net.",
+                    "k.gtld-servers.net.",
+                    "l.gtld-servers.net.",
+                    "m.gtld-servers.net."
+                  ],
+                  "from": "i.root-servers.net",
+                  "ms": 206
+                },
+                {
+                  "zone": "cuongthai.com.",
+                  "ttl": 172800,
+                  "servers": [
+                    "kyrie.ns.cloudflare.com.",
+                    "meilani.ns.cloudflare.com."
+                  ],
+                  "from": "k.gtld-servers.net",
+                  "ms": 225
+                }
+              ],
+              "answer": {
+                "from": "kyrie.ns.cloudflare.com",
+                "records": [
+                  "cuongthai.com. A 160.187.1.208"
+                ]
+              }
+            },
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the expired domain — the TLD answers with its SOA",
+              "vi": "Ẩn: tên miền hết hạn — TLD trả lời bằng SOA của nó"
+            },
+            "goi": "delegationMap(\";; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 0 ms\\ntest.\\t\\t\\t172800\\tIN\\tNS\\tns1.nic.test.\\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\\ntest.\\t\\t\\t900\\tIN\\tSOA\\tns1.nic.test. hostmaster.nic.test. 2026110104 1800 900 604800 900\\n;; Received 128 bytes from 192.0.2.20#53(ns1.nic.test) in 2 ms\")",
+            "mongDoi": {
+              "levels": [
+                {
+                  "zone": "test.",
+                  "ttl": 172800,
+                  "servers": [
+                    "ns1.nic.test."
+                  ],
+                  "from": "a.root-servers.test",
+                  "ms": 0
+                }
+              ],
+              "answer": {
+                "from": "ns1.nic.test",
+                "records": [
+                  "test. SOA ns1.nic.test. hostmaster.nic.test. 2026110104 1800 900 604800 900"
+                ]
+              }
+            },
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "ttlPlan — the real R3 numbers",
+              "vi": "ttlPlan — các số R3 thật"
+            },
+            "goi": "ttlPlan({\"oldTtl\":120,\"newTtl\":10,\"maxStale\":10,\"lowerAt\":\"17:18:12\",\"safety\":5})",
+            "mongDoi": {
+              "changeAt": "17:20:17",
+              "worstStale": 10,
+              "ok": true,
+              "keepOldUntil": "17:20:27"
+            },
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "measureSwitch — the real R3 poll",
+              "vi": "measureSwitch — lượt hỏi R3 thật"
+            },
+            "goi": "measureSwitch(\"17:18:10  TTL 120  203.0.113.10\\n17:18:15  TTL 115  203.0.113.10\\n17:18:20  TTL 110  203.0.113.10\\n17:18:25  TTL 105  203.0.113.10\\n17:18:30  TTL 100  203.0.113.10\\n17:18:35  TTL 95   203.0.113.10\\n17:18:40  TTL 90   203.0.113.10\\n17:18:45  TTL 85   203.0.113.10\\n17:18:50  TTL 80   203.0.113.10\\n17:18:55  TTL 75   203.0.113.10\\n17:19:00  TTL 70   203.0.113.10\\n17:19:05  TTL 65   203.0.113.10\\n17:19:10  TTL 60   203.0.113.10\\n17:19:15  TTL 55   203.0.113.10\\n17:19:20  TTL 50   203.0.113.10\\n17:19:25  TTL 45   203.0.113.10\\n17:19:30  TTL 40   203.0.113.10\\n17:19:35  TTL 35   203.0.113.10\\n17:19:40  TTL 30   203.0.113.10\\n17:19:45  TTL 25   203.0.113.10\\n17:19:50  TTL 19   203.0.113.10\\n17:19:56  TTL 14   203.0.113.10\\n17:20:01  TTL 9    203.0.113.10\\n17:20:06  TTL 4    203.0.113.10\\n17:20:11  TTL 10   203.0.113.10\\n17:20:16  TTL 5    203.0.113.10\\n17:20:21  TTL 0    203.0.113.10\\n17:20:26  TTL 10   203.0.113.11\\n17:20:31  TTL 5    203.0.113.11\\n17:20:36  TTL 0    203.0.113.11\\n17:20:41  TTL 10   203.0.113.11\\n17:20:46  TTL 5    203.0.113.11\\n17:20:51  TTL 0    203.0.113.11\\n17:20:56  TTL 10   203.0.113.11\", \"17:20:17\", \"203.0.113.11\")",
+            "mongDoi": {
+              "lastOld": "17:20:21",
+              "firstNew": "17:20:26",
+              "delayS": 9
+            },
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "negativeWait — status.labflow.test asked 70 s before it was created",
+              "vi": "negativeWait — status.labflow.test bị hỏi 70 s trước khi tạo"
+            },
+            "goi": "negativeWait(\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110102 3600 600 1209600 300\", \"17:05:00\", \"17:06:10\")",
+            "mongDoi": {
+              "negTtl": 300,
+              "visibleFrom": "17:10:01"
+            },
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the wrong-order move of lesson 3.3 (real)",
+              "vi": "Ẩn: lần chuyển sai thứ tự của bài 3.3 (thật)"
+            },
+            "goi": "measureSwitch(\"16:10:46  TTL 120  203.0.113.10\\n16:11:01  TTL 105  203.0.113.10\\n16:11:16  TTL 90   203.0.113.10\\n16:11:31  TTL 75   203.0.113.10\\n16:11:46  TTL 60   203.0.113.10\\n16:12:01  TTL 45   203.0.113.10\\n16:12:16  TTL 30   203.0.113.10\\n16:12:32  TTL 14   203.0.113.10\\n16:12:47  TTL 10   203.0.113.11\\n16:13:02  TTL 10   203.0.113.11\\n16:13:17  TTL 10   203.0.113.10\\n16:13:32  TTL 10   203.0.113.10\\n16:13:47  TTL 10   203.0.113.10\", \"16:11:02\", \"203.0.113.11\")",
+            "mongDoi": {
+              "lastOld": "16:12:32",
+              "firstNew": "16:12:47",
+              "delayS": 105
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "ttlPlan({\"oldTtl\":3600,\"newTtl\":60,\"maxStale\":30,\"lowerAt\":\"21:30:00\"})",
+            "mongDoi": {
+              "changeAt": "22:30:00",
+              "worstStale": 60,
+              "ok": false,
+              "keepOldUntil": "22:31:00"
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "measureSwitch(\"17:18:10  TTL 120  203.0.113.10\\n17:18:15  TTL 115  203.0.113.10\\n17:18:20  TTL 110  203.0.113.10\\n17:18:25  TTL 105  203.0.113.10\\n17:18:30  TTL 100  203.0.113.10\\n17:18:35  TTL 95   203.0.113.10\\n17:18:40  TTL 90   203.0.113.10\\n17:18:45  TTL 85   203.0.113.10\\n17:18:50  TTL 80   203.0.113.10\\n17:18:55  TTL 75   203.0.113.10\\n17:19:00  TTL 70   203.0.113.10\\n17:19:05  TTL 65   203.0.113.10\\n17:19:10  TTL 60   203.0.113.10\\n17:19:15  TTL 55   203.0.113.10\\n17:19:20  TTL 50   203.0.113.10\\n17:19:25  TTL 45   203.0.113.10\\n17:19:30  TTL 40   203.0.113.10\\n17:19:35  TTL 35   203.0.113.10\\n17:19:40  TTL 30   203.0.113.10\\n17:19:45  TTL 25   203.0.113.10\\n17:19:50  TTL 19   203.0.113.10\\n17:19:56  TTL 14   203.0.113.10\\n17:20:01  TTL 9    203.0.113.10\\n17:20:06  TTL 4    203.0.113.10\\n17:20:11  TTL 10   203.0.113.10\\n17:20:16  TTL 5    203.0.113.10\\n17:20:21  TTL 0    203.0.113.10\\n17:20:26  TTL 10   203.0.113.11\\n17:20:31  TTL 5    203.0.113.11\\n17:20:36  TTL 0    203.0.113.11\\n17:20:41  TTL 10   203.0.113.11\\n17:20:46  TTL 5    203.0.113.11\\n17:20:51  TTL 0    203.0.113.11\\n17:20:56  TTL 10   203.0.113.11\", \"17:20:17\", \"203.0.113.99\")",
+            "mongDoi": {
+              "lastOld": "17:20:56",
+              "firstNew": null,
+              "delayS": null
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "negativeWait(\"cuongthai.com. 1800 IN SOA kyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800\", \"09:00:00\", \"09:00:30\")",
+            "mongDoi": {
+              "negTtl": 1800,
+              "visibleFrom": "09:30:01"
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "negativeWait(\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110102 3600 600 1209600 300\", \"17:10:00\", \"17:06:10\")",
+            "mongDoi": {
+              "negTtl": 300,
+              "visibleFrom": "17:10:00"
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "negativeWait(\"labflow.test.\\t\\t3600\\tIN\\tSOA\\tns1.labflow.test. hostmaster.labflow.test. 2026110102 3600 600 1209600 300\", \"17:00:00\", \"17:20:00\")",
+            "mongDoi": {
+              "negTtl": 300,
+              "visibleFrom": "17:20:00"
+            },
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Incident A — the real R4 inputs (same lines as kiem-dns.sh)",
+              "vi": "Sự cố A — đầu vào R4 thật (cùng các dòng kiem-dns.sh)"
+            },
+            "goi": "checkDelegation({\"parent\":\"labflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns3.labflow.test.\\nns1.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.53\\nns3.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.55\",\"child\":\"ns1.labflow.test.\\nns2.labflow.test.\",\"serials\":{\"203.0.113.53\":\"2026110104\",\"203.0.113.55\":null}})",
+            "mongDoi": [
+              "[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.",
+              "[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104",
+              "[FAIL] ns3.labflow.test. 203.0.113.55 does not answer",
+              "[OK]   all name servers have the same serial",
+              "[FAIL] child NS (ns1.labflow.test. ns2.labflow.test.) != parent NS (ns1.labflow.test. ns3.labflow.test.)"
+            ],
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: after the fix (values of lab3-r4-ok)",
+              "vi": "Ẩn: sau khi sửa (giá trị của lab3-r4-ok)"
+            },
+            "goi": "checkDelegation({\"parent\":\"labflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\nns1.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.53\\nns2.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.54\",\"child\":\"ns2.labflow.test.\\nns1.labflow.test.\",\"serials\":{\"203.0.113.53\":\"2026110104\",\"203.0.113.54\":\"2026110104\"}})",
+            "mongDoi": [
+              "[OK]   delegation at the parent: ns1.labflow.test. ns2.labflow.test.",
+              "[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110104",
+              "[OK]   ns2.labflow.test. 203.0.113.54 answers, serial 2026110104",
+              "[OK]   all name servers have the same serial",
+              "[OK]   child NS = parent NS"
+            ],
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: ns2 kept an old serial (constructed)",
+              "vi": "Ẩn: ns2 giữ serial cũ (dựng)"
+            },
+            "goi": "checkDelegation({\"parent\":\"labflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\nns1.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.53\\nns2.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.54\",\"child\":\"ns1.labflow.test.\\nns2.labflow.test.\",\"serials\":{\"203.0.113.53\":\"2026110102\",\"203.0.113.54\":\"2026110101\"}})",
+            "mongDoi": [
+              "[OK]   delegation at the parent: ns1.labflow.test. ns2.labflow.test.",
+              "[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110102",
+              "[OK]   ns2.labflow.test. 203.0.113.54 answers, serial 2026110101",
+              "[FAIL] serials differ: 2026110102 2026110101",
+              "[OK]   child NS = parent NS"
+            ],
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a third name server outside the zone, no glue (constructed)",
+              "vi": "Ẩn: máy chủ tên thứ ba ngoài vùng, không có glue (dựng)"
+            },
+            "goi": "checkDelegation({\"parent\":\"labflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns2.labflow.test.\\nns1.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.53\\nns2.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.54\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns.backup-dns.example.\",\"child\":\"ns1.labflow.test.\\nns2.labflow.test.\",\"serials\":{\"203.0.113.53\":\"2026110105\",\"203.0.113.54\":\"2026110105\"}})",
+            "mongDoi": [
+              "[OK]   delegation at the parent: ns.backup-dns.example. ns1.labflow.test. ns2.labflow.test.",
+              "[FAIL] ns.backup-dns.example. has no address at the parent",
+              "[OK]   ns1.labflow.test. 203.0.113.53 answers, serial 2026110105",
+              "[OK]   ns2.labflow.test. 203.0.113.54 answers, serial 2026110105",
+              "[OK]   all name servers have the same serial",
+              "[FAIL] child NS (ns1.labflow.test. ns2.labflow.test.) != parent NS (ns.backup-dns.example. ns1.labflow.test. ns2.labflow.test.)"
+            ],
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 19",
+              "vi": "Ca ẩn 19"
+            },
+            "goi": "checkDelegation({\"parent\":\"labflow.test.\\t\\t172800\\tIN\\tNS\\tns1.labflow.test.\\nlabflow.test.\\t\\t172800\\tIN\\tNS\\tns3.labflow.test.\\nns1.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.53\\nns3.labflow.test.\\t172800\\tIN\\tA\\t203.0.113.55\",\"child\":\"ns1.labflow.test.\\nns2.labflow.test.\",\"serials\":{\"203.0.113.53\":null,\"203.0.113.55\":null}})",
+            "mongDoi": [
+              "[OK]   delegation at the parent: ns1.labflow.test. ns3.labflow.test.",
+              "[FAIL] ns1.labflow.test. 203.0.113.53 does not answer",
+              "[FAIL] ns3.labflow.test. 203.0.113.55 does not answer",
+              "[OK]   all name servers have the same serial",
+              "[FAIL] child NS (ns1.labflow.test. ns2.labflow.test.) != parent NS (ns1.labflow.test. ns3.labflow.test.)"
+            ],
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Incident B — the real R5 DS lines",
+              "vi": "Sự cố B — các dòng DS R5 thật"
+            },
+            "goi": "dsMatch(\"labflow.test.\\t\\t3600\\tIN\\tDS\\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": false,
+              "reason": "key tag differs",
+              "parent": [
+                {
+                  "keyTag": 50642,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784231846F3"
+                }
+              ],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "The healthy chain of lesson 3.5 (digest split by a space)",
+              "vi": "Chuỗi lành của bài 3.5 (digest bị tách bằng dấu cách)"
+            },
+            "goi": "dsMatch(\"labflow.test.\\t\\t3600\\tIN\\tDS\\t30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": true,
+              "reason": "ok",
+              "parent": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the parent after the fix (real)",
+              "vi": "Ẩn: vùng cha sau khi sửa (thật)"
+            },
+            "goi": "dsMatch(\"labflow.test.\\t\\t3600\\tIN\\tDS\\t30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": true,
+              "reason": "ok",
+              "parent": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a correct rollover, old and new DS together (constructed)",
+              "vi": "Ẩn: đổi khoá đúng cách, DS cũ và mới cùng lúc (dựng)"
+            },
+            "goi": "dsMatch(\"labflow.test.\\t\\t3600\\tIN\\tDS\\t50642 13 2 B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784 231846F3\\nlabflow.test.\\t\\t3600\\tIN\\tDS\\t30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": true,
+              "reason": "ok",
+              "parent": [
+                {
+                  "keyTag": 50642,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "B3989261F7C3A3C93409C6BC4181F6C04021F885EAFA21413ECBE784231846F3"
+                },
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 24",
+              "vi": "Ca ẩn 24"
+            },
+            "goi": "dsMatch(\"labflow.test. IN DS 30957 13 2 0FA2C67AE930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": false,
+              "reason": "digest differs",
+              "parent": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C67AE930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 25",
+              "vi": "Ca ẩn 25"
+            },
+            "goi": "dsMatch(\"\", \"labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\")",
+            "mongDoi": {
+              "match": false,
+              "reason": "no DS at parent (insecure)",
+              "parent": [],
+              "published": [
+                {
+                  "keyTag": 30957,
+                  "alg": 13,
+                  "digestType": 2,
+                  "digest": "0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185"
+                }
+              ]
+            },
+            "an": true,
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. delegationMap() — R1",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. ttlPlan(), measureSwitch(), negativeWait() — R2, R3",
+            "diem": 2.5
+          },
+          {
+            "ma": "f3",
+            "ten": "3. checkDelegation() — R4, R6",
+            "diem": 3
+          },
+          {
+            "ma": "f4",
+            "ten": "4. dsMatch() — R5",
+            "diem": 2.5
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Not sorting the NS lists: dig returns them in any order and the comparison flips at random.|||Không sắp xếp danh sách NS: dig trả theo thứ tự bất kỳ và phép so đổi kết quả ngẫu nhiên."
+        },
+        {
+          "loi": "Counting a server that did not answer as \"serial differs\".|||Coi máy không trả lời là \"serial khác\"."
+        },
+        {
+          "loi": "Measuring the switch from the moment the TTL was lowered instead of from the IP change.|||Đo lần chuyển từ lúc hạ TTL thay vì từ lúc đổi IP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "delegation map",
+          "vi": "bản đồ ủy quyền"
+        },
+        {
+          "en": "KSK rollover",
+          "vi": "đổi khoá ký khoá"
+        },
+        {
+          "en": "glue",
+          "vi": "địa chỉ máy chủ tên ở vùng cha"
+        },
+        {
+          "en": "monitoring check",
+          "vi": "phép kiểm giám sát"
+        }
+      ]
+    }
+  ]
+}

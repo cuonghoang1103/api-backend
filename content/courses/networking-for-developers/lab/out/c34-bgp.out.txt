@@ -1,0 +1,14 @@
+# Ch3 · 3.4 — trên router nhà mạng: hai đường tới cùng một dải 198.19.1.0/24 (hai nơi cùng quảng bá) — BGP chọn đường ngắn
+$ vtysh -c 'show ip bgp 198.19.1.0/24'
+BGP routing table entry for 198.19.1.0/24, version 2
+Paths: (2 available, best #1, table default)
+  Advertised to peers:
+  192.0.2.3 192.0.2.30 192.0.2.66
+  64530
+    192.0.2.30 from 192.0.2.30 (192.0.2.30)
+      Origin IGP, metric 0, valid, external, best (AS Path)
+      Last update: Sun Nov  1 17:16:01 2026
+  64510 64530
+    192.0.2.3 from 192.0.2.3 (192.0.2.3)
+      Origin IGP, valid, external
+      Last update: Sun Nov  1 17:16:01 2026

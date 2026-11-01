@@ -1,0 +1,4 @@
+# Ch3 · 3.2 — log của ns2 (named -g ⇒ docker logs): nhận NOTIFY từ ns1 và chép vùng có serial mới
+$ docker logs nfi-ns2 2>&1 | grep -E 'notify from|Transfer completed' | tail -2 | sed -E 's/ 0x[0-9a-f]+:/:/'
+01-Nov-2026 17:16:42.106 zone labflow.test/IN: notify from 203.0.113.53#47692: serial 2026110102
+01-Nov-2026 17:16:42.111: transfer of 'labflow.test/IN' from 203.0.113.53#53: Transfer completed: 1 messages, 74 records, 5141 bytes, 0.002 secs (2570500 bytes/sec) (serial 2026110102)

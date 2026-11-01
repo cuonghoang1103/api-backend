@@ -1,0 +1,7 @@
+# Ch3 · 3.3 — DNS chậm và thread pool của Node: 4 lần dns.lookup tới tên có máy chủ tên chết, rồi đọc một tệp — ai phải chờ ai?
+$ node treo.mjs
+   72 ms  readFile /etc/hostname: laptop
+10086 ms  lookup x1.dead.test: EAI_AGAIN
+10086 ms  lookup x2.dead.test: EAI_AGAIN
+20093 ms  lookup x3.dead.test: EAI_AGAIN
+20096 ms  lookup x4.dead.test: EAI_AGAIN

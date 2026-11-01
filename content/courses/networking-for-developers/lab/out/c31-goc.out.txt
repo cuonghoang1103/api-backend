@@ -1,0 +1,66 @@
+# Ch3 · 3.1 — Internet THẬT: 13 tên máy chủ gốc, và mỗi tên là nhiều máy ở nhiều nơi (anycast) — hỏi từng máy "anh là bản nào?"
+$ dig +short NS . | sort
+a.root-servers.net.
+b.root-servers.net.
+c.root-servers.net.
+d.root-servers.net.
+e.root-servers.net.
+f.root-servers.net.
+g.root-servers.net.
+h.root-servers.net.
+i.root-servers.net.
+j.root-servers.net.
+k.root-servers.net.
+l.root-servers.net.
+m.root-servers.net.
+$ for l in a b c d e f j k m; do printf '%s.root-servers.net  ' $l; dig @$l.root-servers.net id.server CH TXT +short +time=2 +tries=1; done
+a.root-servers.net  "nnn1-usiad-3"
+b.root-servers.net  "b3-sin"
+c.root-servers.net  "sin1b.c.root-servers.org"
+d.root-servers.net  "sgsg2.droot.maxgigapop.net"
+e.root-servers.net  "c01.HKG.eroot"
+f.root-servers.net  "han1f.f.root-servers.org"
+j.root-servers.net  "rootns-elsin2"
+k.root-servers.net  "ns1.vn-han.k.ripe.net"
+m.root-servers.net  "M-HAN-1"
+$ dig +trace +nodnssec cuongthai.com
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> +trace +nodnssec cuongthai.com
+;; global options: +cmd
+.			555	IN	NS	a.root-servers.net.
+.			555	IN	NS	b.root-servers.net.
+.			555	IN	NS	c.root-servers.net.
+.			555	IN	NS	d.root-servers.net.
+.			555	IN	NS	e.root-servers.net.
+.			555	IN	NS	f.root-servers.net.
+.			555	IN	NS	g.root-servers.net.
+.			555	IN	NS	h.root-servers.net.
+.			555	IN	NS	i.root-servers.net.
+.			555	IN	NS	j.root-servers.net.
+.			555	IN	NS	k.root-servers.net.
+.			555	IN	NS	l.root-servers.net.
+.			555	IN	NS	m.root-servers.net.
+;; Received 420 bytes from 192.168.65.7#53(192.168.65.7) in 3 ms
+
+com.			172800	IN	NS	l.gtld-servers.net.
+com.			172800	IN	NS	g.gtld-servers.net.
+com.			172800	IN	NS	b.gtld-servers.net.
+com.			172800	IN	NS	m.gtld-servers.net.
+com.			172800	IN	NS	c.gtld-servers.net.
+com.			172800	IN	NS	k.gtld-servers.net.
+com.			172800	IN	NS	j.gtld-servers.net.
+com.			172800	IN	NS	d.gtld-servers.net.
+com.			172800	IN	NS	h.gtld-servers.net.
+com.			172800	IN	NS	f.gtld-servers.net.
+com.			172800	IN	NS	i.gtld-servers.net.
+com.			172800	IN	NS	e.gtld-servers.net.
+com.			172800	IN	NS	a.gtld-servers.net.
+;; Received 866 bytes from 192.36.148.17#53(i.root-servers.net) in 206 ms
+
+cuongthai.com.		172800	IN	NS	meilani.ns.cloudflare.com.
+cuongthai.com.		172800	IN	NS	kyrie.ns.cloudflare.com.
+;; Received 362 bytes from 192.52.178.30#53(k.gtld-servers.net) in 225 ms
+
+cuongthai.com.		300	IN	A	160.187.1.208
+;; Received 58 bytes from 108.162.195.38#53(kyrie.ns.cloudflare.com) in 43 ms
+

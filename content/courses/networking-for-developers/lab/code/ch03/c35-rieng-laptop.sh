@@ -1,0 +1,4 @@
+# Ch3 · 3.5 — laptop: cùng một câu hỏi theo ba cách — DNS thường (UDP 53), DNS qua TLS (DoT, TCP 853), DNS qua HTTPS (DoH, TCP 443)
+dig +short labflow.test @198.51.100.1
+dig +short +tls labflow.test @198.51.100.1
+dig +short +https labflow.test @198.51.100.1

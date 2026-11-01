@@ -1,0 +1,3 @@
+# Ch3 · 3.5 — trên router nhà (= chỗ nhà mạng, quán cà phê, ai đứng giữa cũng thấy): bắt được gì từ ba câu hỏi đó?
+@ sleep 1; pkill -INT tcpdump; sleep 1
+tshark -r /tmp/w.pcap -Y 'ip.dst == 198.51.100.1 && (dns || tls.handshake.type == 1 || tls.app_data)' -T fields -e _ws.col.Protocol -e tcp.dstport -e udp.dstport -e dns.qry.name -e tls.handshake.extensions_alpn_str -e tls.app_data 2>/dev/null | awk -F'\t' '{ printf "%-4s port %-4s %s\n", ($4 != "" ? "DNS" : "TLS"), $2 $3, ($4 != "" ? "query name: " $4 : ($5 != "" ? "TLS hello, alpn=" $5 : "TLS application data (" length($6)/2 " bytes, encrypted)")) }'

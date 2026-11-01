@@ -1,0 +1,16 @@
+# Lab 3 · R2 — từ laptop: cả hai máy chủ tên đều đã có bản ghi mới (hỏi thẳng, không qua cache)
+$ for ns in 203.0.113.53 203.0.113.54; do echo "== $ns"; dig +short @$ns labflow.test SOA; dig +short @$ns status.labflow.test; dig +short @$ns labflow.test MX | sort; dig +short @$ns labflow.test CAA; done
+== 203.0.113.53
+ns1.labflow.test. hostmaster.labflow.test. 2026110102 3600 600 1209600 300
+labflow.cdn.test.
+10 mail.labflow.test.
+20 mail2.labflow.test.
+0 issue "letsencrypt.org"
+0 iodef "mailto:security@labflow.test"
+== 203.0.113.54
+ns1.labflow.test. hostmaster.labflow.test. 2026110102 3600 600 1209600 300
+labflow.cdn.test.
+10 mail.labflow.test.
+20 mail2.labflow.test.
+0 issue "letsencrypt.org"
+0 iodef "mailto:security@labflow.test"

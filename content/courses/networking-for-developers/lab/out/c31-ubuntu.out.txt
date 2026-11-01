@@ -1,0 +1,33 @@
+# Ch3 · 3.1 — máy Ubuntu có systemd-resolved: resolv.conf trỏ về 127.0.0.53 (một bộ đệm DNS cục bộ), máy chủ thật nằm sau nó
+$ ls -l /etc/resolv.conf
+lrwxrwxrwx 1 root root 39 Nov  1 17:16 /etc/resolv.conf -> ../run/systemd/resolve/stub-resolv.conf
+$ grep -v '^#' /etc/resolv.conf | grep .
+nameserver 127.0.0.53
+options edns0 trust-ad
+search .
+$ resolvectl status | sed -n '1,4p'
+Global
+         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+  resolv.conf mode: stub
+       DNS Servers: 198.51.100.1
+$ resolvectl query www.labflow.test
+www.labflow.test: 203.0.113.10                              -- link: eth0
+                  2001:db8:d::10                            -- link: eth0
+                  (labflow.test)
+
+-- Information acquired via protocol DNS in 2.2ms.
+-- Data is authenticated: no; Data was acquired via local or encrypted transport: no
+-- Data from: network
+$ resolvectl query www.labflow.test
+www.labflow.test: 2001:db8:d::10                            -- link: eth0
+                  203.0.113.10                              -- link: eth0
+                  (labflow.test)
+
+-- Information acquired via protocol DNS in 654us.
+-- Data is authenticated: no; Data was acquired via local or encrypted transport: no
+-- Data from: cache
+$ resolvectl statistics | sed -n '/Cache/,/Misses/p'
+Cache                                        
+                         Current Cache Size: 3
+                                 Cache Hits: 4
+                               Cache Misses: 2

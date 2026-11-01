@@ -1,0 +1,9 @@
+# Ch3 · 3.5 — tên miền hết hạn = nhà đăng ký gỡ ủy quyền ⇒ TLD trả NXDOMAIN (oldshop.test từng là một tên miền thật trong lab)
+$ dig +trace +nodnssec www.oldshop.test | grep -E 'NXDOMAIN|^test\.|Received|SOA'
+;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 0 ms
+test.			172800	IN	NS	ns1.nic.test.
+;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms
+test.			900	IN	SOA	ns1.nic.test. hostmaster.nic.test. 2026110104 1800 900 604800 900
+;; Received 128 bytes from 192.0.2.20#53(ns1.nic.test) in 2 ms
+$ dig www.oldshop.test | grep -E 'status'
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 64972

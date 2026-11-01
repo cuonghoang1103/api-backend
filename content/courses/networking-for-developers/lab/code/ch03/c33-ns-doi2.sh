@@ -1,0 +1,5 @@
+# Ch3 · 3.3 — trên ns1: lần đổi thứ hai, khi TTL 10 s đã có hiệu lực khắp nơi — api quay về Hà Nội .10
+date +%T
+sed -i -e 's/^api        10  IN A    203.0.113.11/api        10  IN A    203.0.113.10/' -e 's/2026110103 3600/2026110104 3600/' /dnsz/src/labflow.test.zone
+grep -E '^api' /dnsz/src/labflow.test.zone
+bash /lab/k/moi-truong/dns/ky.sh labflow.test && rndc reload labflow.test

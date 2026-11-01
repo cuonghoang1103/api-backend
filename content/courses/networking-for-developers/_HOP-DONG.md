@@ -5,6 +5,8 @@
 > **Chương 2 soạn trọn 01/11/2026** (`s02-dia-chi-dinh-tuyen.mjs` + `bai/020…026`, deck `nfd-02-1…5` + `nfd-lab-2` ở NFD/v1,
 > 5 mô phỏng mới subnet/route/nat/ipv6/bgp, Code Lab `netdev-2-*`). Bài MỞ CHƯƠNG (2.1) có khối "🎯 Chương N trong một khung —
 > học xong làm được gì + vì sao lập trình viên cần" ở đầu bài đọc và slide 2 của deck — chương sau làm y như vậy.
+> **Chương 3 soạn trọn 01/11/2026** (`s03-dns.mjs` + `bai/030…036`, deck `nfd-03-1…5` + `nfd-lab-3` ở NFD/v1 = 94 slide, 5 mô phỏng
+> dns/zone/ttl/anycast/dnssec + 15 tour, Code Lab `netdev-3-*` 6 module 31 đề). Phòng lab DNS: mục 2 (đoạn "Ch3").
 
 ## 0. Khoá này là gì
 
@@ -12,7 +14,9 @@
   trọn từ đầu theo góc nhìn lập trình viên (luật chủ kênh 31/10). Academy NWC204 chỉ là "đọc thêm theo giáo trình trường".
 - **Liên kết chéo Academy ↔ Courses** (luật 31/10): bài trùng/liên quan NWC204 (hoặc NWC203c, OSG202 phần socket, CSI106…)
   có khối `cauNoi()` (`_ui.mjs`) mở THẲNG bài Academy; chiều ngược lại thêm `sauHon()` (`content/academy/nwc204/_lien-ket-courses.mjs`)
-  vào đúng bài NWC204. Kiểu khối duy nhất: `<a class="link-card lien-ket-cheo" …>` (giống khoá authentication).
+  vào đúng bài NWC204. OSG202 ⭐ Chuyên sâu là FILE SINH TỰ ĐỘNG ⇒ thẻ viết vào NGUỒN `flm-nguon/OSG202/gen/src/slides/csN.txt`
+  (khối @en/@vi slide cuối của bài), sinh lại `gen.mjs --only cs` (trong bản clone riêng nếu phiên khác đang sửa flm-nguon) rồi chép
+  `chuyen-sau.mjs` sang repo web — xem `content/_LIEN-KET-CHEO/nwc204-osg202-networking.md`. Kiểu khối duy nhất: `<a class="link-card lien-ket-cheo" …>` (giống khoá authentication).
   Deep link: `/courses/<slug khoá>/learn?lessonSlug=<slug bài>` (Academy dùng chung trang học).
 - "THẤY được + LÀM được": mỗi khái niệm trừu tượng ⇒ mô phỏng `/net-lab` có tour + "Ở đâu trong máy"; mỗi bài có output
   chạy thật trong phòng lab Docker; Code Lab theo TỪNG bài + lab chương; dự án xuyên khoá (mỗi lab chương thêm một phần).
@@ -64,6 +68,26 @@ TIME_WAIT 60 s nếu chạy lại ngay; câu hỏi DNS treo từ lúc bị cư�
 Chạy lại cả chương: `bash code/dung-output-ch2.sh` (≈2 phút; output GIỮ: c24-happy, c25-that, bộ ba c23-laptop/phone/homegw, c23-docker —
 bài trích số đo/số cổng/IP của chúng; `DO_LAI=1` để bắt lại rồi SỬA lời bài). Lời giải Lab 2: `code/ch02/lab2/chay-loi-giai.sh`.
 
+**DNS thật (từ Ch3):** chồng thêm `moi-truong/dns.yml` lên `internet.yml` (cùng project `nfi`):
+`docker compose -f internet.yml -f dns.yml -p nfi up -d`. Ảnh `net-lab-dns` (`Dockerfile.dns` = net-lab-inet + BIND 9.20 + Unbound 1.24 +
+knot-dnsutils). `nfi-dnsinit` chạy một lần `dns/ky.sh all` ⇒ volume `nfi-dnsz` (/dnsz: vùng nguồn, khoá, `root.ds`, `anchor.conf`).
+Máy: root `a.root-servers.test` 192.0.2.10 · TLD `ns1.nic.test` 192.0.2.20 · ns1 203.0.113.53 (primary) · ns2 .54 (secondary, AXFR+NOTIFY) ·
+`ns1.cdn.test` 192.0.2.40 (GeoDNS bằng view, KHÔNG ký) · resolver Unbound trên isp 198.51.100.1 (kiểm DNSSEC, DoT 853, DoH 443) ·
+DNS công cộng anycast 198.19.1.1 = pop1 192.0.2.30 (Hà Nội) + pop2 198.19.255.2 (Singapore), AS64530 · `dead.test` → ns9 .99 (dc DROP).
+Mọi vùng trừ cdn.test ký ECDSA P-256; khoá SINH LẠI mỗi lần `down -v` ⇒ key tag/digest đổi (lời bài không trích key tag cụ thể ngoài
+output đã giữ). Sửa vùng: `/dnsz/src/<vùng>.zone` + tăng serial ⇒ `bash /lab/k/moi-truong/dns/ky.sh <vùng> && rndc reload <vùng>`
+(`KY_TU`/`KY_DEN` để ký hết hạn). Ubuntu có systemd-resolved: `code/ch03/c31-ubuntu-dung.sh` (máy `nfi-ubuntu`, ngoài compose).
+Bẫy đã gặp: máy mới phải đặt `ipv6_address` cố định (IPv6 tự cấp lấy trùng ⇒ isp "Address already in use"); Unbound cần
+`local-zone: "test." nodefault` (không thì tự trả lời .test); `rndc` cần `chown root:root /etc/bind/rndc.key` (named bỏ quyền DAC);
+dnssec-signzone ghi tệp tạm vào thư mục hiện tại ⇒ `cd` vào thư mục vùng; xoá cache một tên KHÔNG đủ với vùng có ký (aggressive NSEC,
+RFC 8198) ⇒ `flush_zone`; resolver nhớ máy chủ chết 900 s (infra cache) ⇒ `flush_infra all` trước các demo đo thời gian; chữ ký hết hạn
+đúng 1 ngày nằm ngay ngưỡng `val-sig-skew-max 86400` ⇒ demo dùng `KY_DEN=now-172800` (2 ngày).
+Chạy lại cả chương: `bash code/dung-output-ch3.sh` (≈12 phút; `GIU_LAB=1` bỏ qua dựng lại lab). Output GIỮ (giu_do — bài trích số đo/giờ):
+c31-dig, c31-isp-doc, c31-goc, c32-hoi/node/ns2-log/that, c33-dem, khối dòng thời gian c33-theo-*, khối c33-am*, c33-app, c33-treo(8),
+c33-that, khối c34-theo-doc, c34-rr, c34-rr-thu, c34-that, c35-chuoi, khối chữ ký hết hạn, khối c35-rieng, c35-dead, c35-isp-infra,
+c35-mot-ns, c35-that. Lời giải Lab 3: `code/ch03/lab3/chay-loi-giai.sh` (R4 sự cố A, R5 sự cố B). Dọn:
+`docker compose -f internet.yml -f dns.yml -p nfi down -v; docker rm -f nfi-ubuntu`.
+
 ## 3. Mỗi bài (cả EN lẫn VI đầy đủ ý)
 
 `${G}` (walk slide) ở đầu → `<div class="ml-en">` eyebrow · h2 · lead (câu hỏi bài trả lời) · các h3 giảng + `run()` output thật
@@ -93,7 +117,9 @@ Bộ kiểm còn bắt **chân slide đè nhau** (01/11/2026): `meta.chuong` dà
 `content/_labs.mjs` (NET_SIMS/NET_TOURS — PHẢI khớp `labs/registry.test.ts`). Có sẵn: encap (http/hop/mtu), arp (lan/gateway/stale),
 socket (demux/bind/ephemeral), waterfall (cold/warm/far); Ch2: subnet (mask/same/vlsm), route (lookup/trace/loop), nat (home/inbound/cgnat),
 ipv6 (addr/happy/localhost), bgp (announce/hijack/withdraw) — dữ liệu thật ở `engine/capture2.ts` (có test đối chiếu từng dòng với .out.txt),
-tour `labs/tour/tours-net2.ts`. Chương sau cần mô phỏng mới (vd dns-trace, tcp-window, tls13, h2-hol,
+tour `labs/tour/tours-net2.ts`; Ch3: dns (trace/stub), zone (records/serial), ttl (change/negative), anycast (withdraw/geodns),
+dnssec (chain/expired) — `engine/capture3.ts` (61 bản trích nguyên văn, có test) + `engine/dns3.ts`, tour `labs/tour/tours-net3.ts`
+(tên action không được có chữ số). Chương sau cần mô phỏng mới (vd dns-trace, tcp-window, tls13, h2-hol,
 nat-table, lb) ⇒ dựng theo cùng khuôn + tour + WhereBox, số tính ra phải ghi nhãn "tính ra".
 
 ## 6. Quiz, lab chương, Code Lab
@@ -103,6 +129,9 @@ nat-table, lb) ⇒ dựng theo cùng khuôn + tour + WhereBox, số tính ra ph�
 - Lab chương: `netdev-N-K-lab-…`, tình huống thật + yêu cầu đánh số + mẫu báo cáo + rubric 10 điểm + gợi ý theo bậc (details) +
   lời giải bằng output thật + thử thách thêm + phần dự án xuyên khoá. Mẫu `bai/015-lab1.mjs`.
 - Code Lab: track `networking-practice` (`content/codelab/networking-practice/`), module slug = slug bài; README Code Lab.
+  Bài viết hàm nên đối chiếu được với output thật (Ch3: `pollResolver` tái hiện từng dòng c33-theo-doc + lab3-r3, `checkDelegation`
+  in đúng các dòng kiem-dns.sh) — bộ dựng ném lỗi nếu lệch. Sau khi sửa: `codelab-xuat-de.mjs --chi <module>`, `_dung-track.mjs`,
+  `codelab-kiem-noi-dung.mjs --chi-tiet` (0 lỗi, 0 cảnh báo "đáp án dài hơn hẳn nhiễu"), `codelab-kiem-cham-trinh-duyet.mjs`.
 
 ## 7. Kiểm trước khi báo
 

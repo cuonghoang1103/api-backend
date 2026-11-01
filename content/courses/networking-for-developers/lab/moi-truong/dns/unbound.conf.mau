@@ -1,0 +1,29 @@
+# Unbound — resolver ĐỆ QUY có kiểm DNSSEC. Mẫu chung; unbound.sh thay các chỗ đánh dấu (tên, giao diện nghe, quyền hỏi) theo vai.
+server:
+  @NGHE@
+  @CHO@
+  access-control: 127.0.0.0/8 allow
+  root-hints: "/lab/k/moi-truong/dns/root.hints"
+  trust-anchor-file: "/dnsz/root.ds"
+  # .test là tên dành riêng (RFC 6761) nên Unbound mặc định tự trả NXDOMAIN — lab dùng nó làm TLD thật ⇒ tắt luật đó
+  local-zone: "test." nodefault
+  module-config: "validator iterator"
+  do-ip6: no
+  chroot: ""
+  username: ""
+  directory: "/tmp"
+  logfile: "/tmp/unbound.log"
+  use-syslog: no
+  verbosity: 1
+  val-log-level: 2
+  ede: yes
+  qname-minimisation: yes
+  prefetch: no
+  num-threads: 1
+  identity: "@ID@"
+  hide-identity: no
+  hide-version: no
+remote-control:
+  control-enable: yes
+  control-interface: 127.0.0.1
+  control-use-cert: no

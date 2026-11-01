@@ -1,0 +1,17 @@
+# Ch3 · 3.4 — Internet THẬT: cuongthai.com trỏ thẳng về VPS; media.cuongthai.com đi qua Cloudflare (proxy) — IP của ai? (tra AS qua Team Cymru)
+$ dig +short cuongthai.com
+160.187.1.208
+$ dig +short TXT 208.1.187.160.origin.asn.cymru.com
+"152992 | 160.187.0.0/23 | VN | apnic | 2024-09-05"
+$ dig +short media.cuongthai.com
+172.67.161.19
+104.21.90.200
+$ dig +short TXT 19.161.67.172.origin.asn.cymru.com
+"13335 | 172.67.160.0/20 | US | arin | 2015-02-25"
+$ curl -sI https://media.cuongthai.com/ | grep -i -E '^(server|cf-ray):'
+server: cloudflare
+cf-ray: a539d6eafec6dd3e-HKG
+$ curl -sI https://cuongthai.com/ | grep -i -E '^(server|cf-ray):'
+server: nginx/1.27.5
+$ dig @1.1.1.1 id.server CH TXT +short
+"hkg11"

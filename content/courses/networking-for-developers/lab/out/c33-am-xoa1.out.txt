@@ -1,0 +1,3 @@
+# Ch3 · 3.3 — trên máy nhà mạng: resolver CỦA MÌNH thì xoá được cache — thử xoá đúng một tên trước
+$ unbound-control flush new.labflow.test
+ok

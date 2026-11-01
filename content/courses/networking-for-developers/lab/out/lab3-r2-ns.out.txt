@@ -1,0 +1,9 @@
+# Lab 3 · R2 — trên ns1: thêm bản ghi cho đợt ra mắt, kiểm vùng TRƯỚC khi nạp, tăng serial, ký lại, nạp lại
+$ cp /dnsz/src/labflow.test.zone /tmp/new.zone
+$ printf 'status         IN CNAME labflow.cdn.test.\n@              IN TXT  "status-verify=81c2"\n@              IN MX   20 mail2\nmail2          IN A    203.0.113.26\n@              IN CAA  0 iodef "mailto:security@labflow.test"\n' >> /tmp/new.zone
+$ sed -i 's/2026110101 3600/2026110102 3600/' /tmp/new.zone
+$ named-checkzone labflow.test /tmp/new.zone
+zone labflow.test/IN: loaded serial 2026110102
+OK
+$ cp /tmp/new.zone /dnsz/src/labflow.test.zone && bash /lab/k/moi-truong/dns/ky.sh labflow.test && rndc reload labflow.test
+zone reload queued

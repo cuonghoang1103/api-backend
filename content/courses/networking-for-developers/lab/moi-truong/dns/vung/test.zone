@@ -1,0 +1,17 @@
+; TLD .test (server ns1.nic.test = 192.0.2.20). Delegations down to each domain: NS + glue + DS.
+$TTL 3600
+test.                    900  IN SOA ns1.nic.test. hostmaster.nic.test. 2026110101 1800 900 604800 900
+test.                 172800  IN NS  ns1.nic.test.
+ns1.nic.test.         172800  IN A   192.0.2.20
+a.root-servers.test.  172800  IN A   192.0.2.10
+; labflow.test — LabFlow's domain, two name servers in the DC, signed with DNSSEC (has a DS)
+labflow.test.         172800  IN NS  ns1.labflow.test.
+labflow.test.         172800  IN NS  ns2.labflow.test.
+ns1.labflow.test.     172800  IN A   203.0.113.53
+ns2.labflow.test.     172800  IN A   203.0.113.54
+$INCLUDE /dnsz/ds/labflow.test.ds
+; cdn.test — the CDN provider's DNS (GeoDNS), NOT signed ⇒ no DS ⇒ "insecure"
+cdn.test.             172800  IN NS  ns1.cdn.test.
+ns1.cdn.test.         172800  IN A   192.0.2.40
+; dead.test — a domain whose name server NEVER answers: NS = ns9.labflow.test (203.0.113.99), the DC router drops packets to it — lessons 3.3/3.5
+dead.test.            172800  IN NS  ns9.labflow.test.

@@ -1,0 +1,13 @@
+# Ch3 · 3.5 — trên resolver nhà mạng, khi ns2 đã tắt. Mỗi vòng: xoá cache VÀ xoá hiểu biết về máy chủ ⇒ lúc thì thử ns1 trước, lúc thử ns2 trước
+$ for i in 1 2 3 4 5 6; do unbound-control flush_zone labflow.test >/dev/null; unbound-control flush_infra all >/dev/null; dig @198.51.100.1 api.labflow.test | grep 'Query time'; done
+;; Query time: 2 msec
+;; Query time: 381 msec
+;; Query time: 1147 msec
+;; Query time: 381 msec
+;; Query time: 383 msec
+;; Query time: 1 msec
+# giờ để resolver NHỚ ns2 không trả lời — chỉ xoá cache tên
+$ for i in 1 2 3; do unbound-control flush_zone labflow.test >/dev/null; dig @198.51.100.1 api.labflow.test | grep 'Query time'; done
+;; Query time: 385 msec
+;; Query time: 1 msec
+;; Query time: 2 msec

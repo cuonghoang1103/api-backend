@@ -1,0 +1,2 @@
+# Ch3 · 3.3 — laptop: hỏi lại sau mỗi lần xoá cache
+dig +short new.labflow.test

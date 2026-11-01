@@ -1,0 +1,1120 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-3-4-anycast-geodns",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-3-4-anycast-geodns"
+  },
+  "exercises": [
+    {
+      "title": "Anycast 1 — One address, two cities",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "anycast",
+        "BGP best path"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The public DNS 198.19.1.1 runs in two places: pop1 \"Hanoi\" and pop2 \"Singapore\", both announcing 198.19.1.0/24 with BGP from AS64530 (lab/out/c34-anycast, c34-anycast-dc, c34-bgp, c34-pop1-rut, c34-theo-doc):<pre># from the laptop at home\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n$ traceroute -n -q 1 198.19.1.1\ntraceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.554 ms\n 2  198.51.100.1  0.470 ms\n 3  198.19.1.1  0.359 ms\n\n# from the server in the datacenter\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n$ traceroute -n -q 1 198.19.1.1\ntraceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets\n 1  203.0.113.1  0.349 ms\n 2  198.19.1.1  0.293 ms\n\n# on the ISP's router\n$ vtysh -c 'show ip bgp 198.19.1.0/24'\nBGP routing table entry for 198.19.1.0/24, version 2\nPaths: (2 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.3 192.0.2.30 192.0.2.66\n  64530\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\n      Origin IGP, metric 0, valid, external, best (AS Path)\n      Last update: Sun Nov  1 17:16:01 2026\n  64510 64530\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\n      Origin IGP, valid, external\n      Last update: Sun Nov  1 17:16:01 2026\n\n# on pop1\n$ date +%T\n16:22:56\n$ vtysh -c 'configure terminal' -c 'router bgp 64530' -c 'address-family ipv4 unicast' -c 'no network 198.19.1.0/24'\n\n# the laptop, asking id.server every second\n$ cat /tmp/any.txt\n16:22:53  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:54  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:55  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:56  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:57  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:22:58  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:22:59  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:00  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:01  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:02  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>DNS công cộng 198.19.1.1 chạy ở hai nơi: pop1 \"Hà Nội\" và pop2 \"Singapore\", cả hai quảng bá 198.19.1.0/24 bằng BGP từ AS64530 (lab/out/c34-anycast, c34-anycast-dc, c34-bgp, c34-pop1-rut, c34-theo-doc):<pre># từ laptop ở nhà\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n$ traceroute -n -q 1 198.19.1.1\ntraceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.554 ms\n 2  198.51.100.1  0.470 ms\n 3  198.19.1.1  0.359 ms\n\n# từ máy chủ trong datacenter\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n$ traceroute -n -q 1 198.19.1.1\ntraceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets\n 1  203.0.113.1  0.349 ms\n 2  198.19.1.1  0.293 ms\n\n# trên router nhà mạng\n$ vtysh -c 'show ip bgp 198.19.1.0/24'\nBGP routing table entry for 198.19.1.0/24, version 2\nPaths: (2 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.3 192.0.2.30 192.0.2.66\n  64530\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\n      Origin IGP, metric 0, valid, external, best (AS Path)\n      Last update: Sun Nov  1 17:16:01 2026\n  64510 64530\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\n      Origin IGP, valid, external\n      Last update: Sun Nov  1 17:16:01 2026\n\n# trên pop1\n$ date +%T\n16:22:56\n$ vtysh -c 'configure terminal' -c 'router bgp 64530' -c 'address-family ipv4 unicast' -c 'no network 198.19.1.0/24'\n\n# laptop, hỏi id.server mỗi giây\n$ cat /tmp/any.txt\n16:22:53  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:54  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:55  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:56  \"pop1.hn (public DNS 198.19.1.1, Hanoi)\"\n16:22:57  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:22:58  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:22:59  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:00  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:01  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n16:23:02  \"pop2.sg (public DNS 198.19.1.1, Singapore)\"</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Anycast = the same prefix announced from several places.|||Anycast = cùng một dải được quảng bá từ nhiều nơi.",
+        "In \"show ip bgp\", each path starts with its AS path line.|||Trong \"show ip bgp\", mỗi đường bắt đầu bằng dòng AS path của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 1 — One address, two cities\n\nAnswer in the answer panel (no code needed).\n\n1. The laptop and the server ask the same address and get different machines. What decided?Laptop và máy chủ hỏi cùng một địa chỉ mà gặp hai máy khác nhau. Cái gì quyết định?\n2. Why is the path \"64530\" chosen over \"64510 64530\" on the ISP router?Vì sao đường \"64530\" được chọn thay cho \"64510 64530\" trên router nhà mạng?\n3. pop1 withdrew at 16:22:56; the next second pop2 answered. What did clients have to change?pop1 rút lúc 16:22:56; giây sau pop2 trả lời. Client phải đổi gì?\n4. How does \"dig @198.19.1.1 id.server CH TXT\" help when debugging?\"dig @198.19.1.1 id.server CH TXT\" giúp gì khi gỡ lỗi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 1 — One address, two cities — answer key\n\n1. The laptop and the server ask the same address and get different machines. What decided?Laptop và máy chủ hỏi cùng một địa chỉ mà gặp hai máy khác nhau. Cái gì quyết định?\n   Answer: d) Routing: each router sends packets to the nearest announcement of 198.19.1.0/24\n   Anycast is plain routing. The ISP router's best path is AS64530 directly (pop1); the DC router's best path is pop2. Nothing in DNS or in the client is involved.VI: Anycast chỉ là định tuyến bình thường. Đường tốt nhất của router nhà mạng là AS64530 trực tiếp (pop1); của router DC là pop2. DNS hay client không dính dáng gì.\n\n2. Why is the path \"64530\" chosen over \"64510 64530\" on the ISP router?Vì sao đường \"64530\" được chọn thay cho \"64510 64530\" trên router nhà mạng?\n   Answer: a) Shorter AS path: one network instead of two\n   \"best (AS Path)\" — FRR even prints the reason. The second path goes through the datacenter's AS64510 first.VI: \"best (AS Path)\" — FRR in luôn lý do. Đường thứ hai đi qua AS64510 của datacenter trước.\n\n3. pop1 withdrew at 16:22:56; the next second pop2 answered. What did clients have to change?pop1 rút lúc 16:22:56; giây sau pop2 trả lời. Client phải đổi gì?\n   Answer: b) Nothing: same address, same config; the routers switched paths\n   This is why root servers and public resolvers are anycast: failover in about a second, invisible to clients. Long TCP connections can break if a route change moves them mid-way (RFC 4786); DNS over UDP does not care.VI: Đó là lý do máy chủ gốc và resolver công cộng dùng anycast: chuyển dự phòng trong khoảng một giây, client không hề hay biết. Kết nối TCP dài có thể đứt nếu đổi tuyến giữa chừng (RFC 4786); DNS trên UDP thì không sao.\n\n4. How does \"dig @198.19.1.1 id.server CH TXT\" help when debugging?\"dig @198.19.1.1 id.server CH TXT\" giúp gì khi gỡ lỗi?\n   Answer: d) It tells you which instance of an anycast service you are reaching\n   Same trick as the root servers in lesson 3.1. Your view of an anycast service depends on where you stand — always note which instance answered.VI: Cùng mẹo với máy chủ gốc ở bài 3.1. Thứ bạn thấy của một dịch vụ anycast tuỳ vào chỗ bạn đứng — luôn ghi lại bản nào đã trả lời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Routing: each router sends packets to the nearest announcement of 198.19.1.0/24</p><p>Anycast is plain routing. The ISP router's best path is AS64530 directly (pop1); the DC router's best path is pop2. Nothing in DNS or in the client is involved.</p><p><i>VI: Anycast chỉ là định tuyến bình thường. Đường tốt nhất của router nhà mạng là AS64530 trực tiếp (pop1); của router DC là pop2. DNS hay client không dính dáng gì.</i></p></li><li><p><b>a)</b> Shorter AS path: one network instead of two</p><p>\"best (AS Path)\" — FRR even prints the reason. The second path goes through the datacenter's AS64510 first.</p><p><i>VI: \"best (AS Path)\" — FRR in luôn lý do. Đường thứ hai đi qua AS64510 của datacenter trước.</i></p></li><li><p><b>b)</b> Nothing: same address, same config; the routers switched paths</p><p>This is why root servers and public resolvers are anycast: failover in about a second, invisible to clients. Long TCP connections can break if a route change moves them mid-way (RFC 4786); DNS over UDP does not care.</p><p><i>VI: Đó là lý do máy chủ gốc và resolver công cộng dùng anycast: chuyển dự phòng trong khoảng một giây, client không hề hay biết. Kết nối TCP dài có thể đứt nếu đổi tuyến giữa chừng (RFC 4786); DNS trên UDP thì không sao.</i></p></li><li><p><b>d)</b> It tells you which instance of an anycast service you are reaching</p><p>Same trick as the root servers in lesson 3.1. Your view of an anycast service depends on where you stand — always note which instance answered.</p><p><i>VI: Cùng mẹo với máy chủ gốc ở bài 3.1. Thứ bạn thấy của một dịch vụ anycast tuỳ vào chỗ bạn đứng — luôn ghi lại bản nào đã trả lời.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The laptop and the server ask the same address and get different machines. What decided?</p><p style=\"opacity:.75;font-size:.92em\"><i>Laptop và máy chủ hỏi cùng một địa chỉ mà gặp hai máy khác nhau. Cái gì quyết định?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A load balancer in front of both machines"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The client: it picks the city with the lowest ping"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DNS: 198.19.1.1 resolves to a different machine for each client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Routing: each router sends packets to the nearest announcement of 198.19.1.0/24"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Anycast is plain routing. The ISP router's best path is AS64530 directly (pop1); the DC router's best path is pop2. Nothing in DNS or in the client is involved.</p><p><i>VI: Anycast chỉ là định tuyến bình thường. Đường tốt nhất của router nhà mạng là AS64530 trực tiếp (pop1); của router DC là pop2. DNS hay client không dính dáng gì.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is the path \"64530\" chosen over \"64510 64530\" on the ISP router?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đường \"64530\" được chọn thay cho \"64510 64530\" trên router nhà mạng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Shorter AS path: one network instead of two"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pop1 is connected through a faster link"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The lower AS number always wins in BGP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It was the first path the router learned"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"best (AS Path)\" — FRR even prints the reason. The second path goes through the datacenter's AS64510 first.</p><p><i>VI: \"best (AS Path)\" — FRR in luôn lý do. Đường thứ hai đi qua AS64510 của datacenter trước.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>pop1 withdrew at 16:22:56; the next second pop2 answered. What did clients have to change?</p><p style=\"opacity:.75;font-size:.92em\"><i>pop1 rút lúc 16:22:56; giây sau pop2 trả lời. Client phải đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Their resolv.conf, to the Singapore address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing: same address, same config; the routers switched paths"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They had to reconnect with a new TLS certificate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They had to wait for a DNS TTL to expire"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>This is why root servers and public resolvers are anycast: failover in about a second, invisible to clients. Long TCP connections can break if a route change moves them mid-way (RFC 4786); DNS over UDP does not care.</p><p><i>VI: Đó là lý do máy chủ gốc và resolver công cộng dùng anycast: chuyển dự phòng trong khoảng một giây, client không hề hay biết. Kết nối TCP dài có thể đứt nếu đổi tuyến giữa chừng (RFC 4786); DNS trên UDP thì không sao.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How does \"dig @198.19.1.1 id.server CH TXT\" help when debugging?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"dig @198.19.1.1 id.server CH TXT\" giúp gì khi gỡ lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It shows the server's software version for security audits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It measures the round-trip time to every instance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It forces the query to the primary server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It tells you which instance of an anycast service you are reaching"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Same trick as the root servers in lesson 3.1. Your view of an anycast service depends on where you stand — always note which instance answered.</p><p><i>VI: Cùng mẹo với máy chủ gốc ở bài 3.1. Thứ bạn thấy của một dịch vụ anycast tuỳ vào chỗ bạn đứng — luôn ghi lại bản nào đã trả lời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking anycast is a DNS feature.|||Nghĩ anycast là tính năng của DNS."
+        },
+        {
+          "loi": "Testing an anycast service from one place and assuming everyone sees the same.|||Thử dịch vụ anycast từ một chỗ rồi mặc định ai cũng thấy như vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anycast",
+          "vi": "một địa chỉ, nhiều nơi"
+        },
+        {
+          "en": "PoP",
+          "vi": "điểm hiện diện"
+        },
+        {
+          "en": "withdraw",
+          "vi": "rút quảng bá"
+        },
+        {
+          "en": "AS path",
+          "vi": "chuỗi AS"
+        }
+      ]
+    },
+    {
+      "title": "Anycast 2 — GeoDNS: who gets which edge?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "GeoDNS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>static.labflow.test is a CNAME to labflow.cdn.test; the CDN's name server ns1.cdn.test chooses the answer with BIND views (lab/moi-truong/dns/named-cdn.conf):<pre>acl vn { 192.0.2.1; 192.0.2.30; 198.51.100.0/24; 100.64.0.0/24; };\nview \"vn\" { match-clients { vn; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.zone\"; }; };\nview \"sg\" { match-clients { any; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.sg.zone\"; }; };</pre>Real output (lab/out/c34-geo, c34-geo-dc, c34-geo-sai):<pre># laptop (Vietnam), pop1 up\n$ dig +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.10\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.10\n$ curl -s http://static.labflow.test/\nLabFlow edge Hanoi (server 203.0.113.10)\nyou came from 198.51.100.2 port 43978\n\n# ns2 in the datacenter (its nearest public DNS is pop2)\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.11\n$ curl -s --resolve static.labflow.test:80:$(dig @198.19.1.1 +short labflow.cdn.test) http://static.labflow.test/\nLabFlow edge Singapore (server 203.0.113.11)\nyou came from 203.0.113.54 port 38078\n\n# laptop, after pop1 withdrew\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.11\n$ curl -s --resolve static.labflow.test:80:$(dig @198.19.1.1 +short labflow.cdn.test) http://static.labflow.test/\nLabFlow edge Singapore (server 203.0.113.11)\nyou came from 198.51.100.2 port 36410</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>static.labflow.test là CNAME sang labflow.cdn.test; máy chủ tên của CDN ns1.cdn.test chọn câu trả lời bằng view của BIND (lab/moi-truong/dns/named-cdn.conf):<pre>acl vn { 192.0.2.1; 192.0.2.30; 198.51.100.0/24; 100.64.0.0/24; };\nview \"vn\" { match-clients { vn; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.zone\"; }; };\nview \"sg\" { match-clients { any; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.sg.zone\"; }; };</pre>Output thật (lab/out/c34-geo, c34-geo-dc, c34-geo-sai):<pre># laptop (Việt Nam), pop1 đang chạy\n$ dig +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.10\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.10\n$ curl -s http://static.labflow.test/\nLabFlow edge Hanoi (server 203.0.113.10)\nyou came from 198.51.100.2 port 43978\n\n# ns2 trong datacenter (DNS công cộng gần nhất là pop2)\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.11\n$ curl -s --resolve static.labflow.test:80:$(dig @198.19.1.1 +short labflow.cdn.test) http://static.labflow.test/\nLabFlow edge Singapore (server 203.0.113.11)\nyou came from 203.0.113.54 port 38078\n\n# laptop, sau khi pop1 rút\n$ dig @198.19.1.1 id.server CH TXT +short\n\"pop2.sg (public DNS 198.19.1.1, Singapore)\"\n$ dig @198.19.1.1 +short static.labflow.test\nlabflow.cdn.test.\n203.0.113.11\n$ curl -s --resolve static.labflow.test:80:$(dig @198.19.1.1 +short labflow.cdn.test) http://static.labflow.test/\nLabFlow edge Singapore (server 203.0.113.11)\nyou came from 198.51.100.2 port 36410</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who asks the CDN's name server? Never the laptop itself.|||Ai hỏi máy chủ tên của CDN? Không bao giờ là chính laptop.",
+        "The views are tried top to bottom; the first match wins.|||Các view được thử từ trên xuống; khớp cái đầu tiên là thắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 2 — GeoDNS: who gets which edge?\n\nAnswer in the answer panel (no code needed).\n\n1. Fill one row per situationĐiền mỗi tình huống một hàng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 2 — GeoDNS: who gets which edge? — answer key\n\n1. Fill one row per situationĐiền mỗi tình huống một hàng\n   - r1.p: not used (ISP resolver)\n   - r1.r: 192.0.2.1\n   - r1.a: 203.0.113.10\n   - r1.e: Hanoi edge\n   - r2.p: pop1 Hanoi\n   - r2.r: 192.0.2.30\n   - r2.a: 203.0.113.10\n   - r2.e: Hanoi edge\n   - r3.p: pop2 Singapore\n   - r3.r: 198.19.255.2\n   - r3.a: 203.0.113.11\n   - r3.e: Singapore edge\n   - r4.p: pop2 Singapore\n   - r4.r: 198.19.255.2\n   - r4.a: 203.0.113.11\n   - r4.e: Singapore edge\n   The CDN never sees the laptop: it sees the resolver that asks on its behalf — 192.0.2.1 is the outside address of the ISP resolver, 192.0.2.30 is pop1, 198.19.255.2 is pop2 (all in named-cdn.conf). The last row is the trap: the user did not move, but their resolver did, so a Vietnamese user is sent to Singapore. EDNS Client Subnet (RFC 7871) fixes this by passing part of the user's address, at a privacy cost — 1.1.1.1 does not send it.VI: CDN không bao giờ thấy laptop: nó thấy resolver hỏi thay — 192.0.2.1 là địa chỉ phía ngoài của resolver nhà mạng, 192.0.2.30 là pop1, 198.19.255.2 là pop2 (đều có trong named-cdn.conf). Hàng cuối là cái bẫy: người dùng không đi đâu cả, nhưng resolver của họ đổi chỗ, nên người dùng Việt Nam bị đưa sang Singapore. EDNS Client Subnet (RFC 7871) sửa chuyện này bằng cách gửi một phần địa chỉ người dùng, đổi lại mất riêng tư — 1.1.1.1 không gửi nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The CDN never sees the laptop: it sees the resolver that asks on its behalf — 192.0.2.1 is the outside address of the ISP resolver, 192.0.2.30 is pop1, 198.19.255.2 is pop2 (all in named-cdn.conf). The last row is the trap: the user did not move, but their resolver did, so a Vietnamese user is sent to Singapore. EDNS Client Subnet (RFC 7871) fixes this by passing part of the user's address, at a privacy cost — 1.1.1.1 does not send it.</p><p><i>VI: CDN không bao giờ thấy laptop: nó thấy resolver hỏi thay — 192.0.2.1 là địa chỉ phía ngoài của resolver nhà mạng, 192.0.2.30 là pop1, 198.19.255.2 là pop2 (đều có trong named-cdn.conf). Hàng cuối là cái bẫy: người dùng không đi đâu cả, nhưng resolver của họ đổi chỗ, nên người dùng Việt Nam bị đưa sang Singapore. EDNS Client Subnet (RFC 7871) sửa chuyện này bằng cách gửi một phần địa chỉ người dùng, đổi lại mất riêng tư — 1.1.1.1 không gửi nó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fill one row per situation</p><p style=\"opacity:.75;font-size:.92em\"><i>Điền mỗi tình huống một hàng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Who asks, through which resolver"
+              },
+              {
+                "ma": "p",
+                "ten": "Copy of 198.19.1.1 used",
+                "luaChon": [
+                  "pop1 Hanoi",
+                  "pop2 Singapore",
+                  "not used (ISP resolver)"
+                ]
+              },
+              {
+                "ma": "r",
+                "ten": "Address the CDN sees asking (resolver)"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer for labflow.cdn.test"
+              },
+              {
+                "ma": "e",
+                "ten": "Edge reached",
+                "luaChon": [
+                  "Hanoi edge",
+                  "Singapore edge"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "laptop → ISP resolver"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "laptop → 198.19.1.1, pop1 up"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "ns2 (datacenter) → 198.19.1.1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "laptop → 198.19.1.1, pop1 withdrawn"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "not used (ISP resolver)",
+              "r1.r": [
+                "192.0.2.1"
+              ],
+              "r1.a": [
+                "203.0.113.10"
+              ],
+              "r1.e": "Hanoi edge",
+              "r2.p": "pop1 Hanoi",
+              "r2.r": [
+                "192.0.2.30"
+              ],
+              "r2.a": [
+                "203.0.113.10"
+              ],
+              "r2.e": "Hanoi edge",
+              "r3.p": "pop2 Singapore",
+              "r3.r": [
+                "198.19.255.2"
+              ],
+              "r3.a": [
+                "203.0.113.11"
+              ],
+              "r3.e": "Singapore edge",
+              "r4.p": "pop2 Singapore",
+              "r4.r": [
+                "198.19.255.2"
+              ],
+              "r4.a": [
+                "203.0.113.11"
+              ],
+              "r4.e": "Singapore edge"
+            },
+            "giaiThich": "<p>The CDN never sees the laptop: it sees the resolver that asks on its behalf — 192.0.2.1 is the outside address of the ISP resolver, 192.0.2.30 is pop1, 198.19.255.2 is pop2 (all in named-cdn.conf). The last row is the trap: the user did not move, but their resolver did, so a Vietnamese user is sent to Singapore. EDNS Client Subnet (RFC 7871) fixes this by passing part of the user's address, at a privacy cost — 1.1.1.1 does not send it.</p><p><i>VI: CDN không bao giờ thấy laptop: nó thấy resolver hỏi thay — 192.0.2.1 là địa chỉ phía ngoài của resolver nhà mạng, 192.0.2.30 là pop1, 198.19.255.2 là pop2 (đều có trong named-cdn.conf). Hàng cuối là cái bẫy: người dùng không đi đâu cả, nhưng resolver của họ đổi chỗ, nên người dùng Việt Nam bị đưa sang Singapore. EDNS Client Subnet (RFC 7871) sửa chuyện này bằng cách gửi một phần địa chỉ người dùng, đổi lại mất riêng tư — 1.1.1.1 không gửi nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming GeoDNS sees the user's IP.|||Mặc định GeoDNS thấy IP của người dùng."
+        },
+        {
+          "loi": "Blaming the CDN when a user uses a far-away resolver.|||Đổ lỗi cho CDN khi người dùng xài một resolver ở xa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GeoDNS",
+          "vi": "DNS theo vị trí"
+        },
+        {
+          "en": "view (BIND)",
+          "vi": "góc nhìn theo người hỏi"
+        },
+        {
+          "en": "ECS",
+          "vi": "EDNS Client Subnet — gửi kèm dải địa chỉ người dùng"
+        }
+      ]
+    },
+    {
+      "title": "Anycast 3 — Round-robin DNS with a dead server",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "round-robin DNS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>app.labflow.test has two A records, .10 and .12 — and .12 was shut down last month (lab/out/c34-rr, c34-rr-thu):<pre>$ for i in 1 2 3 4; do dig +short app.labflow.test | tr '\\n' ' '; echo; done\n203.0.113.12 203.0.113.10\n203.0.113.12 203.0.113.10\n203.0.113.10 203.0.113.12\n203.0.113.10 203.0.113.12\n$ for i in 1 2 3 4; do curl -s -o /dev/null -w '%{remote_ip}  connect %{time_connect}s\\n' http://app.labflow.test/; done\n203.0.113.10  connect 0.002990s\n203.0.113.10  connect 0.205838s\n203.0.113.10  connect 0.002415s\n203.0.113.10  connect 0.001743s\n$ curl -sv -o /dev/null http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'IPv4:|Trying|Established'\n* IPv4: 203.0.113.10, 203.0.113.12\n*   Trying 203.0.113.10:80...\n* Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 39608\n$ for i in 1 2 3 4; do python3 -c \"import socket,time; t=time.time(); s=socket.create_connection(('app.labflow.test',80)); print('python', s.getpee…\npython 203.0.113.10 connected after 2.821 s\npython 203.0.113.10 connected after 0.005 s\npython 203.0.113.10 connected after 3.081 s\npython 203.0.113.10 connected after 0.008 s\n$ python3 -c \"import socket; socket.create_connection(('203.0.113.12',80))\" 2&gt;&amp;1 | tail -1\nOSError: [Errno 113] No route to host\n\n$ curl -sv --trace-time -o /dev/null --resolve app.labflow.test:80:203.0.113.12,203.0.113.10 http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'Trying|Established'\n16:55:49.381329 *   Trying 203.0.113.12:80...\n16:55:49.592099 *   Trying 203.0.113.10:80...\n16:55:49.593044 * Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 53326\n$ curl -sv --trace-time -o /dev/null --happy-eyeballs-timeout-ms 1000 --resolve app.labflow.test:80:203.0.113.12,203.0.113.10 http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'Trying|Established'\n16:55:49.608394 *   Trying 203.0.113.12:80...\n16:55:50.615961 *   Trying 203.0.113.10:80...\n16:55:50.617127 * Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 53328\n$ node thu-dia-chi.mjs\nattempt timeout: 250 ms\nconnected to 203.0.113.10 after 264 ms</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>app.labflow.test có hai bản ghi A, .10 và .12 — mà .12 đã tắt từ tháng trước (lab/out/c34-rr, c34-rr-thu):<pre>$ for i in 1 2 3 4; do dig +short app.labflow.test | tr '\\n' ' '; echo; done\n203.0.113.12 203.0.113.10\n203.0.113.12 203.0.113.10\n203.0.113.10 203.0.113.12\n203.0.113.10 203.0.113.12\n$ for i in 1 2 3 4; do curl -s -o /dev/null -w '%{remote_ip}  connect %{time_connect}s\\n' http://app.labflow.test/; done\n203.0.113.10  connect 0.002990s\n203.0.113.10  connect 0.205838s\n203.0.113.10  connect 0.002415s\n203.0.113.10  connect 0.001743s\n$ curl -sv -o /dev/null http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'IPv4:|Trying|Established'\n* IPv4: 203.0.113.10, 203.0.113.12\n*   Trying 203.0.113.10:80...\n* Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 39608\n$ for i in 1 2 3 4; do python3 -c \"import socket,time; t=time.time(); s=socket.create_connection(('app.labflow.test',80)); print('python', s.getpee…\npython 203.0.113.10 connected after 2.821 s\npython 203.0.113.10 connected after 0.005 s\npython 203.0.113.10 connected after 3.081 s\npython 203.0.113.10 connected after 0.008 s\n$ python3 -c \"import socket; socket.create_connection(('203.0.113.12',80))\" 2&gt;&amp;1 | tail -1\nOSError: [Errno 113] No route to host\n\n$ curl -sv --trace-time -o /dev/null --resolve app.labflow.test:80:203.0.113.12,203.0.113.10 http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'Trying|Established'\n16:55:49.381329 *   Trying 203.0.113.12:80...\n16:55:49.592099 *   Trying 203.0.113.10:80...\n16:55:49.593044 * Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 53326\n$ curl -sv --trace-time -o /dev/null --happy-eyeballs-timeout-ms 1000 --resolve app.labflow.test:80:203.0.113.12,203.0.113.10 http://app.labflow.test/ 2&gt;&amp;1 | grep -E 'Trying|Established'\n16:55:49.608394 *   Trying 203.0.113.12:80...\n16:55:50.615961 *   Trying 203.0.113.10:80...\n16:55:50.617127 * Established connection to app.labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 53328\n$ node thu-dia-chi.mjs\nattempt timeout: 250 ms\nconnected to 203.0.113.10 after 264 ms</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the timestamps of the \"Trying\" lines.|||So mốc thời gian của các dòng \"Trying\".",
+        "Each client library has its own strategy for multiple addresses.|||Mỗi thư viện client có chiến lược riêng cho nhiều địa chỉ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 3 — Round-robin DNS with a dead server\n\nAnswer in the answer panel (no code needed).\n\n1. The order of the two addresses changes between answers. Who does that?Thứ tự hai địa chỉ đổi giữa các câu trả lời. Ai làm việc đó?\n2. curl connected in 0.002 s, 0.206 s, 0.002 s, 0.002 s. Where does the 0.206 come from?curl kết nối trong 0,002 s, 0,206 s, 0,002 s, 0,002 s. 0,206 từ đâu ra?\n3. Python took 2.8 s and 3.1 s when .12 came first. Why so much longer than curl?Python mất 2,8 s và 3,1 s khi .12 đứng đầu. Vì sao lâu hơn curl nhiều vậy?\n4. What is the right way to send users to several servers and survive one dying?Cách đúng để chia người dùng ra nhiều máy chủ mà vẫn sống khi một máy chết là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 3 — Round-robin DNS with a dead server — answer key\n\n1. The order of the two addresses changes between answers. Who does that?Thứ tự hai địa chỉ đổi giữa các câu trả lời. Ai làm việc đó?\n   Answer: b) The resolver (and the server) rotate the order of the records\n   Rotation spreads users over the addresses — but only roughly: one big resolver hands the same order to thousands of users at once.VI: Xoay vòng rải người dùng lên các địa chỉ — nhưng chỉ đại khái: một resolver lớn đưa cùng một thứ tự cho hàng nghìn người cùng lúc.\n\n2. curl connected in 0.002 s, 0.206 s, 0.002 s, 0.002 s. Where does the 0.206 come from?curl kết nối trong 0,002 s, 0,206 s, 0,002 s, 0,002 s. 0,206 từ đâu ra?\n   Answer: a) .12 came first; after 200 ms curl moved on to .10\n   --trace-time shows it: \"Trying .12\" at 49.381, \"Trying .10\" at 49.592. With --happy-eyeballs-timeout-ms 1000 the gap becomes one second.VI: --trace-time cho thấy: \"Trying .12\" lúc 49.381, \"Trying .10\" lúc 49.592. Với --happy-eyeballs-timeout-ms 1000 khoảng cách thành một giây.\n\n3. Python took 2.8 s and 3.1 s when .12 came first. Why so much longer than curl?Python mất 2,8 s và 3,1 s khi .12 đứng đầu. Vì sao lâu hơn curl nhiều vậy?\n   Answer: c) socket.create_connection tries addresses one after another and waits for each to fail\n   Here the failure is \"No route to host\" after ~3 s (ARP for .12 gets no answer). Behind a firewall that silently drops, each dead address can cost tens of seconds.VI: Ở đây lỗi là \"No route to host\" sau ~3 s (ARP cho .12 không ai trả lời). Sau tường lửa lặng lẽ bỏ gói, mỗi địa chỉ chết có thể tốn vài chục giây.\n\n4. What is the right way to send users to several servers and survive one dying?Cách đúng để chia người dùng ra nhiều máy chủ mà vẫn sống khi một máy chết là gì?\n   Answer: b) A load balancer (or health-checked DNS) that removes dead servers\n   Plain DNS has no health check: .12 stays in every answer until someone removes it, then one more TTL in caches. Chapter 10 builds a load balancer.VI: DNS thường không có kiểm tra sức khoẻ: .12 nằm trong mọi câu trả lời tới khi có người gỡ, rồi thêm một TTL trong cache. Chương 10 dựng bộ cân bằng tải.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The resolver (and the server) rotate the order of the records</p><p>Rotation spreads users over the addresses — but only roughly: one big resolver hands the same order to thousands of users at once.</p><p><i>VI: Xoay vòng rải người dùng lên các địa chỉ — nhưng chỉ đại khái: một resolver lớn đưa cùng một thứ tự cho hàng nghìn người cùng lúc.</i></p></li><li><p><b>a)</b> .12 came first; after 200 ms curl moved on to .10</p><p>--trace-time shows it: \"Trying .12\" at 49.381, \"Trying .10\" at 49.592. With --happy-eyeballs-timeout-ms 1000 the gap becomes one second.</p><p><i>VI: --trace-time cho thấy: \"Trying .12\" lúc 49.381, \"Trying .10\" lúc 49.592. Với --happy-eyeballs-timeout-ms 1000 khoảng cách thành một giây.</i></p></li><li><p><b>c)</b> socket.create_connection tries addresses one after another and waits for each to fail</p><p>Here the failure is \"No route to host\" after ~3 s (ARP for .12 gets no answer). Behind a firewall that silently drops, each dead address can cost tens of seconds.</p><p><i>VI: Ở đây lỗi là \"No route to host\" sau ~3 s (ARP cho .12 không ai trả lời). Sau tường lửa lặng lẽ bỏ gói, mỗi địa chỉ chết có thể tốn vài chục giây.</i></p></li><li><p><b>b)</b> A load balancer (or health-checked DNS) that removes dead servers</p><p>Plain DNS has no health check: .12 stays in every answer until someone removes it, then one more TTL in caches. Chapter 10 builds a load balancer.</p><p><i>VI: DNS thường không có kiểm tra sức khoẻ: .12 nằm trong mọi câu trả lời tới khi có người gỡ, rồi thêm một TTL trong cache. Chương 10 dựng bộ cân bằng tải.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The order of the two addresses changes between answers. Who does that?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự hai địa chỉ đổi giữa các câu trả lời. Ai làm việc đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dig shuffles answers randomly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver (and the server) rotate the order of the records"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The laptop's stub sorts by distance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ns1 and ns2 store them in opposite order"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Rotation spreads users over the addresses — but only roughly: one big resolver hands the same order to thousands of users at once.</p><p><i>VI: Xoay vòng rải người dùng lên các địa chỉ — nhưng chỉ đại khái: một resolver lớn đưa cùng một thứ tự cho hàng nghìn người cùng lúc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>curl connected in 0.002 s, 0.206 s, 0.002 s, 0.002 s. Where does the 0.206 come from?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl kết nối trong 0,002 s, 0,206 s, 0,002 s, 0,002 s. 0,206 từ đâu ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": ".12 came first; after 200 ms curl moved on to .10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver took 200 ms to answer that time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TCP retransmitted the lost SYN after 200 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The .10 server was busy for that request"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>--trace-time shows it: \"Trying .12\" at 49.381, \"Trying .10\" at 49.592. With --happy-eyeballs-timeout-ms 1000 the gap becomes one second.</p><p><i>VI: --trace-time cho thấy: \"Trying .12\" lúc 49.381, \"Trying .10\" lúc 49.592. Với --happy-eyeballs-timeout-ms 1000 khoảng cách thành một giây.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Python took 2.8 s and 3.1 s when .12 came first. Why so much longer than curl?</p><p style=\"opacity:.75;font-size:.92em\"><i>Python mất 2,8 s và 3,1 s khi .12 đứng đầu. Vì sao lâu hơn curl nhiều vậy?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Python waits for the DNS TTL of 30 s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Python resolves the name again for every address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "socket.create_connection tries addresses one after another and waits for each to fail"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Python uses a slower TCP stack"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Here the failure is \"No route to host\" after ~3 s (ARP for .12 gets no answer). Behind a firewall that silently drops, each dead address can cost tens of seconds.</p><p><i>VI: Ở đây lỗi là \"No route to host\" sau ~3 s (ARP cho .12 không ai trả lời). Sau tường lửa lặng lẽ bỏ gói, mỗi địa chỉ chết có thể tốn vài chục giây.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What is the right way to send users to several servers and survive one dying?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách đúng để chia người dùng ra nhiều máy chủ mà vẫn sống khi một máy chết là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "More A records, so a dead one is a smaller share"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A load balancer (or health-checked DNS) that removes dead servers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A shorter TTL on the round-robin records"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Asking clients to retry"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plain DNS has no health check: .12 stays in every answer until someone removes it, then one more TTL in caches. Chapter 10 builds a load balancer.</p><p><i>VI: DNS thường không có kiểm tra sức khoẻ: .12 nằm trong mọi câu trả lời tới khi có người gỡ, rồi thêm một TTL trong cache. Chương 10 dựng bộ cân bằng tải.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving a dead server in DNS and calling it \"load balancing\".|||Để máy chết trong DNS và gọi đó là \"cân bằng tải\"."
+        },
+        {
+          "loi": "Measuring only with curl, which hides the problem better than most clients.|||Chỉ đo bằng curl, thứ che vấn đề giỏi hơn hầu hết client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round-robin DNS",
+          "vi": "DNS xoay vòng"
+        },
+        {
+          "en": "Happy Eyeballs",
+          "vi": "thử song song nhiều địa chỉ"
+        },
+        {
+          "en": "health check",
+          "vi": "kiểm tra sức khoẻ"
+        }
+      ]
+    },
+    {
+      "title": "Anycast 4 — The orange cloud, seen from DNS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CDN proxy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The real Internet (lab/out/c34-that): cuongthai.com is served straight from the VPS; media.cuongthai.com is proxied by Cloudflare. The TXT queries ask Team Cymru which network owns an address:<pre>$ dig +short cuongthai.com\n160.187.1.208\n$ dig +short TXT 208.1.187.160.origin.asn.cymru.com\n\"152992 | 160.187.0.0/23 | VN | apnic | 2024-09-05\"\n$ dig +short media.cuongthai.com\n172.67.161.19\n104.21.90.200\n$ dig +short TXT 19.161.67.172.origin.asn.cymru.com\n\"13335 | 172.67.160.0/20 | US | arin | 2015-02-25\"\n$ curl -sI https://media.cuongthai.com/ | grep -i -E '^(server|cf-ray):'\nserver: cloudflare\ncf-ray: a539d6eafec6dd3e-HKG\n$ curl -sI https://cuongthai.com/ | grep -i -E '^(server|cf-ray):'\nserver: nginx/1.27.5\n$ dig @1.1.1.1 id.server CH TXT +short\n\"hkg11\"</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Internet thật (lab/out/c34-that): cuongthai.com phục vụ thẳng từ VPS; media.cuongthai.com đi qua proxy của Cloudflare. Các truy vấn TXT hỏi Team Cymru mạng nào sở hữu một địa chỉ:<pre>$ dig +short cuongthai.com\n160.187.1.208\n$ dig +short TXT 208.1.187.160.origin.asn.cymru.com\n\"152992 | 160.187.0.0/23 | VN | apnic | 2024-09-05\"\n$ dig +short media.cuongthai.com\n172.67.161.19\n104.21.90.200\n$ dig +short TXT 19.161.67.172.origin.asn.cymru.com\n\"13335 | 172.67.160.0/20 | US | arin | 2015-02-25\"\n$ curl -sI https://media.cuongthai.com/ | grep -i -E '^(server|cf-ray):'\nserver: cloudflare\ncf-ray: a539d6eafec6dd3e-HKG\n$ curl -sI https://cuongthai.com/ | grep -i -E '^(server|cf-ray):'\nserver: nginx/1.27.5\n$ dig @1.1.1.1 id.server CH TXT +short\n\"hkg11\"</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look up the AS of each address: who owns it?|||Tra AS của từng địa chỉ: ai sở hữu nó?",
+        "\"server:\" and \"cf-ray:\" headers say who answered HTTP.|||Header \"server:\" và \"cf-ray:\" cho biết ai trả lời HTTP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 4 — The orange cloud, seen from DNS\n\nAnswer in the answer panel (no code needed).\n\n1. What does \"13335 | 172.67.160.0/20 | US\" tell you about media.cuongthai.com?\"13335 | 172.67.160.0/20 | US\" cho biết gì về media.cuongthai.com?\n2. Behind the proxy, what IP does the origin web server see as the client?Sau proxy, máy chủ web gốc thấy IP nào là client?\n3. cuongthai.com resolves to 160.187.1.208 (AS152992, VN) and answers \"server: nginx/1.27.5\". What does that mean?cuongthai.com phân giải ra 160.187.1.208 (AS152992, VN) và trả lời \"server: nginx/1.27.5\". Điều đó nghĩa gì?\n4. dig @1.1.1.1 id.server answered \"hkg11\". Why can Cloudflare not do GeoDNS by the user's location for you here?dig @1.1.1.1 id.server trả lời \"hkg11\". Vì sao ở đây Cloudflare không làm GeoDNS theo vị trí người dùng được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anycast 4 — The orange cloud, seen from DNS — answer key\n\n1. What does \"13335 | 172.67.160.0/20 | US\" tell you about media.cuongthai.com?\"13335 | 172.67.160.0/20 | US\" cho biết gì về media.cuongthai.com?\n   Answer: d) DNS returns Cloudflare's own anycast addresses, not the origin server\n   AS13335 is Cloudflare. A proxied record publishes Cloudflare's addresses; the \"US\" is only where the block was registered — the edge that answered is HKG (cf-ray).VI: AS13335 là Cloudflare. Bản ghi đi qua proxy công bố địa chỉ của Cloudflare; \"US\" chỉ là nơi dải địa chỉ được đăng ký — máy biên trả lời là HKG (cf-ray).\n\n2. Behind the proxy, what IP does the origin web server see as the client?Sau proxy, máy chủ web gốc thấy IP nào là client?\n   Answer: c) A Cloudflare address (the real one is in CF-Connecting-IP)\n   The TCP connection to your origin comes from Cloudflare. Rate limits and logs must read the header — and trust it only from Cloudflare's ranges (Chapter 7).VI: Kết nối TCP tới máy gốc đến từ Cloudflare. Giới hạn tần suất và log phải đọc header — và chỉ tin nó khi đến từ dải của Cloudflare (Chương 7).\n\n3. cuongthai.com resolves to 160.187.1.208 (AS152992, VN) and answers \"server: nginx/1.27.5\". What does that mean?cuongthai.com phân giải ra 160.187.1.208 (AS152992, VN) và trả lời \"server: nginx/1.27.5\". Điều đó nghĩa gì?\n   Answer: a) It is not proxied: anyone with dig sees the origin IP and talks to it directly\n   \"Grey cloud\": Cloudflare only hosts the DNS. Fine for many sites, but the origin is exposed and there is no edge cache.VI: \"Mây xám\": Cloudflare chỉ giữ DNS. Ổn với nhiều trang, nhưng máy gốc bị lộ và không có cache ở máy biên.\n\n4. dig @1.1.1.1 id.server answered \"hkg11\". Why can Cloudflare not do GeoDNS by the user's location for you here?dig @1.1.1.1 id.server trả lời \"hkg11\". Vì sao ở đây Cloudflare không làm GeoDNS theo vị trí người dùng được?\n   Answer: d) Everyone gets the same anycast IPs; routing picks the edge\n   Big CDNs often skip GeoDNS altogether and use anycast for the site itself — the same trick as 198.19.1.1. 1.1.1.1 does not send ECS.VI: CDN lớn thường bỏ hẳn GeoDNS và dùng anycast cho chính trang web — cùng mẹo với 198.19.1.1. 1.1.1.1 không gửi ECS.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> DNS returns Cloudflare's own anycast addresses, not the origin server</p><p>AS13335 is Cloudflare. A proxied record publishes Cloudflare's addresses; the \"US\" is only where the block was registered — the edge that answered is HKG (cf-ray).</p><p><i>VI: AS13335 là Cloudflare. Bản ghi đi qua proxy công bố địa chỉ của Cloudflare; \"US\" chỉ là nơi dải địa chỉ được đăng ký — máy biên trả lời là HKG (cf-ray).</i></p></li><li><p><b>c)</b> A Cloudflare address (the real one is in CF-Connecting-IP)</p><p>The TCP connection to your origin comes from Cloudflare. Rate limits and logs must read the header — and trust it only from Cloudflare's ranges (Chapter 7).</p><p><i>VI: Kết nối TCP tới máy gốc đến từ Cloudflare. Giới hạn tần suất và log phải đọc header — và chỉ tin nó khi đến từ dải của Cloudflare (Chương 7).</i></p></li><li><p><b>a)</b> It is not proxied: anyone with dig sees the origin IP and talks to it directly</p><p>\"Grey cloud\": Cloudflare only hosts the DNS. Fine for many sites, but the origin is exposed and there is no edge cache.</p><p><i>VI: \"Mây xám\": Cloudflare chỉ giữ DNS. Ổn với nhiều trang, nhưng máy gốc bị lộ và không có cache ở máy biên.</i></p></li><li><p><b>d)</b> Everyone gets the same anycast IPs; routing picks the edge</p><p>Big CDNs often skip GeoDNS altogether and use anycast for the site itself — the same trick as 198.19.1.1. 1.1.1.1 does not send ECS.</p><p><i>VI: CDN lớn thường bỏ hẳn GeoDNS và dùng anycast cho chính trang web — cùng mẹo với 198.19.1.1. 1.1.1.1 không gửi ECS.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does \"13335 | 172.67.160.0/20 | US\" tell you about media.cuongthai.com?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"13335 | 172.67.160.0/20 | US\" cho biết gì về media.cuongthai.com?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The media files are stored in the United States"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The domain is registered with Cloudflare"
+              },
+              {
+                "ma": "c",
+                "noiDung": "media.cuongthai.com has moved to a new VPS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DNS returns Cloudflare's own anycast addresses, not the origin server"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>AS13335 is Cloudflare. A proxied record publishes Cloudflare's addresses; the \"US\" is only where the block was registered — the edge that answered is HKG (cf-ray).</p><p><i>VI: AS13335 là Cloudflare. Bản ghi đi qua proxy công bố địa chỉ của Cloudflare; \"US\" chỉ là nơi dải địa chỉ được đăng ký — máy biên trả lời là HKG (cf-ray).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Behind the proxy, what IP does the origin web server see as the client?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau proxy, máy chủ web gốc thấy IP nào là client?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The user's real IP, exactly as without a proxy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1.1.1.1, Cloudflare's public resolver"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A Cloudflare address (the real one is in CF-Connecting-IP)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The VPS's own public address, 160.187.1.208"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The TCP connection to your origin comes from Cloudflare. Rate limits and logs must read the header — and trust it only from Cloudflare's ranges (Chapter 7).</p><p><i>VI: Kết nối TCP tới máy gốc đến từ Cloudflare. Giới hạn tần suất và log phải đọc header — và chỉ tin nó khi đến từ dải của Cloudflare (Chương 7).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>cuongthai.com resolves to 160.187.1.208 (AS152992, VN) and answers \"server: nginx/1.27.5\". What does that mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>cuongthai.com phân giải ra 160.187.1.208 (AS152992, VN) và trả lời \"server: nginx/1.27.5\". Điều đó nghĩa gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is not proxied: anyone with dig sees the origin IP and talks to it directly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Cloudflare hides the server header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is proxied by a Vietnamese CDN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The record is broken and points to the wrong network"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"Grey cloud\": Cloudflare only hosts the DNS. Fine for many sites, but the origin is exposed and there is no edge cache.</p><p><i>VI: \"Mây xám\": Cloudflare chỉ giữ DNS. Ổn với nhiều trang, nhưng máy gốc bị lộ và không có cache ở máy biên.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>dig @1.1.1.1 id.server answered \"hkg11\". Why can Cloudflare not do GeoDNS by the user's location for you here?</p><p style=\"opacity:.75;font-size:.92em\"><i>dig @1.1.1.1 id.server trả lời \"hkg11\". Vì sao ở đây Cloudflare không làm GeoDNS theo vị trí người dùng được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It does: hkg11 means every user is sent to Hong Kong"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1.1.1.1 sends ECS, which hides where the user is"
+              },
+              {
+                "ma": "c",
+                "noiDung": "GeoDNS requires DNSSEC, which cuongthai.com lacks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Everyone gets the same anycast IPs; routing picks the edge"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Big CDNs often skip GeoDNS altogether and use anycast for the site itself — the same trick as 198.19.1.1. 1.1.1.1 does not send ECS.</p><p><i>VI: CDN lớn thường bỏ hẳn GeoDNS và dùng anycast cho chính trang web — cùng mẹo với 198.19.1.1. 1.1.1.1 không gửi ECS.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Logging the proxy's IP as the user's.|||Ghi IP của proxy thành IP người dùng."
+        },
+        {
+          "loi": "Thinking \"proxied\" hides an origin that is also reachable by another name.|||Nghĩ \"đi qua proxy\" giấu được máy gốc trong khi một tên khác vẫn trỏ thẳng vào nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "origin",
+          "vi": "máy chủ gốc"
+        },
+        {
+          "en": "reverse proxy",
+          "vi": "proxy ngược"
+        },
+        {
+          "en": "ASN",
+          "vi": "số hiệu mạng"
+        }
+      ]
+    },
+    {
+      "title": "Anycast 5 — Write bgpBest(): read a BGP table entry",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "BGP best path"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Read FRR's <code>show ip bgp &lt;prefix&gt;</code> output, real from the ISP router (lab/out/c34-bgp):</p><pre>BGP routing table entry for 198.19.1.0/24, version 2\nPaths: (2 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.3 192.0.2.30 192.0.2.66\n  64530\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\n      Origin IGP, metric 0, valid, external, best (AS Path)\n      Last update: Sun Nov  1 17:16:01 2026\n  64510 64530\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\n      Origin IGP, valid, external\n      Last update: Sun Nov  1 17:16:01 2026</pre>\n<p>Write <code>bgpBest(text)</code> returning <code>{ prefix, paths, chosen }</code>:</p>\n<ul><li><code>prefix</code> — from the first line (\"BGP routing table entry for …\");</li>\n<li>a path starts with a line of exactly two spaces + the AS numbers (or <code>Local</code> ⇒ empty array); the next line, four spaces + the next hop + \" from …\", gives <code>nextHop</code>; the line after it contains <code>best</code> as a separate word when FRR selected it. Each path: <code>{ asPath: [numbers], nextHop, best }</code>;</li>\n<li><code>chosen</code> — the index <b>you</b> would select: the shortest AS path; a tie goes to the numerically lowest next-hop address (a simplification of BGP's later tie-breakers). On real outputs it must agree with FRR's <code>best</code>.</li></ul>\n<p>Careful: the \"Advertised to peers:\" line also starts with two spaces, but is not an AS path. Hidden cases: <b>constructed</b> entries — three paths where the best is the second, and the table right after pop1 withdrew (one path left).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đọc output <code>show ip bgp &lt;prefix&gt;</code> của FRR, bản thật trên router nhà mạng (lab/out/c34-bgp):</p><pre>BGP routing table entry for 198.19.1.0/24, version 2\nPaths: (2 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.3 192.0.2.30 192.0.2.66\n  64530\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\n      Origin IGP, metric 0, valid, external, best (AS Path)\n      Last update: Sun Nov  1 17:16:01 2026\n  64510 64530\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\n      Origin IGP, valid, external\n      Last update: Sun Nov  1 17:16:01 2026</pre>\n<p>Viết <code>bgpBest(text)</code> trả về <code>{ prefix, paths, chosen }</code>:</p>\n<ul><li><code>prefix</code> — lấy từ dòng đầu (\"BGP routing table entry for …\");</li>\n<li>một đường bắt đầu bằng dòng có đúng hai dấu cách + các số AS (hoặc <code>Local</code> ⇒ mảng rỗng); dòng kế, bốn dấu cách + next hop + \" from …\", cho <code>nextHop</code>; dòng sau nữa chứa chữ <code>best</code> đứng riêng khi FRR đã chọn nó. Mỗi đường: <code>{ asPath: [số], nextHop, best }</code>;</li>\n<li><code>chosen</code> — chỉ số <b>bạn</b> sẽ chọn: AS path ngắn nhất; hoà thì lấy next hop có giá trị số nhỏ nhất (giản lược các bước phân xử sau của BGP). Trên output thật nó phải trùng với <code>best</code> của FRR.</li></ul>\n<p>Cẩn thận: dòng \"Advertised to peers:\" cũng bắt đầu bằng hai dấu cách, nhưng không phải AS path. Ca ẩn: các mục <b>dựng</b> — ba đường mà đường tốt nhất là đường thứ hai, và bảng ngay sau khi pop1 rút (còn một đường).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — output of show ip bgp <prefix>.|||text — output của show ip bgp <prefix>.",
+      "outputSpec": "{ prefix, paths: [{ asPath, nextHop, best }], chosen }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "bgpBest(\"BGP routing table entry for 198.19.1.0/24, version 2\\nPaths: (2 available, best #1, table default)\\n  Advertised to peers:\\n  192.0.2.3 192.0.2.30 192.0.2.66\\n  64530\\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\\n      Origin IGP, metric 0, valid, external, best (AS Path)\\n      Last update: Sun Nov  1 17:16:01 2026\\n  64510 64530\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, valid, external\\n      Last update: Sun Nov  1 17:16:01 2026\")",
+          "output": "{\"prefix\":\"198.19.1.0/24\",\"paths\":[{\"asPath\":[64530],\"nextHop\":\"192.0.2.30\",\"best\":true},{\"asPath\":[64510,64530],\"nextHop\":\"192.0.2.3\",\"best\":false}],\"chosen\":0}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use a regular expression for the AS path line: two spaces, then digits and spaces only.|||Dùng biểu thức chính quy cho dòng AS path: hai dấu cách, rồi chỉ có chữ số và dấu cách.",
+        "Compare IPv4 addresses as numbers: a*2^24 + b*2^16 + c*2^8 + d.|||So địa chỉ IPv4 như số: a*2^24 + b*2^16 + c*2^8 + d."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** show ip bgp <prefix> text ⇒ { prefix, paths: [{ asPath, nextHop, best }], chosen } */\nfunction bgpBest(text) {\n  // Write your solution here\n  return { prefix: null, paths: [], chosen: -1 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function bgpBest(text) {\n  var lines = String(text).split('\\n');\n  var head = /^BGP routing table entry for ([^,\\s]+)/.exec(lines[0] || '');\n  var paths = [];\n  for (var i = 0; i < lines.length; i++) {\n    var m = /^ {2}(\\d+(?: \\d+)*|Local)$/.exec(lines[i]);                // \"  64510 64530\" — the AS path line\n    if (!m) continue;\n    var hop = /^ {4}(\\S+) from/.exec(lines[i + 1] || '');\n    var info = lines[i + 2] || '';\n    paths.push({\n      asPath: m[1] === 'Local' ? [] : m[1].split(' ').map(Number),\n      nextHop: hop ? hop[1] : null,\n      best: /(^|, )best( |,|$)/.test(info.trim()),\n    });\n  }\n  var num = function (ip) { return ip.split('.').reduce(function (a, b) { return a * 256 + Number(b); }, 0); };\n  var chosen = -1;\n  paths.forEach(function (p, k) {\n    if (chosen < 0) { chosen = k; return; }\n    var c = paths[chosen];\n    if (p.asPath.length < c.asPath.length || (p.asPath.length === c.asPath.length && num(p.nextHop) < num(c.nextHop))) chosen = k;\n  });\n  return { prefix: head ? head[1] : null, paths: paths, chosen: chosen };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Anycast works because every router independently picks the shortest AS path to the prefix: the ISP router sees pop1 directly and pop2 through the datacenter, so homes reach Hanoi. When pop1 withdraws, the only remaining path is chosen within a second — the failover you measured. Reading the BGP entry tells you exactly which copy of an anycast service a network will reach.</p>",
+      "solutionExplanationHtmlVi": "<p>Anycast chạy được vì mỗi router tự chọn AS path ngắn nhất tới dải: router nhà mạng thấy pop1 trực tiếp còn pop2 qua datacenter, nên các nhà tới Hà Nội. Khi pop1 rút, đường duy nhất còn lại được chọn trong vòng một giây — chính lần chuyển dự phòng bạn đã đo. Đọc mục BGP cho biết chính xác một mạng sẽ tới bản nào của dịch vụ anycast.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: the ISP router, two paths",
+              "vi": "Thật: router nhà mạng, hai đường"
+            },
+            "goi": "bgpBest(\"BGP routing table entry for 198.19.1.0/24, version 2\\nPaths: (2 available, best #1, table default)\\n  Advertised to peers:\\n  192.0.2.3 192.0.2.30 192.0.2.66\\n  64530\\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\\n      Origin IGP, metric 0, valid, external, best (AS Path)\\n      Last update: Sun Nov  1 17:16:01 2026\\n  64510 64530\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, valid, external\\n      Last update: Sun Nov  1 17:16:01 2026\")",
+            "mongDoi": {
+              "prefix": "198.19.1.0/24",
+              "paths": [
+                {
+                  "asPath": [
+                    64530
+                  ],
+                  "nextHop": "192.0.2.30",
+                  "best": true
+                },
+                {
+                  "asPath": [
+                    64510,
+                    64530
+                  ],
+                  "nextHop": "192.0.2.3",
+                  "best": false
+                }
+              ],
+              "chosen": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: AS path lengths",
+              "vi": "Thật: độ dài các AS path"
+            },
+            "goi": "bgpBest(\"BGP routing table entry for 198.19.1.0/24, version 2\\nPaths: (2 available, best #1, table default)\\n  Advertised to peers:\\n  192.0.2.3 192.0.2.30 192.0.2.66\\n  64530\\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\\n      Origin IGP, metric 0, valid, external, best (AS Path)\\n      Last update: Sun Nov  1 17:16:01 2026\\n  64510 64530\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, valid, external\\n      Last update: Sun Nov  1 17:16:01 2026\").paths.map(function (p) { return p.asPath.length; })",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "bgpBest(\"BGP routing table entry for 198.51.100.0/24, version 7\\nPaths: (3 available, best #2, table default)\\n  Advertised to peers:\\n  192.0.2.30\\n  64530 64510 64496\\n    192.0.2.30 from 192.0.2.30 (192.0.2.30)\\n      Origin IGP, valid, external\\n      Last update: Sun Nov  1 17:20:00 2026\\n  64510 64496\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, metric 0, valid, external, best (AS Path)\\n      Last update: Sun Nov  1 17:19:00 2026\\n  64520 64496\\n    192.0.2.66 from 192.0.2.66 (192.0.2.66)\\n      Origin IGP, valid, external\\n      Last update: Sun Nov  1 17:18:00 2026\")",
+            "mongDoi": {
+              "prefix": "198.51.100.0/24",
+              "paths": [
+                {
+                  "asPath": [
+                    64530,
+                    64510,
+                    64496
+                  ],
+                  "nextHop": "192.0.2.30",
+                  "best": false
+                },
+                {
+                  "asPath": [
+                    64510,
+                    64496
+                  ],
+                  "nextHop": "192.0.2.3",
+                  "best": true
+                },
+                {
+                  "asPath": [
+                    64520,
+                    64496
+                  ],
+                  "nextHop": "192.0.2.66",
+                  "best": false
+                }
+              ],
+              "chosen": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bgpBest(\"BGP routing table entry for 198.19.1.0/24, version 2\\nPaths: (1 available, best #1, table default)\\n  Advertised to peers:\\n  192.0.2.3 192.0.2.30 192.0.2.66\\n  64510 64530\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, valid, external, best (First path received)\\n      Last update: Sun Nov  1 16:22:57 2026\")",
+            "mongDoi": {
+              "prefix": "198.19.1.0/24",
+              "paths": [
+                {
+                  "asPath": [
+                    64510,
+                    64530
+                  ],
+                  "nextHop": "192.0.2.3",
+                  "best": true
+                }
+              ],
+              "chosen": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bgpBest(\"BGP routing table entry for 192.0.2.0/24, version 1\\nPaths: (2 available, best #2, table default)\\n  Not advertised to any peer\\n  64500\\n    192.0.2.66 from 192.0.2.66 (192.0.2.66)\\n      Origin IGP, valid, external\\n  64501\\n    192.0.2.3 from 192.0.2.3 (192.0.2.3)\\n      Origin IGP, valid, external, best (Router ID)\")",
+            "mongDoi": {
+              "prefix": "192.0.2.0/24",
+              "paths": [
+                {
+                  "asPath": [
+                    64500
+                  ],
+                  "nextHop": "192.0.2.66",
+                  "best": false
+                },
+                {
+                  "asPath": [
+                    64501
+                  ],
+                  "nextHop": "192.0.2.3",
+                  "best": true
+                }
+              ],
+              "chosen": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking \"192.0.2.3 192.0.2.30 192.0.2.66\" (the peers line) as an AS path.|||Lấy \"192.0.2.3 192.0.2.30 192.0.2.66\" (dòng peers) làm AS path."
+        },
+        {
+          "loi": "Comparing AS paths as strings: \"64510 64530\" is longer than \"64530\" even though \"6451\" < \"6453\".|||So AS path như chuỗi: \"64510 64530\" dài hơn \"64530\" dù \"6451\" < \"6453\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "next hop",
+          "vi": "chặng kế tiếp"
+        },
+        {
+          "en": "AS path",
+          "vi": "chuỗi AS"
+        },
+        {
+          "en": "tie-breaker",
+          "vi": "luật phân xử khi hoà"
+        }
+      ]
+    },
+    {
+      "title": "Anycast 6 — Write geoAnswer(): how a GeoDNS server chooses",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "GeoDNS",
+        "CIDR matching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Reproduce the CDN's BIND views (lab/moi-truong/dns/named-cdn.conf):</p><pre>acl vn { 192.0.2.1; 192.0.2.30; 198.51.100.0/24; 100.64.0.0/24; };\nview \"vn\" { match-clients { vn; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.zone\"; }; };\nview \"sg\" { match-clients { any; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.sg.zone\"; }; };</pre>\n<p>Write <code>geoAnswer(views, resolverIp, ecs)</code>. <code>views</code> is an ordered array <code>[{ name, match: [...], answer }]</code>; each match entry is an IPv4 address (= /32), a CIDR block, or <code>\"any\"</code>. Return <code>{ view, answer }</code> of the <b>first</b> view with a matching entry, or <code>{ view: null, answer: null }</code>.</p>\n<p>The address tested is <code>resolverIp</code> — the GeoDNS server only sees who asks. If the optional <code>ecs</code> (EDNS Client Subnet, e.g. <code>\"198.51.100.0/24\"</code>) is given, test the network address of that subnet instead: that is exactly what ECS changes.</p>\n<p>Visible cases are the real resolvers of the lab: the ISP resolver's outside address 192.0.2.1, pop1 192.0.2.30, pop2 198.19.255.2. Hidden cases: pop2 forwarding the house's subnet with ECS, and a <b>constructed</b> three-view setup with /11 blocks and 0.0.0.0/0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm lại các view BIND của CDN (lab/moi-truong/dns/named-cdn.conf):</p><pre>acl vn { 192.0.2.1; 192.0.2.30; 198.51.100.0/24; 100.64.0.0/24; };\nview \"vn\" { match-clients { vn; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.zone\"; }; };\nview \"sg\" { match-clients { any; }; zone \"cdn.test\" { type primary; file \"/lab/k/moi-truong/dns/vung/cdn.test.sg.zone\"; }; };</pre>\n<p>Viết <code>geoAnswer(views, resolverIp, ecs)</code>. <code>views</code> là mảng có thứ tự <code>[{ name, match: [...], answer }]</code>; mỗi mục match là một địa chỉ IPv4 (= /32), một khối CIDR, hoặc <code>\"any\"</code>. Trả về <code>{ view, answer }</code> của view <b>đầu tiên</b> có mục khớp, hoặc <code>{ view: null, answer: null }</code>.</p>\n<p>Địa chỉ đem thử là <code>resolverIp</code> — máy chủ GeoDNS chỉ thấy ai hỏi. Nếu có <code>ecs</code> (EDNS Client Subnet, ví dụ <code>\"198.51.100.0/24\"</code>), thử địa chỉ mạng của dải đó thay vào: đó chính xác là thứ ECS thay đổi.</p>\n<p>Ca hiện là các resolver thật của lab: địa chỉ phía ngoài của resolver nhà mạng 192.0.2.1, pop1 192.0.2.30, pop2 198.19.255.2. Ca ẩn: pop2 chuyển dải của ngôi nhà bằng ECS, và một cấu hình <b>dựng</b> ba view với khối /11 và 0.0.0.0/0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "views — ordered views; resolverIp — who asks; ecs — optional \"a.b.c.d/len\".|||views — các view theo thứ tự; resolverIp — ai hỏi; ecs — tuỳ chọn \"a.b.c.d/len\".",
+      "outputSpec": "{ view, answer }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"192.0.2.1\")",
+          "output": "{\"view\":\"vn\",\"answer\":\"203.0.113.10\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Turn an address into a 32-bit number; two addresses are in the same /len block when their first len bits are equal.|||Đổi địa chỉ thành số 32 bit; hai địa chỉ cùng khối /len khi len bit đầu bằng nhau.",
+        "Use Math.floor(n / 2 ** (32 - len)) instead of >> to avoid negative numbers in JavaScript.|||Dùng Math.floor(n / 2 ** (32 - len)) thay cho >> để tránh số âm trong JavaScript."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ordered views, resolver IP, optional ECS subnet ⇒ { view, answer } */\nfunction geoAnswer(views, resolverIp, ecs) {\n  // Write your solution here\n  return { view: null, answer: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function geoAnswer(views, resolverIp, ecs) {\n  var num = function (ip) { return ip.split('.').reduce(function (a, b) { return a * 256 + Number(b); }, 0); };\n  var inNet = function (ip, net) {\n    if (net === 'any') return true;\n    var p = net.split('/'), len = p.length > 1 ? Number(p[1]) : 32;\n    var size = Math.pow(2, 32 - len);                                   // addresses in the block\n    return Math.floor(num(ip) / size) === Math.floor(num(p[0]) / size);\n  };\n  var who = ecs ? ecs.split('/')[0] : resolverIp;                      // ECS: decide by the user's subnet\n  for (var i = 0; i < views.length; i++) {\n    if (views[i].match.some(function (n) { return inNet(who, n); })) return { view: views[i].name, answer: views[i].answer };\n  }\n  return { view: null, answer: null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A GeoDNS server is just \"first matching rule wins\" over the address of whoever asks. Because that address is the resolver's, users of a distant resolver get a distant edge — the Vietnam-to-Singapore case of exercise 2 — and ECS fixes it only by revealing part of the user's address to every authoritative server on the path.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chủ GeoDNS chỉ là \"luật khớp đầu tiên thắng\" trên địa chỉ của người hỏi. Vì địa chỉ đó là của resolver, người dùng resolver ở xa nhận máy biên ở xa — trường hợp Việt Nam sang Singapore của bài 2 — và ECS chỉ sửa được bằng cách để lộ một phần địa chỉ người dùng cho mọi máy chủ có thẩm quyền trên đường.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: the ISP resolver asks",
+              "vi": "Thật: resolver nhà mạng hỏi"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"192.0.2.1\")",
+            "mongDoi": {
+              "view": "vn",
+              "answer": "203.0.113.10"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: pop1 Hanoi asks",
+              "vi": "Thật: pop1 Hà Nội hỏi"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"192.0.2.30\")",
+            "mongDoi": {
+              "view": "vn",
+              "answer": "203.0.113.10"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: pop2 Singapore asks",
+              "vi": "Thật: pop2 Singapore hỏi"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"198.19.255.2\")",
+            "mongDoi": {
+              "view": "sg",
+              "answer": "203.0.113.11"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"198.19.255.2\", \"198.51.100.0/24\")",
+            "mongDoi": {
+              "view": "vn",
+              "answer": "203.0.113.10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"192.0.2.1\",\"192.0.2.30\",\"198.51.100.0/24\",\"100.64.0.0/24\"],\"answer\":\"203.0.113.10\"},{\"name\":\"sg\",\"match\":[\"any\"],\"answer\":\"203.0.113.11\"}], \"192.0.2.31\")",
+            "mongDoi": {
+              "view": "sg",
+              "answer": "203.0.113.11"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"14.160.0.0/11\",\"113.160.0.0/11\"],\"answer\":\"203.0.113.10\"},{\"name\":\"jp\",\"match\":[\"133.0.0.0/8\"],\"answer\":\"203.0.113.12\"},{\"name\":\"sg\",\"match\":[\"0.0.0.0/0\"],\"answer\":\"203.0.113.11\"}], \"113.190.4.4\")",
+            "mongDoi": {
+              "view": "vn",
+              "answer": "203.0.113.10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"14.160.0.0/11\",\"113.160.0.0/11\"],\"answer\":\"203.0.113.10\"},{\"name\":\"jp\",\"match\":[\"133.0.0.0/8\"],\"answer\":\"203.0.113.12\"},{\"name\":\"sg\",\"match\":[\"0.0.0.0/0\"],\"answer\":\"203.0.113.11\"}], \"8.8.8.8\", \"133.11.0.0/16\")",
+            "mongDoi": {
+              "view": "jp",
+              "answer": "203.0.113.12"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "geoAnswer([{\"name\":\"vn\",\"match\":[\"14.160.0.0/11\",\"113.160.0.0/11\"],\"answer\":\"203.0.113.10\"},{\"name\":\"jp\",\"match\":[\"133.0.0.0/8\"],\"answer\":\"203.0.113.12\"}], \"203.0.113.54\")",
+            "mongDoi": {
+              "view": null,
+              "answer": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing every view and taking the last match: order matters, \"any\" must stay last.|||Thử mọi view rồi lấy cái khớp cuối: thứ tự quan trọng, \"any\" phải ở cuối."
+        },
+        {
+          "loi": "Using bit shifts on addresses ≥ 128.0.0.0: (n >> 0) becomes negative.|||Dùng phép dịch bit cho địa chỉ ≥ 128.0.0.0: (n >> 0) thành số âm."
+        },
+        {
+          "loi": "Ignoring ECS, or using the ECS subnet when none is given.|||Bỏ qua ECS, hoặc dùng dải ECS khi không có."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CIDR",
+          "vi": "ký hiệu khối địa chỉ"
+        },
+        {
+          "en": "first match",
+          "vi": "khớp đầu tiên"
+        },
+        {
+          "en": "EDNS Client Subnet",
+          "vi": "dải mạng của người dùng gửi kèm"
+        }
+      ]
+    }
+  ]
+}

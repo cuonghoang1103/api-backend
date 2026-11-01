@@ -1,0 +1,32 @@
+# Ch3 · 3.2 — mỗi loại bản ghi một câu hỏi (+noall +answer = chỉ in phần ANSWER)
+$ dig +noall +answer labflow.test A
+labflow.test.		289	IN	A	203.0.113.10
+$ dig +noall +answer labflow.test AAAA
+labflow.test.		300	IN	AAAA	2001:db8:d::10
+$ dig +noall +answer www.labflow.test
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		289	IN	A	203.0.113.10
+$ dig +noall +answer static.labflow.test
+static.labflow.test.	300	IN	CNAME	labflow.cdn.test.
+labflow.cdn.test.	51	IN	A	203.0.113.10
+$ dig +noall +answer labflow.test MX
+labflow.test.		300	IN	MX	10 mail.labflow.test.
+$ dig +noall +answer mail.labflow.test
+mail.labflow.test.	300	IN	A	203.0.113.25
+$ dig +noall +answer labflow.test TXT
+labflow.test.		300	IN	TXT	"labflow-verify=7f3c9a1e"
+labflow.test.		300	IN	TXT	"v=spf1 mx -all"
+$ dig +noall +answer _dmarc.labflow.test TXT
+_dmarc.labflow.test.	300	IN	TXT	"v=DMARC1; p=quarantine; rua=mailto:dmarc@labflow.test"
+$ dig +noall +answer labflow.test CAA
+labflow.test.		300	IN	CAA	0 issue "letsencrypt.org"
+$ dig +noall +answer _mongodb._tcp.db.labflow.test SRV
+_mongodb._tcp.db.labflow.test. 300 IN	SRV	0 0 27017 db1.labflow.test.
+_mongodb._tcp.db.labflow.test. 300 IN	SRV	0 0 27017 db2.labflow.test.
+$ dig +noall +answer labflow.test HTTPS
+labflow.test.		300	IN	HTTPS	1 . alpn="h2" ipv4hint=203.0.113.10
+$ dig +noall +answer labflow.test NS
+labflow.test.		86389	IN	NS	ns2.labflow.test.
+labflow.test.		86389	IN	NS	ns1.labflow.test.
+$ dig +noall +answer labflow.test SOA
+labflow.test.		3600	IN	SOA	ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300

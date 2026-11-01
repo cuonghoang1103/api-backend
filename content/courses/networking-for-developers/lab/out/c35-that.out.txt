@@ -1,0 +1,20 @@
+# Ch3 · 3.5 — Internet THẬT: tên miền có ký (cloudflare.com), tên miền CỐ Ý ký hỏng (dnssec-failed.org), cuongthai.com (chưa bật DNSSEC), DoH/DoT tới 1.1.1.1
+$ dig +dnssec cloudflare.com A @1.1.1.1 | grep -E '^;; flags|RRSIG'
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+cloudflare.com.		142	IN	RRSIG	A 13 2 300 20261102102436 20261031082436 34505 cloudflare.com. lmbxwbK6mMlkXN6UbyihP+SttbIcFSVUq9Gvv9/mn3WTWCEGuZuCZdrA w5Ou1a3WMIRfLtZ8Hes5LbNcq5jjog==
+$ dig +short DS cloudflare.com
+2371 13 2 32996839A6D808AFE3EB4A795A0E6A7A39A76FC52FF228B22B76F6D6 3826F2B9
+$ dig dnssec-failed.org @1.1.1.1 | grep -E 'status|EDE'
+;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 43095
+; EDE: 9 (DNSKEY Missing): (no SEP matching the DS found for dnssec-failed.org.)
+$ dig +cd +short dnssec-failed.org @1.1.1.1
+96.99.227.255
+$ dig +short DS cuongthai.com
+$ dig cuongthai.com @1.1.1.1 | grep -E '^;; flags'
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+$ dig +short +tls cuongthai.com @1.1.1.1
+160.187.1.208
+$ dig +short +https cuongthai.com @1.1.1.1
+160.187.1.208
+$ curl -s -H 'accept: application/dns-json' 'https://cloudflare-dns.com/dns-query?name=cuongthai.com&type=A'
+{"Status":0,"TC":false,"RD":true,"RA":true,"AD":false,"CD":false,"Question":[{"name":"cuongthai.com","type":1}],"Answer":[{"name":"cuongthai.com","type":1,"TTL":300,"data":"160.187.1.208"}]}

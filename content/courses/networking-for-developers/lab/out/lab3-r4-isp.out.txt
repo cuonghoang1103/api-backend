@@ -1,0 +1,8 @@
+# Lab 3 · R4 (sự cố A) — trên resolver nhà mạng: mỗi vòng quên cache + quên hiểu biết về máy chủ, rồi hỏi một lần
+$ for i in 1 2 3 4 5 6; do unbound-control flush_zone labflow.test >/dev/null; unbound-control flush_infra all >/dev/null; dig @198.51.100.1 api.labflow.test | grep -E 'status|Query time' | tr '\n' ' '; echo; done
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 62267 ;; Query time: 388 msec 
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 55791 ;; Query time: 386 msec 
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 11839 ;; Query time: 389 msec 
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43596 ;; Query time: 2 msec 
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 45430 ;; Query time: 1141 msec 
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 34555 ;; Query time: 1136 msec 

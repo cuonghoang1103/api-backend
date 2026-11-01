@@ -1,0 +1,21 @@
+# Ch3 · 3.1 — dig +trace: dig tự đi từ gốc xuống như resolver (+nodnssec cho gọn — chữ ký DNSSEC ở bài 3.5)
+$ dig +trace +nodnssec www.labflow.test
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> +trace +nodnssec www.labflow.test
+;; global options: +cmd
+.			86400	IN	NS	a.root-servers.test.
+;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 2 ms
+
+test.			172800	IN	NS	ns1.nic.test.
+;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms
+
+labflow.test.		172800	IN	NS	ns1.labflow.test.
+labflow.test.		172800	IN	NS	ns2.labflow.test.
+;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms
+
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+labflow.test.		86400	IN	NS	ns2.labflow.test.
+labflow.test.		86400	IN	NS	ns1.labflow.test.
+;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms
+

@@ -1,0 +1,1248 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-3-1-phan-giai",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-3-1-phan-giai"
+  },
+  "exercises": [
+    {
+      "title": "DNS 1 — Read one dig answer, line by line",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "dig",
+        "DNS message"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>On the lab laptop (lab/out/c31-dig): which resolver the laptop uses, a first question, then the same question again a moment later.<pre>$ cat /etc/resolv.conf\nnameserver 198.51.100.1\n$ dig www.labflow.test\n\n; &lt;&lt;&gt;&gt; DiG 9.20.24-1ubuntu0.4-Ubuntu &lt;&lt;&gt;&gt; www.labflow.test\n;; global options: +cmd\n;; Got answer:\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 45418\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n\n;; ANSWER SECTION:\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n\n;; Query time: 13 msec\n;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)\n;; WHEN: Sun Nov 01 16:10:11 +07 2026\n;; MSG SIZE  rcvd: 75\n$ dig www.labflow.test | grep -E 'Query time|^www|^labflow'\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n;; Query time: 0 msec</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên laptop của phòng lab (lab/out/c31-dig): laptop dùng resolver nào, một câu hỏi, rồi hỏi lại đúng câu đó ngay sau.<pre>$ cat /etc/resolv.conf\nnameserver 198.51.100.1\n$ dig www.labflow.test\n\n; &lt;&lt;&gt;&gt; DiG 9.20.24-1ubuntu0.4-Ubuntu &lt;&lt;&gt;&gt; www.labflow.test\n;; global options: +cmd\n;; Got answer:\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 45418\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n\n;; ANSWER SECTION:\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n\n;; Query time: 13 msec\n;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)\n;; WHEN: Sun Nov 01 16:10:11 +07 2026\n;; MSG SIZE  rcvd: 75\n$ dig www.labflow.test | grep -E 'Query time|^www|^labflow'\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n;; Query time: 0 msec</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The header line gives the status, the flags line gives qr/rd/ra/aa/ad and the four counts.|||Dòng header cho trạng thái, dòng flags cho qr/rd/ra/aa/ad và bốn con số đếm.",
+        "Read the ANSWER section top to bottom: an alias first, then the record it points to.|||Đọc phần ANSWER từ trên xuống: bí danh trước, rồi bản ghi nó trỏ tới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 1 — Read one dig answer, line by line\n\nAnswer in the answer panel (no code needed).\n\n1. Which flag says that the server you asked is willing to do the whole lookup for you?Cờ nào cho biết máy chủ bạn hỏi sẵn lòng đi tra trọn cho bạn?\n2. The ANSWER section has two lines. What does the first line tell the client?Phần ANSWER có hai dòng. Dòng đầu nói gì với client?\n3. What is the number 300 on both answer lines?Con số 300 trên cả hai dòng trả lời là gì?\n4. 13 msec the first time, 0 msec the second time. Why?Lần đầu 13 msec, lần hai 0 msec. Vì sao?\n5. \"SERVER: 198.51.100.1#53 (UDP)\". Where did the laptop get that address?\"SERVER: 198.51.100.1#53 (UDP)\". Laptop lấy địa chỉ đó ở đâu?\n6. Every name ends with a dot: \"www.labflow.test.\". What is that dot?Tên nào cũng kết thúc bằng dấu chấm: \"www.labflow.test.\". Dấu chấm đó là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 1 — Read one dig answer, line by line — answer key\n\n1. Which flag says that the server you asked is willing to do the whole lookup for you?Cờ nào cho biết máy chủ bạn hỏi sẵn lòng đi tra trọn cho bạn?\n   Answer: c) ra — recursion available\n   rd (\"recursion desired\") is what dig asked for; ra is the server saying yes. qr only marks a reply, ad says DNSSEC checked out (lesson 3.5), and aa appears only when the zone's own server answers — here it is missing because a resolver answered.VI: rd (\"muốn đệ quy\") là thứ dig xin; ra là máy chủ đồng ý. qr chỉ đánh dấu đây là câu trả lời, ad nói DNSSEC đã kiểm đạt (bài 3.5), còn aa chỉ có khi chính máy chủ của vùng trả lời — ở đây không có vì resolver trả lời.\n\n2. The ANSWER section has two lines. What does the first line tell the client?Phần ANSWER có hai dòng. Dòng đầu nói gì với client?\n   Answer: c) www.labflow.test is another name (CNAME) for labflow.test, whose address follows\n   A CNAME says \"the real name is labflow.test — look that up\". The resolver followed the alias itself and added the A record, so one answer is enough.VI: CNAME nói \"tên thật là labflow.test — hãy tra tên đó\". Resolver tự đi theo bí danh và gửi kèm bản ghi A, nên một câu trả lời là đủ.\n\n3. What is the number 300 on both answer lines?Con số 300 trên cả hai dòng trả lời là gì?\n   Answer: c) The TTL: how many seconds this answer may be kept in a cache\n   TTL = time to live, in seconds. A resolver that got it at 300 counts down from there (lesson 3.3). The time is on the \"Query time\" line.VI: TTL = thời gian sống, tính bằng giây. Resolver nhận nó ở 300 sẽ đếm ngược từ đó (bài 3.3). Thời gian nằm ở dòng \"Query time\".\n\n4. 13 msec the first time, 0 msec the second time. Why?Lần đầu 13 msec, lần hai 0 msec. Vì sao?\n   Answer: a) The second answer came from the resolver's cache\n   dig never caches; it sent a packet both times. The resolver walked root → TLD → LabFlow the first time and answered the second time from memory — exercise 2 shows the packets.VI: dig không bao giờ có cache; cả hai lần nó đều gửi gói. Lần đầu resolver đi gốc → TLD → LabFlow, lần hai trả lời từ bộ nhớ — bài 2 cho thấy các gói.\n\n5. \"SERVER: 198.51.100.1#53 (UDP)\". Where did the laptop get that address?\"SERVER: 198.51.100.1#53 (UDP)\". Laptop lấy địa chỉ đó ở đâu?\n   Answer: c) From the nameserver line of /etc/resolv.conf: the ISP's resolver\n   The stub (the small resolver library inside your machine) sends every question to the address in resolv.conf — usually handed out by DHCP. #53 is the port.VI: Stub (thư viện phân giải nhỏ trong máy bạn) gửi mọi câu hỏi tới địa chỉ trong resolv.conf — thường do DHCP cấp. #53 là cổng.\n\n6. Every name ends with a dot: \"www.labflow.test.\". What is that dot?Tên nào cũng kết thúc bằng dấu chấm: \"www.labflow.test.\". Dấu chấm đó là gì?\n   Answer: c) The root of the DNS tree: the name is complete\n   A fully qualified name ends at the root, written as an empty label after the last dot. In a zone file a name WITHOUT the final dot is relative and gets the domain appended (lesson 3.2).VI: Tên đầy đủ kết thúc ở gốc, viết là một nhãn rỗng sau dấu chấm cuối. Trong tệp vùng, tên KHÔNG có dấu chấm cuối là tên tương đối và bị ghép thêm tên miền (bài 3.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> ra — recursion available</p><p>rd (\"recursion desired\") is what dig asked for; ra is the server saying yes. qr only marks a reply, ad says DNSSEC checked out (lesson 3.5), and aa appears only when the zone's own server answers — here it is missing because a resolver answered.</p><p><i>VI: rd (\"muốn đệ quy\") là thứ dig xin; ra là máy chủ đồng ý. qr chỉ đánh dấu đây là câu trả lời, ad nói DNSSEC đã kiểm đạt (bài 3.5), còn aa chỉ có khi chính máy chủ của vùng trả lời — ở đây không có vì resolver trả lời.</i></p></li><li><p><b>c)</b> www.labflow.test is another name (CNAME) for labflow.test, whose address follows</p><p>A CNAME says \"the real name is labflow.test — look that up\". The resolver followed the alias itself and added the A record, so one answer is enough.</p><p><i>VI: CNAME nói \"tên thật là labflow.test — hãy tra tên đó\". Resolver tự đi theo bí danh và gửi kèm bản ghi A, nên một câu trả lời là đủ.</i></p></li><li><p><b>c)</b> The TTL: how many seconds this answer may be kept in a cache</p><p>TTL = time to live, in seconds. A resolver that got it at 300 counts down from there (lesson 3.3). The time is on the \"Query time\" line.</p><p><i>VI: TTL = thời gian sống, tính bằng giây. Resolver nhận nó ở 300 sẽ đếm ngược từ đó (bài 3.3). Thời gian nằm ở dòng \"Query time\".</i></p></li><li><p><b>a)</b> The second answer came from the resolver's cache</p><p>dig never caches; it sent a packet both times. The resolver walked root → TLD → LabFlow the first time and answered the second time from memory — exercise 2 shows the packets.</p><p><i>VI: dig không bao giờ có cache; cả hai lần nó đều gửi gói. Lần đầu resolver đi gốc → TLD → LabFlow, lần hai trả lời từ bộ nhớ — bài 2 cho thấy các gói.</i></p></li><li><p><b>c)</b> From the nameserver line of /etc/resolv.conf: the ISP's resolver</p><p>The stub (the small resolver library inside your machine) sends every question to the address in resolv.conf — usually handed out by DHCP. #53 is the port.</p><p><i>VI: Stub (thư viện phân giải nhỏ trong máy bạn) gửi mọi câu hỏi tới địa chỉ trong resolv.conf — thường do DHCP cấp. #53 là cổng.</i></p></li><li><p><b>c)</b> The root of the DNS tree: the name is complete</p><p>A fully qualified name ends at the root, written as an empty label after the last dot. In a zone file a name WITHOUT the final dot is relative and gets the domain appended (lesson 3.2).</p><p><i>VI: Tên đầy đủ kết thúc ở gốc, viết là một nhãn rỗng sau dấu chấm cuối. Trong tệp vùng, tên KHÔNG có dấu chấm cuối là tên tương đối và bị ghép thêm tên miền (bài 3.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which flag says that the server you asked is willing to do the whole lookup for you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cờ nào cho biết máy chủ bạn hỏi sẵn lòng đi tra trọn cho bạn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "aa — authoritative answer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "qr — this message is a response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ra — recursion available"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ad — authenticated data"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>rd (\"recursion desired\") is what dig asked for; ra is the server saying yes. qr only marks a reply, ad says DNSSEC checked out (lesson 3.5), and aa appears only when the zone's own server answers — here it is missing because a resolver answered.</p><p><i>VI: rd (\"muốn đệ quy\") là thứ dig xin; ra là máy chủ đồng ý. qr chỉ đánh dấu đây là câu trả lời, ad nói DNSSEC đã kiểm đạt (bài 3.5), còn aa chỉ có khi chính máy chủ của vùng trả lời — ở đây không có vì resolver trả lời.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The ANSWER section has two lines. What does the first line tell the client?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần ANSWER có hai dòng. Dòng đầu nói gì với client?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "www.labflow.test has two addresses, and the client may use either"
+              },
+              {
+                "ma": "b",
+                "noiDung": "labflow.test is the name server responsible for www.labflow.test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "www.labflow.test is another name (CNAME) for labflow.test, whose address follows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The resolver could not find www, so it answered for labflow.test instead"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A CNAME says \"the real name is labflow.test — look that up\". The resolver followed the alias itself and added the A record, so one answer is enough.</p><p><i>VI: CNAME nói \"tên thật là labflow.test — hãy tra tên đó\". Resolver tự đi theo bí danh và gửi kèm bản ghi A, nên một câu trả lời là đủ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What is the number 300 on both answer lines?</p><p style=\"opacity:.75;font-size:.92em\"><i>Con số 300 trên cả hai dòng trả lời là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The size of the answer in bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "How many milliseconds the lookup took"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The TTL: how many seconds this answer may be kept in a cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The priority of the record, lowest first"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>TTL = time to live, in seconds. A resolver that got it at 300 counts down from there (lesson 3.3). The time is on the \"Query time\" line.</p><p><i>VI: TTL = thời gian sống, tính bằng giây. Resolver nhận nó ở 300 sẽ đếm ngược từ đó (bài 3.3). Thời gian nằm ở dòng \"Query time\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>13 msec the first time, 0 msec the second time. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần đầu 13 msec, lần hai 0 msec. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The second answer came from the resolver's cache"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The second time dig asked the authoritative server directly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The network was busy during the first query"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The laptop kept the answer and did not send a second query"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>dig never caches; it sent a packet both times. The resolver walked root → TLD → LabFlow the first time and answered the second time from memory — exercise 2 shows the packets.</p><p><i>VI: dig không bao giờ có cache; cả hai lần nó đều gửi gói. Lần đầu resolver đi gốc → TLD → LabFlow, lần hai trả lời từ bộ nhớ — bài 2 cho thấy các gói.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"SERVER: 198.51.100.1#53 (UDP)\". Where did the laptop get that address?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"SERVER: 198.51.100.1#53 (UDP)\". Laptop lấy địa chỉ đó ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "From the NS records of labflow.test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is the address of the home router, which answers every DNS query"
+              },
+              {
+                "ma": "c",
+                "noiDung": "From the nameserver line of /etc/resolv.conf: the ISP's resolver"
+              },
+              {
+                "ma": "d",
+                "noiDung": "From the root servers, which assign a resolver to every laptop"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The stub (the small resolver library inside your machine) sends every question to the address in resolv.conf — usually handed out by DHCP. #53 is the port.</p><p><i>VI: Stub (thư viện phân giải nhỏ trong máy bạn) gửi mọi câu hỏi tới địa chỉ trong resolv.conf — thường do DHCP cấp. #53 là cổng.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Every name ends with a dot: \"www.labflow.test.\". What is that dot?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tên nào cũng kết thúc bằng dấu chấm: \"www.labflow.test.\". Dấu chấm đó là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A separator dig adds before the TTL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A sign that the name was found in a cache"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The root of the DNS tree: the name is complete"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A typo in the zone file that dig repairs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A fully qualified name ends at the root, written as an empty label after the last dot. In a zone file a name WITHOUT the final dot is relative and gets the domain appended (lesson 3.2).</p><p><i>VI: Tên đầy đủ kết thúc ở gốc, viết là một nhãn rỗng sau dấu chấm cuối. Trong tệp vùng, tên KHÔNG có dấu chấm cuối là tên tương đối và bị ghép thêm tên miền (bài 3.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the 300 as a time measurement of the query.|||Đọc 300 thành thời gian đo được của câu hỏi."
+        },
+        {
+          "loi": "Thinking dig keeps a cache: it does not, the resolver does.|||Nghĩ dig có cache: không có, resolver mới có."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stub resolver",
+          "vi": "bộ phân giải đầu cuối",
+          "giaiThich": "Thư viện trong máy bạn, chỉ biết gửi câu hỏi tới resolver."
+        },
+        {
+          "en": "recursive resolver",
+          "vi": "resolver đệ quy",
+          "giaiThich": "Máy đi hỏi hộ từ gốc xuống và giữ cache."
+        },
+        {
+          "en": "CNAME",
+          "vi": "bí danh"
+        },
+        {
+          "en": "TTL",
+          "vi": "thời gian sống của bản ghi trong cache"
+        }
+      ]
+    },
+    {
+      "title": "DNS 2 — Follow the resolver, packet by packet",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "DNS resolution"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>While the laptop asked <code>www.labflow.test</code> twice (one second apart), we captured on the ISP's resolver (lab/out/c31-isp-doc; <code>dnsgoi.sh</code> prints one line per DNS packet). 198.51.100.2 is the house, 198.51.100.1 / 192.0.2.1 are the two sides of the resolver, 192.0.2.10 is the root, 192.0.2.20 the TLD <code>test.</code>, 203.0.113.53/.54 are LabFlow's two name servers.<pre>$ ./dnsgoi.sh /tmp/r.pcap\n   t(s)  from              to              msg     name                 type   result\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong lúc laptop hỏi <code>www.labflow.test</code> hai lần (cách nhau một giây), ta bắt gói trên resolver nhà mạng (lab/out/c31-isp-doc; <code>dnsgoi.sh</code> in mỗi gói DNS một dòng). 198.51.100.2 là ngôi nhà, 198.51.100.1 / 192.0.2.1 là hai phía của resolver, 192.0.2.10 là máy chủ gốc, 192.0.2.20 là TLD <code>test.</code>, 203.0.113.53/.54 là hai máy chủ tên của LabFlow.<pre>$ ./dnsgoi.sh /tmp/r.pcap\n   t(s)  from              to              msg     name                 type   result\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Follow the time column; a \"referral\" answer gives no address, only who to ask next.|||Đi theo cột thời gian; câu trả lời \"referral\" không cho địa chỉ, chỉ cho biết hỏi ai tiếp.",
+        "The second lookup at 1.0359 s produces no upstream packets at all.|||Lần tra thứ hai lúc 1,0359 s không sinh ra gói nào đi lên trên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 2 — Follow the resolver, packet by packet\n\nAnswer in the answer panel (no code needed).\n\n1. Put the first lookup in order, as the capture shows it.Xếp lần tra đầu tiên theo đúng thứ tự trong bản bắt gói.\n2. Order the servers by how much of the name they know, from least to most.Xếp các máy chủ theo mức hiểu biết về tên, từ ít nhất tới nhiều nhất.\n3. Order what happens from typing the URL to the first byte of HTTP.Xếp các việc từ lúc gõ URL tới byte HTTP đầu tiên.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 2 — Follow the resolver, packet by packet — answer key\n\n1. Put the first lookup in order, as the capture shows it.Xếp lần tra đầu tiên theo đúng thứ tự trong bản bắt gói.\n   Answer: m1) The house asks the resolver for www.labflow.test  →  m4) The resolver asks the root, and the root refers it to the servers of test.  →  m5) The TLD refers it to ns1/ns2.labflow.test (a referral, no address yet)  →  m2) LabFlow's server answers with the records (flag aa)  →  m6) The resolver fetches the DNSKEY sets to check the signatures  →  m3) The resolver answers the house: NOERROR, two answers\n   The resolver starts from the only thing it knows — the root's address, built in — and each level points one step down. The DNSKEY lines are DNSSEC validation (lesson 3.5); only after that does the house get its answer at 0.0097 s.VI: Resolver bắt đầu từ thứ duy nhất nó biết — địa chỉ máy chủ gốc, có sẵn — và mỗi cấp chỉ xuống một bậc. Các dòng DNSKEY là kiểm DNSSEC (bài 3.5); chỉ sau đó nhà mới nhận câu trả lời, lúc 0,0097 s.\n\n2. Order the servers by how much of the name they know, from least to most.Xếp các máy chủ theo mức hiểu biết về tên, từ ít nhất tới nhiều nhất.\n   Answer: m3) Root server (192.0.2.10): only who runs each TLD  →  m2) TLD server ns1.nic.test (192.0.2.20): who runs each domain under test.  →  m1) ns1/ns2.labflow.test: every record of labflow.test\n   Each level knows exactly one level down — that is delegation. Nobody holds the whole tree, which is why DNS scales to hundreds of millions of domains.VI: Mỗi cấp biết đúng một cấp bên dưới — đó là ủy quyền. Không ai giữ cả cây, nên DNS mở rộng được tới hàng trăm triệu tên miền.\n\n3. Order what happens from typing the URL to the first byte of HTTP.Xếp các việc từ lúc gõ URL tới byte HTTP đầu tiên.\n   Answer: m1) getaddrinfo reads /etc/hosts (files before dns)  →  m4) The stub sends the question to the resolver in resolv.conf  →  m2) The resolver answers from its cache or walks the tree  →  m3) The client opens a TCP connection to the address it got\n   DNS finishes before any connection starts — a slow lookup delays everything after it (lesson 0.2: the \"namelookup\" stage of curl).VI: DNS xong trước khi bất kỳ kết nối nào bắt đầu — tra chậm thì mọi việc sau đều chậm (bài 0.2: chặng \"namelookup\" của curl).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The resolver starts from the only thing it knows — the root's address, built in — and each level points one step down. The DNSKEY lines are DNSSEC validation (lesson 3.5); only after that does the house get its answer at 0.0097 s.</p><p><i>VI: Resolver bắt đầu từ thứ duy nhất nó biết — địa chỉ máy chủ gốc, có sẵn — và mỗi cấp chỉ xuống một bậc. Các dòng DNSKEY là kiểm DNSSEC (bài 3.5); chỉ sau đó nhà mới nhận câu trả lời, lúc 0,0097 s.</i></p><p>Each level knows exactly one level down — that is delegation. Nobody holds the whole tree, which is why DNS scales to hundreds of millions of domains.</p><p><i>VI: Mỗi cấp biết đúng một cấp bên dưới — đó là ủy quyền. Không ai giữ cả cây, nên DNS mở rộng được tới hàng trăm triệu tên miền.</i></p><p>DNS finishes before any connection starts — a slow lookup delays everything after it (lesson 0.2: the \"namelookup\" stage of curl).</p><p><i>VI: DNS xong trước khi bất kỳ kết nối nào bắt đầu — tra chậm thì mọi việc sau đều chậm (bài 0.2: chặng \"namelookup\" của curl).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Put the first lookup in order, as the capture shows it.</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp lần tra đầu tiên theo đúng thứ tự trong bản bắt gói.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The house asks the resolver for www.labflow.test"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "LabFlow's server answers with the records (flag aa)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The resolver answers the house: NOERROR, two answers"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The resolver asks the root, and the root refers it to the servers of test."
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The TLD refers it to ns1/ns2.labflow.test (a referral, no address yet)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The resolver fetches the DNSKEY sets to check the signatures"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m5",
+              "m2",
+              "m6",
+              "m3"
+            ],
+            "giaiThich": "<p>The resolver starts from the only thing it knows — the root's address, built in — and each level points one step down. The DNSKEY lines are DNSSEC validation (lesson 3.5); only after that does the house get its answer at 0.0097 s.</p><p><i>VI: Resolver bắt đầu từ thứ duy nhất nó biết — địa chỉ máy chủ gốc, có sẵn — và mỗi cấp chỉ xuống một bậc. Các dòng DNSKEY là kiểm DNSSEC (bài 3.5); chỉ sau đó nhà mới nhận câu trả lời, lúc 0,0097 s.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>Order the servers by how much of the name they know, from least to most.</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp các máy chủ theo mức hiểu biết về tên, từ ít nhất tới nhiều nhất.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "ns1/ns2.labflow.test: every record of labflow.test"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "TLD server ns1.nic.test (192.0.2.20): who runs each domain under test."
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Root server (192.0.2.10): only who runs each TLD"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>Each level knows exactly one level down — that is delegation. Nobody holds the whole tree, which is why DNS scales to hundreds of millions of domains.</p><p><i>VI: Mỗi cấp biết đúng một cấp bên dưới — đó là ủy quyền. Không ai giữ cả cây, nên DNS mở rộng được tới hàng trăm triệu tên miền.</i></p>"
+          },
+          {
+            "ma": "o3",
+            "de": "<p>Order what happens from typing the URL to the first byte of HTTP.</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp các việc từ lúc gõ URL tới byte HTTP đầu tiên.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "getaddrinfo reads /etc/hosts (files before dns)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The resolver answers from its cache or walks the tree"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The client opens a TCP connection to the address it got"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The stub sends the question to the resolver in resolv.conf"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m2",
+              "m3"
+            ],
+            "giaiThich": "<p>DNS finishes before any connection starts — a slow lookup delays everything after it (lesson 0.2: the \"namelookup\" stage of curl).</p><p><i>VI: DNS xong trước khi bất kỳ kết nối nào bắt đầu — tra chậm thì mọi việc sau đều chậm (bài 0.2: chặng \"namelookup\" của curl).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the laptop talks to the root servers: only the resolver does.|||Nghĩ laptop nói chuyện với máy chủ gốc: chỉ resolver làm việc đó."
+        },
+        {
+          "loi": "Reading a referral as an answer.|||Đọc một referral thành câu trả lời."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "referral",
+          "vi": "chỉ đường",
+          "giaiThich": "Câu trả lời \"tôi không biết, hỏi các máy này\" kèm NS."
+        },
+        {
+          "en": "delegation",
+          "vi": "ủy quyền"
+        },
+        {
+          "en": "iterative query",
+          "vi": "hỏi lần lượt"
+        }
+      ]
+    },
+    {
+      "title": "DNS 3 — Do the resolver's job by hand",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "delegation",
+        "authoritative answer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>With <code>+norecurse</code> (\"do not look it up for me\") we asked each level ourselves (lab/out/c31-tay, banner lines removed):<pre>$ dig @192.0.2.10 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 42499\n;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 2\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; AUTHORITY SECTION:\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; ADDITIONAL SECTION:\nns1.nic.test.\t\t172800\tIN\tA\t192.0.2.20\n;; Query time: 1 msec\n;; SERVER: 192.0.2.10#53(192.0.2.10) (UDP)\n\n$ dig @192.0.2.20 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 15400\n;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 2, ADDITIONAL: 3\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; AUTHORITY SECTION:\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns2.labflow.test.\n;; ADDITIONAL SECTION:\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns2.labflow.test.\t172800\tIN\tA\t203.0.113.54\n;; Query time: 0 msec\n;; SERVER: 192.0.2.20#53(192.0.2.20) (UDP)\n\n$ dig @203.0.113.53 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 59680\n;; flags: qr aa; QUERY: 1, ANSWER: 2, AUTHORITY: 2, ADDITIONAL: 3\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; ANSWER SECTION:\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n;; AUTHORITY SECTION:\nlabflow.test.\t\t86400\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t86400\tIN\tNS\tns2.labflow.test.\n;; ADDITIONAL SECTION:\nns1.labflow.test.\t86400\tIN\tA\t203.0.113.53\nns2.labflow.test.\t86400\tIN\tA\t203.0.113.54\n;; Query time: 1 msec\n;; SERVER: 203.0.113.53#53(203.0.113.53) (UDP)</pre>Fill one row per server.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với <code>+norecurse</code> (\"đừng tra hộ tôi\") ta tự hỏi từng cấp (lab/out/c31-tay, đã bỏ các dòng tiêu đề):<pre>$ dig @192.0.2.10 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 42499\n;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 2\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; AUTHORITY SECTION:\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; ADDITIONAL SECTION:\nns1.nic.test.\t\t172800\tIN\tA\t192.0.2.20\n;; Query time: 1 msec\n;; SERVER: 192.0.2.10#53(192.0.2.10) (UDP)\n\n$ dig @192.0.2.20 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 15400\n;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 2, ADDITIONAL: 3\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; AUTHORITY SECTION:\nlabflow.test.\t\t172800\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t172800\tIN\tNS\tns2.labflow.test.\n;; ADDITIONAL SECTION:\nns1.labflow.test.\t172800\tIN\tA\t203.0.113.53\nns2.labflow.test.\t172800\tIN\tA\t203.0.113.54\n;; Query time: 0 msec\n;; SERVER: 192.0.2.20#53(192.0.2.20) (UDP)\n\n$ dig @203.0.113.53 www.labflow.test +norecurse\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 59680\n;; flags: qr aa; QUERY: 1, ANSWER: 2, AUTHORITY: 2, ADDITIONAL: 3\n;; QUESTION SECTION:\n;www.labflow.test.\t\tIN\tA\n;; ANSWER SECTION:\nwww.labflow.test.\t300\tIN\tCNAME\tlabflow.test.\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n;; AUTHORITY SECTION:\nlabflow.test.\t\t86400\tIN\tNS\tns1.labflow.test.\nlabflow.test.\t\t86400\tIN\tNS\tns2.labflow.test.\n;; ADDITIONAL SECTION:\nns1.labflow.test.\t86400\tIN\tA\t203.0.113.53\nns2.labflow.test.\t86400\tIN\tA\t203.0.113.54\n;; Query time: 1 msec\n;; SERVER: 203.0.113.53#53(203.0.113.53) (UDP)</pre>Điền mỗi máy chủ một hàng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ANSWER: 0 + NS lines in AUTHORITY = a referral.|||ANSWER: 0 + dòng NS ở AUTHORITY = referral.",
+        "The ADDITIONAL section gives the address of the next server — no extra lookup needed.|||Phần ADDITIONAL cho địa chỉ máy chủ kế tiếp — không cần tra thêm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 3 — Do the resolver's job by hand\n\nAnswer in the answer panel (no code needed).\n\n1. Three servers, three kinds of answerBa máy chủ, ba kiểu trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 3 — Do the resolver's job by hand — answer key\n\n1. Three servers, three kinds of answerBa máy chủ, ba kiểu trả lời\n   - r1.w: root server\n   - r1.a: no\n   - r1.k: referral (who to ask next)\n   - r1.n: 192.0.2.20\n   - r1.t: 172800\n   - r2.w: TLD server of test.\n   - r2.a: no\n   - r2.k: referral (who to ask next)\n   - r2.n: 203.0.113.53 / 203.0.113.54 / 203.0.113.53 or 203.0.113.54 / 203.0.113.53 / 203.0.113.54\n   - r2.t: 172800\n   - r3.w: LabFlow's own name server\n   - r3.a: yes\n   - r3.k: final answer\n   - r3.n: none / - / — / no one / nobody\n   - r3.t: 86400\n   A referral has ANSWER: 0 and the next servers in AUTHORITY, their addresses (\"glue\") in ADDITIONAL. Only the zone's own server sets aa. Note the two TTLs for the same NS set: the parent's copy says 172800 (2 days), the child's own says 86400 — resolvers prefer the child's once they reach it, and lab 3 shows why a wrong parent copy hurts for days.VI: Referral có ANSWER: 0, các máy chủ kế tiếp nằm ở AUTHORITY, địa chỉ của chúng (\"glue\") ở ADDITIONAL. Chỉ máy chủ của chính vùng mới đặt aa. Để ý hai TTL cho cùng bộ NS: bản của vùng cha ghi 172800 (2 ngày), bản của chính vùng ghi 86400 — resolver ưu tiên bản của vùng con khi đã tới đó, và lab 3 cho thấy vì sao một bản sai ở vùng cha gây hại nhiều ngày.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A referral has ANSWER: 0 and the next servers in AUTHORITY, their addresses (\"glue\") in ADDITIONAL. Only the zone's own server sets aa. Note the two TTLs for the same NS set: the parent's copy says 172800 (2 days), the child's own says 86400 — resolvers prefer the child's once they reach it, and lab 3 shows why a wrong parent copy hurts for days.</p><p><i>VI: Referral có ANSWER: 0, các máy chủ kế tiếp nằm ở AUTHORITY, địa chỉ của chúng (\"glue\") ở ADDITIONAL. Chỉ máy chủ của chính vùng mới đặt aa. Để ý hai TTL cho cùng bộ NS: bản của vùng cha ghi 172800 (2 ngày), bản của chính vùng ghi 86400 — resolver ưu tiên bản của vùng con khi đã tới đó, và lab 3 cho thấy vì sao một bản sai ở vùng cha gây hại nhiều ngày.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Three servers, three kinds of answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba máy chủ, ba kiểu trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Server asked"
+              },
+              {
+                "ma": "w",
+                "ten": "Who is it",
+                "luaChon": [
+                  "root server",
+                  "TLD server of test.",
+                  "LabFlow's own name server",
+                  "the ISP's resolver"
+                ]
+              },
+              {
+                "ma": "a",
+                "ten": "aa flag?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "k",
+                "ten": "Kind of answer",
+                "luaChon": [
+                  "referral (who to ask next)",
+                  "final answer"
+                ]
+              },
+              {
+                "ma": "n",
+                "ten": "Next address to ask (or none)"
+              },
+              {
+                "ma": "t",
+                "ten": "TTL on its NS lines (s)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "192.0.2.10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "192.0.2.20"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "203.0.113.53"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": "root server",
+              "r1.a": "no",
+              "r1.k": "referral (who to ask next)",
+              "r1.n": [
+                "192.0.2.20"
+              ],
+              "r1.t": [
+                "172800"
+              ],
+              "r2.w": "TLD server of test.",
+              "r2.a": "no",
+              "r2.k": "referral (who to ask next)",
+              "r2.n": [
+                "203.0.113.53",
+                "203.0.113.54",
+                "203.0.113.53 or 203.0.113.54",
+                "203.0.113.53 / 203.0.113.54"
+              ],
+              "r2.t": [
+                "172800"
+              ],
+              "r3.w": "LabFlow's own name server",
+              "r3.a": "yes",
+              "r3.k": "final answer",
+              "r3.n": [
+                "none",
+                "-",
+                "—",
+                "no one",
+                "nobody"
+              ],
+              "r3.t": [
+                "86400"
+              ]
+            },
+            "giaiThich": "<p>A referral has ANSWER: 0 and the next servers in AUTHORITY, their addresses (\"glue\") in ADDITIONAL. Only the zone's own server sets aa. Note the two TTLs for the same NS set: the parent's copy says 172800 (2 days), the child's own says 86400 — resolvers prefer the child's once they reach it, and lab 3 shows why a wrong parent copy hurts for days.</p><p><i>VI: Referral có ANSWER: 0, các máy chủ kế tiếp nằm ở AUTHORITY, địa chỉ của chúng (\"glue\") ở ADDITIONAL. Chỉ máy chủ của chính vùng mới đặt aa. Để ý hai TTL cho cùng bộ NS: bản của vùng cha ghi 172800 (2 ngày), bản của chính vùng ghi 86400 — resolver ưu tiên bản của vùng con khi đã tới đó, và lab 3 cho thấy vì sao một bản sai ở vùng cha gây hại nhiều ngày.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting the root to know the address of www.labflow.test.|||Mong máy chủ gốc biết địa chỉ của www.labflow.test."
+        },
+        {
+          "loi": "Missing the aa flag: it is what separates the zone's server from a cache.|||Bỏ sót cờ aa: chính nó phân biệt máy chủ của vùng với một bản cache."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "authoritative server",
+          "vi": "máy chủ có thẩm quyền",
+          "giaiThich": "Máy chủ giữ bản gốc của vùng."
+        },
+        {
+          "en": "glue record",
+          "vi": "bản ghi keo",
+          "giaiThich": "Địa chỉ của máy chủ tên, gửi kèm referral."
+        },
+        {
+          "en": "+norecurse",
+          "vi": "không đệ quy"
+        }
+      ]
+    },
+    {
+      "title": "DNS 4 — The stub side: hosts file, search domains, local caches",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "getaddrinfo",
+        "search list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Three real experiments on the client side (lab/out/c31-stub, c31-ndots, c31-ubuntu):<pre># 1) the hosts file\n$ grep '^hosts' /etc/nsswitch.conf\nhosts:          files dns\n$ echo '203.0.113.11 labflow.test   # added for testing, forgot to remove' &gt;&gt; /etc/hosts\n$ getent ahosts labflow.test | head -1\n203.0.113.11    STREAM labflow.test\n$ dig +short labflow.test\n203.0.113.10\n$ node -e \"… dns.lookup(…) … dns.resolve4(…)\"\ndns.resolve4 [ '203.0.113.10' ]\ndns.lookup   203.0.113.11\n\n# 2) search + ndots\n$ cat /etc/resolv.conf\nnameserver 198.51.100.1\nsearch labflow.test\noptions ndots:5\n$ getent ahostsv4 api | head -1\n203.0.113.10    STREAM api.labflow.test\n$ getent ahostsv4 labflow.cdn.test | head -1\n203.0.113.10    STREAM labflow.cdn.test\n$ getent ahostsv4 labflow.cdn.test. | head -1\n203.0.113.10    STREAM labflow.cdn.test\n# every DNS answer the laptop received during the three commands\nNOERROR  api.labflow.test\nNXDOMAIN labflow.cdn.test.labflow.test\nNOERROR  labflow.cdn.test\nNOERROR  labflow.cdn.test\n\n# 3) an Ubuntu machine with systemd-resolved\n$ grep -v '^#' /etc/resolv.conf | grep .\nnameserver 127.0.0.53\noptions edns0 trust-ad\nsearch .\n$ resolvectl status | sed -n '1,4p'\nGlobal\n         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported\n  resolv.conf mode: stub\n       DNS Servers: 198.51.100.1</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba thí nghiệm thật ở phía client (lab/out/c31-stub, c31-ndots, c31-ubuntu):<pre># 1) tệp hosts\n$ grep '^hosts' /etc/nsswitch.conf\nhosts:          files dns\n$ echo '203.0.113.11 labflow.test   # added for testing, forgot to remove' &gt;&gt; /etc/hosts\n$ getent ahosts labflow.test | head -1\n203.0.113.11    STREAM labflow.test\n$ dig +short labflow.test\n203.0.113.10\n$ node -e \"… dns.lookup(…) … dns.resolve4(…)\"\ndns.resolve4 [ '203.0.113.10' ]\ndns.lookup   203.0.113.11\n\n# 2) search + ndots\n$ cat /etc/resolv.conf\nnameserver 198.51.100.1\nsearch labflow.test\noptions ndots:5\n$ getent ahostsv4 api | head -1\n203.0.113.10    STREAM api.labflow.test\n$ getent ahostsv4 labflow.cdn.test | head -1\n203.0.113.10    STREAM labflow.cdn.test\n$ getent ahostsv4 labflow.cdn.test. | head -1\n203.0.113.10    STREAM labflow.cdn.test\n# every DNS answer the laptop received during the three commands\nNOERROR  api.labflow.test\nNXDOMAIN labflow.cdn.test.labflow.test\nNOERROR  labflow.cdn.test\nNOERROR  labflow.cdn.test\n\n# 3) máy Ubuntu có systemd-resolved\n$ grep -v '^#' /etc/resolv.conf | grep .\nnameserver 127.0.0.53\noptions edns0 trust-ad\nsearch .\n$ resolvectl status | sed -n '1,4p'\nGlobal\n         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported\n  resolv.conf mode: stub\n       DNS Servers: 198.51.100.1</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Programs that call getaddrinfo follow nsswitch.conf; dig and resolve*() do not.|||Chương trình gọi getaddrinfo đi theo nsswitch.conf; dig và resolve*() thì không.",
+        "Count the dots in the name and compare with ndots.|||Đếm dấu chấm trong tên rồi so với ndots."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 4 — The stub side: hosts file, search domains, local caches\n\nAnswer in the answer panel (no code needed).\n\n1. getent and curl get 203.0.113.11, dig gets 203.0.113.10. Why?getent và curl nhận 203.0.113.11, dig nhận 203.0.113.10. Vì sao?\n2. In Node, dns.lookup gave .11 and dns.resolve4 gave .10. What is the difference?Trong Node, dns.lookup cho .11 còn dns.resolve4 cho .10. Khác nhau ở đâu?\n3. With \"search labflow.test\" and \"ndots:5\", why was labflow.cdn.test.labflow.test asked first?Với \"search labflow.test\" và \"ndots:5\", vì sao labflow.cdn.test.labflow.test bị hỏi trước?\n4. How many DNS questions did the form with a final dot, \"labflow.cdn.test.\", cost?Dạng có dấu chấm cuối, \"labflow.cdn.test.\", tốn bao nhiêu câu hỏi DNS?\n5. On Ubuntu, resolv.conf says nameserver 127.0.0.53. Which server really answers the questions?Trên Ubuntu, resolv.conf ghi nameserver 127.0.0.53. Máy chủ nào thật sự trả lời các câu hỏi?\n6. A pod in Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) calls api.example.com. What happens first?Một pod Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) gọi api.example.com. Điều gì xảy ra trước?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNS 4 — The stub side: hosts file, search domains, local caches — answer key\n\n1. getent and curl get 203.0.113.11, dig gets 203.0.113.10. Why?getent và curl nhận 203.0.113.11, dig nhận 203.0.113.10. Vì sao?\n   Answer: d) \"hosts: files dns\": the system reads /etc/hosts first; dig asks DNS directly\n   A forgotten hosts line wins over DNS for every program that uses getaddrinfo (curl, browsers, most languages). dig and nslookup skip it — so \"dig says it is fine\" proves nothing about what your app sees.VI: Một dòng hosts bị quên thắng DNS với mọi chương trình dùng getaddrinfo (curl, trình duyệt, hầu hết ngôn ngữ). dig và nslookup bỏ qua nó — nên \"dig nói ổn\" không chứng minh gì về thứ ứng dụng thấy.\n\n2. In Node, dns.lookup gave .11 and dns.resolve4 gave .10. What is the difference?Trong Node, dns.lookup cho .11 còn dns.resolve4 cho .10. Khác nhau ở đâu?\n   Answer: a) lookup goes through getaddrinfo (hosts file included); resolve4 sends a DNS query itself\n   http.get, fetch and most libraries call dns.lookup — they behave like curl. resolve*() talk to the DNS servers directly, like dig.VI: http.get, fetch và hầu hết thư viện gọi dns.lookup — chúng cư xử như curl. resolve*() nói chuyện thẳng với máy chủ DNS, như dig.\n\n3. With \"search labflow.test\" and \"ndots:5\", why was labflow.cdn.test.labflow.test asked first?Với \"search labflow.test\" và \"ndots:5\", vì sao labflow.cdn.test.labflow.test bị hỏi trước?\n   Answer: a) The name has fewer than 5 dots, so the search domain is tried before the name itself\n   ndots:N means \"a name with fewer than N dots is probably short — try the search list first\". labflow.cdn.test has 2 dots, so one useless query (NXDOMAIN) came first. Kubernetes pods use ndots:5.VI: ndots:N nghĩa là \"tên có ít hơn N dấu chấm chắc là tên ngắn — thử danh sách search trước\". labflow.cdn.test có 2 dấu chấm, nên một câu hỏi vô ích (NXDOMAIN) đi trước. Pod Kubernetes dùng ndots:5.\n\n4. How many DNS questions did the form with a final dot, \"labflow.cdn.test.\", cost?Dạng có dấu chấm cuối, \"labflow.cdn.test.\", tốn bao nhiêu câu hỏi DNS?\n   Answer: d) One: a final dot skips the search list\n   Count the answers: 1 for api, 2 for labflow.cdn.test, 1 for labflow.cdn.test. The final dot is the cheap fix for ndots traffic.VI: Đếm các câu trả lời: 1 cho api, 2 cho labflow.cdn.test, 1 cho labflow.cdn.test. Dấu chấm cuối là cách rẻ để cắt lưu lượng do ndots.\n\n5. On Ubuntu, resolv.conf says nameserver 127.0.0.53. Which server really answers the questions?Trên Ubuntu, resolv.conf ghi nameserver 127.0.0.53. Máy chủ nào thật sự trả lời các câu hỏi?\n   Answer: a) systemd-resolved, a local cache on the machine, which forwards to 198.51.100.1\n   127.0.0.53 is a loopback address: a local cache listens there. To see the real upstream server, run resolvectl status — and remember that this cache is one more layer that can hold an old answer (lesson 3.3).VI: 127.0.0.53 là địa chỉ loopback: một bộ đệm cục bộ lắng nghe ở đó. Muốn thấy máy chủ thật phía trên, chạy resolvectl status — và nhớ bộ đệm này thêm một lớp có thể giữ câu trả lời cũ (bài 3.3).\n\n6. A pod in Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) calls api.example.com. What happens first?Một pod Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) gọi api.example.com. Điều gì xảy ra trước?\n   Answer: c) Three queries with the search domains appended fail before api.example.com itself is asked\n   api.example.com has 2 dots < 5, so every external call costs three NXDOMAIN lookups first (doubled for A and AAAA). Fixes: a trailing dot in the URL, or lower ndots in the pod's dnsConfig. Exercise 5 computes this.VI: api.example.com có 2 dấu chấm < 5, nên mỗi lần gọi ra ngoài tốn ba lần NXDOMAIN trước (nhân đôi cho A và AAAA). Cách sửa: dấu chấm cuối trong URL, hoặc hạ ndots trong dnsConfig của pod. Bài 5 tính chuyện này.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> \"hosts: files dns\": the system reads /etc/hosts first; dig asks DNS directly</p><p>A forgotten hosts line wins over DNS for every program that uses getaddrinfo (curl, browsers, most languages). dig and nslookup skip it — so \"dig says it is fine\" proves nothing about what your app sees.</p><p><i>VI: Một dòng hosts bị quên thắng DNS với mọi chương trình dùng getaddrinfo (curl, trình duyệt, hầu hết ngôn ngữ). dig và nslookup bỏ qua nó — nên \"dig nói ổn\" không chứng minh gì về thứ ứng dụng thấy.</i></p></li><li><p><b>a)</b> lookup goes through getaddrinfo (hosts file included); resolve4 sends a DNS query itself</p><p>http.get, fetch and most libraries call dns.lookup — they behave like curl. resolve*() talk to the DNS servers directly, like dig.</p><p><i>VI: http.get, fetch và hầu hết thư viện gọi dns.lookup — chúng cư xử như curl. resolve*() nói chuyện thẳng với máy chủ DNS, như dig.</i></p></li><li><p><b>a)</b> The name has fewer than 5 dots, so the search domain is tried before the name itself</p><p>ndots:N means \"a name with fewer than N dots is probably short — try the search list first\". labflow.cdn.test has 2 dots, so one useless query (NXDOMAIN) came first. Kubernetes pods use ndots:5.</p><p><i>VI: ndots:N nghĩa là \"tên có ít hơn N dấu chấm chắc là tên ngắn — thử danh sách search trước\". labflow.cdn.test có 2 dấu chấm, nên một câu hỏi vô ích (NXDOMAIN) đi trước. Pod Kubernetes dùng ndots:5.</i></p></li><li><p><b>d)</b> One: a final dot skips the search list</p><p>Count the answers: 1 for api, 2 for labflow.cdn.test, 1 for labflow.cdn.test. The final dot is the cheap fix for ndots traffic.</p><p><i>VI: Đếm các câu trả lời: 1 cho api, 2 cho labflow.cdn.test, 1 cho labflow.cdn.test. Dấu chấm cuối là cách rẻ để cắt lưu lượng do ndots.</i></p></li><li><p><b>a)</b> systemd-resolved, a local cache on the machine, which forwards to 198.51.100.1</p><p>127.0.0.53 is a loopback address: a local cache listens there. To see the real upstream server, run resolvectl status — and remember that this cache is one more layer that can hold an old answer (lesson 3.3).</p><p><i>VI: 127.0.0.53 là địa chỉ loopback: một bộ đệm cục bộ lắng nghe ở đó. Muốn thấy máy chủ thật phía trên, chạy resolvectl status — và nhớ bộ đệm này thêm một lớp có thể giữ câu trả lời cũ (bài 3.3).</i></p></li><li><p><b>c)</b> Three queries with the search domains appended fail before api.example.com itself is asked</p><p>api.example.com has 2 dots < 5, so every external call costs three NXDOMAIN lookups first (doubled for A and AAAA). Fixes: a trailing dot in the URL, or lower ndots in the pod's dnsConfig. Exercise 5 computes this.</p><p><i>VI: api.example.com có 2 dấu chấm < 5, nên mỗi lần gọi ra ngoài tốn ba lần NXDOMAIN trước (nhân đôi cho A và AAAA). Cách sửa: dấu chấm cuối trong URL, hoặc hạ ndots trong dnsConfig của pod. Bài 5 tính chuyện này.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>getent and curl get 203.0.113.11, dig gets 203.0.113.10. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>getent và curl nhận 203.0.113.11, dig nhận 203.0.113.10. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl caches old answers and dig does not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver gives a different answer to each program"
+              },
+              {
+                "ma": "c",
+                "noiDung": "dig uses IPv6 and the others use IPv4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"hosts: files dns\": the system reads /etc/hosts first; dig asks DNS directly"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A forgotten hosts line wins over DNS for every program that uses getaddrinfo (curl, browsers, most languages). dig and nslookup skip it — so \"dig says it is fine\" proves nothing about what your app sees.</p><p><i>VI: Một dòng hosts bị quên thắng DNS với mọi chương trình dùng getaddrinfo (curl, trình duyệt, hầu hết ngôn ngữ). dig và nslookup bỏ qua nó — nên \"dig nói ổn\" không chứng minh gì về thứ ứng dụng thấy.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In Node, dns.lookup gave .11 and dns.resolve4 gave .10. What is the difference?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong Node, dns.lookup cho .11 còn dns.resolve4 cho .10. Khác nhau ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lookup goes through getaddrinfo (hosts file included); resolve4 sends a DNS query itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "lookup asks the root servers, resolve4 asks the resolver"
+              },
+              {
+                "ma": "c",
+                "noiDung": "lookup returns a random address from the answer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "resolve4 is the newer API and ignores old records"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>http.get, fetch and most libraries call dns.lookup — they behave like curl. resolve*() talk to the DNS servers directly, like dig.</p><p><i>VI: http.get, fetch và hầu hết thư viện gọi dns.lookup — chúng cư xử như curl. resolve*() nói chuyện thẳng với máy chủ DNS, như dig.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With \"search labflow.test\" and \"ndots:5\", why was labflow.cdn.test.labflow.test asked first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với \"search labflow.test\" và \"ndots:5\", vì sao labflow.cdn.test.labflow.test bị hỏi trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The name has fewer than 5 dots, so the search domain is tried before the name itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The resolver adds the search domain to every name it receives"
+              },
+              {
+                "ma": "c",
+                "noiDung": "getent always tries the longest name first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "labflow.cdn.test does not exist until labflow.test is asked"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>ndots:N means \"a name with fewer than N dots is probably short — try the search list first\". labflow.cdn.test has 2 dots, so one useless query (NXDOMAIN) came first. Kubernetes pods use ndots:5.</p><p><i>VI: ndots:N nghĩa là \"tên có ít hơn N dấu chấm chắc là tên ngắn — thử danh sách search trước\". labflow.cdn.test có 2 dấu chấm, nên một câu hỏi vô ích (NXDOMAIN) đi trước. Pod Kubernetes dùng ndots:5.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many DNS questions did the form with a final dot, \"labflow.cdn.test.\", cost?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dạng có dấu chấm cuối, \"labflow.cdn.test.\", tốn bao nhiêu câu hỏi DNS?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Three: one per label of the name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None: it was answered from /etc/hosts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two, like the form without the dot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One: a final dot skips the search list"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Count the answers: 1 for api, 2 for labflow.cdn.test, 1 for labflow.cdn.test. The final dot is the cheap fix for ndots traffic.</p><p><i>VI: Đếm các câu trả lời: 1 cho api, 2 cho labflow.cdn.test, 1 cho labflow.cdn.test. Dấu chấm cuối là cách rẻ để cắt lưu lượng do ndots.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>On Ubuntu, resolv.conf says nameserver 127.0.0.53. Which server really answers the questions?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Ubuntu, resolv.conf ghi nameserver 127.0.0.53. Máy chủ nào thật sự trả lời các câu hỏi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "systemd-resolved, a local cache on the machine, which forwards to 198.51.100.1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The machine itself walks from the root servers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "127.0.0.53, a public resolver run by Ubuntu"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nobody: 127.0.0.53 is a placeholder and DNS is disabled"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>127.0.0.53 is a loopback address: a local cache listens there. To see the real upstream server, run resolvectl status — and remember that this cache is one more layer that can hold an old answer (lesson 3.3).</p><p><i>VI: 127.0.0.53 là địa chỉ loopback: một bộ đệm cục bộ lắng nghe ở đó. Muốn thấy máy chủ thật phía trên, chạy resolvectl status — và nhớ bộ đệm này thêm một lớp có thể giữ câu trả lời cũ (bài 3.3).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A pod in Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) calls api.example.com. What happens first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một pod Kubernetes (search default.svc.cluster.local svc.cluster.local cluster.local, ndots:5) gọi api.example.com. Điều gì xảy ra trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "api.example.com is asked first, because it contains dots"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The call fails, because external names need a trailing dot"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Three queries with the search domains appended fail before api.example.com itself is asked"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pod asks the cluster DNS once and it forwards the right name"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>api.example.com has 2 dots < 5, so every external call costs three NXDOMAIN lookups first (doubled for A and AAAA). Fixes: a trailing dot in the URL, or lower ndots in the pod's dnsConfig. Exercise 5 computes this.</p><p><i>VI: api.example.com có 2 dấu chấm < 5, nên mỗi lần gọi ra ngoài tốn ba lần NXDOMAIN trước (nhân đôi cho A và AAAA). Cách sửa: dấu chấm cuối trong URL, hoặc hạ ndots trong dnsConfig của pod. Bài 5 tính chuyện này.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Debugging with dig while the app reads /etc/hosts.|||Gỡ lỗi bằng dig trong khi ứng dụng đọc /etc/hosts."
+        },
+        {
+          "loi": "Believing 127.0.0.53 is the real DNS server.|||Tin 127.0.0.53 là máy chủ DNS thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nsswitch.conf",
+          "vi": "thứ tự nguồn tra tên"
+        },
+        {
+          "en": "search domain",
+          "vi": "tên miền tìm kèm"
+        },
+        {
+          "en": "ndots",
+          "vi": "ngưỡng số dấu chấm"
+        },
+        {
+          "en": "systemd-resolved",
+          "vi": "bộ đệm DNS cục bộ của Ubuntu"
+        }
+      ]
+    },
+    {
+      "title": "DNS 5 — Write searchOrder() and queriesFor(): what ndots costs",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "search list",
+        "ndots"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The stub decides which full names to ask, in which order, from <code>search</code> and <code>ndots</code> in resolv.conf. Real proof (lab/out/c31-ndots):</p><pre>$ cat /etc/resolv.conf\nnameserver 198.51.100.1\nsearch labflow.test\noptions ndots:5\n$ getent ahostsv4 api | head -1\n203.0.113.10    STREAM api.labflow.test\n$ getent ahostsv4 labflow.cdn.test | head -1\n203.0.113.10    STREAM labflow.cdn.test\n$ getent ahostsv4 labflow.cdn.test. | head -1\n203.0.113.10    STREAM labflow.cdn.test\n# every DNS answer the laptop received during the three commands\nNOERROR  api.labflow.test\nNXDOMAIN labflow.cdn.test.labflow.test\nNOERROR  labflow.cdn.test\nNOERROR  labflow.cdn.test</pre>\n<p>Write <code>searchOrder(name, conf)</code> — <code>conf = { search: [...], ndots }</code> — returning the names tried, in order, <b>without</b> a final dot. glibc's rules:</p>\n<ul><li>a name ending in <code>.</code> is absolute: only that name (dot removed) is tried;</li>\n<li>count the dots in the name: if <code>dots &gt;= ndots</code>, try the name itself first, then the name + each search domain;</li>\n<li>otherwise try the name + each search domain first, and the name itself <b>last</b>;</li>\n<li><code>ndots</code> defaults to 1; search entries <code>\".\"</code> (Ubuntu writes <code>search .</code>) are ignored, a final dot on a search domain is dropped.</li></ul>\n<p>Then <code>queriesFor(name, conf, existing)</code>: walk that order and return <code>{ answer, queries }</code> — the first name present in the array <code>existing</code>, and how many names were asked to get there (one query per name; real clients often double it, A + AAAA). If none exists: <code>{ answer: null, queries: &lt;all of them&gt; }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Stub quyết định hỏi những tên đầy đủ nào, theo thứ tự nào, dựa trên <code>search</code> và <code>ndots</code> trong resolv.conf. Bằng chứng thật (lab/out/c31-ndots):</p><pre>$ cat /etc/resolv.conf\nnameserver 198.51.100.1\nsearch labflow.test\noptions ndots:5\n$ getent ahostsv4 api | head -1\n203.0.113.10    STREAM api.labflow.test\n$ getent ahostsv4 labflow.cdn.test | head -1\n203.0.113.10    STREAM labflow.cdn.test\n$ getent ahostsv4 labflow.cdn.test. | head -1\n203.0.113.10    STREAM labflow.cdn.test\n# every DNS answer the laptop received during the three commands\nNOERROR  api.labflow.test\nNXDOMAIN labflow.cdn.test.labflow.test\nNOERROR  labflow.cdn.test\nNOERROR  labflow.cdn.test</pre>\n<p>Viết <code>searchOrder(name, conf)</code> — <code>conf = { search: [...], ndots }</code> — trả về các tên được thử, theo thứ tự, <b>không</b> có dấu chấm cuối. Luật của glibc:</p>\n<ul><li>tên kết thúc bằng <code>.</code> là tên tuyệt đối: chỉ thử đúng tên đó (bỏ dấu chấm);</li>\n<li>đếm dấu chấm trong tên: nếu <code>dots &gt;= ndots</code>, thử chính tên trước, rồi tên + từng search domain;</li>\n<li>ngược lại thử tên + từng search domain trước, và chính tên <b>cuối cùng</b>;</li>\n<li><code>ndots</code> mặc định 1; mục search <code>\".\"</code> (Ubuntu ghi <code>search .</code>) bị bỏ qua, dấu chấm cuối của search domain được bỏ.</li></ul>\n<p>Rồi <code>queriesFor(name, conf, existing)</code>: đi theo thứ tự đó, trả <code>{ answer, queries }</code> — tên đầu tiên có trong mảng <code>existing</code>, và đã hỏi bao nhiêu tên mới tới được (mỗi tên một câu hỏi; client thật thường nhân đôi, A + AAAA). Không tên nào có: <code>{ answer: null, queries: &lt;tất cả&gt; }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "name — a host name; conf — { search, ndots }; existing — array of names that exist.|||name — tên máy; conf — { search, ndots }; existing — mảng các tên có thật.",
+      "outputSpec": "searchOrder: array of names; queriesFor: { answer, queries }.|||searchOrder: mảng tên; queriesFor: { answer, queries }.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "searchOrder(\"api\", {\"search\":[\"labflow.test\"],\"ndots\":5})",
+          "output": "[\"api.labflow.test\",\"api\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Dots: name.split(\".\").length - 1.|||Số dấu chấm: name.split(\".\").length - 1.",
+        "Build the list \"name + each search domain\" once, then put the bare name in front or at the back.|||Dựng danh sách \"tên + từng search domain\" một lần, rồi đặt tên trần ở đầu hoặc ở cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Names the stub tries, in order (no final dot). conf = { search: [...], ndots } */\nfunction searchOrder(name, conf) {\n  // Write your solution here\n  return [name];\n}\n\n/** First existing name and how many names were asked. */\nfunction queriesFor(name, conf, existing) {\n  // Write your solution here\n  return { answer: null, queries: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function searchOrder(name, conf) {\n  var c = conf || {};\n  var ndots = c.ndots === undefined ? 1 : c.ndots;\n  var search = (c.search || []).filter(function (d) { return d && d !== '.'; }).map(function (d) { return d.replace(/\\.$/, ''); });\n  if (name.slice(-1) === '.') return [name.slice(0, -1)];          // absolute: the search list is never used\n  var dots = name.split('.').length - 1;\n  var withSearch = search.map(function (d) { return name + '.' + d; });\n  return dots >= ndots ? [name].concat(withSearch) : withSearch.concat([name]);\n}\n\nfunction queriesFor(name, conf, existing) {\n  var order = searchOrder(name, conf);\n  for (var i = 0; i < order.length; i++) {\n    if (existing.indexOf(order[i]) >= 0) return { answer: order[i], queries: i + 1 };\n  }\n  return { answer: null, queries: order.length };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The stub cannot know whether \"api\" means api.labflow.test or a top-level name, so glibc guesses by counting dots. The guess costs real round trips: every failed candidate is a full query to the resolver, often two (A and AAAA). That is the hidden latency of ndots:5 in Kubernetes, and the reason a trailing dot or a lower ndots makes external calls faster.</p>",
+      "solutionExplanationHtmlVi": "<p>Stub không biết \"api\" là api.labflow.test hay một tên cấp cao nhất, nên glibc đoán bằng cách đếm dấu chấm. Phép đoán tốn lượt đi về thật: mỗi ứng viên hỏng là một câu hỏi trọn vẹn tới resolver, thường là hai (A và AAAA). Đó là độ trễ ẩn của ndots:5 trong Kubernetes, và là lý do dấu chấm cuối hay ndots thấp hơn làm lời gọi ra ngoài nhanh hơn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: \"api\" with ndots:5 (c31-ndots)",
+              "vi": "Thật: \"api\" với ndots:5 (c31-ndots)"
+            },
+            "goi": "searchOrder(\"api\", {\"search\":[\"labflow.test\"],\"ndots\":5})",
+            "mongDoi": [
+              "api.labflow.test",
+              "api"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Real: 2 dots < 5 — the search domain first",
+              "vi": "Thật: 2 dấu chấm < 5 — search domain trước"
+            },
+            "goi": "searchOrder(\"labflow.cdn.test\", {\"search\":[\"labflow.test\"],\"ndots\":5})",
+            "mongDoi": [
+              "labflow.cdn.test.labflow.test",
+              "labflow.cdn.test"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Real: a final dot — no search",
+              "vi": "Thật: có dấu chấm cuối — không search"
+            },
+            "goi": "searchOrder(\"labflow.cdn.test.\", {\"search\":[\"labflow.test\"],\"ndots\":5})",
+            "mongDoi": [
+              "labflow.cdn.test"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Real: two queries, as tshark counted",
+              "vi": "Thật: hai câu hỏi, đúng như tshark đếm"
+            },
+            "goi": "queriesFor(\"labflow.cdn.test\", {\"search\":[\"labflow.test\"],\"ndots\":5}, [\"api.labflow.test\",\"labflow.cdn.test\",\"labflow.test\",\"www.labflow.test\"])",
+            "mongDoi": {
+              "answer": "labflow.cdn.test",
+              "queries": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "searchOrder(\"api.example.com\", {\"search\":[\"default.svc.cluster.local\",\"svc.cluster.local\",\"cluster.local\"],\"ndots\":5})",
+            "mongDoi": [
+              "api.example.com.default.svc.cluster.local",
+              "api.example.com.svc.cluster.local",
+              "api.example.com.cluster.local",
+              "api.example.com"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "queriesFor(\"api.example.com\", {\"search\":[\"default.svc.cluster.local\",\"svc.cluster.local\",\"cluster.local\"],\"ndots\":5}, [\"api.example.com\"])",
+            "mongDoi": {
+              "answer": "api.example.com",
+              "queries": 4
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "queriesFor(\"api.example.com.\", {\"search\":[\"default.svc.cluster.local\",\"svc.cluster.local\",\"cluster.local\"],\"ndots\":5}, [\"api.example.com\"])",
+            "mongDoi": {
+              "answer": "api.example.com",
+              "queries": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "searchOrder(\"a.b.c.d.e.f\", {\"search\":[\"default.svc.cluster.local\",\"svc.cluster.local\",\"cluster.local\"],\"ndots\":5})",
+            "mongDoi": [
+              "a.b.c.d.e.f",
+              "a.b.c.d.e.f.default.svc.cluster.local",
+              "a.b.c.d.e.f.svc.cluster.local",
+              "a.b.c.d.e.f.cluster.local"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "searchOrder(\"db\", {\"search\":[\"corp.example.\"]})",
+            "mongDoi": [
+              "db.corp.example",
+              "db"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "searchOrder(\"www.labflow.test\", {\"search\":[\".\"],\"ndots\":1})",
+            "mongDoi": [
+              "www.labflow.test"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "queriesFor(\"nope\", {\"search\":[\"labflow.test\"],\"ndots\":5}, [\"api.labflow.test\",\"labflow.cdn.test\",\"labflow.test\",\"www.labflow.test\"])",
+            "mongDoi": {
+              "answer": null,
+              "queries": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "queriesFor(\"redis\", {\"search\":[\"default.svc.cluster.local\",\"svc.cluster.local\",\"cluster.local\"],\"ndots\":5}, [\"redis.svc.cluster.local\",\"redis.cluster.local\"])",
+            "mongDoi": {
+              "answer": "redis.svc.cluster.local",
+              "queries": 2
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying the search list to a name that ends with a dot.|||Áp danh sách search cho tên kết thúc bằng dấu chấm."
+        },
+        {
+          "loi": "Forgetting the bare name at the end when dots < ndots.|||Quên tên trần ở cuối khi dots < ndots."
+        },
+        {
+          "loi": "Comparing dots > ndots instead of dots >= ndots.|||So dots > ndots thay vì dots >= ndots."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "absolute name / FQDN",
+          "vi": "tên tuyệt đối"
+        },
+        {
+          "en": "relative name",
+          "vi": "tên tương đối"
+        },
+        {
+          "en": "NXDOMAIN",
+          "vi": "tên không tồn tại"
+        }
+      ]
+    },
+    {
+      "title": "DNS 6 — Write clientWaits(): how long did the client wait, and why?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "cache miss",
+        "resolver work"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Turn the resolver's capture into numbers a developer cares about. The real capture of exercise 2 (lab/out/c31-isp-doc):</p><pre>   t(s)  from              to              msg     name                 type   result\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2</pre>\n<p>Write <code>clientWaits(text, client)</code>. Lines that start with a time and have <code>→</code> as the third word are packets: <code>t from → to msg name type [result…]</code> (other lines are ignored). For every packet <b>sent by</b> <code>client</code> with msg <code>query</code>, in order, return:</p>\n<pre>{ name, type, ms, upstream, result }</pre>\n<ul><li>the matching answer is the first later <code>answer</code> packet <b>to</b> <code>client</code> with the same name and type;</li>\n<li><code>ms</code> = (answer time − query time) in milliseconds, rounded to one decimal (<code>Math.round(x * 10) / 10</code>);</li>\n<li><code>upstream</code> = how many <code>query</code> packets sent by <b>anyone other than</b> <code>client</code> appear between the query and its answer (the work the resolver did for it);</li>\n<li><code>result</code> = the first word after the type in the answer (<code>NOERROR</code>, <code>NXDOMAIN</code>, <code>SERVFAIL</code>…);</li>\n<li>no answer before the end of the capture: <code>ms: null</code>, <code>result: \"TIMEOUT\"</code>, and <code>upstream</code> counted to the end.</li></ul>\n<p>On the real capture: <code>[{ name: \"www.labflow.test\", type: \"A\", ms: 9.7, upstream: 9, result: \"NOERROR\" }, { …, ms: 0.1, upstream: 0, … }]</code> — the cost of an empty cache, then of a full one. A hidden case uses a <b>constructed</b> capture (A and AAAA asked together, an NXDOMAIN, a dead name server).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến bản bắt gói của resolver thành những con số lập trình viên quan tâm. Bản bắt thật của bài 2 (lab/out/c31-isp-doc):</p><pre>   t(s)  from              to              msg     name                 type   result\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2</pre>\n<p>Viết <code>clientWaits(text, client)</code>. Dòng bắt đầu bằng thời gian và có <code>→</code> là chữ thứ ba là một gói: <code>t from → to msg name type [kết quả…]</code> (dòng khác bỏ qua). Với mỗi gói <code>query</code> <b>do</b> <code>client</code> gửi, theo thứ tự, trả về:</p>\n<pre>{ name, type, ms, upstream, result }</pre>\n<ul><li>câu trả lời tương ứng là gói <code>answer</code> đầu tiên về sau gửi <b>tới</b> <code>client</code> có cùng name và type;</li>\n<li><code>ms</code> = (thời điểm trả lời − thời điểm hỏi) tính bằng mili giây, làm tròn một chữ số thập phân (<code>Math.round(x * 10) / 10</code>);</li>\n<li><code>upstream</code> = số gói <code>query</code> do <b>bất kỳ ai khác</b> <code>client</code> gửi nằm giữa câu hỏi và câu trả lời (phần việc resolver làm cho nó);</li>\n<li><code>result</code> = chữ đầu tiên sau type trong câu trả lời (<code>NOERROR</code>, <code>NXDOMAIN</code>, <code>SERVFAIL</code>…);</li>\n<li>tới hết bản bắt vẫn không có trả lời: <code>ms: null</code>, <code>result: \"TIMEOUT\"</code>, và <code>upstream</code> đếm tới cuối.</li></ul>\n<p>Trên bản bắt thật: <code>[{ name: \"www.labflow.test\", type: \"A\", ms: 9.7, upstream: 9, result: \"NOERROR\" }, { …, ms: 0.1, upstream: 0, … }]</code> — giá của cache rỗng, rồi của cache đầy. Một ca ẩn dùng bản bắt <b>dựng</b> (A và AAAA hỏi cùng lúc, một NXDOMAIN, một máy chủ tên chết).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — dnsgoi.sh output; client — the client's IP.|||text — output của dnsgoi.sh; client — IP của client.",
+      "outputSpec": "Array of { name, type, ms, upstream, result }.|||Mảng { name, type, ms, upstream, result }.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\", \"198.51.100.2\")",
+          "output": "[{\"name\":\"www.labflow.test\",\"type\":\"A\",\"ms\":9.7,\"upstream\":9,\"result\":\"NOERROR\"},{\"name\":\"www.labflow.test\",\"type\":\"A\",\"ms\":0.1,\"upstream\":0,\"result\":\"NOERROR\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Parse every packet line into an object first, then work on the array.|||Phân tích mọi dòng gói thành object trước, rồi mới làm việc trên mảng.",
+        "For each client query, scan forward: count other hosts' queries until you meet the matching answer.|||Với mỗi câu hỏi của client, quét tới: đếm câu hỏi của máy khác cho tới khi gặp câu trả lời khớp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** dnsgoi.sh text ⇒ [{ name, type, ms, upstream, result }] for every query sent by client */\nfunction clientWaits(text, client) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function clientWaits(text, client) {\n  var rows = [];\n  String(text).split('\\n').forEach(function (line) {\n    var w = line.trim().split(/\\s+/);\n    if (!/^\\d+(\\.\\d+)?$/.test(w[0]) || w[2] !== '→') return;         // header, prompt and other lines\n    rows.push({ t: Number(w[0]), from: w[1], to: w[3], msg: w[4], name: w[5], type: w[6], rcode: w[7] || null });\n  });\n  var out = [];\n  rows.forEach(function (r, i) {\n    if (r.from !== client || r.msg !== 'query') return;\n    var up = 0, ans = null;\n    for (var j = i + 1; j < rows.length; j++) {\n      var s = rows[j];\n      if (s.msg === 'answer' && s.to === client && s.name === r.name && s.type === r.type) { ans = s; break; }\n      if (s.msg === 'query' && s.from !== client) up++;\n    }\n    out.push({\n      name: r.name, type: r.type,\n      ms: ans ? Math.round((ans.t - r.t) * 1000 * 10) / 10 : null,\n      upstream: up,\n      result: ans ? ans.rcode : 'TIMEOUT',\n    });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The client only ever sees one round trip to its resolver; everything else is hidden work that the resolver does on a cache miss. Counting that work explains the 13 ms vs 0 ms of exercise 1, and the same function flags the dangerous case: a question that never gets an answer because the name server behind it is dead — the client just waits (lesson 3.5 measures 20 s).</p>",
+      "solutionExplanationHtmlVi": "<p>Client chỉ thấy một lượt đi về tới resolver của nó; mọi thứ khác là phần việc ẩn resolver làm khi trượt cache. Đếm phần việc đó giải thích 13 ms với 0 ms của bài 1, và cùng hàm này bắt được trường hợp nguy hiểm: một câu hỏi không bao giờ có trả lời vì máy chủ tên phía sau đã chết — client chỉ biết chờ (bài 3.5 đo được 20 s).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real capture: empty cache, then full cache",
+              "vi": "Bản bắt thật: cache rỗng, rồi cache đầy"
+            },
+            "goi": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\", \"198.51.100.2\")",
+            "mongDoi": [
+              {
+                "name": "www.labflow.test",
+                "type": "A",
+                "ms": 9.7,
+                "upstream": 9,
+                "result": "NOERROR"
+              },
+              {
+                "name": "www.labflow.test",
+                "type": "A",
+                "ms": 0.1,
+                "upstream": 0,
+                "result": "NOERROR"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The resolver's own queries (192.0.2.1) — how many?",
+              "vi": "Câu hỏi của chính resolver (192.0.2.1) — bao nhiêu?"
+            },
+            "goi": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\", \"192.0.2.1\").length",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   api.labflow.test     A      \\n 0.0001  198.51.100.2    → 198.51.100.1    query   api.labflow.test     AAAA   \\n 0.0004  192.0.2.1       → 203.0.113.53    query   api.labflow.test     A      \\n 0.0005  192.0.2.1       → 203.0.113.53    query   api.labflow.test     AAAA   \\n 0.0016  203.0.113.53    → 192.0.2.1       answer  api.labflow.test     A      NOERROR aa answers=1\\n 0.0018  198.51.100.1    → 198.51.100.2    answer  api.labflow.test     A      NOERROR answers=1\\n 0.0019  203.0.113.53    → 192.0.2.1       answer  api.labflow.test     AAAA   NOERROR aa\\n 0.0021  198.51.100.1    → 198.51.100.2    answer  api.labflow.test     AAAA   NOERROR\\n 2.5000  198.51.100.2    → 198.51.100.1    query   nope.labflow.test    A      \\n 2.5004  192.0.2.1       → 203.0.113.54    query   nope.labflow.test    A      \\n 2.5013  203.0.113.54    → 192.0.2.1       answer  nope.labflow.test    A      NXDOMAIN aa\\n 2.5015  198.51.100.1    → 198.51.100.2    answer  nope.labflow.test    A      NXDOMAIN\\n 4.0000  198.51.100.2    → 198.51.100.1    query   x1.dead.test         A      \\n 4.0003  192.0.2.1       → 203.0.113.99    query   x1.dead.test         A      \\n 6.0010  192.0.2.1       → 203.0.113.99    query   x1.dead.test         A      \", \"198.51.100.2\")",
+            "mongDoi": [
+              {
+                "name": "api.labflow.test",
+                "type": "A",
+                "ms": 1.8,
+                "upstream": 2,
+                "result": "NOERROR"
+              },
+              {
+                "name": "api.labflow.test",
+                "type": "AAAA",
+                "ms": 2,
+                "upstream": 2,
+                "result": "NOERROR"
+              },
+              {
+                "name": "nope.labflow.test",
+                "type": "A",
+                "ms": 1.5,
+                "upstream": 1,
+                "result": "NXDOMAIN"
+              },
+              {
+                "name": "x1.dead.test",
+                "type": "A",
+                "ms": null,
+                "upstream": 2,
+                "result": "TIMEOUT"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\\n 0.0055  192.0.2.1       → 192.0.2.10      query   _ta-9e2e             A\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  _ta-9e2e             A      NXDOMAIN aa\\n 0.0065  192.0.2.10      → 192.0.2.1       answer  .                    DNSKEY NOERROR aa answers=4\\n 0.0071  192.0.2.1       → 192.0.2.20      query   test                 DNSKEY\\n 0.0078  192.0.2.20      → 192.0.2.1       answer  test                 DNSKEY NOERROR aa answers=4\\n 0.0081  192.0.2.1       → 203.0.113.54    query   labflow.test         DNSKEY\\n 0.0093  203.0.113.54    → 192.0.2.1       answer  labflow.test         DNSKEY NOERROR aa answers=4\\n 0.0097  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\\n 1.0359  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 1.0360  198.51.100.1    → 198.51.100.2    answer  www.labflow.test     A      NOERROR answers=2\", \"10.9.9.9\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "clientWaits(\"   t(s)  from              to              msg     name                 type   result\\n 0.0000  198.51.100.2    → 198.51.100.1    query   www.labflow.test     A\\n 0.0003  192.0.2.1       → 192.0.2.10      query   .                    NS\\n 0.0015  192.0.2.10      → 192.0.2.1       answer  .                    NS     NOERROR aa answers=2\\n 0.0017  192.0.2.1       → 192.0.2.10      query   test                 A\\n 0.0019  192.0.2.10      → 192.0.2.1       answer  test                 A      NOERROR referral\\n 0.0020  192.0.2.1       → 192.0.2.20      query   labflow.test         A\\n 0.0025  192.0.2.20      → 192.0.2.1       answer  labflow.test         A      NOERROR referral\\n 0.0026  192.0.2.1       → 203.0.113.53    query   www.labflow.test     A\\n 0.0038  203.0.113.53    → 192.0.2.1       answer  www.labflow.test     A      NOERROR aa answers=4\\n 0.0040  192.0.2.1       → 203.0.113.54    query   labflow.test         A\\n 0.0051  203.0.113.54    → 192.0.2.1       answer  labflow.test         A      NOERROR aa answers=2\\n 0.0054  192.0.2.1       → 192.0.2.10      query   .                    DNSKEY\", \"198.51.100.2\")",
+            "mongDoi": [
+              {
+                "name": "www.labflow.test",
+                "type": "A",
+                "ms": null,
+                "upstream": 6,
+                "result": "TIMEOUT"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Matching by name only: A and AAAA of the same name are two separate questions.|||Khớp chỉ theo tên: A và AAAA của cùng một tên là hai câu hỏi riêng."
+        },
+        {
+          "loi": "Counting the resolver's answers as upstream work, or counting the client's own second query.|||Đếm câu trả lời của resolver là việc phía trên, hoặc đếm câu hỏi thứ hai của chính client."
+        },
+        {
+          "loi": "Rounding 0.1 ms to 0 by using Math.round(x) instead of one decimal.|||Làm tròn 0,1 ms thành 0 vì dùng Math.round(x) thay vì một chữ số thập phân."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache hit / miss",
+          "vi": "trúng / trượt cache"
+        },
+        {
+          "en": "upstream query",
+          "vi": "câu hỏi đi lên trên"
+        },
+        {
+          "en": "timeout",
+          "vi": "hết giờ chờ"
+        }
+      ]
+    }
+  ]
+}

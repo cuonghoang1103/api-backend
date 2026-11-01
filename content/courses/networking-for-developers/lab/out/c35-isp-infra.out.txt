@@ -1,0 +1,5 @@
+# Ch3 · 3.5 — trên resolver: nó ghi nhớ 203.0.113.99 không trả lời (rto = thời gian chờ đã tăng tới, ttl = còn nhớ bao lâu)
+$ unbound-control dump_infra | grep 203.0.113.99
+203.0.113.99 dead.test. ttl 840 ping 0 var 94 rtt 376 rto 24064 tA 3 tAAAA 0 tother 0 ednsknown 0 edns 0 delay 6 lame dnssec 0 rec 0 A 0 other 0
+$ unbound-control get_option infra-host-ttl
+900

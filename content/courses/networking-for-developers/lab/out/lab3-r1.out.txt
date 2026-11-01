@@ -1,0 +1,24 @@
+# Lab 3 · R1 — bản đồ ủy quyền: ai giữ phần nào của tên, TTL ở mỗi cấp, vùng nào có ký
+$ dig +trace +nodnssec www.labflow.test | grep -v -E '^;; global|^; <<>>|^$'
+.			86400	IN	NS	a.root-servers.test.
+;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 4 ms
+test.			172800	IN	NS	ns1.nic.test.
+;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms
+labflow.test.		172800	IN	NS	ns2.labflow.test.
+labflow.test.		172800	IN	NS	ns1.labflow.test.
+;; Received 141 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms
+www.labflow.test.	300	IN	CNAME	labflow.test.
+labflow.test.		300	IN	A	203.0.113.10
+labflow.test.		86400	IN	NS	ns2.labflow.test.
+labflow.test.		86400	IN	NS	ns1.labflow.test.
+;; Received 171 bytes from 203.0.113.54#53(ns2.labflow.test) in 0 ms
+$ dig +trace +nodnssec static.labflow.test | grep -E 'IN\s+(NS|A|CNAME)\s|Received' | tail -6
+;; Received 114 bytes from 192.0.2.10#53(a.root-servers.test) in 1 ms
+labflow.test.		172800	IN	NS	ns1.labflow.test.
+labflow.test.		172800	IN	NS	ns2.labflow.test.
+;; Received 144 bytes from 192.0.2.20#53(ns1.nic.test) in 0 ms
+static.labflow.test.	300	IN	CNAME	labflow.cdn.test.
+;; Received 102 bytes from 203.0.113.53#53(ns1.labflow.test) in 0 ms
+$ delv -a /dnsz/anchor.conf static.labflow.test 2>&1 | grep '^;'
+; fully validated
+; unsigned answer

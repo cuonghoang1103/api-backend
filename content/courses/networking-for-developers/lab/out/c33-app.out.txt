@@ -1,0 +1,17 @@
+# Ch3 · 3.3 — cache trong ỨNG DỤNG: Java nhớ câu trả lời 30 s, Node hỏi lại mỗi lần — đếm câu hỏi thật bằng tcpdump
+$ java Hoi.java api.labflow.test 2>&1 | grep -v Picked
+java lookup 1: 203.0.113.10 in 10.5 ms
+java lookup 2: 203.0.113.10 in 0.5 ms
+java lookup 3: 203.0.113.10 in 1.5 ms
+java lookup 4: 203.0.113.10 in 0.1 ms
+java lookup 5: 203.0.113.10 in 0.2 ms
+$ tshark -r /tmp/a.pcap -Y 'dns.flags.response==0' 2>/dev/null | wc -l
+2
+$ node hoi.mjs api.labflow.test
+node lookup 1: 203.0.113.10 in 4.0 ms
+node lookup 2: 203.0.113.10 in 6.2 ms
+node lookup 3: 203.0.113.10 in 2.6 ms
+node lookup 4: 203.0.113.10 in 2.8 ms
+node lookup 5: 203.0.113.10 in 3.0 ms
+$ tshark -r /tmp/b.pcap -Y 'dns.flags.response==0' 2>/dev/null | wc -l
+5

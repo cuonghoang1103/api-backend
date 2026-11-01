@@ -1,0 +1,18 @@
+# Ch3 · 3.2 — code của bạn đọc bản ghi thế nào: module dns của Node (dns.promises). mongodb+srv:// = tra SRV + TXT y như dưới
+$ cat > /tmp/ghi.mjs <<'JS'
+> import dns from 'node:dns/promises';
+> console.log('MX  ', await dns.resolveMx('labflow.test'));
+> console.log('TXT ', await dns.resolveTxt('labflow.test'));
+> console.log('CAA ', await dns.resolveCaa('labflow.test'));
+> console.log('SRV ', await dns.resolveSrv('_mongodb._tcp.db.labflow.test'));
+> console.log('TXT ', await dns.resolveTxt('db.labflow.test'));
+> JS
+$ node /tmp/ghi.mjs
+MX   [ { exchange: 'mail.labflow.test', priority: 10 } ]
+TXT  [ [ 'labflow-verify=7f3c9a1e' ], [ 'v=spf1 mx -all' ] ]
+CAA  [ { critical: 0, issue: 'letsencrypt.org' } ]
+SRV  [
+  { name: 'db1.labflow.test', port: 27017, priority: 0, weight: 0 },
+  { name: 'db2.labflow.test', port: 27017, priority: 0, weight: 0 }
+]
+TXT  [ [ 'replicaSet=rs0&authSource=admin' ] ]

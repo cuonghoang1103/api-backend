@@ -1,0 +1,27 @@
+# Ch3 · 3.5 — chuỗi tin cậy DNSSEC của labflow.test, đọc từ dưới lên: chữ ký (RRSIG) ⇐ khoá (DNSKEY) ⇐ DS ở vùng cha ⇐ … ⇐ mỏ neo gốc
+$ dig +dnssec +noall +answer labflow.test A
+labflow.test.		300	IN	A	203.0.113.10
+labflow.test.		300	IN	RRSIG	A 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==
+$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | awk '{ print $1, $4, $5, $6, $7, substr($8, 1, 16) "…" }'
+labflow.test. DNSKEY 257 3 13 Q8ELEP109JcZSFib…
+labflow.test. DNSKEY 256 3 13 xzRWnqoxiH8ysNNF…
+$ dig +noall +answer labflow.test DS @192.0.2.20
+labflow.test.		3600	IN	DS	30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185
+$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | dnssec-dsfromkey -a SHA-256 -f - labflow.test
+labflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185
+$ dig +noall +answer test DS @192.0.2.10
+test.			86400	IN	DS	39072 13 2 CCEC87AE6F412C58CF2EBA7C3DACC5B8CF14016F1AD8077617142FB5 01826AF1
+$ cat /dnsz/anchor.conf
+trust-anchors { . static-ds 57466 13 2 "53274C60181AAFF3C55E9752CA22148C8E40E807A4D2DB4602C10AA45C5E364B"; };
+$ dig labflow.test | grep -E '^;; flags'
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+$ delv -a /dnsz/anchor.conf labflow.test A 2>&1 | head -2
+; fully validated
+labflow.test.		300	IN	A	203.0.113.10
+$ delv -a /dnsz/anchor.conf static.labflow.test A 2>&1
+; fully validated
+static.labflow.test.	300	IN	CNAME	labflow.cdn.test.
+static.labflow.test.	300	IN	RRSIG	CNAME 13 3 300 20261201102442 20261101092442 62671 labflow.test. vGKkGtZCt3kGalcf1Rto34AVEbuGFrAvZUfMHBPkiyku4DHlj4oERnXw QMwi1PH6W3qgyLJUtv85r+Pg6U6ISg==
+
+; unsigned answer
+labflow.cdn.test.	60	IN	A	203.0.113.10

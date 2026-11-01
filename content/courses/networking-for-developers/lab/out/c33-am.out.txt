@@ -1,0 +1,4 @@
+# Ch3 · 3.3 — cache ÂM (negative caching): hỏi một tên CHƯA tồn tại ⇒ NXDOMAIN, và resolver nhớ luôn câu "không có"
+$ dig new.labflow.test | grep -E 'status|SOA'
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 50830
+labflow.test.		300	IN	SOA	ns1.labflow.test. hostmaster.labflow.test. 2026110101 3600 600 1209600 300

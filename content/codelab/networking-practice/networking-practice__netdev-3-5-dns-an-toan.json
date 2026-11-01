@@ -1,0 +1,1174 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-3-5-dns-an-toan",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-3-5-dns-an-toan"
+  },
+  "exercises": [
+    {
+      "title": "DNSSEC 1 — Read the real chain of trust",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "DNSSEC chain of trust"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>labflow.test's chain, read from the bottom up (lab/out/c35-chuoi; long signatures cut):<pre>$ dig +dnssec +noall +answer labflow.test A\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\nlabflow.test.\t\t300\tIN\tRRSIG\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk o…\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | awk '{ print $1, $4, $5, $6, $7, substr($8, 1, 16) \"…\" }'\nlabflow.test. DNSKEY 257 3 13 Q8ELEP109JcZSFib…\nlabflow.test. DNSKEY 256 3 13 xzRWnqoxiH8ysNNF…\n$ dig +noall +answer labflow.test DS @192.0.2.20\nlabflow.test.\t\t3600\tIN\tDS\t30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | dnssec-dsfromkey -a SHA-256 -f - labflow.test\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\n$ dig +noall +answer test DS @192.0.2.10\ntest.\t\t\t86400\tIN\tDS\t39072 13 2 CCEC87AE6F412C58CF2EBA7C3DACC5B8CF14016F1AD8077617142FB5 01826AF1\n$ cat /dnsz/anchor.conf\ntrust-anchors { . static-ds 57466 13 2 \"53274C60181AAFF3C55E9752CA22148C8E40E807A4D2DB4602C10AA45C5E364B\"; };\n$ dig labflow.test | grep -E '^;; flags'\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n$ delv -a /dnsz/anchor.conf labflow.test A 2&gt;&amp;1 | head -2\n; fully validated\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n$ delv -a /dnsz/anchor.conf static.labflow.test A 2&gt;&amp;1\n; fully validated\nstatic.labflow.test.\t300\tIN\tCNAME\tlabflow.cdn.test.\nstatic.labflow.test.\t300\tIN\tRRSIG\tCNAME 13 3 300 20261201102442 20261101092442 62671 labflow.test. vGKkGtZCt3kGalcf1Rto34AVEbuGFrAvZUfMHBPkiyku4DHl…\n; unsigned answer\nlabflow.cdn.test.\t60\tIN\tA\t203.0.113.10</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi của labflow.test, đọc từ dưới lên (lab/out/c35-chuoi; chữ ký dài đã cắt):<pre>$ dig +dnssec +noall +answer labflow.test A\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\nlabflow.test.\t\t300\tIN\tRRSIG\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk o…\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | awk '{ print $1, $4, $5, $6, $7, substr($8, 1, 16) \"…\" }'\nlabflow.test. DNSKEY 257 3 13 Q8ELEP109JcZSFib…\nlabflow.test. DNSKEY 256 3 13 xzRWnqoxiH8ysNNF…\n$ dig +noall +answer labflow.test DS @192.0.2.20\nlabflow.test.\t\t3600\tIN\tDS\t30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABA F1499185\n$ dig +noall +answer labflow.test DNSKEY @203.0.113.53 | dnssec-dsfromkey -a SHA-256 -f - labflow.test\nlabflow.test. IN DS 30957 13 2 0FA2C679E930C7E36936706B14EAA9991CE9A57532C3620D014E2ABAF1499185\n$ dig +noall +answer test DS @192.0.2.10\ntest.\t\t\t86400\tIN\tDS\t39072 13 2 CCEC87AE6F412C58CF2EBA7C3DACC5B8CF14016F1AD8077617142FB5 01826AF1\n$ cat /dnsz/anchor.conf\ntrust-anchors { . static-ds 57466 13 2 \"53274C60181AAFF3C55E9752CA22148C8E40E807A4D2DB4602C10AA45C5E364B\"; };\n$ dig labflow.test | grep -E '^;; flags'\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n$ delv -a /dnsz/anchor.conf labflow.test A 2&gt;&amp;1 | head -2\n; fully validated\nlabflow.test.\t\t300\tIN\tA\t203.0.113.10\n$ delv -a /dnsz/anchor.conf static.labflow.test A 2&gt;&amp;1\n; fully validated\nstatic.labflow.test.\t300\tIN\tCNAME\tlabflow.cdn.test.\nstatic.labflow.test.\t300\tIN\tRRSIG\tCNAME 13 3 300 20261201102442 20261101092442 62671 labflow.test. vGKkGtZCt3kGalcf1Rto34AVEbuGFrAvZUfMHBPkiyku4DHl…\n; unsigned answer\nlabflow.cdn.test.\t60\tIN\tA\t203.0.113.10</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RRSIG fields: type alg labels ttl expiration inception keytag signer signature.|||Các trường RRSIG: type alg labels ttl expiration inception keytag signer signature.",
+        "Each link: a signature checked with a key, or a key matched to the DS of the parent.|||Mỗi mắt xích: một chữ ký kiểm bằng một khoá, hoặc một khoá khớp với DS của vùng cha."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 1 — Read the real chain of trust\n\nAnswer in the answer panel (no code needed).\n\n1. In the RRSIG line \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", what are the two long numbers?Trong dòng RRSIG \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", hai con số dài là gì?\n2. DNSKEY 256 and DNSKEY 257: what is the difference?DNSKEY 256 và DNSKEY 257: khác nhau gì?\n3. The DS at the TLD and the output of dnssec-dsfromkey are equal. What does that prove?DS ở TLD và output của dnssec-dsfromkey bằng nhau. Điều đó chứng minh gì?\n4. What anchors the whole chain?Cái gì neo cả chuỗi?\n5. delv says \"fully validated\" for the CNAME and \"unsigned answer\" for labflow.cdn.test. Why?delv nói \"fully validated\" cho CNAME và \"unsigned answer\" cho labflow.cdn.test. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 1 — Read the real chain of trust — answer key\n\n1. In the RRSIG line \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", what are the two long numbers?Trong dòng RRSIG \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", hai con số dài là gì?\n   Answer: c) Expiration then inception of the signature, in UTC\n   Order: covered type, algorithm (13 = ECDSA P-256), labels, original TTL, EXPIRATION, INCEPTION, key tag, signer, signature. Here valid for 30 days; someone (or a job) must re-sign before the end.VI: Thứ tự: loại được ký, thuật toán (13 = ECDSA P-256), số nhãn, TTL gốc, HẾT HẠN, BẮT ĐẦU, key tag, người ký, chữ ký. Ở đây hiệu lực 30 ngày; ai đó (hoặc một tác vụ) phải ký lại trước khi hết.\n\n2. DNSKEY 256 and DNSKEY 257: what is the difference?DNSKEY 256 và DNSKEY 257: khác nhau gì?\n   Answer: a) 256 signs the records (ZSK); 257 signs the keys (KSK)\n   The flags field: 257 has the SEP bit. Splitting the roles lets you change the ZSK often without touching the parent.VI: Trường flags: 257 có bit SEP. Tách vai trò giúp đổi ZSK thường xuyên mà không đụng tới vùng cha.\n\n3. The DS at the TLD and the output of dnssec-dsfromkey are equal. What does that prove?DS ở TLD và output của dnssec-dsfromkey bằng nhau. Điều đó chứng minh gì?\n   Answer: d) The parent vouches for exactly the key that labflow.test publishes\n   DS = hash of the child's KSK, published and signed by the parent. Same key tag 30957, same digest — only the space dig inserts differs. Lab 3 breaks this link.VI: DS = băm của KSK vùng con, do vùng cha công bố và ký. Cùng key tag 30957, cùng digest — chỉ khác dấu cách dig chèn vào. Lab 3 làm gãy mắt xích này.\n\n4. What anchors the whole chain?Cái gì neo cả chuỗi?\n   Answer: b) The trust anchor: the root key hash set in the validator\n   Everything else is checked; the anchor is trusted without proof. The real root has been signed since 15 July 2010.VI: Mọi thứ khác đều được kiểm; mỏ neo được tin mà không cần chứng minh. Gốc thật được ký từ 15/7/2010.\n\n5. delv says \"fully validated\" for the CNAME and \"unsigned answer\" for labflow.cdn.test. Why?delv nói \"fully validated\" cho CNAME và \"unsigned answer\" cho labflow.cdn.test. Vì sao?\n   Answer: d) cdn.test has no DS: provably unsigned, which is allowed\n   Insecure ≠ bogus: there is a signed proof that no DS exists, so the validator accepts unsigned data for that zone.VI: Insecure ≠ bogus: có bằng chứng được ký rằng không có DS, nên bộ kiểm chấp nhận dữ liệu không ký cho vùng đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Expiration then inception of the signature, in UTC</p><p>Order: covered type, algorithm (13 = ECDSA P-256), labels, original TTL, EXPIRATION, INCEPTION, key tag, signer, signature. Here valid for 30 days; someone (or a job) must re-sign before the end.</p><p><i>VI: Thứ tự: loại được ký, thuật toán (13 = ECDSA P-256), số nhãn, TTL gốc, HẾT HẠN, BẮT ĐẦU, key tag, người ký, chữ ký. Ở đây hiệu lực 30 ngày; ai đó (hoặc một tác vụ) phải ký lại trước khi hết.</i></p></li><li><p><b>a)</b> 256 signs the records (ZSK); 257 signs the keys (KSK)</p><p>The flags field: 257 has the SEP bit. Splitting the roles lets you change the ZSK often without touching the parent.</p><p><i>VI: Trường flags: 257 có bit SEP. Tách vai trò giúp đổi ZSK thường xuyên mà không đụng tới vùng cha.</i></p></li><li><p><b>d)</b> The parent vouches for exactly the key that labflow.test publishes</p><p>DS = hash of the child's KSK, published and signed by the parent. Same key tag 30957, same digest — only the space dig inserts differs. Lab 3 breaks this link.</p><p><i>VI: DS = băm của KSK vùng con, do vùng cha công bố và ký. Cùng key tag 30957, cùng digest — chỉ khác dấu cách dig chèn vào. Lab 3 làm gãy mắt xích này.</i></p></li><li><p><b>b)</b> The trust anchor: the root key hash set in the validator</p><p>Everything else is checked; the anchor is trusted without proof. The real root has been signed since 15 July 2010.</p><p><i>VI: Mọi thứ khác đều được kiểm; mỏ neo được tin mà không cần chứng minh. Gốc thật được ký từ 15/7/2010.</i></p></li><li><p><b>d)</b> cdn.test has no DS: provably unsigned, which is allowed</p><p>Insecure ≠ bogus: there is a signed proof that no DS exists, so the validator accepts unsigned data for that zone.</p><p><i>VI: Insecure ≠ bogus: có bằng chứng được ký rằng không có DS, nên bộ kiểm chấp nhận dữ liệu không ký cho vùng đó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In the RRSIG line \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", what are the two long numbers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dòng RRSIG \"A 13 2 300 20261201102442 20261101092442 62671 labflow.test. …\", hai con số dài là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Inception then expiration, in local time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two key tags of the keys that signed it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Expiration then inception of the signature, in UTC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The serials of the zone before and after signing"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Order: covered type, algorithm (13 = ECDSA P-256), labels, original TTL, EXPIRATION, INCEPTION, key tag, signer, signature. Here valid for 30 days; someone (or a job) must re-sign before the end.</p><p><i>VI: Thứ tự: loại được ký, thuật toán (13 = ECDSA P-256), số nhãn, TTL gốc, HẾT HẠN, BẮT ĐẦU, key tag, người ký, chữ ký. Ở đây hiệu lực 30 ngày; ai đó (hoặc một tác vụ) phải ký lại trước khi hết.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>DNSKEY 256 and DNSKEY 257: what is the difference?</p><p style=\"opacity:.75;font-size:.92em\"><i>DNSKEY 256 và DNSKEY 257: khác nhau gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "256 signs the records (ZSK); 257 signs the keys (KSK)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Their lengths: 256 bits and 257 bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "256 is used for IPv4 records, 257 for IPv6 ones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "256 is the old key, 257 the new one replacing it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The flags field: 257 has the SEP bit. Splitting the roles lets you change the ZSK often without touching the parent.</p><p><i>VI: Trường flags: 257 có bit SEP. Tách vai trò giúp đổi ZSK thường xuyên mà không đụng tới vùng cha.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The DS at the TLD and the output of dnssec-dsfromkey are equal. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>DS ở TLD và output của dnssec-dsfromkey bằng nhau. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The zone was transferred correctly to ns2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TLD and LabFlow use the same key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The signature over the A record is valid"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The parent vouches for exactly the key that labflow.test publishes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>DS = hash of the child's KSK, published and signed by the parent. Same key tag 30957, same digest — only the space dig inserts differs. Lab 3 breaks this link.</p><p><i>VI: DS = băm của KSK vùng con, do vùng cha công bố và ký. Cùng key tag 30957, cùng digest — chỉ khác dấu cách dig chèn vào. Lab 3 làm gãy mắt xích này.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What anchors the whole chain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái gì neo cả chuỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The SOA serial number of the root zone"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The trust anchor: the root key hash set in the validator"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The TLS certificate of the website itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The TLD's DNSKEY, which every resolver downloads"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Everything else is checked; the anchor is trusted without proof. The real root has been signed since 15 July 2010.</p><p><i>VI: Mọi thứ khác đều được kiểm; mỏ neo được tin mà không cần chứng minh. Gốc thật được ký từ 15/7/2010.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>delv says \"fully validated\" for the CNAME and \"unsigned answer\" for labflow.cdn.test. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>delv nói \"fully validated\" cho CNAME và \"unsigned answer\" cho labflow.cdn.test. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The CDN signs with a different algorithm"
+              },
+              {
+                "ma": "b",
+                "noiDung": "delv cannot follow a CNAME into another zone"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The CDN's signatures expired a few days ago"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cdn.test has no DS: provably unsigned, which is allowed"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Insecure ≠ bogus: there is a signed proof that no DS exists, so the validator accepts unsigned data for that zone.</p><p><i>VI: Insecure ≠ bogus: có bằng chứng được ký rằng không có DS, nên bộ kiểm chấp nhận dữ liệu không ký cho vùng đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the expiration as the inception (expiration comes first).|||Đọc hết hạn thành bắt đầu (hết hạn đứng trước)."
+        },
+        {
+          "loi": "Thinking \"unsigned\" means broken.|||Nghĩ \"không ký\" nghĩa là hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RRSIG",
+          "vi": "chữ ký của một bộ bản ghi"
+        },
+        {
+          "en": "DNSKEY",
+          "vi": "khoá công khai của vùng"
+        },
+        {
+          "en": "DS",
+          "vi": "băm khoá vùng con, ở vùng cha"
+        },
+        {
+          "en": "trust anchor",
+          "vi": "mỏ neo tin cậy"
+        },
+        {
+          "en": "KSK / ZSK",
+          "vi": "khoá ký khoá / khoá ký vùng"
+        }
+      ]
+    },
+    {
+      "title": "DNSSEC 2 — The order of the checks, and of the diagnosis",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "DNSSEC validation",
+        "DNS troubleshooting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Use the chain of exercise 1 and the checklist of the lesson. Real symptoms of the expired-signature incident (lab/out/c35-hong):<pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +dnssec +noall +answer labflow.test A @203.0.113.53 | awk '$4 == \"RRSIG\" { print \"RRSIG valid from\", $10, \"until\", $9 }'\nRRSIG valid from 20261002102446 until 20261030102446\n$ date -u +%Y%m%d%H%M%S\n20261101102450</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng chuỗi của bài 1 và danh sách kiểm của bài học. Triệu chứng thật của sự cố chữ ký hết hạn (lab/out/c35-hong):<pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +dnssec +noall +answer labflow.test A @203.0.113.53 | awk '$4 == \"RRSIG\" { print \"RRSIG valid from\", $10, \"until\", $9 }'\nRRSIG valid from 20261002102446 until 20261030102446\n$ date -u +%Y%m%d%H%M%S\n20261101102450</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A validator starts from the only thing it trusts — the root anchor.|||Bộ kiểm bắt đầu từ thứ duy nhất nó tin — mỏ neo gốc.",
+        "Diagnosis goes from the app outward.|||Chẩn đoán đi từ ứng dụng ra ngoài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 2 — The order of the checks, and of the diagnosis\n\nAnswer in the answer panel (no code needed).\n\n1. Order the checks a validating resolver makes for labflow.test A, starting from what it already trusts.Xếp các bước kiểm mà resolver kiểm DNSSEC làm cho labflow.test A, bắt đầu từ thứ nó đã tin.\n2. \"Works on my machine, not on yours\": order the six checks of the lesson.\"Máy tôi chạy, máy bạn không\": xếp sáu bước kiểm của bài học.\n3. Order the fix of the expired-signature incident.Xếp các bước sửa sự cố chữ ký hết hạn.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 2 — The order of the checks, and of the diagnosis — answer key\n\n1. Order the checks a validating resolver makes for labflow.test A, starting from what it already trusts.Xếp các bước kiểm mà resolver kiểm DNSSEC làm cho labflow.test A, bắt đầu từ thứ nó đã tin.\n   Answer: m2) The root DNSKEY matches the trust anchor  →  m1) The DS for test. is signed by the root  →  m4) test.'s DNSKEY matches that DS; the DS for labflow.test is signed by test.  →  m5) labflow.test's KSK (257) matches that DS and signs the DNSKEY set  →  m3) The ZSK (256) verifies the RRSIG over the A record\n   Top-down from the anchor, one link per level. Fail at any step ⇒ bogus ⇒ SERVFAIL; a missing DS at some step (provably) ⇒ insecure from there down.VI: Từ mỏ neo đi xuống, mỗi cấp một mắt xích. Hỏng ở bước nào ⇒ bogus ⇒ SERVFAIL; thiếu DS (có chứng minh) ở bước nào ⇒ insecure từ đó trở xuống.\n\n2. \"Works on my machine, not on yours\": order the six checks of the lesson.\"Máy tôi chạy, máy bạn không\": xếp sáu bước kiểm của bài học.\n   Answer: m3) What the app gets: getent ahosts name (hosts file, search domains)  →  m6) Which resolver: resolv.conf, resolvectl status  →  m5) Each resolver: dig name @resolver (old answer? TTL counting?)  →  m1) The truth: dig name @ns1 / @ns2 + SOA serial  →  m2) DNSSEC: compare with +cd and read the EDE  →  m4) Delegation: dig +trace (NXDOMAIN at the TLD, a slow hop)\n   From the app outward: first what the program really sees, then each layer that could hold a different answer, until the authoritative servers and the delegation above them.VI: Từ ứng dụng ra ngoài: trước hết thứ chương trình thật sự thấy, rồi từng lớp có thể giữ câu trả lời khác, tới máy chủ có thẩm quyền và ủy quyền phía trên chúng.\n\n3. Order the fix of the expired-signature incident.Xếp các bước sửa sự cố chữ ký hết hạn.\n   Answer: m5) Confirm: SERVFAIL without +cd, the address with +cd, EDE 7  →  m2) Re-sign the zone correctly and bump the serial so ns2 copies it  →  m1) Check the new RRSIG window on the authoritative server  →  m3) Wait for (or flush) the bogus cache on resolvers — about 60 s on Unbound  →  m4) Add monitoring: alert when signatures expire in less than 7 days\n   Diagnose before touching, fix at the source, verify on the authoritative server, then remember the caches. The last step is what kiem-dns.sh does in Lab 3.VI: Chẩn đoán trước khi động vào, sửa tận gốc, kiểm trên máy chủ có thẩm quyền, rồi nhớ tới cache. Bước cuối là việc kiem-dns.sh làm trong Lab 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Top-down from the anchor, one link per level. Fail at any step ⇒ bogus ⇒ SERVFAIL; a missing DS at some step (provably) ⇒ insecure from there down.</p><p><i>VI: Từ mỏ neo đi xuống, mỗi cấp một mắt xích. Hỏng ở bước nào ⇒ bogus ⇒ SERVFAIL; thiếu DS (có chứng minh) ở bước nào ⇒ insecure từ đó trở xuống.</i></p><p>From the app outward: first what the program really sees, then each layer that could hold a different answer, until the authoritative servers and the delegation above them.</p><p><i>VI: Từ ứng dụng ra ngoài: trước hết thứ chương trình thật sự thấy, rồi từng lớp có thể giữ câu trả lời khác, tới máy chủ có thẩm quyền và ủy quyền phía trên chúng.</i></p><p>Diagnose before touching, fix at the source, verify on the authoritative server, then remember the caches. The last step is what kiem-dns.sh does in Lab 3.</p><p><i>VI: Chẩn đoán trước khi động vào, sửa tận gốc, kiểm trên máy chủ có thẩm quyền, rồi nhớ tới cache. Bước cuối là việc kiem-dns.sh làm trong Lab 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the checks a validating resolver makes for labflow.test A, starting from what it already trusts.</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp các bước kiểm mà resolver kiểm DNSSEC làm cho labflow.test A, bắt đầu từ thứ nó đã tin.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The DS for test. is signed by the root"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The root DNSKEY matches the trust anchor"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The ZSK (256) verifies the RRSIG over the A record"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "test.'s DNSKEY matches that DS; the DS for labflow.test is signed by test."
+              },
+              {
+                "ma": "m5",
+                "noiDung": "labflow.test's KSK (257) matches that DS and signs the DNSKEY set"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m4",
+              "m5",
+              "m3"
+            ],
+            "giaiThich": "<p>Top-down from the anchor, one link per level. Fail at any step ⇒ bogus ⇒ SERVFAIL; a missing DS at some step (provably) ⇒ insecure from there down.</p><p><i>VI: Từ mỏ neo đi xuống, mỗi cấp một mắt xích. Hỏng ở bước nào ⇒ bogus ⇒ SERVFAIL; thiếu DS (có chứng minh) ở bước nào ⇒ insecure từ đó trở xuống.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>\"Works on my machine, not on yours\": order the six checks of the lesson.</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Máy tôi chạy, máy bạn không\": xếp sáu bước kiểm của bài học.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The truth: dig name @ns1 / @ns2 + SOA serial"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "DNSSEC: compare with +cd and read the EDE"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "What the app gets: getent ahosts name (hosts file, search domains)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Delegation: dig +trace (NXDOMAIN at the TLD, a slow hop)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Each resolver: dig name @resolver (old answer? TTL counting?)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Which resolver: resolv.conf, resolvectl status"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m6",
+              "m5",
+              "m1",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>From the app outward: first what the program really sees, then each layer that could hold a different answer, until the authoritative servers and the delegation above them.</p><p><i>VI: Từ ứng dụng ra ngoài: trước hết thứ chương trình thật sự thấy, rồi từng lớp có thể giữ câu trả lời khác, tới máy chủ có thẩm quyền và ủy quyền phía trên chúng.</i></p>"
+          },
+          {
+            "ma": "o3",
+            "de": "<p>Order the fix of the expired-signature incident.</p><p style=\"opacity:.75;font-size:.92em\"><i>Xếp các bước sửa sự cố chữ ký hết hạn.</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Check the new RRSIG window on the authoritative server"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Re-sign the zone correctly and bump the serial so ns2 copies it"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Wait for (or flush) the bogus cache on resolvers — about 60 s on Unbound"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Add monitoring: alert when signatures expire in less than 7 days"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Confirm: SERVFAIL without +cd, the address with +cd, EDE 7"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m2",
+              "m1",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Diagnose before touching, fix at the source, verify on the authoritative server, then remember the caches. The last step is what kiem-dns.sh does in Lab 3.</p><p><i>VI: Chẩn đoán trước khi động vào, sửa tận gốc, kiểm trên máy chủ có thẩm quyền, rồi nhớ tới cache. Bước cuối là việc kiem-dns.sh làm trong Lab 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing the zone without bumping the serial: ns2 keeps the bad signatures.|||Sửa vùng mà không tăng serial: ns2 giữ chữ ký hỏng."
+        },
+        {
+          "loi": "Declaring victory while resolvers still serve the cached bogus answer.|||Tuyên bố xong trong khi resolver còn trả câu bogus đã cache."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "kiểm chứng chữ ký"
+        },
+        {
+          "en": "+cd (checking disabled)",
+          "vi": "tắt kiểm DNSSEC"
+        },
+        {
+          "en": "EDE",
+          "vi": "mã lỗi mở rộng"
+        }
+      ]
+    },
+    {
+      "title": "DNSSEC 3 — Secure, insecure or bogus?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "DNSSEC states"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Lab and real Internet (lab/out/c35-hong, c35-isp-bogus, c35-sua-hoi, c35-sua-hoi2, c35-that):<pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +dnssec +noall +answer labflow.test A @203.0.113.53 | awk '$4 == \"RRSIG\" { print \"RRSIG valid from\", $10, \"until\", $9 }'\nRRSIG valid from 20261002102446 until 20261030102446\n$ date -u +%Y%m%d%H%M%S\n20261101102450\n# after re-signing correctly\n$ dig labflow.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14010\n# on the ISP resolver\n$ unbound-control get_option val-bogus-ttl\n60\n$ unbound-control flush_bogus\nok removed 0 rrsets, 1 messages and 1 key entries\n# laptop\n$ dig labflow.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 36096\n\n# real Internet\n$ dig +dnssec cloudflare.com A @1.1.1.1 | grep -E '^;; flags|RRSIG'\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1\ncloudflare.com.\t\t142\tIN\tRRSIG\tA 13 2 300 20261102102436 20261031082436 34505 cloudflare.com. lmbxwbK6mMlkXN6UbyihP+SttbIcFSVUq9Gvv9/mn3WTWCEGuZuCZdrA w5Ou1a3WMIRfLtZ8H…\n$ dig +short DS cloudflare.com\n2371 13 2 32996839A6D808AFE3EB4A795A0E6A7A39A76FC52FF228B22B76F6D6 3826F2B9\n$ dig dnssec-failed.org @1.1.1.1 | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 43095\n; EDE: 9 (DNSKEY Missing): (no SEP matching the DS found for dnssec-failed.org.)\n$ dig +cd +short dnssec-failed.org @1.1.1.1\n96.99.227.255\n$ dig +short DS cuongthai.com\n$ dig cuongthai.com @1.1.1.1 | grep -E '^;; flags'\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n$ dig +short +tls cuongthai.com @1.1.1.1\n160.187.1.208\n$ dig +short +https cuongthai.com @1.1.1.1\n160.187.1.208\n$ curl -s -H 'accept: application/dns-json' 'https://cloudflare-dns.com/dns-query?name=cuongthai.com&amp;type=A'\n{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"cuongthai.com\",\"type\":1}],\"Answer\":[{\"name\":\"cuongthai.com\",\"type\":1,\"TTL\":300,\"d…</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab và Internet thật (lab/out/c35-hong, c35-isp-bogus, c35-sua-hoi, c35-sua-hoi2, c35-that):<pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10\n$ dig +dnssec +noall +answer labflow.test A @203.0.113.53 | awk '$4 == \"RRSIG\" { print \"RRSIG valid from\", $10, \"until\", $9 }'\nRRSIG valid from 20261002102446 until 20261030102446\n$ date -u +%Y%m%d%H%M%S\n20261101102450\n# sau khi ký lại đúng\n$ dig labflow.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14010\n# trên resolver nhà mạng\n$ unbound-control get_option val-bogus-ttl\n60\n$ unbound-control flush_bogus\nok removed 0 rrsets, 1 messages and 1 key entries\n# laptop\n$ dig labflow.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 36096\n\n# Internet thật\n$ dig +dnssec cloudflare.com A @1.1.1.1 | grep -E '^;; flags|RRSIG'\n;; flags: qr rd ra ad; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1\ncloudflare.com.\t\t142\tIN\tRRSIG\tA 13 2 300 20261102102436 20261031082436 34505 cloudflare.com. lmbxwbK6mMlkXN6UbyihP+SttbIcFSVUq9Gvv9/mn3WTWCEGuZuCZdrA w5Ou1a3WMIRfLtZ8H…\n$ dig +short DS cloudflare.com\n2371 13 2 32996839A6D808AFE3EB4A795A0E6A7A39A76FC52FF228B22B76F6D6 3826F2B9\n$ dig dnssec-failed.org @1.1.1.1 | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 43095\n; EDE: 9 (DNSKEY Missing): (no SEP matching the DS found for dnssec-failed.org.)\n$ dig +cd +short dnssec-failed.org @1.1.1.1\n96.99.227.255\n$ dig +short DS cuongthai.com\n$ dig cuongthai.com @1.1.1.1 | grep -E '^;; flags'\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n$ dig +short +tls cuongthai.com @1.1.1.1\n160.187.1.208\n$ dig +short +https cuongthai.com @1.1.1.1\n160.187.1.208\n$ curl -s -H 'accept: application/dns-json' 'https://cloudflare-dns.com/dns-query?name=cuongthai.com&amp;type=A'\n{\"Status\":0,\"TC\":false,\"RD\":true,\"RA\":true,\"AD\":false,\"CD\":false,\"Question\":[{\"name\":\"cuongthai.com\",\"type\":1}],\"Answer\":[{\"name\":\"cuongthai.com\",\"type\":1,\"TTL\":300,\"d…</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ad flag = secure; SERVFAIL that disappears with +cd = bogus; no DS = insecure.|||Cờ ad = secure; SERVFAIL biến mất khi có +cd = bogus; không có DS = insecure.",
+        "The EDE number is printed right after \"EDE:\".|||Số EDE in ngay sau \"EDE:\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 3 — Secure, insecure or bogus?\n\nAnswer in the answer panel (no code needed).\n\n1. Classify each name, as seen through a validating resolverPhân loại từng tên, nhìn qua một resolver có kiểm DNSSEC\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 3 — Secure, insecure or bogus? — answer key\n\n1. Classify each name, as seen through a validating resolverPhân loại từng tên, nhìn qua một resolver có kiểm DNSSEC\n   - r1.s: bogus\n   - r1.r: SERVFAIL\n   - r1.c: yes\n   - r1.e: 7\n   - r2.s: secure\n   - r2.r: answer with ad\n   - r2.c: yes\n   - r2.e: none / - / —\n   - r3.s: secure\n   - r3.r: answer with ad\n   - r3.c: yes\n   - r3.e: none / - / —\n   - r4.s: bogus\n   - r4.r: SERVFAIL\n   - r4.c: yes\n   - r4.e: 9\n   - r5.s: insecure\n   - r5.r: answer without ad\n   - r5.c: yes\n   - r5.e: none / - / —\n   +cd always returns the data — DNSSEC never deletes records, it only refuses to vouch for them. \"Works with +cd, fails without\" is the signature of a DNSSEC problem. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (the DS points to a key that is not published). cuongthai.com has no DS: insecure, answered without ad. Right after the fix the resolver still had the bogus result cached (val-bogus-ttl 60 s).VI: +cd luôn trả dữ liệu — DNSSEC không bao giờ xoá bản ghi, nó chỉ từ chối bảo lãnh. \"Chạy với +cd, hỏng khi không có\" là dấu hiệu của sự cố DNSSEC. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (DS trỏ tới một khoá không được công bố). cuongthai.com không có DS: insecure, trả lời không có ad. Ngay sau khi sửa, resolver vẫn còn cache kết quả bogus (val-bogus-ttl 60 s).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>+cd always returns the data — DNSSEC never deletes records, it only refuses to vouch for them. \"Works with +cd, fails without\" is the signature of a DNSSEC problem. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (the DS points to a key that is not published). cuongthai.com has no DS: insecure, answered without ad. Right after the fix the resolver still had the bogus result cached (val-bogus-ttl 60 s).</p><p><i>VI: +cd luôn trả dữ liệu — DNSSEC không bao giờ xoá bản ghi, nó chỉ từ chối bảo lãnh. \"Chạy với +cd, hỏng khi không có\" là dấu hiệu của sự cố DNSSEC. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (DS trỏ tới một khoá không được công bố). cuongthai.com không có DS: insecure, trả lời không có ad. Ngay sau khi sửa, resolver vẫn còn cache kết quả bogus (val-bogus-ttl 60 s).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Classify each name, as seen through a validating resolver</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân loại từng tên, nhìn qua một resolver có kiểm DNSSEC</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Name (moment)"
+              },
+              {
+                "ma": "s",
+                "ten": "State",
+                "luaChon": [
+                  "secure",
+                  "insecure",
+                  "bogus"
+                ]
+              },
+              {
+                "ma": "r",
+                "ten": "Validating resolver returns",
+                "luaChon": [
+                  "answer with ad",
+                  "answer without ad",
+                  "SERVFAIL"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Does +cd return the address?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "e",
+                "ten": "EDE code (or none)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "labflow.test (signatures expired)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "labflow.test (after re-signing + flush)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "cloudflare.com"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "dnssec-failed.org"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "cuongthai.com"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "bogus",
+              "r1.r": "SERVFAIL",
+              "r1.c": "yes",
+              "r1.e": [
+                "7"
+              ],
+              "r2.s": "secure",
+              "r2.r": "answer with ad",
+              "r2.c": "yes",
+              "r2.e": [
+                "none",
+                "-",
+                "—"
+              ],
+              "r3.s": "secure",
+              "r3.r": "answer with ad",
+              "r3.c": "yes",
+              "r3.e": [
+                "none",
+                "-",
+                "—"
+              ],
+              "r4.s": "bogus",
+              "r4.r": "SERVFAIL",
+              "r4.c": "yes",
+              "r4.e": [
+                "9"
+              ],
+              "r5.s": "insecure",
+              "r5.r": "answer without ad",
+              "r5.c": "yes",
+              "r5.e": [
+                "none",
+                "-",
+                "—"
+              ]
+            },
+            "giaiThich": "<p>+cd always returns the data — DNSSEC never deletes records, it only refuses to vouch for them. \"Works with +cd, fails without\" is the signature of a DNSSEC problem. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (the DS points to a key that is not published). cuongthai.com has no DS: insecure, answered without ad. Right after the fix the resolver still had the bogus result cached (val-bogus-ttl 60 s).</p><p><i>VI: +cd luôn trả dữ liệu — DNSSEC không bao giờ xoá bản ghi, nó chỉ từ chối bảo lãnh. \"Chạy với +cd, hỏng khi không có\" là dấu hiệu của sự cố DNSSEC. EDE 7 = Signature Expired, EDE 9 = DNSKEY Missing (DS trỏ tới một khoá không được công bố). cuongthai.com không có DS: insecure, trả lời không có ad. Ngay sau khi sửa, resolver vẫn còn cache kết quả bogus (val-bogus-ttl 60 s).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling an unsigned domain \"broken\".|||Gọi tên miền không ký là \"hỏng\"."
+        },
+        {
+          "loi": "Concluding \"the server is down\" from a SERVFAIL without trying +cd.|||Kết luận \"máy chủ chết\" từ một SERVFAIL mà không thử +cd."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "secure / insecure / bogus",
+          "vi": "an toàn / không ký / hỏng"
+        },
+        {
+          "en": "val-bogus-ttl",
+          "vi": "thời gian nhớ kết quả bogus"
+        },
+        {
+          "en": "ad flag",
+          "vi": "cờ đã xác thực"
+        }
+      ]
+    },
+    {
+      "title": "DNSSEC 4 — Encrypted DNS, and three failures you will meet",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "encrypted DNS",
+        "DNS failure modes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output (lab/out/c35-rieng-laptop, c35-rieng-doc, c35-dead, c35-isp-infra, c35-mot-ns, c35-het-han):<pre># the same question three ways\n$ dig +short labflow.test @198.51.100.1\n203.0.113.10\n$ dig +short +tls labflow.test @198.51.100.1\n203.0.113.10\n$ dig +short +https labflow.test @198.51.100.1\n203.0.113.10\n# what the home router saw\nDNS  port 53   query name: labflow.test\nTLS  port 853  TLS hello, alpn=dot\nTLS  port 853  TLS application data (69 bytes, encrypted)\nTLS  port 853  TLS application data (72 bytes, encrypted)\nTLS  port 853  TLS application data (19 bytes, encrypted)\nTLS  port 443  TLS hello, alpn=h2\nTLS  port 443  TLS application data (69 bytes, encrypted)\nTLS  port 443  TLS application data (56 bytes, encrypted)\nTLS  port 443  TLS application data (182 bytes, encrypted)\nTLS  port 443  TLS application data (26 bytes, encrypted)\n\n# dead.test: its only name server never answers; 7 new names, 20 s limit\nquery 1  no answer (timed out)  after  20.1 s\nquery 2  no answer (timed out)  after  20.1 s\nquery 3  no answer (timed out)  after  20.1 s\nquery 4  status: SERVFAIL       after   0.0 s\nquery 5  status: SERVFAIL       after   0.0 s\nquery 6  status: SERVFAIL       after   0.0 s\nquery 7  status: SERVFAIL       after   0.0 s\n# on the ISP resolver\n$ unbound-control dump_infra | grep 203.0.113.99\n203.0.113.99 dead.test. ttl 840 ping 0 var 94 rtt 376 rto 24064 tA 3 tAAAA 0 tother 0 ednsknown 0 edns 0 delay 6 lame dnssec 0 rec 0 A 0 other 0\n$ unbound-control get_option infra-host-ttl\n900\n\n# ns2 stopped: query time per round (cache and server memory flushed each time)\n;; Query time: 2 msec\n;; Query time: 381 msec\n;; Query time: 1147 msec\n;; Query time: 381 msec\n;; Query time: 383 msec\n;; Query time: 1 msec\n;; Query time: 385 msec\n;; Query time: 1 msec\n;; Query time: 2 msec\n\n# an expired domain\n$ dig +trace +nodnssec www.oldshop.test | grep -E 'NXDOMAIN|^test\\.|Received|SOA'\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 0 ms\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\ntest.\t\t\t900\tIN\tSOA\tns1.nic.test. hostmaster.nic.test. 2026110104 1800 900 604800 900\n;; Received 128 bytes from 192.0.2.20#53(ns1.nic.test) in 2 ms\n$ dig www.oldshop.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 64972</pre></p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật (lab/out/c35-rieng-laptop, c35-rieng-doc, c35-dead, c35-isp-infra, c35-mot-ns, c35-het-han):<pre># cùng một câu hỏi theo ba cách\n$ dig +short labflow.test @198.51.100.1\n203.0.113.10\n$ dig +short +tls labflow.test @198.51.100.1\n203.0.113.10\n$ dig +short +https labflow.test @198.51.100.1\n203.0.113.10\n# thứ router nhà nhìn thấy\nDNS  port 53   query name: labflow.test\nTLS  port 853  TLS hello, alpn=dot\nTLS  port 853  TLS application data (69 bytes, encrypted)\nTLS  port 853  TLS application data (72 bytes, encrypted)\nTLS  port 853  TLS application data (19 bytes, encrypted)\nTLS  port 443  TLS hello, alpn=h2\nTLS  port 443  TLS application data (69 bytes, encrypted)\nTLS  port 443  TLS application data (56 bytes, encrypted)\nTLS  port 443  TLS application data (182 bytes, encrypted)\nTLS  port 443  TLS application data (26 bytes, encrypted)\n\n# dead.test: máy chủ tên duy nhất không bao giờ trả lời; 7 tên mới, giới hạn 20 s\nquery 1  no answer (timed out)  after  20.1 s\nquery 2  no answer (timed out)  after  20.1 s\nquery 3  no answer (timed out)  after  20.1 s\nquery 4  status: SERVFAIL       after   0.0 s\nquery 5  status: SERVFAIL       after   0.0 s\nquery 6  status: SERVFAIL       after   0.0 s\nquery 7  status: SERVFAIL       after   0.0 s\n# trên resolver nhà mạng\n$ unbound-control dump_infra | grep 203.0.113.99\n203.0.113.99 dead.test. ttl 840 ping 0 var 94 rtt 376 rto 24064 tA 3 tAAAA 0 tother 0 ednsknown 0 edns 0 delay 6 lame dnssec 0 rec 0 A 0 other 0\n$ unbound-control get_option infra-host-ttl\n900\n\n# ns2 đã tắt: thời gian mỗi vòng (mỗi lần đều xoá cache và trí nhớ về máy chủ)\n;; Query time: 2 msec\n;; Query time: 381 msec\n;; Query time: 1147 msec\n;; Query time: 381 msec\n;; Query time: 383 msec\n;; Query time: 1 msec\n;; Query time: 385 msec\n;; Query time: 1 msec\n;; Query time: 2 msec\n\n# một tên miền hết hạn\n$ dig +trace +nodnssec www.oldshop.test | grep -E 'NXDOMAIN|^test\\.|Received|SOA'\n;; Received 76 bytes from 198.51.100.1#53(198.51.100.1) in 0 ms\ntest.\t\t\t172800\tIN\tNS\tns1.nic.test.\n;; Received 111 bytes from 192.0.2.10#53(a.root-servers.test) in 0 ms\ntest.\t\t\t900\tIN\tSOA\tns1.nic.test. hostmaster.nic.test. 2026110104 1800 900 604800 900\n;; Received 128 bytes from 192.0.2.20#53(ns1.nic.test) in 2 ms\n$ dig www.oldshop.test | grep -E 'status'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NXDOMAIN, id: 64972</pre></p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "DoT = TLS on 853, DoH = HTTPS on 443.|||DoT = TLS trên 853, DoH = HTTPS trên 443.",
+        "Resolvers remember which name servers do not answer (the infra cache).|||Resolver nhớ máy chủ tên nào không trả lời (cache hạ tầng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 4 — Encrypted DNS, and three failures you will meet\n\nAnswer in the answer panel (no code needed).\n\n1. What can someone on the path (ISP, café Wi-Fi) still learn from the DoT and DoH queries?Người đứng giữa đường (nhà mạng, Wi-Fi quán cà phê) vẫn biết được gì từ các câu hỏi DoT và DoH?\n2. The first three users waited 20 s and got nothing; the next ones got SERVFAIL in 0.0 s. Why the change?Ba người đầu chờ 20 s và không nhận gì; những người sau nhận SERVFAIL trong 0,0 s. Vì sao thay đổi?\n3. With ns2 stopped, some rounds took ~380 ms or ~1.1 s and others 1–2 ms. What happens?Khi ns2 đã tắt, có vòng mất ~380 ms hay ~1,1 s, có vòng 1–2 ms. Chuyện gì xảy ra?\n4. www.oldshop.test returns NXDOMAIN and the TLD sends its own SOA. What happened to the domain?www.oldshop.test trả NXDOMAIN và TLD gửi SOA của chính nó. Tên miền đã ra sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DNSSEC 4 — Encrypted DNS, and three failures you will meet — answer key\n\n1. What can someone on the path (ISP, café Wi-Fi) still learn from the DoT and DoH queries?Người đứng giữa đường (nhà mạng, Wi-Fi quán cà phê) vẫn biết được gì từ các câu hỏi DoT và DoH?\n   Answer: b) That you talk to that resolver, on port 853 or 443, and the sizes — not the names\n   Plain DNS showed \"query name: labflow.test\". DoT/DoH show only a TLS hello and encrypted bytes. DoH on 443 looks like any HTTPS. The resolver itself still sees everything — and TLS does not prove the answer is genuine: that is DNSSEC's job.VI: DNS thường hiện \"query name: labflow.test\". DoT/DoH chỉ hiện TLS hello và byte đã mã hoá. DoH trên 443 trông như mọi HTTPS khác. Chính resolver vẫn thấy hết — và TLS không chứng minh câu trả lời là thật: đó là việc của DNSSEC.\n\n2. The first three users waited 20 s and got nothing; the next ones got SERVFAIL in 0.0 s. Why the change?Ba người đầu chờ 20 s và không nhận gì; những người sau nhận SERVFAIL trong 0,0 s. Vì sao thay đổi?\n   Answer: d) The resolver now remembers .99 as dead and fails at once\n   dump_infra: rto 24064 ms, \"ttl 840\" left of infra-host-ttl 900. A dead name server first makes users hang, then fail fast — both look like \"the site is down\".VI: dump_infra: rto 24064 ms, \"ttl 840\" còn lại của infra-host-ttl 900. Máy chủ tên chết lúc đầu làm người dùng treo, rồi hỏng nhanh — cả hai đều trông như \"trang chết\".\n\n3. With ns2 stopped, some rounds took ~380 ms or ~1.1 s and others 1–2 ms. What happens?Khi ns2 đã tắt, có vòng mất ~380 ms hay ~1,1 s, có vòng 1–2 ms. Chuyện gì xảy ra?\n   Answer: a) Trying ns2 first costs a timeout before ns1 answers\n   A second name server keeps the domain up, but a dead one still costs latency until resolvers learn to avoid it. That is \"slow, sometimes\" — Lab 3's incident A.VI: Máy chủ tên thứ hai giữ tên miền sống, nhưng máy chết vẫn tốn độ trễ cho tới khi resolver biết tránh nó. Đó là \"chậm, lúc có lúc không\" — sự cố A của Lab 3.\n\n4. www.oldshop.test returns NXDOMAIN and the TLD sends its own SOA. What happened to the domain?www.oldshop.test trả NXDOMAIN và TLD gửi SOA của chính nó. Tên miền đã ra sao?\n   Answer: a) It expired: the TLD no longer delegates it\n   +trace stops at the TLD: no NS for oldshop.test any more. Nothing on your servers can fix it — renew the domain (and set auto-renew).VI: +trace dừng ở TLD: không còn NS cho oldshop.test. Không gì trên máy chủ của bạn sửa được — gia hạn tên miền (và bật tự gia hạn).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> That you talk to that resolver, on port 853 or 443, and the sizes — not the names</p><p>Plain DNS showed \"query name: labflow.test\". DoT/DoH show only a TLS hello and encrypted bytes. DoH on 443 looks like any HTTPS. The resolver itself still sees everything — and TLS does not prove the answer is genuine: that is DNSSEC's job.</p><p><i>VI: DNS thường hiện \"query name: labflow.test\". DoT/DoH chỉ hiện TLS hello và byte đã mã hoá. DoH trên 443 trông như mọi HTTPS khác. Chính resolver vẫn thấy hết — và TLS không chứng minh câu trả lời là thật: đó là việc của DNSSEC.</i></p></li><li><p><b>d)</b> The resolver now remembers .99 as dead and fails at once</p><p>dump_infra: rto 24064 ms, \"ttl 840\" left of infra-host-ttl 900. A dead name server first makes users hang, then fail fast — both look like \"the site is down\".</p><p><i>VI: dump_infra: rto 24064 ms, \"ttl 840\" còn lại của infra-host-ttl 900. Máy chủ tên chết lúc đầu làm người dùng treo, rồi hỏng nhanh — cả hai đều trông như \"trang chết\".</i></p></li><li><p><b>a)</b> Trying ns2 first costs a timeout before ns1 answers</p><p>A second name server keeps the domain up, but a dead one still costs latency until resolvers learn to avoid it. That is \"slow, sometimes\" — Lab 3's incident A.</p><p><i>VI: Máy chủ tên thứ hai giữ tên miền sống, nhưng máy chết vẫn tốn độ trễ cho tới khi resolver biết tránh nó. Đó là \"chậm, lúc có lúc không\" — sự cố A của Lab 3.</i></p></li><li><p><b>a)</b> It expired: the TLD no longer delegates it</p><p>+trace stops at the TLD: no NS for oldshop.test any more. Nothing on your servers can fix it — renew the domain (and set auto-renew).</p><p><i>VI: +trace dừng ở TLD: không còn NS cho oldshop.test. Không gì trên máy chủ của bạn sửa được — gia hạn tên miền (và bật tự gia hạn).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What can someone on the path (ISP, café Wi-Fi) still learn from the DoT and DoH queries?</p><p style=\"opacity:.75;font-size:.92em\"><i>Người đứng giữa đường (nhà mạng, Wi-Fi quán cà phê) vẫn biết được gì từ các câu hỏi DoT và DoH?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The answers, but not the questions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "That you talk to that resolver, on port 853 or 443, and the sizes — not the names"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The names, because DNS is never encrypted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing at all, not even the resolver's address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Plain DNS showed \"query name: labflow.test\". DoT/DoH show only a TLS hello and encrypted bytes. DoH on 443 looks like any HTTPS. The resolver itself still sees everything — and TLS does not prove the answer is genuine: that is DNSSEC's job.</p><p><i>VI: DNS thường hiện \"query name: labflow.test\". DoT/DoH chỉ hiện TLS hello và byte đã mã hoá. DoH trên 443 trông như mọi HTTPS khác. Chính resolver vẫn thấy hết — và TLS không chứng minh câu trả lời là thật: đó là việc của DNSSEC.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The first three users waited 20 s and got nothing; the next ones got SERVFAIL in 0.0 s. Why the change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba người đầu chờ 20 s và không nhận gì; những người sau nhận SERVFAIL trong 0,0 s. Vì sao thay đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The name server came back to life and refused the queries"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dig switched to TCP after three failures"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The laptop cached the failure for later queries"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The resolver now remembers .99 as dead and fails at once"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>dump_infra: rto 24064 ms, \"ttl 840\" left of infra-host-ttl 900. A dead name server first makes users hang, then fail fast — both look like \"the site is down\".</p><p><i>VI: dump_infra: rto 24064 ms, \"ttl 840\" còn lại của infra-host-ttl 900. Máy chủ tên chết lúc đầu làm người dùng treo, rồi hỏng nhanh — cả hai đều trông như \"trang chết\".</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With ns2 stopped, some rounds took ~380 ms or ~1.1 s and others 1–2 ms. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi ns2 đã tắt, có vòng mất ~380 ms hay ~1,1 s, có vòng 1–2 ms. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Trying ns2 first costs a timeout before ns1 answers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ns1 is overloaded on every second round"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The laptop retries every second query it sends"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The TTL of api changes between rounds"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A second name server keeps the domain up, but a dead one still costs latency until resolvers learn to avoid it. That is \"slow, sometimes\" — Lab 3's incident A.</p><p><i>VI: Máy chủ tên thứ hai giữ tên miền sống, nhưng máy chết vẫn tốn độ trễ cho tới khi resolver biết tránh nó. Đó là \"chậm, lúc có lúc không\" — sự cố A của Lab 3.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>www.oldshop.test returns NXDOMAIN and the TLD sends its own SOA. What happened to the domain?</p><p style=\"opacity:.75;font-size:.92em\"><i>www.oldshop.test trả NXDOMAIN và TLD gửi SOA của chính nó. Tên miền đã ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It expired: the TLD no longer delegates it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its two name servers are down"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Its DNSSEC signatures expired yesterday"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The ISP's resolver blocked the domain"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>+trace stops at the TLD: no NS for oldshop.test any more. Nothing on your servers can fix it — renew the domain (and set auto-renew).</p><p><i>VI: +trace dừng ở TLD: không còn NS cho oldshop.test. Không gì trên máy chủ của bạn sửa được — gia hạn tên miền (và bật tự gia hạn).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing DoH makes answers trustworthy.|||Tin rằng DoH làm câu trả lời đáng tin."
+        },
+        {
+          "loi": "Debugging a \"random\" slowness without asking each name server directly.|||Gỡ một sự chậm \"ngẫu nhiên\" mà không hỏi thẳng từng máy chủ tên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DoT / DoH",
+          "vi": "DNS qua TLS / qua HTTPS"
+        },
+        {
+          "en": "infra cache",
+          "vi": "cache hạ tầng của resolver"
+        },
+        {
+          "en": "lame / dead name server",
+          "vi": "máy chủ tên hỏng / chết"
+        },
+        {
+          "en": "domain expiry",
+          "vi": "tên miền hết hạn"
+        }
+      ]
+    },
+    {
+      "title": "DNSSEC 5 — Write rrsigStatus(): is this signature still valid?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "RRSIG validity",
+        "monitoring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The incident of the lesson in one function. A real RRSIG (lab/out/c35-chuoi) and the real moment of the incident (<code>date -u</code> in c35-hong: <code>20261101102450</code>):</p><pre>labflow.test.\t\t300\tIN\tRRSIG\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==</pre>\n<p>Write <code>rrsigStatus(line, nowUtc, skew)</code>. <code>line</code> is a dig answer line of type RRSIG; after the word <code>RRSIG</code> come: covered type, algorithm, labels, original TTL, <b>expiration</b>, <b>inception</b>, key tag, signer, signature. Times are UTC <code>YYYYMMDDHHMMSS</code>. Return:</p>\n<pre>{ covers, algorithm, keyTag, signer, inception, expiration, status, daysLeft }</pre>\n<ul><li><code>algorithm</code> and <code>keyTag</code> are numbers; inception/expiration stay strings;</li>\n<li><code>status</code>: <code>\"expired\"</code> if now &gt; expiration + skew, <code>\"not yet valid\"</code> if now &lt; inception − skew, else <code>\"valid\"</code> (<code>skew</code> in seconds, default 0 — Unbound allows up to 86 400);</li>\n<li><code>daysLeft</code> = (expiration − now) in days, one decimal, negative when past.</li></ul>\n<p>Hidden cases: the incident's signature (expired two days before, rebuilt from the real fields c35-hong printed), the real cloudflare.com signature, and the one-day-skew trap the lesson describes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự cố của bài học gói trong một hàm. Một RRSIG thật (lab/out/c35-chuoi) và thời điểm thật của sự cố (<code>date -u</code> trong c35-hong: <code>20261101102450</code>):</p><pre>labflow.test.\t\t300\tIN\tRRSIG\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==</pre>\n<p>Viết <code>rrsigStatus(line, nowUtc, skew)</code>. <code>line</code> là một dòng trả lời dig loại RRSIG; sau chữ <code>RRSIG</code> lần lượt là: loại được ký, thuật toán, số nhãn, TTL gốc, <b>hết hạn</b>, <b>bắt đầu</b>, key tag, người ký, chữ ký. Thời gian là UTC <code>YYYYMMDDHHMMSS</code>. Trả về:</p>\n<pre>{ covers, algorithm, keyTag, signer, inception, expiration, status, daysLeft }</pre>\n<ul><li><code>algorithm</code> và <code>keyTag</code> là số; inception/expiration giữ dạng chuỗi;</li>\n<li><code>status</code>: <code>\"expired\"</code> nếu now &gt; expiration + skew, <code>\"not yet valid\"</code> nếu now &lt; inception − skew, ngược lại <code>\"valid\"</code> (<code>skew</code> tính bằng giây, mặc định 0 — Unbound cho tới 86 400);</li>\n<li><code>daysLeft</code> = (expiration − now) tính bằng ngày, một chữ số thập phân, âm khi đã qua.</li></ul>\n<p>Ca ẩn: chữ ký của sự cố (hết hạn hai ngày trước, dựng lại từ đúng các trường thật c35-hong in ra), chữ ký thật của cloudflare.com, và cái bẫy lệch đồng hồ một ngày mà bài học kể.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "line — an RRSIG answer line; nowUtc — \"YYYYMMDDHHMMSS\"; skew — seconds (optional).|||line — dòng trả lời RRSIG; nowUtc — \"YYYYMMDDHHMMSS\"; skew — giây (tuỳ chọn).",
+      "outputSpec": "{ covers, algorithm, keyTag, signer, inception, expiration, status, daysLeft }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261101102450\")",
+          "output": "{\"covers\":\"A\",\"algorithm\":13,\"keyTag\":62671,\"signer\":\"labflow.test.\",\"inception\":\"20261101092442\",\"expiration\":\"20261201102442\",\"status\":\"valid\",\"daysLeft\":30}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Find the index of the word \"RRSIG\" and count from there: the line may start with a name and TTL of any width.|||Tìm vị trí chữ \"RRSIG\" rồi đếm từ đó: dòng có thể bắt đầu bằng tên và TTL dài ngắn tuỳ ý.",
+        "Date.UTC(year, month − 1, day, h, m, s) gives milliseconds; divide by 1000.|||Date.UTC(năm, tháng − 1, ngày, giờ, phút, giây) cho mili giây; chia 1000."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** RRSIG line + \"YYYYMMDDHHMMSS\" (+ skew seconds) ⇒ { covers, algorithm, keyTag, signer, inception, expiration, status, daysLeft } */\nfunction rrsigStatus(line, nowUtc, skew) {\n  // Write your solution here\n  return { status: 'valid' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function rrsigStatus(line, nowUtc, skew) {\n  var w = String(line).trim().split(/\\s+/);\n  var i = w.indexOf('RRSIG');\n  var t = function (s) { return Date.UTC(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8), +s.slice(8, 10), +s.slice(10, 12), +s.slice(12, 14)) / 1000; };\n  var exp = t(w[i + 5]), inc = t(w[i + 6]), now = t(nowUtc), k = skew || 0;\n  var status = now > exp + k ? 'expired' : (now < inc - k ? 'not yet valid' : 'valid');\n  return {\n    covers: w[i + 1], algorithm: Number(w[i + 2]), keyTag: Number(w[i + 7]), signer: w[i + 8],\n    inception: w[i + 6], expiration: w[i + 5],\n    status: status,\n    daysLeft: Math.round((exp - now) / 86400 * 10) / 10,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A DNSSEC zone carries an expiry date on every record set; if the signing job dies, the zone breaks on a schedule, for everyone behind a validating resolver, while servers and network look healthy. Checking \"days left\" on the authoritative server is the cheapest monitor there is — Lab 3's checker alerts below 7 days. The skew explains why validators fail a little after the written date.</p>",
+      "solutionExplanationHtmlVi": "<p>Vùng DNSSEC mang một ngày hết hạn trên mỗi bộ bản ghi; nếu tác vụ ký chết, vùng hỏng đúng hẹn, với mọi người đứng sau resolver có kiểm DNSSEC, trong khi máy chủ và mạng vẫn khoẻ. Kiểm \"còn bao nhiêu ngày\" trên máy chủ có thẩm quyền là cách giám sát rẻ nhất — bộ kiểm của Lab 3 báo động khi dưới 7 ngày. Độ lệch giải thích vì sao bộ kiểm hỏng muộn hơn ngày ghi một chút.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: a fresh signature at the moment of the incident",
+              "vi": "Thật: chữ ký mới ở thời điểm sự cố"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261101102450\")",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261101092442",
+              "expiration": "20261201102442",
+              "status": "valid",
+              "daysLeft": 30
+            }
+          },
+          {
+            "moTa": {
+              "en": "Same signature, exactly at its expiration second",
+              "vi": "Cùng chữ ký, đúng giây hết hạn"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261201102442\")",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261101092442",
+              "expiration": "20261201102442",
+              "status": "valid",
+              "daysLeft": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261030102446 20261002102446 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261101102450\")",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261002102446",
+              "expiration": "20261030102446",
+              "status": "expired",
+              "daysLeft": -2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261030102446 20261002102446 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261031000000\", 86400)",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261002102446",
+              "expiration": "20261030102446",
+              "status": "valid",
+              "daysLeft": -0.6
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261030102446 20261002102446 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261101102450\", 86400)",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261002102446",
+              "expiration": "20261030102446",
+              "status": "expired",
+              "daysLeft": -2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "rrsigStatus(\"cloudflare.com.\\t\\t142\\tIN\\tRRSIG\\tA 13 2 300 20261102102436 20261031082436 34505 cloudflare.com. lmbxwbK6mMlkXN6UbyihP+SttbIcFSVUq9Gvv9/mn3WTWCEGuZuCZdrA w5Ou1a3WMIRfLtZ8Hes5LbNcq5jjog==\", \"20261101102450\")",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 34505,
+              "signer": "cloudflare.com.",
+              "inception": "20261031082436",
+              "expiration": "20261102102436",
+              "status": "valid",
+              "daysLeft": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "rrsigStatus(\"labflow.test.\\t\\t300\\tIN\\tRRSIG\\tA 13 2 300 20261201102442 20261101092442 62671 labflow.test. tHgSYhKgL+Va+d31K7R/x1uYqtxMlg+HMxogV0sVgsGPq67oXpbYhlkk oaBIfTSTjL/5kmro5Hztjm8OCNprXg==\", \"20261101080000\", 3600)",
+            "mongDoi": {
+              "covers": "A",
+              "algorithm": 13,
+              "keyTag": 62671,
+              "signer": "labflow.test.",
+              "inception": "20261101092442",
+              "expiration": "20261201102442",
+              "status": "not yet valid",
+              "daysLeft": 30.1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping expiration and inception (expiration comes first).|||Đảo hết hạn với bắt đầu (hết hạn đứng trước)."
+        },
+        {
+          "loi": "Parsing the time as local time with new Date(…): use UTC.|||Đọc thời gian theo giờ máy với new Date(…): phải dùng UTC."
+        },
+        {
+          "loi": "Forgetting the skew on the inception side.|||Quên độ lệch ở phía bắt đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inception / expiration",
+          "vi": "thời điểm bắt đầu / hết hạn"
+        },
+        {
+          "en": "clock skew",
+          "vi": "độ lệch đồng hồ"
+        },
+        {
+          "en": "re-signing",
+          "vi": "ký lại"
+        }
+      ]
+    },
+    {
+      "title": "DNSSEC 6 — Write dnsVerdict(): is it DNSSEC, the name, or the server?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "DNS troubleshooting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The fastest triage of a DNS failure needs two commands: <code>dig name</code> and <code>dig +cd +short name</code>. Real outputs (lab/out/c35-hong):</p><pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10</pre>\n<p>Write <code>dnsVerdict(plain, cdShort)</code> returning <code>{ status, ede, cause }</code>:</p>\n<ul><li><code>status</code> — the word after <code>status:</code>, or <code>null</code> if there is none;</li>\n<li><code>ede</code> — from a line like <code>; EDE: 7 (Signature Expired): …</code> ⇒ <code>{ code: 7, name: \"Signature Expired\" }</code>, else <code>null</code>;</li>\n<li><code>cause</code> — <code>\"ok\"</code> for NOERROR, <code>\"no such name\"</code> for NXDOMAIN, for SERVFAIL <code>\"dnssec\"</code> when <code>cdShort</code> contains an IP address on a line of its own and <code>\"server failure\"</code> otherwise; with no status, <code>\"unreachable\"</code> if the text says \"timed out\" or \"no servers could be reached\", else <code>\"unknown\"</code>; any other status ⇒ <code>\"other\"</code>.</li></ul>\n<p>Hidden cases, all real: dnssec-failed.org through 1.1.1.1 (EDE 9), Lab 3's incident B (EDE 6, DS ≠ key), a dead ns3 that times out, the expired domain oldshop.test, and a SERVFAIL whose +cd answer is empty.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại nhanh nhất một lỗi DNS cần hai lệnh: <code>dig name</code> và <code>dig +cd +short name</code>. Output thật (lab/out/c35-hong):</p><pre>$ dig labflow.test | grep -E 'status|EDE'\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: SERVFAIL, id: 14879\n; EDE: 7 (Signature Expired): (validation failure &lt;labflow.test. A IN&gt;: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\n$ dig +cd +short labflow.test\n203.0.113.10</pre>\n<p>Viết <code>dnsVerdict(plain, cdShort)</code> trả về <code>{ status, ede, cause }</code>:</p>\n<ul><li><code>status</code> — chữ sau <code>status:</code>, hoặc <code>null</code> nếu không có;</li>\n<li><code>ede</code> — từ dòng dạng <code>; EDE: 7 (Signature Expired): …</code> ⇒ <code>{ code: 7, name: \"Signature Expired\" }</code>, ngược lại <code>null</code>;</li>\n<li><code>cause</code> — <code>\"ok\"</code> với NOERROR, <code>\"no such name\"</code> với NXDOMAIN, với SERVFAIL là <code>\"dnssec\"</code> khi <code>cdShort</code> có một địa chỉ IP đứng riêng một dòng và <code>\"server failure\"</code> nếu không; không có status thì <code>\"unreachable\"</code> nếu chữ có \"timed out\" hoặc \"no servers could be reached\", ngược lại <code>\"unknown\"</code>; status khác ⇒ <code>\"other\"</code>.</li></ul>\n<p>Ca ẩn, đều là thật: dnssec-failed.org qua 1.1.1.1 (EDE 9), sự cố B của Lab 3 (EDE 6, DS ≠ khoá), ns3 chết bị hết giờ, tên miền hết hạn oldshop.test, và một SERVFAIL mà câu trả lời +cd rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "plain — dig output (any part of it); cdShort — dig +cd +short output.|||plain — output dig (một phần cũng được); cdShort — output dig +cd +short.",
+      "outputSpec": "{ status, ede, cause }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 14879\\n; EDE: 7 (Signature Expired): (validation failure <labflow.test. A IN>: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\", \"203.0.113.10\")",
+          "output": "{\"status\":\"SERVFAIL\",\"ede\":{\"code\":7,\"name\":\"Signature Expired\"},\"cause\":\"dnssec\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two regular expressions do most of the work: /status: ([A-Z]+)/ and /EDE: (\\d+) \\(([^)]+)\\)/.|||Hai biểu thức chính quy làm gần hết việc: /status: ([A-Z]+)/ và /EDE: (\\d+) \\(([^)]+)\\)/.",
+        "+cd +short prints one answer per line; a line that is an address means the data exists.|||+cd +short in mỗi câu trả lời một dòng; dòng là địa chỉ nghĩa là dữ liệu có tồn tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** dig output + dig +cd +short output ⇒ { status, ede, cause } */\nfunction dnsVerdict(plain, cdShort) {\n  // Write your solution here\n  return { status: null, ede: null, cause: 'unknown' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function dnsVerdict(plain, cdShort) {\n  var txt = String(plain);\n  var st = /status: ([A-Z]+)/.exec(txt);\n  var e = /EDE: (\\d+) \\(([^)]+)\\)/.exec(txt);\n  var timedOut = /timed out|no servers could be reached/.test(txt);\n  var cdAddr = String(cdShort || '').split('\\n').some(function (l) { return /^\\d{1,3}(\\.\\d{1,3}){3}$|^[0-9a-f:]+:[0-9a-f:]*$/i.test(l.trim()); });\n  var status = st ? st[1] : null;\n  var cause;\n  if (!status) cause = timedOut ? 'unreachable' : 'unknown';\n  else if (status === 'NOERROR') cause = 'ok';\n  else if (status === 'NXDOMAIN') cause = 'no such name';\n  else if (status === 'SERVFAIL') cause = cdAddr ? 'dnssec' : 'server failure';\n  else cause = 'other';\n  return { status: status, ede: e ? { code: Number(e[1]), name: e[2] } : null, cause: cause };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SERVFAIL hides very different problems. The +cd comparison splits them in one step: if the data comes back with checking disabled, the records exist and the failure is validation — a signature, a key or a DS — not the server, the network or the name. EDE then names the exact link that broke. That is steps 5 and 6 of the lesson's checklist as code.</p>",
+      "solutionExplanationHtmlVi": "<p>SERVFAIL che những vấn đề rất khác nhau. Phép so +cd tách chúng trong một bước: nếu dữ liệu trả về khi tắt kiểm, bản ghi có tồn tại và cái hỏng là khâu kiểm — chữ ký, khoá hay DS — chứ không phải máy chủ, mạng hay tên. EDE sau đó gọi tên chính xác mắt xích đã gãy. Đó là bước 5 và 6 trong danh sách kiểm của bài học, viết thành mã.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: the expired signatures",
+              "vi": "Thật: chữ ký hết hạn"
+            },
+            "goi": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 14879\\n; EDE: 7 (Signature Expired): (validation failure <labflow.test. A IN>: signature expired from 203.0.113.53 for key labflow.test. while building chain of trust)\", \"203.0.113.10\")",
+            "mongDoi": {
+              "status": "SERVFAIL",
+              "ede": {
+                "code": 7,
+                "name": "Signature Expired"
+              },
+              "cause": "dnssec"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: after the fix",
+              "vi": "Thật: sau khi sửa"
+            },
+            "goi": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 36096\", \"203.0.113.10\")",
+            "mongDoi": {
+              "status": "NOERROR",
+              "ede": null,
+              "cause": "ok"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 43095\\n; EDE: 9 (DNSKEY Missing): (no SEP matching the DS found for dnssec-failed.org.)\", \"96.99.227.255\")",
+            "mongDoi": {
+              "status": "SERVFAIL",
+              "ede": {
+                "code": 9,
+                "name": "DNSKEY Missing"
+              },
+              "cause": "dnssec"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 45489\\n; EDE: 6 (DNSSEC Bogus): (validation failure <labflow.test. A IN>: no keys have a DS with algorithm ECDSAP256SHA256 from 203.0.113.54 for key labflow.test. while building chain of trust)\", \"203.0.113.10\")",
+            "mongDoi": {
+              "status": "SERVFAIL",
+              "ede": {
+                "code": 6,
+                "name": "DNSSEC Bogus"
+              },
+              "cause": "dnssec"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "dnsVerdict(\";; communications error to 203.0.113.55#53: timed out\\n;; no servers could be reached\", \"\")",
+            "mongDoi": {
+              "status": null,
+              "ede": null,
+              "cause": "unreachable"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "dnsVerdict(\";; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 64972\", \"\")",
+            "mongDoi": {
+              "status": "NXDOMAIN",
+              "ede": null,
+              "cause": "no such name"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "dnsVerdict(\"query 4  status: SERVFAIL       after   0.0 s\", \"\")",
+            "mongDoi": {
+              "status": "SERVFAIL",
+              "ede": null,
+              "cause": "server failure"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every SERVFAIL \"the server is down\".|||Gọi mọi SERVFAIL là \"máy chủ chết\"."
+        },
+        {
+          "loi": "Reading the EDE text after the first colon as the name: the name is inside the parentheses.|||Đọc chữ EDE sau dấu hai chấm đầu thành tên: tên nằm trong ngoặc tròn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SERVFAIL",
+          "vi": "máy chủ không trả lời được"
+        },
+        {
+          "en": "EDE 6 / 7 / 9",
+          "vi": "DNSSEC Bogus / Signature Expired / DNSKEY Missing"
+        },
+        {
+          "en": "triage",
+          "vi": "phân loại nhanh"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+# Phần DNS của "Internet trong một hộp" — phòng lab Chương 3 (DNS tới tận gốc). Chồng LÊN internet.yml (cùng project nfi):
+#   docker build -t net-lab-dns -f Dockerfile.dns .                                  # = net-lab-inet + BIND 9 + Unbound + kdig
+#   docker compose -f internet.yml -f dns.yml -p nfi up -d                            # ≈20 s (ký DNSSEC + BGP)
+#   docker compose -f internet.yml -f dns.yml -p nfi down -v                          # dọn (cả volume khoá DNSSEC)
+#
+#  Máy chủ tên (authoritative) theo cấp:
+#    "."            a.root-servers.test  192.0.2.10   (nfi-root, ở IX như nhiều bản sao root thật)        — đã ký DNSSEC
+#    "test."        ns1.nic.test         192.0.2.20   (nfi-tld, nhà đăng ký TLD)                           — đã ký
+#    "labflow.test" ns1.labflow.test     203.0.113.53 (nfi-ns, primary) + ns2 203.0.113.54 (nfi-ns2, AXFR) — đã ký
+#    "cdn.test"     ns1.cdn.test         192.0.2.40   (nfi-cdns, GeoDNS bằng view của BIND)                — KHÔNG ký
+#  Resolver đệ quy (Unbound, kiểm DNSSEC):
+#    resolver nhà mạng 198.51.100.1 (trên nfi-isp; DoT :853, DoH :443) — laptop/phone/mobile dùng (resolv.conf)
+#    DNS công cộng 198.19.1.1 = ANYCAST, hai nơi cùng quảng bá 198.19.1.0/24 bằng BGP (AS64530):
+#      nfi-pop1 "Hà Nội" ở IX (192.0.2.30, nối ISP) · nfi-pop2 "Singapore" sau router DC (198.19.255.2, mạng nfi-sg)
+#  Máy biên LabFlow: nfi-server 203.0.113.10 (Hà Nội) + 203.0.113.11 (Singapore) — nginx trả lời "LabFlow edge <nơi>".
+#  Máy mới trên mạng có IPv6 PHẢI ghi ipv6_address: Docker tự cấp từ ::1 trở lên và giành mất địa chỉ của router (isp = ::1).
+#  198.18.0.0/15 là dải dành cho đo kiểm (RFC 2544) — như mọi địa chỉ khác của lab, không phải của ai ngoài đời.
+x-dns: &dns
+  image: net-lab-dns
+  init: true
+  cap_add: [NET_ADMIN, NET_RAW]
+  labels: { netlab: "1" }
+  volumes: ["../:/lab/k:ro", "dnsz:/dnsz"]
+  depends_on: { dnsinit: { condition: service_completed_successfully } }
+x-dns-router: &dnsrouter
+  <<: *dns
+  cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]
+  sysctls: { net.ipv4.ip_forward: "1" }
+services:
+  dnsinit:
+    image: net-lab-dns
+    container_name: nfi-dnsinit
+    labels: { netlab: "1" }
+    network_mode: none
+    volumes: ["../:/lab/k:ro", "dnsz:/dnsz"]
+    command: ["bash", "/lab/k/moi-truong/dns/ky.sh", "all"]
+  # ── máy cũ của internet.yml đổi sang ảnh có BIND/Unbound ──
+  laptop: { image: net-lab-dns, volumes: ["dnsz:/dnsz:ro"] }
+  phone: { image: net-lab-dns }
+  mobile: { image: net-lab-dns }
+  isp:
+    image: net-lab-dns
+    environment: { DNS_LAB: "1", FRR_VAI: isp-dns }
+    volumes: ["dnsz:/dnsz"]
+    depends_on: { dnsinit: { condition: service_completed_successfully } }
+  dc:
+    image: net-lab-dns
+    environment: { FRR_VAI: dc-dns }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "dc"]
+    networks: { sg: { ipv4_address: 198.19.255.1, mac_address: "02:00:c6:13:ff:01", interface_name: sg0 } }
+  server:
+    image: net-lab-dns
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "server"]
+  ns:
+    <<: *dns
+    hostname: ns1
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "ns1"]
+  # ── máy mới ──
+  ns2:
+    <<: *dns
+    container_name: nfi-ns2
+    hostname: ns2
+    networks: { dcnet: { ipv4_address: 203.0.113.54, ipv6_address: "2001:db8:d::54", mac_address: "02:00:cb:00:71:36" } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "ns2"]
+  root:
+    <<: *dns
+    container_name: nfi-root
+    hostname: a-root
+    networks: { ix: { ipv4_address: 192.0.2.10, ipv6_address: "2001:db8:ffff::10", mac_address: "02:00:c0:00:02:0a" } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "root"]
+  tld:
+    <<: *dns
+    container_name: nfi-tld
+    hostname: nic
+    networks: { ix: { ipv4_address: 192.0.2.20, ipv6_address: "2001:db8:ffff::20", mac_address: "02:00:c0:00:02:14" } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "tld"]
+  cdns:
+    <<: *dns
+    container_name: nfi-cdns
+    hostname: cdns
+    networks: { ix: { ipv4_address: 192.0.2.40, ipv6_address: "2001:db8:ffff::40", mac_address: "02:00:c0:00:02:28" } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "cdn"]
+  pop1:
+    <<: *dnsrouter
+    container_name: nfi-pop1
+    hostname: pop1
+    networks: { ix: { ipv4_address: 192.0.2.30, ipv6_address: "2001:db8:ffff::30", mac_address: "02:00:c0:00:02:1e", interface_name: ix0 } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "pop1"]
+  pop2:
+    <<: *dnsrouter
+    container_name: nfi-pop2
+    hostname: pop2
+    networks: { sg: { ipv4_address: 198.19.255.2, mac_address: "02:00:c6:13:ff:02", interface_name: up0 } }
+    command: ["bash", "/lab/k/moi-truong/dns/may-dns.sh", "pop2"]
+networks:
+  sg:
+    name: nfi-sg
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    ipam: { config: [{ subnet: 198.19.255.0/24, gateway: 198.19.255.254 }] }
+volumes:
+  dnsz: { name: nfi-dnsz, labels: { netlab: "1" } }

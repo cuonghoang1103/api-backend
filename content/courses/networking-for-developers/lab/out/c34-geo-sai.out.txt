@@ -1,0 +1,9 @@
+# Ch3 · 3.4 — laptop ở Việt Nam, pop1 vừa rút ⇒ 198.19.1.1 giờ là pop2 Singapore ⇒ GeoDNS tưởng bạn ở Singapore
+$ dig @198.19.1.1 id.server CH TXT +short
+"pop2.sg (public DNS 198.19.1.1, Singapore)"
+$ dig @198.19.1.1 +short static.labflow.test
+labflow.cdn.test.
+203.0.113.11
+$ curl -s --resolve static.labflow.test:80:$(dig @198.19.1.1 +short labflow.cdn.test) http://static.labflow.test/
+LabFlow edge Singapore (server 203.0.113.11)
+you came from 198.51.100.2 port 36410

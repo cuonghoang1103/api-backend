@@ -1,0 +1,2 @@
+# Ch3 · 3.5 — laptop: ngay sau khi sửa — resolver vẫn nhớ câu trả lời "bogus" một lúc (val-bogus-ttl) — rồi xoá cache thì lành
+dig labflow.test | grep -E 'status'

@@ -1,0 +1,7 @@
+# Ch3 · 3.4 — từ máy chủ trong DC: CÙNG địa chỉ 198.19.1.1, máy trả lời khác hẳn
+$ dig @198.19.1.1 id.server CH TXT +short
+"pop2.sg (public DNS 198.19.1.1, Singapore)"
+$ traceroute -n -q 1 198.19.1.1
+traceroute to 198.19.1.1 (198.19.1.1), 30 hops max, 60 byte packets
+ 1  203.0.113.1  0.349 ms
+ 2  198.19.1.1  0.293 ms

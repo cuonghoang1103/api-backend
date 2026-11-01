@@ -1,0 +1,21 @@
+# Ch3 · 3.2 — Internet THẬT: bản ghi của cuongthai.com (Cloudflare giữ DNS). TXT chỉ in dòng SPF.
+$ dig +noall +answer cuongthai.com A
+cuongthai.com.		325	IN	A	160.187.1.208
+$ dig +noall +answer www.cuongthai.com A
+www.cuongthai.com.	377	IN	A	160.187.1.208
+$ dig +noall +answer cuongthai.com MX
+cuongthai.com.		377	IN	MX	10 fwd1.porkbun.com.
+cuongthai.com.		377	IN	MX	20 fwd2.porkbun.com.
+$ dig +short cuongthai.com TXT | grep -o '^"v=spf1[^"]*"'
+"v=spf1 include:_spf.porkbun.com include:amazonses.com ~all"
+$ dig +noall +answer _dmarc.cuongthai.com TXT
+_dmarc.cuongthai.com.	377	IN	TXT	"v=DMARC1; p=none;"
+$ dig +noall +answer cuongthai.com SOA
+cuongthai.com.		752	IN	SOA	kyrie.ns.cloudflare.com. dns.cloudflare.com. 2418592525 10000 2400 604800 1800
+$ dig +noall +answer cuongthai.com CAA
+$ dig +noall +answer media.cuongthai.com HTTPS
+media.cuongthai.com.	377	IN	HTTPS	1 . alpn="h2" ipv4hint=104.21.90.200,172.67.161.19 ech=AEX+DQBBIwAgACBUwzDgt+dfjw3UA+1lZN4Hm6+gPsiBaO2+68YzWSZpWwAEAAEAAQASY2xvdWRmbGFyZS1lY2guY29tAAA= ipv6hint=2606:4700:3030::6815:5ac8,2606:4700:3035::ac43:a113
+$ dig +noall +answer cuongthai.com ANY @kyrie.ns.cloudflare.com
+cuongthai.com.		3600	IN	HINFO	"RFC8482" ""
+$ dig +short -x 1.1.1.1
+one.one.one.one.

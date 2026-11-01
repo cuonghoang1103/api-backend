@@ -1,0 +1,33 @@
+# Ch3 · 3.2 — named-checkzone kiểm một tệp vùng TRƯỚC khi nạp: tệp đúng, rồi ba lỗi kinh điển
+$ named-checkzone labflow.test /dnsz/src/labflow.test.zone
+zone labflow.test/IN: loaded serial 2026110101
+OK
+# 1) CNAME ở đỉnh (apex) tên miền — muốn trỏ labflow.test sang tên của CDN
+$ sed 's/^@              IN A    203.0.113.10/@              IN CNAME labflow.cdn.test./' /dnsz/src/labflow.test.zone > /tmp/apex.zone
+$ named-checkzone labflow.test /tmp/apex.zone
+dns_master_load: /tmp/apex.zone:13: labflow.test: CNAME and other data
+dns_master_load: /tmp/apex.zone:20: labflow.test: CNAME and other data
+dns_master_load: /tmp/apex.zone:23: labflow.test: CNAME and other data
+dns_master_load: /tmp/apex.zone:26: labflow.test: CNAME and other data
+dns_master_load: /tmp/apex.zone:34: labflow.test: CNAME and other data
+zone labflow.test/IN: loading from master file /tmp/apex.zone failed: CNAME and other data
+zone labflow.test/IN: not loaded due to errors.
+# 2) CNAME đứng chung với bản ghi khác ở cùng một tên
+$ printf 'api            IN CNAME labflow.test.\n' | cat /dnsz/src/labflow.test.zone - > /tmp/chung.zone
+$ named-checkzone labflow.test /tmp/chung.zone
+dns_master_load: /tmp/chung.zone:35: api.labflow.test: CNAME and other data
+zone labflow.test/IN: loading from master file /tmp/chung.zone failed: CNAME and other data
+zone labflow.test/IN: not loaded due to errors.
+# 3) MX trỏ thẳng vào một địa chỉ IP thay vì một tên
+$ sed 's/^@              IN MX   10 mail/@              IN MX   10 203.0.113.25./' /dnsz/src/labflow.test.zone > /tmp/mx.zone
+$ named-checkzone labflow.test /tmp/mx.zone
+/tmp/mx.zone:20: warning: '203.0.113.25.': MX is an address
+zone labflow.test/IN: labflow.test/MX '203.0.113.25' (out of zone) has no addresses records (A or AAAA)
+zone labflow.test/IN: loaded serial 2026110101
+OK
+# 4) quên DẤU CHẤM CUỐI: tên không có dấu chấm cuối là tên TƯƠNG ĐỐI ⇒ bị ghép thêm tên miền
+$ sed 's/^@              IN MX   10 mail$/@              IN MX   10 mail.labflow.test/' /dnsz/src/labflow.test.zone > /tmp/cham.zone
+$ named-checkzone labflow.test /tmp/cham.zone
+zone labflow.test/IN: labflow.test/MX 'mail.labflow.test.labflow.test' has no address records (A or AAAA)
+zone labflow.test/IN: loaded serial 2026110101
+OK

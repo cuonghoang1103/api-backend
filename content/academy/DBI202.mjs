@@ -1521,6 +1521,11 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
   <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 3.4: Schema evolution: ALTER TABLE &amp; normalisation</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: changing a table that already has rows with ALTER TABLE. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: which ALTER locks the table and how to do it safely, designing so you change less.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-2-luoc-do-va-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.2 — The schema, and migrations that survive production</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma (in PostgreSQL; DBI202 uses SQL Server). Same: changing a table that already has rows with ALTER TABLE, and constraints that protect the data. There you add: the same change shipped as a Prisma migration on PostgreSQL: a NOT NULL column without a default fails on existing rows (23502 ⇒ P3018), then nullable ⇒ backfill ⇒ tighten. This lesson adds what that one does not: the SQL Server syntax for every constraint and the naming convention graders look for.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -1580,6 +1585,11 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 3.4: Tiến hoá lược đồ: ALTER TABLE &amp; chuẩn hoá</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: sửa một bảng đã có dữ liệu bằng ALTER TABLE. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: lệnh ALTER nào khoá bảng và cách làm cho an toàn, thiết kế sao cho ít phải đổi.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-2-luoc-do-va-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.2 — Lược đồ, và migration sống sót được trên production</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma (trên PostgreSQL; DBI202 dùng SQL Server). Giống: sửa một bảng đã có dữ liệu bằng ALTER TABLE, và ràng buộc giữ dữ liệu đúng. Ở đó học thêm: cùng thay đổi đó đi ra bằng migration Prisma trên PostgreSQL: cột NOT NULL không có mặc định hỏng trên các dòng đang có (23502 ⇒ P3018), rồi cho null ⇒ điền ⇒ siết. Bài này có thứ bài kia không có: cú pháp SQL Server cho từng loại ràng buộc và quy ước đặt tên người chấm để ý.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,
@@ -1716,6 +1726,11 @@ LEFT is required so the top manager, whose <span class="badge">mgr_id</span> is 
   <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 5.2: OUTER JOIN: keeping the rows that do not match</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: LEFT JOIN keeping every left row, the anti-join pattern "who has nothing?", RIGHT and FULL. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: the four shapes side by side; around it, what the server really does when joining (lesson 5.1), join traps (lesson 5.4) and the Nested Loop/Hash/Merge strategies (lesson 10.2).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-4-quan-he-va-n-plus-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.4 — Relations, and the N+1 problem measured</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma (in PostgreSQL; DBI202 uses SQL Server). Same: JOIN between two tables and the result table it produces. There you add: the same data loaded from Node through Prisma: include sends two queries with IN, a loop sends 51, measured; then groupBy and select to send less. This lesson adds what that one does not: every join type side by side on SQL Server, including outer joins.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
@@ -1770,6 +1785,11 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 5.2: OUTER JOIN: giữ lại các dòng không khớp</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: LEFT JOIN giữ mọi dòng bên trái, khuôn phản nối "ai không có gì?", RIGHT và FULL. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: bốn hình dạng đặt cạnh nhau; xung quanh nó còn máy chủ thật sự làm gì khi join (bài 5.1), cạm bẫy join (bài 5.4) và chiến lược Nested Loop/Hash/Merge (bài 10.2).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-4-quan-he-va-n-plus-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.4 — Quan hệ, và bẫy N+1 đo bằng số thật</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma (trên PostgreSQL; DBI202 dùng SQL Server). Giống: JOIN giữa hai bảng và bảng kết quả nó tạo ra. Ở đó học thêm: cùng dữ liệu đó lấy từ Node qua Prisma: include gửi hai truy vấn dùng IN, vòng lặp gửi 51, đo thật; rồi groupBy và select để gửi ít hơn. Bài này có thứ bài kia không có: mọi loại join đặt cạnh nhau trên SQL Server, cả outer join.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,
@@ -2641,6 +2661,11 @@ Query: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DBI202'
   <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 9.2: Which columns, composite &amp; covering indexes</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: multi-column indexes and the order of columns in an index. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: choosing which columns to index, composite and covering indexes on PostgreSQL.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-5-chi-muc-va-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.5 — Indexes, and reading EXPLAIN ANALYZE</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma (in PostgreSQL; DBI202 uses SQL Server). Same: composite indexes, the leftmost-prefix rule, and reading an execution plan. There you add: the same rule on PostgreSQL with EXPLAIN ANALYZE: the reversed index still avoids the Sort, yet reads 3,844 pages for a rare author against 13 — measured; plus the write tax of every index. This lesson adds what that one does not: clustered vs nonclustered indexes and reading the plan in SSMS (Ctrl+M).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
@@ -2691,6 +2716,11 @@ Truy vấn: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DB
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 9.2: Cột nào, chỉ mục tổ hợp &amp; covering</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: chỉ mục ghép nhiều cột và thứ tự cột trong chỉ mục. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: chọn cột nào để đánh chỉ mục, chỉ mục tổ hợp và covering index trên PostgreSQL.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-5-chi-muc-va-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.5 — Chỉ mục, và cách đọc EXPLAIN ANALYZE</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma (trên PostgreSQL; DBI202 dùng SQL Server). Giống: chỉ mục ghép, quy tắc tiền tố trái nhất, và đọc kế hoạch thực thi. Ở đó học thêm: cùng quy tắc trên PostgreSQL với EXPLAIN ANALYZE: chỉ mục đảo vẫn bỏ được Sort nhưng đọc 3.844 trang cho một tác giả hiếm so với 13 — đo thật; thêm thuế ghi của mỗi chỉ mục. Bài này có thứ bài kia không có: chỉ mục gom cụm vs không gom cụm và đọc kế hoạch trong SSMS (Ctrl+M).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,
@@ -2758,6 +2788,11 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
   <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 11.4: Row locks, lost updates and deadlocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: deadlocks. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: row locks, lost updates and how to avoid deadlocks on PostgreSQL.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.3 — CRUD, transactions, and swapping the Notes API onto PostgreSQL</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma (in PostgreSQL; DBI202 uses SQL Server). Same: ACID and what a transaction guarantees. There you add: the same guarantees from a Node API with Prisma on PostgreSQL: a half-written note without a transaction, rolled back inside one, and two buyers who both read 10 (only one subtracted). This lesson adds what that one does not: isolation levels and the anomalies each one prevents, on SQL Server.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -2815,6 +2850,11 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 11.4: Khoá dòng, lost update và deadlock</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: khoá chết (deadlock). Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: khoá dòng, lost update và cách tránh deadlock trên PostgreSQL.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.3 — CRUD, transaction, và đổi ruột Notes API sang PostgreSQL</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma (trên PostgreSQL; DBI202 dùng SQL Server). Giống: ACID và một giao dịch bảo đảm điều gì. Ở đó học thêm: cùng các bảo đảm đó từ một API Node qua Prisma trên PostgreSQL: ghi chú nửa vời khi không có giao dịch, cuộn ngược khi có, và hai người mua cùng đọc 10 (chỉ trừ một). Bài này có thứ bài kia không có: các mức cô lập và hiện tượng mỗi mức ngăn được, trên SQL Server.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

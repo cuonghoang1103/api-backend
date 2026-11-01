@@ -73,6 +73,11 @@ ORDER BY n.id;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: join notes to their authors and stats</span><span class="lc-sub">The Code Lab track sets up the multi-table data used across this chapter.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-4-quan-he-va-n-plus-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.4 — Relations, and the N+1 problem measured</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: joining users with their notes, and seeing the parent columns repeat in the result. There you add: what Prisma's include really sends (two queries with IN, not a JOIN), the N+1 problem counted query by query (51 statements vs 2), groupBy/_count, and columns as bandwidth. This lesson adds what that one does not: what the server really does when it joins, and writing every join by hand.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -122,6 +127,11 @@ ORDER BY n.id;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: join note với tác giả và thống kê của chúng</span><span class="lc-sub">Track Code Lab dựng bộ dữ liệu nhiều bảng dùng xuyên suốt chương này.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-4-quan-he-va-n-plus-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.4 — Quan hệ, và bẫy N+1 đo bằng số thật</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: nối người dùng với ghi chú của họ, và thấy cột của dòng cha lặp lại trong kết quả. Ở đó học thêm: include của Prisma thật sự gửi gì (hai truy vấn dùng IN, không phải JOIN), bẫy N+1 đếm từng câu (51 câu vs 2), groupBy/_count, và cột là băng thông. Bài này có thứ bài kia không có: máy chủ thật sự làm gì khi join, và tự viết từng phép join.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

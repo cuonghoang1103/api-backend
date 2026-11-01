@@ -142,6 +142,11 @@ LINE 1: SELECT count(*) FROM thu_ddl;
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 5.4: Transactions &amp; connection pool</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: commit/rollback so a group of statements never half-happens. Different: Academy does it through JDBC (setAutoCommit); Courses does it directly in SQL on PostgreSQL. In this lesson we add: ROLLBACK undoing cleanly, the confusing aborted state, SAVEPOINT, DDL being transactional too; later lessons cover MVCC, isolation levels, row locks and deadlocks. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.3 — CRUD, transactions, and swapping the Notes API onto PostgreSQL</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: a transaction is all or nothing, and ROLLBACK leaves no trace. There you add: transactions through Prisma ($transaction batch and interactive), the silent bug of using prisma instead of tx, the 5-second timeout (P2028), a transaction holding a pool seat (another user waited 2,813 ms vs 3 ms), and why atomic is not serial. This lesson adds what that one does not: BEGIN/COMMIT/ROLLBACK by hand, the aborted state, SAVEPOINT and DDL inside a transaction.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -258,6 +263,11 @@ LINE 1: SELECT count(*) FROM thu_ddl;
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 5.4: Giao dịch &amp; connection pool</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: commit/rollback để nhóm câu lệnh không xảy ra nửa vời. Khác: Academy làm qua JDBC (setAutoCommit); Courses làm thẳng trong SQL trên PostgreSQL. Ở bài này mình học thêm: ROLLBACK hoàn tác sạch, trạng thái aborted gây bối rối, SAVEPOINT, DDL cũng nằm trong giao dịch; các bài sau có MVCC, mức cô lập, khoá dòng và deadlock. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.3 — CRUD, transaction, và đổi ruột Notes API sang PostgreSQL</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: giao dịch là được cả hoặc không gì cả, và ROLLBACK không để lại dấu vết. Ở đó học thêm: giao dịch qua Prisma ($transaction dạng lô và dạng tương tác), con bug im lặng dùng prisma thay vì tx, giới hạn 5 giây (P2028), giao dịch giữ một chỗ pool (người khác chờ 2.813 ms vs 3 ms), và vì sao nguyên tử không phải tuần tự. Bài này có thứ bài kia không có: BEGIN/COMMIT/ROLLBACK gõ tay, trạng thái aborted, SAVEPOINT và DDL trong giao dịch.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,
@@ -851,6 +861,11 @@ B│ COMMIT</div>
   <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3: Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: deadlocks. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: row locks, lost updates and two fixes (never read just to write back; SELECT … FOR UPDATE), NOWAIT/lock_timeout, SKIP LOCKED, and deadlocks. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-6-hop-dong-api-voi-du-lieu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.6 — Keeping the chapter-6 contract with a real database</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: the lost update, and fixing it with a version check or SELECT … FOR UPDATE. There you add: the version column through Prisma's updateMany turned into a 409 in an HTTP API (1 row vs 0 rows, measured), the same idea as ETag/If-Match on the wire. This lesson adds what that one does not: watching a writer wait, NOWAIT/lock_timeout, SKIP LOCKED and a real deadlock.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -993,6 +1008,11 @@ B│ COMMIT</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3: Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: khoá chết (deadlock). Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: khoá dòng, lost update và hai cách sửa (không đọc rồi ghi lại; SELECT … FOR UPDATE), NOWAIT/lock_timeout, SKIP LOCKED, và deadlock. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-6-hop-dong-api-voi-du-lieu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.6 — Giữ hợp đồng của chương 6 khi đã có cơ sở dữ liệu thật</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: lost update, và sửa bằng kiểm tra version hoặc SELECT … FOR UPDATE. Ở đó học thêm: cột version qua updateMany của Prisma thành lỗi 409 trong một API HTTP (1 dòng vs 0 dòng, đo thật), cùng ý với ETag/If-Match trên đường truyền. Bài này có thứ bài kia không có: xem một người ghi phải chờ, NOWAIT/lock_timeout, SKIP LOCKED và một deadlock thật.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

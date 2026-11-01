@@ -23299,6 +23299,16 @@ RESET ROLE;</code></pre>
     ]),
     bi(`<p>Part 2 continues with Row-Level Security (slide 14), encryption and password hashing (16–17), Dynamic Data Masking (18), backup/restore and the 3-2-1 rule (19–21), replication (22), partitioning/sharding/pooling (23–24), and monitoring plus a project checklist (25).</p>`,
     `<p>Phần 2 tiếp tục với Row-Level Security (slide 14), mã hoá và băm mật khẩu (16–17), Dynamic Data Masking (18), backup/restore và quy tắc 3-2-1 (19–21), nhân bản (22), partitioning/sharding/pooling (23–24), và giám sát cùng checklist đồ án (25).</p>`),
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-6-hop-dong-api-voi-du-lieu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.6 — Keeping the chapter-6 contract with a real database</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma (in PostgreSQL; DBI202 uses SQL Server). Same: SQL injection: one quote that makes the WHERE always true, and parameters as the fix. There you add: the same attack through Prisma: $queryRawUnsafe with string concatenation leaked 1,000,003 rows, the tagged template $queryRaw returned 0. This lesson adds what that one does not: injection on SQL Server and PostgreSQL by hand, accounts and GRANT/REVOKE/DENY.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>`,
+    `<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-6-hop-dong-api-voi-du-lieu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.6 — Giữ hợp đồng của chương 6 khi đã có cơ sở dữ liệu thật</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma (trên PostgreSQL; DBI202 dùng SQL Server). Giống: SQL injection: một dấu nháy biến WHERE thành luôn đúng, và tham số hoá là cách sửa. Ở đó học thêm: cùng đòn tấn công qua Prisma: $queryRawUnsafe nối chuỗi làm lộ 1.000.003 dòng, $queryRaw dạng tagged template trả 0. Bài này có thứ bài kia không có: tự tiêm vào SQL Server và PostgreSQL, tài khoản và GRANT/REVOKE/DENY.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>`),
     books([
     ]),
   ].join('\n'),

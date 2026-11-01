@@ -438,6 +438,11 @@ Time: 1215.946 ms (00:01.216)
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: expression indexes, selectivity, and partial indexes</span><span class="lc-sub">The Code Lab track makes the planner flip between Seq Scan and index.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-5-chi-muc-va-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.5 — Indexes, and reading EXPLAIN ANALYZE</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: why an index gets ignored (a function on the column, a cast, a leading %), selectivity, and the write cost of indexes. There you add: the same traps measured from a Node/Prisma project on 1,000,000 notes: a prefix LIKE that misses the index under en_US.utf8 and the text_pattern_ops fix, a low-selectivity index that made the query slower, what Prisma's contains/startsWith compile to. This lesson adds what that one does not: partial indexes and their parameter trap, stale statistics, unused indexes and CREATE INDEX CONCURRENTLY.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -528,6 +533,11 @@ Time: 1215.946 ms (00:01.216)
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: expression index, độ chọn lọc, và partial index</span><span class="lc-sub">Track Code Lab làm bộ lập kế hoạch lật giữa Seq Scan và chỉ mục.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-5-chi-muc-va-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.5 — Chỉ mục, và cách đọc EXPLAIN ANALYZE</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: vì sao chỉ mục bị bỏ qua (hàm bọc cột, ép kiểu, % ở đầu), độ chọn lọc, và chi phí ghi của chỉ mục. Ở đó học thêm: cùng các bẫy đó đo từ một dự án Node/Prisma trên 1.000.000 ghi chú: LIKE tiền tố trượt chỉ mục với en_US.utf8 và cách sửa text_pattern_ops, chỉ mục độ chọn lọc thấp làm truy vấn chậm hơn, contains/startsWith của Prisma sinh ra gì. Bài này có thứ bài kia không có: partial index và bẫy tham số, thống kê cũ, chỉ mục không ai dùng và CREATE INDEX CONCURRENTLY.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

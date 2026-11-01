@@ -96,6 +96,11 @@ ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSE
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: measure the 15.9× yourself, then hit the wall on purpose</span><span class="lc-sub">The Code Lab track ships the Node.js script that produced both outputs.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-1-ket-noi-va-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.1 — Why a database, and what one connection really costs</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: one process per connection (seen with ps), what opening a connection costs, and the server refusing connection 101. There you add: the same limits measured from a Node API: 8.36 ms vs 0.41 ms per query, 97 slots for a normal role vs 100 for a superuser, 12 PrismaClient × pool 10 failing with 53300, a client created per request, the slow first request. This lesson adds what that one does not: the database side: a backend's memory, the connection handshake, and the multiplication that exhausts connections in production.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -165,6 +170,11 @@ ERROR 53300: remaining connection slots are reserved for roles with the SUPERUSE
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tự đo con số 15,9 lần, rồi cố tình đâm vào tường</span><span class="lc-sub">Nhánh Code Lab kèm sẵn script Node.js đã sinh ra cả hai output.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-1-ket-noi-va-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.1 — Vì sao cần cơ sở dữ liệu, và một kết nối thật sự tốn gì</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: mỗi kết nối là một tiến trình (thấy bằng ps), mở một kết nối tốn gì, và máy chủ từ chối kết nối thứ 101. Ở đó học thêm: cùng các giới hạn đó đo từ một API Node: 8,36 ms vs 0,41 ms mỗi truy vấn, 97 chỗ cho vai thường vs 100 cho superuser, 12 PrismaClient × pool 10 hỏng với 53300, client tạo trong mỗi request, request đầu chậm. Bài này có thứ bài kia không có: phía cơ sở dữ liệu: bộ nhớ của một backend, màn bắt tay kết nối, và phép nhân làm cạn kết nối trên production.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -227,6 +237,11 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 5.4: Transactions &amp; connection pool</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: the connection pool: keep connections open and lend them out. Different: Academy configures the pool in Tomcat; Courses looks at pools from the database side. In this lesson we add: a pool inside the app vs a pool in front of it (PgBouncer), what one connection costs (lesson 14.1). If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-1-ket-noi-va-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.1 — Why a database, and what one connection really costs</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: a connection pool, how big it should be, and PgBouncer in front of PostgreSQL. There you add: pool sizes 1/5/10/20 measured with the real backends counted in pg_stat_activity, one PrismaClient per process, and installing Prisma 7 as it really runs today. This lesson adds what that one does not: Prisma's connection_limit / pool_timeout with a real timeout, PgBouncer with 150 clients on 10 connections, and every transaction-mode trap.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -279,6 +294,11 @@ cuongthai.com:  12 × 10 = 120   >   max_connections = 100   ❌</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 5.4: Giao dịch &amp; connection pool</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: connection pool: giữ sẵn kết nối và cho mượn. Khác: Academy cấu hình pool ở Tomcat; Courses nhìn pool từ phía cơ sở dữ liệu. Ở bài này mình học thêm: pool nằm trong app và pool đứng trước app (PgBouncer), một kết nối tốn những gì (bài 14.1). Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-1-ket-noi-va-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.1 — Vì sao cần cơ sở dữ liệu, và một kết nối thật sự tốn gì</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: connection pool, cỡ pool bao nhiêu là đủ, và PgBouncer đứng trước PostgreSQL. Ở đó học thêm: cỡ pool 1/5/10/20 đo thật kèm số backend đếm từ pg_stat_activity, mỗi tiến trình một PrismaClient, và cài Prisma 7 đúng như nó chạy hôm nay. Bài này có thứ bài kia không có: connection_limit / pool_timeout của Prisma với một lần hết giờ thật, PgBouncer cho 150 client trên 10 kết nối, và từng bẫy của transaction mode.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

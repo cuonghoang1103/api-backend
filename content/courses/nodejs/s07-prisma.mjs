@@ -134,7 +134,7 @@ DELETE /api/v1/notes/2 204 6.7ms</div>
 <span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);</code></pre>
 
 <h3>Setting it up, exactly as run</h3>
-<pre><code class="language-bash">npm i prisma @prisma/client @prisma/adapter-pg
+<pre><code class="language-bash">npm i prisma@7 @prisma/client@7 @prisma/adapter-pg@7
 npm i -D dotenv
 npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">prisma/
@@ -142,6 +142,7 @@ npx prisma init --datasource-provider postgresql</code></pre>
 prisma.config.ts
 .env
 .gitignore</div>
+<div class="pitfall"><strong>Pin the major version.</strong> Re-run on 1 Nov 2026: the npm <code>latest</code> tag of the <code>prisma</code> CLI pointed to a release candidate (<code>8.0.0-rc.29</code>) while <code>@prisma/client</code> stayed on 7.10.1, so the unpinned <code>npm i prisma @prisma/client @prisma/adapter-pg</code> installed mixed versions and <code>prisma init --datasource-provider postgresql</code> failed with <code>No flag registered for --datasource-provider</code>. With <code>@7</code> every package is 7.10.1. That release's <code>init</code> names the config file <code>prisma7.config.ts</code> (and adds "skills" folders for AI coding tools, which you may delete); the CLI reads <code>prisma.config.ts</code> just the same.</div>
 <p><code>prisma.config.ts</code> is where Prisma 7 reads its settings, and it is plain code — which is why the <code>.env</code> file is loaded explicitly:</p>
 <pre><code class="language-javascript"><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
 <span class="tok-keyword">import</span> { defineConfig } <span class="tok-keyword">from</span> <span class="tok-string">"prisma/config"</span>;
@@ -164,6 +165,16 @@ prisma.config.ts
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-2370" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2370 — Connection Pooling, Serverless and Edge</span><span class="lc-sub">10 exercises on pool sizing and client lifetime.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-1-gia-ket-noi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 14.1 — What a connection costs</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: one process per connection (seen with ps), what opening a connection costs, and the server refusing connection 101. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: the same limits measured from a Node API: 8.36 ms vs 0.41 ms per query, 97 slots for a normal role vs 100 for a superuser, 12 PrismaClient × pool 10 failing with 53300, a client created per request, the slow first request. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 14.2 — Pooling: in the app, and in front of it</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: a connection pool, how big it should be, and PgBouncer in front of PostgreSQL. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: pool sizes 1/5/10/20 measured with the real backends counted in pg_stat_activity, one PrismaClient per process, and installing Prisma 7 as it really runs today. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
 </a>
 </div>
 
@@ -278,7 +289,7 @@ DELETE /api/v1/notes/2 204 6.7ms</div>
 <span class="tok-keyword">const</span> server = <span class="tok-fn">createApp</span>().<span class="tok-fn">listen</span>(PORT);</code></pre>
 
 <h3>Cài đặt, đúng như đã chạy</h3>
-<pre><code class="language-bash">npm i prisma @prisma/client @prisma/adapter-pg
+<pre><code class="language-bash">npm i prisma@7 @prisma/client@7 @prisma/adapter-pg@7
 npm i -D dotenv
 npx prisma init --datasource-provider postgresql</code></pre>
 <div class="out">prisma/
@@ -286,6 +297,7 @@ npx prisma init --datasource-provider postgresql</code></pre>
 prisma.config.ts
 .env
 .gitignore</div>
+<div class="pitfall"><strong>Ghim phiên bản chính.</strong> Chạy lại ngày 01/11/2026: nhãn <code>latest</code> trên npm của CLI <code>prisma</code> trỏ vào một bản release candidate (<code>8.0.0-rc.29</code>) trong khi <code>@prisma/client</code> vẫn là 7.10.1, nên lệnh không ghim <code>npm i prisma @prisma/client @prisma/adapter-pg</code> cài lẫn hai phiên bản và <code>prisma init --datasource-provider postgresql</code> hỏng với <code>No flag registered for --datasource-provider</code>. Ghim <code>@7</code> thì mọi gói cùng là 7.10.1. Bản đó đặt tên tệp cấu hình là <code>prisma7.config.ts</code> (và thêm thư mục "skills" cho công cụ AI viết code, xoá được); CLI vẫn đọc <code>prisma.config.ts</code> y như vậy.</div>
 <p><code>prisma.config.ts</code> là nơi Prisma 7 đọc cấu hình, và nó là code thuần — vì vậy file <code>.env</code> phải được nạp một cách tường minh:</p>
 <pre><code class="language-javascript"><span class="tok-keyword">import</span> <span class="tok-string">"dotenv/config"</span>;
 <span class="tok-keyword">import</span> { defineConfig } <span class="tok-keyword">from</span> <span class="tok-string">"prisma/config"</span>;
@@ -308,6 +320,16 @@ prisma.config.ts
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-2370" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2370 — Connection Pooling, Serverless and Edge</span><span class="lc-sub">10 bài tập về chọn cỡ pool và vòng đời client.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-1-gia-ket-noi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 14.1 — Một kết nối tốn những gì</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: mỗi kết nối là một tiến trình (thấy bằng ps), mở một kết nối tốn gì, và máy chủ từ chối kết nối thứ 101. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: cùng các giới hạn đó đo từ một API Node: 8,36 ms vs 0,41 ms mỗi truy vấn, 97 chỗ cho vai thường vs 100 cho superuser, 12 PrismaClient × pool 10 hỏng với 53300, client tạo trong mỗi request, request đầu chậm. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 14.2 — Pool: trong app, và đứng trước app</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: connection pool, cỡ pool bao nhiêu là đủ, và PgBouncer đứng trước PostgreSQL. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: cỡ pool 1/5/10/20 đo thật kèm số backend đếm từ pg_stat_activity, mỗi tiến trình một PrismaClient, và cài Prisma 7 đúng như nó chạy hôm nay. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
 </a>
 </div>
 `,
@@ -406,7 +428,7 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_authorId_fkey"
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">migrate deploy on production</span></div>
 </div>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>migrate dev</code></span><span class="v"><strong>Development only.</strong> Compares, writes a new SQL file, applies it, regenerates the client — and offers to reset the database when it cannot reconcile.</span></div>
+  <div class="kv"><span class="k"><code>migrate dev</code></span><span class="v"><strong>Development only.</strong> Compares, writes a new SQL file, applies it — on Prisma 7.10 it no longer regenerates the client, so run <code>npx prisma generate</code> after it — and offers to reset the database when it cannot reconcile.</span></div>
   <div class="kv"><span class="k"><code>migrate deploy</code></span><span class="v"><strong>Production.</strong> Applies pending files in order. Never creates a file, never resets, never asks a question. This is what runs in CI.</span></div>
   <div class="kv"><span class="k"><code>migrate status</code></span><span class="v">Reads the history table and reports what is pending or failed.</span></div>
   <div class="kv"><span class="k"><code>migrate resolve</code></span><span class="v">Marks a failed migration as rolled-back or applied. A human decision — see the end of this lesson.</span></div>
@@ -522,6 +544,16 @@ All migrations have been successfully applied.
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 436 — Migrations and Schema Changes</span><span class="lc-sub">10 exercises on evolving a schema without losing data.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-16-1-prisma-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 16.1 — Prisma and migrations, seen from the database</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: what migrate dev and migrate deploy do, the _prisma_migrations history table, and what to do when a migration fails. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: writing the Notes schema field by field, drift found by migrate diff with a shadow database and fixed as a real migration, a P3018 ⇒ P3009 drill and the three-step recovery, Prisma 7.10 changes (migrate dev no longer generates the client). If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.3 — Constraints in SQL Server &amp; ALTER TABLE</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: changing a table that already has rows with ALTER TABLE, and constraints that protect the data. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same change shipped as a Prisma migration on PostgreSQL: a NOT NULL column without a default fails on existing rows (23502 ⇒ P3018), then nullable ⇒ backfill ⇒ tighten. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -611,7 +643,7 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_authorId_fkey"
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">migrate deploy trên production</span></div>
 </div>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>migrate dev</code></span><span class="v"><strong>Chỉ dùng khi dev.</strong> So sánh, ghi file SQL mới, áp nó, sinh lại client — và đề nghị xoá sạch cơ sở dữ liệu khi nó không dung hoà được.</span></div>
+  <div class="kv"><span class="k"><code>migrate dev</code></span><span class="v"><strong>Chỉ dùng khi dev.</strong> So sánh, ghi file SQL mới, áp nó — ở Prisma 7.10 nó không còn tự sinh lại client, nên chạy <code>npx prisma generate</code> sau đó — và đề nghị xoá sạch cơ sở dữ liệu khi nó không dung hoà được.</span></div>
   <div class="kv"><span class="k"><code>migrate deploy</code></span><span class="v"><strong>Production.</strong> Áp các file còn tồn theo thứ tự. Không bao giờ tạo file, không bao giờ reset, không bao giờ hỏi. Đây là lệnh chạy trong CI.</span></div>
   <div class="kv"><span class="k"><code>migrate status</code></span><span class="v">Đọc bảng lịch sử và báo cái nào đang chờ hoặc đã lỗi.</span></div>
   <div class="kv"><span class="k"><code>migrate resolve</code></span><span class="v">Đánh dấu một migration lỗi là đã cuộn ngược hoặc đã áp. Đây là quyết định của con người — xem cuối bài.</span></div>
@@ -726,6 +758,16 @@ All migrations have been successfully applied.
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-436" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 436 — Migrations and Schema Changes</span><span class="lc-sub">10 bài tập về việc tiến hoá lược đồ mà không mất dữ liệu.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-16-1-prisma-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 16.1 — Prisma và migration, nhìn từ phía cơ sở dữ liệu</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: migrate dev và migrate deploy làm gì, bảng lịch sử _prisma_migrations, và làm gì khi một migration hỏng. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: viết lược đồ Notes từng trường, drift tìm bằng migrate diff với cơ sở dữ liệu bóng rồi sửa thành migration thật, diễn tập P3018 ⇒ P3009 và cách gỡ ba bước, thay đổi của Prisma 7.10 (migrate dev không còn sinh client). Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.3 — Ràng buộc trong SQL Server &amp; ALTER TABLE</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: sửa một bảng đã có dữ liệu bằng ALTER TABLE, và ràng buộc giữ dữ liệu đúng. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng thay đổi đó đi ra bằng migration Prisma trên PostgreSQL: cột NOT NULL không có mặc định hỏng trên các dòng đang có (23502 ⇒ P3018), rồi cho null ⇒ điền ⇒ siết. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -904,6 +946,16 @@ timeout or doing less work in the transaction.</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2368 — Transactions and Batch Operations</span><span class="lc-sub">10 exercises on atomic writes and batching.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 11.1 — Transactions: all of it, or none of it</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: a transaction is all or nothing, and ROLLBACK leaves no trace. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: transactions through Prisma ($transaction batch and interactive), the silent bug of using prisma instead of tx, the 5-second timeout (P2028), a transaction holding a pool seat (another user waited 2,813 ms vs 3 ms), and why atomic is not serial. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3 — Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: ACID and what a transaction guarantees. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same guarantees from a Node API with Prisma on PostgreSQL: a half-written note without a transaction, rolled back inside one, and two buyers who both read 10 (only one subtracted). If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1066,6 +1118,16 @@ timeout or doing less work in the transaction.</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 2368 — Transactions and Batch Operations</span><span class="lc-sub">10 bài tập về ghi nguyên tử và gộp lô.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 11.1 — Giao dịch: được tất cả, hoặc không gì cả</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: giao dịch là được cả hoặc không gì cả, và ROLLBACK không để lại dấu vết. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: giao dịch qua Prisma ($transaction dạng lô và dạng tương tác), con bug im lặng dùng prisma thay vì tx, giới hạn 5 giây (P2028), giao dịch giữ một chỗ pool (người khác chờ 2.813 ms vs 3 ms), và vì sao nguyên tử không phải tuần tự. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3 — Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: ACID và một giao dịch bảo đảm điều gì. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng các bảo đảm đó từ một API Node qua Prisma trên PostgreSQL: ghi chú nửa vời khi không có giao dịch, cuộn ngược khi có, và hai người mua cùng đọc 10 (chỉ trừ một). Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
 </div>
 `,
     },
@@ -1202,6 +1264,16 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 433 — Relations and Nested Operations</span><span class="lc-sub">10 exercises on include, select and nested writes.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 5.1 — INNER JOIN: putting rows back together</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: joining users with their notes, and seeing the parent columns repeat in the result. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: what Prisma's include really sends (two queries with IN, not a JOIN), the N+1 problem counted query by query (51 statements vs 2), groupBy/_count, and columns as bandwidth. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-join-day-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.2 — Every join, with the result table</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: JOIN between two tables and the result table it produces. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same data loaded from Node through Prisma: include sends two queries with IN, a loop sends 51, measured; then groupBy and select to send less. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1323,6 +1395,16 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 433 — Relations and Nested Operations</span><span class="lc-sub">10 bài tập về include, select và ghi lồng nhau.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 5.1 — INNER JOIN: ráp các dòng lại với nhau</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: nối người dùng với ghi chú của họ, và thấy cột của dòng cha lặp lại trong kết quả. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: include của Prisma thật sự gửi gì (hai truy vấn dùng IN, không phải JOIN), bẫy N+1 đếm từng câu (51 câu vs 2), groupBy/_count, và cột là băng thông. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-join-day-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.2 — Toàn bộ các phép JOIN, kèm bảng kết quả</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: JOIN giữa hai bảng và bảng kết quả nó tạo ra. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng dữ liệu đó lấy từ Node qua Prisma: include gửi hai truy vấn dùng IN, vòng lặp gửi 51, đo thật; rồi groupBy và select để gửi ít hơn. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
 </div>
 `,
     },
@@ -1395,7 +1477,7 @@ Execution Time: 0.129 ms</div>
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">no Sort node at all</span></div>
 </div>
 <p>The <code>Sort</code> disappeared, and that is the part people miss. Because the index stores <code>createdAt</code> in descending order <em>within</em> each <code>authorId</code>, the rows come out of the index already in the order you asked for; PostgreSQL walks five pages, takes twenty rows and stops. That is why the column order in <code>@@index([authorId, createdAt])</code> matters: equality column first, then the column you sort or range-scan on.</p>
-<div class="callout ok"><strong>The rule of thumb that covers most real indexes:</strong> the columns you compare with <code>=</code>, then the column you <code>ORDER BY</code> or use with <code>&gt;</code>/<code>&lt;</code>, then anything you merely select. An index on <code>(createdAt, authorId)</code> would <em>not</em> have removed the sort here.</div>
+<div class="callout ok"><strong>The rule of thumb that covers most real indexes:</strong> the columns you compare with <code>=</code>, then the column you <code>ORDER BY</code> or use with <code>&gt;</code>/<code>&lt;</code>, then anything you merely select. Reversed, <code>(createdAt DESC, authorId)</code> still has no Sort step and is fast for a busy author (re-measured 1 Nov 2026 on 1,000,000 notes: 0.118 ms) — but it walks the index past everyone else's newer notes: for an author with 20 year-old notes it read 3,844 pages in 30.3 ms, against 13 pages and 0.038 ms with <code>(authorId, createdAt DESC)</code>.</div>
 
 <h3>Indexes are not free — the write tax, measured</h3>
 <p>Inserting 50,000 rows into the same table with different numbers of indexes:</p>
@@ -1413,7 +1495,7 @@ WHERE slug LIKE '%4242'           Parallel Seq Scan    35.947 ms
 WHERE title = 'Ghi chú số 4242'   Parallel Seq Scan    31.801 ms  (no index on title)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">A function around the column</span><span class="v"><code>lower(slug)</code> is not <code>slug</code>. The B-tree stores the raw value, so it cannot be used — <strong>1100× slower</strong>. Fix: store a normalised column, or create an expression index on <code>lower(slug)</code>.</span></div>
-  <div class="kv"><span class="k">A leading wildcard</span><span class="v"><code>LIKE '%4242'</code> cannot use a B-tree — the index is sorted by prefix. <code>LIKE 'bulk%'</code> can. For "contains" search you want full-text search or a trigram index.</span></div>
+  <div class="kv"><span class="k">A leading wildcard</span><span class="v"><code>LIKE '%4242'</code> cannot use a B-tree — the index is sorted by prefix. <code>LIKE 'bulk%'</code> can only if the index matches the collation: with the default <code>en_US.utf8</code> it was a Seq Scan (re-measured: 55.7 ms) until an index on <code>(slug text_pattern_ops)</code> made it an Index Scan (0.11 ms). For "contains" search you want full-text search or a trigram index.</span></div>
   <div class="kv"><span class="k">A type mismatch</span><span class="v">Comparing a <code>text</code> column to a number, or an <code>int</code> column to a string, can force a cast that disables the index.</span></div>
   <div class="kv"><span class="k">Low selectivity</span><span class="v">An index on <code>pinned</code> (two possible values) is usually ignored: reading 40% of the table through an index is slower than reading it straight through.</span></div>
 </div>
@@ -1444,6 +1526,21 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
 <a class="link-card codelab" href="/code-lab/postgresql${REF}#module-867" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 867 — Indexes &amp; Query Performance</span><span class="lc-sub">10 exercises on index types, planning and EXPLAIN.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-3-khong-dung-selectivity-partial" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 9.3 — When indexes are NOT used, selectivity &amp; partial indexes</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: why an index gets ignored (a function on the column, a cast, a leading %), selectivity, and the write cost of indexes. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: the same traps measured from a Node/Prisma project on 1,000,000 notes: a prefix LIKE that misses the index under en_US.utf8 and the text_pattern_ops fix, a low-selectivity index that made the query slower, what Prisma's contains/startsWith compile to. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 10.1 — Reading a plan: EXPLAIN vs EXPLAIN ANALYZE</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: reading EXPLAIN ANALYZE from the inside out, and actual time vs cost. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: one API query before and after a composite index declared in schema.prisma (55.177 ms ⇒ 0.084 ms, the Sort gone), column order measured both ways, and getting the real SQL from Prisma's query event. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.2 — Clustered vs nonclustered &amp; reading a plan</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: composite indexes, the leftmost-prefix rule, and reading an execution plan. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same rule on PostgreSQL with EXPLAIN ANALYZE: the reversed index still avoids the Sort, yet reads 3,844 pages for a rare author against 13 — measured; plus the write tax of every index. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
 </a>
 </div>
 
@@ -1502,7 +1599,7 @@ Execution Time: 0.129 ms</div>
   <div class="lz-step"><span class="lz-n">4</span><span class="lz-t">biến mất hẳn bước Sort</span></div>
 </div>
 <p>Bước <code>Sort</code> đã biến mất, và đó mới là phần người ta hay bỏ sót. Vì chỉ mục lưu <code>createdAt</code> theo thứ tự giảm dần <em>bên trong</em> từng <code>authorId</code>, các dòng đi ra khỏi chỉ mục đã sẵn đúng thứ tự bạn yêu cầu; PostgreSQL đi qua năm trang, lấy hai mươi dòng rồi dừng. Đó là lý do thứ tự cột trong <code>@@index([authorId, createdAt])</code> rất quan trọng: cột so bằng đứng trước, rồi tới cột bạn sắp xếp hoặc quét theo khoảng.</p>
-<div class="callout ok"><strong>Quy tắc ngón tay cái bao phủ hầu hết chỉ mục thực tế:</strong> các cột bạn so bằng <code>=</code> trước, rồi tới cột bạn <code>ORDER BY</code> hoặc dùng với <code>&gt;</code>/<code>&lt;</code>, rồi mới tới những cột chỉ để lấy ra. Một chỉ mục <code>(createdAt, authorId)</code> sẽ <em>không</em> loại bỏ được bước sắp xếp ở đây.</div>
+<div class="callout ok"><strong>Quy tắc ngón tay cái bao phủ hầu hết chỉ mục thực tế:</strong> các cột bạn so bằng <code>=</code> trước, rồi tới cột bạn <code>ORDER BY</code> hoặc dùng với <code>&gt;</code>/<code>&lt;</code>, rồi mới tới những cột chỉ để lấy ra. Đảo lại, <code>(createdAt DESC, authorId)</code> vẫn không có bước Sort và vẫn nhanh với tác giả nhiều bài (đo lại 01/11/2026 trên 1.000.000 ghi chú: 0,118 ms) — nhưng nó phải đi xuyên qua ghi chú mới hơn của mọi người khác: với một tác giả chỉ có 20 ghi chú từ một năm trước, nó đọc 3.844 trang trong 30,3 ms, so với 13 trang và 0,038 ms của <code>(authorId, createdAt DESC)</code>.</div>
 
 <h3>Chỉ mục không miễn phí — thuế ghi, đo bằng số</h3>
 <p>Chèn 50.000 dòng vào cùng một bảng với số lượng chỉ mục khác nhau:</p>
@@ -1520,7 +1617,7 @@ WHERE slug LIKE '%4242'           Parallel Seq Scan    35,947 ms
 WHERE title = 'Ghi chú số 4242'   Parallel Seq Scan    31,801 ms  (title không có chỉ mục)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Bọc một hàm quanh cột</span><span class="v"><code>lower(slug)</code> không phải là <code>slug</code>. Cây B-tree lưu giá trị thô nên không dùng được — <strong>chậm hơn 1100 lần</strong>. Cách sửa: lưu sẵn một cột đã chuẩn hoá, hoặc tạo chỉ mục biểu thức trên <code>lower(slug)</code>.</span></div>
-  <div class="kv"><span class="k">Dấu sao ở đầu chuỗi</span><span class="v"><code>LIKE '%4242'</code> không dùng được B-tree — chỉ mục sắp xếp theo tiền tố. <code>LIKE 'bulk%'</code> thì dùng được. Muốn tìm kiếm kiểu "chứa" thì bạn cần full-text search hoặc chỉ mục trigram.</span></div>
+  <div class="kv"><span class="k">Dấu sao ở đầu chuỗi</span><span class="v"><code>LIKE '%4242'</code> không dùng được B-tree — chỉ mục sắp xếp theo tiền tố. <code>LIKE 'bulk%'</code> chỉ dùng được khi chỉ mục khớp collation: với collation mặc định <code>en_US.utf8</code> nó vẫn là Seq Scan (đo lại: 55,7 ms), tới khi thêm chỉ mục <code>(slug text_pattern_ops)</code> mới thành Index Scan (0,11 ms). Muốn tìm kiếm kiểu "chứa" thì bạn cần full-text search hoặc chỉ mục trigram.</span></div>
   <div class="kv"><span class="k">Lệch kiểu dữ liệu</span><span class="v">So một cột <code>text</code> với một con số, hoặc cột <code>int</code> với một chuỗi, có thể sinh ra phép ép kiểu làm chỉ mục mất tác dụng.</span></div>
   <div class="kv"><span class="k">Độ chọn lọc thấp</span><span class="v">Chỉ mục trên <code>pinned</code> (chỉ hai giá trị) thường bị bỏ qua: đọc 40% số dòng qua chỉ mục còn chậm hơn đọc thẳng cả bảng.</span></div>
 </div>
@@ -1551,6 +1648,21 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
 <a class="link-card codelab" href="/code-lab/postgresql${REF}#module-867" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 867 — Indexes &amp; Query Performance</span><span class="lc-sub">10 bài tập về loại chỉ mục, lập kế hoạch và EXPLAIN.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-3-khong-dung-selectivity-partial" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 9.3 — Khi chỉ mục KHÔNG được dùng, độ chọn lọc &amp; partial index</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: vì sao chỉ mục bị bỏ qua (hàm bọc cột, ép kiểu, % ở đầu), độ chọn lọc, và chi phí ghi của chỉ mục. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: cùng các bẫy đó đo từ một dự án Node/Prisma trên 1.000.000 ghi chú: LIKE tiền tố trượt chỉ mục với en_US.utf8 và cách sửa text_pattern_ops, chỉ mục độ chọn lọc thấp làm truy vấn chậm hơn, contains/startsWith của Prisma sinh ra gì. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: đọc EXPLAIN ANALYZE từ trong ra ngoài, và actual time so với cost. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: một truy vấn của API trước và sau một chỉ mục tổ hợp khai trong schema.prisma (55,177 ms ⇒ 0,084 ms, mất bước Sort), thứ tự cột đo cả hai chiều, và lấy SQL thật từ sự kiện query của Prisma. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.2 — Chỉ mục gom cụm vs không gom cụm &amp; đọc kế hoạch</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: chỉ mục ghép, quy tắc tiền tố trái nhất, và đọc kế hoạch thực thi. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng quy tắc trên PostgreSQL với EXPLAIN ANALYZE: chỉ mục đảo vẫn bỏ được Sort nhưng đọc 3.844 trang cho một tác giả hiếm so với 13 — đo thật; thêm thuế ghi của mỗi chỉ mục. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -1610,12 +1722,13 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
   <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">create</span>({ data });
 } <span class="tok-keyword">catch</span> (err) {
   <span class="tok-keyword">if</span> (err.code === <span class="tok-string">'P2002'</span>) {
-    <span class="tok-keyword">const</span> fields = err.meta?.driverAdapterError?.cause?.constraint?.fields ?? [];
-    <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">409</span>, <span class="tok-string">'DUPLICATE'</span>, \`\${fields.<span class="tok-fn">join</span>(<span class="tok-string">', '</span>)} already exists\`);
+    <span class="tok-keyword">const</span> c = err.meta?.driverAdapterError?.cause?.constraint;
+    <span class="tok-keyword">const</span> what = c?.fields?.<span class="tok-fn">join</span>(<span class="tok-string">', '</span>) ?? c?.index ?? <span class="tok-string">'value'</span>;   <span class="tok-comment">// PostgreSQL may give the index name</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">409</span>, <span class="tok-string">'DUPLICATE'</span>, \`\${what} already exists\`);
   }
   <span class="tok-keyword">throw</span> err;
 }</code></pre>
-<div class="pitfall">Older tutorials read the field list from <code>err.meta.target</code>. In Prisma 7 with a driver adapter that property is <strong>undefined</strong> — the constraint details moved under <code>meta.driverAdapterError.cause.constraint.fields</code>. Log the whole <code>err.meta</code> once in development rather than trusting a blog post, and always keep a fallback: the message string always names the field.</div>
+<div class="pitfall">Older tutorials read the field list from <code>err.meta.target</code>. In Prisma 7 with a driver adapter that property is <strong>undefined</strong> — the constraint details moved under <code>meta.driverAdapterError.cause.constraint</code>. Re-run on Prisma 7.10.1 (1 Nov 2026): that object was <code>{ index: "Note_slug_key" }</code> with <strong>no</strong> <code>fields</code>, and the message read <code>Unique constraint failed on the constraint: \`Note_slug_key\`</code> — code that reads only <code>fields</code> produced the message " already exists". Read both. Log the whole <code>err.meta</code> once in development rather than trusting a blog post, and always keep a fallback: the message string names the field or the constraint.</div>
 <div class="callout warn"><strong>Do not "check then insert".</strong> <code>findUnique</code> followed by <code>create</code> has a gap between the two queries, and two concurrent requests both find nothing and both insert. Let the unique index be the referee and catch P2002 — that is the only version that is correct under concurrency. Chapter 6's status-code table already told you which code to send; now you know where the error comes from.</div>
 
 <h3>The lost update, and the version column that stops it</h3>
@@ -1687,6 +1800,16 @@ C. prisma.note.count({ where })    -&gt; 0 rows</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 432 — Query Filtering and Pagination</span><span class="lc-sub">10 exercises on filters, cursors and page windows.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the PostgreSQL course — lesson 11.4 — Row locks, lost updates and deadlocks</span><span class="lc-sub">If you took the PostgreSQL course, this part will feel familiar. Same: the lost update, and fixing it with a version check or SELECT … FOR UPDATE. Different: that lesson looks from the database side; this one from a Node API through Prisma. In this lesson we add: the version column through Prisma's updateMany turned into a 409 in an HTTP API (1 row vs 0 rows, measured), the same idea as ETag/If-Match on the wire. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN POSTGRESQL LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-slide-cs7-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson ⭐ CS.7 — 📑 Security &amp; operations (1): SQL injection, accounts, GRANT/REVOKE/DENY (slides 1–13)</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: SQL injection: one quote that makes the WHERE always true, and parameters as the fix. Different: Academy uses SQL Server; here it runs on PostgreSQL through Prisma. In this lesson we add: the same attack through Prisma: $queryRawUnsafe with string concatenation leaked 1,000,003 rows, the tagged template $queryRaw returned 0. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1737,12 +1860,13 @@ meta       : { modelName: "Note", driverAdapterError: { cause: {
   <span class="tok-keyword">return await</span> prisma.note.<span class="tok-fn">create</span>({ data });
 } <span class="tok-keyword">catch</span> (err) {
   <span class="tok-keyword">if</span> (err.code === <span class="tok-string">'P2002'</span>) {
-    <span class="tok-keyword">const</span> fields = err.meta?.driverAdapterError?.cause?.constraint?.fields ?? [];
-    <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">409</span>, <span class="tok-string">'DUPLICATE'</span>, \`\${fields.<span class="tok-fn">join</span>(<span class="tok-string">', '</span>)} đã tồn tại\`);
+    <span class="tok-keyword">const</span> c = err.meta?.driverAdapterError?.cause?.constraint;
+    <span class="tok-keyword">const</span> what = c?.fields?.<span class="tok-fn">join</span>(<span class="tok-string">', '</span>) ?? c?.index ?? <span class="tok-string">'value'</span>;   <span class="tok-comment">// PostgreSQL có thể chỉ trả tên chỉ mục</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-fn">AppError</span>(<span class="tok-number">409</span>, <span class="tok-string">'DUPLICATE'</span>, \`\${what} đã tồn tại\`);
   }
   <span class="tok-keyword">throw</span> err;
 }</code></pre>
-<div class="pitfall">Các bài hướng dẫn cũ đọc danh sách trường từ <code>err.meta.target</code>. Với Prisma 7 dùng driver adapter, thuộc tính đó là <strong>undefined</strong> — chi tiết ràng buộc đã chuyển xuống <code>meta.driverAdapterError.cause.constraint.fields</code>. Hãy log nguyên <code>err.meta</code> một lần khi dev thay vì tin một bài blog, và luôn giữ phương án dự phòng: chuỗi message bao giờ cũng nêu tên trường.</div>
+<div class="pitfall">Các bài hướng dẫn cũ đọc danh sách trường từ <code>err.meta.target</code>. Với Prisma 7 dùng driver adapter, thuộc tính đó là <strong>undefined</strong> — chi tiết ràng buộc đã chuyển xuống <code>meta.driverAdapterError.cause.constraint</code>. Chạy lại trên Prisma 7.10.1 (01/11/2026): object đó là <code>{ index: "Note_slug_key" }</code>, <strong>không</strong> có <code>fields</code>, và message là <code>Unique constraint failed on the constraint: \`Note_slug_key\`</code> — code chỉ đọc <code>fields</code> sinh ra câu " đã tồn tại" thiếu tên. Hãy đọc cả hai. Hãy log nguyên <code>err.meta</code> một lần khi dev thay vì tin một bài blog, và luôn giữ phương án dự phòng: chuỗi message luôn nêu tên trường hoặc tên ràng buộc.</div>
 <div class="callout warn"><strong>Đừng "kiểm tra rồi chèn".</strong> <code>findUnique</code> rồi mới <code>create</code> có một khe hở giữa hai truy vấn, và hai request đồng thời sẽ cùng thấy trống rồi cùng chèn. Hãy để chỉ mục duy nhất làm trọng tài và bắt lỗi P2002 — đó là phiên bản duy nhất đúng khi có tương tranh. Bảng mã trạng thái của chương 6 đã cho bạn biết nên trả mã nào; giờ bạn biết lỗi đó từ đâu ra.</div>
 
 <h3>Mất bản cập nhật, và cột version chặn đứng nó</h3>
@@ -1813,6 +1937,16 @@ C. prisma.note.count({ where }) -&gt; 0 dòng</div>
 <a class="link-card codelab" href="/code-lab/prisma-orm${REF}#module-432" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 432 — Query Filtering and Pagination</span><span class="lc-sub">10 bài tập về bộ lọc, con trỏ và cửa sổ trang.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá PostgreSQL — bài 11.4 — Khoá dòng, lost update và deadlock</span><span class="lc-sub">Nếu bạn đã học khoá PostgreSQL thì phần này không còn lạ. Giống: lost update, và sửa bằng kiểm tra version hoặc SELECT … FOR UPDATE. Khác: bài đó nhìn từ phía cơ sở dữ liệu; bài này nhìn từ một API Node qua Prisma. Ở bài này mình học thêm: cột version qua updateMany của Prisma thành lỗi 409 trong một API HTTP (1 dòng vs 0 dòng, đo thật), cùng ý với ETag/If-Match trên đường truyền. Chưa học khoá PostgreSQL cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI POSTGRESQL →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-slide-cs7-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài ⭐ CS.7 — 📑 Bảo mật &amp; vận hành (1): SQL injection, tài khoản, GRANT/REVOKE/DENY (slide 1–13)</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: SQL injection: một dấu nháy biến WHERE thành luôn đúng, và tham số hoá là cách sửa. Khác: Academy dùng SQL Server; ở đây chạy trên PostgreSQL qua Prisma. Ở bài này mình học thêm: cùng đòn tấn công qua Prisma: $queryRawUnsafe nối chuỗi làm lộ 1.000.003 dòng, $queryRaw dạng tagged template trả 0. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

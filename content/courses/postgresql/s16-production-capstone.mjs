@@ -70,6 +70,11 @@ export default {
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: read a generated migration and predict the lock it takes</span><span class="lc-sub">The Code Lab track walks the Prisma ↔ SQL mapping with real files.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-2-luoc-do-va-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 7.2 — The schema, and migrations that survive production</span><span class="lc-sub">The Node.js course uses this inside a real API, through Prisma. Same: what migrate dev and migrate deploy do, the _prisma_migrations history table, and what to do when a migration fails. There you add: writing the Notes schema field by field, drift found by migrate diff with a shadow database and fixed as a real migration, a P3018 ⇒ P3009 drill and the three-step recovery, Prisma 7.10 changes (migrate dev no longer generates the client). This lesson adds what that one does not: the Prisma ↔ SQL map from the database side, a real P3006 in this website's history, locks and lock_timeout when changing a live table.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -112,6 +117,11 @@ export default {
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: đọc một migration được sinh ra và đoán trước cái khoá nó sẽ lấy</span><span class="lc-sub">Nhánh Code Lab đi qua bản đồ ánh xạ Prisma ↔ SQL bằng file thật.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-7-2-luoc-do-va-migration" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 7.2 — Lược đồ, và migration sống sót được trên production</span><span class="lc-sub">Khoá Node.js dùng đúng phần này trong một API thật, qua Prisma. Giống: migrate dev và migrate deploy làm gì, bảng lịch sử _prisma_migrations, và làm gì khi một migration hỏng. Ở đó học thêm: viết lược đồ Notes từng trường, drift tìm bằng migrate diff với cơ sở dữ liệu bóng rồi sửa thành migration thật, diễn tập P3018 ⇒ P3009 và cách gỡ ba bước, thay đổi của Prisma 7.10 (migrate dev không còn sinh client). Bài này có thứ bài kia không có: bản đồ Prisma ↔ SQL nhìn từ phía cơ sở dữ liệu, một lỗi P3006 thật trong lịch sử của website này, khoá và lock_timeout khi đổi một bảng đang chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

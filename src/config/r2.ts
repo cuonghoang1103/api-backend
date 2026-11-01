@@ -80,6 +80,12 @@ export function getR2Client(): S3Client {
     // R2 supports virtual-hosted-style for custom domains; path-
     // style breaks the SDK's URL signer for some operations.
     forcePathStyle: false,
+    // 01/11/2026: từ AWS SDK 3.729 mặc định là 'WHEN_SUPPORTED' ⇒ mọi URL ký sẵn PUT
+    // (getSignedUploadUrl, hub.routes) mang `x-amz-checksum-crc32=AAAAAA==` — checksum
+    // của body RỖNG (đo bằng getSignedUrl, không gọi mạng). Nhà cung cấp kiểm checksum
+    // sẽ từ chối mọi tệp thật. Đặt như client sandbox ở trên: chỉ tính khi API bắt buộc.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
   });
 
   return cachedClient;

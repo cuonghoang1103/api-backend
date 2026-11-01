@@ -137,3 +137,24 @@ export const O_EVENT = {
   csdl: EVENT, tenCsdl: 'event',
   ld: { en: `<h4>Sample tables (chapters 9–10)</h4>${pre(LD_EVENT_TXT)}<p>The lesson used 500 000 rows; 20 000 deterministic rows are enough for the planner to make the same choices. The grader is PostgreSQL 18 (WASM).</p>`, vi: `<h4>Bảng mẫu (chương 9–10)</h4>${pre(LD_EVENT_TXT)}<p>Bài giảng dùng 500 000 dòng; 20 000 dòng tất định đủ để bộ lập kế hoạch chọn giống vậy. Máy chấm là PostgreSQL 18 (WASM).</p>` },
 };
+
+/** users + notes của Chương 12 (bài 12.1: 20 user, 500 ghi chú, views = (id * 37) % 101 — tất định). */
+export const NOTES12 = `SET TimeZone = 'Asia/Ho_Chi_Minh';
+CREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);
+INSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;
+CREATE TABLE notes (
+  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  user_id    int NOT NULL REFERENCES users(id),
+  title      text NOT NULL,
+  body       text,
+  views      int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',
+  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'
+);
+INSERT INTO notes (user_id, title, body, views)
+SELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;
+UPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson`;
+const LD12 = `users (id identity PK, email UNIQUE)                         20 rows user1@notes.vn … user20@notes.vn
+notes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)
+      500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00`;
+export const O_NOTES12 = { csdl: NOTES12, tenCsdl: 'notes12', ld: { en: `<h4>Sample tables (chapter 12)</h4>${pre(LD12)}`, vi: `<h4>Bảng mẫu (chương 12)</h4>${pre(LD12)}` } };

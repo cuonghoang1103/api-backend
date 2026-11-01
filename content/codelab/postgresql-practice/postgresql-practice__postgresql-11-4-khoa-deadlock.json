@@ -1,0 +1,497 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-11-4-khoa-deadlock",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-11-4-khoa-deadlock"
+  },
+  "exercises": [
+    {
+      "title": "No lost update: sell one unit atomically",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "UPDATE … SET x = x − 1 WHERE x >= 1",
+        "RETURNING",
+        "no read-modify-write"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "locks",
+        "lost-update",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Two customers buy the last Moleskine notebooks (CT0906) at the same moment. Reading the stock in the app and writing <code>stock - 1</code> back loses one sale. Write ONE statement that takes one unit only if one is available and returns <code>sku, stock</code> (no row = sold out).</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>UPDATE product SET stock = stock - 1 WHERE sku = 'CT0906' AND stock &gt;= 1 RETURNING sku, stock</code>.</li>\n  <li>No SELECT before the UPDATE.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai khách mua những cuốn sổ Moleskine cuối cùng (CT0906) cùng lúc. Đọc tồn kho ở app rồi ghi lại <code>stock - 1</code> sẽ mất một lượt bán. Viết MỘT câu lệnh chỉ lấy một đơn vị khi còn hàng và trả về <code>sku, stock</code> (không có dòng = hết hàng).</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>UPDATE product SET stock = stock - 1 WHERE sku = 'CT0906' AND stock &gt;= 1 RETURNING sku, stock</code>.</li>\n  <li>Không SELECT trước UPDATE.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku    | stock\n-------+------\nCT0906 | 5    ",
+          "explanation": "Expected result of check \"6 → 5\" (row order does not matter).|||Kết quả mong đợi của kiểm \"6 → 5\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Let the database do the arithmetic on the row it has locked.|||Để CSDL làm phép tính trên chính dòng nó đang khoá.",
+        "The condition stock &gt;= 1 makes \"sold out\" a normal outcome (0 rows), not an error.|||Điều kiện stock &gt;= 1 biến \"hết hàng\" thành kết quả bình thường (0 dòng), không phải lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE product\nSET stock = stock - 1               -- computed from the CURRENT row under its row lock\nWHERE sku = 'CT0906' AND stock >= 1  -- sold out ⇒ 0 rows, no error, no negative stock\nRETURNING sku, stock;\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An UPDATE locks the row and re-reads it at its latest committed version before applying <code>stock - 1</code>; a concurrent UPDATE waits, then works on the new value. \"Fix 1\" of lesson 11.4: never read a value just to write it back.</p>",
+      "solutionExplanationHtmlVi": "<p>UPDATE khoá dòng và đọc lại phiên bản commit mới nhất trước khi áp <code>stock - 1</code>; UPDATE đồng thời phải chờ, rồi làm trên giá trị mới. \"Cách sửa 1\" của bài 11.4: đừng bao giờ đọc một giá trị chỉ để ghi nó lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "6 → 5|||6 → 5",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "CT0906",
+                  5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Sold out: no row comes back|||Hết hàng: không dòng nào trả về",
+            "an": true,
+            "themCsdl": "UPDATE product SET stock = 0 WHERE sku = 'CT0906'",
+            "choPhepRong": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": []
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "No SELECT-then-UPDATE|||Không SELECT rồi mới UPDATE",
+            "khop": "^(?![\\s\\S]*\\bSELECT\\b)[\\s\\S]*\\bUPDATE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Read stock in the app (6), write 5: two buyers both write 5 — one sale vanishes.|||Đọc tồn kho ở app (6), ghi 5: hai người mua đều ghi 5 — mất một lượt bán."
+        },
+        {
+          "loi": "No <code>stock &gt;= 1</code>: on a sold-out item the CHECK (stock ≥ 0) raises an error in the middle of checkout.|||Không có <code>stock &gt;= 1</code>: với hàng đã hết, CHECK (stock ≥ 0) báo lỗi giữa lúc thanh toán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "A job queue in one statement: FOR UPDATE SKIP LOCKED",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "FOR UPDATE SKIP LOCKED",
+        "claim the oldest job",
+        "UPDATE … WHERE id = (subquery)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "locks",
+        "queue"
+      ],
+      "problemHtml": "<p>Worker <code>w1</code> claims the <b>oldest queued</b> job (smallest id): set its state to <code>running</code> and worker to <code>w1</code>, and return <code>id, payload</code>. Many workers run this at once — a job locked by another worker must be skipped, not waited for.</p>\n<pre>job (id PK, payload, state queued|running|done, worker) — 1 done, 2–4 queued, 5 running</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>The subquery picks the job: <code>… WHERE state = 'queued' ORDER BY id LIMIT 1 FOR UPDATE SKIP LOCKED</code>.</li>\n  <li>One UPDATE … RETURNING.</li>\n</ul>",
+      "problemHtmlVi": "<p>Worker <code>w1</code> nhận việc <b>đang chờ cũ nhất</b> (id nhỏ nhất): đặt state thành <code>running</code> và worker là <code>w1</code>, trả về <code>id, payload</code>. Nhiều worker chạy câu này cùng lúc — việc đang bị worker khác khoá phải được bỏ qua, không chờ.</p>\n<pre>job (id PK, payload, state queued|running|done, worker) — 1 done, 2–4 queued, 5 running</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Truy vấn con chọn việc: <code>… WHERE state = 'queued' ORDER BY id LIMIT 1 FOR UPDATE SKIP LOCKED</code>.</li>\n  <li>Một lệnh UPDATE … RETURNING.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | payload \n---+---------\n2  | email #2",
+          "explanation": "Expected result of check \"Job 2 is claimed\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Việc 2 được nhận\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The subquery chooses and locks ONE row; the UPDATE changes exactly that row.|||Truy vấn con chọn và khoá MỘT dòng; UPDATE đổi đúng dòng đó.",
+        "SKIP LOCKED makes concurrent workers pick different jobs instead of queueing behind each other.|||SKIP LOCKED khiến các worker đồng thời chọn các việc khác nhau thay vì xếp hàng sau nhau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "job.sql",
+          "language": "sql",
+          "code": "-- job.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- job.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE job (\n  id      int PRIMARY KEY,\n  payload text NOT NULL,\n  state   text NOT NULL DEFAULT 'queued' CHECK (state IN ('queued', 'running', 'done')),\n  worker  text\n);\nINSERT INTO job (id, payload, state) VALUES\n  (1, 'email #1', 'done'), (2, 'email #2', 'queued'), (3, 'resize img', 'queued'), (4, 'invoice pdf', 'queued'), (5, 'sms', 'running');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE job\nSET state = 'running', worker = 'w1'\nWHERE id = (SELECT id FROM job\n            WHERE state = 'queued'\n            ORDER BY id\n            LIMIT 1\n            FOR UPDATE SKIP LOCKED)        -- rows locked by other workers are invisible to this pick\nRETURNING id, payload;\n"
+        },
+        {
+          "name": "job.sql",
+          "language": "sql",
+          "code": "-- job.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- job.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE job (\n  id      int PRIMARY KEY,\n  payload text NOT NULL,\n  state   text NOT NULL DEFAULT 'queued' CHECK (state IN ('queued', 'running', 'done')),\n  worker  text\n);\nINSERT INTO job (id, payload, state) VALUES\n  (1, 'email #1', 'done'), (2, 'email #2', 'queued'), (3, 'resize img', 'queued'), (4, 'invoice pdf', 'queued'), (5, 'sms', 'running');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The grader is a single session, so it can only check the result (job 2 claimed, others untouched) and the clause. On a real server, start two psql windows, BEGIN in both, run the claim in each: they get jobs 2 and 3 without waiting — that is SKIP LOCKED.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chấm chỉ có một phiên, nên chỉ kiểm được kết quả (việc 2 được nhận, việc khác giữ nguyên) và mệnh đề. Trên máy chủ thật, mở hai cửa sổ psql, BEGIN ở cả hai, chạy lệnh nhận việc ở mỗi bên: chúng nhận việc 2 và 3 mà không chờ — đó là SKIP LOCKED.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE job (\n  id      int PRIMARY KEY,\n  payload text NOT NULL,\n  state   text NOT NULL DEFAULT 'queued' CHECK (state IN ('queued', 'running', 'done')),\n  worker  text\n);\nINSERT INTO job (id, payload, state) VALUES\n  (1, 'email #1', 'done'), (2, 'email #2', 'queued'), (3, 'resize img', 'queued'), (4, 'invoice pdf', 'queued'), (5, 'sms', 'running');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Job 2 is claimed|||Việc 2 được nhận",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "payload"
+              ],
+              "hang": [
+                [
+                  2,
+                  "email #2"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Exactly one job changed|||Đúng một việc bị đổi",
+            "kiemTra": "SELECT id, state, worker FROM job ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "state",
+                "worker"
+              ],
+              "hang": [
+                [
+                  1,
+                  "done",
+                  null
+                ],
+                [
+                  2,
+                  "running",
+                  "w1"
+                ],
+                [
+                  3,
+                  "queued",
+                  null
+                ],
+                [
+                  4,
+                  "queued",
+                  null
+                ],
+                [
+                  5,
+                  "running",
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "When job 2 is already running, job 3 is next|||Khi việc 2 đang chạy, việc 3 là kế tiếp",
+            "an": true,
+            "themCsdl": "UPDATE job SET state = 'running' WHERE id = 2",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "payload"
+              ],
+              "hang": [
+                [
+                  3,
+                  "resize img"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "FOR UPDATE SKIP LOCKED|||FOR UPDATE SKIP LOCKED",
+            "khop": "FOR\\s+UPDATE\\s+SKIP\\s+LOCKED",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "UPDATE … WHERE state = 'queued' without LIMIT: one worker grabs every job.|||UPDATE … WHERE state = 'queued' không LIMIT: một worker ôm hết mọi việc."
+        },
+        {
+          "loi": "FOR UPDATE without SKIP LOCKED: all workers wait on the same first row — the queue becomes single-threaded.|||FOR UPDATE thiếu SKIP LOCKED: mọi worker chờ cùng dòng đầu — hàng đợi thành đơn luồng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SKIP LOCKED",
+          "vi": "bỏ qua dòng đang bị khoá"
+        },
+        {
+          "en": "FOR UPDATE",
+          "vi": "khoá dòng để ghi"
+        }
+      ]
+    },
+    {
+      "title": "Anatomy of a deadlock",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "deadlock",
+        "40P01",
+        "lock ordering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "locks",
+        "deadlock"
+      ],
+      "problemHtml": "<p>Two transfers run at the same time:</p><pre>-- WINDOW 1                                        -- WINDOW 2\nBEGIN;\nUPDATE accounts SET balance = balance - 10 WHERE id = 'A';\n                                                   BEGIN;\n                                                   UPDATE accounts SET balance = balance - 10 WHERE id = 'B';\nUPDATE accounts SET balance = balance + 10 WHERE id = 'B';   -- waits for window 2\n                                                   UPDATE accounts SET balance = balance + 10 WHERE id = 'A';   -- deadlock!</pre><p>Order what happens.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai phi vụ chuyển tiền chạy cùng lúc:</p><pre>-- WINDOW 1                                        -- WINDOW 2\nBEGIN;\nUPDATE accounts SET balance = balance - 10 WHERE id = 'A';\n                                                   BEGIN;\n                                                   UPDATE accounts SET balance = balance - 10 WHERE id = 'B';\nUPDATE accounts SET balance = balance + 10 WHERE id = 'B';   -- waits for window 2\n                                                   UPDATE accounts SET balance = balance + 10 WHERE id = 'A';   -- deadlock!</pre><p>Sắp thứ tự những gì xảy ra.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A deadlock needs a cycle: A waits for B while B waits for A.|||Deadlock cần một vòng: A chờ B trong khi B chờ A.",
+        "PostgreSQL breaks it by killing one participant.|||PostgreSQL phá vòng bằng cách huỷ một bên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anatomy of a deadlock\n\nAnswer in the answer panel (no code needed).\n\n1. From two locks to one victimTừ hai khoá tới một nạn nhân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anatomy of a deadlock — answer key\n\n1. From two locks to one victimTừ hai khoá tới một nạn nhân\n   Answer: m5) Window 1 locks row A / cửa sổ 1 khoá dòng A  →  m1) Window 2 locks row B / cửa sổ 2 khoá dòng B  →  m2) Window 1 asks for B and waits for window 2 / cửa sổ 1 xin B và chờ cửa sổ 2  →  m3) Window 2 asks for A: each waits for the other / cửa sổ 2 xin A: mỗi bên chờ bên kia  →  m4) After deadlock_timeout (1 s) PostgreSQL detects the cycle and aborts one with 40P01 / sau deadlock_timeout PostgreSQL phát hiện vòng và huỷ một bên với 40P01  →  m6) The other transaction gets its lock and can commit / giao dịch còn lại nhận khoá và commit được\n   The cure is to take locks in a consistent order (e.g. always the smaller account id first) so a cycle cannot form, and to retry on 40P01.VI: Cách chữa là lấy khoá theo thứ tự nhất quán (vd luôn id tài khoản nhỏ trước) để vòng không hình thành, và thử lại khi gặp 40P01.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The cure is to take locks in a consistent order (e.g. always the smaller account id first) so a cycle cannot form, and to retry on 40P01.</p><p><i>VI: Cách chữa là lấy khoá theo thứ tự nhất quán (vd luôn id tài khoản nhỏ trước) để vòng không hình thành, và thử lại khi gặp 40P01.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From two locks to one victim</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ hai khoá tới một nạn nhân</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Window 2 locks row B / cửa sổ 2 khoá dòng B"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Window 1 asks for B and waits for window 2 / cửa sổ 1 xin B và chờ cửa sổ 2"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Window 2 asks for A: each waits for the other / cửa sổ 2 xin A: mỗi bên chờ bên kia"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "After deadlock_timeout (1 s) PostgreSQL detects the cycle and aborts one with 40P01 / sau deadlock_timeout PostgreSQL phát hiện vòng và huỷ một bên với 40P01"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Window 1 locks row A / cửa sổ 1 khoá dòng A"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The other transaction gets its lock and can commit / giao dịch còn lại nhận khoá và commit được"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m1",
+              "m2",
+              "m3",
+              "m4",
+              "m6"
+            ],
+            "giaiThich": "<p>The cure is to take locks in a consistent order (e.g. always the smaller account id first) so a cycle cannot form, and to retry on 40P01.</p><p><i>VI: Cách chữa là lấy khoá theo thứ tự nhất quán (vd luôn id tài khoản nhỏ trước) để vòng không hình thành, và thử lại khi gặp 40P01.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking both transactions wait forever.|||Nghĩ rằng cả hai chờ mãi mãi."
+        },
+        {
+          "loi": "Fixing deadlocks with longer timeouts instead of consistent lock order.|||Sửa deadlock bằng timeout dài hơn thay vì khoá theo thứ tự nhất quán."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deadlock",
+          "vi": "khoá chết"
+        },
+        {
+          "en": "40P01 deadlock_detected",
+          "vi": "mã lỗi deadlock"
+        }
+      ]
+    },
+    {
+      "title": "Two windows: lost update, FOR UPDATE and NOWAIT",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "lost update in practice",
+        "SELECT … FOR UPDATE",
+        "NOWAIT / lock_timeout"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "locks",
+        "concurrency"
+      ],
+      "problemHtml": "<p>Reproduce lesson 11.4 on your own PostgreSQL with two psql windows on the accounts table (A = 100, B = 0).</p><pre>-- 1) lost update: both windows\nBEGIN; SELECT balance FROM accounts WHERE id = 'A';          -- both read 100\nUPDATE accounts SET balance = 90 WHERE id = 'A'; COMMIT;     -- window 1 (app computed 100 - 10)\nUPDATE accounts SET balance = 80 WHERE id = 'A'; COMMIT;     -- window 2 (app computed 100 - 20) ⇒ 80, the -10 is lost\n-- 2) the fix: SELECT … FOR UPDATE — window 2 now WAITS at its SELECT until window 1 commits, then reads 90\n-- 3) don't wait: SELECT … FOR UPDATE NOWAIT  ⇒  ERROR: could not obtain lock on row (55P03)\n--    or SET LOCAL lock_timeout = '2s'       ⇒  ERROR: canceling statement due to lock timeout</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> Row locks only show their effect when a second session tries to take them; the browser grader has exactly one session. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Part 1 ends with balance 80 (one withdrawal lost).</li>\n  <li>Part 2 ends with 70 (both withdrawals applied), window 2 visibly waited.</li>\n  <li>Part 3 shows the 55P03 or lock-timeout error instead of waiting.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tái hiện bài 11.4 trên PostgreSQL của bạn với hai cửa sổ psql trên bảng accounts (A = 100, B = 0).</p><pre>-- 1) mất cập nhật: cả hai cửa sổ\nBEGIN; SELECT balance FROM accounts WHERE id = 'A';          -- cả hai đọc 100\nUPDATE accounts SET balance = 90 WHERE id = 'A'; COMMIT;     -- cửa sổ 1 (app tính 100 - 10)\nUPDATE accounts SET balance = 80 WHERE id = 'A'; COMMIT;     -- cửa sổ 2 (app tính 100 - 20) ⇒ 80, mất khoản -10\n-- 2) cách sửa: SELECT … FOR UPDATE — cửa sổ 2 giờ CHỜ ở câu SELECT tới khi cửa sổ 1 commit, rồi đọc 90\n-- 3) không chờ: SELECT … FOR UPDATE NOWAIT  ⇒  ERROR: could not obtain lock on row (55P03)\n--    hoặc SET LOCAL lock_timeout = '2s'       ⇒  ERROR: canceling statement due to lock timeout</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> Khoá dòng chỉ thể hiện tác dụng khi phiên thứ hai cố lấy chúng; máy chấm trình duyệt chỉ có đúng một phiên. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phần 1 kết thúc với số dư 80 (mất một lần rút).</li>\n  <li>Phần 2 kết thúc với 70 (áp đủ hai lần rút), cửa sổ 2 rõ ràng đã chờ.</li>\n  <li>Phần 3 cho thấy lỗi 55P03 hoặc lock timeout thay vì chờ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Window 2 (part 3): SELECT … FOR UPDATE NOWAIT;|||Cửa sổ 2 (phần 3): SELECT … FOR UPDATE NOWAIT;",
+          "output": "ERROR:  could not obtain lock on row in relation \"accounts\"|||ERROR:  could not obtain lock on row in relation \"accounts\"",
+          "explanation": "NOWAIT turns \"wait for the lock\" into an immediate error the app can handle.|||NOWAIT biến \"chờ khoá\" thành lỗi ngay lập tức để app xử lý."
+        }
+      ],
+      "hintsJson": [
+        "Keep each window's transaction open while you type in the other.|||Giữ giao dịch của mỗi cửa sổ mở trong lúc gõ ở cửa sổ kia.",
+        "If a window seems frozen, it is waiting for a lock — that is the lesson.|||Nếu một cửa sổ có vẻ đứng, nó đang chờ khoá — đó chính là bài học."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "locks.sql",
+          "language": "sql",
+          "code": "-- setup\nCREATE TABLE IF NOT EXISTS accounts (id text PRIMARY KEY, owner text NOT NULL, balance numeric(12,2) NOT NULL CHECK (balance >= 0));\nTRUNCATE accounts; INSERT INTO accounts VALUES ('A', 'Cuong', 100), ('B', 'Mai', 0);\n-- follow the three parts of the brief in two windows\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "locks.sql",
+          "language": "sql",
+          "code": "-- Part 2 (both windows):\n-- W1: BEGIN; SELECT balance FROM accounts WHERE id = 'A' FOR UPDATE;   -- 100, row locked\n-- W2: BEGIN; SELECT balance FROM accounts WHERE id = 'A' FOR UPDATE;   -- … waits …\n-- W1: UPDATE accounts SET balance = 90 WHERE id = 'A'; COMMIT;\n-- W2: (unblocks, reads 90) UPDATE accounts SET balance = 70 WHERE id = 'A'; COMMIT;   -- 70: nothing lost\n-- Even better (Fix 1): UPDATE accounts SET balance = balance - 10 WHERE id = 'A' — no read at all.\n-- Part 3:\n-- W2: SELECT balance FROM accounts WHERE id = 'A' FOR UPDATE NOWAIT;\n--     ERROR:  could not obtain lock on row in relation \"accounts\"   (SQLSTATE 55P03)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A plain SELECT never locks, so two read-modify-write transactions overwrite each other. FOR UPDATE makes the second reader wait for the first writer; NOWAIT / lock_timeout bound that wait. The simplest fix remains the atomic UPDATE of the first exercise.</p>",
+      "solutionExplanationHtmlVi": "<p>SELECT thường không khoá, nên hai giao dịch đọc-sửa-ghi đè lên nhau. FOR UPDATE khiến người đọc thứ hai chờ người ghi thứ nhất; NOWAIT / lock_timeout giới hạn thời gian chờ. Cách sửa đơn giản nhất vẫn là UPDATE nguyên tử của bài đầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "psql -h localhost -p 5444 -U postgres -d pgcourse   # in two terminals",
+          "lyDo": "Row locks only show their effect when a second session tries to take them; the browser grader has exactly one session.|||Khoá dòng chỉ thể hiện tác dụng khi phiên thứ hai cố lấy chúng; máy chấm trình duyệt chỉ có đúng một phiên."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Committing window 1 before window 2 reads — no race, no lost update to observe.|||Commit cửa sổ 1 trước khi cửa sổ 2 đọc — không có tranh chấp, không thấy mất cập nhật."
+        },
+        {
+          "loi": "Using FOR UPDATE in only one window.|||Chỉ dùng FOR UPDATE ở một cửa sổ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row lock",
+          "vi": "khoá dòng"
+        },
+        {
+          "en": "NOWAIT",
+          "vi": "không chờ khoá"
+        }
+      ]
+    }
+  ]
+}

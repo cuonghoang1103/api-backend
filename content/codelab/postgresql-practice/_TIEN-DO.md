@@ -17,6 +17,8 @@ Dựng: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` → `node
 | Ch8 (8.1–8.4) + Lab 4 | ✅ 16 đề (bảng sale của bài + CT Shop mini) + Lab 4 (W1/W1b/W3/W4/W5) |
 | Ch9 (9.1–9.4) | ✅ 16 đề (bảng event 20 000 dòng tất định + ANALYZE; chấm bằng kế hoạch thật qua plan_text/plan_nodes) |
 | Ch10 (10.1–10.4) + Lab 5 | ✅ 14 đề (pg_stats, CREATE STATISTICS, SET LOCAL work_mem/enable_hashjoin) + Lab 5 (P2–P6) |
-| Ch11–Ch17, Lab 6–9 | ⏳ đang làm |
+| Ch11 (11.1–11.4) | ✅ 14 đề (2 đề chạy trên máy: write skew, lost update/NOWAIT — máy chấm chỉ có một phiên) |
+| Ch12 (12.1–12.4) + Lab 6 | ✅ 17 đề (users/notes của bài + CT Shop mini) + Lab 6 (T1a/T1c/T2a/T2b/T4) |
+| Ch13–Ch17, Lab 7–9 | ⏳ đang làm |
 
 Ghi chú: xem đầu `nguon/_chung.mjs` (giới hạn PGlite đo thật, cách soạn pg()/cs()/tay()/deLonPg()).

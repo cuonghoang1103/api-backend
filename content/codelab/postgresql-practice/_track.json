@@ -296,6 +296,60 @@
       "name": "10.5 Lab 5 — CT Shop: many orders — indexes and EXPLAIN",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 5 — CT Shop: make the busy pages fast"
+    },
+    {
+      "slug": "postgresql-11-1-giao-dich",
+      "name": "11.1 Transactions: all of it, or none of it",
+      "level": "ADVANCED",
+      "description": "Luyện: The aborted transaction, step by step · SAVEPOINT: what is left after each rollback? · An atomic transfer you can call: transfer(from, to, amount)"
+    },
+    {
+      "slug": "postgresql-11-2-mvcc",
+      "name": "11.2 MVCC: why readers never block writers",
+      "level": "ADVANCED",
+      "description": "Luyện: One statement, one snapshot · UPDATE writes a new version: watch the ctid move · Who sees which version? · Dead tuples, VACUUM and bloat"
+    },
+    {
+      "slug": "postgresql-11-3-muc-co-lap",
+      "name": "11.3 Isolation levels and the anomalies they stop",
+      "level": "ADVANCED",
+      "description": "Luyện: Anomaly × isolation level in PostgreSQL · Pick the level for the job · Reproduce write skew, then let SERIALIZABLE stop it"
+    },
+    {
+      "slug": "postgresql-11-4-khoa-deadlock",
+      "name": "11.4 Row locks, lost updates and deadlocks",
+      "level": "ADVANCED",
+      "description": "Luyện: No lost update: sell one unit atomically · A job queue in one statement: FOR UPDATE SKIP LOCKED · Anatomy of a deadlock · Two windows: lost update, FOR UPDATE and NOWAIT"
+    },
+    {
+      "slug": "postgresql-12-1-ham",
+      "name": "12.1 Functions: SQL, PL/pgSQL and volatility",
+      "level": "ADVANCED",
+      "description": "Luyện: A SQL function: note_count(uid) · PL/pgSQL branching: a popularity label · A function that returns a table · order_total with an error for missing orders · IMMUTABLE, STABLE or VOLATILE?"
+    },
+    {
+      "slug": "postgresql-12-2-trigger",
+      "name": "12.2 Triggers: automation the application cannot forget",
+      "level": "ADVANCED",
+      "description": "Luyện: The trigger everybody needs: updated_at · An audit log that records only real changes · Selling decrements the stock — in a trigger · Trigger timing and its traps"
+    },
+    {
+      "slug": "postgresql-12-3-view",
+      "name": "12.3 Views: a query with a name",
+      "level": "ADVANCED",
+      "description": "Luyện: Name a summary query: note_summary · A writable view that cannot leak rows: WITH CHECK OPTION · The order list the API needs, as a view · What a view is — and is not"
+    },
+    {
+      "slug": "postgresql-12-4-materialized-view",
+      "name": "12.4 Materialized views: trading freshness for speed",
+      "level": "ADVANCED",
+      "description": "Luyện: Store the summary: CREATE MATERIALIZED VIEW · Refresh without blocking the dashboard · A daily revenue table for the dashboard (CT Shop) · View or materialized view?"
+    },
+    {
+      "slug": "postgresql-lab-6-dat-hang-an-toan-ct-shop",
+      "name": "12.5 Lab 6 — CT Shop: safe checkout — transactions, functions, triggers, views",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 6 — CT Shop: a checkout that can never half-happen"
     }
   ]
 }

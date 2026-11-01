@@ -1,0 +1,420 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-11-3-muc-co-lap",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-11-3-muc-co-lap"
+  },
+  "exercises": [
+    {
+      "title": "Anomaly × isolation level in PostgreSQL",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "Read Committed",
+        "Repeatable Read",
+        "Serializable"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "isolation"
+      ],
+      "problemHtml": "<p>Fill in, <b>for PostgreSQL</b> (not the SQL standard minimum), whether each anomaly is possible or prevented at each level.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền, <b>cho PostgreSQL</b> (không phải mức tối thiểu của chuẩn SQL), mỗi dị thường có thể xảy ra hay bị chặn ở từng mức.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read Committed takes a new snapshot per STATEMENT; Repeatable Read one per TRANSACTION.|||Read Committed lấy ảnh chụp mới mỗi CÂU LỆNH; Repeatable Read một ảnh mỗi GIAO DỊCH.",
+        "Write skew involves rows that no transaction writes in common.|||Lệch ghi liên quan các dòng mà không giao dịch nào cùng ghi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anomaly × isolation level in PostgreSQL\n\nAnswer in the answer panel (no code needed).\n\n1. Anomalies by levelDị thường theo mức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Anomaly × isolation level in PostgreSQL — answer key\n\n1. Anomalies by levelDị thường theo mức\n   - r1.rc: prevented\n   - r1.rr: prevented\n   - r1.sr: prevented\n   - r2.rc: possible\n   - r2.rr: prevented\n   - r2.sr: prevented\n   - r3.rc: possible\n   - r3.rr: prevented\n   - r3.sr: prevented\n   - r4.rc: possible\n   - r4.rr: possible\n   - r4.sr: prevented\n   PostgreSQL never shows uncommitted data (READ UNCOMMITTED behaves like READ COMMITTED). Its Repeatable Read is snapshot isolation: one snapshot for the whole transaction, so no phantoms either — stronger than the standard requires. Only Serializable (SSI) detects write skew and aborts one transaction with 40001.VI: PostgreSQL không bao giờ cho thấy dữ liệu chưa commit (READ UNCOMMITTED hành xử như READ COMMITTED). Repeatable Read của nó là snapshot isolation: một ảnh chụp cho cả giao dịch nên cũng không có bóng ma — mạnh hơn chuẩn yêu cầu. Chỉ Serializable (SSI) phát hiện lệch ghi và huỷ một giao dịch với 40001.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL never shows uncommitted data (READ UNCOMMITTED behaves like READ COMMITTED). Its Repeatable Read is snapshot isolation: one snapshot for the whole transaction, so no phantoms either — stronger than the standard requires. Only Serializable (SSI) detects write skew and aborts one transaction with 40001.</p><p><i>VI: PostgreSQL không bao giờ cho thấy dữ liệu chưa commit (READ UNCOMMITTED hành xử như READ COMMITTED). Repeatable Read của nó là snapshot isolation: một ảnh chụp cho cả giao dịch nên cũng không có bóng ma — mạnh hơn chuẩn yêu cầu. Chỉ Serializable (SSI) phát hiện lệch ghi và huỷ một giao dịch với 40001.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Anomalies by level</p><p style=\"opacity:.75;font-size:.92em\"><i>Dị thường theo mức</i></p>",
+            "cot": [
+              {
+                "ma": "dt",
+                "ten": "Anomaly / Dị thường"
+              },
+              {
+                "ma": "rc",
+                "ten": "Read Committed",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              },
+              {
+                "ma": "rr",
+                "ten": "Repeatable Read",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              },
+              {
+                "ma": "sr",
+                "ten": "Serializable",
+                "luaChon": [
+                  "possible",
+                  "prevented"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "dt": "dirty read (see uncommitted data) / đọc bẩn"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "dt": "non-repeatable read (same row, two values in one transaction) / đọc không lặp lại"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "dt": "phantom read (same query, new rows appear) / đọc bóng ma"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "dt": "write skew (two transactions each read, then write disjoint rows) / lệch ghi"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.rc": "prevented",
+              "r1.rr": "prevented",
+              "r1.sr": "prevented",
+              "r2.rc": "possible",
+              "r2.rr": "prevented",
+              "r2.sr": "prevented",
+              "r3.rc": "possible",
+              "r3.rr": "prevented",
+              "r3.sr": "prevented",
+              "r4.rc": "possible",
+              "r4.rr": "possible",
+              "r4.sr": "prevented"
+            },
+            "giaiThich": "<p>PostgreSQL never shows uncommitted data (READ UNCOMMITTED behaves like READ COMMITTED). Its Repeatable Read is snapshot isolation: one snapshot for the whole transaction, so no phantoms either — stronger than the standard requires. Only Serializable (SSI) detects write skew and aborts one transaction with 40001.</p><p><i>VI: PostgreSQL không bao giờ cho thấy dữ liệu chưa commit (READ UNCOMMITTED hành xử như READ COMMITTED). Repeatable Read của nó là snapshot isolation: một ảnh chụp cho cả giao dịch nên cũng không có bóng ma — mạnh hơn chuẩn yêu cầu. Chỉ Serializable (SSI) phát hiện lệch ghi và huỷ một giao dịch với 40001.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering from the SQL-standard table (phantoms possible at Repeatable Read) — PostgreSQL prevents them.|||Trả lời theo bảng của chuẩn SQL (Repeatable Read vẫn có bóng ma) — PostgreSQL thì chặn."
+        },
+        {
+          "loi": "Believing Repeatable Read is enough for the on-call rule.|||Tin rằng Repeatable Read đủ cho luật trực ca."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "isolation level",
+          "vi": "mức cô lập"
+        },
+        {
+          "en": "write skew",
+          "vi": "lệch ghi"
+        },
+        {
+          "en": "SSI",
+          "vi": "Serializable Snapshot Isolation"
+        }
+      ]
+    },
+    {
+      "title": "Pick the level for the job",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "choosing an isolation level",
+        "retry on 40001"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "isolation"
+      ],
+      "problemHtml": "<p>Choose what lesson 11.3 recommends.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn điều bài 11.3 khuyên.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Consistency across several reads ⇒ Repeatable Read.|||Nhất quán qua nhiều lần đọc ⇒ Repeatable Read.",
+        "Rules spanning several rows written by different transactions ⇒ Serializable + retry.|||Luật trải trên nhiều dòng do các giao dịch khác nhau ghi ⇒ Serializable + thử lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the level for the job\n\nAnswer in the answer panel (no code needed).\n\n1. A monthly report runs 5 queries and their totals must agree with each other while orders keep arriving.Báo cáo tháng chạy 5 truy vấn và các tổng phải khớp nhau trong khi đơn vẫn đổ về.\n2. \"At least one doctor must stay on call\": each transaction checks the count, then takes itself off call.\"Phải luôn có ít nhất một bác sĩ trực\": mỗi giao dịch kiểm số người trực, rồi tự rời ca.\n3. Under SERIALIZABLE your transaction fails with could not serialize access due to read/write dependencies. What should the application do?Ở SERIALIZABLE giao dịch của bạn hỏng với could not serialize access due to read/write dependencies. Ứng dụng nên làm gì?\n4. The default level of PostgreSQL (and the one most apps run) is…Mức mặc định của PostgreSQL (và mức phần lớn app dùng) là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the level for the job — answer key\n\n1. A monthly report runs 5 queries and their totals must agree with each other while orders keep arriving.Báo cáo tháng chạy 5 truy vấn và các tổng phải khớp nhau trong khi đơn vẫn đổ về.\n   Answer: a) REPEATABLE READ (one snapshot for all 5 queries)\n   One snapshot makes the 5 queries consistent with each other without blocking writers.VI: Một ảnh chụp làm 5 truy vấn khớp nhau mà không chặn người ghi.\n\n2. \"At least one doctor must stay on call\": each transaction checks the count, then takes itself off call.\"Phải luôn có ít nhất một bác sĩ trực\": mỗi giao dịch kiểm số người trực, rồi tự rời ca.\n   Answer: d) SERIALIZABLE, and retry the transaction on SQLSTATE 40001\n   Write skew: each transaction is correct alone, together they break the rule. SSI detects the dangerous pattern and aborts one; the app retries.VI: Lệch ghi: mỗi giao dịch đúng khi đứng riêng, cùng nhau thì phá luật. SSI phát hiện mẫu nguy hiểm và huỷ một cái; app thử lại.\n\n3. Under SERIALIZABLE your transaction fails with could not serialize access due to read/write dependencies. What should the application do?Ở SERIALIZABLE giao dịch của bạn hỏng với could not serialize access due to read/write dependencies. Ứng dụng nên làm gì?\n   Answer: c) roll back and rerun the WHOLE transaction from the beginning\n   40001 is a \"please try again\" signal; nothing was committed. Rerun every statement, because the reads may now return different values.VI: 40001 là tín hiệu \"thử lại đi\"; chưa có gì được commit. Chạy lại mọi câu lệnh, vì các lần đọc giờ có thể trả giá trị khác.\n\n4. The default level of PostgreSQL (and the one most apps run) is…Mức mặc định của PostgreSQL (và mức phần lớn app dùng) là…\n   Answer: a) READ COMMITTED\n   Read Committed + atomic single statements (UPDATE … SET x = x − 1) + row locks where needed covers most application logic.VI: Read Committed + câu lệnh đơn nguyên tử (UPDATE … SET x = x − 1) + khoá dòng khi cần là đủ cho phần lớn logic ứng dụng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> REPEATABLE READ (one snapshot for all 5 queries)</p><p>One snapshot makes the 5 queries consistent with each other without blocking writers.</p><p><i>VI: Một ảnh chụp làm 5 truy vấn khớp nhau mà không chặn người ghi.</i></p></li><li><p><b>d)</b> SERIALIZABLE, and retry the transaction on SQLSTATE 40001</p><p>Write skew: each transaction is correct alone, together they break the rule. SSI detects the dangerous pattern and aborts one; the app retries.</p><p><i>VI: Lệch ghi: mỗi giao dịch đúng khi đứng riêng, cùng nhau thì phá luật. SSI phát hiện mẫu nguy hiểm và huỷ một cái; app thử lại.</i></p></li><li><p><b>c)</b> roll back and rerun the WHOLE transaction from the beginning</p><p>40001 is a \"please try again\" signal; nothing was committed. Rerun every statement, because the reads may now return different values.</p><p><i>VI: 40001 là tín hiệu \"thử lại đi\"; chưa có gì được commit. Chạy lại mọi câu lệnh, vì các lần đọc giờ có thể trả giá trị khác.</i></p></li><li><p><b>a)</b> READ COMMITTED</p><p>Read Committed + atomic single statements (UPDATE … SET x = x − 1) + row locks where needed covers most application logic.</p><p><i>VI: Read Committed + câu lệnh đơn nguyên tử (UPDATE … SET x = x − 1) + khoá dòng khi cần là đủ cho phần lớn logic ứng dụng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A monthly report runs 5 queries and their totals must agree with each other while orders keep arriving.</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo tháng chạy 5 truy vấn và các tổng phải khớp nhau trong khi đơn vẫn đổ về.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "REPEATABLE READ (one snapshot for all 5 queries)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "READ UNCOMMITTED for speed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "READ COMMITTED with longer timeouts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "lock all the tables first"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One snapshot makes the 5 queries consistent with each other without blocking writers.</p><p><i>VI: Một ảnh chụp làm 5 truy vấn khớp nhau mà không chặn người ghi.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>\"At least one doctor must stay on call\": each transaction checks the count, then takes itself off call.</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Phải luôn có ít nhất một bác sĩ trực\": mỗi giao dịch kiểm số người trực, rồi tự rời ca.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "READ COMMITTED with a CHECK constraint"
+              },
+              {
+                "ma": "b",
+                "noiDung": "REPEATABLE READ is enough"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing — the app checks it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SERIALIZABLE, and retry the transaction on SQLSTATE 40001"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Write skew: each transaction is correct alone, together they break the rule. SSI detects the dangerous pattern and aborts one; the app retries.</p><p><i>VI: Lệch ghi: mỗi giao dịch đúng khi đứng riêng, cùng nhau thì phá luật. SSI phát hiện mẫu nguy hiểm và huỷ một cái; app thử lại.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Under SERIALIZABLE your transaction fails with <code>could not serialize access due to read/write dependencies</code>. What should the application do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở SERIALIZABLE giao dịch của bạn hỏng với <code>could not serialize access due to read/write dependencies</code>. Ứng dụng nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ignore it, the data is saved"
+              },
+              {
+                "ma": "b",
+                "noiDung": "retry only the last statement"
+              },
+              {
+                "ma": "c",
+                "noiDung": "roll back and rerun the WHOLE transaction from the beginning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "switch the server to READ COMMITTED"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>40001 is a \"please try again\" signal; nothing was committed. Rerun every statement, because the reads may now return different values.</p><p><i>VI: 40001 là tín hiệu \"thử lại đi\"; chưa có gì được commit. Chạy lại mọi câu lệnh, vì các lần đọc giờ có thể trả giá trị khác.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>The default level of PostgreSQL (and the one most apps run) is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức mặc định của PostgreSQL (và mức phần lớn app dùng) là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "READ COMMITTED"
+              },
+              {
+                "ma": "b",
+                "noiDung": "REPEATABLE READ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "READ UNCOMMITTED"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SERIALIZABLE"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Read Committed + atomic single statements (UPDATE … SET x = x − 1) + row locks where needed covers most application logic.</p><p><i>VI: Read Committed + câu lệnh đơn nguyên tử (UPDATE … SET x = x − 1) + khoá dòng khi cần là đủ cho phần lớn logic ứng dụng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using SERIALIZABLE without a retry loop — users see random errors.|||Dùng SERIALIZABLE mà không có vòng thử lại — người dùng gặp lỗi ngẫu nhiên."
+        },
+        {
+          "loi": "Retrying just the failed statement.|||Chỉ thử lại câu lệnh hỏng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "40001 serialization_failure",
+          "vi": "lỗi tuần tự hoá"
+        }
+      ]
+    },
+    {
+      "title": "Reproduce write skew, then let SERIALIZABLE stop it",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "two sessions",
+        "REPEATABLE READ write skew",
+        "SERIALIZABLE 40001"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "chay-tai-may",
+        "isolation",
+        "concurrency"
+      ],
+      "problemHtml": "<p>Concurrency needs two real sessions — open two psql windows on your PostgreSQL 17 (lesson 0.3 container) and follow the script exactly, line by line, alternating windows.</p><pre>-- setup (once)\nCREATE TABLE oncall (name text PRIMARY KEY, on_call boolean NOT NULL);\nINSERT INTO oncall VALUES ('An', true), ('Binh', true);\n\n-- WINDOW 1                                         -- WINDOW 2\nBEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT count(*) FROM oncall WHERE on_call;  -- 2\n                                                    BEGIN ISOLATION LEVEL REPEATABLE READ;\n                                                    SELECT count(*) FROM oncall WHERE on_call;  -- 2\nUPDATE oncall SET on_call = false WHERE name = 'An';\n                                                    UPDATE oncall SET on_call = false WHERE name = 'Binh';\nCOMMIT;\n                                                    COMMIT;\nSELECT * FROM oncall;    -- nobody on call: write skew\n\n-- now repeat with BEGIN ISOLATION LEVEL SERIALIZABLE in both windows</pre><p class=\"callout warn\"><b>Runs on YOUR machine, not in the browser.</b> The browser grader is a single PostgreSQL session inside one transaction — two transactions cannot run concurrently there, so it cannot show (or grade) an isolation anomaly. Nothing here is graded automatically: do the steps in your own PostgreSQL, compare with the expected output, then press <b>Mark as solved</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Run 1 (REPEATABLE READ): both COMMITs succeed and nobody is left on call.</li>\n  <li>Run 2 (reset the data, SERIALIZABLE in both windows): the second COMMIT (or UPDATE) fails with <code>ERROR: could not serialize access due to read/write dependencies among transactions</code> (SQLSTATE 40001).</li>\n  <li>Write down which window failed and what you would do in the application.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồng thời cần hai phiên thật — mở hai cửa sổ psql vào PostgreSQL 17 của bạn (container bài 0.3) và làm đúng theo script, từng dòng, xen kẽ hai cửa sổ.</p><pre>-- setup (once)\nCREATE TABLE oncall (name text PRIMARY KEY, on_call boolean NOT NULL);\nINSERT INTO oncall VALUES ('An', true), ('Binh', true);\n\n-- WINDOW 1                                         -- WINDOW 2\nBEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT count(*) FROM oncall WHERE on_call;  -- 2\n                                                    BEGIN ISOLATION LEVEL REPEATABLE READ;\n                                                    SELECT count(*) FROM oncall WHERE on_call;  -- 2\nUPDATE oncall SET on_call = false WHERE name = 'An';\n                                                    UPDATE oncall SET on_call = false WHERE name = 'Binh';\nCOMMIT;\n                                                    COMMIT;\nSELECT * FROM oncall;    -- nobody on call: write skew\n\n-- now repeat with BEGIN ISOLATION LEVEL SERIALIZABLE in both windows</pre><p class=\"callout warn\"><b>Chạy trên MÁY CỦA BẠN, không chạy trong trình duyệt.</b> Máy chấm trình duyệt là MỘT phiên PostgreSQL bên trong một giao dịch — không thể có hai giao dịch chạy đồng thời, nên không thể cho thấy (hay chấm) dị thường cô lập. Trang này không tự chấm: làm các bước trên PostgreSQL của bạn, so với output mong đợi, rồi bấm <b>Tự đánh dấu đã giải</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lượt 1 (REPEATABLE READ): cả hai COMMIT thành công và không còn ai trực.</li>\n  <li>Lượt 2 (đặt lại dữ liệu, SERIALIZABLE ở cả hai cửa sổ): COMMIT (hoặc UPDATE) thứ hai hỏng với <code>ERROR: could not serialize access due to read/write dependencies among transactions</code> (SQLSTATE 40001).</li>\n  <li>Ghi lại cửa sổ nào hỏng và bạn sẽ làm gì trong ứng dụng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Run 2, window 2: COMMIT;|||Lượt 2, cửa sổ 2: COMMIT;",
+          "output": "ERROR:  could not serialize access due to read/write dependencies among transactions|||ERROR:  could not serialize access due to read/write dependencies among transactions",
+          "explanation": "Serializable detected the write skew and aborted one transaction; the other one committed.|||Serializable phát hiện lệch ghi và huỷ một giao dịch; giao dịch kia đã commit."
+        }
+      ],
+      "hintsJson": [
+        "Type each line in the right window before moving on — the interleaving is the whole point.|||Gõ từng dòng đúng cửa sổ rồi mới làm tiếp — thứ tự xen kẽ chính là điểm mấu chốt.",
+        "Reset the data between the two runs.|||Đặt lại dữ liệu giữa hai lượt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "write-skew.sql",
+          "language": "sql",
+          "code": "-- setup (once)\nCREATE TABLE oncall (name text PRIMARY KEY, on_call boolean NOT NULL);\nINSERT INTO oncall VALUES ('An', true), ('Binh', true);\n\n-- WINDOW 1                                         -- WINDOW 2\nBEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT count(*) FROM oncall WHERE on_call;  -- 2\n                                                    BEGIN ISOLATION LEVEL REPEATABLE READ;\n                                                    SELECT count(*) FROM oncall WHERE on_call;  -- 2\nUPDATE oncall SET on_call = false WHERE name = 'An';\n                                                    UPDATE oncall SET on_call = false WHERE name = 'Binh';\nCOMMIT;\n                                                    COMMIT;\nSELECT * FROM oncall;    -- nobody on call: write skew\n\n-- now repeat with BEGIN ISOLATION LEVEL SERIALIZABLE in both windows\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "write-skew.sql",
+          "language": "sql",
+          "code": "-- setup (once)\nCREATE TABLE oncall (name text PRIMARY KEY, on_call boolean NOT NULL);\nINSERT INTO oncall VALUES ('An', true), ('Binh', true);\n\n-- WINDOW 1                                         -- WINDOW 2\nBEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT count(*) FROM oncall WHERE on_call;  -- 2\n                                                    BEGIN ISOLATION LEVEL REPEATABLE READ;\n                                                    SELECT count(*) FROM oncall WHERE on_call;  -- 2\nUPDATE oncall SET on_call = false WHERE name = 'An';\n                                                    UPDATE oncall SET on_call = false WHERE name = 'Binh';\nCOMMIT;\n                                                    COMMIT;\nSELECT * FROM oncall;    -- nobody on call: write skew\n\n-- now repeat with BEGIN ISOLATION LEVEL SERIALIZABLE in both windows\n\n-- Expected, run 1 (REPEATABLE READ):\n--   both UPDATEs succeed (they touch different rows), both COMMITs succeed\n--   SELECT * FROM oncall;  →  An f · Binh f      ← the rule \"someone is on call\" is broken\n-- Reset: UPDATE oncall SET on_call = true;\n-- Expected, run 2 (SERIALIZABLE in both windows):\n--   the second transaction to COMMIT gets\n--   ERROR:  could not serialize access due to read/write dependencies among transactions\n--   DETAIL: Reason code: Canceled on identification as a pivot, during commit attempt.\n--   SELECT * FROM oncall;  →  exactly one person went off call\n-- In the app: catch SQLSTATE 40001 → ROLLBACK → rerun the whole transaction (it will now see count = 1 and refuse)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each transaction alone keeps the rule (it sees 2 people on call, removes 1). Together they remove both. Repeatable Read cannot see the conflict because they write different rows; Serializable tracks read/write dependencies and aborts one of them.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi giao dịch đứng riêng đều giữ luật (thấy 2 người trực, bỏ 1). Cùng nhau chúng bỏ cả hai. Repeatable Read không thấy xung đột vì chúng ghi các dòng khác nhau; Serializable theo dõi phụ thuộc đọc/ghi và huỷ một trong hai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "psql -h localhost -p 5444 -U postgres -d pgcourse   # in two terminals",
+          "lyDo": "The browser grader is a single PostgreSQL session inside one transaction — two transactions cannot run concurrently there, so it cannot show (or grade) an isolation anomaly.|||Máy chấm trình duyệt là MỘT phiên PostgreSQL bên trong một giao dịch — không thể có hai giao dịch chạy đồng thời, nên không thể cho thấy (hay chấm) dị thường cô lập."
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running window 1 to COMMIT before starting window 2 — that is serial execution, no anomaly appears.|||Chạy cửa sổ 1 tới COMMIT rồi mới bắt đầu cửa sổ 2 — đó là chạy tuần tự, không có dị thường."
+        },
+        {
+          "loi": "Using SERIALIZABLE in only one of the two windows — SSI needs both transactions to be serializable.|||Chỉ dùng SERIALIZABLE ở một trong hai cửa sổ — SSI cần cả hai giao dịch đều serializable."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "write skew",
+          "vi": "lệch ghi"
+        },
+        {
+          "en": "SERIALIZABLE",
+          "vi": "mức cô lập cao nhất"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,559 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-11-2-mvcc",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-11-2-mvcc"
+  },
+  "exercises": [
+    {
+      "title": "One statement, one snapshot",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "statement snapshot",
+        "DELETE … RETURNING in a CTE",
+        "xmax"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "mvcc"
+      ],
+      "problemHtml": "<p>In ONE statement, delete row 1 (in a CTE with RETURNING) and, in the main query, count the rows of <code>mvcc_demo</code>. Return <code>deleted</code> (rows deleted by the CTE) and <code>seen</code> (rows the main query counted). Predict the numbers before you run — then explain them with MVCC.</p>\n<pre>mvcc_demo (id int PK, val text) — (1, 'first'), (2, 'second')</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>WITH d AS (DELETE … RETURNING id) SELECT (SELECT count(*) FROM d) AS deleted, (SELECT count(*) FROM mvcc_demo) AS seen</code>.</li>\n  <li>After the statement, the row really is gone.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong MỘT câu lệnh, xoá dòng 1 (trong một CTE có RETURNING) và, ở truy vấn chính, đếm số dòng của <code>mvcc_demo</code>. Trả về <code>deleted</code> (số dòng CTE đã xoá) và <code>seen</code> (số dòng truy vấn chính đếm được). Đoán trước con số rồi mới chạy — và giải thích bằng MVCC.</p>\n<pre>mvcc_demo (id int PK, val text) — (1, 'first'), (2, 'second')</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>WITH d AS (DELETE … RETURNING id) SELECT (SELECT count(*) FROM d) AS deleted, (SELECT count(*) FROM mvcc_demo) AS seen</code>.</li>\n  <li>Sau câu lệnh, dòng thật sự đã mất.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "deleted | seen\n--------+-----\n1       | 2   ",
+          "explanation": "Expected result of check \"deleted 1, seen 2\" (row order does not matter).|||Kết quả mong đợi của kiểm \"deleted 1, seen 2\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Every part of one SQL statement (all its CTEs) reads the same snapshot.|||Mọi phần của một câu SQL (mọi CTE của nó) đọc cùng một ảnh chụp.",
+        "The delete only becomes visible to the NEXT statement.|||Lệnh xoá chỉ hiện ra với câu lệnh KẾ TIẾP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "mvcc_demo.sql",
+          "language": "sql",
+          "code": "-- mvcc_demo.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- mvcc_demo.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH d AS (\n  DELETE FROM mvcc_demo WHERE id = 1 RETURNING id\n)\nSELECT (SELECT count(*) FROM d)         AS deleted,   -- 1\n       (SELECT count(*) FROM mvcc_demo) AS seen;      -- 2: the whole statement reads ONE snapshot taken before the delete\n"
+        },
+        {
+          "name": "mvcc_demo.sql",
+          "language": "sql",
+          "code": "-- mvcc_demo.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- mvcc_demo.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DELETE does not erase a row: it sets the version's xmax to the deleting transaction. Snapshots taken before that (including the snapshot of the very statement doing the delete) still see the version; later statements do not. That single rule explains why readers never wait.</p>",
+      "solutionExplanationHtmlVi": "<p>DELETE không xoá dòng: nó đặt xmax của phiên bản là giao dịch xoá. Ảnh chụp lấy trước đó (kể cả ảnh chụp của chính câu lệnh đang xoá) vẫn thấy phiên bản; các câu lệnh sau thì không. Chỉ một luật đó giải thích vì sao người đọc không bao giờ phải chờ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "deleted 1, seen 2|||deleted 1, seen 2",
+            "mongDoi": {
+              "cot": [
+                "deleted",
+                "seen"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "After the statement only one row is left|||Sau câu lệnh chỉ còn một dòng",
+            "kiemTra": "SELECT count(*) AS rows FROM mvcc_demo",
+            "mongDoi": {
+              "cot": [
+                "rows"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "With more rows the snapshot still predates the delete|||Nhiều dòng hơn thì ảnh chụp vẫn có trước lệnh xoá",
+            "an": true,
+            "themCsdl": "INSERT INTO mvcc_demo VALUES (3, 'third'), (4, 'fourth')",
+            "mongDoi": {
+              "cot": [
+                "deleted",
+                "seen"
+              ],
+              "hang": [
+                [
+                  1,
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "DELETE inside a CTE|||DELETE nằm trong CTE",
+            "khop": "WITH\\s+\\w+\\s+AS\\s*\\(\\s*DELETE",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting seen = 1: the main query does not see the CTE's delete — same snapshot.|||Mong seen = 1: truy vấn chính không thấy lệnh xoá của CTE — cùng ảnh chụp."
+        },
+        {
+          "loi": "Subtracting the deleted rows \"to correct\" — now the number is right for the wrong reason, and wrong as soon as the logic changes.|||Trừ số dòng đã xoá \"cho đúng\" — con số đúng vì lý do sai, và sai ngay khi logic đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "xmin / xmax",
+          "vi": "giao dịch tạo / xoá phiên bản"
+        },
+        {
+          "en": "snapshot",
+          "vi": "ảnh chụp dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "UPDATE writes a new version: watch the ctid move",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "ctid",
+        "UPDATE = new tuple",
+        "data-modifying CTE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "mvcc"
+      ],
+      "problemHtml": "<p>Prove that an UPDATE does not change a row in place. In ONE statement, read the <code>ctid</code> (physical position) of row 1, update its val to <code>'changed'</code>, and return <code>old_ctid &lt;&gt; new_ctid AS moved</code> plus the new <code>val</code>.</p>\n<pre>mvcc_demo (id int PK, val text) — (1, 'first'), (2, 'second')</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>A CTE that reads the old ctid, a CTE that UPDATEs … RETURNING ctid, val.</li>\n  <li>Columns <code>moved, val</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chứng minh UPDATE không sửa dòng tại chỗ. Trong MỘT câu lệnh, đọc <code>ctid</code> (vị trí vật lý) của dòng 1, cập nhật val thành <code>'changed'</code>, và trả về <code>old_ctid &lt;&gt; new_ctid AS moved</code> cùng <code>val</code> mới.</p>\n<pre>mvcc_demo (id int PK, val text) — (1, 'first'), (2, 'second')</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một CTE đọc ctid cũ, một CTE UPDATE … RETURNING ctid, val.</li>\n  <li>Cột <code>moved, val</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "moved | val    \n------+--------\ntrue  | changed",
+          "explanation": "Expected result of check \"moved = true, val = changed\" (row order does not matter).|||Kết quả mong đợi của kiểm \"moved = true, val = changed\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "All CTEs of one statement share one snapshot: <code>before</code> still sees the old version.|||Mọi CTE của một câu lệnh dùng chung một ảnh chụp: <code>before</code> vẫn thấy phiên bản cũ.",
+        "ctid = (page, line pointer).|||ctid = (trang, con trỏ dòng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "mvcc_demo.sql",
+          "language": "sql",
+          "code": "-- mvcc_demo.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- mvcc_demo.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH before AS (\n  SELECT ctid AS old_ctid FROM mvcc_demo WHERE id = 1\n), upd AS (\n  UPDATE mvcc_demo SET val = 'changed' WHERE id = 1\n  RETURNING ctid AS new_ctid, val\n)\nSELECT b.old_ctid <> u.new_ctid AS moved, u.val\nFROM before b, upd u;          -- moved = true: the new version lives at a new position; the old one is now a dead tuple\n"
+        },
+        {
+          "name": "mvcc_demo.sql",
+          "language": "sql",
+          "code": "-- mvcc_demo.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- mvcc_demo.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The old version stays on disk (invisible to new snapshots) until VACUUM reclaims it. That is the price of MVCC: dead tuples and bloat, managed by autovacuum (lesson 14.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Phiên bản cũ nằm lại trên đĩa (vô hình với ảnh chụp mới) cho tới khi VACUUM thu hồi. Đó là cái giá của MVCC: dead tuple và bloat, do autovacuum quản lý (bài 14.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE mvcc_demo (id int PRIMARY KEY, val text);\nINSERT INTO mvcc_demo VALUES (1, 'first'), (2, 'second');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "moved = true, val = changed|||moved = true, val = changed",
+            "mongDoi": {
+              "cot": [
+                "moved",
+                "val"
+              ],
+              "hang": [
+                [
+                  true,
+                  "changed"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Reads ctid|||Đọc ctid",
+            "khop": "\\bctid\\b",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Still a new position on the second update of a row|||Lần cập nhật thứ hai của một dòng vẫn sang vị trí mới",
+            "an": true,
+            "themCsdl": "UPDATE mvcc_demo SET val = 'x' WHERE id = 1",
+            "mongDoi": {
+              "cot": [
+                "moved",
+                "val"
+              ],
+              "hang": [
+                [
+                  true,
+                  "changed"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ctid with itself inside RETURNING — always false.|||So ctid với chính nó trong RETURNING — luôn false."
+        },
+        {
+          "loi": "Believing UPDATE is cheaper than DELETE + INSERT in PostgreSQL — physically it IS a new tuple plus a dead one.|||Tin rằng UPDATE rẻ hơn DELETE + INSERT trong PostgreSQL — về vật lý nó CHÍNH LÀ một tuple mới cộng một tuple chết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ctid",
+          "vi": "vị trí vật lý của phiên bản dòng"
+        },
+        {
+          "en": "dead tuple",
+          "vi": "phiên bản dòng đã chết"
+        }
+      ]
+    },
+    {
+      "title": "Who sees which version?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "snapshot",
+        "visibility"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "mvcc"
+      ],
+      "problemHtml": "<p>Session A runs <code>BEGIN; UPDATE mvcc_demo SET val = 'A-edit' WHERE id = 1;</code> and has not committed. Isolation is the default (Read Committed). Fill in what each statement sees or does.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phiên A chạy <code>BEGIN; UPDATE mvcc_demo SET val = 'A-edit' WHERE id = 1;</code> và chưa commit. Mức cô lập mặc định (Read Committed). Điền điều mỗi câu lệnh thấy hoặc làm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Reading never blocks; writing the same row does.|||Đọc không bao giờ bị chặn; ghi cùng một dòng thì có.",
+        "Each statement in Read Committed takes a new snapshot.|||Mỗi câu lệnh ở Read Committed lấy một ảnh chụp mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Who sees which version?\n\nAnswer in the answer panel (no code needed).\n\n1. Visibility while A is openKhả năng nhìn thấy khi A còn mở\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Who sees which version? — answer key\n\n1. Visibility while A is openKhả năng nhìn thấy khi A còn mở\n   - r1.kq: first\n   - r2.kq: A-edit\n   - r3.kq: waits for A\n   - r4.kq: A-edit\n   Readers see the last committed version (first) and never wait; the writer sees its own change. A second writer of the SAME row must wait for the first one's row lock. After A commits, a new Read Committed statement sees A's version.VI: Người đọc thấy phiên bản đã commit gần nhất (first) và không bao giờ chờ; người ghi thấy thay đổi của chính mình. Người ghi thứ hai trên CÙNG dòng phải chờ khoá dòng của người thứ nhất. Sau khi A commit, câu lệnh Read Committed mới thấy phiên bản của A.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Readers see the last committed version (first) and never wait; the writer sees its own change. A second writer of the SAME row must wait for the first one's row lock. After A commits, a new Read Committed statement sees A's version.</p><p><i>VI: Người đọc thấy phiên bản đã commit gần nhất (first) và không bao giờ chờ; người ghi thấy thay đổi của chính mình. Người ghi thứ hai trên CÙNG dòng phải chờ khoá dòng của người thứ nhất. Sau khi A commit, câu lệnh Read Committed mới thấy phiên bản của A.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Visibility while A is open</p><p style=\"opacity:.75;font-size:.92em\"><i>Khả năng nhìn thấy khi A còn mở</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Statement / Câu lệnh"
+              },
+              {
+                "ma": "kq",
+                "ten": "Result",
+                "luaChon": [
+                  "first",
+                  "A-edit",
+                  "waits for A"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "Session B: SELECT val FROM mvcc_demo WHERE id = 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "Session A: SELECT val FROM mvcc_demo WHERE id = 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "Session B: UPDATE mvcc_demo SET val = 'B-edit' WHERE id = 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "Session B, after A commits: SELECT val … WHERE id = 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kq": "first",
+              "r2.kq": "A-edit",
+              "r3.kq": "waits for A",
+              "r4.kq": "A-edit"
+            },
+            "giaiThich": "<p>Readers see the last committed version (first) and never wait; the writer sees its own change. A second writer of the SAME row must wait for the first one's row lock. After A commits, a new Read Committed statement sees A's version.</p><p><i>VI: Người đọc thấy phiên bản đã commit gần nhất (first) và không bao giờ chờ; người ghi thấy thay đổi của chính mình. Người ghi thứ hai trên CÙNG dòng phải chờ khoá dòng của người thứ nhất. Sau khi A commit, câu lệnh Read Committed mới thấy phiên bản của A.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting B's SELECT to wait for A (it does in some databases with locking reads).|||Mong SELECT của B phải chờ A (đúng ở vài hệ dùng khoá khi đọc)."
+        },
+        {
+          "loi": "Expecting B to see the uncommitted A-edit (a dirty read — never in PostgreSQL).|||Mong B thấy A-edit chưa commit (đọc bẩn — không bao giờ xảy ra trong PostgreSQL)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "snapshot",
+          "vi": "ảnh chụp dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "Dead tuples, VACUUM and bloat",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "dead tuples",
+        "VACUUM",
+        "VACUUM FULL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "mvcc",
+        "vacuum"
+      ],
+      "problemHtml": "<p>Lesson 11.2 updated every row of a 100 000-row table twice. Reason about the aftermath. <i>(The browser grader cannot show pg_stat counters — its statistics collector is off — so this part is a quiz; try it in psql.)</i></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 11.2 cập nhật mọi dòng của bảng 100 000 dòng hai lần. Suy luận về hậu quả. <i>(Máy chấm trình duyệt không hiện bộ đếm pg_stat — bộ thu thống kê của nó tắt — nên phần này là trắc nghiệm; hãy thử trong psql.)</i></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "UPDATE = new version + dead old version.|||UPDATE = phiên bản mới + phiên bản cũ chết.",
+        "VACUUM recycles, VACUUM FULL rewrites.|||VACUUM tái chế, VACUUM FULL viết lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Dead tuples, VACUUM and bloat\n\nAnswer in the answer panel (no code needed).\n\n1. Right after UPDATE bloat_demo SET val = val || '!' on 100 000 rows, n_dead_tup is about…Ngay sau UPDATE bloat_demo SET val = val || '!' trên 100 000 dòng, n_dead_tup khoảng…\n2. What does a plain VACUUM bloat_demo do to the file size?VACUUM bloat_demo thường làm gì với kích thước tệp?\n3. Why is a long-running open transaction dangerous for MVCC?Vì sao một giao dịch mở quá lâu nguy hiểm với MVCC?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Dead tuples, VACUUM and bloat — answer key\n\n1. Right after UPDATE bloat_demo SET val = val || '!' on 100 000 rows, n_dead_tup is about…Ngay sau UPDATE bloat_demo SET val = val || '!' trên 100 000 dòng, n_dead_tup khoảng…\n   Answer: c) 100 000 — one dead version per updated row\n   Every updated row leaves its previous version behind as a dead tuple.VI: Mỗi dòng bị cập nhật để lại phiên bản trước thành một dead tuple.\n\n2. What does a plain VACUUM bloat_demo do to the file size?VACUUM bloat_demo thường làm gì với kích thước tệp?\n   Answer: d) nothing: it marks the space reusable\n   Plain VACUUM frees space inside the file for reuse (no lock on reads/writes); only VACUUM FULL / pg_repack rewrite and shrink it.VI: VACUUM thường giải phóng chỗ trong tệp để dùng lại (không khoá đọc/ghi); chỉ VACUUM FULL / pg_repack mới viết lại và thu nhỏ.\n\n3. Why is a long-running open transaction dangerous for MVCC?Vì sao một giao dịch mở quá lâu nguy hiểm với MVCC?\n   Answer: b) VACUUM must keep every version it could still see\n   Dead tuples are only removable once no snapshot can see them; one forgotten \"idle in transaction\" session holds back cleanup for the whole database.VI: Dead tuple chỉ dọn được khi không ảnh chụp nào còn thấy chúng; một phiên \"idle in transaction\" bị quên giữ chân việc dọn của cả CSDL.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 100 000 — one dead version per updated row</p><p>Every updated row leaves its previous version behind as a dead tuple.</p><p><i>VI: Mỗi dòng bị cập nhật để lại phiên bản trước thành một dead tuple.</i></p></li><li><p><b>d)</b> nothing: it marks the space reusable</p><p>Plain VACUUM frees space inside the file for reuse (no lock on reads/writes); only VACUUM FULL / pg_repack rewrite and shrink it.</p><p><i>VI: VACUUM thường giải phóng chỗ trong tệp để dùng lại (không khoá đọc/ghi); chỉ VACUUM FULL / pg_repack mới viết lại và thu nhỏ.</i></p></li><li><p><b>b)</b> VACUUM must keep every version it could still see</p><p>Dead tuples are only removable once no snapshot can see them; one forgotten \"idle in transaction\" session holds back cleanup for the whole database.</p><p><i>VI: Dead tuple chỉ dọn được khi không ảnh chụp nào còn thấy chúng; một phiên \"idle in transaction\" bị quên giữ chân việc dọn của cả CSDL.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Right after <code>UPDATE bloat_demo SET val = val || '!'</code> on 100 000 rows, n_dead_tup is about…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngay sau <code>UPDATE bloat_demo SET val = val || '!'</code> trên 100 000 dòng, n_dead_tup khoảng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0 — UPDATE edits rows in place"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 000"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100 000 — one dead version per updated row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "50 000"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every updated row leaves its previous version behind as a dead tuple.</p><p><i>VI: Mỗi dòng bị cập nhật để lại phiên bản trước thành một dead tuple.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does a plain <code>VACUUM bloat_demo</code> do to the file size?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>VACUUM bloat_demo</code> thường làm gì với kích thước tệp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it shrinks the file to the live data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it rewrites the table into a new file"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it doubles the file to make room"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing: it marks the space reusable"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Plain VACUUM frees space inside the file for reuse (no lock on reads/writes); only VACUUM FULL / pg_repack rewrite and shrink it.</p><p><i>VI: VACUUM thường giải phóng chỗ trong tệp để dùng lại (không khoá đọc/ghi); chỉ VACUUM FULL / pg_repack mới viết lại và thu nhỏ.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why is a long-running open transaction dangerous for MVCC?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một giao dịch mở quá lâu nguy hiểm với MVCC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it takes a lock on every table of the database"
+              },
+              {
+                "ma": "b",
+                "noiDung": "VACUUM must keep every version it could still see"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it keeps one CPU core busy until it ends"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it switches autovacuum off for the database"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Dead tuples are only removable once no snapshot can see them; one forgotten \"idle in transaction\" session holds back cleanup for the whole database.</p><p><i>VI: Dead tuple chỉ dọn được khi không ảnh chụp nào còn thấy chúng; một phiên \"idle in transaction\" bị quên giữ chân việc dọn của cả CSDL.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running VACUUM FULL routinely — it takes an exclusive lock and rewrites the whole table.|||Chạy VACUUM FULL thường xuyên — nó khoá độc quyền và viết lại cả bảng."
+        },
+        {
+          "loi": "Leaving transactions open in an app (BEGIN, then waiting for a user).|||Để giao dịch mở trong app (BEGIN rồi chờ người dùng)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bloat",
+          "vi": "phình to do dead tuple"
+        },
+        {
+          "en": "VACUUM",
+          "vi": "dọn dead tuple"
+        }
+      ]
+    }
+  ]
+}

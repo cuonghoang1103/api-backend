@@ -1,0 +1,454 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-11-1-giao-dich",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-11-1-giao-dich"
+  },
+  "exercises": [
+    {
+      "title": "The aborted transaction, step by step",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "aborted state",
+        "ROLLBACK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "transaction"
+      ],
+      "problemHtml": "<p>In psql (accounts A = 100, B = 0) you type:</p><pre>BEGIN;\nUPDATE accounts SET balance = balance - 500 WHERE id = 'A';   -- violates the CHECK\nSELECT 'does this run?' AS probe;\nCOMMIT;</pre><p>Order what PostgreSQL answers.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong psql (tài khoản A = 100, B = 0) bạn gõ:</p><pre>BEGIN;\nUPDATE accounts SET balance = balance - 500 WHERE id = 'A';   -- vi phạm CHECK\nSELECT 'câu này có chạy không?' AS thu;\nCOMMIT;</pre><p>Sắp thứ tự những gì PostgreSQL trả lời.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One error poisons the whole transaction in PostgreSQL.|||Trong PostgreSQL một lỗi làm hỏng cả giao dịch.",
+        "COMMIT of an aborted transaction reports ROLLBACK.|||COMMIT một giao dịch đã hỏng sẽ báo ROLLBACK."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The aborted transaction, step by step\n\nAnswer in the answer panel (no code needed).\n\n1. What happens, in orderĐiều gì xảy ra, theo thứ tự\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The aborted transaction, step by step — answer key\n\n1. What happens, in orderĐiều gì xảy ra, theo thứ tự\n   Answer: m1) BEGIN — a transaction is open / mở giao dịch  →  m3) ERROR: new row … violates check constraint \"accounts_balance_check\" / lỗi vi phạm CHECK  →  m4) ERROR: current transaction is aborted, commands ignored until end of transaction block / mọi lệnh sau bị bỏ qua  →  m2) COMMIT answers ROLLBACK — nothing is saved / COMMIT trả về ROLLBACK, không gì được lưu\n   After any error the transaction is aborted: every further statement fails until the block ends, and COMMIT turns into ROLLBACK. This is why drivers must roll back (or use savepoints) before retrying.VI: Sau bất kỳ lỗi nào giao dịch bị hỏng: mọi câu sau đều lỗi cho tới khi kết thúc khối, và COMMIT biến thành ROLLBACK. Vì vậy driver phải rollback (hoặc dùng savepoint) trước khi thử lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>After any error the transaction is aborted: every further statement fails until the block ends, and COMMIT turns into ROLLBACK. This is why drivers must roll back (or use savepoints) before retrying.</p><p><i>VI: Sau bất kỳ lỗi nào giao dịch bị hỏng: mọi câu sau đều lỗi cho tới khi kết thúc khối, và COMMIT biến thành ROLLBACK. Vì vậy driver phải rollback (hoặc dùng savepoint) trước khi thử lại.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>What happens, in order</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì xảy ra, theo thứ tự</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "BEGIN — a transaction is open / mở giao dịch"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "COMMIT answers ROLLBACK — nothing is saved / COMMIT trả về ROLLBACK, không gì được lưu"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "ERROR: new row … violates check constraint \"accounts_balance_check\" / lỗi vi phạm CHECK"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "ERROR: current transaction is aborted, commands ignored until end of transaction block / mọi lệnh sau bị bỏ qua"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>After any error the transaction is aborted: every further statement fails until the block ends, and COMMIT turns into ROLLBACK. This is why drivers must roll back (or use savepoints) before retrying.</p><p><i>VI: Sau bất kỳ lỗi nào giao dịch bị hỏng: mọi câu sau đều lỗi cho tới khi kết thúc khối, và COMMIT biến thành ROLLBACK. Vì vậy driver phải rollback (hoặc dùng savepoint) trước khi thử lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting the SELECT to run (SQL Server continues after many errors; PostgreSQL does not).|||Mong câu SELECT vẫn chạy (SQL Server chạy tiếp sau nhiều lỗi; PostgreSQL thì không)."
+        },
+        {
+          "loi": "Thinking COMMIT saves the statements that succeeded before the error.|||Nghĩ rằng COMMIT lưu được các câu đã thành công trước lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch",
+          "giaiThich": "Nhóm lệnh được tất cả hoặc không gì (BEGIN … COMMIT / ROLLBACK)."
+        },
+        {
+          "en": "aborted transaction",
+          "vi": "giao dịch đã hỏng"
+        }
+      ]
+    },
+    {
+      "title": "SAVEPOINT: what is left after each rollback?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "SAVEPOINT",
+        "ROLLBACK TO SAVEPOINT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "transaction",
+        "savepoint"
+      ],
+      "problemHtml": "<p>Start: A = 100.00, B = 0.00. Work out the balances.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ban đầu: A = 100.00, B = 0.00. Tính số dư.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A savepoint is a bookmark inside one transaction.|||Savepoint là dấu trang bên trong một giao dịch.",
+        "Only ROLLBACK (TO SAVEPOINT) clears the aborted state.|||Chỉ ROLLBACK (TO SAVEPOINT) mới gỡ trạng thái hỏng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SAVEPOINT: what is left after each rollback?\n\nAnswer in the answer panel (no code needed).\n\n1. After BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (fails); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;Sau BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (lỗi); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;\n2. Same as above but without ROLLBACK TO SAVEPOINT sp1 (the next UPDATE is typed right after the error, then COMMIT).Như trên nhưng không có ROLLBACK TO SAVEPOINT sp1 (gõ UPDATE kế tiếp ngay sau lỗi, rồi COMMIT).\n3. BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK; — does thu_ddl exist afterwards?BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK; — sau đó thu_ddl còn không?\n4. Why do ORMs wrap a retry loop around a transaction instead of continuing after an error?Vì sao ORM bọc vòng thử lại quanh cả giao dịch thay vì chạy tiếp sau lỗi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SAVEPOINT: what is left after each rollback? — answer key\n\n1. After BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (fails); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;Sau BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (lỗi); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;\n   Answer: c) A 60.00, B 40.00\n   ROLLBACK TO SAVEPOINT undoes only the work after sp1 (the failed update) and clears the aborted state; the −40 and +40 commit.VI: ROLLBACK TO SAVEPOINT chỉ huỷ phần sau sp1 (lệnh hỏng) và gỡ trạng thái hỏng; −40 và +40 được commit.\n\n2. Same as above but without ROLLBACK TO SAVEPOINT sp1 (the next UPDATE is typed right after the error, then COMMIT).Như trên nhưng không có ROLLBACK TO SAVEPOINT sp1 (gõ UPDATE kế tiếp ngay sau lỗi, rồi COMMIT).\n   Answer: c) A 100.00, B 0.00 (all rolled back)\n   Without the savepoint rollback the transaction stays aborted: the B update fails and COMMIT becomes ROLLBACK.VI: Không rollback về savepoint thì giao dịch vẫn hỏng: lệnh cập nhật B lỗi và COMMIT thành ROLLBACK.\n\n3. BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK; — does thu_ddl exist afterwards?BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK; — sau đó thu_ddl còn không?\n   Answer: a) no — DDL is transactional in PostgreSQL\n   PostgreSQL rolls back CREATE/ALTER/DROP like data changes — a migration that fails halfway leaves nothing behind (MySQL commits DDL implicitly).VI: PostgreSQL rollback được CREATE/ALTER/DROP như thay đổi dữ liệu — migration hỏng giữa chừng không để lại gì (MySQL tự commit DDL).\n\n4. Why do ORMs wrap a retry loop around a transaction instead of continuing after an error?Vì sao ORM bọc vòng thử lại quanh cả giao dịch thay vì chạy tiếp sau lỗi?\n   Answer: a) an error aborts the whole transaction: roll back, rerun\n   Serialization failures (40001) and deadlocks (40P01) in particular require rerunning the whole transaction from the start.VI: Đặc biệt lỗi tuần tự hoá (40001) và deadlock (40P01) bắt buộc chạy lại cả giao dịch từ đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A 60.00, B 40.00</p><p>ROLLBACK TO SAVEPOINT undoes only the work after sp1 (the failed update) and clears the aborted state; the −40 and +40 commit.</p><p><i>VI: ROLLBACK TO SAVEPOINT chỉ huỷ phần sau sp1 (lệnh hỏng) và gỡ trạng thái hỏng; −40 và +40 được commit.</i></p></li><li><p><b>c)</b> A 100.00, B 0.00 (all rolled back)</p><p>Without the savepoint rollback the transaction stays aborted: the B update fails and COMMIT becomes ROLLBACK.</p><p><i>VI: Không rollback về savepoint thì giao dịch vẫn hỏng: lệnh cập nhật B lỗi và COMMIT thành ROLLBACK.</i></p></li><li><p><b>a)</b> no — DDL is transactional in PostgreSQL</p><p>PostgreSQL rolls back CREATE/ALTER/DROP like data changes — a migration that fails halfway leaves nothing behind (MySQL commits DDL implicitly).</p><p><i>VI: PostgreSQL rollback được CREATE/ALTER/DROP như thay đổi dữ liệu — migration hỏng giữa chừng không để lại gì (MySQL tự commit DDL).</i></p></li><li><p><b>a)</b> an error aborts the whole transaction: roll back, rerun</p><p>Serialization failures (40001) and deadlocks (40P01) in particular require rerunning the whole transaction from the start.</p><p><i>VI: Đặc biệt lỗi tuần tự hoá (40001) và deadlock (40P01) bắt buộc chạy lại cả giao dịch từ đầu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>After <code>BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (fails); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;</code></p><p style=\"opacity:.75;font-size:.92em\"><i>Sau <code>BEGIN; UPDATE … A − 40; SAVEPOINT sp1; UPDATE … A − 500 (lỗi); ROLLBACK TO SAVEPOINT sp1; UPDATE … B + 40; COMMIT;</code></i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A 60.00, B 0.00"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A 100.00, B 0.00"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 60.00, B 40.00"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 100.00, B 40.00"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>ROLLBACK TO SAVEPOINT undoes only the work after sp1 (the failed update) and clears the aborted state; the −40 and +40 commit.</p><p><i>VI: ROLLBACK TO SAVEPOINT chỉ huỷ phần sau sp1 (lệnh hỏng) và gỡ trạng thái hỏng; −40 và +40 được commit.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Same as above but without <code>ROLLBACK TO SAVEPOINT sp1</code> (the next UPDATE is typed right after the error, then COMMIT).</p><p style=\"opacity:.75;font-size:.92em\"><i>Như trên nhưng không có <code>ROLLBACK TO SAVEPOINT sp1</code> (gõ UPDATE kế tiếp ngay sau lỗi, rồi COMMIT).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A 60.00, B 0.00 (debit only)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A 100.00, B 40.00 (credit only)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A 100.00, B 0.00 (all rolled back)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 60.00, B 40.00 (both kept)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Without the savepoint rollback the transaction stays aborted: the B update fails and COMMIT becomes ROLLBACK.</p><p><i>VI: Không rollback về savepoint thì giao dịch vẫn hỏng: lệnh cập nhật B lỗi và COMMIT thành ROLLBACK.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p><code>BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK;</code> — does thu_ddl exist afterwards?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>BEGIN; CREATE TABLE thu_ddl (id int); INSERT INTO thu_ddl VALUES (1); ROLLBACK;</code> — sau đó thu_ddl còn không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no — DDL is transactional in PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only until the session ends"
+              },
+              {
+                "ma": "c",
+                "noiDung": "yes, empty"
+              },
+              {
+                "ma": "d",
+                "noiDung": "yes, with one row"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>PostgreSQL rolls back CREATE/ALTER/DROP like data changes — a migration that fails halfway leaves nothing behind (MySQL commits DDL implicitly).</p><p><i>VI: PostgreSQL rollback được CREATE/ALTER/DROP như thay đổi dữ liệu — migration hỏng giữa chừng không để lại gì (MySQL tự commit DDL).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why do ORMs wrap a retry loop around a transaction instead of continuing after an error?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao ORM bọc vòng thử lại quanh cả giao dịch thay vì chạy tiếp sau lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an error aborts the whole transaction: roll back, rerun"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a retry loop is faster than using a savepoint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL closes the connection after every error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "most errors come from the network, so resending helps"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Serialization failures (40001) and deadlocks (40P01) in particular require rerunning the whole transaction from the start.</p><p><i>VI: Đặc biệt lỗi tuần tự hoá (40001) và deadlock (40P01) bắt buộc chạy lại cả giao dịch từ đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a failed statement is simply skipped.|||Nghĩ rằng câu lỗi chỉ bị bỏ qua."
+        },
+        {
+          "loi": "Thinking DDL cannot be rolled back.|||Nghĩ rằng DDL không rollback được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SAVEPOINT",
+          "vi": "điểm lưu trong giao dịch"
+        }
+      ]
+    },
+    {
+      "title": "An atomic transfer you can call: transfer(from, to, amount)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "function body = one statement context",
+        "atomicity on error",
+        "RETURNS void"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "transaction",
+        "function"
+      ],
+      "problemHtml": "<p>Create <code>transfer(src text, dst text, amount numeric) RETURNS void</code> (LANGUAGE sql or plpgsql) that debits <code>src</code> and credits <code>dst</code>. Because a function call is one statement, a failure anywhere (e.g. the CHECK on the debit) must leave <b>both</b> balances untouched.</p>\n<pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0)) — A Cuong 100.00, B Mai 0.00</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Two UPDATE statements inside the function.</li>\n  <li>Credit first or debit first — either way the failure must undo both.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo <code>transfer(src text, dst text, amount numeric) RETURNS void</code> (LANGUAGE sql hoặc plpgsql) trừ tiền <code>src</code> và cộng tiền <code>dst</code>. Vì lời gọi hàm là một câu lệnh, lỗi ở bất kỳ đâu (vd CHECK của lệnh trừ) phải để <b>cả hai</b> số dư nguyên vẹn.</p>\n<pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0)) — A Cuong 100.00, B Mai 0.00</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai lệnh UPDATE bên trong hàm.</li>\n  <li>Cộng trước hay trừ trước — kiểu gì lỗi cũng phải huỷ cả hai.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | balance\n---+--------\nA  | 70     \nB  | 30     ",
+          "explanation": "Expected result of check \"transfer(A, B, 30) moves 30\" (row order matters).|||Kết quả mong đợi của kiểm \"transfer(A, B, 30) chuyển 30\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "A function body runs inside the caller's statement: its errors abort the caller.|||Thân hàm chạy bên trong câu lệnh của người gọi: lỗi của nó làm hỏng người gọi.",
+        "Do NOT catch and ignore the error inside the function — that is how half a transfer survives.|||ĐỪNG bắt rồi lờ lỗi bên trong hàm — đó là cách nửa phi vụ chuyển tiền sống sót."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE FUNCTION transfer(src text, dst text, amount numeric) RETURNS void\nLANGUAGE sql AS $$\n  UPDATE accounts SET balance = balance + amount WHERE id = dst;   -- credit first, on purpose …\n  UPDATE accounts SET balance = balance - amount WHERE id = src;   -- … if this violates the CHECK, the credit is undone too\n$$;\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every statement is atomic, and a function call is a statement. If the debit fails, the credit made a moment earlier in the same call is rolled back with it. The third check proves it: it catches the error outside, then looks at the balances — both unchanged.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu lệnh đều nguyên tử, và lời gọi hàm là một câu lệnh. Nếu lệnh trừ hỏng, khoản cộng vừa làm trong cùng lời gọi bị huỷ theo. Kiểm thứ ba chứng minh điều đó: nó bắt lỗi ở ngoài, rồi xem số dư — cả hai nguyên vẹn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "transfer(A, B, 30) moves 30|||transfer(A, B, 30) chuyển 30",
+            "kiemTra": "SELECT transfer('A', 'B', 30); SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  70
+                ],
+                [
+                  "B",
+                  30
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An overdraft is rejected|||Rút quá số dư bị chặn",
+            "thu": "SELECT transfer('A', 'B', 500)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "After a failed transfer nothing changed — not even the credit|||Sau một lần chuyển hỏng không gì thay đổi — kể cả khoản cộng",
+            "kiemTra": "DO $$ BEGIN PERFORM transfer('A', 'B', 500); EXCEPTION WHEN check_violation THEN NULL; END $$; SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  100
+                ],
+                [
+                  "B",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Two transfers in a row|||Hai lần chuyển liên tiếp",
+            "kiemTra": "SELECT transfer('A', 'B', 70); SELECT transfer('B', 'A', 20); SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  50
+                ],
+                [
+                  "B",
+                  50
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the debit: money is created out of nothing.|||Quên lệnh trừ: tiền tự sinh ra từ hư không."
+        },
+        {
+          "loi": "Wrapping the debit in BEGIN … EXCEPTION … END and swallowing the error: the credit stays, the debit is skipped — exactly the half-transfer ACID forbids.|||Bọc lệnh trừ trong BEGIN … EXCEPTION … END rồi nuốt lỗi: khoản cộng ở lại, khoản trừ bị bỏ — đúng kiểu nửa vời mà ACID cấm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch",
+          "giaiThich": "Nhóm lệnh được tất cả hoặc không gì (BEGIN … COMMIT / ROLLBACK)."
+        },
+        {
+          "en": "atomicity",
+          "vi": "tính nguyên tử"
+        }
+      ]
+    }
+  ]
+}

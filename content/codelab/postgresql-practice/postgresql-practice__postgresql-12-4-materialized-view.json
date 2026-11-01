@@ -1,0 +1,620 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-12-4-materialized-view",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-12-4-materialized-view"
+  },
+  "exercises": [
+    {
+      "title": "Store the summary: CREATE MATERIALIZED VIEW",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "CREATE MATERIALIZED VIEW",
+        "staleness"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "matview"
+      ],
+      "problemHtml": "<p>Create the materialized view <code>note_summary_mv (user_id, notes, tong_views)</code> — per user, number of notes and total views — so the dashboard reads 20 stored rows instead of aggregating 500.</p>\n<h4>Sample tables (chapter 12)</h4><pre>users (id identity PK, email UNIQUE)                         20 rows user1@notes.vn … user20@notes.vn\nnotes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)\n      500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE MATERIALIZED VIEW note_summary_mv AS SELECT … GROUP BY user_id</code>.</li>\n  <li>It stores rows: later writes are NOT reflected until a refresh.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo materialized view <code>note_summary_mv (user_id, notes, tong_views)</code> — theo user, số ghi chú và tổng views — để dashboard đọc 20 dòng đã lưu thay vì tổng hợp 500 dòng.</p>\n<h4>Bảng mẫu (chương 12)</h4><pre>users (id identity PK, email UNIQUE)                         20 rows user1@notes.vn … user20@notes.vn\nnotes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)\n      500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE MATERIALIZED VIEW note_summary_mv AS SELECT … GROUP BY user_id</code>.</li>\n  <li>Nó lưu dòng: các lần ghi sau KHÔNG hiện ra cho tới khi làm mới.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "user_id | notes | tong_views\n--------+-------+-----------\n1       | 25    | 1433      \n2       | 25    | 1331      \n3       | 25    | 1246      ",
+          "explanation": "Expected result of check \"Users 1–3 in the stored summary\" (row order matters).|||Kết quả mong đợi của kiểm \"User 1–3 trong bảng tóm tắt đã lưu\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Same syntax as a view plus the word MATERIALIZED.|||Cùng cú pháp view, thêm chữ MATERIALIZED.",
+        "relkind m = materialized view, v = view."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes12.sql",
+          "language": "sql",
+          "code": "-- notes12.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes12.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE MATERIALIZED VIEW note_summary_mv AS\nSELECT user_id, count(*) AS notes, sum(views) AS tong_views\nFROM notes\nGROUP BY user_id;\n"
+        },
+        {
+          "name": "notes12.sql",
+          "language": "sql",
+          "code": "-- notes12.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes12.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A materialized view runs its query once and stores the result like a table (it can even be indexed). Reads are fast; the data is as old as the last REFRESH.</p>",
+      "solutionExplanationHtmlVi": "<p>Materialized view chạy truy vấn một lần và lưu kết quả như một bảng (đánh chỉ mục được). Đọc nhanh; dữ liệu cũ bằng lần REFRESH gần nhất.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Users 1–3 in the stored summary|||User 1–3 trong bảng tóm tắt đã lưu",
+            "kiemTra": "SELECT * FROM note_summary_mv WHERE user_id <= 3 ORDER BY user_id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "user_id",
+                "notes",
+                "tong_views"
+              ],
+              "hang": [
+                [
+                  1,
+                  25,
+                  1433
+                ],
+                [
+                  2,
+                  25,
+                  1331
+                ],
+                [
+                  3,
+                  25,
+                  1246
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "It goes stale: a later update is not visible|||Nó bị cũ: lần cập nhật sau không hiện ra",
+            "kiemTra": "UPDATE notes SET views = views + 100 WHERE user_id = 1; SELECT tong_views FROM note_summary_mv WHERE user_id = 1",
+            "mongDoi": {
+              "cot": [
+                "tong_views"
+              ],
+              "hang": [
+                [
+                  1433
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "It is a materialized view|||Đó là materialized view",
+            "kiemTra": "SELECT relkind FROM pg_class WHERE relname = 'note_summary_mv'",
+            "mongDoi": {
+              "cot": [
+                "relkind"
+              ],
+              "hang": [
+                [
+                  "m"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A plain view — always fresh, but recomputed on every read (the thing you wanted to avoid).|||View thường — luôn mới, nhưng tính lại mỗi lần đọc (đúng điều bạn muốn tránh)."
+        },
+        {
+          "loi": "Forgetting that a materialized view goes stale.|||Quên rằng materialized view sẽ cũ đi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "materialized view",
+          "vi": "view lưu sẵn kết quả"
+        }
+      ]
+    },
+    {
+      "title": "Refresh without blocking the dashboard",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "REFRESH MATERIALIZED VIEW CONCURRENTLY",
+        "unique index required"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "matview"
+      ],
+      "problemHtml": "<p><code>note_summary_mv</code> is stale. A plain <code>REFRESH</code> locks out readers while it runs. Make the view refreshable <b>concurrently</b> and refresh it that way.</p>\n<h4>Sample tables (chapter 12)</h4><pre>users (id identity PK, email UNIQUE)                         20 rows user1@notes.vn … user20@notes.vn\nnotes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)\n      500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00</pre><p>This task already has <code>note_summary_mv</code>, built BEFORE user 1's notes gained 100 views each.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>CONCURRENTLY needs a UNIQUE index on the materialized view (here: user_id).</li>\n  <li>Then <code>REFRESH MATERIALIZED VIEW CONCURRENTLY note_summary_mv</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>note_summary_mv</code> đã cũ. <code>REFRESH</code> thường chặn người đọc trong lúc chạy. Làm cho view làm mới được <b>đồng thời</b> và làm mới theo cách đó.</p>\n<h4>Bảng mẫu (chương 12)</h4><pre>users (id identity PK, email UNIQUE)                         20 rows user1@notes.vn … user20@notes.vn\nnotes (id identity PK, user_id → users, title, body, views int DEFAULT 0, created_at, updated_at)\n      500 rows, 25 per user; views = (id * 37) % 101 (0 … 100); created_at = updated_at = 2020-01-01 08:00</pre><p>Bài này đã có sẵn <code>note_summary_mv</code>, dựng TRƯỚC khi mỗi ghi chú của user 1 được cộng 100 views.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CONCURRENTLY cần một chỉ mục UNIQUE trên materialized view (ở đây: user_id).</li>\n  <li>Rồi <code>REFRESH MATERIALIZED VIEW CONCURRENTLY note_summary_mv</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "user_id | tong_views\n--------+-----------\n1       | 3933      \n2       | 1331      ",
+          "explanation": "Expected result of check \"User 1 now shows the new total\" (row order matters).|||Kết quả mong đợi của kiểm \"User 1 giờ hiện tổng mới\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Without a unique index: \"cannot refresh materialized view concurrently\".|||Không có chỉ mục unique: \"cannot refresh materialized view concurrently\".",
+        "The index must cover all rows (no WHERE) and be on plain columns.|||Chỉ mục phải phủ mọi dòng (không WHERE) và trên cột trơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes12-mv.sql",
+          "language": "sql",
+          "code": "-- notes12-mv.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes12-mv.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson\nCREATE MATERIALIZED VIEW note_summary_mv AS\nSELECT user_id, count(*) AS notes, sum(views) AS tong_views\nFROM notes GROUP BY user_id;\n-- since the view was built, the app has kept writing:\nUPDATE notes SET views = views + 100 WHERE user_id = 1;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE UNIQUE INDEX note_summary_mv_user ON note_summary_mv (user_id);   -- lets PostgreSQL diff old vs new rows\nREFRESH MATERIALIZED VIEW CONCURRENTLY note_summary_mv;                   -- readers keep reading the old rows meanwhile\n"
+        },
+        {
+          "name": "notes12-mv.sql",
+          "language": "sql",
+          "code": "-- notes12-mv.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes12-mv.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson\nCREATE MATERIALIZED VIEW note_summary_mv AS\nSELECT user_id, count(*) AS notes, sum(views) AS tong_views\nFROM notes GROUP BY user_id;\n-- since the view was built, the app has kept writing:\nUPDATE notes SET views = views + 100 WHERE user_id = 1;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CONCURRENTLY builds the new result aside, compares it with the old one through the unique key, and applies only the differences — readers are never blocked. It is slower overall and needs the unique index.</p>",
+      "solutionExplanationHtmlVi": "<p>CONCURRENTLY dựng kết quả mới ở bên cạnh, so với kết quả cũ qua khoá unique, rồi chỉ áp phần khác biệt — người đọc không bao giờ bị chặn. Tổng thể chậm hơn và cần chỉ mục unique.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE users (id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY, email text NOT NULL UNIQUE);\nINSERT INTO users (email) SELECT 'user' || g || '@notes.vn' FROM generate_series(1, 20) g;\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id    int NOT NULL REFERENCES users(id),\n  title      text NOT NULL,\n  body       text,\n  views      int NOT NULL DEFAULT 0,\n  created_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07',\n  updated_at timestamptz NOT NULL DEFAULT '2020-01-01 08:00+07'\n);\nINSERT INTO notes (user_id, title, body, views)\nSELECT (g % 20) + 1, 'Note ' || g, 'Body of note ' || g, 0 FROM generate_series(1, 500) g;\nUPDATE notes SET views = (id * 37) % 101;   -- deterministic, like the lesson\nCREATE MATERIALIZED VIEW note_summary_mv AS\nSELECT user_id, count(*) AS notes, sum(views) AS tong_views\nFROM notes GROUP BY user_id;\n-- since the view was built, the app has kept writing:\nUPDATE notes SET views = views + 100 WHERE user_id = 1;",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "User 1 now shows the new total|||User 1 giờ hiện tổng mới",
+            "kiemTra": "SELECT user_id, tong_views FROM note_summary_mv WHERE user_id IN (1, 2) ORDER BY user_id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "user_id",
+                "tong_views"
+              ],
+              "hang": [
+                [
+                  1,
+                  3933
+                ],
+                [
+                  2,
+                  1331
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "A unique index exists on the view|||Có chỉ mục unique trên view",
+            "kiemTra": "SELECT count(*) AS unique_indexes FROM pg_index WHERE indrelid = 'note_summary_mv'::regclass AND indisunique",
+            "mongDoi": {
+              "cot": [
+                "unique_indexes"
+              ],
+              "hang": [
+                [
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "REFRESH … CONCURRENTLY|||REFRESH … CONCURRENTLY",
+            "khop": "REFRESH\\s+MATERIALIZED\\s+VIEW\\s+CONCURRENTLY",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Plain REFRESH on a busy dashboard: every reader waits until it finishes.|||REFRESH thường trên dashboard đông: mọi người đọc phải chờ tới khi xong."
+        },
+        {
+          "loi": "CONCURRENTLY without the unique index — it errors.|||CONCURRENTLY mà thiếu chỉ mục unique — báo lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "REFRESH … CONCURRENTLY",
+          "vi": "làm mới không chặn người đọc"
+        }
+      ]
+    },
+    {
+      "title": "A daily revenue table for the dashboard (CT Shop)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "materialized view over joins",
+        "indexing a matview",
+        "refresh after new data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "matview",
+        "ctshop"
+      ],
+      "problemHtml": "<p>Create <code>mv_daily_revenue (day, payments, revenue)</code>: per calendar day of <code>payment.paid_at</code> (Vietnam time), the number of payments and their sum. Give it a unique index on <code>day</code>. The check adds a payment, refreshes, and expects the new numbers.</p>\n<h4>Sample database: CT Shop mini (the course's lab project, sliced)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Same 8 tables as Labs 1–9 (in schema <code>public</code> instead of <code>shop</code>); the rows are a small slice of the lab data — same category tree, same product ids/SKUs/prices. Every <code>id</code> is <code>GENERATED ALWAYS AS IDENTITY</code>: leave it out of INSERT. Times are <code>timestamptz</code> shown in Asia/Ho_Chi_Minh. Full script: the <code>ctshop.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>paid_at::date AS day</code> (the session is in Vietnam time).</li>\n  <li><code>CREATE UNIQUE INDEX … ON mv_daily_revenue (day)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo <code>mv_daily_revenue (day, payments, revenue)</code>: theo ngày lịch của <code>payment.paid_at</code> (giờ Việt Nam), số thanh toán và tổng tiền. Thêm chỉ mục unique trên <code>day</code>. Kiểm sẽ thêm một thanh toán, làm mới, và mong thấy số mới.</p>\n<h4>CSDL mẫu: CT Shop mini (dự án lab của khoá, cắt nhỏ)</h4>\n<pre>customer       (id PK, email UNIQUE lower-case, full_name, phone NULL, city DEFAULT 'Hà Nội', created_at timestamptz)\ncategory       (id PK, name UNIQUE, parent_id → category.id — NULL = root)       12 rows: 1–4 roots, 5–12 children\nproduct        (id PK, sku UNIQUE, name, category_id → category, price numeric(12,2) &gt; 0, stock int ≥ 0 DEFAULT 0,\n                attrs jsonb DEFAULT '{}', is_active boolean DEFAULT true, created_at)          16 rows (ids 1…46, gaps)\norders         (id PK, customer_id → customer, status pending|paid|shipped|cancelled, created_at timestamptz, note)   14 rows\norder_item     (order_id → orders ON DELETE CASCADE, product_id → product, qty &gt; 0, unit_price) — PK (order_id, product_id)\npayment        (id PK, order_id UNIQUE → orders, amount, method cod|card|momo|bank, paid_at)    one per paid/shipped order\nstock_movement (id PK, product_id → product, change ≠ 0, reason import|sale|return|adjust, order_id NULL, created_at)\nreview         (id PK, product_id → product, customer_id → customer, rating 1–5, body, created_at) — UNIQUE (product_id, customer_id)</pre>\n<p>Đúng 8 bảng của Lab 1–9 (ở schema <code>public</code> thay vì <code>shop</code>); dữ liệu là một lát nhỏ của dữ liệu lab — cùng cây danh mục, cùng id/SKU/giá sản phẩm. Mọi <code>id</code> là <code>GENERATED ALWAYS AS IDENTITY</code>: bỏ cột id khi INSERT. Thời gian là <code>timestamptz</code> hiển thị theo giờ Asia/Ho_Chi_Minh. Script đầy đủ: tab <code>ctshop.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>paid_at::date AS day</code> (phiên đang ở giờ Việt Nam).</li>\n  <li><code>CREATE UNIQUE INDEX … ON mv_daily_revenue (day)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "day        | payments | revenue\n-----------+----------+--------\n2026-08-03 | 1        | 134000 \n2026-08-10 | 1        | 139000 \n2026-08-28 | 1        | 163000 \n2026-09-05 | 1        | 162000 \n2026-09-08 | 1        | 705000 \n2026-09-12 | 1        | 749000 \n2026-09-20 | 1        | 207000 \n2026-09-30 | 1        | 158000 \n… (10 rows)",
+          "explanation": "Expected result of check \"Ten paying days\" (row order matters).|||Kết quả mong đợi của kiểm \"Mười ngày có thanh toán\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Same query you would put in a view, stored.|||Cùng truy vấn bạn sẽ đặt vào view, nhưng được lưu.",
+        "The unique index serves both lookups by day and REFRESH CONCURRENTLY.|||Chỉ mục unique phục vụ cả tra theo ngày lẫn REFRESH CONCURRENTLY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE MATERIALIZED VIEW mv_daily_revenue AS\nSELECT paid_at::date AS day, count(*) AS payments, sum(amount) AS revenue\nFROM payment\nGROUP BY 1;\nCREATE UNIQUE INDEX mv_daily_revenue_day ON mv_daily_revenue (day);\n"
+        },
+        {
+          "name": "ctshop.sql",
+          "language": "sql",
+          "code": "-- ctshop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dashboards tolerate minutes of staleness but not slow pages: a materialized view with a unique key, refreshed concurrently by a scheduled job (pg_cron, a worker), is the standard compromise.</p>",
+      "solutionExplanationHtmlVi": "<p>Dashboard chịu được dữ liệu cũ vài phút nhưng không chịu được trang chậm: materialized view có khoá unique, được làm mới đồng thời bởi một job định kỳ (pg_cron, worker), là thoả hiệp chuẩn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\nINSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),\n  (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),\n  (10, 'Máy tính cầm tay', 3), (11, 'Thước & compa', 3), (12, 'Giáo trình IT', 4);\nINSERT INTO product (id, sku, name, category_id, price, stock, attrs, is_active, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1,  'CT0501', 'Bút bi Thiên Long TL-027 (xanh)',       5,   5000, 120, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (2,  'CT0502', 'Bút bi Thiên Long TL-079 (hộp 20 cây)', 5,  78000,  40, '{\"brand\": \"Thiên Long\", \"color\": \"xanh\", \"tags\": [\"văn phòng\"]}', true, '2025-01-03 08:00+07'),\n  (4,  'CT0504', 'Bút gel Uni-ball Signo 0.5mm',          5,  28000,  65, '{\"brand\": \"Uni\", \"color\": \"đen\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07'),\n  (7,  'CT0601', 'Bút chì gỗ Thiên Long 2B GP-01',        6,   4000, 200, '{\"brand\": \"Thiên Long\", \"color\": \"vàng\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (10, 'CT0604', 'Tẩy Pentel Hi-Polymer',                 6,   9000,   0, '{\"brand\": \"Pentel\", \"color\": \"trắng\", \"tags\": [\"học sinh\"]}', true, '2025-01-05 08:00+07'),\n  (14, 'CT0702', 'Bút dạ quang Stabilo Boss Original',    7,  22000,  80, '{\"brand\": \"Stabilo\", \"color\": \"vàng\", \"tags\": [\"sinh viên\"]}', true, '2025-01-03 08:00+07'),\n  (19, 'CT0801', 'Vở ô ly Hồng Hà 48 trang',              8,   6000, 300, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (23, 'CT0805', 'Lốc 10 vở Hồng Hà 96 trang',            8, 105000,  25, '{\"brand\": \"Hồng Hà\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (25, 'CT0901', 'Sổ lò xo Campus A5',                    9,  32000,  54, '{\"brand\": \"Campus\", \"color\": \"xanh\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (30, 'CT0906', 'Sổ tay Moleskine Classic A5',           9, 590000,   6, '{\"brand\": \"Moleskine\", \"color\": \"đen\", \"tags\": [\"văn phòng\"]}', true, '2025-01-07 08:00+07'),\n  (31, 'CT1001', 'Máy tính Casio FX-580VN X',            10, 705000,  12, '{\"brand\": \"Casio\", \"tags\": [\"học sinh\", \"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (36, 'CT1006', 'Máy tính Deli D82TL',                  10, 285000,   0, '{\"brand\": \"Deli\", \"tags\": [\"văn phòng\"]}', false, '2025-01-07 08:00+07'),\n  (37, 'CT1101', 'Thước kẻ nhựa Thiên Long 20cm',        11,   5000, 150, '{\"brand\": \"Thiên Long\", \"tags\": [\"học sinh\"]}', true, '2025-01-02 08:00+07'),\n  (41, 'CT1105', 'Compa Staedtler Noris',                11,  85000,   9, '{\"brand\": \"Staedtler\", \"tags\": [\"học sinh\"]}', true, '2025-01-06 08:00+07'),\n  (43, 'CT1201', 'Giáo trình Cơ sở dữ liệu (bản in)',    12,  89000,  30, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-02 08:00+07'),\n  (46, 'CT1204', 'Sổ tay SQL bỏ túi',                    12,  59000,  44, '{\"brand\": \"CT Books\", \"tags\": [\"sinh viên\"]}', true, '2025-01-05 08:00+07');\nINSERT INTO customer (id, email, full_name, phone, city, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 'kh001@ctshop.vn', 'Trần Thị Bình',    '0910007919', 'Hà Nội',    '2025-02-10 09:00+07'),\n  (2, 'kh002@ctshop.vn', 'Lê Minh Chi',      '0930015838', 'TP.HCM',    '2025-03-01 10:30+07'),\n  (3, 'kh003@ctshop.vn', 'Phạm Quốc Dũng',   '0940023757', 'Đà Nẵng',   '2025-03-15 14:00+07'),\n  (4, 'kh004@ctshop.vn', 'Hoàng Thu Hà',     '0960031676', 'Hà Nội',    '2025-05-20 08:15+07'),\n  (5, 'kh005@ctshop.vn', 'Vũ Gia Khoa',      '0970039595', 'Cần Thơ',   '2025-06-02 19:40+07'),\n  (6, 'kh006@ctshop.vn', 'Đặng Văn Linh',    '0980047514', 'Hải Phòng', '2025-08-11 11:00+07'),\n  (7, 'kh007@ctshop.vn', 'Bùi Thị Nam',      NULL,         'TP.HCM',    '2025-09-09 16:20+07'),\n  (8, 'kh008@ctshop.vn', 'Nguyễn Minh Phúc', '0320063352', 'Đà Nẵng',   '2026-07-01 07:00+07');\nINSERT INTO orders (id, customer_id, status, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 'shipped',   '2026-08-03 09:15+07'), (2, 1, 'paid',      '2026-09-12 20:40+07'),\n  (3, 2, 'shipped',   '2026-08-10 14:05+07'), (4, 2, 'cancelled', '2026-08-22 10:00+07'),\n  (5, 3, 'shipped',   '2026-08-28 16:30+07'), (6, 3, 'paid',      '2026-09-20 08:45+07'),\n  (7, 3, 'pending',   '2026-10-01 21:10+07'), (8, 4, 'paid',      '2026-09-05 11:00+07'),\n  (9, 5, 'shipped',   '2026-09-08 07:55+07'), (10, 5, 'shipped',  '2026-09-30 19:20+07'),\n  (11, 6, 'pending',  '2026-10-02 09:00+07'), (12, 7, 'paid',     '2026-10-03 15:35+07'),\n  (13, 1, 'shipped',  '2026-10-05 10:10+07'), (14, 6, 'cancelled', '2026-10-06 18:00+07');\nINSERT INTO order_item (order_id, product_id, qty, unit_price) VALUES\n  (1, 1, 3, 5000), (1, 19, 5, 6000), (1, 43, 1, 89000),\n  (2, 31, 1, 705000), (2, 14, 2, 22000),\n  (3, 2, 1, 75000), (3, 25, 2, 32000),\n  (4, 30, 1, 590000),\n  (5, 23, 1, 105000), (5, 7, 10, 4000), (5, 10, 2, 9000),\n  (6, 46, 2, 59000), (6, 43, 1, 89000),\n  (7, 41, 1, 85000), (7, 37, 2, 5000),\n  (8, 4, 4, 28000), (8, 1, 10, 5000),\n  (9, 31, 1, 705000),\n  (10, 19, 10, 6000), (10, 25, 1, 32000), (10, 14, 3, 22000),\n  (11, 2, 1, 78000),\n  (12, 43, 2, 89000), (12, 46, 1, 59000),\n  (13, 1, 5, 5000), (13, 4, 1, 28000),\n  (14, 31, 1, 705000);\nINSERT INTO payment (id, order_id, amount, method, paid_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 134000, 'card', '2026-08-03 11:15+07'), (2, 2, 749000, 'momo', '2026-09-12 22:40+07'),\n  (3, 3, 139000, 'bank', '2026-08-10 16:05+07'), (4, 5, 163000, 'card', '2026-08-28 18:30+07'),\n  (5, 6, 207000, 'momo', '2026-09-20 10:45+07'), (6, 8, 162000, 'cod',  '2026-09-05 13:00+07'),\n  (7, 9, 705000, 'card', '2026-09-08 09:55+07'), (8, 10, 158000, 'momo', '2026-09-30 21:20+07'),\n  (9, 12, 237000, 'cod', '2026-10-03 17:35+07'), (10, 13, 53000, 'card', '2026-10-05 12:10+07');\nINSERT INTO stock_movement (id, product_id, change, reason, order_id, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 150, 'import', NULL, '2026-08-01 08:00+07'), (2, 19, 320, 'import', NULL, '2026-08-01 08:00+07'),\n  (3, 31, 20, 'import', NULL, '2026-08-01 08:00+07'), (4, 1, -3, 'sale', 1, '2026-08-03 09:15+07'),\n  (5, 19, -5, 'sale', 1, '2026-08-03 09:15+07'), (6, 43, -1, 'sale', 1, '2026-08-03 09:15+07'),\n  (7, 31, -1, 'sale', 9, '2026-09-08 07:55+07');\nINSERT INTO review (id, product_id, customer_id, rating, body, created_at) OVERRIDING SYSTEM VALUE VALUES\n  (1, 1, 1, 5, 'Mực ra đều', '2026-08-08 09:15+07'), (2, 19, 1, 4, 'Giấy dày, viết êm', '2026-08-08 09:20+07'),\n  (3, 2, 2, 4, 'Đúng mô tả', '2026-08-15 14:05+07'), (4, 25, 2, 5, 'Rất tốt, giao nhanh', '2026-08-15 14:10+07'),\n  (5, 23, 3, 3, 'Tạm được', '2026-09-02 16:30+07'), (6, 31, 5, 5, 'Đóng gói kỹ', '2026-09-13 07:55+07'),\n  (7, 14, 5, 2, 'Hơi đắt', '2026-10-05 19:20+07'), (8, 19, 5, 4, 'Đúng mô tả', '2026-10-05 19:25+07');\n\n-- explicit ids above ⇒ move every identity sequence past them (the next INSERT without an id gets max(id) + 1)\nSELECT setval(pg_get_serial_sequence('category', 'id'), 12), setval(pg_get_serial_sequence('product', 'id'), 48),\n       setval(pg_get_serial_sequence('customer', 'id'), 8), setval(pg_get_serial_sequence('orders', 'id'), 14),\n       setval(pg_get_serial_sequence('payment', 'id'), 10), setval(pg_get_serial_sequence('stock_movement', 'id'), 7),\n       setval(pg_get_serial_sequence('review', 'id'), 8);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Ten paying days|||Mười ngày có thanh toán",
+            "kiemTra": "SELECT * FROM mv_daily_revenue ORDER BY day",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "day",
+                "payments",
+                "revenue"
+              ],
+              "hang": [
+                [
+                  "2026-08-03",
+                  1,
+                  134000
+                ],
+                [
+                  "2026-08-10",
+                  1,
+                  139000
+                ],
+                [
+                  "2026-08-28",
+                  1,
+                  163000
+                ],
+                [
+                  "2026-09-05",
+                  1,
+                  162000
+                ],
+                [
+                  "2026-09-08",
+                  1,
+                  705000
+                ],
+                [
+                  "2026-09-12",
+                  1,
+                  749000
+                ],
+                [
+                  "2026-09-20",
+                  1,
+                  207000
+                ],
+                [
+                  "2026-09-30",
+                  1,
+                  158000
+                ],
+                [
+                  "2026-10-03",
+                  1,
+                  237000
+                ],
+                [
+                  "2026-10-05",
+                  1,
+                  53000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "After a new payment + REFRESH CONCURRENTLY the day is updated|||Sau thanh toán mới + REFRESH CONCURRENTLY, ngày đó được cập nhật",
+            "kiemTra": "INSERT INTO payment (order_id, amount, method, paid_at) VALUES (7, 95000, 'cod', '2026-09-08 20:00+07'); REFRESH MATERIALIZED VIEW CONCURRENTLY mv_daily_revenue; SELECT day, payments, revenue FROM mv_daily_revenue WHERE day = '2026-09-08'",
+            "mongDoi": {
+              "cot": [
+                "day",
+                "payments",
+                "revenue"
+              ],
+              "hang": [
+                [
+                  "2026-09-08",
+                  2,
+                  800000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Early-morning payments stay on their Vietnam day|||Thanh toán sáng sớm vẫn ở đúng ngày giờ VN",
+            "kiemTra": "INSERT INTO payment (order_id, amount, method, paid_at) VALUES (11, 78000, 'card', '2026-10-06 06:30+07'); REFRESH MATERIALIZED VIEW mv_daily_revenue; SELECT day, payments FROM mv_daily_revenue WHERE day >= '2026-10-05' ORDER BY day",
+            "an": true,
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "day",
+                "payments"
+              ],
+              "hang": [
+                [
+                  "2026-10-05",
+                  1
+                ],
+                [
+                  "2026-10-06",
+                  1
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No unique index: the dashboard's nightly REFRESH CONCURRENTLY fails.|||Không chỉ mục unique: lệnh REFRESH CONCURRENTLY hằng đêm của dashboard lỗi."
+        },
+        {
+          "loi": "Grouping by the UTC date — evening payments in Vietnam move to the previous/next day.|||Gom theo ngày UTC — thanh toán buổi tối ở Việt Nam dời sang ngày khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "materialized view",
+          "vi": "view lưu sẵn kết quả"
+        }
+      ]
+    },
+    {
+      "title": "View or materialized view?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "freshness vs speed"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "matview",
+        "view"
+      ],
+      "problemHtml": "<p>Choose for each need.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn cho từng nhu cầu.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask how stale the number may be.|||Hỏi con số được phép cũ tới đâu.",
+        "Ask how often it is read vs how costly it is to compute.|||Hỏi nó được đọc thường xuyên thế nào so với chi phí tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# View or materialized view?\n\nAnswer in the answer panel (no code needed).\n\n1. A checkout page must show the stock that is on the shelf right now.Trang thanh toán phải hiện tồn kho đang có trên kệ ngay lúc này.\n2. A yearly sales report scans 50 million rows and is opened 200 times a day; yesterday's numbers are fine.Báo cáo doanh số năm quét 50 triệu dòng và được mở 200 lần mỗi ngày; số liệu của hôm qua là đủ.\n3. What does REFRESH MATERIALIZED VIEW (without CONCURRENTLY) do to readers?REFRESH MATERIALIZED VIEW (không CONCURRENTLY) làm gì với người đọc?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# View or materialized view? — answer key\n\n1. A checkout page must show the stock that is on the shelf right now.Trang thanh toán phải hiện tồn kho đang có trên kệ ngay lúc này.\n   Answer: b) a plain view (or the table) — it must never be stale\n   Correctness beats speed when users act on the number.VI: Khi người dùng hành động theo con số thì đúng quan trọng hơn nhanh.\n\n2. A yearly sales report scans 50 million rows and is opened 200 times a day; yesterday's numbers are fine.Báo cáo doanh số năm quét 50 triệu dòng và được mở 200 lần mỗi ngày; số liệu của hôm qua là đủ.\n   Answer: c) a materialized view refreshed nightly\n   Compute once, read 200 times. A REFRESH per night costs one scan.VI: Tính một lần, đọc 200 lần. Mỗi đêm một lần REFRESH tốn đúng một lượt quét.\n\n3. What does REFRESH MATERIALIZED VIEW (without CONCURRENTLY) do to readers?REFRESH MATERIALIZED VIEW (không CONCURRENTLY) làm gì với người đọc?\n   Answer: d) blocks them until it finishes (exclusive lock)\n   A plain refresh swaps in the new data under an exclusive lock; CONCURRENTLY avoids that at the price of a unique index and more work.VI: Làm mới thường tráo dữ liệu mới dưới khoá độc quyền; CONCURRENTLY tránh được điều đó với cái giá là chỉ mục unique và nhiều việc hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> a plain view (or the table) — it must never be stale</p><p>Correctness beats speed when users act on the number.</p><p><i>VI: Khi người dùng hành động theo con số thì đúng quan trọng hơn nhanh.</i></p></li><li><p><b>c)</b> a materialized view refreshed nightly</p><p>Compute once, read 200 times. A REFRESH per night costs one scan.</p><p><i>VI: Tính một lần, đọc 200 lần. Mỗi đêm một lần REFRESH tốn đúng một lượt quét.</i></p></li><li><p><b>d)</b> blocks them until it finishes (exclusive lock)</p><p>A plain refresh swaps in the new data under an exclusive lock; CONCURRENTLY avoids that at the price of a unique index and more work.</p><p><i>VI: Làm mới thường tráo dữ liệu mới dưới khoá độc quyền; CONCURRENTLY tránh được điều đó với cái giá là chỉ mục unique và nhiều việc hơn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>A checkout page must show the stock that is on the shelf right now.</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang thanh toán phải hiện tồn kho đang có trên kệ ngay lúc này.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a materialized view refreshed hourly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a plain view (or the table) — it must never be stale"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a materialized view refreshed nightly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a CSV export"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Correctness beats speed when users act on the number.</p><p><i>VI: Khi người dùng hành động theo con số thì đúng quan trọng hơn nhanh.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>A yearly sales report scans 50 million rows and is opened 200 times a day; yesterday's numbers are fine.</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo doanh số năm quét 50 triệu dòng và được mở 200 lần mỗi ngày; số liệu của hôm qua là đủ.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a trigger on every insert"
+              },
+              {
+                "ma": "b",
+                "noiDung": "run the query 200 times"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a materialized view refreshed nightly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a plain view"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Compute once, read 200 times. A REFRESH per night costs one scan.</p><p><i>VI: Tính một lần, đọc 200 lần. Mỗi đêm một lần REFRESH tốn đúng một lượt quét.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>What does REFRESH MATERIALIZED VIEW (without CONCURRENTLY) do to readers?</p><p style=\"opacity:.75;font-size:.92em\"><i>REFRESH MATERIALIZED VIEW (không CONCURRENTLY) làm gì với người đọc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "shows them half-refreshed rows meanwhile"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing at all, readers never notice"
+              },
+              {
+                "ma": "c",
+                "noiDung": "cancels the queries already running"
+              },
+              {
+                "ma": "d",
+                "noiDung": "blocks them until it finishes (exclusive lock)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A plain refresh swaps in the new data under an exclusive lock; CONCURRENTLY avoids that at the price of a unique index and more work.</p><p><i>VI: Làm mới thường tráo dữ liệu mới dưới khoá độc quyền; CONCURRENTLY tránh được điều đó với cái giá là chỉ mục unique và nhiều việc hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Materializing data that users act on in real time.|||Lưu sẵn dữ liệu mà người dùng hành động theo thời gian thực."
+        },
+        {
+          "loi": "Refreshing without CONCURRENTLY on a busy system.|||Làm mới không CONCURRENTLY trên hệ đang bận."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "staleness",
+          "vi": "độ cũ của dữ liệu"
+        }
+      ]
+    }
+  ]
+}

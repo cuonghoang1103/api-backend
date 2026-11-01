@@ -44,7 +44,7 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | ⭐ CS.5 | slide-cs5-1/5-2, cs5-on | 0 → 14 | ✅ (11 SQL trình duyệt: ROW_NUMBER/RANK/DENSE_RANK, cộng dồn ROWS, top-N mỗi nhóm, khoảng trống, pivot CASE, LAG, đảo; 3 đề sql-pg: CTE đệ quy WITH RECURSIVE — SQL Server mode không chạy được CTE đệ quy (thiếu RECURSIVE ⇒ PG lỗi, có RECURSIVE ⇒ bị chặn là cú pháp PG); 1 đề tay: MERGE WITH (HOLDLOCK) + OUTPUT $action) |
 | ⭐ CS.6 | slide-cs6-1/6-2, cs6-on | 0 → 15 | ✅ (7 SQL trình duyệt: xoá mềm + UNIQUE lọc, luật đặt phòng thành CHECK/UNIQUE, LMS từ mô tả, mã giảm giá theo shop, giá theo khoảng hiệu lực, chọn ON DELETE cho blog; 1 đề tay: thêm cột NOT NULL UNIQUE theo lô WHILE + UPDATE TOP; còn lại tĩnh) |
 | ⭐ CS.7 | slide-cs7-1/7-2, cs7-on | 0 → 11 | ✅ (4 đề tay SQL Server: vá SQL injection, role quyền tối thiểu thử bằng EXECUTE AS (lỗi 229), Row-Level Security theo SESSION_CONTEXT (lỗi 33504), phân vùng theo tháng + TRUNCATE … WITH (PARTITIONS); còn lại tĩnh) |
-| ⭐ CS.8 + cầu nối | slide-cs8-1/8-2, cs8-on, cau-noi-di-lam | 0 → … | ⏳ |
+| ⭐ CS.8 + cầu nối | slide-cs8-1/8-2, cs8-on, cau-noi-di-lam | 0 → 21 | ✅ (14 SQL trình duyệt: lương cao thứ hai khi hoà, đếm cả phòng 0 người, NOT IN gặp NULL, chia nguyên (kiểm 100.0 trong mã vì PG trả numeric cho SUM(bigint)), đổi M/F, tìm/xoá trùng, hơn sếp, fan-out, phép chia, đặt phòng chồng lấn, trạng thái mới nhất, tỉ lệ huỷ chuyến; 3 sql-pg: lịch generate_series, RETURNING, ON CONFLICT; còn lại tĩnh. 33 bài của deck: phần trùng CS.5 không làm lại) |
 | Ôn thi | on-pe, ngan-hang-cau-hoi, PE 1–3 chữa đề, FE chữa đề (+ PE 1 CT Rent có sẵn) | 1 → … | ⏳ |
 
 Bài KHÔNG có đề (định hướng, không có gì để luyện): dbi202-bat-dau-tai-day, dbi202-slide-dbi1-1, dbi202-gioi-thieu,

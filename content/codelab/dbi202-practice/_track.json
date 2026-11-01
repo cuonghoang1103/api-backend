@@ -544,6 +544,30 @@
       "description": "Luyện: Exercise 1 — fix the SQL injection in a product search · Exercise 2 — a least-privilege account for the revenue report · Exercise 3 — multi-tenant Row-Level Security with SESSION_CONTEXT · Exercise 4 — why two equal passwords must not get equal hashes · Exercise 5 — partition a bookings table by month, then purge January fast"
     },
     {
+      "slug": "dbi202-slide-cs8-1",
+      "name": "⭐ CS.8 Database interviews (1): answering + theory bank",
+      "level": "ADVANCED",
+      "description": "Luyện: Writing SQL live in front of the interviewer: the order that works · Bank Q1–30: keys, normalisation, joins — answer with the trade-off · Bank Q31–66: indexes, transactions, NoSQL, security — the trade-off answers"
+    },
+    {
+      "slug": "dbi202-slide-cs8-2",
+      "name": "⭐ CS.8 Database interviews (2): classic SQL problems and their traps",
+      "level": "ADVANCED",
+      "description": "Luyện: Second-highest salary — and what if the top is tied? · Head count per department, including departments with nobody · Customers who never ordered — when one order has no customer · Share of the company per department — the integer-division trap · Swap every 'M' and 'F' with ONE statement"
+    },
+    {
+      "slug": "dbi202-cs8-on",
+      "name": "⭐ CS.8 Exercises: interview SQL problems",
+      "level": "ADVANCED",
+      "description": "Luyện: Problem 1 — find duplicate customers by e-mail · Problem 2 — delete the duplicates, keep the newest · Problem 3 — employees who earn more than their supervisor · Problem 4 — total ordered and total paid per customer (the fan-out trap) · Problem 5 — customers who bought EVERY book (relational division) · Problem 6 — overlapping room bookings · Problem 7 — the latest status of every order · Problem 8 — daily cancellation rate, excluding banned users · Problem 9 — monthly revenue including the months with zero (PostgreSQL)"
+    },
+    {
+      "slug": "dbi202-cau-noi-di-lam",
+      "name": "⭐ Bridge: from DBI202 to a real job",
+      "level": "ADVANCED",
+      "description": "Luyện: SQL Server habits that change on PostgreSQL · Register a customer and get the new id back — only if the e-mail is new (PostgreSQL) · Add an incoming batch to stock with one upsert (PostgreSQL ON CONFLICT) · What you use at work, and how to write it on a CV"
+    },
+    {
       "slug": "dbi202-9-pe-1-ct-rent",
       "name": "PE 1 — CT Rent (car rental) · 10 questions",
       "level": "ADVANCED",

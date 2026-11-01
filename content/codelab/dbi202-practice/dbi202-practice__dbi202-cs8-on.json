@@ -1,0 +1,1386 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cs8-on",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cs8-on"
+  },
+  "exercises": [
+    {
+      "title": "Problem 1 — find duplicate customers by e-mail",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "GROUP BY … HAVING",
+        "normalising before comparing",
+        "NULL in GROUP BY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "duplicates"
+      ],
+      "problemHtml": "<p>List every e-mail used by more than one customer, compared <b>ignoring case and surrounding spaces</b>: <code>email</code> (lower-case, trimmed) and <code>so_lan</code>. Customers without an e-mail are not duplicates. Sort by email.</p>\n<p><code>KhachHang(id, ten, email NULL, ngayTao)</code> — the same person was registered several times with differently typed e-mails.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>GROUP BY LOWER(TRIM(email)) … HAVING COUNT(*) > 1.</li>\n  <li>Exclude NULL e-mails explicitly (GROUP BY puts all NULLs in one group).</li>\n</ul>",
+      "problemHtmlVi": "<p>Liệt kê mọi email được nhiều hơn một khách dùng, so <b>không phân biệt hoa thường và bỏ khoảng trắng hai đầu</b>: <code>email</code> (chữ thường, đã cắt) và <code>so_lan</code>. Khách không có email không tính là trùng. Sắp theo email.</p>\n<p><code>KhachHang(id, ten, email NULL, ngayTao)</code> — cùng một người bị đăng ký nhiều lần với email gõ khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>GROUP BY LOWER(TRIM(email)) … HAVING COUNT(*) > 1.</li>\n  <li>Loại email NULL tường minh (GROUP BY gom mọi NULL vào một nhóm).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "email       | so_lan\n------------+-------\nan@shop.vn  | 2     \nchi@shop.vn | 3     ",
+          "explanation": "Expected result of check \"an@shop.vn ×2, chi@shop.vn ×3\" (row order matters).|||Kết quả mong đợi của kiểm \"an@shop.vn ×2, chi@shop.vn ×3\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise first, then group: the key of the group is the cleaned value.|||Chuẩn hoá trước rồi gộp: khoá của nhóm là giá trị đã làm sạch.",
+        "Ask the interviewer how duplicates are defined (case? spaces? dots in Gmail?).|||Hỏi người phỏng vấn thế nào là trùng (hoa thường? khoảng trắng? dấu chấm của Gmail?)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "KhachHang.sql",
+          "language": "sql",
+          "code": "-- KhachHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- KhachHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT LOWER(TRIM(email)) AS email, COUNT(*) AS so_lan\nFROM KhachHang\nWHERE email IS NOT NULL\nGROUP BY LOWER(TRIM(email))\nHAVING COUNT(*) > 1\nORDER BY email;\n"
+        },
+        {
+          "name": "KhachHang.sql",
+          "language": "sql",
+          "code": "-- KhachHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- KhachHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On SQL Server the default collation is case-insensitive, so GROUP BY email already merges \"Chi@Shop.vn\" and \"chi@shop.vn\" — but not the spaces. Writing LOWER(TRIM(…)) makes the rule explicit and portable.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên SQL Server collation mặc định không phân biệt hoa thường nên GROUP BY email đã gộp \"Chi@Shop.vn\" và \"chi@shop.vn\" — nhưng không gộp khoảng trắng. Viết LOWER(TRIM(…)) làm luật tường minh và chạy được mọi nơi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "an@shop.vn ×2, chi@shop.vn ×3|||an@shop.vn ×2, chi@shop.vn ×3",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "email",
+                "so_lan"
+              ],
+              "hang": [
+                [
+                  "an@shop.vn",
+                  2
+                ],
+                [
+                  "chi@shop.vn",
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Binh registers again in capitals|||Ẩn: Binh đăng ký lại bằng chữ hoa",
+            "an": true,
+            "themCsdl": "INSERT INTO KhachHang VALUES (9, 'Binh 2', 'BINH@SHOP.VN', '2025-04-01')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "email",
+                "so_lan"
+              ],
+              "hang": [
+                [
+                  "an@shop.vn",
+                  2
+                ],
+                [
+                  "binh@shop.vn",
+                  2
+                ],
+                [
+                  "chi@shop.vn",
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Groups with HAVING|||Gộp nhóm với HAVING",
+            "khop": "\\bHAVING\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Grouping the raw e-mail — \" AN@shop.vn \" and \"an@shop.vn\" look different.|||Gộp email thô — \" AN@shop.vn \" và \"an@shop.vn\" trông khác nhau."
+        },
+        {
+          "loi": "Forgetting NULLs: the two customers without e-mail appear as a \"duplicate\".|||Quên NULL: hai khách không có email hiện thành \"trùng\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data deduplication",
+          "vi": "khử trùng dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "Problem 2 — delete the duplicates, keep the newest",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "DELETE with EXISTS",
+        "tie-break",
+        "keep one per group"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "duplicates"
+      ],
+      "problemHtml": "<p>For each e-mail (ignoring case and spaces) keep only the <b>newest</b> customer (latest ngayTao; on the same day, the larger id) and DELETE the others. Customers without an e-mail are never deleted.</p>\n<p><code>KhachHang(id, ten, email NULL, ngayTao)</code> — the same person was registered several times with differently typed e-mails.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>DELETE FROM KhachHang WHERE EXISTS (a newer row with the same cleaned e-mail).</li>\n  <li>\"Newer\" = later ngayTao, or the same ngayTao and a larger id.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi email (không phân biệt hoa thường và khoảng trắng) chỉ giữ khách <b>mới nhất</b> (ngayTao muộn nhất; cùng ngày thì id lớn hơn) và DELETE những người còn lại. Khách không có email không bao giờ bị xoá.</p>\n<p><code>KhachHang(id, ten, email NULL, ngayTao)</code> — cùng một người bị đăng ký nhiều lần với email gõ khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>DELETE FROM KhachHang WHERE EXISTS (một dòng mới hơn có cùng email đã làm sạch).</li>\n  <li>\"Mới hơn\" = ngayTao muộn hơn, hoặc cùng ngayTao và id lớn hơn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id\n--\n2 \n3 \n5 \n7 \n8 ",
+          "explanation": "Expected result of check \"Remaining customers: one per e-mail, plus those without e-mail\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Khách còn lại: mỗi email một người, cộng những người không có email\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Delete a row if a \"better\" row exists in its group: that keeps exactly one per group.|||Xoá một dòng nếu trong nhóm có dòng \"tốt hơn\": như vậy mỗi nhóm còn đúng một dòng.",
+        "Ties on ngayTao need a second key, otherwise both survive.|||Hoà ngayTao cần khoá thứ hai, nếu không cả hai cùng sống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "KhachHang.sql",
+          "language": "sql",
+          "code": "-- KhachHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- KhachHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "DELETE FROM KhachHang\nWHERE email IS NOT NULL\n  AND EXISTS (SELECT 1\n              FROM KhachHang k2\n              WHERE LOWER(TRIM(k2.email)) = LOWER(TRIM(KhachHang.email))\n                AND (k2.ngayTao > KhachHang.ngayTao\n                     OR (k2.ngayTao = KhachHang.ngayTao AND k2.id > KhachHang.id)));\n"
+        },
+        {
+          "name": "KhachHang.sql",
+          "language": "sql",
+          "code": "-- KhachHang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- KhachHang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQL Server shortcut: WITH x AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY LOWER(TRIM(email)) ORDER BY ngayTao DESC, id DESC) AS rn FROM KhachHang WHERE email IS NOT NULL) DELETE FROM x WHERE rn > 1 — a CTE is updatable there, not on PostgreSQL. In real life, first re-point orders of the deleted customers to the kept one.</p>",
+      "solutionExplanationHtmlVi": "<p>Lối tắt SQL Server: WITH x AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY LOWER(TRIM(email)) ORDER BY ngayTao DESC, id DESC) AS rn FROM KhachHang WHERE email IS NOT NULL) DELETE FROM x WHERE rn > 1 — ở đó CTE cập nhật được, PostgreSQL thì không. Ngoài đời, trước hết chuyển đơn hàng của khách bị xoá sang khách được giữ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE KhachHang (\n  id     INT          NOT NULL PRIMARY KEY,\n  ten    VARCHAR(50)  NOT NULL,\n  email  VARCHAR(100) NULL,\n  ngayTao DATE        NOT NULL\n);\nINSERT INTO KhachHang (id, ten, email, ngayTao) VALUES\n  (1, 'An', 'an@shop.vn', '2025-01-05'), (2, 'An Nguyen', ' AN@shop.vn ', '2025-03-01'),\n  (3, 'Binh', 'binh@shop.vn', '2025-01-07'),\n  (4, 'Chi', 'chi@shop.vn', '2025-02-01'), (5, 'Chi T.', 'Chi@Shop.vn', '2025-02-01'), (6, 'Chi Tran', 'chi@shop.vn', '2025-01-15'),\n  (7, 'Khach 1', NULL, '2025-01-01'), (8, 'Khach 2', NULL, '2025-01-02');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Remaining customers: one per e-mail, plus those without e-mail|||Khách còn lại: mỗi email một người, cộng những người không có email",
+            "kiemTra": "SELECT id FROM KhachHang ORDER BY id",
+            "mongDoi": {
+              "cot": [
+                "id"
+              ],
+              "hang": [
+                [
+                  2
+                ],
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  7
+                ],
+                [
+                  8
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: a later sign-up of An|||Ẩn: An đăng ký thêm lần sau nữa",
+            "kiemTra": "SELECT id FROM KhachHang ORDER BY id",
+            "an": true,
+            "themCsdl": "INSERT INTO KhachHang VALUES (9, 'An moi', 'an@SHOP.vn', '2025-05-01')",
+            "mongDoi": {
+              "cot": [
+                "id"
+              ],
+              "hang": [
+                [
+                  3
+                ],
+                [
+                  5
+                ],
+                [
+                  7
+                ],
+                [
+                  8
+                ],
+                [
+                  9
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses DELETE|||Dùng DELETE",
+            "khop": "\\bDELETE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only comparing ngayTao: customers 4 and 5 (same day) both stay.|||Chỉ so ngayTao: khách 4 và 5 (cùng ngày) đều còn."
+        },
+        {
+          "loi": "Keeping the largest id instead of the newest date — id 6 is older than 4 and 5.|||Giữ id lớn nhất thay vì ngày mới nhất — id 6 cũ hơn 4 và 5."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keep latest",
+          "vi": "giữ bản mới nhất"
+        }
+      ]
+    },
+    {
+      "title": "Problem 3 — employees who earn more than their supervisor",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "self-join"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "join"
+      ],
+      "problemHtml": "<p>Return <code>empName, empSalary, sepName, sepSalary</code> for every employee paid more than their own supervisor. Sort by empSSN.</p>\n<details class=\"cl-luoc-do\" open><summary><b>FUHCompany schema</b> (the course's sample database — full script in the <code>FUHCompany.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns (PK underlined, FK in italics)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 employees, 5 departments, 6 projects, 16 work assignments, 5 dependents. Names are Vietnamese with diacritics; text compares case-insensitively as on SQL Server.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Join tblEmployee to itself: e.supervisorSSN = s.empSSN.</li>\n  <li>Alias the second copy's columns as sepName, sepSalary.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>empName, empSalary, sepName, sepSalary</code> cho mọi nhân viên lương cao hơn chính sếp của họ. Sắp theo empSSN.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ FUHCompany</b> (CSDL mẫu của môn — script đầy đủ ở tab <code>FUHCompany.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột (khoá chính gạch chân, khoá ngoại in nghiêng)</th></tr></thead><tbody><tr><td><code>tblEmployee</code></td><td><span style=\"text-decoration:underline\">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee</td></tr><tr><td><code>tblDepartment</code></td><td><span style=\"text-decoration:underline\">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE</td></tr><tr><td><code>tblProject</code></td><td><span style=\"text-decoration:underline\">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment</td></tr><tr><td><code>tblWorksOn</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)</td></tr><tr><td><code>tblLocation</code></td><td><span style=\"text-decoration:underline\">locNum</span> INT, locName NVARCHAR(50) UNIQUE</td></tr><tr><td><code>tblDepLocation</code></td><td><span style=\"text-decoration:underline\"><i>depNum</i>, <i>locNum</i></span></td></tr><tr><td><code>tblDependent</code></td><td><span style=\"text-decoration:underline\"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)</td></tr></tbody></table><p>14 nhân viên, 5 phòng, 6 dự án, 16 dòng phân công, 5 người phụ thuộc. Tên tiếng Việt có dấu; so chuỗi không phân biệt hoa thường như SQL Server.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nối tblEmployee với chính nó: e.supervisorSSN = s.empSSN.</li>\n  <li>Đặt bí danh cột của bản thứ hai là sepName, sepSalary.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "empName       | empSalary | sepName       | sepSalary\n--------------+-----------+---------------+----------\nĐặng Tuấn Anh | 105000    | Phạm Quốc Bảo | 95000    ",
+          "explanation": "Expected result of check \"Đặng Tuấn Anh earns more than Phạm Quốc Bảo\" (row order matters).|||Kết quả mong đợi của kiểm \"Đặng Tuấn Anh lương cao hơn Phạm Quốc Bảo\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Two aliases of one table: e = the employee, s = the supervisor.|||Hai bí danh của một bảng: e = nhân viên, s = sếp.",
+        "The top boss has no supervisor and drops out of the inner join — correct here.|||Sếp lớn nhất không có sếp nên rơi khỏi phép nối trong — đúng ở đây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT e.empName, e.empSalary, s.empName AS sepName, s.empSalary AS sepSalary\nFROM tblEmployee e\nJOIN tblEmployee s ON s.empSSN = e.supervisorSSN\nWHERE e.empSalary > s.empSalary\nORDER BY e.empSSN;\n"
+        },
+        {
+          "name": "FUHCompany.sql",
+          "language": "sql",
+          "code": "-- FUHCompany.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- FUHCompany.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Classic warm-up (LeetCode 181). Mention the index that helps: supervisorSSN is a foreign key and deserves one anyway.</p>",
+      "solutionExplanationHtmlVi": "<p>Câu khởi động kinh điển (LeetCode 181). Nhắc chỉ mục có ích: supervisorSSN là khoá ngoại và vốn nên có chỉ mục.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE tblLocation (\n    locNum   INT           NOT NULL,\n    locName  NVARCHAR(50)  NOT NULL,\n    CONSTRAINT pk_location      PRIMARY KEY (locNum),\n    CONSTRAINT uq_location_name UNIQUE (locName)\n);\n\nCREATE TABLE tblDepartment (\n    depNum      INT            NOT NULL,\n    depName     NVARCHAR(50)   NOT NULL,\n    mgrSSN      DECIMAL(18,0)  NULL,\n    mgrAssDate  DATE           NULL,\n    CONSTRAINT pk_department      PRIMARY KEY (depNum),\n    CONSTRAINT uq_department_name UNIQUE (depName)\n);\n\nCREATE TABLE tblEmployee (\n    empSSN         DECIMAL(18,0)  NOT NULL,\n    empName        NVARCHAR(50)   NOT NULL,\n    empAddress     NVARCHAR(100)  NULL,\n    empSalary      DECIMAL(10,0)  NULL,\n    empSex         CHAR(1)        NULL,\n    empBirthdate   DATE           NULL,\n    depNum         INT            NULL,\n    supervisorSSN  DECIMAL(18,0)  NULL,\n    CONSTRAINT pk_employee            PRIMARY KEY (empSSN),\n    CONSTRAINT ck_employee_sex        CHECK (empSex IN ('F', 'M')),\n    CONSTRAINT ck_employee_salary     CHECK (empSalary > 0),\n    CONSTRAINT fk_employee_department FOREIGN KEY (depNum)        REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_employee_supervisor FOREIGN KEY (supervisorSSN) REFERENCES tblEmployee (empSSN)\n);\n\nCREATE TABLE tblDepLocation (\n    depNum  INT  NOT NULL,\n    locNum  INT  NOT NULL,\n    CONSTRAINT pk_deplocation            PRIMARY KEY (depNum, locNum),\n    CONSTRAINT fk_deplocation_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum),\n    CONSTRAINT fk_deplocation_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum)\n);\n\nCREATE TABLE tblProject (\n    proNum   INT           NOT NULL,\n    proName  NVARCHAR(50)  NOT NULL,\n    locNum   INT           NULL,\n    depNum   INT           NULL,\n    CONSTRAINT pk_project            PRIMARY KEY (proNum),\n    CONSTRAINT fk_project_location   FOREIGN KEY (locNum) REFERENCES tblLocation (locNum),\n    CONSTRAINT fk_project_department FOREIGN KEY (depNum) REFERENCES tblDepartment (depNum)\n);\n\nCREATE TABLE tblWorksOn (\n    empSSN     DECIMAL(18,0)  NOT NULL,\n    proNum     INT            NOT NULL,\n    workHours  DECIMAL(5,1)   NULL,\n    CONSTRAINT pk_workson          PRIMARY KEY (empSSN, proNum),\n    CONSTRAINT ck_workson_hours    CHECK (workHours >= 0),\n    CONSTRAINT fk_workson_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN),\n    CONSTRAINT fk_workson_project  FOREIGN KEY (proNum) REFERENCES tblProject (proNum)\n);\n\nCREATE TABLE tblDependent (\n    depName          NVARCHAR(50)   NOT NULL,\n    empSSN           DECIMAL(18,0)  NOT NULL,\n    depSex           CHAR(1)        NULL,\n    depBirthdate     DATE           NULL,\n    depRelationship  NVARCHAR(30)   NULL,\n    CONSTRAINT pk_dependent          PRIMARY KEY (empSSN, depName),\n    CONSTRAINT ck_dependent_sex      CHECK (depSex IN ('F', 'M')),\n    CONSTRAINT fk_dependent_employee FOREIGN KEY (empSSN) REFERENCES tblEmployee (empSSN)\n);\n\nALTER TABLE tblDepartment\n    ADD CONSTRAINT fk_department_manager FOREIGN KEY (mgrSSN) REFERENCES tblEmployee (empSSN);\n\nINSERT INTO tblLocation (locNum, locName) VALUES\n    (1, N'TP Hà Nội'),\n    (2, N'TP Hồ Chí Minh'),\n    (3, N'TP Đà Nẵng'),\n    (4, N'TP Cần Thơ');\n\nINSERT INTO tblDepartment (depNum, depName, mgrSSN, mgrAssDate) VALUES\n    (1, N'Phòng Phần mềm trong nước', NULL, NULL),\n    (2, N'Phòng Phần mềm nước ngoài', NULL, NULL),\n    (3, N'Phòng Kinh doanh',          NULL, NULL),\n    (4, N'Phòng Hành chính',          NULL, NULL),\n    (5, N'Phòng Nghiên cứu',          NULL, NULL);\n\nINSERT INTO tblEmployee (empSSN, empName, empAddress, empSalary, empSex, empBirthdate, depNum, supervisorSSN) VALUES\n    (30121050001, N'Trần Minh Quang', N'45 Nguyễn Huệ, Q.1, TP Hồ Chí Minh',     150000, 'M', '1968-03-12', 1, NULL),\n    (30121050002, N'Hoàng Thị Hà',    N'12 Lê Lợi, Q.1, TP Hồ Chí Minh',         90000,  'F', '1985-07-20', 1, 30121050001),\n    (30121050010, N'Phạm Quốc Bảo',   N'102 Kim Mã, Ba Đình, TP Hà Nội',         95000,  'M', '1978-09-09', 2, 30121050001),\n    (30121050020, N'Nguyễn Thị Mai',  N'60 Bạch Đằng, Hải Châu, TP Đà Nẵng',     88000,  'F', '1980-06-25', 3, 30121050001),\n    (30121050030, N'Huỳnh Văn Tài',   N'9 Võ Văn Tần, Q.3, TP Hồ Chí Minh',      70000,  'M', '1975-10-10', 4, 30121050001),\n    (30121050037, N'Lý Thanh Tâm',    N'77 Hùng Vương, Hải Châu, TP Đà Nẵng',    65000,  'F', '1983-03-03', 5, 30121050001),\n    (30121050003, N'Võ Việt Anh',     N'88 Trần Hưng Đạo, Q.5, TP Hồ Chí Minh',  60000,  'M', '1990-11-02', 1, 30121050002),\n    (30121050004, N'Lê Thị Lan Anh',  N'21 Pasteur, Q.3, TP Hồ Chí Minh',        45000,  'F', '1995-01-15', 1, 30121050002),\n    (30121050005, N'Mai Duy An',      N'7 Hàng Bài, Hoàn Kiếm, TP Hà Nội',       55000,  'M', '1992-05-30', 2, 30121050010),\n    (30121050011, N'Hồ Ngọc Hân',     N'33 Cầu Giấy, TP Hà Nội',                 72000,  'F', '1988-12-01', 2, 30121050010),\n    (30121050012, N'Đặng Tuấn Anh',   N'5 Láng Hạ, Đống Đa, TP Hà Nội',          105000, 'M', '1970-04-18', 2, 30121050010),\n    (30121050021, N'Bùi Văn Nam',     NULL,                                      40000,  'M', '1998-02-14', 3, 30121050020),\n    (30121050027, N'Trương Thị Thu',  N'14 Nguyễn Văn Linh, TP Đà Nẵng',         52000,  'F', '1993-08-08', 3, 30121050020),\n    (30121050038, N'Phan Hữu Nghĩa',  N'3 Lý Thường Kiệt, TP Hà Nội',            38000,  'M', NULL,         5, 30121050037);\n\nUPDATE tblDepartment SET mgrSSN = 30121050001, mgrAssDate = '2015-01-01' WHERE depNum = 1;\nUPDATE tblDepartment SET mgrSSN = 30121050010, mgrAssDate = '2018-06-15' WHERE depNum = 2;\nUPDATE tblDepartment SET mgrSSN = 30121050020, mgrAssDate = '2019-03-01' WHERE depNum = 3;\nUPDATE tblDepartment SET mgrSSN = 30121050030, mgrAssDate = '2020-09-01' WHERE depNum = 4;\nUPDATE tblDepartment SET mgrSSN = 30121050037, mgrAssDate = '2022-01-10' WHERE depNum = 5;\n\nINSERT INTO tblDepLocation (depNum, locNum) VALUES\n    (1, 1), (1, 2),\n    (2, 1), (2, 2),\n    (3, 2), (3, 3),\n    (4, 1),\n    (5, 3);\n\nINSERT INTO tblProject (proNum, proName, locNum, depNum) VALUES\n    (1, N'ProjectA', 1, 1),\n    (2, N'ProjectB', 2, 1),\n    (3, N'ProjectC', 1, 2),\n    (4, N'ProjectD', 2, 2),\n    (5, N'ProjectE', 3, 3),\n    (6, N'ProjectF', 2, 4);\n\nINSERT INTO tblWorksOn (empSSN, proNum, workHours) VALUES\n    (30121050001, 1, 10.0),\n    (30121050002, 1, 20.0),\n    (30121050003, 1, 30.0),\n    (30121050003, 2, 12.5),\n    (30121050004, 2, 35.0),\n    (30121050005, 2, 20.0),\n    (30121050003, 3, 10.0),\n    (30121050005, 3, 25.0),\n    (30121050011, 3, 30.0),\n    (30121050012, 3, 15.0),\n    (30121050010, 4, 30.0),\n    (30121050012, 4, 20.0),\n    (30121050020, 5, 15.0),\n    (30121050021, 5, 40.0),\n    (30121050027, 5, 30.0),\n    (30121050030, 6, 40.0);\n\nINSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship) VALUES\n    (N'Phạm Thị Hoa',     30121050001, 'F', '1970-01-20', N'Vợ'),\n    (N'Trần Minh Khang',  30121050001, 'M', '2000-05-05', N'Con trai'),\n    (N'Nguyễn Văn Bình',  30121050002, 'M', '1983-09-12', N'Chồng'),\n    (N'Phạm Gia Huy',     30121050010, 'M', '2010-02-02', N'Con trai'),\n    (N'Trương Minh Châu', 30121050027, 'F', '2020-07-07', N'Con gái');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Đặng Tuấn Anh earns more than Phạm Quốc Bảo|||Đặng Tuấn Anh lương cao hơn Phạm Quốc Bảo",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "empName",
+                "empSalary",
+                "sepName",
+                "sepSalary"
+              ],
+              "hang": [
+                [
+                  "Đặng Tuấn Anh",
+                  105000,
+                  "Phạm Quốc Bảo",
+                  95000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Nghĩa gets a raise above Tâm|||Ẩn: Nghĩa được tăng lương vượt Tâm",
+            "an": true,
+            "themCsdl": "UPDATE tblEmployee SET empSalary = 70000 WHERE empSSN = 30121050038",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "empName",
+                "empSalary",
+                "sepName",
+                "sepSalary"
+              ],
+              "hang": [
+                [
+                  "Đặng Tuấn Anh",
+                  105000,
+                  "Phạm Quốc Bảo",
+                  95000
+                ],
+                [
+                  "Phan Hữu Nghĩa",
+                  70000,
+                  "Lý Thanh Tâm",
+                  65000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Hân now earns exactly as much as her supervisor — not \"more\"|||Ẩn: Hân giờ lương bằng đúng sếp — không phải \"cao hơn\"",
+            "an": true,
+            "themCsdl": "UPDATE tblEmployee SET empSalary = 95000 WHERE empSSN = 30121050011",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "empName",
+                "empSalary",
+                "sepName",
+                "sepSalary"
+              ],
+              "hang": [
+                [
+                  "Đặng Tuấn Anh",
+                  105000,
+                  "Phạm Quốc Bảo",
+                  95000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A self-join|||Phép tự nối",
+            "khop": "\\btblEmployee\\b[\\s\\S]*\\bJOIN\\s+tblEmployee\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Joining the wrong way round (s.supervisorSSN = e.empSSN) — that compares bosses with their reports.|||Nối ngược (s.supervisorSSN = e.empSSN) — thành so sếp với cấp dưới."
+        },
+        {
+          "loi": "Forgetting the alias names the task asks for.|||Quên tên bí danh mà đề yêu cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "self-join",
+          "vi": "phép tự nối"
+        }
+      ]
+    },
+    {
+      "title": "Problem 4 — total ordered and total paid per customer (the fan-out trap)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "fan-out",
+        "aggregate before join",
+        "LEFT JOIN",
+        "COALESCE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "join"
+      ],
+      "problemHtml": "<p>For every customer: <code>id, ten, tong_dat</code> (sum of orders) and <code>tong_tra</code> (sum of payments), 0 when there is none. Sort by id. An has 2 orders (300) and 3 payments (300).</p>\n<p><code>Khach(id, ten)</code>, <code>DonDat(id, khachId, tongTien)</code>, <code>ThanhToan(id, khachId, soTien)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Aggregate each child table in its own subquery/CTE, THEN join to Khach.</li>\n  <li>LEFT JOIN + COALESCE(…, 0) for customers with no rows.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mọi khách: <code>id, ten, tong_dat</code> (tổng đơn) và <code>tong_tra</code> (tổng thanh toán), 0 nếu không có. Sắp theo id. An có 2 đơn (300) và 3 lần trả (300).</p>\n<p><code>Khach(id, ten)</code>, <code>DonDat(id, khachId, tongTien)</code>, <code>ThanhToan(id, khachId, soTien)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gộp mỗi bảng con trong truy vấn con/CTE riêng, RỒI mới nối với Khach.</li>\n  <li>LEFT JOIN + COALESCE(…, 0) cho khách không có dòng nào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | ten  | tong_dat | tong_tra\n---+------+----------+---------\n1  | An   | 300      | 300     \n2  | Binh | 50       | 0       \n3  | Chi  | 0        | 30      ",
+          "explanation": "Expected result of check \"An 300/300, Binh 50/0, Chi 0/30\" (row order matters).|||Kết quả mong đợi của kiểm \"An 300/300, Binh 50/0, Chi 0/30\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Joining two child tables at once multiplies rows: 2 orders × 3 payments = 6 rows for An.|||Nối hai bảng con cùng lúc nhân dòng: 2 đơn × 3 lần trả = 6 dòng cho An.",
+        "Reduce each child to one row per customer first.|||Thu mỗi bảng con về một dòng mỗi khách trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Shop.sql",
+          "language": "sql",
+          "code": "-- Shop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Shop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Khach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE DonDat (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), tongTien DECIMAL(12,0) NOT NULL);\nCREATE TABLE ThanhToan (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), soTien DECIMAL(12,0) NOT NULL);\nINSERT INTO Khach VALUES (1, 'An'), (2, 'Binh'), (3, 'Chi');\nINSERT INTO DonDat VALUES (10, 1, 100), (11, 1, 200), (12, 2, 50);\nINSERT INTO ThanhToan VALUES (20, 1, 150), (21, 1, 100), (22, 1, 50), (23, 3, 30);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH d AS (SELECT khachId, SUM(tongTien) AS tong_dat FROM DonDat GROUP BY khachId),\n     t AS (SELECT khachId, SUM(soTien)   AS tong_tra FROM ThanhToan GROUP BY khachId)\nSELECT k.id, k.ten, COALESCE(d.tong_dat, 0) AS tong_dat, COALESCE(t.tong_tra, 0) AS tong_tra\nFROM Khach k\nLEFT JOIN d ON d.khachId = k.id\nLEFT JOIN t ON t.khachId = k.id\nORDER BY k.id;\n"
+        },
+        {
+          "name": "Shop.sql",
+          "language": "sql",
+          "code": "-- Shop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Shop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Khach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE DonDat (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), tongTien DECIMAL(12,0) NOT NULL);\nCREATE TABLE ThanhToan (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), soTien DECIMAL(12,0) NOT NULL);\nINSERT INTO Khach VALUES (1, 'An'), (2, 'Binh'), (3, 'Chi');\nINSERT INTO DonDat VALUES (10, 1, 100), (11, 1, 200), (12, 2, 50);\nINSERT INTO ThanhToan VALUES (20, 1, 150), (21, 1, 100), (22, 1, 50), (23, 3, 30);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The fan-out bug is the most common wrong number in real dashboards: the query runs, the totals look plausible, and they are multiplied. Pre-aggregate, or use correlated subqueries in the SELECT list.</p>",
+      "solutionExplanationHtmlVi": "<p>Lỗi fan-out là con số sai phổ biến nhất trong dashboard thật: truy vấn chạy, tổng trông hợp lý, và nó đã bị nhân lên. Gộp trước, hoặc dùng truy vấn con tương quan trong danh sách SELECT.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Khach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE DonDat (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), tongTien DECIMAL(12,0) NOT NULL);\nCREATE TABLE ThanhToan (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL REFERENCES Khach (id), soTien DECIMAL(12,0) NOT NULL);\nINSERT INTO Khach VALUES (1, 'An'), (2, 'Binh'), (3, 'Chi');\nINSERT INTO DonDat VALUES (10, 1, 100), (11, 1, 200), (12, 2, 50);\nINSERT INTO ThanhToan VALUES (20, 1, 150), (21, 1, 100), (22, 1, 50), (23, 3, 30);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "An 300/300, Binh 50/0, Chi 0/30|||An 300/300, Binh 50/0, Chi 0/30",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "ten",
+                "tong_dat",
+                "tong_tra"
+              ],
+              "hang": [
+                [
+                  1,
+                  "An",
+                  300,
+                  300
+                ],
+                [
+                  2,
+                  "Binh",
+                  50,
+                  0
+                ],
+                [
+                  3,
+                  "Chi",
+                  0,
+                  30
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Binh pays twice|||Ẩn: Binh trả hai lần",
+            "an": true,
+            "themCsdl": "INSERT INTO ThanhToan VALUES (24, 2, 20), (25, 2, 30)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "ten",
+                "tong_dat",
+                "tong_tra"
+              ],
+              "hang": [
+                [
+                  1,
+                  "An",
+                  300,
+                  300
+                ],
+                [
+                  2,
+                  "Binh",
+                  50,
+                  50
+                ],
+                [
+                  3,
+                  "Chi",
+                  0,
+                  30
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Two separate aggregations|||Hai phép gộp riêng",
+            "khop": "\\bGROUP\\s+BY\\b[\\s\\S]*\\bGROUP\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SUM after joining both tables: An shows 900 / 900.|||SUM sau khi nối cả hai bảng: An hiện 900 / 900."
+        },
+        {
+          "loi": "Inner joins: customers with no orders or no payments vanish.|||Nối trong: khách không có đơn hoặc không trả tiền biến mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fan-out",
+          "vi": "nhân dòng khi nối"
+        }
+      ]
+    },
+    {
+      "title": "Problem 5 — customers who bought EVERY book (relational division)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "relational division",
+        "COUNT(DISTINCT)",
+        "HAVING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "division"
+      ],
+      "problemHtml": "<p>Return <code>khachId</code> of every customer who bought every book in <code>Sach</code>, sorted.</p>\n<p><code>Sach(id, ten)</code> — 3 books; <code>MuaSach(id, khachId, sachId)</code> — purchases, a customer may buy the same book twice.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>GROUP BY khachId HAVING COUNT(DISTINCT sachId) = (SELECT COUNT(*) FROM Sach).</li>\n  <li>Never hard-code 3: the catalogue grows.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>khachId</code> của mọi khách đã mua đủ mọi cuốn trong <code>Sach</code>, có sắp xếp.</p>\n<p><code>Sach(id, ten)</code> — 3 cuốn; <code>MuaSach(id, khachId, sachId)</code> — lượt mua, một khách có thể mua cùng một cuốn hai lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>GROUP BY khachId HAVING COUNT(DISTINCT sachId) = (SELECT COUNT(*) FROM Sach).</li>\n  <li>Đừng viết cứng số 3: danh mục sẽ lớn lên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "khachId\n-------\n100    \n300    ",
+          "explanation": "Expected result of check \"Customers 100 and 300\" (row order matters).|||Kết quả mong đợi của kiểm \"Khách 100 và 300\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "\"Every\" in a question = division: compare a per-group count with the total count.|||\"Mọi/tất cả\" trong đề = phép chia: so số đếm mỗi nhóm với tổng số.",
+        "DISTINCT protects you from repeated purchases.|||DISTINCT bảo vệ khỏi lượt mua lặp lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Sach.sql",
+          "language": "sql",
+          "code": "-- Sach.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Sach.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Sach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE MuaSach (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL, sachId INT NOT NULL REFERENCES Sach (id));\nINSERT INTO Sach VALUES (1, 'SQL'), (2, 'Java'), (3, 'React');\nINSERT INTO MuaSach VALUES (1, 100, 1), (2, 100, 2), (3, 100, 3),\n                           (4, 200, 1), (5, 200, 1), (6, 200, 2),\n                           (7, 300, 3), (8, 300, 2), (9, 300, 1), (10, 300, 1),\n                           (11, 400, 2);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT khachId\nFROM MuaSach\nGROUP BY khachId\nHAVING COUNT(DISTINCT sachId) = (SELECT COUNT(*) FROM Sach)\nORDER BY khachId;\n"
+        },
+        {
+          "name": "Sach.sql",
+          "language": "sql",
+          "code": "-- Sach.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Sach.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Sach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE MuaSach (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL, sachId INT NOT NULL REFERENCES Sach (id));\nINSERT INTO Sach VALUES (1, 'SQL'), (2, 'Java'), (3, 'React');\nINSERT INTO MuaSach VALUES (1, 100, 1), (2, 100, 2), (3, 100, 3),\n                           (4, 200, 1), (5, 200, 1), (6, 200, 2),\n                           (7, 300, 3), (8, 300, 2), (9, 300, 1), (10, 300, 1),\n                           (11, 400, 2);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The textbook form is a double NOT EXISTS: \"there is no book that this customer did not buy\". Both forms are correct; the COUNT form is easier to say out loud in an interview.</p>",
+      "solutionExplanationHtmlVi": "<p>Dạng giáo trình là NOT EXISTS lồng hai lần: \"không có cuốn nào mà khách này chưa mua\". Cả hai dạng đều đúng; dạng COUNT dễ nói thành lời khi phỏng vấn hơn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Sach (id INT NOT NULL PRIMARY KEY, ten VARCHAR(50) NOT NULL);\nCREATE TABLE MuaSach (id INT NOT NULL PRIMARY KEY, khachId INT NOT NULL, sachId INT NOT NULL REFERENCES Sach (id));\nINSERT INTO Sach VALUES (1, 'SQL'), (2, 'Java'), (3, 'React');\nINSERT INTO MuaSach VALUES (1, 100, 1), (2, 100, 2), (3, 100, 3),\n                           (4, 200, 1), (5, 200, 1), (6, 200, 2),\n                           (7, 300, 3), (8, 300, 2), (9, 300, 1), (10, 300, 1),\n                           (11, 400, 2);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Customers 100 and 300|||Khách 100 và 300",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "khachId"
+              ],
+              "hang": [
+                [
+                  100
+                ],
+                [
+                  300
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a fourth book appears, customer 300 buys it|||Ẩn: có cuốn thứ tư, khách 300 mua nó",
+            "an": true,
+            "themCsdl": "INSERT INTO Sach VALUES (4, 'Docker'); INSERT INTO MuaSach VALUES (12, 300, 4)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "khachId"
+              ],
+              "hang": [
+                [
+                  300
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Compares with the size of Sach|||So với số lượng sách trong Sach",
+            "khop": "\\(\\s*SELECT\\s+COUNT\\s*\\(\\s*\\*\\s*\\)\\s+FROM\\s+Sach\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "COUNT(sachId) without DISTINCT — customer 200 (SQL twice + Java) counts as 3.|||COUNT(sachId) không DISTINCT — khách 200 (SQL hai lần + Java) bị đếm thành 3."
+        },
+        {
+          "loi": "Hard-coding 3.|||Viết cứng số 3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "relational division",
+          "vi": "phép chia quan hệ"
+        }
+      ]
+    },
+    {
+      "title": "Problem 6 — overlapping room bookings",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "interval overlap",
+        "self-join",
+        "a.id < b.id"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "intervals"
+      ],
+      "problemHtml": "<p>List every pair of bookings of the same room that overlap: <code>id1, id2</code> with id1 &lt; id2, sorted by id1, id2. Back-to-back bookings (one ends at 10, the next starts at 10) do <b>not</b> overlap.</p>\n<p><code>DatPhong(id, phong, tu, den)</code> — hours of one day; a booking 9–11 covers [9, 11).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Two intervals overlap when a.tu < b.den AND b.tu < a.den.</li>\n  <li>a.id < b.id lists each pair once and never pairs a booking with itself.</li>\n</ul>",
+      "problemHtmlVi": "<p>Liệt kê mọi cặp lần đặt cùng phòng bị chồng nhau: <code>id1, id2</code> với id1 &lt; id2, sắp theo id1, id2. Hai lần đặt nối tiếp (một cái kết thúc lúc 10, cái kia bắt đầu lúc 10) <b>không</b> chồng nhau.</p>\n<p><code>DatPhong(id, phong, tu, den)</code> — giờ trong một ngày; lần đặt 9–11 chiếm [9, 11).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai khoảng chồng nhau khi a.tu < b.den AND b.tu < a.den.</li>\n  <li>a.id < b.id liệt kê mỗi cặp một lần và không bao giờ ghép một lần đặt với chính nó.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id1 | id2\n----+----\n1   | 2  \n1   | 4  \n2   | 4  \n3   | 4  ",
+          "explanation": "Expected result of check \"Four overlapping pairs in P1\" (row order matters).|||Kết quả mong đợi của kiểm \"Bốn cặp chồng nhau ở P1\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Draw two bars: they overlap unless one ends before the other starts.|||Vẽ hai thanh: chúng chồng nhau trừ khi một thanh kết thúc trước khi thanh kia bắt đầu.",
+        "Negate \"a ends before b starts OR b ends before a starts\".|||Phủ định \"a kết thúc trước khi b bắt đầu HOẶC b kết thúc trước khi a bắt đầu\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "DatPhong.sql",
+          "language": "sql",
+          "code": "-- DatPhong.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DatPhong.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DatPhong (id INT NOT NULL PRIMARY KEY, phong VARCHAR(10) NOT NULL, tu INT NOT NULL, den INT NOT NULL);\nINSERT INTO DatPhong VALUES\n  (1, 'P1', 8, 10), (2, 'P1', 9, 11), (3, 'P1', 11, 12), (4, 'P1', 7, 13),\n  (5, 'P2', 8, 9), (6, 'P2', 9, 10), (7, 'P3', 14, 16);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT a.id AS id1, b.id AS id2\nFROM DatPhong a\nJOIN DatPhong b ON b.phong = a.phong\n               AND a.id < b.id\n               AND a.tu < b.den\n               AND b.tu < a.den\nORDER BY id1, id2;\n"
+        },
+        {
+          "name": "DatPhong.sql",
+          "language": "sql",
+          "code": "-- DatPhong.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- DatPhong.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE DatPhong (id INT NOT NULL PRIMARY KEY, phong VARCHAR(10) NOT NULL, tu INT NOT NULL, den INT NOT NULL);\nINSERT INTO DatPhong VALUES\n  (1, 'P1', 8, 10), (2, 'P1', 9, 11), (3, 'P1', 11, 12), (4, 'P1', 7, 13),\n  (5, 'P2', 8, 9), (6, 'P2', 9, 10), (7, 'P3', 14, 16);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two-comparison test covers every case: partial overlap, containment, identical intervals. PostgreSQL can make overlaps impossible at write time: EXCLUDE USING gist (phong WITH =, int4range(tu, den) WITH &&).</p>",
+      "solutionExplanationHtmlVi": "<p>Phép kiểm hai so sánh phủ mọi trường hợp: chồng một phần, chứa trọn, trùng hệt. PostgreSQL có thể cấm chồng lấn ngay khi ghi: EXCLUDE USING gist (phong WITH =, int4range(tu, den) WITH &&).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE DatPhong (id INT NOT NULL PRIMARY KEY, phong VARCHAR(10) NOT NULL, tu INT NOT NULL, den INT NOT NULL);\nINSERT INTO DatPhong VALUES\n  (1, 'P1', 8, 10), (2, 'P1', 9, 11), (3, 'P1', 11, 12), (4, 'P1', 7, 13),\n  (5, 'P2', 8, 9), (6, 'P2', 9, 10), (7, 'P3', 14, 16);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Four overlapping pairs in P1|||Bốn cặp chồng nhau ở P1",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id1",
+                "id2"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  3,
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: a booking inside another one, in P3|||Ẩn: một lần đặt nằm trong lần khác, ở P3",
+            "an": true,
+            "themCsdl": "INSERT INTO DatPhong VALUES (8, 'P3', 15, 16), (9, 'P3', 16, 17)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id1",
+                "id2"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  7,
+                  8
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A self-join on DatPhong|||Tự nối DatPhong",
+            "khop": "\\bDatPhong\\b[\\s\\S]*\\bJOIN\\s+DatPhong\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<= instead of <: back-to-back bookings 5 and 6 are reported.|||<= thay vì <: hai lần đặt nối tiếp 5 và 6 bị báo."
+        },
+        {
+          "loi": "Only testing \"b starts inside a\": misses booking 4, which contains booking 1.|||Chỉ kiểm \"b bắt đầu bên trong a\": bỏ sót lần đặt 4 chứa trọn lần đặt 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở"
+        },
+        {
+          "en": "overlap",
+          "vi": "chồng lấn"
+        }
+      ]
+    },
+    {
+      "title": "Problem 7 — the latest status of every order",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "latest row per group",
+        "ROW_NUMBER",
+        "correlated MAX"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "window"
+      ],
+      "problemHtml": "<p>Return <code>donId, trangThai</code> = the current (latest) status of each order, sorted by donId.</p>\n<p><code>LichSuDon(donId, buoc, trangThai)</code> — every status change of every order; a higher buoc is later.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>ROW_NUMBER() OVER (PARTITION BY donId ORDER BY buoc DESC) = 1, or buoc = (SELECT MAX(buoc) … same order).</li>\n  <li>Do not rely on insertion order.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>donId, trangThai</code> = trạng thái hiện tại (mới nhất) của mỗi đơn, sắp theo donId.</p>\n<p><code>LichSuDon(donId, buoc, trangThai)</code> — mọi lần đổi trạng thái của mọi đơn; buoc lớn hơn là muộn hơn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>ROW_NUMBER() OVER (PARTITION BY donId ORDER BY buoc DESC) = 1, hoặc buoc = (SELECT MAX(buoc) … cùng đơn).</li>\n  <li>Đừng dựa vào thứ tự chèn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "donId | trangThai\n------+----------\n1     | SHIPPED  \n2     | CANCELLED\n3     | CREATED  \n4     | DELIVERED",
+          "explanation": "Expected result of check \"Four orders\" (row order matters).|||Kết quả mong đợi của kiểm \"Bốn đơn\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "\"Latest per group\" = rank inside the group by time, keep rank 1.|||\"Mới nhất mỗi nhóm\" = xếp hạng trong nhóm theo thời gian, giữ hạng 1.",
+        "MAX(trangThai) is the alphabetically largest status, not the latest.|||MAX(trangThai) là trạng thái lớn nhất theo bảng chữ cái, không phải mới nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "LichSuDon.sql",
+          "language": "sql",
+          "code": "-- LichSuDon.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- LichSuDon.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE LichSuDon (donId INT NOT NULL, buoc INT NOT NULL, trangThai VARCHAR(20) NOT NULL, PRIMARY KEY (donId, buoc));\nINSERT INTO LichSuDon VALUES\n  (1, 1, 'CREATED'), (1, 2, 'PAID'), (1, 3, 'SHIPPED'),\n  (2, 1, 'CREATED'), (2, 2, 'CANCELLED'),\n  (3, 1, 'CREATED'),\n  (4, 3, 'DELIVERED'), (4, 1, 'CREATED'), (4, 2, 'PAID');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "WITH x AS (\n    SELECT donId, trangThai, ROW_NUMBER() OVER (PARTITION BY donId ORDER BY buoc DESC) AS rn\n    FROM LichSuDon\n)\nSELECT donId, trangThai\nFROM x\nWHERE rn = 1\nORDER BY donId;\n"
+        },
+        {
+          "name": "LichSuDon.sql",
+          "language": "sql",
+          "code": "-- LichSuDon.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- LichSuDon.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE LichSuDon (donId INT NOT NULL, buoc INT NOT NULL, trangThai VARCHAR(20) NOT NULL, PRIMARY KEY (donId, buoc));\nINSERT INTO LichSuDon VALUES\n  (1, 1, 'CREATED'), (1, 2, 'PAID'), (1, 3, 'SHIPPED'),\n  (2, 1, 'CREATED'), (2, 2, 'CANCELLED'),\n  (3, 1, 'CREATED'),\n  (4, 3, 'DELIVERED'), (4, 1, 'CREATED'), (4, 2, 'PAID');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For a big history table, an index on (donId, buoc DESC) INCLUDE (trangThai) makes both versions cheap; many systems also keep a currentStatus column on the order itself (deliberate denormalisation, CS.6).</p>",
+      "solutionExplanationHtmlVi": "<p>Với bảng lịch sử lớn, chỉ mục (donId, buoc DESC) INCLUDE (trangThai) làm cả hai cách đều rẻ; nhiều hệ còn giữ cột trangThaiHienTai ngay trên đơn (phi chuẩn hoá có chủ ý, CS.6).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE LichSuDon (donId INT NOT NULL, buoc INT NOT NULL, trangThai VARCHAR(20) NOT NULL, PRIMARY KEY (donId, buoc));\nINSERT INTO LichSuDon VALUES\n  (1, 1, 'CREATED'), (1, 2, 'PAID'), (1, 3, 'SHIPPED'),\n  (2, 1, 'CREATED'), (2, 2, 'CANCELLED'),\n  (3, 1, 'CREATED'),\n  (4, 3, 'DELIVERED'), (4, 1, 'CREATED'), (4, 2, 'PAID');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Four orders|||Bốn đơn",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "donId",
+                "trangThai"
+              ],
+              "hang": [
+                [
+                  1,
+                  "SHIPPED"
+                ],
+                [
+                  2,
+                  "CANCELLED"
+                ],
+                [
+                  3,
+                  "CREATED"
+                ],
+                [
+                  4,
+                  "DELIVERED"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: order 3 is paid, order 1 is delivered|||Ẩn: đơn 3 được trả tiền, đơn 1 đã giao",
+            "an": true,
+            "themCsdl": "INSERT INTO LichSuDon VALUES (3, 2, 'PAID'), (1, 4, 'DELIVERED')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "donId",
+                "trangThai"
+              ],
+              "hang": [
+                [
+                  1,
+                  "DELIVERED"
+                ],
+                [
+                  2,
+                  "CANCELLED"
+                ],
+                [
+                  3,
+                  "PAID"
+                ],
+                [
+                  4,
+                  "DELIVERED"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Picks one row per order|||Chọn một dòng mỗi đơn",
+            "khop": "\\bROW_NUMBER\\b|\\bMAX\\s*\\(\\s*buoc\\s*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "MAX(trangThai): order 1 shows SHIPPED by luck, order 4 shows PAID instead of DELIVERED.|||MAX(trangThai): đơn 1 tình cờ ra SHIPPED, đơn 4 ra PAID thay vì DELIVERED."
+        },
+        {
+          "loi": "ORDER BY buoc ascending — that is the FIRST status.|||ORDER BY buoc tăng dần — đó là trạng thái ĐẦU TIÊN."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "latest-per-group",
+          "vi": "bản ghi mới nhất mỗi nhóm"
+        }
+      ]
+    },
+    {
+      "title": "Problem 8 — daily cancellation rate, excluding banned users",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "conditional aggregation",
+        "join filters",
+        "rate with decimals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview",
+        "aggregation"
+      ],
+      "problemHtml": "<p>For each day from 2013-10-01 to 2013-10-03: <code>request_at</code> and <code>cancellation_rate</code> = cancelled trips ÷ all trips, counting only trips whose client <b>and</b> driver are both not banned, rounded to 2 decimals as <code>DECIMAL(4,2)</code>. A trip is cancelled when its status is not \"completed\". Sort by day.</p>\n<p><code>Users(users_id, banned, role)</code> and <code>Trips(id, client_id, driver_id, city_id, status, request_at)</code> — client 2 is banned.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Join Users twice (client and driver), both banned = 'No'.</li>\n  <li>SUM(CASE WHEN status <> 'completed' THEN 1.0 ELSE 0 END) / COUNT(*).</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi ngày từ 2013-10-01 tới 2013-10-03: <code>request_at</code> và <code>cancellation_rate</code> = số chuyến huỷ ÷ tổng chuyến, chỉ tính chuyến mà cả khách <b>lẫn</b> tài xế đều không bị cấm, làm tròn 2 chữ số dạng <code>DECIMAL(4,2)</code>. Chuyến bị huỷ khi trạng thái khác \"completed\". Sắp theo ngày.</p>\n<p><code>Users(users_id, banned, role)</code> và <code>Trips(id, client_id, driver_id, city_id, status, request_at)</code> — khách 2 bị cấm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nối Users hai lần (khách và tài xế), cả hai banned = 'No'.</li>\n  <li>SUM(CASE WHEN status <> 'completed' THEN 1.0 ELSE 0 END) / COUNT(*).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "request_at | cancellation_rate\n-----------+------------------\n2013-10-01 | 0.33             \n2013-10-02 | 0                \n2013-10-03 | 0.5              ",
+          "explanation": "Expected result of check \"0.33, 0.00, 0.50\" (row order matters).|||Kết quả mong đợi của kiểm \"0.33, 0.00, 0.50\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Filter people in the JOIN conditions, filter days in WHERE.|||Lọc người trong điều kiện JOIN, lọc ngày trong WHERE.",
+        "1.0 makes the division decimal.|||1.0 làm phép chia thành thập phân."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Trips.sql",
+          "language": "sql",
+          "code": "-- Trips.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Trips.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Users (users_id INT NOT NULL PRIMARY KEY, banned VARCHAR(3) NOT NULL, role VARCHAR(10) NOT NULL);\nCREATE TABLE Trips (id INT NOT NULL PRIMARY KEY, client_id INT NOT NULL, driver_id INT NOT NULL, city_id INT NOT NULL,\n                    status VARCHAR(20) NOT NULL, request_at DATE NOT NULL);\nINSERT INTO Users VALUES (1, 'No', 'client'), (2, 'Yes', 'client'), (3, 'No', 'client'), (4, 'No', 'client'),\n                         (10, 'No', 'driver'), (11, 'No', 'driver'), (12, 'No', 'driver'), (13, 'No', 'driver');\nINSERT INTO Trips VALUES\n  (1, 1, 10, 1, 'completed', '2013-10-01'), (2, 2, 11, 1, 'cancelled_by_driver', '2013-10-01'),\n  (3, 3, 12, 6, 'completed', '2013-10-01'), (4, 4, 13, 6, 'cancelled_by_client', '2013-10-01'),\n  (5, 1, 10, 1, 'completed', '2013-10-02'), (6, 2, 11, 6, 'completed', '2013-10-02'),\n  (7, 3, 12, 6, 'completed', '2013-10-02'), (8, 2, 12, 12, 'completed', '2013-10-03'),\n  (9, 3, 10, 12, 'completed', '2013-10-03'), (10, 4, 13, 12, 'cancelled_by_driver', '2013-10-03');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT t.request_at,\n       CAST(ROUND(SUM(CASE WHEN t.status <> 'completed' THEN 1.0 ELSE 0 END) / COUNT(*), 2) AS DECIMAL(4,2)) AS cancellation_rate\nFROM Trips t\nJOIN Users c ON c.users_id = t.client_id AND c.banned = 'No'\nJOIN Users d ON d.users_id = t.driver_id AND d.banned = 'No'\nWHERE t.request_at BETWEEN '2013-10-01' AND '2013-10-03'\nGROUP BY t.request_at\nORDER BY t.request_at;\n"
+        },
+        {
+          "name": "Trips.sql",
+          "language": "sql",
+          "code": "-- Trips.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Trips.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Users (users_id INT NOT NULL PRIMARY KEY, banned VARCHAR(3) NOT NULL, role VARCHAR(10) NOT NULL);\nCREATE TABLE Trips (id INT NOT NULL PRIMARY KEY, client_id INT NOT NULL, driver_id INT NOT NULL, city_id INT NOT NULL,\n                    status VARCHAR(20) NOT NULL, request_at DATE NOT NULL);\nINSERT INTO Users VALUES (1, 'No', 'client'), (2, 'Yes', 'client'), (3, 'No', 'client'), (4, 'No', 'client'),\n                         (10, 'No', 'driver'), (11, 'No', 'driver'), (12, 'No', 'driver'), (13, 'No', 'driver');\nINSERT INTO Trips VALUES\n  (1, 1, 10, 1, 'completed', '2013-10-01'), (2, 2, 11, 1, 'cancelled_by_driver', '2013-10-01'),\n  (3, 3, 12, 6, 'completed', '2013-10-01'), (4, 4, 13, 6, 'cancelled_by_client', '2013-10-01'),\n  (5, 1, 10, 1, 'completed', '2013-10-02'), (6, 2, 11, 6, 'completed', '2013-10-02'),\n  (7, 3, 12, 6, 'completed', '2013-10-02'), (8, 2, 12, 12, 'completed', '2013-10-03'),\n  (9, 3, 10, 12, 'completed', '2013-10-03'), (10, 4, 13, 12, 'cancelled_by_driver', '2013-10-03');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is LeetCode 262, one of the most asked \"hard\" SQL questions. A day where every trip is excluded disappears from the result — ask whether it should show 0.00 instead (then you need a calendar, problem 9).</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là LeetCode 262, một trong các câu SQL \"khó\" hay hỏi nhất. Ngày mà mọi chuyến đều bị loại sẽ biến khỏi kết quả — hỏi lại xem có cần hiện 0.00 không (khi đó cần bảng lịch, bài 9).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Users (users_id INT NOT NULL PRIMARY KEY, banned VARCHAR(3) NOT NULL, role VARCHAR(10) NOT NULL);\nCREATE TABLE Trips (id INT NOT NULL PRIMARY KEY, client_id INT NOT NULL, driver_id INT NOT NULL, city_id INT NOT NULL,\n                    status VARCHAR(20) NOT NULL, request_at DATE NOT NULL);\nINSERT INTO Users VALUES (1, 'No', 'client'), (2, 'Yes', 'client'), (3, 'No', 'client'), (4, 'No', 'client'),\n                         (10, 'No', 'driver'), (11, 'No', 'driver'), (12, 'No', 'driver'), (13, 'No', 'driver');\nINSERT INTO Trips VALUES\n  (1, 1, 10, 1, 'completed', '2013-10-01'), (2, 2, 11, 1, 'cancelled_by_driver', '2013-10-01'),\n  (3, 3, 12, 6, 'completed', '2013-10-01'), (4, 4, 13, 6, 'cancelled_by_client', '2013-10-01'),\n  (5, 1, 10, 1, 'completed', '2013-10-02'), (6, 2, 11, 6, 'completed', '2013-10-02'),\n  (7, 3, 12, 6, 'completed', '2013-10-02'), (8, 2, 12, 12, 'completed', '2013-10-03'),\n  (9, 3, 10, 12, 'completed', '2013-10-03'), (10, 4, 13, 12, 'cancelled_by_driver', '2013-10-03');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "0.33, 0.00, 0.50|||0.33, 0.00, 0.50",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "request_at",
+                "cancellation_rate"
+              ],
+              "hang": [
+                [
+                  "2013-10-01",
+                  0.33
+                ],
+                [
+                  "2013-10-02",
+                  0
+                ],
+                [
+                  "2013-10-03",
+                  0.5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: driver 13 gets banned, and a trip on 2013-10-04 must be ignored|||Ẩn: tài xế 13 bị cấm, và một chuyến ngày 2013-10-04 phải bị bỏ qua",
+            "an": true,
+            "themCsdl": "UPDATE Users SET banned = 'Yes' WHERE users_id = 13; INSERT INTO Trips VALUES (11, 1, 10, 1, 'cancelled_by_client', '2013-10-04')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "request_at",
+                "cancellation_rate"
+              ],
+              "hang": [
+                [
+                  "2013-10-01",
+                  0
+                ],
+                [
+                  "2013-10-02",
+                  0
+                ],
+                [
+                  "2013-10-03",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Conditional aggregation|||Gộp có điều kiện",
+            "khop": "\\bSUM\\s*\\(\\s*CASE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only the client — a banned driver's trips still count.|||Chỉ kiểm khách — chuyến của tài xế bị cấm vẫn được tính."
+        },
+        {
+          "loi": "Counting only one kind of cancellation.|||Chỉ đếm một kiểu huỷ chuyến."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cancellation rate",
+          "vi": "tỉ lệ huỷ"
+        }
+      ]
+    },
+    {
+      "title": "Problem 9 — monthly revenue including the months with zero (PostgreSQL)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "calendar table",
+        "generate_series",
+        "LEFT JOIN to a calendar"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "postgresql",
+        "advanced",
+        "interview",
+        "time-series"
+      ],
+      "problemHtml": "<p>Return one row per month from 2025-01 to 2025-06: <code>thang</code> (the first day, as a date) and <code>doanh_thu</code> (0 for a month without orders), sorted by month. Runs on real PostgreSQL: build the months with <code>generate_series</code>.</p>\n<p><code>don_hang(id, ngay, tien)</code> — orders of January–June 2025; March and May have none. PostgreSQL syntax.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>generate_series(DATE '2025-01-01', DATE '2025-06-01', INTERVAL '1 month') gives the six month starts.</li>\n  <li>LEFT JOIN the orders on a half-open month range; COALESCE(SUM(…), 0).</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả mỗi tháng một dòng từ 2025-01 tới 2025-06: <code>thang</code> (ngày đầu tháng, kiểu date) và <code>doanh_thu</code> (0 cho tháng không có đơn), sắp theo tháng. Chạy trên PostgreSQL thật: sinh các tháng bằng <code>generate_series</code>.</p>\n<p><code>don_hang(id, ngay, tien)</code> — đơn tháng 1–6/2025; tháng 3 và tháng 5 không có đơn. Cú pháp PostgreSQL.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>generate_series(DATE '2025-01-01', DATE '2025-06-01', INTERVAL '1 month') cho sáu ngày đầu tháng.</li>\n  <li>LEFT JOIN đơn hàng theo khoảng tháng nửa mở; COALESCE(SUM(…), 0).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "thang      | doanh_thu\n-----------+----------\n2025-01-01 | 150      \n2025-02-01 | 80       \n2025-03-01 | 0        \n2025-04-01 | 150      \n2025-05-01 | 0        \n2025-06-01 | 90       ",
+          "explanation": "Expected result of check \"Six months, March and May at 0\" (row order matters).|||Kết quả mong đợi của kiểm \"Sáu tháng, tháng 3 và 5 bằng 0\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Rows that do not exist cannot be grouped: generate the months first, then attach the data.|||Dòng không tồn tại thì không gộp được: sinh tháng trước, rồi gắn dữ liệu vào.",
+        "LEFT JOIN + COALESCE turns \"no row\" into 0.|||LEFT JOIN + COALESCE biến \"không có dòng\" thành 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- PostgreSQL: this exercise runs on real PostgreSQL (not in SQL Server mode).\n-- PostgreSQL: bài này chạy trên PostgreSQL thật (không ở chế độ SQL Server).\n"
+        },
+        {
+          "name": "don_hang.sql",
+          "language": "sql",
+          "code": "-- don_hang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- don_hang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql.\nCREATE TABLE don_hang (id int PRIMARY KEY, ngay date NOT NULL, tien numeric(12,0) NOT NULL);\nINSERT INTO don_hang VALUES\n  (1, '2025-01-03', 100), (2, '2025-01-20', 50), (3, '2025-02-14', 80),\n  (4, '2025-04-01', 120), (5, '2025-04-30', 30), (6, '2025-06-15', 90);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT m::date AS thang,\n       COALESCE(SUM(d.tien), 0) AS doanh_thu\nFROM generate_series(DATE '2025-01-01', DATE '2025-06-01', INTERVAL '1 month') AS m\nLEFT JOIN don_hang d ON d.ngay >= m AND d.ngay < m + INTERVAL '1 month'\nGROUP BY m\nORDER BY m;\n"
+        },
+        {
+          "name": "don_hang.sql",
+          "language": "sql",
+          "code": "-- don_hang.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- don_hang.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql.\nCREATE TABLE don_hang (id int PRIMARY KEY, ngay date NOT NULL, tien numeric(12,0) NOT NULL);\nINSERT INTO don_hang VALUES\n  (1, '2025-01-03', 100), (2, '2025-01-20', 50), (3, '2025-02-14', 80),\n  (4, '2025-04-01', 120), (5, '2025-04-30', 30), (6, '2025-06-15', 90);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On SQL Server build the months with a recursive CTE (WITH m AS (SELECT CAST('2025-01-01' AS DATE) AS thang UNION ALL SELECT DATEADD(MONTH, 1, thang) FROM m WHERE thang < '2025-06-01')) or, on 2022+, GENERATE_SERIES(0, 5) with DATEADD. A permanent calendar table is the usual production answer.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên SQL Server sinh tháng bằng CTE đệ quy (WITH m AS (SELECT CAST('2025-01-01' AS DATE) AS thang UNION ALL SELECT DATEADD(MONTH, 1, thang) FROM m WHERE thang < '2025-06-01')) hoặc, từ bản 2022, GENERATE_SERIES(0, 5) kèm DATEADD. Bảng lịch cố định là câu trả lời thường dùng trên production.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE don_hang (id int PRIMARY KEY, ngay date NOT NULL, tien numeric(12,0) NOT NULL);\nINSERT INTO don_hang VALUES\n  (1, '2025-01-03', 100), (2, '2025-01-20', 50), (3, '2025-02-14', 80),\n  (4, '2025-04-01', 120), (5, '2025-04-30', 30), (6, '2025-06-15', 90);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Six months, March and May at 0|||Sáu tháng, tháng 3 và 5 bằng 0",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "thang",
+                "doanh_thu"
+              ],
+              "hang": [
+                [
+                  "2025-01-01",
+                  150
+                ],
+                [
+                  "2025-02-01",
+                  80
+                ],
+                [
+                  "2025-03-01",
+                  0
+                ],
+                [
+                  "2025-04-01",
+                  150
+                ],
+                [
+                  "2025-05-01",
+                  0
+                ],
+                [
+                  "2025-06-01",
+                  90
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: an order on 31 May and one on 1 July|||Ẩn: một đơn ngày 31/5 và một đơn ngày 1/7",
+            "an": true,
+            "themCsdl": "INSERT INTO don_hang VALUES (7, '2025-05-31', 40), (8, '2025-07-01', 999)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "thang",
+                "doanh_thu"
+              ],
+              "hang": [
+                [
+                  "2025-01-01",
+                  150
+                ],
+                [
+                  "2025-02-01",
+                  80
+                ],
+                [
+                  "2025-03-01",
+                  0
+                ],
+                [
+                  "2025-04-01",
+                  150
+                ],
+                [
+                  "2025-05-01",
+                  40
+                ],
+                [
+                  "2025-06-01",
+                  90
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A generated calendar|||Lịch được sinh ra",
+            "khop": "\\bgenerate_series\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "GROUP BY date_trunc on the orders only — March and May are simply missing.|||GROUP BY date_trunc chỉ trên đơn hàng — tháng 3 và 5 biến mất luôn."
+        },
+        {
+          "loi": "<= at the end of the range — 1 July would be counted in June.|||<= ở cuối khoảng — ngày 1/7 bị tính vào tháng 6."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "calendar table",
+          "vi": "bảng lịch"
+        },
+        {
+          "en": "time series",
+          "vi": "chuỗi thời gian"
+        }
+      ]
+    }
+  ]
+}

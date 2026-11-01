@@ -1,0 +1,534 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-cs8-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-cs8-1"
+  },
+  "exercises": [
+    {
+      "title": "Writing SQL live in front of the interviewer: the order that works",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "live SQL interview",
+        "clarifying questions",
+        "edge cases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview"
+      ],
+      "problemHtml": "<p>Slides 3–4. The interviewer says \"find the second-highest salary\". Order what you do.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 3–4. Người phỏng vấn nói \"tìm lương cao thứ hai\". Sắp những việc bạn làm.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Never start typing before the edge cases are agreed.|||Đừng gõ trước khi thống nhất các ca biên.",
+        "Test with the nasty example, not the happy one.|||Thử bằng ví dụ khó chịu, không phải ví dụ đẹp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing SQL live in front of the interviewer: the order that works\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Writing SQL live in front of the interviewer: the order that works — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m2) Ask: ties? NULL salaries? what if there is no second value?  →  m3) Say the plan out loud: distinct salaries, rank them, take rank 2  →  m5) Write it as small named CTE steps  →  m4) Run it by hand on a tiny example with a tie and a NULL  →  m1) Offer a second solution and the index that would help\n   Clarify → plan → write → test by hand → alternatives. Interviewers grade the questions you ask as much as the SQL you write.VI: Hỏi rõ → lập kế hoạch → viết → chạy tay → phương án khác. Người phỏng vấn chấm câu bạn hỏi ngang với câu SQL bạn viết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Clarify → plan → write → test by hand → alternatives. Interviewers grade the questions you ask as much as the SQL you write.</p><p><i>VI: Hỏi rõ → lập kế hoạch → viết → chạy tay → phương án khác. Người phỏng vấn chấm câu bạn hỏi ngang với câu SQL bạn viết.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Offer a second solution and the index that would help"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Ask: ties? NULL salaries? what if there is no second value?"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Say the plan out loud: distinct salaries, rank them, take rank 2"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Run it by hand on a tiny example with a tie and a NULL"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Write it as small named CTE steps"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m5",
+              "m4",
+              "m1"
+            ],
+            "giaiThich": "<p>Clarify → plan → write → test by hand → alternatives. Interviewers grade the questions you ask as much as the SQL you write.</p><p><i>VI: Hỏi rõ → lập kế hoạch → viết → chạy tay → phương án khác. Người phỏng vấn chấm câu bạn hỏi ngang với câu SQL bạn viết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Jumping straight to TOP 1 … WHERE salary < (SELECT MAX …) without asking about ties.|||Lao ngay vào TOP 1 … WHERE salary < (SELECT MAX …) mà không hỏi về hoà."
+        },
+        {
+          "loi": "Stopping at the first solution without mentioning indexes or alternatives.|||Dừng ở lời giải đầu tiên mà không nhắc chỉ mục hay phương án khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clarifying question",
+          "vi": "câu hỏi làm rõ"
+        },
+        {
+          "en": "edge case",
+          "vi": "ca biên"
+        }
+      ]
+    },
+    {
+      "title": "Bank Q1–30: keys, normalisation, joins — answer with the trade-off",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "keys",
+        "normalisation",
+        "joins",
+        "NULL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview"
+      ],
+      "problemHtml": "<p>Five questions from slides 5–8. Each claim about engine behaviour was run on SQL Server and PostgreSQL.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu từ slide 5–8. Mọi khẳng định về hành vi của hệ đều đã chạy trên SQL Server và PostgreSQL.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three steps: definition, example with a number, trade-off.|||Ba bước: định nghĩa, ví dụ có số, đánh đổi.",
+        "When an engine detail matters, say which engine.|||Khi chi tiết của hệ quan trọng, nói rõ hệ nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bank Q1–30: keys, normalisation, joins — answer with the trade-off\n\nAnswer in the answer panel (no code needed).\n\n1. A UNIQUE column on SQL Server and on PostgreSQL receives a second NULL. Result?Cột UNIQUE trên SQL Server và PostgreSQL nhận NULL thứ hai. Kết quả?\n2. \"Why not just normalise everything to BCNF?\" — the best short answer is…\"Sao không chuẩn hoá mọi thứ lên BCNF?\" — câu trả lời ngắn tốt nhất là…\n3. WHERE id NOT IN (SELECT customerId FROM Orders) returns no rows at all. Most likely…WHERE id NOT IN (SELECT customerId FROM Orders) không trả dòng nào. Nhiều khả năng…\n4. COUNT(*) vs COUNT(e.empSSN) after a LEFT JOIN of departments to employees: an empty department shows…COUNT(*) vs COUNT(e.empSSN) sau LEFT JOIN phòng với nhân viên: phòng trống hiện…\n5. DELETE vs TRUNCATE inside a transaction, then ROLLBACK:DELETE và TRUNCATE trong một giao dịch rồi ROLLBACK:\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bank Q1–30: keys, normalisation, joins — answer with the trade-off — answer key\n\n1. A UNIQUE column on SQL Server and on PostgreSQL receives a second NULL. Result?Cột UNIQUE trên SQL Server và PostgreSQL nhận NULL thứ hai. Kết quả?\n   Answer: a) SQL Server refuses it; PostgreSQL accepts it\n   SQL Server treats NULLs as equal for UNIQUE (one NULL only; use a filtered index for more). PostgreSQL 15+ can choose with NULLS NOT DISTINCT.VI: SQL Server coi các NULL bằng nhau với UNIQUE (chỉ một NULL; dùng chỉ mục lọc để có nhiều). PostgreSQL 15+ chọn được bằng NULLS NOT DISTINCT.\n\n2. \"Why not just normalise everything to BCNF?\" — the best short answer is…\"Sao không chuẩn hoá mọi thứ lên BCNF?\" — câu trả lời ngắn tốt nhất là…\n   Answer: d) BCNF can lose a dependency, and reads may need more joins; 3NF is the usual stop\n   Definition → example → trade-off: 3NF always preserves dependencies; BCNF might not.VI: Định nghĩa → ví dụ → đánh đổi: 3NF luôn bảo toàn phụ thuộc; BCNF có thể không.\n\n3. WHERE id NOT IN (SELECT customerId FROM Orders) returns no rows at all. Most likely…WHERE id NOT IN (SELECT customerId FROM Orders) không trả dòng nào. Nhiều khả năng…\n   Answer: d) one order has a NULL customerId\n   x NOT IN (…, NULL) is never TRUE. Use NOT EXISTS, which ignores NULLs correctly.VI: x NOT IN (…, NULL) không bao giờ TRUE. Dùng NOT EXISTS, nó xử lý NULL đúng.\n\n4. COUNT(*) vs COUNT(e.empSSN) after a LEFT JOIN of departments to employees: an empty department shows…COUNT(*) vs COUNT(e.empSSN) sau LEFT JOIN phòng với nhân viên: phòng trống hiện…\n   Answer: b) 1 with COUNT(*), 0 with COUNT(e.empSSN)\n   The LEFT JOIN produces one row of NULLs; COUNT(*) counts rows, COUNT(column) skips NULLs.VI: LEFT JOIN sinh một dòng toàn NULL; COUNT(*) đếm dòng, COUNT(cột) bỏ NULL.\n\n5. DELETE vs TRUNCATE inside a transaction, then ROLLBACK:DELETE và TRUNCATE trong một giao dịch rồi ROLLBACK:\n   Answer: c) both are undone on SQL Server and on PostgreSQL\n   A common myth. TRUNCATE is logged (page deallocations) and fully transactional; it also resets IDENTITY on SQL Server.VI: Một hiểu lầm phổ biến. TRUNCATE có ghi nhật ký (giải phóng trang) và hoàn toàn giao dịch; nó còn đặt lại IDENTITY trên SQL Server.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> SQL Server refuses it; PostgreSQL accepts it</p><p>SQL Server treats NULLs as equal for UNIQUE (one NULL only; use a filtered index for more). PostgreSQL 15+ can choose with NULLS NOT DISTINCT.</p><p><i>VI: SQL Server coi các NULL bằng nhau với UNIQUE (chỉ một NULL; dùng chỉ mục lọc để có nhiều). PostgreSQL 15+ chọn được bằng NULLS NOT DISTINCT.</i></p></li><li><p><b>d)</b> BCNF can lose a dependency, and reads may need more joins; 3NF is the usual stop</p><p>Definition → example → trade-off: 3NF always preserves dependencies; BCNF might not.</p><p><i>VI: Định nghĩa → ví dụ → đánh đổi: 3NF luôn bảo toàn phụ thuộc; BCNF có thể không.</i></p></li><li><p><b>d)</b> one order has a NULL customerId</p><p>x NOT IN (…, NULL) is never TRUE. Use NOT EXISTS, which ignores NULLs correctly.</p><p><i>VI: x NOT IN (…, NULL) không bao giờ TRUE. Dùng NOT EXISTS, nó xử lý NULL đúng.</i></p></li><li><p><b>b)</b> 1 with COUNT(*), 0 with COUNT(e.empSSN)</p><p>The LEFT JOIN produces one row of NULLs; COUNT(*) counts rows, COUNT(column) skips NULLs.</p><p><i>VI: LEFT JOIN sinh một dòng toàn NULL; COUNT(*) đếm dòng, COUNT(cột) bỏ NULL.</i></p></li><li><p><b>c)</b> both are undone on SQL Server and on PostgreSQL</p><p>A common myth. TRUNCATE is logged (page deallocations) and fully transactional; it also resets IDENTITY on SQL Server.</p><p><i>VI: Một hiểu lầm phổ biến. TRUNCATE có ghi nhật ký (giải phóng trang) và hoàn toàn giao dịch; nó còn đặt lại IDENTITY trên SQL Server.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A UNIQUE column on SQL Server and on PostgreSQL receives a second NULL. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột UNIQUE trên SQL Server và PostgreSQL nhận NULL thứ hai. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SQL Server refuses it; PostgreSQL accepts it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "both accept it: NULL is never equal to NULL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SQL Server accepts it; PostgreSQL refuses it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "both refuse it: NULL counts as a value"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>SQL Server treats NULLs as equal for UNIQUE (one NULL only; use a filtered index for more). PostgreSQL 15+ can choose with NULLS NOT DISTINCT.</p><p><i>VI: SQL Server coi các NULL bằng nhau với UNIQUE (chỉ một NULL; dùng chỉ mục lọc để có nhiều). PostgreSQL 15+ chọn được bằng NULLS NOT DISTINCT.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>\"Why not just normalise everything to BCNF?\" — the best short answer is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Sao không chuẩn hoá mọi thứ lên BCNF?\" — câu trả lời ngắn tốt nhất là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BCNF tables cannot have foreign keys"
+              },
+              {
+                "ma": "b",
+                "noiDung": "BCNF is only a theory and no real DBMS supports it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "normalisation makes every query slower"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BCNF can lose a dependency, and reads may need more joins; 3NF is the usual stop"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Definition → example → trade-off: 3NF always preserves dependencies; BCNF might not.</p><p><i>VI: Định nghĩa → ví dụ → đánh đổi: 3NF luôn bảo toàn phụ thuộc; BCNF có thể không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>WHERE id NOT IN (SELECT customerId FROM Orders) returns no rows at all. Most likely…</p><p style=\"opacity:.75;font-size:.92em\"><i>WHERE id NOT IN (SELECT customerId FROM Orders) không trả dòng nào. Nhiều khả năng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the subquery returns too many rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every customer has placed an order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NOT IN needs an index on customerId"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one order has a NULL customerId"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>x NOT IN (…, NULL) is never TRUE. Use NOT EXISTS, which ignores NULLs correctly.</p><p><i>VI: x NOT IN (…, NULL) không bao giờ TRUE. Dùng NOT EXISTS, nó xử lý NULL đúng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>COUNT(*) vs COUNT(e.empSSN) after a LEFT JOIN of departments to employees: an empty department shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>COUNT(*) vs COUNT(e.empSSN) sau LEFT JOIN phòng với nhân viên: phòng trống hiện…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 with both counts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1 with COUNT(*), 0 with COUNT(e.empSSN)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0 with both counts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "NULL with COUNT(*), 0 with COUNT(e.empSSN)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The LEFT JOIN produces one row of NULLs; COUNT(*) counts rows, COUNT(column) skips NULLs.</p><p><i>VI: LEFT JOIN sinh một dòng toàn NULL; COUNT(*) đếm dòng, COUNT(cột) bỏ NULL.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>DELETE vs TRUNCATE inside a transaction, then ROLLBACK:</p><p style=\"opacity:.75;font-size:.92em\"><i>DELETE và TRUNCATE trong một giao dịch rồi ROLLBACK:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TRUNCATE is undone only on PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only DELETE can be rolled back on either engine"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both are undone on SQL Server and on PostgreSQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "neither can be rolled back once it runs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A common myth. TRUNCATE is logged (page deallocations) and fully transactional; it also resets IDENTITY on SQL Server.</p><p><i>VI: Một hiểu lầm phổ biến. TRUNCATE có ghi nhật ký (giải phóng trang) và hoàn toàn giao dịch; nó còn đặt lại IDENTITY trên SQL Server.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"TRUNCATE cannot be rolled back\" — false on both engines.|||\"TRUNCATE không rollback được\" — sai trên cả hai hệ."
+        },
+        {
+          "loi": "Using NOT IN on a nullable column.|||Dùng NOT IN trên cột cho phép NULL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trade-off",
+          "vi": "sự đánh đổi"
+        },
+        {
+          "en": "three-valued logic",
+          "vi": "logic ba giá trị"
+        }
+      ]
+    },
+    {
+      "title": "Bank Q31–66: indexes, transactions, NoSQL, security — the trade-off answers",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 8,
+      "points": 30,
+      "concepts": [
+        "indexes",
+        "isolation",
+        "NoSQL",
+        "security",
+        "operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "advanced",
+        "interview"
+      ],
+      "problemHtml": "<p>Five questions from slides 9–12.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu từ slide 9–12.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer ends with \"it depends on … because …\".|||Mỗi câu trả lời kết bằng \"tuỳ vào … vì …\".",
+        "Quote a number you measured in this course.|||Dẫn một con số bạn đã đo trong khoá học."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bank Q31–66: indexes, transactions, NoSQL, security — the trade-off answers\n\nAnswer in the answer panel (no code needed).\n\n1. \"Should we index every column used in a WHERE?\"\"Có nên đánh chỉ mục mọi cột xuất hiện trong WHERE?\"\n2. Default isolation level: SQL Server and PostgreSQL both say READ COMMITTED. The difference?Mức cô lập mặc định: SQL Server và PostgreSQL đều là READ COMMITTED. Khác nhau ở đâu?\n3. \"When would you pick MongoDB over PostgreSQL?\"\"Khi nào bạn chọn MongoDB thay PostgreSQL?\"\n4. \"How do you store passwords?\"\"Bạn lưu mật khẩu thế nào?\"\n5. \"The database is slow\" — your first step is…\"CSDL chạy chậm\" — bước đầu tiên của bạn là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bank Q31–66: indexes, transactions, NoSQL, security — the trade-off answers — answer key\n\n1. \"Should we index every column used in a WHERE?\"\"Có nên đánh chỉ mục mọi cột xuất hiện trong WHERE?\"\n   Answer: d) no: each index slows writes; index selective, frequent filters and FKs\n   Back it up with the read/write ratio and an unused-index query.VI: Chứng minh bằng tỉ lệ đọc/ghi và truy vấn tìm chỉ mục không dùng.\n\n2. Default isolation level: SQL Server and PostgreSQL both say READ COMMITTED. The difference?Mức cô lập mặc định: SQL Server và PostgreSQL đều là READ COMMITTED. Khác nhau ở đâu?\n   Answer: a) SQL Server uses short S locks (readers can wait); PostgreSQL reads snapshots\n   Same name, different mechanism — unless RCSI is ON in SQL Server.VI: Cùng tên, khác cơ chế — trừ khi bật RCSI trên SQL Server.\n\n3. \"When would you pick MongoDB over PostgreSQL?\"\"Khi nào bạn chọn MongoDB thay PostgreSQL?\"\n   Answer: c) whole documents with varying fields, few cross-entity transactions\n   Then add the cost: no joins/constraints across collections, and jsonb often covers the case.VI: Rồi nói cái giá: không nối/ràng buộc giữa các collection, và jsonb thường đã đủ.\n\n4. \"How do you store passwords?\"\"Bạn lưu mật khẩu thế nào?\"\n   Answer: a) a slow salted hash (bcrypt/Argon2) computed in the app\n   Hash ≠ encryption; salt defeats rainbow tables; cost slows guessing.VI: Băm ≠ mã hoá; muối vô hiệu bảng rainbow; chi phí làm chậm đoán.\n\n5. \"The database is slow\" — your first step is…\"CSDL chạy chậm\" — bước đầu tiên của bạn là…\n   Answer: d) find the slow statements and measure plan, reads, waits\n   Measure first; the 6-step diagnosis of CS.3 is the answer they want to hear.VI: Đo trước; quy trình 6 bước của CS.3 là câu họ muốn nghe.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> no: each index slows writes; index selective, frequent filters and FKs</p><p>Back it up with the read/write ratio and an unused-index query.</p><p><i>VI: Chứng minh bằng tỉ lệ đọc/ghi và truy vấn tìm chỉ mục không dùng.</i></p></li><li><p><b>a)</b> SQL Server uses short S locks (readers can wait); PostgreSQL reads snapshots</p><p>Same name, different mechanism — unless RCSI is ON in SQL Server.</p><p><i>VI: Cùng tên, khác cơ chế — trừ khi bật RCSI trên SQL Server.</i></p></li><li><p><b>c)</b> whole documents with varying fields, few cross-entity transactions</p><p>Then add the cost: no joins/constraints across collections, and jsonb often covers the case.</p><p><i>VI: Rồi nói cái giá: không nối/ràng buộc giữa các collection, và jsonb thường đã đủ.</i></p></li><li><p><b>a)</b> a slow salted hash (bcrypt/Argon2) computed in the app</p><p>Hash ≠ encryption; salt defeats rainbow tables; cost slows guessing.</p><p><i>VI: Băm ≠ mã hoá; muối vô hiệu bảng rainbow; chi phí làm chậm đoán.</i></p></li><li><p><b>d)</b> find the slow statements and measure plan, reads, waits</p><p>Measure first; the 6-step diagnosis of CS.3 is the answer they want to hear.</p><p><i>VI: Đo trước; quy trình 6 bước của CS.3 là câu họ muốn nghe.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"Should we index every column used in a WHERE?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Có nên đánh chỉ mục mọi cột xuất hiện trong WHERE?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "yes: indexes only cost disk space"
+              },
+              {
+                "ma": "b",
+                "noiDung": "yes, but only on tables larger than 1 GB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no: the optimizer ignores indexes on small columns"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no: each index slows writes; index selective, frequent filters and FKs"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Back it up with the read/write ratio and an unused-index query.</p><p><i>VI: Chứng minh bằng tỉ lệ đọc/ghi và truy vấn tìm chỉ mục không dùng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Default isolation level: SQL Server and PostgreSQL both say READ COMMITTED. The difference?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức cô lập mặc định: SQL Server và PostgreSQL đều là READ COMMITTED. Khác nhau ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SQL Server uses short S locks (readers can wait); PostgreSQL reads snapshots"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SQL Server is SERIALIZABLE in practice"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL allows dirty reads, SQL Server does not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "there is no difference in behaviour"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Same name, different mechanism — unless RCSI is ON in SQL Server.</p><p><i>VI: Cùng tên, khác cơ chế — trừ khi bật RCSI trên SQL Server.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>\"When would you pick MongoDB over PostgreSQL?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khi nào bạn chọn MongoDB thay PostgreSQL?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "whenever the data is larger than what one server can hold"
+              },
+              {
+                "ma": "b",
+                "noiDung": "when the data needs many foreign keys and multi-table joins"
+              },
+              {
+                "ma": "c",
+                "noiDung": "whole documents with varying fields, few cross-entity transactions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "never, because PostgreSQL jsonb makes MongoDB useless"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Then add the cost: no joins/constraints across collections, and jsonb often covers the case.</p><p><i>VI: Rồi nói cái giá: không nối/ràng buộc giữa các collection, và jsonb thường đã đủ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>\"How do you store passwords?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Bạn lưu mật khẩu thế nào?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a slow salted hash (bcrypt/Argon2) computed in the app"
+              },
+              {
+                "ma": "b",
+                "noiDung": "in plain text, protected by GRANT permissions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SHA-256 of the password, which is irreversible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AES-encrypted with a key kept in the database"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Hash ≠ encryption; salt defeats rainbow tables; cost slows guessing.</p><p><i>VI: Băm ≠ mã hoá; muối vô hiệu bảng rainbow; chi phí làm chậm đoán.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"The database is slow\" — your first step is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"CSDL chạy chậm\" — bước đầu tiên của bạn là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "rebuild every index in the database overnight"
+              },
+              {
+                "ma": "b",
+                "noiDung": "move the whole application to a NoSQL database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "add more RAM to the server and restart it tonight"
+              },
+              {
+                "ma": "d",
+                "noiDung": "find the slow statements and measure plan, reads, waits"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measure first; the 6-step diagnosis of CS.3 is the answer they want to hear.</p><p><i>VI: Đo trước; quy trình 6 bước của CS.3 là câu họ muốn nghe.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Absolute answers (\"always\", \"never\") without the trade-off.|||Câu trả lời tuyệt đối (\"luôn\", \"không bao giờ\") không có đánh đổi."
+        },
+        {
+          "loi": "Guessing performance fixes before measuring.|||Đoán cách sửa hiệu năng trước khi đo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "read/write ratio",
+          "vi": "tỉ lệ đọc/ghi"
+        }
+      ]
+    }
+  ]
+}

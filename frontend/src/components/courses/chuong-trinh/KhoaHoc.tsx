@@ -2,19 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { BookOpen, CheckCircle2, Clock, Hourglass, Layers, Sparkles } from 'lucide-react';
 import type { MonChuongTrinh } from '@/types';
 import { pickLang } from '@/lib/utils';
 import type { BoChu, NgonNgu } from './chu';
 import s from './chuongTrinh.module.css';
 
-/** Ảnh bìa khoá — ảnh hỏng thì về một ô mực trơn mang mã/chữ đầu, không dùng ảnh stock. */
-function AnhBia({ m, ten, className }: { m: MonChuongTrinh; ten: string; className?: string }) {
+/** Ảnh bìa khoá — ảnh hỏng thì về một ô mực trơn mang mã/chữ đầu (không ảnh stock). Ảnh là trang trí: tên khoá nằm
+ *  ngay dưới trong cùng liên kết, nên `alt=""` để trình đọc màn hình không đọc tên hai lần. */
+export function AnhBia({ m, ten, className }: { m: Pick<MonChuongTrinh, 'thumbnailUrl' | 'courseCode'>; ten: string; className?: string }) {
   const [hong, setHong] = useState(false);
   if (!m.thumbnailUrl || hong) {
     return (
-      <div className={`flex items-center justify-center bg-[var(--p-thumb)] text-[var(--p-paper)] ${className ?? ''}`} aria-hidden>
-        <span className="line-clamp-2 px-2 text-center font-editorial text-[13px] leading-tight sm:text-sm">
+      <div className={`flex items-center justify-center bg-[var(--k-thumb)] text-white ${className ?? ''}`} aria-hidden>
+        <span className="line-clamp-2 px-3 text-center font-heading text-sm font-semibold leading-tight">
           {m.courseCode || ten.split(/[:—(]/)[0]!.trim()}
         </span>
       </div>
@@ -28,139 +29,178 @@ function AnhBia({ m, ten, className }: { m: MonChuongTrinh; ten: string; classNa
       loading="lazy"
       decoding="async"
       onError={() => setHong(true)}
-      className={`bg-[var(--p-thumb)] object-cover ${className ?? ''}`}
+      className={`bg-[var(--k-thumb)] object-cover ${className ?? ''}`}
     />
   );
 }
 
-function MetaKhoa({ m, c, hienKy }: { m: MonChuongTrinh; c: BoChu; hienKy?: boolean }) {
-  const phan = (m.sapRaMat
-    ? [c.capDo[m.level] ?? m.level, m.soBaiDuKien ? c.khung(m.soChuongDuKien ?? 0, m.soBaiDuKien) : null, m.categoryName]
-    : [
-        hienKy && m.loTrinhKy ? c.kyNgan(m.loTrinhKy) : null,
-        c.capDo[m.level] ?? m.level,
-        m.totalLessons ? c.bai(m.totalLessons) : null,
-        c.gio(m.totalDurationSeconds) || null,
-        m.categoryName,
-      ]).filter(Boolean) as string[];
+const MAU_CAP_DO: Record<string, string> = {
+  BEGINNER: 'bg-[var(--k-green-soft)] text-[var(--k-green)]',
+  INTERMEDIATE: 'bg-[var(--k-amber-soft)] text-[var(--k-amber)]',
+  ADVANCED: 'bg-[var(--k-rose-soft)] text-[var(--k-rose)]',
+};
+
+export function ChipCapDo({ level, c }: { level: string; c: BoChu }) {
   return (
-    <p className={`${s.so} flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-[var(--p-ink-3)]`}>
-      {phan.map((x, i) => (
-        <span key={i} className="whitespace-nowrap">
-          {x}
-          {i < phan.length - 1 && <span aria-hidden className="ml-2 text-[var(--p-ink-3)] opacity-50">/</span>}
-        </span>
-      ))}
-    </p>
+    <span className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${MAU_CAP_DO[level] ?? 'bg-[var(--k-accent-soft)] text-[var(--k-accent)]'}`}>
+      {c.capDo[level] ?? level}
+    </span>
   );
 }
 
-/** Nhãn "Sắp ra mắt" — chữ + viền mảnh màu nhấn, không nền rực. */
-export function NhanSapRaMat({ c }: { c: BoChu }) {
+/** Chip mã/kỳ — màu nhấn tím như chip mã môn của Academy. */
+export function ChipNhan({ children, tone = 'accent' }: { children: React.ReactNode; tone?: 'accent' | 'cyan' }) {
   return (
-    <span className="inline-block whitespace-nowrap border border-[var(--p-accent)] px-1.5 py-0.5 text-[11px] font-medium leading-none text-[var(--p-accent)]">
+    <span
+      className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${
+        tone === 'cyan' ? 'bg-[var(--k-cyan-soft)] text-[var(--k-accent-2)]' : 'bg-[var(--k-accent-soft)] text-[var(--k-accent)]'
+      }`}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** Nhãn "Đang soạn" — vàng hổ phách + đồng hồ cát, có giải thích khi rê. */
+export function NhanDangSoan({ c, noi }: { c: BoChu; noi?: boolean }) {
+  return (
+    <span
+      title={c.dangSoanGiaiThich}
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-[var(--k-amber-line)] px-2.5 py-1 text-xs font-semibold ${
+        noi ? 'bg-amber-400 text-amber-950 shadow-sm' : 'bg-[var(--k-amber-soft)] text-[var(--k-amber)]'
+      }`}
+    >
+      <Hourglass aria-hidden className="h-3.5 w-3.5" />
+      {c.dangSoan}
+    </span>
+  );
+}
+
+export function NhanSapRaMat({ c, noi }: { c: BoChu; noi?: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-[var(--k-cyan-line)] px-2.5 py-1 text-xs font-semibold ${
+        noi ? 'bg-cyan-300 text-cyan-950 shadow-sm' : 'bg-[var(--k-cyan-soft)] text-[var(--k-accent-2)]'
+      }`}
+    >
+      <Sparkles aria-hidden className="h-3.5 w-3.5" />
       {c.sapRaMat}
     </span>
   );
 }
 
-function TienDo({ p, c }: { p: number; c: BoChu }) {
+export function TienDo({ p, c }: { p: number; c: BoChu }) {
   return (
     <div className="w-full">
-      <p className={`${s.so} mb-1 text-xs font-medium text-[var(--p-accent)]`}>{c.tienDo(p)}</p>
+      <div className="mb-1.5 flex items-center justify-between gap-2 text-xs">
+        <span className={`${s.so} font-semibold text-[var(--k-accent)]`}>{c.tienDo(p)}</span>
+      </div>
       <div
-        className="h-[3px] w-full bg-[var(--p-rule)]"
+        className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--k-accent-soft)]"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={p}
         aria-label={c.tienDo(p)}
       >
-        <div className="h-full bg-[var(--p-accent)]" style={{ width: `${Math.max(2, p)}%` }} />
+        <div className="h-full rounded-full" style={{ width: `${Math.max(3, p)}%`, background: 'var(--k-grad)' }} />
       </div>
     </div>
   );
 }
 
 /**
- * Một dòng khoá học trong danh mục (kiểu bảng môn học của một trường): số thứ tự · ảnh · tên + mô tả · tiến độ.
- * `soThuTu` = thứ tự trong kỳ (lộ trình); bỏ trống ở các chế độ xem không có thứ tự.
+ * Thẻ khoá học — cùng khuôn với thẻ môn của Academy: ảnh bìa 16:9, chip, tên, mô tả, chân thẻ số bài/giờ.
+ * `thuTu` = thứ tự trong kỳ (chế độ lộ trình) — hiện thành số tròn trên ảnh. `hienKy` = thêm chip "Kỳ N".
  */
-export function HangKhoa({ m, nn, c, soThuTu, hienKy }: {
-  m: MonChuongTrinh; nn: NgonNgu; c: BoChu; soThuTu?: number; hienKy?: boolean;
+export function TheKhoa({ m, nn, c, thuTu, hienKy }: {
+  m: MonChuongTrinh; nn: NgonNgu; c: BoChu; thuTu?: number; hienKy?: boolean;
 }) {
   const ten = pickLang(m.title, nn);
   const moTa = pickLang(m.shortDescription, nn);
+  const gio = c.gio(m.totalDurationSeconds);
+  const xong = m.progress != null && m.progress >= 100;
   return (
-    <li className="border-t border-[var(--p-rule)] first:border-t-0">
+    <li className="min-w-0">
       <Link
         href={`/courses/${m.slug}`}
-        className={`${s.hang} group grid grid-cols-[5.5rem_minmax(0,1fr)] items-start gap-x-4 gap-y-2 px-2 py-4 sm:grid-cols-[2rem_8.5rem_minmax(0,1fr)_7.5rem] sm:gap-x-5 sm:px-3 sm:py-5`}
+        className={`${s.theKhoa} group grid h-full grid-cols-[7.5rem_minmax(0,1fr)] gap-3 overflow-hidden rounded-2xl p-3 sm:flex sm:flex-col sm:gap-0 sm:p-0`}
       >
-        <span aria-hidden className={`${s.so} hidden pt-0.5 font-editorial text-xl leading-none text-[var(--p-ink-3)] sm:block`}>
-          {soThuTu ?? ''}
-        </span>
-        <AnhBia m={m} ten={ten} className="aspect-video w-full border border-[var(--p-rule)]" />
-        <div className="min-w-0">
-          <h4 className={`${s.tenKhoa} ${s.tieuDe} text-[15px] font-semibold leading-snug text-[var(--p-ink)] sm:text-base`}>
-            {ten}
-          </h4>
-          {moTa && (
-            <p className="mt-1 hidden text-sm leading-relaxed text-[var(--p-ink-2)] sm:line-clamp-2">{moTa}</p>
-          )}
-          <div className="mt-1.5">
-            <MetaKhoa m={m} c={c} hienKy={hienKy} />
+        {/* Điện thoại: thẻ nằm ngang (ảnh nhỏ bên trái) để 75 khoá không thành một cột dài vô tận. */}
+        <div className="relative aspect-video self-start overflow-hidden rounded-xl bg-[var(--k-thumb)] sm:self-auto sm:rounded-none">
+          <AnhBia m={m} ten={ten} className={`${s.anhKhoa} absolute inset-0 h-full w-full`} />
+          <div className="absolute left-2.5 top-2.5 hidden flex-wrap gap-1.5 sm:flex">
+            {m.sapRaMat ? <NhanSapRaMat c={c} noi /> : m.dangSoan ? <NhanDangSoan c={c} noi /> : null}
+            {xong && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400 px-2.5 py-1 text-xs font-semibold text-emerald-950 shadow-sm">
+                <CheckCircle2 aria-hidden className="h-3.5 w-3.5" />
+                {c.daXong}
+              </span>
+            )}
           </div>
-          {m.sapRaMat && (
-            <div className="mt-2 sm:hidden"><NhanSapRaMat c={c} /></div>
-          )}
-          {m.progress != null && (
-            <div className="mt-2.5 max-w-[12rem] sm:hidden">
-              <TienDo p={m.progress} c={c} />
-            </div>
+          {thuTu != null && (
+            <span
+              className={`${s.so} absolute right-2.5 top-2.5 hidden h-7 w-7 sm:grid place-items-center rounded-full bg-black/60 text-xs font-bold text-white ring-1 ring-white/25 backdrop-blur-sm`}
+              title={c.thuTu(thuTu)}
+            >
+              <span aria-hidden>{thuTu}</span>
+              <span className="sr-only">{c.thuTu(thuTu)}</span>
+            </span>
           )}
         </div>
-        <div className="hidden items-center justify-end gap-3 self-center sm:flex">
-          {m.sapRaMat ? (
-            <NhanSapRaMat c={c} />
-          ) : m.progress != null ? (
-            <TienDo p={m.progress} c={c} />
-          ) : (
-            <ArrowRight aria-hidden className={`${s.muiTen} h-4 w-4 text-[var(--p-ink-3)]`} />
-          )}
+        <div className="flex min-w-0 flex-1 flex-col gap-2 sm:gap-3 sm:p-4">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="contents sm:hidden">
+              {m.sapRaMat ? <NhanSapRaMat c={c} /> : m.dangSoan ? <NhanDangSoan c={c} /> : null}
+            </span>
+            {hienKy && m.loTrinhKy ? <ChipNhan>{c.kyNgan(m.loTrinhKy)}</ChipNhan> : null}
+            <ChipCapDo level={m.level} c={c} />
+            {m.categoryName && <span className="hidden sm:contents"><ChipNhan tone="cyan">{m.categoryName}</ChipNhan></span>}
+          </div>
+          <h3 className={`${s.tieuDe} ${s.tenKhoa} line-clamp-2 text-[15px] font-semibold leading-snug text-[var(--k-ink)] transition-colors sm:text-[17px]`}>
+            {ten}
+          </h3>
+          {moTa && <p className="hidden text-sm leading-relaxed text-[var(--k-ink-2)] sm:line-clamp-3">{moTa}</p>}
+          <div className="mt-auto pt-1">
+            {m.progress != null && !xong ? (
+              <TienDo p={m.progress} c={c} />
+            ) : (
+              <div className={`${s.so} flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-[var(--k-ink-3)]`}>
+                {m.sapRaMat ? (
+                  m.soBaiDuKien ? (
+                    <span className="inline-flex items-center gap-1.5"><Layers aria-hidden className="h-4 w-4" />{c.khung(m.soChuongDuKien ?? 0, m.soBaiDuKien)}</span>
+                  ) : null
+                ) : (
+                  <>
+                    {m.totalLessons > 0 && (
+                      <span className="inline-flex items-center gap-1.5"><BookOpen aria-hidden className="h-4 w-4" />{c.bai(m.totalLessons)}</span>
+                    )}
+                    {gio && <span className="inline-flex items-center gap-1.5"><Clock aria-hidden className="h-4 w-4" />{gio}</span>}
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </Link>
     </li>
   );
 }
 
-/** Thẻ khoá cho chế độ "Tất cả khoá" — cùng giọng với hàng: phẳng, viền mảnh, chữ là chính. */
-export function TheKhoa({ m, nn, c }: { m: MonChuongTrinh; nn: NgonNgu; c: BoChu }) {
+/** Thẻ nhỏ "Học tiếp" — ảnh + tên + tiến độ. */
+export function TheHocTiep({ m, nn, c }: { m: MonChuongTrinh; nn: NgonNgu; c: BoChu }) {
   const ten = pickLang(m.title, nn);
-  const moTa = pickLang(m.shortDescription, nn);
   return (
     <li className="min-w-0">
-      <Link
-        href={`/courses/${m.slug}`}
-        className={`${s.the} group flex h-full flex-col border-t-2 border-[var(--p-rule-strong)] pt-4`}
-      >
-        <div className="overflow-hidden border border-[var(--p-rule)]">
-          <AnhBia m={m} ten={ten} className={`${s.anhThe} aspect-video w-full`} />
+      <Link href={`/courses/${m.slug}`} className={`${s.theKhoa} flex items-center gap-3 rounded-2xl p-3`}>
+        <div className="relative aspect-video w-24 shrink-0 overflow-hidden rounded-xl sm:w-28">
+          <AnhBia m={m} ten={ten} className="absolute inset-0 h-full w-full" />
         </div>
-        <p className={`${s.so} mt-4 text-xs ${m.sapRaMat ? 'font-medium text-[var(--p-accent)]' : 'text-[var(--p-ink-3)]'}`}>
-          {m.sapRaMat ? c.sapRaMat : m.loTrinhKy ? c.hocKy(m.loTrinhKy) : c.khoaMoi}
-          {m.categoryName ? ` · ${m.categoryName}` : ''}
-        </p>
-        <h3 className={`${s.tieuDe} mt-1.5 font-editorial text-xl leading-tight text-[var(--p-ink)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4`}>
-          {ten}
-        </h3>
-        {moTa && <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--p-ink-2)]">{moTa}</p>}
-        <div className="mt-auto pt-4">
-          {m.progress != null ? (
-            <TienDo p={m.progress} c={c} />
-          ) : (
-            <MetaKhoa m={m} c={c} />
-          )}
+        <div className="min-w-0 flex-1">
+          <p className={`${s.tieuDe} line-clamp-2 text-sm font-semibold leading-snug text-[var(--k-ink)]`}>{ten}</p>
+          <div className="mt-2">
+            <TienDo p={m.progress ?? 0} c={c} />
+          </div>
         </div>
       </Link>
     </li>

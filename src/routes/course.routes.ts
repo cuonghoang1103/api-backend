@@ -21,6 +21,7 @@ import type { ApiResponse } from '../types/index.js';
 import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 import { kyHopLe, nhomSapRaMat, xepChuongTrinh } from '../config/chuongTrinhKhoaHoc.js';
 import { SAP_RA_MAT, chanSapRaMat, laSapRaMat } from '../services/khoaSapRaMat.js';
+import { demBaiDaSoan, laDangSoan, tinhBaoGom } from '../services/khoaDaSoan.js';
 
 const router = Router();
 
@@ -1102,7 +1103,12 @@ router.get('/chuong-trinh', optionalAuth, async (req, res: Response<ApiResponse>
       for (const r of rows) ghiDanh.set(r.courseId, { soBaiXong: r._count.lessonProgress });
     }
 
-    const mon = ds.map((c) => dongGoiMonChuongTrinh(c, ghiDanh.get(c.id)));
+    // Khoá mới có khung (bài chỉ là đoạn giới thiệu) ⇒ `dangSoan: true` — trang /courses gắn nhãn "Đang soạn".
+    const soan = await demBaiDaSoan(ds.map((c) => c.id));
+    const mon = ds.map((c) => ({
+      ...dongGoiMonChuongTrinh(c, ghiDanh.get(c.id)),
+      dangSoan: laDangSoan(soan.get(c.id)),
+    }));
     const { nam, chuaXep } = xepChuongTrinh(mon);
     const sapRaMat = nhomSapRaMat(sapRa.map((c) => ({
       ...dongGoiMonChuongTrinh(c),
@@ -2214,8 +2220,15 @@ router.get('/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next)
      * Nên đây là đường MỚI chọn bằng tham số.
      */
     if (String(req.query.gon || '') === '1') {
+      // "Khoá học này gồm" (chương/bài/quiz/video/slide/Code Lab/đề thi) + cờ đang soạn — chỉ trang giới thiệu đọc,
+      // nên chỉ tính ở đường gọn (trang học không trả thêm hai truy vấn này).
+      const baoGom = await tinhBaoGom(course, course.sections).catch((e) => {
+        logger.warn('[courses/:slug] tinhBaoGom lỗi — bỏ qua', e);
+        return null;
+      });
       const goiGon = {
         ...serializedCourse,
+        baoGom,
         sections: serializedCourse.sections.map((sec) => ({
           ...sec,
           lessons: sec.lessons.map((bai) => {

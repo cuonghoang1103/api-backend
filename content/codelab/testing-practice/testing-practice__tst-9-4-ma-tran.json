@@ -1,0 +1,183 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-9-4-ma-tran",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-9-4-ma-tran"
+  },
+  "exercises": [
+    {
+      "title": "Shards that take the same time",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest",
+        "harmless refactor (stay green)"
+      ],
+      "prerequisites": [
+        "tst-9-4-ma-tran"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/ci/shard.js</code> — splitIntoShards, pickShard. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Test the shard splitter: longest file first into the lightest shard (the exact split for known timings), every file exactly once for any number of shards, the same split whatever the input order, a file without timing costs UNKNOWN_MS, \"1/3\" is the first shard and \"0/3\", \"4/3\" or \"1-3\" are refused..</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>6 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. It also applies <b>1 harmless change</b> (a refactor that keeps the behaviour): your tests must stay <b>green</b> on it, otherwise they are testing the implementation instead of the behaviour.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>src/ci/shard.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 6</b> mutants and stay green on the 1 harmless change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/ci/shard.js</code> — splitIntoShards, pickShard. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Test bộ chia shard: file lâu nhất trước, vào shard nhẹ nhất (đúng cách chia với thời gian đã biết), mỗi file đúng một lần với mọi số shard, cùng một cách chia dù thứ tự đầu vào khác, file chưa có thời gian tính UNKNOWN_MS, \"1/3\" là shard đầu và \"0/3\", \"4/3\", \"1-3\" bị từ chối..</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>6 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Nó còn áp <b>1 thay đổi vô hại</b> (refactor giữ nguyên hành vi): test phải VẪN XANH, nếu không là bạn đang test cách cài đặt chứ không phải hành vi.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>src/ci/shard.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 6</b> đột biến và vẫn xanh với 1 thay đổi vô hại.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with src/ci/shard.test.js.|||Tệp test của bạn, bắt đầu từ src/ci/shard.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 6 mutants; green on the 1 harmless change(s).|||Xanh với code đúng; đỏ với từng đột biến trong 6; xanh với 1 thay đổi vô hại.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: shortest file first: the long files pile up at the end|||Đột biến M1: shortest file first: the long files pile up at the end",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-9-4-ma-tran shows the techniques this exercise needs; the reference solution is the course’s own test file(s): src/ci/shard.test.js.|||Bài tst-9-4-ma-tran dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: src/ci/shard.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/ci/shard.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { splitIntoShards, pickShard, durationsFromReport, UNKNOWN_MS } from './shard.js';\n\nconst MS = { 'a.test.js': 3000, 'b.test.js': 2000, 'c.test.js': 2000, 'd.test.js': 1000, 'e.test.js': 1000, 'f.test.js': 1000 };\nconst FILES = Object.keys(MS);\nconst names = (shards) => shards.map((s) => s.files);\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(splitIntoShards).toBeDefined();\n    expect(pickShard).toBeDefined();\n    expect(durationsFromReport).toBeDefined();\n    expect(UNKNOWN_MS).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/ci/shard.js",
+          "language": "javascript",
+          "code": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/ci/shard.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { splitIntoShards, pickShard, durationsFromReport, UNKNOWN_MS } from './shard.js';\n\nconst MS = { 'a.test.js': 3000, 'b.test.js': 2000, 'c.test.js': 2000, 'd.test.js': 1000, 'e.test.js': 1000, 'f.test.js': 1000 };\nconst FILES = Object.keys(MS);\nconst names = (shards) => shards.map((s) => s.files);\n\ndescribe('splitIntoShards', () => {\n  it('longest first, each into the lightest shard → 4 + 3 + 3 seconds', () => {\n    const shards = splitIntoShards(FILES, 3, MS);\n    expect(names(shards)).toEqual([['a.test.js', 'f.test.js'], ['b.test.js', 'd.test.js'], ['c.test.js', 'e.test.js']]);\n    expect(shards.map((s) => s.ms)).toEqual([4000, 3000, 3000]);\n  });\n\n  it('every file exactly once, whatever the number of shards', () => {\n    for (const n of [1, 2, 3, 6, 8]) {\n      expect(names(splitIntoShards(FILES, n, MS)).flat().sort()).toEqual([...FILES].sort());\n    }\n  });\n\n  it('more shards than files → the extra shards are empty, not an error', () => {\n    expect(names(splitIntoShards(['a.test.js', 'b.test.js'], 3, MS))).toEqual([['a.test.js'], ['b.test.js'], []]);\n  });\n\n  it('the input order does not matter: every CI machine computes the same split', () => {\n    expect(names(splitIntoShards([...FILES].reverse(), 3, MS))).toEqual(names(splitIntoShards(FILES, 3, MS)));\n  });\n\n  it('a file without a timing counts as UNKNOWN_MS', () => {\n    const shards = splitIntoShards(['new.test.js', 'd.test.js'], 1, MS);\n    expect(shards[0].ms).toBe(UNKNOWN_MS + 1000);\n  });\n\n  it.each([0, -1, 1.5])('total %s is refused', (n) => {\n    expect(() => splitIntoShards(FILES, n, MS)).toThrow(RangeError);\n  });\n});\n\ndescribe('pickShard', () => {\n  it('\"1/3\" is the first shard, \"3/3\" the last (1-based, like --shard)', () => {\n    expect(pickShard(FILES, '1/3', MS)).toEqual(['a.test.js', 'f.test.js']);\n    expect(pickShard(FILES, '3/3', MS)).toEqual(['c.test.js', 'e.test.js']);\n  });\n  it.each(['0/3', '4/3'])('%s does not exist', (spec) => {\n    expect(() => pickShard(FILES, spec, MS)).toThrow(RangeError);\n  });\n  it('a malformed spec is a SyntaxError', () => {\n    expect(() => pickShard(FILES, '1-3', MS)).toThrow(SyntaxError);\n  });\n});\n\ndescribe('durationsFromReport', () => {\n  it('relative file → milliseconds, from a Vitest JSON report', () => {\n    const report = { testResults: [{ name: '/w/p/src/x.test.js', startTime: 1000, endTime: 1250.4 }, { name: '/w/p/src/y.test.js', startTime: 1000, endTime: 1600.6 }] };\n    expect(durationsFromReport(report, '/w/p')).toEqual({ 'src/x.test.js': 250, 'src/y.test.js': 601 });\n  });\n});\n"
+        },
+        {
+          "name": "src/ci/shard.js",
+          "language": "javascript",
+          "code": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>src/ci/shard.test.js</code>), checked to kill every mutant and to stay green on the harmless change(s). Each mutant changes exactly one decision:</p><ul><li>M1 — shortest file first: the long files pile up at the end</li><li>M2 — ties depend on the input order: two machines split differently</li><li>M3 — each file goes to the HEAVIEST shard</li><li>M4 — a new test file costs nothing</li><li>M5 — shard 0/3 is accepted</li><li>M6 — shards are numbered from 0, like an array</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>src/ci/shard.test.js</code>), đã kiểm diệt mọi đột biến và vẫn xanh với thay đổi vô hại. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — shortest file first: the long files pile up at the end</li><li>M2 — ties depend on the input order: two machines split differently</li><li>M3 — each file goes to the HEAVIEST shard</li><li>M4 — a new test file costs nothing</li><li>M5 — shard 0/3 is accepted</li><li>M6 — shards are numbered from 0, like an array</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: shortest file first: the long files pile up at the end",
+            "goiY": "write a test whose result would change if this happened: “shortest file first: the long files pile up at the end” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “shortest file first: the long files pile up at the end” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(a) - cost(b) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: ties depend on the input order: two machines split differently",
+            "goiY": "write a test whose result would change if this happened: “ties depend on the input order: two machines split differently” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “ties depend on the input order: two machines split differently” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: each file goes to the HEAVIEST shard",
+            "goiY": "write a test whose result would change if this happened: “each file goes to the HEAVIEST shard” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “each file goes to the HEAVIEST shard” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms > min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: a new test file costs nothing",
+            "goiY": "write a test whose result would change if this happened: “a new test file costs nothing” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a new test file costs nothing” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? 0;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: shard 0/3 is accepted",
+            "goiY": "write a test whose result would change if this happened: “shard 0/3 is accepted” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “shard 0/3 is accepted” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: shards are numbered from 0, like an array",
+            "goiY": "write a test whose result would change if this happened: “shards are numbered from 0, like an array” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “shards are numbered from 0, like an array” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = Array.from({ length: total }, () => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index % total].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: another way to build the empty shards — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "src/ci/shard.js": "// Splits test files into shards that take about the same time (lesson 9.4).\n// Vitest's own --shard=i/n splits by file, not by time; with timings from an earlier run we can do better:\n// longest file first, each into the shard that has the least work so far.\nexport const UNKNOWN_MS = 1000; // a file with no timing yet (a new test) counts as one second\n\nexport function splitIntoShards(files, total, durations = {}) {\n  if (!Number.isInteger(total) || total < 1) throw new RangeError('total must be a whole number ≥ 1, got ' + total);\n  const shards = [...Array(total)].map(() => ({ files: [], ms: 0 }));\n  const cost = (f) => durations[f] ?? UNKNOWN_MS;\n  const order = [...files].sort((a, b) => cost(b) - cost(a) || a.localeCompare(b));\n  for (const file of order) {\n    const lightest = shards.reduce((min, s) => (s.ms < min.ms ? s : min));\n    lightest.files.push(file);\n    lightest.ms += cost(file);\n  }\n  return shards;\n}\n\n// spec = \"2/3\" like --shard: the second of three shards (1-based).\nexport function pickShard(files, spec, durations) {\n  const m = /^(\\d+)\\/(\\d+)$/.exec(spec);\n  if (!m) throw new SyntaxError('shard must look like 2/3, got ' + spec);\n  const [index, total] = [Number(m[1]), Number(m[2])];\n  if (index < 1 || index > total) throw new RangeError('shard ' + spec + ' does not exist');\n  return splitIntoShards(files, total, durations)[index - 1].files;\n}\n\n// Timings per file (ms) from a Vitest JSON report: { '<relative file>': ms }.\nexport function durationsFromReport(report, root = '') {\n  const out = {};\n  for (const r of report.testResults) {\n    const file = r.name.startsWith(root) ? r.name.slice(root.length).replace(/^\\//, '') : r.name;\n    out[file] = Math.round(r.endTime - r.startTime);\n  }\n  return out;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Asserting HOW the code does it (call order, internal fields, exact implementation) — a harmless refactor turns such a test red.|||Khẳng định CÁCH code làm (thứ tự gọi, trường nội bộ, cài đặt cụ thể) — một refactor vô hại làm test như vậy đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "harmless change",
+          "vi": "thay đổi vô hại",
+          "giaiThich": "refactor giữ nguyên hành vi — bộ test tốt phải VẪN XANH"
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,11 @@
  * `fast-check` THU GỌN (integer/nat/boolean/constantFrom/oneof/tuple/record/array/string/double, map/filter/chain,
  * property/asyncProperty/assert): hạt giống cố định 42 + giá trị biên đi trước ⇒ chấm lặp lại được; không thu nhỏ phản ví dụ.
  * Đủ để chạy bộ test tham khảo của khoá Testing Ch1–Ch2 (10 đề, 58/58 đột biến — đo 01/11/2026).
+ * Mở rộng cùng ngày cho 32 đề chấm trong trình duyệt của khoá (Ch3, 6.4, Ch8–Ch11): vi.mock(path, factory) + vi.hoisted
+ * (đưa lên trên import), vi.mocked/importActual/stubGlobal/stubEnv, useFakeTimers({ toFake }), hook trả hàm dọn, afterEach
+ * luôn chạy, restoreMocks (mặc định bật như cấu hình khoá), toMatchFileSnapshot (ghi ở lượt code đúng ⇒ trả `anhChup`),
+ * msw thu gọn ('msw', 'msw/http', 'msw/node' — setupServer thay fetch của realm), node:fs trên tệp của đề + import.meta.url,
+ * thư viện đi kèm đề (`thuVien`, CommonJS — vd yaml), xaoTron (--sequence.shuffle, hạt giống) và lapLai (--repeats).
  */
 export const RUNNER_SRC = String.raw`
 (function (G) {
@@ -126,7 +131,11 @@ export const RUNNER_SRC = String.raw`
   }
 
   // ── trạng thái test đang chạy ──
-  var hienTai = null; // { soExpect, loiMem: [], hua: [] }
+  var hienTai = null; // { soExpect, loiMem: [], hua: [], tep }
+  // phiên của MỘT lượt chạy: tệp (đọc qua node:fs / so ảnh chụp), ảnh chụp mới ghi, tệp test đang nạp,
+  // module giả (vi.mock), biến toàn cục / env đã thay (vi.stubGlobal / vi.stubEnv)
+  var phien = { files: {}, anhChup: {}, tep: '', moGia: {}, goiGoc: {}, envGoc: {}, napThat: null };
+  if (typeof G.process === 'undefined') G.process = { env: {}, platform: 'browser', argv: [], cwd: function () { return '/'; } };
 
   function LoiKhangDinh(msg) { var e = new Error(msg); e.name = 'AssertionError'; return e; }
 
@@ -229,6 +238,20 @@ export const RUNNER_SRC = String.raw`
     M.toHaveReturned = function () { var m = canMock(); bao(m.results.some(function (r) { return r.type === 'return'; }), 'expected spy to have returned', 'expected spy not to have returned'); };
     M.toHaveReturnedWith = function (v) { var m = canMock(); bao(m.results.some(function (r) { return r.type === 'return' && bang(r.value, v, false); }), 'expected spy to have returned ' + inGT(v), 'expected spy not to have returned ' + inGT(v)); };
     M.toThrowError = M.toThrow;
+    // ảnh chụp tệp (golden master, bài 10.2): chưa có ⇒ GHI (đạt, như Vitest lần chạy đầu) và các lượt sau của cùng
+    // lần chấm (đột biến) so với bản đã ghi từ code ĐÚNG; có rồi (tệp của đề/bài làm) ⇒ so nguyên văn.
+    M.toMatchFileSnapshot = function (duong) {
+      var tu = (hienTai && hienTai.tep) || phien.tep;
+      var tep = giai(String(duong), tu) || String(duong).replace(/^\/+/, '');
+      var moi = typeof nhan === 'string' ? nhan : JSON.stringify(nhan, null, 2);
+      var cu = phien.files[tep] != null ? String(phien.files[tep]) : phien.anhChup[tep];
+      if (cu == null) { if (hienTai) hienTai.soExpect++; phien.anhChup[tep] = moi; return _Promise.resolve(); }
+      var a = cu.split('\n'), b = moi.split('\n'), d = 0;
+      while (d < a.length && d < b.length && a[d] === b[d]) d++;
+      var trung = cu === moi;
+      bao(trung, 'Snapshot ' + tep + ' mismatched — first difference at line ' + (d + 1) + ': expected ' + inGT(a[d] === undefined ? '<end of file>' : a[d]) + ', received ' + inGT(b[d] === undefined ? '<end of file>' : b[d]), 'expected value not to match snapshot ' + tep);
+      return _Promise.resolve();
+    };
     var bocLai = {};
     Object.keys(M).forEach(function (ten) {
       bocLai[ten] = function () {
@@ -289,7 +312,7 @@ export const RUNNER_SRC = String.raw`
   function nhomMoi(ten, cha, che) { return { ten: ten, cha: cha, con: [], truocMoi: [], sauMoi: [], truocTat: [], sauTat: [], che: che || null }; }
   function themTest(ten, fn, opts) {
     if (typeof ten === 'function') { fn = ten; ten = fn.name || 'anonymous'; }
-    nhomHt.con.push({ loai: 'test', ten: String(ten), fn: fn, che: opts.che || null, tran: opts.tran, phaiDo: !!opts.phaiDo });
+    nhomHt.con.push({ loai: 'test', ten: String(ten), fn: fn, che: opts.che || null, tran: opts.tran, phaiDo: !!opts.phaiDo, tep: phien.tep });
   }
   function themNhom(ten, fn, che) {
     var n = nhomMoi(String(ten), nhomHt, che);
@@ -451,10 +474,15 @@ export const RUNNER_SRC = String.raw`
       if (!gia) gia = { bay: GOC_HEN.Date.now(), hen: [], soId: 0 };
       if (cfg && cfg.now != null) gia.bay = +new GOC_HEN.Date(cfg.now);
       gia.henBat = true;
-      G.setTimeout = function (fn, ms) { var h = { id: ++gia.soId, luc: gia.bay + Math.max(0, +ms || 0), fn: fn, args: Array.prototype.slice.call(arguments, 2), lap: 0 }; gia.hen.push(h); return h.id; };
-      G.setInterval = function (fn, ms) { var d = Math.max(1, +ms || 0); var h = { id: ++gia.soId, luc: gia.bay + d, fn: fn, args: Array.prototype.slice.call(arguments, 2), lap: d }; gia.hen.push(h); return h.id; };
-      G.clearTimeout = G.clearInterval = function (id) { if (!gia) return; var i = gia.hen.findIndex(function (h) { return h.id === id; }); if (i >= 0) gia.hen.splice(i, 1); };
-      caiDate();
+      // { toFake: ['Date'] } ⇒ chỉ giả những thứ được kể (bài 10.2: giờ giả, setTimeout thật)
+      var chi = cfg && Array.isArray(cfg.toFake) ? cfg.toFake : null;
+      var gia1 = function (k) { return !chi || chi.indexOf(k) >= 0; };
+      if (gia1('setTimeout')) G.setTimeout = function (fn, ms) { var h = { id: ++gia.soId, luc: gia.bay + Math.max(0, +ms || 0), fn: fn, args: Array.prototype.slice.call(arguments, 2), lap: 0 }; gia.hen.push(h); return h.id; };
+      if (gia1('setInterval')) G.setInterval = function (fn, ms) { var d = Math.max(1, +ms || 0); var h = { id: ++gia.soId, luc: gia.bay + d, fn: fn, args: Array.prototype.slice.call(arguments, 2), lap: d }; gia.hen.push(h); return h.id; };
+      var xoaGia = function (id) { if (!gia) return; var i = gia.hen.findIndex(function (h) { return h.id === id; }); if (i >= 0) gia.hen.splice(i, 1); };
+      if (gia1('setTimeout') || gia1('clearTimeout')) G.clearTimeout = xoaGia;
+      if (gia1('setInterval') || gia1('clearInterval')) G.clearInterval = xoaGia;
+      if (gia1('Date')) caiDate();
       return vi;
     },
     useRealTimers: function () {
@@ -489,6 +517,45 @@ export const RUNNER_SRC = String.raw`
     },
     getTimerCount: function () { return gia ? gia.hen.length : 0; },
     clearAllTimers: function () { if (gia) gia.hen = []; return vi; },
+    // module giả: bộ biến đổi đưa vi.hoisted / vi.mock (cấp đầu tệp) lên TRÊN các import, như Vitest
+    hoisted: function (fn) { return fn(); },
+    mock: function (spec, factory) {
+      if (typeof factory !== 'function') throw new Error('vi.mock(' + JSON.stringify(spec) + ') without a factory (automocking) is not available in the browser grader — pass one: vi.mock(path, () => ({ ... }))');
+      var p = giai(String(spec), phien.tep);
+      if (p == null) throw new Error('vi.mock: only relative paths (./file.js) to files of this exercise can be mocked here, got ' + JSON.stringify(spec));
+      if (phien.files[p] == null && phien.files[p + '.js'] != null) p = p + '.js';
+      phien.moGia[p] = { factory: factory, xuat: null };
+      return undefined;
+    },
+    doMock: function (spec, factory) { return vi.mock(spec, factory); },
+    mocked: function (x) { return x; },
+    importActual: function (spec) {
+      var p = giai(String(spec), phien.tep);
+      if (p != null && phien.files[p] == null && phien.files[p + '.js'] != null) p = p + '.js';
+      return new _Promise(function (ok, hong) { try { ok(phien.napThat(p)); } catch (e) { hong(e); } });
+    },
+    stubGlobal: function (ten, gt) {
+      if (!Object.prototype.hasOwnProperty.call(phien.goiGoc, ten)) phien.goiGoc[ten] = { co: ten in G, gt: G[ten] };
+      G[ten] = gt;
+      return vi;
+    },
+    unstubAllGlobals: function () {
+      Object.keys(phien.goiGoc).forEach(function (k) { var g = phien.goiGoc[k]; if (g.co) G[k] = g.gt; else delete G[k]; });
+      phien.goiGoc = {};
+      return vi;
+    },
+    stubEnv: function (ten, gt) {
+      var env = G.process.env;
+      if (!Object.prototype.hasOwnProperty.call(phien.envGoc, ten)) phien.envGoc[ten] = { co: ten in env, gt: env[ten] };
+      env[ten] = gt;
+      return vi;
+    },
+    unstubAllEnvs: function () {
+      var env = G.process.env;
+      Object.keys(phien.envGoc).forEach(function (k) { var g = phien.envGoc[k]; if (g.co) env[k] = g.gt; else delete env[k]; });
+      phien.envGoc = {};
+      return vi;
+    },
   };
   vi = new Proxy(vi, { get: function (t, k) {
     if (k in t || typeof k !== 'string' || k === 'then' || k === 'toJSON') return t[k];
@@ -548,6 +615,106 @@ export const RUNNER_SRC = String.raw`
   };
   FC.default = FC;
 
+  // ── msw THU GỌN (bài 3.2, 6.4, 8.3): setupServer thay fetch của realm này; http.get/post/put/patch/delete/all;
+  // HttpResponse.json/text/error; server.listen/use/resetHandlers/close; { once: true }. Không có mạng:
+  // yêu cầu không handler nào nhận ⇒ fetch bị từ chối (TypeError), như mạng hỏng.
+  function khopDuong(mau, url) {
+    var u; try { u = new URL(url); } catch (e) { return null; }
+    var m = String(mau), duongMau;
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(m)) {
+      var mu = /^([a-z][a-z0-9+.-]*:\/\/[^/]+)(\/.*)?$/i.exec(m);
+      if (!mu || mu[1].toLowerCase() !== u.origin.toLowerCase()) return null;
+      duongMau = mu[2] || '/';
+    } else duongMau = m;
+    duongMau = duongMau.split('?')[0];
+    var a = duongMau.split('/'), b = u.pathname.split('/'), ts = {};
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] === '*') return ts;
+      if (i >= b.length) return null;
+      if (a[i].charAt(0) === ':') { ts[a[i].slice(1)] = decodeURIComponent(b[i]); continue; }
+      if (a[i] !== b[i]) return null;
+    }
+    return a.length === b.length || (a.length === b.length - 1 && b[b.length - 1] === '') ? ts : null;
+  }
+  function moiHandler(method) { return function (mau, fn, o) { return { method: method, mau: mau, fn: fn, once: !!(o && o.once), daDung: false }; }; }
+  var HTTP = { all: moiHandler('*'), get: moiHandler('GET'), post: moiHandler('POST'), put: moiHandler('PUT'), patch: moiHandler('PATCH'), delete: moiHandler('DELETE'), head: moiHandler('HEAD'), options: moiHandler('OPTIONS') };
+  function HttpResponse(body, init) { return new G.Response(body, init); }
+  function voiKieu(init, kieu) { init = init || {}; var h = new G.Headers(init.headers || {}); if (!h.has('content-type')) h.set('content-type', kieu); return { status: init.status, statusText: init.statusText, headers: h }; }
+  HttpResponse.json = function (b, init) { return new G.Response(JSON.stringify(b), voiKieu(init, 'application/json')); };
+  HttpResponse.text = function (b, init) { return new G.Response(b, voiKieu(init, 'text/plain')); };
+  HttpResponse.html = function (b, init) { return new G.Response(b, voiKieu(init, 'text/html')); };
+  HttpResponse.error = function () { return G.Response.error(); };
+  // mọi server đang nghe (mới nhất trước): fetch của realm đi qua lần lượt từng server, không ai nhận ⇒ TypeError
+  var mayNghe = [], fetchGoc = null;
+  async function fetchGia(input, init) {
+    var req = new G.Request(input, init), cheDo = 'warn';
+    for (var k = mayNghe.length - 1; k >= 0; k--) {
+      var res = await mayNghe[k].xuLy(req);
+      if (res !== undefined) return res;
+      cheDo = mayNghe[k].cheDo;
+    }
+    throw new TypeError('[MSW] ' + (cheDo === 'error' ? 'Error: ' : '') + 'intercepted a request without a matching request handler: ' + req.method + ' ' + req.url + ' (the browser grader has no network)');
+  }
+  function setupServer() {
+    var dau = Array.prototype.slice.call(arguments), them = [];
+    var may = {
+      cheDo: 'warn',
+      xuLy: async function (req) {
+        var ds = them.concat(dau);
+        for (var i = 0; i < ds.length; i++) {
+          var h = ds[i];
+          if (h.once && h.daDung) continue;
+          if (h.method !== '*' && h.method !== req.method) continue;
+          var ts = khopDuong(h.mau, req.url);
+          if (!ts) continue;
+          var res = await h.fn({ request: req.clone(), params: ts, cookies: {} });
+          if (res === undefined) continue;
+          if (h.once) h.daDung = true;
+          if (res && res.type === 'error') throw new TypeError('Failed to fetch');
+          return res;
+        }
+        return undefined;
+      },
+    };
+    return {
+      listen: function (o) {
+        if (o && o.onUnhandledRequest) may.cheDo = String(o.onUnhandledRequest);
+        if (mayNghe.indexOf(may) >= 0) return;
+        if (!mayNghe.length) { fetchGoc = G.fetch; G.fetch = fetchGia; }
+        mayNghe.push(may);
+      },
+      close: function () {
+        var i = mayNghe.indexOf(may);
+        if (i < 0) return;
+        mayNghe.splice(i, 1);
+        if (!mayNghe.length) G.fetch = fetchGoc;
+      },
+      use: function () { them = Array.prototype.slice.call(arguments).concat(them); },
+      resetHandlers: function () { them = []; if (arguments.length) dau = Array.prototype.slice.call(arguments); dau.forEach(function (h) { h.daDung = false; }); },
+      restoreHandlers: function () { them.concat(dau).forEach(function (h) { h.daDung = false; }); },
+      listHandlers: function () { return them.concat(dau); },
+    };
+  }
+  var MSW = { http: HTTP, HttpResponse: HttpResponse, setupServer: setupServer };
+  // node:fs THU GỌN: đọc tệp CỦA ĐỀ (vd .github/workflows/test.yml, package.json) — đường dẫn tính từ gốc dự án
+  function duongTep(p) {
+    var s = p && typeof p === 'object' && typeof p.href === 'string' ? p.href : String(p);
+    if (/^file:/.test(s)) s = decodeURIComponent(new URL(s).pathname);
+    var phan = [];
+    s.split('/').forEach(function (x) { if (x === '' || x === '.') return; if (x === '..') phan.pop(); else phan.push(x); });
+    return phan.join('/');
+  }
+  var FS = {
+    readFileSync: function (p) {
+      var t = duongTep(p);
+      if (phien.files[t] == null) { var e = new Error("ENOENT: no such file or directory, open '" + t + "' (the browser grader only has this exercise's files)"); e.code = 'ENOENT'; throw e; }
+      return String(phien.files[t]);
+    },
+    existsSync: function (p) { return phien.files[duongTep(p)] != null; },
+  };
+  FS.default = FS;
+  FS.promises = { readFile: function (p) { return new _Promise(function (ok) { ok(FS.readFileSync(p)); }); } };
+
   var VITEST = {
     describe: describe, it: it, test: it, expect: expect, suite: describe,
     beforeEach: hook('truocMoi'), afterEach: hook('sauMoi'), beforeAll: hook('truocTat'), afterAll: hook('sauTat'),
@@ -558,8 +725,43 @@ export const RUNNER_SRC = String.raw`
   var DINH_DANH = /^[A-Za-z_$][\w$]*$/;
   function demDong(s) { return (s.match(/\n/g) || []).length; }
   function dem(s) { return new Array(demDong(s) + 1).join('\n'); }
+  // Vị trí NGAY SAU dấu ngoặc khớp với ngoặc mở tại i (bỏ qua chuỗi, chuỗi mẫu, chú thích) — để cắt một lời gọi vi.mock(...).
+  var HUYEN = String.fromCharCode(96);
+  function sauNgoac(s, i) {
+    var sau = 0;
+    for (var j = i; j < s.length; j++) {
+      var c = s.charAt(j);
+      if (c === '/' && s.charAt(j + 1) === '/') { j = s.indexOf('\n', j); if (j < 0) return -1; continue; }
+      if (c === '/' && s.charAt(j + 1) === '*') { j = s.indexOf('*/', j + 2); if (j < 0) return -1; j++; continue; }
+      if (c === "'" || c === '"' || c === HUYEN) {
+        for (j++; j < s.length && s.charAt(j) !== c; j++) if (s.charAt(j) === '\\') j++;
+        continue;
+      }
+      if (c === '(' || c === '{' || c === '[') sau++;
+      else if (c === ')' || c === '}' || c === ']') { sau--; if (sau === 0) return j + 1; }
+    }
+    return -1;
+  }
+  // vi.hoisted(...) gán ở cấp đầu tệp + vi.mock(...) ở cấp đầu tệp ⇒ cắt ra (giữ số dòng) để đặt TRÊN mọi import
+  function tachHoist(ma) {
+    var len = [], re = /^[ \t]*(?:(?:const|let|var)\s+[^=;]+?=\s*vi\.hoisted\(|vi\.(?:mock|hoisted)\()/gm, m, out = '', tu = 0;
+    while ((m = re.exec(ma))) {
+      var mo = m.index + m[0].length - 1;
+      var het = sauNgoac(ma, mo);
+      if (het < 0) break;
+      if (ma.charAt(het) === ';') het++;
+      var doan = ma.slice(m.index, het);
+      len.push(doan.trim().replace(/;?$/, ';'));
+      out += ma.slice(tu, m.index) + dem(doan);
+      tu = het;
+      re.lastIndex = het;
+    }
+    return { ma: out + ma.slice(tu), len: len };
+  }
   function bienDoi(ma, ten) {
-    var xuat = [];
+    var xuat = [], truoc = [];
+    var h = tachHoist(ma);
+    ma = h.ma.replace(/\bimport\.meta\.url\b/g, '__meta.url').replace(/\bimport\.meta\b/g, '__meta');
     // import ở đầu dòng HOẶC ngay sau dấu ; (nhiều import trên một dòng)
     var s = ma.replace(/(?<=^|;)([ \t]*)import\s+([\w$*{][\s\S]*?)\s+from\s*(['"])([^'"\n]+)\3[ \t]*;?/gm, function (m, sp, mau, q, spec) {
       mau = mau.trim();
@@ -579,6 +781,7 @@ export const RUNNER_SRC = String.raw`
           phan.push('const ' + (mm[2] || mm[1]) + ' = __lay(' + bien + ', ' + JSON.stringify(mm[1]) + ', ' + JSON.stringify(spec) + ');');
         });
       }
+      if (spec === 'vitest' && h.len.length) { truoc.push(phan.join(' ')); return sp + dem(m); } // import vitest lên trước vi.mock
       return sp + phan.join(' ') + dem(m);
     });
     s = s.replace(/(?<=^|;)([ \t]*)import\s*(['"])([^'"\n]+)\2[ \t]*;?/gm, function (m, sp, q, spec) { return sp + '__nhap(' + JSON.stringify(spec) + ');' + dem(m); });
@@ -599,7 +802,8 @@ export const RUNNER_SRC = String.raw`
     });
     if (/^[ \t]*export\s/m.test(s)) throw new SyntaxError('unsupported export form in ' + ten + ' (use export function / export const / export { a, b })');
     var cuoi = xuat.map(function (p) { return 'Object.defineProperty(__xuat, ' + JSON.stringify(p[1]) + ', { enumerable: true, get: function () { return ' + p[0] + '; } });'; }).join(' ');
-    return '(function (__nhap, __lay, __xuat) { "use strict";\n' + s + '\n;' + cuoi + '\n})\n//# sourceURL=' + ten;
+    var dau = truoc.concat(h.len).join(' ');
+    return '(function (__nhap, __lay, __xuat, __meta) { "use strict"; ' + dau + '\n' + s + '\n;' + cuoi + '\n})\n//# sourceURL=' + ten;
   }
   function giai(spec, tu) {
     if (!/^\.{1,2}\//.test(spec)) return null;
@@ -615,9 +819,33 @@ export const RUNNER_SRC = String.raw`
     var files = d.files || {};
     var tepTest = d.tepTest || [];
     var tranTestMs = d.tranTestMs || 2000;
+    var thuVien = d.thuVien || {}, soThuVien = {};
+    var lapLai = Math.max(0, Math.min(20, Number(d.lapLai) || 0));
+    var xaoTron = Number(d.xaoTron) || 0;
+    var khoiPhucMock = d.restoreMocks !== false; // cấu hình khoá Testing: restoreMocks: true
+    phien = { files: files, anhChup: {}, tep: '', moGia: {}, goiGoc: {}, envGoc: {}, napThat: null };
     goc = nhomMoi('', null); nhomHt = goc;
     var soModule = {}, dangNap = {};
-    function nap(duong) {
+    // thư viện npm ĐI KÈM ĐỀ (bản gói CommonJS trong testsJson.thuVien, vd 'yaml') — chỉ đề cần mới mang theo
+    function napThuVien(ten) {
+      if (soThuVien[ten]) return soThuVien[ten];
+      var module = { exports: {} };
+      evalToanCuc('(function (module, exports) {\n' + thuVien[ten] + '\n})\n//# sourceURL=thu-vien/' + ten)(module, module.exports);
+      var x = module.exports;
+      if (x && typeof x === 'object' && !('default' in x)) { try { Object.defineProperty(x, 'default', { value: x, enumerable: false, configurable: true }); } catch (e) { /* đóng băng */ } }
+      soThuVien[ten] = x;
+      return x;
+    }
+    phien.napThat = function (p) { return nap(p, true); };
+    function nap(duong, that) {
+      var gia2 = !that && phien.moGia[duong];
+      if (gia2) {
+        if (!gia2.xuat) {
+          gia2.xuat = gia2.factory(function () { return _Promise.resolve(nap(duong, true)); });
+          if (gia2.xuat && typeof gia2.xuat.then === 'function') throw new Error('vi.mock(' + JSON.stringify(duong) + '): an async factory is not supported by the browser grader — return the object directly');
+        }
+        return gia2.xuat;
+      }
       if (soModule[duong]) return soModule[duong];
       if (dangNap[duong]) throw new Error('circular import through ' + duong + ' is not supported by the browser grader');
       if (files[duong] == null) throw new Error('Cannot find module ' + duong);
@@ -628,19 +856,22 @@ export const RUNNER_SRC = String.raw`
       fn(function (spec) {
         if (spec === 'vitest') return VITEST;
         if (spec === 'fast-check') return FC;
+        if (spec === 'msw' || spec === 'msw/http' || spec === 'msw/node') return MSW;
+        if (spec === 'node:fs' || spec === 'fs') return FS;
+        if (Object.prototype.hasOwnProperty.call(thuVien, spec)) return napThuVien(spec);
         var p = giai(spec, duong);
-        if (p == null) throw new Error('Cannot import "' + spec + '" — only "vitest" and relative paths (./file.js) to files of this exercise');
+        if (p == null) throw new Error('Cannot import "' + spec + '" — the browser grader has "vitest", "fast-check", "msw" (subset), "node:fs" (this exercise\'s files)' + (Object.keys(thuVien).length ? ', ' + Object.keys(thuVien).map(function (k) { return '"' + k + '"'; }).join(', ') : '') + ' and relative paths (./file.js) to files of this exercise');
         if (files[p] == null && files[p + '.js'] != null) p = p + '.js';
         return nap(p);
       }, function (m, ten, spec) {
         if (!(ten in m)) throw new SyntaxError('The requested module ' + JSON.stringify(spec) + ' does not provide an export named ' + JSON.stringify(ten));
         return m[ten];
-      }, xuat);
+      }, xuat, { url: 'file:///' + duong });
       dangNap[duong] = false;
       return xuat;
     }
     try {
-      for (var i = 0; i < tepTest.length; i++) nap(tepTest[i]);
+      for (var i = 0; i < tepTest.length; i++) { phien.tep = tepTest[i]; nap(tepTest[i]); }
     } catch (e) {
       return { tests: [], loiNap: (e && e.name ? e.name + ': ' : '') + (e && e.message ? e.message : String(e)) };
     }
@@ -650,49 +881,71 @@ export const RUNNER_SRC = String.raw`
     var locOnly = coOnly(goc);
 
     var ketQua = [];
-    async function chayHook(ds) { for (var i = 0; i < ds.length; i++) await ds[i](); }
+    // hook trả về một HÀM ⇒ hàm dọn (chạy sau afterEach / afterAll), như Vitest
+    async function chayHook(ds, don) { for (var i = 0; i < ds.length; i++) { var r = await ds[i](); if (typeof r === 'function' && don) don.push(r); } }
     function chuoiTruoc(n) { var ds = []; for (var x = n; x; x = x.cha) ds.unshift(x); return ds; }
     async function chayMot(t, n, tenDay) {
-      var ctx = { soExpect: 0, loiMem: [], hua: [], canDung: null, canCo: false };
+      var ctx = { soExpect: 0, loiMem: [], hua: [], canDung: null, canCo: false, tep: t.tep };
       hienTai = ctx;
       var loi = null;
       var tran = t.tran || tranTestMs;
-      var hen;
+      var hen, don = [];
+      var day = chuoiTruoc(n);
       try {
-        var day = chuoiTruoc(n);
-        for (var a = 0; a < day.length; a++) await chayHook(day[a].truocMoi);
+        if (khoiPhucMock) vi.restoreAllMocks();
+        for (var a = 0; a < day.length; a++) await chayHook(day[a].truocMoi, don);
         var r = t.fn();
         var cho = _Promise.resolve(r).then(function () { return _Promise.all(ctx.hua); });
         await _Promise.race([cho, new _Promise(function (_, rej) { hen = _setTimeout(function () { rej(new Error('Test timed out in ' + tran + 'ms')); }, tran); })]);
+      } catch (e) { loi = e; }
+      if (hen) _clearTimeout(hen);
+      // afterEach + hàm dọn LUÔN chạy (cả khi test đỏ) — không để đồng hồ giả / handler rò sang test sau
+      try {
         for (var b = day.length - 1; b >= 0; b--) await chayHook(day[b].sauMoi);
+        for (var k = don.length - 1; k >= 0; k--) await don[k]();
+      } catch (e) { if (!loi) loi = e; }
+      if (!loi) {
         if (ctx.loiMem.length) loi = ctx.loiMem[0];
         else if (ctx.canDung != null && ctx.soExpect !== ctx.canDung) loi = LoiKhangDinh('expected ' + ctx.canDung + ' assertions to be called but received ' + ctx.soExpect);
         else if (ctx.soExpect === 0) loi = LoiKhangDinh('expected any number of assertions, but got none — a test without expect() always passes (requireAssertions)');
-      } catch (e) { loi = e; }
-      if (hen) _clearTimeout(hen);
+      }
       hienTai = null;
       if (t.phaiDo) loi = loi ? null : LoiKhangDinh('expected this test to fail (it.fails), but it passed');
-      ketQua.push({ ten: tenDay, dat: !loi, loi: loi ? ngan((loi && loi.name && loi.name !== 'AssertionError' ? loi.name + ': ' : '') + (loi && loi.message !== undefined ? loi.message : String(loi))) : undefined });
+      return { ten: tenDay, dat: !loi, loi: loi ? ngan((loi && loi.name && loi.name !== 'AssertionError' ? loi.name + ': ' : '') + (loi && loi.message !== undefined ? loi.message : String(loi))) : undefined };
     }
+    // --sequence.shuffle: thứ tự test/nhóm xáo theo HẠT GIỐNG cố định (chấm lặp lại được)
+    var ngauXao = (function (a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; })(xaoTron);
+    function xao(ds) { if (!xaoTron) return ds; ds = ds.slice(); for (var i = ds.length - 1; i > 0; i--) { var j = Math.floor(ngauXao() * (i + 1)); var x = ds[i]; ds[i] = ds[j]; ds[j] = x; } return ds; }
     async function di(n, ten, boQua, trongOnly) {
       var dangOnly = trongOnly || n.che === 'only';
       var bo = boQua || n.che === 'skip';
       var coTest = false;
       (function quet(x) { x.con.forEach(function (c) { if (c.loai === 'test') coTest = true; else quet(c.nhom); }); })(n);
+      var donTat = [];
       if (!bo && coTest) {
-        try { await chayHook(n.truocTat); } catch (e) { ketQua.push({ ten: (ten || 'beforeAll'), dat: false, loi: 'beforeAll failed: ' + ngan(e && e.message) }); return; }
+        try { await chayHook(n.truocTat, donTat); } catch (e) { ketQua.push({ ten: (ten || 'beforeAll'), dat: false, loi: 'beforeAll failed: ' + ngan(e && e.message) }); return; }
       }
-      for (var i = 0; i < n.con.length; i++) {
-        var c = n.con[i];
+      var con = xao(n.con);
+      for (var i = 0; i < con.length; i++) {
+        var c = con[i];
         if (c.loai === 'nhom') { await di(c.nhom, (ten ? ten + ' › ' : '') + c.nhom.ten, bo, dangOnly); continue; }
         if (bo || c.che === 'skip' || c.che === 'todo' || typeof c.fn !== 'function') continue;
         if (locOnly && !dangOnly && c.che !== 'only') continue;
-        await chayMot(c, n, (ten ? ten + ' › ' : '') + c.ten);
+        // --repeats=N: chạy thêm N lần; một lần đỏ là test đỏ (bắt test chập chờn)
+        var kq = null;
+        for (var lan = 0; lan <= lapLai; lan++) {
+          kq = await chayMot(c, n, (ten ? ten + ' › ' : '') + c.ten);
+          if (!kq.dat) { if (lan) kq.loi = '(repeat ' + lan + ') ' + kq.loi; break; }
+        }
+        ketQua.push(kq);
       }
-      if (!bo && coTest) { try { await chayHook(n.sauTat); } catch (e) { /* afterAll lỗi: bỏ qua */ } }
+      if (!bo && coTest) {
+        try { await chayHook(n.sauTat); for (var k = donTat.length - 1; k >= 0; k--) await donTat[k](); } catch (e) { /* afterAll lỗi: bỏ qua */ }
+      }
     }
     await di(goc, '', false, false);
-    return { tests: ketQua };
+    var ghi = Object.keys(phien.anhChup).length ? { anhChup: phien.anhChup } : {};
+    return Object.assign({ tests: ketQua }, ghi);
   }
 
   G.__ctMutation = { chay: chay, bienDoi: bienDoi, bang: bang };

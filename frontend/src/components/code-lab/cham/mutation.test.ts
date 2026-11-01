@@ -8,22 +8,23 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { RUNNER_SRC } from './mutationRunner';
-import { chamMutation, ketQuaXanh, ketQuaDotBien, tepChoLuot, timTepTest, type LuotChay, type TestChay } from './chamMutation';
+import { chamMutation, ketQuaXanh, ketQuaDotBien, ketQuaVoHai, tepChoLuot, timTepTest, tuyChonTu, type LuotChay, type TestChay, type TuyChonChay } from './chamMutation';
 import { chapNhan, demDotBien, tinhDiem } from './diem';
 import type { TepMap, TestsJson } from './kieu';
 
-type Runner = { chay: (d: { files: TepMap; tepTest: string[]; tranTestMs?: number }) => Promise<{ tests: TestChay[]; loiNap?: string }> };
+type Runner = { chay: (d: { files: TepMap; tepTest: string[]; tranTestMs?: number } & TuyChonChay) => Promise<{ tests: TestChay[]; loiNap?: string; anhChup?: TepMap }> };
 
 /** Mỗi lượt một ngữ cảnh vm MỚI — như một Worker mới. */
 function runner(): Runner {
-  const ctx = vm.createContext({ setTimeout, clearTimeout, console });
+  // những gì Worker của trình duyệt có sẵn (route handler / msw cần Request/Response; crypto.randomUUID)
+  const ctx = vm.createContext({ setTimeout, clearTimeout, console, crypto: globalThis.crypto, Request, Response, Headers, URL, URLSearchParams, TextEncoder, TextDecoder, structuredClone, AbortController });
   vm.runInContext(RUNNER_SRC, ctx);
   const r = (ctx as unknown as { __ctMutation: Runner }).__ctMutation;
   // kết quả từ realm vm ⇒ chép sang realm này (trình duyệt: structured clone qua postMessage)
   return { chay: async (d) => JSON.parse(JSON.stringify(await r.chay(d))) };
 }
-async function chayVm(files: TepMap, tepTest: string[], _timeoutMs?: number, tranTestMs?: number): Promise<LuotChay> {
-  const r = await runner().chay({ files, tepTest, tranTestMs: tranTestMs ?? 300 });
+async function chayVm(files: TepMap, tepTest: string[], _timeoutMs?: number, tranTestMs?: number, tuy: TuyChonChay = {}): Promise<LuotChay> {
+  const r = await runner().chay({ files, tepTest, tranTestMs: tranTestMs ?? 300, ...tuy });
   return { ...r, ms: 0 };
 }
 /** Chạy một tệp test với một module `src/m.js`. */
@@ -166,7 +167,7 @@ it('default + rename', () => { expect(bay).toBe(7); expect(pt('01:30')).toBe(90)
     const a = await chay1("import { it } from 'vitest'; import { khongCo } from './m.js'; it('x', () => {});");
     assert.match(a.loiNap!, /does not provide an export named "khongCo"/);
     const b = await chay1("import { it } from 'vitest'; import { x } from 'lodash';");
-    assert.match(b.loiNap!, /only "vitest"/);
+    assert.match(b.loiNap!, /Cannot import "lodash" — the browser grader has "vitest"/);
     const c = await chay1("import { it } from 'vitest'\nit('x', () => { expect(1).toBe(1) ");
     assert.match(c.loiNap!, /SyntaxError/);
   });
@@ -350,5 +351,144 @@ describe('điểm + ngưỡng', () => {
     assert.equal(chapNhan({ loai: 'js' }, [{ dat: true }, { dat: false, boQua: 'x' }]), true);
     assert.equal(chapNhan({ loai: 'js' }, [{ dat: true }, { dat: false }]), false);
     assert.equal(chapNhan({ loai: 'js' }, []), false);
+  });
+});
+
+// ─── mở rộng 01/11/2026 cho 52 đề tự động của khoá Testing (Ch3 msw/vi.mock, Ch6.4 route handler, Ch8 shuffle/repeats,
+//     Ch9 node:fs + yaml đi kèm đề, Ch10 golden master) ───
+describe('bộ chạy — mở rộng Ch3–Ch10', () => {
+  const chayN = (files: TepMap, tepTest: string[], tuy: TuyChonChay = {}) => runner().chay({ files, tepTest, tranTestMs: 300, ...tuy });
+
+  it('vi.mock + vi.hoisted được đưa lên TRÊN import (như Vitest); vi.mocked; importActual trả module thật', async () => {
+    const r = await chayN({
+      'src/mail.js': "export async function send() { throw new Error('real network'); }\nexport const ten = 'that';",
+      'src/remind.js': "import { send } from './mail.js';\nexport async function remind(to) { await send({ to, subject: 'tomorrow' }); return 'ok'; }",
+      'src/r.test.js': `import { it, expect, vi } from 'vitest';
+import { remind } from './remind.js';
+const { send } = vi.hoisted(() => ({ send: vi.fn() }));
+vi.mock('./mail.js', () => ({ send }));
+it('dùng module giả', async () => {
+  await expect(remind('an')).resolves.toBe('ok');
+  expect(vi.mocked(send)).toHaveBeenCalledWith({ to: 'an', subject: 'tomorrow' });
+});
+it('importActual', async () => { const m = await vi.importActual('./mail.js'); expect(m.ten).toBe('that'); });`,
+    }, ['src/r.test.js']);
+    assert.deepEqual(dat(r), [true, true]);
+    // biến KHÔNG hoisted dùng trong factory ⇒ lỗi TDZ như Vitest (bài 3.2: vi-mock-sai)
+    const sai = await chayN({
+      'src/mail.js': 'export async function send() {}',
+      'src/remind.js': "import { send } from './mail.js';\nexport const s = send;",
+      'src/r.test.js': "import { it, expect, vi } from 'vitest';\nimport { s } from './remind.js';\nconst send = vi.fn();\nvi.mock('./mail.js', () => ({ send }));\nit('x', () => { expect(s).toBe(send); });",
+    }, ['src/r.test.js']);
+    assert.match(sai.loiNap!, /before initialization|not defined/);
+  });
+
+  it('msw thu gọn: setupServer/http/HttpResponse, server.use ưu tiên, resetHandlers, error() ⇒ fetch từ chối, không handler ⇒ TypeError', async () => {
+    const r = await chayN({
+      'src/c.js': "export async function lay(id) { const res = await fetch('https://api.test/b/' + id, { headers: { authorization: 'Bearer k' } }); if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); }",
+      'src/c.test.js': `import { it, expect, beforeAll, afterEach, afterAll } from 'vitest';
+import { setupServer } from 'msw/node';
+import { http, HttpResponse } from 'msw/http';
+import { lay } from './c.js';
+const thay = [];
+const server = setupServer(http.get('https://api.test/b/:id', ({ request, params }) => { thay.push(request.headers.get('authorization')); return HttpResponse.json({ id: Number(params.id) }); }));
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+it('handler gốc + params + header', async () => { await expect(lay(7)).resolves.toEqual({ id: 7 }); expect(thay).toEqual(['Bearer k']); });
+it('server.use thắng', async () => { server.use(http.get('https://api.test/b/:id', () => new HttpResponse(null, { status: 503 }))); await expect(lay(1)).rejects.toThrow('HTTP 503'); });
+it('resetHandlers trả về handler gốc', async () => { await expect(lay(2)).resolves.toEqual({ id: 2 }); });
+it('mạng hỏng', async () => { server.use(http.get('https://api.test/b/:id', () => HttpResponse.error())); await expect(lay(3)).rejects.toThrow(TypeError); });
+it('không handler nào nhận', async () => { await expect(fetch('https://khac.test/')).rejects.toThrow(/without a matching request handler/); });`,
+    }, ['src/c.test.js']);
+    assert.deepEqual(dat(r), [true, true, true, true, true]);
+  });
+
+  it('node:fs đọc tệp CỦA ĐỀ qua new URL(…, import.meta.url); thư viện đi kèm đề (thuVien, CommonJS)', async () => {
+    const r = await chayN({
+      '.github/w.yml': 'name: CI\n',
+      'src/ci/w.test.js': `import { it, expect } from 'vitest';
+import { readFileSync, existsSync } from 'node:fs';
+import { parse } from 'yaml';
+const TEXT = readFileSync(new URL('../../.github/w.yml', import.meta.url), 'utf8');
+it('đọc được', () => { expect(TEXT).toBe('name: CI\\n'); expect(parse(TEXT)).toEqual({ dong: 1 }); expect(existsSync('.github/w.yml')).toBe(true); });
+it('tệp không có ⇒ ENOENT', () => { expect(() => readFileSync('nope.txt', 'utf8')).toThrow(/ENOENT/); });`,
+    }, ['src/ci/w.test.js'], { thuVien: { yaml: 'module.exports = { parse: function (s) { return { dong: s.trim().split("\\n").length }; } };' } });
+    assert.deepEqual(dat(r), [true, true]);
+  });
+
+  it('toMatchFileSnapshot: chưa có ⇒ ghi (anhChup) và đạt; có rồi ⇒ so, lệch thì nói dòng đầu khác', async () => {
+    const files: TepMap = { 'src/r.js': "export const bc = (n) => 'A\\nB ' + n + '\\n';", 'src/r.test.js': "import { it, expect } from 'vitest';\nimport { bc } from './r.js';\nit('golden', async () => { await expect(bc(1)).toMatchFileSnapshot('./__ok__/r.txt'); });" };
+    const a = await chayN(files, ['src/r.test.js']);
+    assert.deepEqual(dat(a), [true]);
+    assert.deepEqual(a.anhChup, { 'src/__ok__/r.txt': 'A\nB 1\n' });
+    const b = await chayN({ ...files, 'src/r.js': "export const bc = (n) => 'A\\nB ' + (n + 1) + '\\n';", ...a.anhChup }, ['src/r.test.js']);
+    assert.deepEqual(dat(b), [false]);
+    assert.match(b.tests[0].loi!, /mismatched — first difference at line 2/);
+  });
+
+  it('beforeEach trả hàm dọn; afterEach chạy cả khi test đỏ; useFakeTimers({ toFake: [Date] }) giữ setTimeout thật; stubGlobal/stubEnv', async () => {
+    const r = await chayN({ 'src/a.test.js': `import { it, expect, vi, beforeEach, afterEach } from 'vitest';
+const log = [];
+beforeEach(() => { vi.stubGlobal('fetch', async () => 'gia'); vi.stubEnv('API', 'http://x'); return () => { log.push('don'); vi.unstubAllGlobals(); vi.unstubAllEnvs(); }; });
+afterEach(() => { log.push('after'); });
+it('đỏ', () => { expect(1).toBe(2); });
+it('dọn đã chạy sau test đỏ', async () => { expect(log).toEqual(['after', 'don']); expect(await fetch()).toBe('gia'); expect(process.env.API).toBe('http://x'); });
+it('chỉ giả Date', async () => {
+  vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(new Date('2026-11-16T00:00:00Z'));
+  await new Promise((r) => setTimeout(r, 1));
+  expect(new Date().toISOString()).toBe('2026-11-16T00:00:00.000Z');
+  vi.useRealTimers();
+});` }, ['src/a.test.js']);
+    assert.deepEqual(dat(r), [false, true, true]);
+  });
+
+  it('--sequence.shuffle (xaoTron, hạt giống cố định) bắt test phụ thuộc thứ tự; --repeats (lapLai) bắt test chập chờn', async () => {
+    const thuTu: TepMap = { 'src/a.test.js': "import { it, expect } from 'vitest';\nlet x = 0;\n" + Array.from({ length: 6 }, (_, i) => `it('t${i}', () => { x++; expect(x).toBe(${i + 1}); });`).join('\n') };
+    assert.ok(dat(await chayN(thuTu, ['src/a.test.js'])).every(Boolean));
+    assert.ok(dat(await chayN(thuTu, ['src/a.test.js'], { xaoTron: 20261101 })).some((d) => !d));
+    const chapChon: TepMap = { 'src/b.test.js': "import { it, expect } from 'vitest';\nlet n = 0;\nit('lần thứ 3 đỏ', () => { n++; expect(n % 3).not.toBe(0); });" };
+    assert.deepEqual(dat(await chayN(chapChon, ['src/b.test.js'])), [true]);
+    const lap = await chayN(chapChon, ['src/b.test.js'], { lapLai: 9 });
+    assert.deepEqual(dat(lap), [false]);
+    assert.match(lap.tests[0].loi!, /^\(repeat 2\)/);
+  });
+
+  it('restoreMocks (cấu hình khoá): spy của test trước được trả lại trước test sau; tắt được', async () => {
+    const f: TepMap = { 'src/a.test.js': "import { it, expect, vi } from 'vitest';\nit('spy', () => { vi.spyOn(Math, 'max').mockReturnValue(-1); expect(Math.max(1, 2)).toBe(-1); });\nit('đã trả', () => { expect(Math.max(1, 2)).toBe(2); });" };
+    assert.deepEqual(dat(await chayN(f, ['src/a.test.js'])), [true, true]);
+    assert.deepEqual(dat(await chayN(f, ['src/a.test.js'], { restoreMocks: false })), [true, false]);
+  });
+});
+
+describe('chamMutation — thay đổi vô hại + ảnh chụp + tuỳ chọn đề', () => {
+  const IMPL2 = 'export function tong(ds) { let s = 0; for (let i = 0; i < ds.length; i++) s += ds[i]; return s; }\n';
+  const tj: TestsJson = {
+    loai: 'mutation', impl: { 'src/t.js': IMPL2 }, toiThieuTest: 1,
+    kiem: [
+      { i: 0, kiem: 'xanh', nhom: 'xanh', moTa: 'xanh' },
+      { i: 1, kiem: 'diet', nhom: 'dot-bien', moTa: 'bỏ phần tử cuối', ma: { 'src/t.js': IMPL2.replace('i < ds.length', 'i < ds.length - 1') } },
+      { i: 2, kiem: 'vo-hai', nhom: 'xanh', moTa: 'reduce thay for', ma: { 'src/t.js': 'export function tong(ds) { return ds.reduce((a, b) => a + b, 0); }\n' } },
+    ],
+  };
+  const tep = (body: string): TepMap => ({ 'src/t.test.js': `import { it, expect } from 'vitest';\nimport { tong } from './t.js';\n${body}` });
+  it('test hành vi: diệt + vẫn xanh với refactor ⇒ đạt', async () => {
+    const kq = await chamMutation(tj, tj.kiem!, tep("it('1+2+3', () => { expect(tong([1, 2, 3])).toBe(6); });"), undefined, chayVm);
+    assert.deepEqual(kq.map((r) => r.dat), [true, true, true]);
+    assert.equal(chapNhan(tj, kq), true);
+  });
+  it('test khoá vào cách cài đặt (đọc mã nguồn) ⇒ đỏ với refactor ⇒ CHƯA đạt dù diệt hết', async () => {
+    const kq = await chamMutation(tj, tj.kiem!, tep("it('dùng vòng for', () => { expect(String(tong)).toContain('for ('); expect(tong([1, 2, 3])).toBe(6); });"), undefined, chayVm);
+    assert.deepEqual(kq.map((r) => r.dat), [true, true, false]);
+    assert.match(kq[2].thay!, /ĐỎ với một thay đổi VÔ HẠI/);
+    assert.equal(chapNhan(tj, kq), false);
+    assert.equal(ketQuaVoHai({ tests: [{ ten: 'a', dat: true }], ms: 1 }).dat, true);
+  });
+  it('ảnh chụp ghi ở lượt code đúng được dùng cho đột biến; tuyChonTu đọc thuVien/xaoTron/lapLai/restoreMocks', async () => {
+    const tj2: TestsJson = { ...tj, kiem: tj.kiem!.slice(0, 2) };
+    const kq = await chamMutation(tj2, tj2.kiem!, tep("it('golden', async () => { await expect(String(tong([4, 5]))).toMatchFileSnapshot('./__ok__/t.txt'); });"), undefined, chayVm);
+    assert.deepEqual(kq.map((r) => r.dat), [true, true]);
+    assert.match(kq[1].thay!, /Snapshot src\/__ok__\/t\.txt mismatched/);
+    assert.deepEqual(tuyChonTu({ loai: 'mutation', thuVien: { yaml: 'x' }, xaoTron: 7, lapLai: 9, restoreMocks: false }), { thuVien: { yaml: 'x' }, xaoTron: 7, lapLai: 9, restoreMocks: false });
   });
 });

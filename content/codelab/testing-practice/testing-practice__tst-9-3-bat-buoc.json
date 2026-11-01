@@ -1,0 +1,174 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-9-3-bat-buoc",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-9-3-bat-buoc"
+  },
+  "exercises": [
+    {
+      "title": "The gate that decides a merge",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest",
+        "harmless refactor (stay green)"
+      ],
+      "prerequisites": [
+        "tst-9-3-bat-buoc"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>src/ci/gate.js</code> — decideMerge. It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Test decideMerge(needs, required): only success lets a pull request merge — failure, cancelled and skipped all block; a required job missing from needs blocks; every problem is listed with its job and result; a job that is not required (quarantine) never blocks..</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>5 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. It also applies <b>1 harmless change</b> (a refactor that keeps the behaviour): your tests must stay <b>green</b> on it, otherwise they are testing the implementation instead of the behaviour.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>src/ci/gate.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 5</b> mutants and stay green on the 1 harmless change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>src/ci/gate.js</code> — decideMerge. Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Test decideMerge(needs, required): chỉ success mới cho merge — failure, cancelled và skipped đều chặn; một job bắt buộc vắng mặt trong needs thì chặn; mọi vấn đề đều được liệt kê kèm tên job và kết quả; một job không bắt buộc (quarantine) không bao giờ chặn..</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>5 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Nó còn áp <b>1 thay đổi vô hại</b> (refactor giữ nguyên hành vi): test phải VẪN XANH, nếu không là bạn đang test cách cài đặt chứ không phải hành vi.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>src/ci/gate.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 5</b> đột biến và vẫn xanh với 1 thay đổi vô hại.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with src/ci/gate.test.js.|||Tệp test của bạn, bắt đầu từ src/ci/gate.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 5 mutants; green on the 1 harmless change(s).|||Xanh với code đúng; đỏ với từng đột biến trong 5; xanh với 1 thay đổi vô hại.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: skipped and cancelled jobs count as passed|||Đột biến M1: skipped and cancelled jobs count as passed",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-9-3-bat-buoc shows the techniques this exercise needs; the reference solution is the course’s own test file(s): src/ci/gate.test.js.|||Bài tst-9-3-bat-buoc dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: src/ci/gate.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/ci/gate.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { decideMerge } from './gate.js';\n\nconst all = (result) => ({ unit: { result }, integration: { result }, e2e: { result } });\nconst REQUIRED = ['unit', 'integration', 'e2e'];\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(decideMerge).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "src/ci/gate.js",
+          "language": "javascript",
+          "code": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/ci/gate.test.js",
+          "language": "javascript",
+          "code": "import { describe, it, expect } from 'vitest';\nimport { decideMerge } from './gate.js';\n\nconst all = (result) => ({ unit: { result }, integration: { result }, e2e: { result } });\nconst REQUIRED = ['unit', 'integration', 'e2e'];\n\ndescribe('decideMerge — the ci-ok gate', () => {\n  it('every required job succeeded → may merge', () => {\n    expect(decideMerge(all('success'), REQUIRED)).toEqual({ ok: true, problems: [] });\n  });\n\n  it.each(['failure', 'cancelled', 'skipped'])('a required job that is %s blocks the merge', (result) => {\n    const needs = { ...all('success'), integration: { result } };\n    expect(decideMerge(needs, REQUIRED)).toEqual({ ok: false, problems: ['integration: ' + result] });\n  });\n\n  it('a required job missing from needs blocks (someone deleted it from the workflow)', () => {\n    const { e2e, ...rest } = all('success');\n    expect(decideMerge(rest, REQUIRED)).toEqual({ ok: false, problems: ['e2e: not in needs'] });\n  });\n\n  it('every problem is listed, not only the first', () => {\n    expect(decideMerge({ unit: { result: 'failure' } }, REQUIRED).problems).toEqual(['unit: failure', 'integration: not in needs', 'e2e: not in needs']);\n  });\n\n  it('a job that is not required never blocks (report-only, e.g. quarantine)', () => {\n    const needs = { ...all('success'), quarantine: { result: 'failure' } };\n    expect(decideMerge(needs, REQUIRED).ok).toBe(true);\n  });\n});\n"
+        },
+        {
+          "name": "src/ci/gate.js",
+          "language": "javascript",
+          "code": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>src/ci/gate.test.js</code>), checked to kill every mutant and to stay green on the harmless change(s). Each mutant changes exactly one decision:</p><ul><li>M1 — skipped and cancelled jobs count as passed</li><li>M2 — a job deleted from the workflow is not noticed</li><li>M3 — one problem is tolerated</li><li>M4 — checks what ran instead of what is required</li><li>M5 — the reason (failure/skipped) is lost</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>src/ci/gate.test.js</code>), đã kiểm diệt mọi đột biến và vẫn xanh với thay đổi vô hại. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — skipped and cancelled jobs count as passed</li><li>M2 — a job deleted from the workflow is not noticed</li><li>M3 — one problem is tolerated</li><li>M4 — checks what ran instead of what is required</li><li>M5 — the reason (failure/skipped) is lost</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: skipped and cancelled jobs count as passed",
+            "goiY": "write a test whose result would change if this happened: “skipped and cancelled jobs count as passed” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “skipped and cancelled jobs count as passed” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result === 'failure') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: a job deleted from the workflow is not noticed",
+            "goiY": "write a test whose result would change if this happened: “a job deleted from the workflow is not noticed” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a job deleted from the workflow is not noticed” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) continue;\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: one problem is tolerated",
+            "goiY": "write a test whose result would change if this happened: “one problem is tolerated” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “one problem is tolerated” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length < 2, problems };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: checks what ran instead of what is required",
+            "goiY": "write a test whose result would change if this happened: “checks what ran instead of what is required” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “checks what ran instead of what is required” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of Object.keys(needs)) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: the reason (failure/skipped) is lost",
+            "goiY": "write a test whose result would change if this happened: “the reason (failure/skipped) is lost” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the reason (failure/skipped) is lost” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const result = needs[job]?.result;\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: destructuring instead of ?. — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "src/ci/gate.js": "// The one required check (lesson 9.3): decides from the results of the jobs it needs whether a pull request may merge.\n// needs = the toJSON(needs) context of the gate job: { unit: { result: 'success', outputs: {} }, … }\n// required = the jobs that must have passed. Anything but 'success' blocks: failure, cancelled — and skipped,\n// because on GitHub a skipped required check counts as passed.\nexport function decideMerge(needs, required) {\n  const problems = [];\n  for (const job of required) {\n    const { result } = needs[job] ?? {};\n    if (result === undefined) problems.push(job + ': not in needs');\n    else if (result !== 'success') problems.push(job + ': ' + result);\n  }\n  return { ok: problems.length === 0, problems };\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Asserting HOW the code does it (call order, internal fields, exact implementation) — a harmless refactor turns such a test red.|||Khẳng định CÁCH code làm (thứ tự gọi, trường nội bộ, cài đặt cụ thể) — một refactor vô hại làm test như vậy đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "harmless change",
+          "vi": "thay đổi vô hại",
+          "giaiThich": "refactor giữ nguyên hành vi — bộ test tốt phải VẪN XANH"
+        }
+      ]
+    }
+  ]
+}

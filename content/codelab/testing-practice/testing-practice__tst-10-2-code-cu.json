@@ -1,0 +1,212 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-10-2-code-cu",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-10-2-code-cu"
+  },
+  "exercises": [
+    {
+      "title": "Characterize a legacy report before anyone touches it",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Vitest",
+        "harmless refactor (stay green)"
+      ],
+      "prerequisites": [
+        "tst-10-2-code-cu"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "browser-graded"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>demo10/legacy/monthlyReport.v0.js</code> — monthlyReport (LabFlow v0, untouched). It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> Without editing the legacy file, pin what monthlyReport prints today: replace the database, the holiday service and the clock through seams (vi.mock, vi.stubGlobal, fake timers), choose inputs that reach every branch (other lab, other month, cancelled, pending, 30/31 seats, Saturday, Sunday, both holidays, an empty month, half hours) and keep the whole output as an approved file..</p>\n<p>The grader runs your tests in the browser against the correct code (all must pass), then against <b>8 mutants</b> — copies of the code with one planted bug each. A mutant is <b>killed</b> when at least one of your tests fails on it. It also applies <b>1 harmless change</b> (a refactor that keeps the behaviour): your tests must stay <b>green</b> on it, otherwise they are testing the implementation instead of the behaviour.</p>\n<p>The starter has a single smoke test (the code under test loads) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write your tests in <code>demo10/dac-ta/4-golden.test.js</code> (Vitest syntax: <code>describe</code> / <code>it</code> / <code>expect</code>; more <code>*.test.js</code> files are fine).</li>\n  <li>Every test passes on the correct code and contains at least one <code>expect</code> (a test without an assertion fails — <code>requireAssertions</code>, as in the course config).</li>\n  <li>Kill <b>all 8</b> mutants and stay green on the 1 harmless change.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>demo10/legacy/monthlyReport.v0.js</code> — monthlyReport (LabFlow v0, untouched). Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Không sửa file cũ, ghim lại đúng những gì monthlyReport in ra hôm nay: thay CSDL, dịch vụ ngày lễ và đồng hồ qua seam (vi.mock, vi.stubGlobal, fake timers), chọn dữ liệu đi qua mọi nhánh (phòng khác, tháng khác, đã huỷ, chờ duyệt, 30/31 chỗ, thứ Bảy, Chủ nhật, cả hai ngày lễ, tháng trống, nửa giờ) và giữ toàn bộ output thành một file đã duyệt..</p>\n<p>Máy chấm chạy test của bạn ngay trong trình duyệt với code đúng (phải xanh hết), rồi với <b>8 đột biến</b> — các bản code cài sẵn một lỗi. Đột biến bị <b>diệt</b> khi ít nhất một test của bạn đỏ với nó. Nó còn áp <b>1 thay đổi vô hại</b> (refactor giữ nguyên hành vi): test phải VẪN XANH, nếu không là bạn đang test cách cài đặt chứ không phải hành vi.</p>\n<p>Code khởi đầu có đúng một test khói (code cần test nạp được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết test vào <code>demo10/dac-ta/4-golden.test.js</code> (cú pháp Vitest: <code>describe</code> / <code>it</code> / <code>expect</code>; thêm tệp <code>*.test.js</code> cũng được).</li>\n  <li>Mọi test xanh với code đúng và có ít nhất một <code>expect</code> (test không có khẳng định bị tính đỏ — <code>requireAssertions</code>, như cấu hình khoá).</li>\n  <li>Diệt <b>cả 8</b> đột biến và vẫn xanh với 1 thay đổi vô hại.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo10/dac-ta/4-golden.test.js.|||Tệp test của bạn, bắt đầu từ demo10/dac-ta/4-golden.test.js.",
+      "outputSpec": "Green on the correct code; red on each of the 8 mutants; green on the 1 harmless change(s).|||Xanh với code đúng; đỏ với từng đột biến trong 8; xanh với 1 thay đổi vô hại.",
+      "constraints": "Imports: \"vitest\", relative paths to the exercise files, and the browser grader’s \"msw\" subset / \"node:fs\" (reads this exercise’s files) where the lesson uses them.|||Import: \"vitest\", đường dẫn tương đối tới tệp của đề, và bản thu gọn \"msw\" / \"node:fs\" (đọc tệp của đề) của máy chấm khi bài dùng tới.",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: a 30-seat booking counts as large|||Đột biến M1: a 30-seat booking counts as large",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Submit the starter first: every mutant survives, and the table names what each one breaks. Then add one test per rule.|||Nộp code khởi đầu trước: mọi đột biến sống, bảng kết quả nói mỗi cái làm hỏng gì. Rồi thêm từng test cho từng luật.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-10-2-code-cu shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo10/dac-ta/4-golden.test.js.|||Bài tst-10-2-code-cu dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo10/dac-ta/4-golden.test.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo10/dac-ta/4-golden.test.js",
+          "language": "javascript",
+          "code": "// Lesson 10.2, step 4: a golden master. Many inputs chosen to reach every branch, the whole output kept in one\n// approved file. Same link seams as step 3; the legacy file is still untouched.\nimport { describe, it, expect, vi, beforeEach } from 'vitest';\nimport { monthlyReport } from '../legacy/monthlyReport.v0.js';\nimport { ROWS, HOLIDAYS } from './rows.js';\n\nvi.mock('../legacy/db.js', () => ({ db: { all: async () => ROWS } }));\n\nbeforeEach(() => {\n  vi.useFakeTimers({ toFake: ['Date'] });\n  vi.stubGlobal('fetch', async () => ({ json: async () => HOLIDAYS }));\n  return () => { vi.useRealTimers(); vi.unstubAllGlobals(); };\n});\n\n// Starter: ONE smoke test — it only checks that the code under test can be imported. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm code nạp được, không diệt đột biến nào.\ndescribe('starter', () => {\n  it('the code under test can be imported', () => {\n    expect(monthlyReport).toBeDefined();\n    expect(ROWS).toBeDefined();\n    expect(HOLIDAYS).toBeDefined();\n  });\n});\n"
+        },
+        {
+          "name": "demo10/dac-ta/rows.js",
+          "language": "javascript",
+          "code": "// Test data for the characterization tests of lesson 10.2: every branch of monthlyReport, on purpose.\nexport const ROWS = [\n  { lab: 'BE-201', date: '2026-10-06', start: '08:00', end: '10:00', seats: 20, status: 'CONFIRMED' },\n  { lab: 'BE-201', date: '2026-10-03', start: '13:30', end: '15:00', seats: 30, status: 'CONFIRMED' }, // Saturday · exactly 30 seats\n  { lab: 'BE-201', date: '2026-10-04', start: '09:00', end: '11:30', seats: 31, status: 'PENDING' },   // Sunday · 31 seats\n  { lab: 'BE-201', date: '2026-10-07', start: '07:00', end: '08:00', seats: 12, status: 'CANCELLED' },\n  { lab: 'BE-305', date: '2026-10-06', start: '10:00', end: '12:30', seats: 40, status: 'CONFIRMED' }, // another lab\n  { lab: 'BE-201', date: '2026-09-30', start: '14:00', end: '16:00', seats: 25, status: 'CONFIRMED' }, // another month\n  { lab: 'BE-201', date: '2026-09-01', start: '08:00', end: '09:00', seats: 10, status: 'CONFIRMED' }, // first holiday of the list\n  { lab: 'BE-201', date: '2026-09-02', start: '08:00', end: '12:00', seats: 35, status: 'CONFIRMED' }, // second holiday\n  { lab: 'BE-201', date: '2026-10-20', start: '18:00', end: '21:00', seats: 28, status: 'CONFIRMED' },\n];\nexport const HOLIDAYS = ['2026-09-01', '2026-09-02'];\n"
+        },
+        {
+          "name": "demo10/legacy/monthlyReport.v0.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo10/dac-ta/4-golden.test.js",
+          "language": "javascript",
+          "code": "// Lesson 10.2, step 4: a golden master. Many inputs chosen to reach every branch, the whole output kept in one\n// approved file. Same link seams as step 3; the legacy file is still untouched.\nimport { it, expect, vi, beforeEach } from 'vitest';\nimport { monthlyReport } from '../legacy/monthlyReport.v0.js';\nimport { ROWS, HOLIDAYS } from './rows.js';\n\nvi.mock('../legacy/db.js', () => ({ db: { all: async () => ROWS } }));\n\nbeforeEach(() => {\n  vi.useFakeTimers({ toFake: ['Date'] });\n  vi.stubGlobal('fetch', async () => ({ json: async () => HOLIDAYS }));\n  return () => { vi.useRealTimers(); vi.unstubAllGlobals(); };\n});\n\nit('prints the same reports as before, for every lab and month we keep', async () => {\n  let all = '';\n  for (const today of ['2026-09-30T12:00:00+07:00', '2026-10-31T12:00:00+07:00', '2026-11-15T12:00:00+07:00']) {\n    vi.setSystemTime(new Date(today));\n    for (const lab of ['BE-201', 'BE-305']) all += await monthlyReport(lab) + '----\\n';\n  }\n  await expect(all).toMatchFileSnapshot('./__approved__/monthly-report.txt');\n});\n"
+        },
+        {
+          "name": "demo10/dac-ta/rows.js",
+          "language": "javascript",
+          "code": "// Test data for the characterization tests of lesson 10.2: every branch of monthlyReport, on purpose.\nexport const ROWS = [\n  { lab: 'BE-201', date: '2026-10-06', start: '08:00', end: '10:00', seats: 20, status: 'CONFIRMED' },\n  { lab: 'BE-201', date: '2026-10-03', start: '13:30', end: '15:00', seats: 30, status: 'CONFIRMED' }, // Saturday · exactly 30 seats\n  { lab: 'BE-201', date: '2026-10-04', start: '09:00', end: '11:30', seats: 31, status: 'PENDING' },   // Sunday · 31 seats\n  { lab: 'BE-201', date: '2026-10-07', start: '07:00', end: '08:00', seats: 12, status: 'CANCELLED' },\n  { lab: 'BE-305', date: '2026-10-06', start: '10:00', end: '12:30', seats: 40, status: 'CONFIRMED' }, // another lab\n  { lab: 'BE-201', date: '2026-09-30', start: '14:00', end: '16:00', seats: 25, status: 'CONFIRMED' }, // another month\n  { lab: 'BE-201', date: '2026-09-01', start: '08:00', end: '09:00', seats: 10, status: 'CONFIRMED' }, // first holiday of the list\n  { lab: 'BE-201', date: '2026-09-02', start: '08:00', end: '12:00', seats: 35, status: 'CONFIRMED' }, // second holiday\n  { lab: 'BE-201', date: '2026-10-20', start: '18:00', end: '21:00', seats: 28, status: 'CONFIRMED' },\n];\nexport const HOLIDAYS = ['2026-09-01', '2026-09-02'];\n"
+        },
+        {
+          "name": "demo10/legacy/monthlyReport.v0.js",
+          "language": "javascript",
+          "code": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo10/dac-ta/4-golden.test.js</code>), checked to kill every mutant and to stay green on the harmless change(s). Each mutant changes exactly one decision:</p><ul><li>M1 — a 30-seat booking counts as large</li><li>M2 — pending bookings disappear from the report</li><li>M3 — Sunday is no longer a weekend</li><li>M4 — the first holiday of the year is ignored</li><li>M5 — hours rounded to whole hours</li><li>M6 — the (pending) mark is lost</li><li>M7 — the empty-month line changes (the office Excel import breaks)</li><li>M8 — every lab is counted in every report</li></ul><p>Verified in the browser grader itself. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo10/dac-ta/4-golden.test.js</code>), đã kiểm diệt mọi đột biến và vẫn xanh với thay đổi vô hại. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — a 30-seat booking counts as large</li><li>M2 — pending bookings disappear from the report</li><li>M3 — Sunday is no longer a weekend</li><li>M4 — the first holiday of the year is ignored</li><li>M5 — hours rounded to whole hours</li><li>M6 — the (pending) mark is lost</li><li>M7 — the empty-month line changes (the office Excel import breaks)</li><li>M8 — every lab is counted in every report</li></ul><p>Đã kiểm bằng chính máy chấm trình duyệt. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "mutation",
+        "impl": {
+          "demo10/dac-ta/rows.js": "// Test data for the characterization tests of lesson 10.2: every branch of monthlyReport, on purpose.\nexport const ROWS = [\n  { lab: 'BE-201', date: '2026-10-06', start: '08:00', end: '10:00', seats: 20, status: 'CONFIRMED' },\n  { lab: 'BE-201', date: '2026-10-03', start: '13:30', end: '15:00', seats: 30, status: 'CONFIRMED' }, // Saturday · exactly 30 seats\n  { lab: 'BE-201', date: '2026-10-04', start: '09:00', end: '11:30', seats: 31, status: 'PENDING' },   // Sunday · 31 seats\n  { lab: 'BE-201', date: '2026-10-07', start: '07:00', end: '08:00', seats: 12, status: 'CANCELLED' },\n  { lab: 'BE-305', date: '2026-10-06', start: '10:00', end: '12:30', seats: 40, status: 'CONFIRMED' }, // another lab\n  { lab: 'BE-201', date: '2026-09-30', start: '14:00', end: '16:00', seats: 25, status: 'CONFIRMED' }, // another month\n  { lab: 'BE-201', date: '2026-09-01', start: '08:00', end: '09:00', seats: 10, status: 'CONFIRMED' }, // first holiday of the list\n  { lab: 'BE-201', date: '2026-09-02', start: '08:00', end: '12:00', seats: 35, status: 'CONFIRMED' }, // second holiday\n  { lab: 'BE-201', date: '2026-10-20', start: '18:00', end: '21:00', seats: 28, status: 'CONFIRMED' },\n];\nexport const HOLIDAYS = ['2026-09-01', '2026-09-02'];\n",
+          "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+        },
+        "toiThieuTest": 1,
+        "timeoutMs": 6000,
+        "kiem": [
+          {
+            "kiem": "xanh",
+            "nhom": "xanh",
+            "moTa": "Your tests pass on the correct code (≥ 1 tests) · Test của bạn xanh với code đúng"
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M1: a 30-seat booking counts as large",
+            "goiY": "write a test whose result would change if this happened: “a 30-seat booking counts as large” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “a 30-seat booking counts as large” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats >= 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M2: pending bookings disappear from the report",
+            "goiY": "write a test whose result would change if this happened: “pending bookings disappear from the report” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “pending bookings disappear from the report” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status == 'CONFIRMED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M3: Sunday is no longer a weekend",
+            "goiY": "write a test whose result would change if this happened: “Sunday is no longer a weekend” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “Sunday is no longer a weekend” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M4: the first holiday of the year is ignored",
+            "goiY": "write a test whose result would change if this happened: “the first holiday of the year is ignored” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the first holiday of the year is ignored” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) > 0) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M5: hours rounded to whole hours",
+            "goiY": "write a test whose result would change if this happened: “hours rounded to whole hours” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “hours rounded to whole hours” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60) + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M6: the (pending) mark is lost",
+            "goiY": "write a test whose result would change if this happened: “the (pending) mark is lost” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the (pending) mark is lost” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + '' + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M7: the empty-month line changes (the office Excel import breaks)",
+            "goiY": "write a test whose result would change if this happened: “the empty-month line changes (the office Excel import breaks)” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “the empty-month line changes (the office Excel import breaks)” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings this month.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "diet",
+            "nhom": "dot-bien",
+            "moTa": "Mutant M8: every lab is counted in every report",
+            "goiY": "write a test whose result would change if this happened: “every lab is counted in every report” — start from the rule, not from the code · viết một test cho kết quả khác đi nếu điều này xảy ra: “every lab is counted in every report” — bắt đầu từ luật, không từ code",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i++) {\n    var b = rows[i];\n    if (b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          },
+          {
+            "kiem": "vo-hai",
+            "nhom": "xanh",
+            "moTa": "Harmless change H1: i += 1 instead of i++ — your tests must stay green · Thay đổi vô hại: test phải vẫn xanh",
+            "ma": {
+              "demo10/legacy/monthlyReport.v0.js": "// LabFlow v0 (2019) — monthly usage report for the faculty office.\n// DO NOT CHANGE THE OUTPUT: the office pastes this text into its Excel sheet every month.\n// No tests. The person who wrote it has left.\nimport { db } from './db.js';\n\nexport async function monthlyReport(lab) {\n  var d = new Date();\n  var y = d.getFullYear();\n  var m = d.getMonth() + 1;\n  var mm = m < 10 ? '0' + m : '' + m;\n  var rows = await db.all('SELECT * FROM bookings');\n  var hol = [];\n  try {\n    var r = await fetch('https://holidays.labflow.example/api/vn/' + y);\n    hol = await r.json();\n  } catch (e) {\n    // no network: no holidays\n  }\n  var txt = 'LAB ' + lab + ' - ' + y + '/' + mm + '\\n';\n  var n = 0, mins = 0, big = 0, wk = 0;\n  for (var i = 0; i < rows.length; i += 1) {\n    var b = rows[i];\n    if (b.lab == lab && b.date.substr(0, 7) == y + '-' + mm && b.status != 'CANCELLED') {\n      n++;\n      var t = (parseInt(b.end.substr(0, 2)) * 60 + parseInt(b.end.substr(3, 2))) - (parseInt(b.start.substr(0, 2)) * 60 + parseInt(b.start.substr(3, 2)));\n      mins = mins + t;\n      if (b.seats > 30) big++;\n      var day = new Date(b.date).getDay();\n      if (day == 0 || day == 6 || hol.indexOf(b.date) != -1) wk++;\n      txt += b.date + ' ' + b.start + '-' + b.end + ' ' + b.seats + ' seats' + (b.status == 'PENDING' ? ' (pending)' : '') + '\\n';\n    }\n  }\n  if (n == 0) {\n    txt += 'No bookings.\\n';\n  } else {\n    txt += 'Bookings: ' + n + '\\n';\n    txt += 'Hours: ' + Math.round(mins / 60 * 10) / 10 + '\\n';\n    txt += 'Large (>30 seats): ' + big + '\\n';\n    txt += 'Weekend/holiday: ' + wk + '\\n';\n  }\n  return txt;\n}\n"
+            }
+          }
+        ]
+      },
+      "gradeKind": "mutation",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Asserting HOW the code does it (call order, internal fields, exact implementation) — a harmless refactor turns such a test red.|||Khẳng định CÁCH code làm (thứ tự gọi, trường nội bộ, cài đặt cụ thể) — một refactor vô hại làm test như vậy đỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        },
+        {
+          "en": "harmless change",
+          "vi": "thay đổi vô hại",
+          "giaiThich": "refactor giữ nguyên hành vi — bộ test tốt phải VẪN XANH"
+        }
+      ]
+    }
+  ]
+}

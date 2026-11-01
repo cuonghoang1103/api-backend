@@ -1,0 +1,139 @@
+{
+  "trackSlug": "testing-practice",
+  "moduleSlug": "tst-7-4-da-trinh-duyet",
+  "lesson": {
+    "course": "testing",
+    "slug": "tst-7-4-da-trinh-duyet"
+  },
+  "exercises": [
+    {
+      "title": "Five projects: the header on desktops and phones",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "mutation testing",
+        "Playwright"
+      ],
+      "prerequisites": [
+        "tst-7-4-da-trinh-duyet"
+      ],
+      "tags": [
+        "testing",
+        "mutation",
+        "labflow-lite",
+        "run-locally"
+      ],
+      "problemHtml": "<p><b>Code under test:</b> <code>web/app/style.css</code>, <code>web/app/index.html</code> — style.css (media query), index.html (viewport). It is the course's LabFlow Lite code at this point of the course; read it in the file tabs. Editing it changes nothing: the grader always uses the original.</p>\n<p><b>Your task:</b> One test, all five projects (Chromium, Firefox, WebKit, Pixel 7, iPhone 15): the computed font size of the header title is 20px on desktops and 17px on phones.</p>\n<p>⚠️ <b>This exercise is not graded on the website</b> — it drives real browsers with Playwright against the built web app and the e2e server, which a browser tab cannot provide. You run the same mutation check on your own machine with <code>cham-tai-may.mjs</code> (it is in the starter): your tests must pass on the correct code, then each of the <b>4 mutants</b> (copies with one planted bug) must turn at least one test red. Marking the exercise solved is <b>self-reported</b>.</p>\n<p>The starter has a single smoke test (the app opens) — green, but it kills no mutant.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Download the starter (⬇ Starter) and copy its files into your <code>labflow-lite</code> project — the one you have been building since lesson 0.2. It contains the test file to write (<code>demo7/th74.spec.js</code>), the course version of the code under test, and <code>cham-tai-may.mjs</code>.</li>\n  <li>Write your tests in <code>demo7/th74.spec.js</code> (more test files are fine: <code>node cham-tai-may.mjs &lt;file…&gt;</code>).</li>\n  <li>Run <code>node cham-tai-may.mjs</code> (Playwright browsers installed: <code>npx playwright install</code>; port 4173 free). It prints <code>4/4</code> when every mutant is killed.</li>\n  <li>Then press <b>Self-mark as solved</b>. The website cannot verify this — it is your own word.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Code cần test:</b> <code>web/app/style.css</code>, <code>web/app/index.html</code> — style.css (media query), index.html (viewport). Đây là code LabFlow Lite của khoá ở thời điểm bài này; đọc ở các tab tệp. Sửa nó không có tác dụng: máy chấm luôn dùng bản gốc.</p>\n<p><b>Nhiệm vụ:</b> Một test, cả năm project (Chromium, Firefox, WebKit, Pixel 7, iPhone 15): cỡ chữ đã tính của tiêu đề header là 20px trên máy tính và 17px trên điện thoại.</p>\n<p>⚠️ <b>Bài này KHÔNG chấm trên website</b> — nó điều khiển trình duyệt thật bằng Playwright, chạy trên bản build web + server e2e, điều mà một tab trình duyệt không làm được. Bạn chạy cùng phép kiểm đột biến trên máy mình bằng <code>cham-tai-may.mjs</code> (có trong code khởi đầu): test phải xanh với code đúng, rồi mỗi <b>4 đột biến</b> (bản cài sẵn một lỗi) phải làm ít nhất một test đỏ. Đánh dấu đã giải là <b>tự khai</b>.</p>\n<p>Code khởi đầu có đúng một test khói (app mở được) — xanh nhưng không diệt đột biến nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tải code khởi đầu (⬇ Starter) rồi chép các tệp vào dự án <code>labflow-lite</code> của bạn — dự án bạn dựng từ bài 0.2. Trong đó có tệp test phải viết (<code>demo7/th74.spec.js</code>), bản code cần test của khoá và <code>cham-tai-may.mjs</code>.</li>\n  <li>Viết test vào <code>demo7/th74.spec.js</code> (nhiều tệp test cũng được: <code>node cham-tai-may.mjs &lt;tệp…&gt;</code>).</li>\n  <li>Chạy <code>node cham-tai-may.mjs</code> (đã cài trình duyệt Playwright: <code>npx playwright install</code>; cổng 4173 trống). Nó in <code>4/4</code> khi mọi đột biến bị diệt.</li>\n  <li>Rồi bấm <b>Tự đánh dấu đã giải</b>. Website không kiểm được việc này — đó là lời của bạn.</li>\n</ul>",
+      "inputSpec": "Your test file(s), starting with demo7/th74.spec.js.|||Tệp test của bạn, bắt đầu từ demo7/th74.spec.js.",
+      "outputSpec": "Green on the correct code; red on each of the 4 mutants.|||Xanh với code đúng; đỏ với từng đột biến trong 4.",
+      "constraints": "Runs on your machine: npx playwright test .|||Chạy trên máy bạn: npx playwright test .",
+      "examplesJson": [
+        {
+          "input": "Mutant M1: phones wider than 400 px (Pixel 7: 412) get the desktop header|||Đột biến M1: phones wider than 400 px (Pixel 7: 412) get the desktop header",
+          "output": "Killed — at least one of your tests fails on this version.|||Bị diệt — ít nhất một test của bạn đỏ với bản này.",
+          "explanation": "A test kills a mutant only if it observes the exact decision the mutant changes. A suite that just runs the code (high coverage) can let every mutant survive.|||Một test chỉ diệt được đột biến khi nó quan sát đúng quyết định mà đột biến làm đổi. Bộ test chỉ chạy qua code (độ phủ cao) vẫn có thể để mọi đột biến sống."
+        }
+      ],
+      "hintsJson": [
+        "Run the local grader with the starter first: every mutant survives. Then add one test per rule you see in the task.|||Chạy máy chấm cục bộ với code khởi đầu trước: mọi đột biến sống. Rồi thêm từng test cho từng luật trong đề.",
+        "Test the boundaries and both outcomes of every rule; assert exact values (toBe/toEqual/toThrow with the error code), not just “truthy”.|||Test giá trị biên và cả hai kết quả của mỗi luật; khẳng định giá trị chính xác (toBe/toEqual/toThrow kèm mã lỗi), không chỉ \"truthy\".",
+        "The lesson tst-7-4-da-trinh-duyet shows the techniques this exercise needs; the reference solution is the course’s own test file(s): demo7/th74.spec.js.|||Bài tst-7-4-da-trinh-duyet dạy đúng kỹ thuật bài này cần; lời giải tham khảo là chính (các) tệp test của khoá: demo7/th74.spec.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "demo7/th74.spec.js",
+          "language": "javascript",
+          "code": "import { test, expect } from '@playwright/test';\n\n// The header title shrinks on small screens (style.css: @media (max-width: 600px)).\n\n// Starter: ONE smoke test — it only checks that the app opens. It kills no mutant.\n// Write the real tests below (see the task). Khởi đầu: MỘT test khói — chỉ kiểm app mở được, không diệt đột biến nào.\ntest('starter: the app opens', async ({ page }) => {\n  await page.goto('/');\n  await expect(page.locator('body')).toBeVisible();\n});\n"
+        },
+        {
+          "name": "cham-tai-may.mjs",
+          "language": "javascript",
+          "code": "// Code Lab · tst-cl-7-4 — LOCAL mutation grader (máy chấm đột biến chạy TRÊN MÁY BẠN).\n// Run it inside your labflow-lite project folder:  node cham-tai-may.mjs [test files…]\n// (default: the test file(s) of this exercise). Needs the Playwright browsers (npx playwright install) and port 4173 free — Playwright builds the web app and starts the e2e server itself.\n// What it does — same algorithm as the course's mutation labs: your tests must be GREEN on the correct code, then each\n// planted bug is written into its file one at a time (the file is ALWAYS restored, even on Ctrl+C) and your tests must\n// turn RED; harmless changes must keep them GREEN. It prints N/N when every check passes.\nimport { readFileSync, writeFileSync } from 'node:fs';\nimport { spawnSync } from 'node:child_process';\n\nconst DE = {\n  \"id\": \"tst-cl-7-4\",\n  \"runner\": \"playwright\",\n  \"config\": null,\n  \"args\": [],\n  \"tests\": [\n    \"demo7/th74.spec.js\"\n  ],\n  \"dotBien\": [\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"@media (max-width: 600px)\",\n      \"to\": \"@media (max-width: 400px)\",\n      \"label\": \"phones wider than 400 px (Pixel 7: 412) get the desktop header\"\n    },\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"header h1 { font-size: 17px; }\",\n      \"to\": \"header h1 { font-size: 20px; }\",\n      \"label\": \"phones get the desktop title size\"\n    },\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"header h1 { font-size: 20px; margin: 0; }\",\n      \"to\": \"header h1 { font-size: 22px; margin: 0; }\",\n      \"label\": \"the desktop title size changed\"\n    },\n    {\n      \"file\": \"web/app/index.html\",\n      \"from\": \"<meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\" />\",\n      \"to\": \"\",\n      \"label\": \"no viewport tag: phones render the desktop layout zoomed out\"\n    }\n  ],\n  \"voHai\": []\n};\n\nconst tests = process.argv.slice(2).length ? process.argv.slice(2) : DE.tests;\nconst npx = (args) => spawnSync('npx', args, { encoding: 'utf8', shell: process.platform === 'win32' });\nconst run = () => (DE.runner === 'playwright'\n  ? npx(['playwright', 'test', ...tests, ...(DE.args ?? ['--project=chromium'])])\n  : npx(['vitest', 'run', ...(DE.config ? ['--config', DE.config] : []), ...tests, ...(DE.args ?? [])])).status;\n\nlet dangSua = null; // { file, goc } — trả lại nếu bị ngắt giữa chừng\nconst traLai = () => { if (dangSua) { writeFileSync(dangSua.file, dangSua.goc); dangSua = null; } };\nprocess.on('SIGINT', () => { traLai(); process.exit(130); });\n\nfunction voi(m, fn) {\n  const goc = readFileSync(m.file, 'utf8');\n  const n = goc.split(m.from).length - 1;\n  if (n !== 1) {\n    console.log(`  ? \"${m.label}\": the text to change was found ${n} times in ${m.file} — your file differs from the course version; copy ${m.file} from this exercise's starter and run again`);\n    return null;\n  }\n  dangSua = { file: m.file, goc };\n  writeFileSync(m.file, goc.replace(m.from, () => m.to));\n  try { return fn(); } finally { traLai(); }\n}\n\nconsole.log(`${DE.id}: ${tests.join(' ')} (${DE.runner})`);\nif (run() !== 0) {\n  console.log('✘ Your tests are NOT green on the correct code — fix them first (the code has no bug). 0/' + (DE.dotBien.length + DE.voHai.length));\n  process.exit(1);\n}\nconsole.log('✔ green on the correct code');\nlet dat = 0;\nfor (const m of DE.dotBien) {\n  const st = voi(m, run);\n  if (st != null && st !== 0) dat++;\n  console.log(`${st == null ? '?' : st !== 0 ? '✔ killed   ' : '✘ SURVIVED '} ${m.label}`);\n}\nfor (const m of DE.voHai) {\n  const st = voi(m, run);\n  if (st === 0) dat++;\n  console.log(`${st == null ? '?' : st === 0 ? '✔ still green ' : '✘ RED (brittle)'} harmless: ${m.label}`);\n}\nconst tong = DE.dotBien.length + DE.voHai.length;\nconsole.log(`\\n${dat}/${tong} ${dat === tong ? '— all mutants killed. Mark the exercise solved on the website.' : '— not yet.'}`);\nprocess.exitCode = dat === tong ? 0 : 1;\n"
+        },
+        {
+          "name": "web/app/index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>LabFlow Lite</title>\n    <link rel=\"stylesheet\" href=\"./style.css\" />\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script type=\"module\" src=\"./main.jsx\"></script>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "web/app/style.css",
+          "language": "css",
+          "code": "/* Just enough style for a real page: the screenshots in lesson 7.4 compare it pixel by pixel. */\nbody { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1f2933; }\nheader { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #e06a1b; color: #fff; }\nheader h1 { font-size: 20px; margin: 0; }\nmain { max-width: 640px; margin: 24px auto; padding: 20px; background: #fff; border-radius: 8px; }\nform p { display: flex; flex-direction: column; gap: 4px; margin: 0 0 12px; }\ninput { font-size: 16px; padding: 6px 8px; border: 1px solid #9aa5b1; border-radius: 4px; }\ninput[aria-invalid=\"true\"] { border-color: #c0392b; }\nbutton { font-size: 16px; padding: 8px 16px; border: 0; border-radius: 4px; background: #e06a1b; color: #fff; cursor: pointer; }\nbutton:disabled { opacity: 0.6; }\n[role=\"alert\"] { color: #c0392b; }\n[role=\"status\"] { color: #2f7d4f; }\ntable { width: 100%; border-collapse: collapse; }\nth, td { text-align: left; padding: 6px; border-bottom: 1px solid #e4e7eb; }\n@media (max-width: 600px) { main { margin: 0; border-radius: 0; } header h1 { font-size: 17px; } }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "demo7/th74.spec.js",
+          "language": "javascript",
+          "code": "import { test, expect } from '@playwright/test';\n\n// The header title shrinks on small screens (style.css: @media (max-width: 600px)).\ntest('the header title size follows the screen width', async ({ page }, testInfo) => {\n  await page.goto('/');\n  const mobile = testInfo.project.name.startsWith('mobile');\n  await expect(page.getByRole('heading', { name: 'LabFlow Lite' })).toHaveCSS('font-size', mobile ? '17px' : '20px');\n});\n"
+        },
+        {
+          "name": "cham-tai-may.mjs",
+          "language": "javascript",
+          "code": "// Code Lab · tst-cl-7-4 — LOCAL mutation grader (máy chấm đột biến chạy TRÊN MÁY BẠN).\n// Run it inside your labflow-lite project folder:  node cham-tai-may.mjs [test files…]\n// (default: the test file(s) of this exercise). Needs the Playwright browsers (npx playwright install) and port 4173 free — Playwright builds the web app and starts the e2e server itself.\n// What it does — same algorithm as the course's mutation labs: your tests must be GREEN on the correct code, then each\n// planted bug is written into its file one at a time (the file is ALWAYS restored, even on Ctrl+C) and your tests must\n// turn RED; harmless changes must keep them GREEN. It prints N/N when every check passes.\nimport { readFileSync, writeFileSync } from 'node:fs';\nimport { spawnSync } from 'node:child_process';\n\nconst DE = {\n  \"id\": \"tst-cl-7-4\",\n  \"runner\": \"playwright\",\n  \"config\": null,\n  \"args\": [],\n  \"tests\": [\n    \"demo7/th74.spec.js\"\n  ],\n  \"dotBien\": [\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"@media (max-width: 600px)\",\n      \"to\": \"@media (max-width: 400px)\",\n      \"label\": \"phones wider than 400 px (Pixel 7: 412) get the desktop header\"\n    },\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"header h1 { font-size: 17px; }\",\n      \"to\": \"header h1 { font-size: 20px; }\",\n      \"label\": \"phones get the desktop title size\"\n    },\n    {\n      \"file\": \"web/app/style.css\",\n      \"from\": \"header h1 { font-size: 20px; margin: 0; }\",\n      \"to\": \"header h1 { font-size: 22px; margin: 0; }\",\n      \"label\": \"the desktop title size changed\"\n    },\n    {\n      \"file\": \"web/app/index.html\",\n      \"from\": \"<meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1\\\" />\",\n      \"to\": \"\",\n      \"label\": \"no viewport tag: phones render the desktop layout zoomed out\"\n    }\n  ],\n  \"voHai\": []\n};\n\nconst tests = process.argv.slice(2).length ? process.argv.slice(2) : DE.tests;\nconst npx = (args) => spawnSync('npx', args, { encoding: 'utf8', shell: process.platform === 'win32' });\nconst run = () => (DE.runner === 'playwright'\n  ? npx(['playwright', 'test', ...tests, ...(DE.args ?? ['--project=chromium'])])\n  : npx(['vitest', 'run', ...(DE.config ? ['--config', DE.config] : []), ...tests, ...(DE.args ?? [])])).status;\n\nlet dangSua = null; // { file, goc } — trả lại nếu bị ngắt giữa chừng\nconst traLai = () => { if (dangSua) { writeFileSync(dangSua.file, dangSua.goc); dangSua = null; } };\nprocess.on('SIGINT', () => { traLai(); process.exit(130); });\n\nfunction voi(m, fn) {\n  const goc = readFileSync(m.file, 'utf8');\n  const n = goc.split(m.from).length - 1;\n  if (n !== 1) {\n    console.log(`  ? \"${m.label}\": the text to change was found ${n} times in ${m.file} — your file differs from the course version; copy ${m.file} from this exercise's starter and run again`);\n    return null;\n  }\n  dangSua = { file: m.file, goc };\n  writeFileSync(m.file, goc.replace(m.from, () => m.to));\n  try { return fn(); } finally { traLai(); }\n}\n\nconsole.log(`${DE.id}: ${tests.join(' ')} (${DE.runner})`);\nif (run() !== 0) {\n  console.log('✘ Your tests are NOT green on the correct code — fix them first (the code has no bug). 0/' + (DE.dotBien.length + DE.voHai.length));\n  process.exit(1);\n}\nconsole.log('✔ green on the correct code');\nlet dat = 0;\nfor (const m of DE.dotBien) {\n  const st = voi(m, run);\n  if (st != null && st !== 0) dat++;\n  console.log(`${st == null ? '?' : st !== 0 ? '✔ killed   ' : '✘ SURVIVED '} ${m.label}`);\n}\nfor (const m of DE.voHai) {\n  const st = voi(m, run);\n  if (st === 0) dat++;\n  console.log(`${st == null ? '?' : st === 0 ? '✔ still green ' : '✘ RED (brittle)'} harmless: ${m.label}`);\n}\nconst tong = DE.dotBien.length + DE.voHai.length;\nconsole.log(`\\n${dat}/${tong} ${dat === tong ? '— all mutants killed. Mark the exercise solved on the website.' : '— not yet.'}`);\nprocess.exitCode = dat === tong ? 0 : 1;\n"
+        },
+        {
+          "name": "web/app/index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>LabFlow Lite</title>\n    <link rel=\"stylesheet\" href=\"./style.css\" />\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script type=\"module\" src=\"./main.jsx\"></script>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "web/app/style.css",
+          "language": "css",
+          "code": "/* Just enough style for a real page: the screenshots in lesson 7.4 compare it pixel by pixel. */\nbody { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1f2933; }\nheader { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #e06a1b; color: #fff; }\nheader h1 { font-size: 20px; margin: 0; }\nmain { max-width: 640px; margin: 24px auto; padding: 20px; background: #fff; border-radius: 8px; }\nform p { display: flex; flex-direction: column; gap: 4px; margin: 0 0 12px; }\ninput { font-size: 16px; padding: 6px 8px; border: 1px solid #9aa5b1; border-radius: 4px; }\ninput[aria-invalid=\"true\"] { border-color: #c0392b; }\nbutton { font-size: 16px; padding: 8px 16px; border: 0; border-radius: 4px; background: #e06a1b; color: #fff; cursor: pointer; }\nbutton:disabled { opacity: 0.6; }\n[role=\"alert\"] { color: #c0392b; }\n[role=\"status\"] { color: #2f7d4f; }\ntable { width: 100%; border-collapse: collapse; }\nth, td { text-align: left; padding: 6px; border-bottom: 1px solid #e4e7eb; }\n@media (max-width: 600px) { main { margin: 0; border-radius: 0; } header h1 { font-size: 17px; } }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is the course’s own test file(s) for this lesson (<code>demo7/th74.spec.js</code>), checked to kill every mutant. Each mutant changes exactly one decision:</p><ul><li>M1 — phones wider than 400 px (Pixel 7: 412) get the desktop header</li><li>M2 — phones get the desktop title size</li><li>M3 — the desktop title size changed</li><li>M4 — no viewport tag: phones render the desktop layout zoomed out</li></ul><p>Verified with the course checker on a fresh copy of LabFlow Lite. A suite kills a mutant only when some test observes that decision — which is why coverage alone does not tell you whether a suite is good.</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo là chính (các) tệp test của khoá cho bài này (<code>demo7/th74.spec.js</code>), đã kiểm diệt mọi đột biến. Mỗi đột biến đổi đúng một quyết định:</p><ul><li>M1 — phones wider than 400 px (Pixel 7: 412) get the desktop header</li><li>M2 — phones get the desktop title size</li><li>M3 — the desktop title size changed</li><li>M4 — no viewport tag: phones render the desktop layout zoomed out</li></ul><p>Đã kiểm bằng máy chấm của khoá trên một bản sao mới của LabFlow Lite. Bộ test chỉ diệt được đột biến khi có test quan sát quyết định đó — vì vậy độ phủ một mình không nói được bộ test tốt hay không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "node cham-tai-may.mjs",
+          "lyDo": "pw",
+          "runner": "playwright",
+          "args": [],
+          "tep": [
+            "demo7/th74.spec.js"
+          ],
+          "dotBien": [
+            "phones wider than 400 px (Pixel 7: 412) get the desktop header",
+            "phones get the desktop title size",
+            "the desktop title size changed",
+            "no viewport tag: phones render the desktop layout zoomed out"
+          ],
+          "voHai": []
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only typical values in the middle of a range — the correct code and an off-by-one mutant agree there, so the mutant survives.|||Chỉ test giá trị điển hình giữa khoảng — code đúng và đột biến lệch một đơn vị cho cùng kết quả nên đột biến sống."
+        },
+        {
+          "loi": "Forgetting await on an async call or on expect(...).rejects — the test finishes before the promise and stays green whatever the code does.|||Quên await lời gọi async hoặc expect(...).rejects — test kết thúc trước promise và xanh bất kể code làm gì."
+        },
+        {
+          "loi": "Your project’s copy of the code differs from the course version — the local grader then cannot plant the bug (“found 0 times”). Copy the files from the starter.|||Bản code trong dự án của bạn khác bản của khoá — máy chấm cục bộ không cài được lỗi (\"found 0 times\"). Chép các tệp từ code khởi đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mutant",
+          "vi": "đột biến",
+          "giaiThich": "bản code bị cài sẵn MỘT lỗi nhỏ; bộ test tốt phải đỏ với nó"
+        },
+        {
+          "en": "killed / survived",
+          "vi": "bị diệt / còn sống",
+          "giaiThich": "test đỏ với đột biến = diệt; vẫn xanh = sống (bộ test có lỗ hổng)"
+        }
+      ]
+    }
+  ]
+}

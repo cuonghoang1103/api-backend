@@ -291,6 +291,11 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: filter the note table and reproduce the NULL trap</span><span class="lc-sub">The Code Lab track makes the &lt;&gt; vs IS NULL difference stick.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-1-primitive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">null on the TypeScript side — TS 2.1: Primitives &amp; strict null checks</span><span class="lc-sub">Same: NULL means “no value” and every use must handle it explicitly. Different: in TypeScript a nullable column is typed string | null, and tsc refuses every use that does not check first — the same schedule file had 0 errors with strict off and 4 with it on, 3 of them crashes.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -381,6 +386,11 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: lọc bảng note và tái hiện cạm bẫy NULL</span><span class="lc-sub">Track Code Lab làm khác biệt &lt;&gt; vs IS NULL đọng lại.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-1-primitive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">null ở phía TypeScript — TS 2.1: Kiểu primitive &amp; strict null checks</span><span class="lc-sub">Giống: NULL nghĩa là “không có giá trị” và mọi chỗ dùng phải xử lý nó tường minh. Khác: trong TypeScript cột cho phép NULL có kiểu string | null, và tsc từ chối mọi chỗ dùng chưa kiểm trước — cùng một tệp lịch phòng 0 lỗi khi tắt strict, 4 lỗi khi bật, 3 trong số đó là lỗi sập.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

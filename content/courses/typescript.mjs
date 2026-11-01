@@ -1,7 +1,7 @@
 /**
  * TypeScript — khoá học CuongThai (Courses, academyType=GENERAL, KHÔNG thuộc kỳ Academy).
  * Giáo trình tự soạn: 16 chương, zero → làm chủ hệ thống kiểu, song ngữ EN/VI.
- * 01/11/2026: Mục 0 + Chương 1 soạn lại TRỌN (slide deck ts-* ảnh R2 images/academy/TS/v1, lab có máy chấm, dự án xuyên khoá LabFlow TS ở
+ * 01/11/2026: Mục 0 + Chương 1 (đợt mẫu) rồi Chương 2 soạn lại TRỌN (slide deck ts-* ảnh R2 images/academy/TS/v1, lab có máy chấm, dự án xuyên khoá LabFlow TS ở
  * ./typescript/_labflow-ts, đề Code Lab kiểu "ts" ở ./typescript/_de-codelab-ts.json). Quy trình soạn: ./typescript/_HOP-DONG.md.
  * Sections tách theo file trong ./typescript/ cho dễ soạn; seeder chỉ đọc file này.
  *

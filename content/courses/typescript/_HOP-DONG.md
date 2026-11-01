@@ -80,6 +80,16 @@ _labflow-ts/
 - Xong chương ⇒ cập nhật ảnh chụp `_labflow-ts/` (rsync bỏ `node_modules`, `.cham-*`, `.kiem-de`), kiểm trên bản sao mới:
   `npm ci && npm run typecheck && npm test && node scripts/cham-lab-1.mjs --from src/rules` (10/10).
 
+### 3.1b Chương 2 thêm gì (01/11/2026)
+- `src/rules/schedule.ts` + `schedule.test.ts` (13 test; `npm test` = 23 test) = lời giải Lab 2: `LABS as const`, `LabCode = (typeof LABS)[number]`,
+  `TimeRange = readonly [start: number, end: number]`, `ScheduleEntry` (`note: string | null`, `cancelledAt?: string`), `isLab` (guard bằng `some`,
+  không `as`), `toRange`, `findEntry` (`| undefined`), `noteOf` (`??`), `firstStart` (`| null`), `sortByStart` (`toSorted`), `labelOf`.
+- `lab2/` (khởi đầu viết khi `strict: false` + `tsconfig.loose.json`, test, `kiem/phai-dung.ts`, `kiem/sai.ts`, `yeu/`, `vua/`), `scripts/cham-lab-2.mjs`
+  (`npm run lab2`; phần C cấm thêm `as` trừ `as const` và `!` — bóc chú thích + chuỗi trước khi quét), `demo2/<deck>/`.
+- Số đo Lab 2: cùng tệp `strict: false` 0 lỗi / strict 10 lỗi · khởi đầu **1/10** (0/8) · `yeu/` "! và as" **4/10** (test xanh, E 0/8) ·
+  `vua/` "null thật, mảng thường" **7/10** (E 4/8: S5–S8 lọt) · tham khảo **10/10**. Mã đo được: S1 TS2532, S2 TS18047, S3 TS18048, S4 TS2531,
+  S5 TS2322, S6 TS2540, S7 TS2322 (tsc 7 in union đã sắp: `"AL-301" | "BE-201" | "BE-202"`), S8 TS2339.
+
 ### 3.2 Số đo nền của Lab 1 (01/11/2026, chạy thật)
 | Bài nộp | A tsc src (2) | B gọi đúng (1) | C không any (1) | D 15 test (2) | E 8 lời gọi sai bị từ chối (4) | Tổng |
 |---|---|---|---|---|---|---|
@@ -228,7 +238,12 @@ typescript: 'typescript-practice',
 ## 10. Trạng thái
 - 01/11/2026 — đợt mẫu **Mục 0 + Chương 1**: 7 + 6 bài (2 bài "Bắt đầu" + Lab 1 + quiz Mục 0 là bài MỚI), 11 deck / 130 slide đẩy `TS/v1`
   (`VER` rỗng), 31 đề Code Lab `ts` / 66 bài sai mẫu (kiem-de-ts 31/31), 8 cặp liên kết chéo. Độ dài (nguồn bài + giảng): 38–42k ký tự/bài.
-  Các chương 2–16 vẫn là bài cũ (chữ, video YouTube, chưa slide/lab/Code Lab) — soạn theo §5 + §9, bắt chước đợt mẫu.
+  Các chương 3–16 (lúc viết dòng này) vẫn là bài cũ (chữ, video YouTube, chưa slide/lab/Code Lab) — soạn theo §5 + §9, bắt chước đợt mẫu.
+- 01/11/2026 — **Chương 2 trọn**: 4 bài (slug giữ) + Lab 2 (MỚI `typescript-2-6-lab-lich-phong`) + quiz 10 câu; 5 deck / 58 slide đẩy `TS/v1`
+  (ts-02-1..4 mỗi deck 12, ts-lab-2 10); 17 đề Code Lab `ts` mới (ts-cl-2-1..4 a–d + ts-cl-lab-2), 38 sai mẫu — kiem-de-ts 48/48 (tsc 7.0.2) và
+  17/17 với tsc 6.0.3; 4 cặp liên kết chéo (postgresql 4.2, react 2.3, api-design 4.1, prisma-orm 8.3). Độ dài nguồn bài + giảng 43–47k ký tự.
+  Cách làm: viết `$S/ts/BRIEF-CH2.md` rồi fork 4 tác tử soạn 4 bài song song (demo riêng `demo2/<deck>`, đề Code Lab ra tệp riêng rồi gộp),
+  phiên chính làm Lab, quiz, tệp chương, liên kết chiều ngược, upload, ảnh chụp dự án.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

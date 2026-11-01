@@ -34,6 +34,7 @@ export default {
     "typescript-2-2-mang-tuple": { yt: "1QgEdeejdDY", credit: "Codevolution — ES6 and Typescript Tutorial - 46 - Arrays and Tuples" },
     "typescript-2-3-kieu-dac-biet": { yt: "YpT0rCWdCaE", credit: "TypeScript with Benny Code — Any, unknown, never, and void in TypeScript" },
     "typescript-2-4-literal-as-const": { yt: "jxSh-RZTCws", credit: "Matt Pocock — Literal types are SO USEFUL in TS - Advanced TypeScript" },
+    "typescript-2-6-lab-lich-phong": { yt: "C_fjVngpUgg", credit: "newline — How The TypeScript strictNullChecks Compiler Option Works" },
     /* ── Chương 3 ── */
     "typescript-3-1-tham-so": { yt: "jXoSaX_yFh4", credit: "Net Ninja — TypeScript Tutorial #8 - Function Basics" },
     "typescript-3-2-callback": { yt: "m8O-Bo3I8pc", credit: "Smartherd — Functions as Type | TypeScript Tutorial" },

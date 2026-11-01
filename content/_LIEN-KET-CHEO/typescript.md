@@ -14,8 +14,12 @@ sạch lúc chèn.
 | `typescript-1-2-chung-minh-gi` | API Design `api-2-2-validation` | `content/courses/api-design/s02-loi-phan-hoi.mjs` | không tin body của request | Zod kiểm lúc chạy ở cửa vs vì sao chỉ có kiểu thì không đủ; guard tự tay trước Zod |
 | `typescript-1-3-suy-luan-kieu` | Node.js `nodejs-1-1-bien-pham-vi` (mục "const does not mean immutable") | `content/courses/nodejs/s01-javascript.mjs` | let gán lại được, const thì không | const còn làm hẹp KIỂU; thuộc tính object vẫn bị nới kiểu dù const |
 | `typescript-1-4-any-unknown` | FER202 (Academy) `fer202-5-4-slot13-proptypes-slides` | `content/academy/fer202/ch5.mjs` (một `bi(en, vi)` cuối mảng `content`, sau `books`) | khai báo kiểu cho từng giá trị, chặn dữ liệu sai sớm | PropTypes kiểm lúc chạy, chỉ cảnh báo ở dev; TS từ chối trước khi chạy; any tắt kiểm; JSDoc trên .js |
+| `typescript-2-1-primitive` | PostgreSQL `postgresql-4-2-select-where` (cạm bẫy NULL) | `content/courses/postgresql/s04-chen-truy-van.mjs` (sau thẻ codelab "filter the note table…" / "lọc bảng note…") | NULL = không có giá trị, phải xử lý tường minh | cột nullable ⇒ `string \| null`; tsc từ chối mọi chỗ dùng chưa kiểm (0 lỗi tắt strict → 4 lỗi bật strict) |
+| `typescript-2-2-mang-tuple` | React `rx-2-3-object-array` | `content/courses/react/s02-state.mjs` (sau `${LINK(…immer…)}` ở ml-en và ml-vi) | `sort()` đổi chính mảng nhận vào; `toSorted`/spread trả bản sao | `readonly T[]` ⇒ TS2339 cho sort/push, TS4104; readonly bị xoá lúc chạy, khác `Object.freeze` |
+| `typescript-2-3-kieu-dac-biet` | API Design `api-4-1-thay-doi` | `content/courses/api-design/s04-phien-ban.mjs` (sau thẻ nguồn "Hyrum’s Law") | giá trị trạng thái mới làm gãy code xử lý "mọi" trường hợp | `never` bắt tsc chỉ ra từng switch (TS2322 gọi tên LAB_CLOSED); dữ liệu từ mạng vẫn cần default khoan dung |
+| `typescript-2-4-literal-as-const` | Prisma ORM `pr-8-3-su-co-enum` | `content/courses/prisma-orm/s08-he-kieu.mjs` (sau thẻ codelab của 8.3) | danh sách giá trị chép tay sẽ lệch, chỉ danh sách suy ra mới an toàn | không cần Prisma: `as const` + `(typeof LABS)[number]` + guard kiểm query string |
 
 ## Chưa cặp (lý do)
-- `typescript-0-2-cach-hoc`, `typescript-0-9-bat-dau-tai-day-2`, `typescript-1-6-lab-chuyen-doi`: không có bài bên kia tương ứng đúng.
+- `typescript-0-2-cach-hoc`, `typescript-0-9-bat-dau-tai-day-2`, `typescript-1-6-lab-chuyen-doi`, `typescript-2-6-lab-lich-phong`: không có bài bên kia tương ứng đúng.
 - SDN302 `sdn302-8-1-nestjs-hono` (NestJS = TypeScript trên Express): để dành cho Chương 11 (Express có kiểu) / Chương 14 (decorator).
 - Khoá `prisma-orm` / `react` (Courses): để dành cho Chương 12–13.

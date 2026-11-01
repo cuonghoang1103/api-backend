@@ -1409,5 +1409,797 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-2-1-a",
+    "bai": "typescript-2-1-primitive",
+    "doKho": "EASY",
+    "phut": 10,
+    "tieuDe": "Say which schedule fields may be missing|||Nói rõ trường nào của lịch có thể thiếu",
+    "moTa": "<p>In src/schedule.ts, <code>note</code> is NULL in the database when there is no note, and <code>cancelledAt</code> is absent until a booking is cancelled. Fix the type so the real rows in kiem/dung.ts compile and each line of kiem/sai.ts is refused with its code.</p><p><strong>Done when:</strong> tsc is clean on kiem/dung.ts and kiem/sai.ts gets TS18047, TS18048 and TS2741 on the marked lines. No any.</p>|||<p>Trong src/schedule.ts, <code>note</code> là NULL trong CSDL khi không có ghi chú, còn <code>cancelledAt</code> vắng mặt cho tới khi lượt đặt bị huỷ. Sửa kiểu để các dòng thật trong kiem/dung.ts biên dịch được và mỗi dòng của kiem/sai.ts bị từ chối đúng mã.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts, kiem/sai.ts có TS18047, TS18048 và TS2741 ở các dòng đánh dấu. Không any.</p>",
+    "khoiDau": {
+      "src/schedule.ts": "// One row of a lab's schedule. Some fields may be missing — say which ones.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string;\n  cancelledAt: string;\n};\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { ScheduleEntry } from '../src/schedule.ts';\n\n// Real rows from the database: these must compile.\nexport const rows: ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', bookedBy: 'an.nv', note: 'Bring an HDMI cable' },\n  { id: 2, lab: 'BE-201', bookedBy: 'binh.tt', note: null },\n  { id: 3, lab: 'AL-301', bookedBy: 'chi.lm', note: null, cancelledAt: '2026-11-01T07:15:00Z' },\n];\n",
+      "kiem/sai.ts": "import type { ScheduleEntry } from '../src/schedule.ts';\n\ndeclare const entry: ScheduleEntry;\nentry.note.toUpperCase(); // expect TS18047\nentry.cancelledAt.slice(0, 10); // expect TS18048\nexport const noKey: ScheduleEntry = { id: 4, lab: 'BE-202', bookedBy: 'dung.pt' }; // expect TS2741\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/schedule.ts": "// One row of a lab's schedule.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: \"no note\" (the key is always there)\n  cancelledAt?: string;     // the key is absent until the booking is cancelled\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "note as string | undefined — a NULL from the database no longer fits",
+        "tep": {
+          "src/schedule.ts": "// One row of a lab's schedule. Some fields may be missing — say which ones.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string | undefined;\n  cancelledAt?: string;\n};\n"
+        }
+      },
+      {
+        "nhan": "cancelledAt: string | undefined — the key becomes required, real rows break",
+        "tep": {
+          "src/schedule.ts": "// One row of a lab's schedule. Some fields may be missing — say which ones.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: string | null;\n  cancelledAt: string | undefined;\n};\n"
+        }
+      },
+      {
+        "nhan": "note typed as any",
+        "tep": {
+          "src/schedule.ts": "// One row of a lab's schedule. Some fields may be missing — say which ones.\nexport type ScheduleEntry = {\n  id: number;\n  lab: string;\n  bookedBy: string;\n  note: any;\n  cancelledAt?: string;\n};\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-1-b",
+    "bai": "typescript-2-1-primitive",
+    "doKho": "EASY",
+    "phut": 12,
+    "tieuDe": "An honest findEntry — no as, no !|||findEntry trung thực — không as, không !",
+    "moTa": "<p><code>findEntry</code> claims it always returns an entry, using <code>as</code> to silence tsc; <code>bookerOf(S, 9)</code> crashes. Give <code>findEntry</code> its honest return type and make <code>bookerOf</code> return <code>\"(unknown)\"</code> for a missing id. Do not use <code>as</code> (except <code>as const</code>) or the <code>!</code> assertion.</p><p><strong>Done when:</strong> the 3 tests pass and kiem/sai.ts gets TS2532 on the marked line.</p>|||<p><code>findEntry</code> tự nhận luôn trả về một lượt đặt, dùng <code>as</code> để bịt miệng tsc; <code>bookerOf(S, 9)</code> sập. Cho <code>findEntry</code> kiểu trả về trung thực và để <code>bookerOf</code> trả <code>\"(unknown)\"</code> khi không có id đó. Không dùng <code>as</code> (trừ <code>as const</code>) hay khẳng định <code>!</code>.</p><p><strong>Đạt khi:</strong> 3 test xanh và kiem/sai.ts có TS2532 ở dòng đánh dấu.</p>",
+    "khoiDau": {
+      "src/find.ts": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Returns the entry with this id.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id) as ScheduleEntry;\n}\n\n// Who booked entry \"id\"? \"(unknown)\" when there is no such entry.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id).bookedBy;\n}\n"
+    },
+    "coDinh": {
+      "test/find.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { findEntry, bookerOf } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }, { id: 2, lab: 'AL-301', bookedBy: 'binh.tt' }];\n\ntest('finds an existing entry', () => assert.equal(bookerOf(S, 2), 'binh.tt'));\ntest('a missing id gives undefined, not a crash', () => assert.equal(findEntry(S, 9), undefined));\ntest('the booker of a missing entry is (unknown)', () => assert.equal(bookerOf(S, 9), '(unknown)'));\n",
+      "kiem/sai.ts": "import { findEntry } from '../src/find.ts';\n\nconst S = [{ id: 1, lab: 'BE-201', bookedBy: 'an.nv' }];\nfindEntry(S, 1).bookedBy; // expect TS2532\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/find.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/find.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)",
+        "[\\w)\\]]!(?!=)"
+      ]
+    },
+    "loiGiai": {
+      "src/find.ts": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Honest return type: find() gives undefined when nothing matches, so the type says so.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\n// ?. stops at undefined, ?? supplies the default only for null/undefined.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id)?.bookedBy ?? '(unknown)';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "find(...)! — the assertion still lies, and bookerOf still crashes",
+        "tep": {
+          "src/find.ts": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Returns the entry with this id.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id)!;\n}\n\n// Who booked entry \"id\"? \"(unknown)\" when there is no such entry.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id).bookedBy;\n}\n"
+        }
+      },
+      {
+        "nhan": "honest return type, but bookerOf silences it with !",
+        "tep": {
+          "src/find.ts": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Honest return type: find() gives undefined when nothing matches, so the type says so.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\n// ?. stops at undefined, ?? supplies the default only for null/undefined.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id)!.bookedBy;\n}\n"
+        }
+      },
+      {
+        "nhan": "returns null instead of undefined — callers expecting undefined break",
+        "tep": {
+          "src/find.ts": "export type ScheduleEntry = { id: number; lab: string; bookedBy: string };\n\n// Honest return type: find() gives undefined when nothing matches, so the type says so.\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry | null {\n  return schedule.find((e) => e.id === id) ?? null;\n}\n\n// ?. stops at undefined, ?? supplies the default only for null/undefined.\nexport function bookerOf(schedule: ScheduleEntry[], id: number): string {\n  return findEntry(schedule, id)?.bookedBy ?? '(unknown)';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-1-c",
+    "bai": "typescript-2-1-primitive",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "tieuDe": "|| or ?? — a closed lab must have 0 seats|||Dùng || hay ?? — phòng đang bảo trì phải có 0 chỗ",
+    "moTa": "<p>src/lab.ts compiles cleanly — tsc has nothing to say — yet two of the five tests fail: a lab closed for maintenance (capacity 0) gets 40 seats, and an empty note becomes \"(no note)\". Fix the two defaults so that only a missing value (null) is replaced.</p><p><strong>Done when:</strong> all 5 tests in test/lab.test.ts pass.</p>|||<p>src/lab.ts biên dịch sạch — tsc không có gì để nói — vậy mà hai trong năm test đỏ: phòng đang bảo trì (capacity 0) được 40 chỗ, và ghi chú rỗng biến thành \"(no note)\". Sửa hai giá trị mặc định để chỉ giá trị vắng (null) mới bị thay.</p><p><strong>Đạt khi:</strong> cả 5 test trong test/lab.test.ts xanh.</p>",
+    "khoiDau": {
+      "src/lab.ts": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  return lab.capacity || DEFAULT_CAPACITY;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note || '(no note)';\n}\n"
+    },
+    "coDinh": {
+      "test/lab.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { capacityOf, noteOf } from '../src/lab.ts';\n\ntest('a lab with no recorded capacity gets the default 40', () => assert.equal(capacityOf({ code: 'BE-202', capacity: null }), 40));\ntest('a lab closed for maintenance has 0 seats', () => assert.equal(capacityOf({ code: 'AL-301', capacity: 0 }), 0));\ntest('a normal lab keeps its capacity', () => assert.equal(capacityOf({ code: 'BE-201', capacity: 35 }), 35));\ntest('no note shows (no note)', () => assert.equal(noteOf(null), '(no note)'));\ntest('an empty note stays empty', () => assert.equal(noteOf(''), ''));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/lab.test.ts"
+      ],
+      "chay": [
+        "node --test test/lab.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  return lab.capacity ?? DEFAULT_CAPACITY // ?? replaces ONLY null/undefined; 0 stays 0;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note ?? '(no note)' // '' is kept;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "if (!lab.capacity) — the same falsy check as ||, 0 still becomes 40",
+        "tep": {
+          "src/lab.ts": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  if (!lab.capacity) return DEFAULT_CAPACITY;\n  return lab.capacity;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note ?? '(no note)';\n}\n"
+        }
+      },
+      {
+        "nhan": "fixes capacity with ?? but keeps || for the note",
+        "tep": {
+          "src/lab.ts": "// capacity: null = not recorded yet (use the default), 0 = closed for maintenance.\nexport type Lab = { code: string; capacity: number | null };\nexport const DEFAULT_CAPACITY = 40;\n\nexport function capacityOf(lab: Lab): number {\n  return lab.capacity ?? DEFAULT_CAPACITY;\n}\n\n// note: null = no note. An empty string is a real (empty) note and must stay empty.\nexport function noteOf(note: string | null): string {\n  return note || '(no note)';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-1-d",
+    "bai": "typescript-2-1-primitive",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "tieuDe": "Send a bigint booking id as JSON without losing a digit|||Gửi id lượt đặt kiểu bigint qua JSON mà không mất chữ số nào",
+    "moTa": "<p>Booking ids come from a PostgreSQL <code>bigint</code> column. <code>toJson</code> calls <code>JSON.stringify</code> on an entry with a bigint id — it compiles, and throws at runtime. Make <code>toJson</code> send the id as a string with every digit; keep <code>parseId</code> returning a <code>bigint</code>.</p><p><strong>Done when:</strong> the 2 tests pass and kiem/sai.ts gets TS2322 and TS2365.</p>|||<p>Id lượt đặt lấy từ cột <code>bigint</code> của PostgreSQL. <code>toJson</code> gọi <code>JSON.stringify</code> trên một lượt đặt có id bigint — biên dịch được, và ném lỗi lúc chạy. Sửa <code>toJson</code> để gửi id dạng chuỗi đủ mọi chữ số; giữ <code>parseId</code> trả về <code>bigint</code>.</p><p><strong>Đạt khi:</strong> 2 test xanh và kiem/sai.ts có TS2322 và TS2365.</p>",
+    "khoiDau": {
+      "src/id.ts": "export type Entry = { id: bigint; lab: string };\n\n// Booking ids come from a PostgreSQL bigint column and can be larger than 2^53.\nexport function parseId(text: string): bigint {\n  return BigInt(text);\n}\n\n// The JSON the API sends. The id must keep every digit (send it as a string).\nexport function toJson(e: Entry): string {\n  return JSON.stringify(e);\n}\n"
+    },
+    "coDinh": {
+      "test/id.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseId, toJson } from '../src/id.ts';\n\ntest('a big id keeps every digit in JSON', () =>\n  assert.equal(toJson({ id: 9007199254740993n, lab: 'BE-201' }), '{\"id\":\"9007199254740993\",\"lab\":\"BE-201\"}'));\ntest('parseId gives a bigint you can do bigint maths with', () => assert.equal(parseId('9007199254740993') + 1n, 9007199254740994n));\n",
+      "kiem/sai.ts": "import { parseId } from '../src/id.ts';\n\nconst asNumber: number = parseId('7'); // expect TS2322\nparseId('7') + 1; // expect TS2365\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/id.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/id.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/id.ts": "export type Entry = { id: bigint; lab: string };\n\n// Booking ids come from a PostgreSQL bigint column and can be larger than 2^53.\nexport function parseId(text: string): bigint {\n  return BigInt(text);\n}\n\n// The JSON the API sends. The id must keep every digit (send it as a string).\nexport function toJson(e: Entry): string {\n  // JSON has no bigint: JSON.stringify throws on one, and Number() would round it.\n  return JSON.stringify({ id: e.id.toString(), lab: e.lab });\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Number(e.id) — 9007199254740993 becomes 9007199254740992",
+        "tep": {
+          "src/id.ts": "export type Entry = { id: bigint; lab: string };\n\n// Booking ids come from a PostgreSQL bigint column and can be larger than 2^53.\nexport function parseId(text: string): bigint {\n  return BigInt(text);\n}\n\n// The JSON the API sends. The id must keep every digit (send it as a string).\nexport function toJson(e: Entry): string {\n  return JSON.stringify({ id: String(Number(e.id)), lab: e.lab });\n}\n"
+        }
+      },
+      {
+        "nhan": "parseId returns a number — the bigint maths and the tsc checks are gone",
+        "tep": {
+          "src/id.ts": "export type Entry = { id: number; lab: string };\n\nexport function parseId(text: string): number {\n  return Number(text);\n}\n\nexport function toJson(e: Entry): string {\n  return JSON.stringify({ id: String(e.id), lab: e.lab });\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-2-a",
+    "bai": "typescript-2-2-mang-tuple",
+    "doKho": "EASY",
+    "phut": 10,
+    "tieuDe": "Sort the schedule without reordering the caller's list|||Sắp lịch mà không xáo danh sách của người gọi",
+    "moTa": "<p>src/sort.ts sorts the day's bookings with <code>sort()</code>, which reorders the array it receives — the page that passed it in now shows the wrong \"latest booking\". Change the parameter type so the function promises not to modify the list, and return a sorted copy.</p><p><strong>Done when:</strong> tsc is clean on src/, test/ and kiem/dung.ts (a caller that only holds a <code>readonly Entry[]</code>), and both tests pass.</p>|||<p>src/sort.ts sắp các lượt đặt trong ngày bằng <code>sort()</code> — hàm này xếp lại chính mảng nó nhận, nên trang đã truyền mảng vào giờ hiện sai \"lượt đặt mới nhất\". Đổi kiểu tham số để hàm hứa không sửa danh sách, và trả về một bản sao đã sắp.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test/ và kiem/dung.ts (người gọi chỉ có <code>readonly Entry[]</code>), và cả hai test xanh.</p>",
+    "khoiDau": {
+      "src/sort.ts": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\nexport function sortByStart(list: Entry[]): Entry[] {\n  return list.sort((a, b) => a.start - b.start);\n}\n"
+    },
+    "coDinh": {
+      "test/sort.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { sortByStart } from '../src/sort.ts';\n\nconst day = () => [{ id: 1, start: 780 }, { id: 2, start: 480 }, { id: 3, start: 600 }];\n\ntest('returns the bookings ordered by start', () => {\n  assert.deepEqual(sortByStart(day()).map((e) => e.id), [2, 3, 1]);\n});\ntest('leaves the caller\\'s list in booking order (id 1, 2, 3)', () => {\n  const mine = day();\n  sortByStart(mine);\n  assert.deepEqual(mine.map((e) => e.id), [1, 2, 3]);\n});\n",
+      "kiem/dung.ts": "// Correct callers: a page that only has a READ-ONLY view of the schedule must be able to call sortByStart.\nimport { sortByStart, type Entry } from '../src/sort.ts';\n\nconst shared: readonly Entry[] = [{ id: 1, start: 780 }, { id: 2, start: 480 }];\nconst timeline: Entry[] = sortByStart(shared);\nconsole.log(timeline.length);\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/sort.test.ts",
+        "kiem/dung.ts"
+      ],
+      "chay": [
+        "node --test test/sort.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/sort.ts": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\n// readonly: this function promises not to change the caller's array, and tsc holds it to that.\n// toSorted (ES2023) returns a sorted COPY; sort() would reorder the caller's list in place.\nexport function sortByStart(list: readonly Entry[]): Entry[] {\n  return list.toSorted((a, b) => a.start - b.start);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "readonly on the parameter, then cast it away and sort() anyway — compiles, but the caller's list is reordered",
+        "tep": {
+          "src/sort.ts": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\n// readonly: this function promises not to change the caller's array, and tsc holds it to that.\n// toSorted (ES2023) returns a sorted COPY; sort() would reorder the caller's list in place.\nexport function sortByStart(list: readonly Entry[]): Entry[] {\n  return (list as Entry[]).sort((a, b) => a.start - b.start);\n}\n"
+        }
+      },
+      {
+        "nhan": "toSorted() but the parameter stays Entry[] — a caller with a readonly list is refused (TS4104)",
+        "tep": {
+          "src/sort.ts": "// LabFlow schedule page: show the day's bookings sorted by start time.\nexport type Entry = { id: number; start: number };\n\n// readonly: this function promises not to change the caller's array, and tsc holds it to that.\n// toSorted (ES2023) returns a sorted COPY; sort() would reorder the caller's list in place.\nexport function sortByStart(list: Entry[]): Entry[] {\n  return list.toSorted((a, b) => a.start - b.start);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-2-b",
+    "bai": "typescript-2-2-mang-tuple",
+    "doKho": "EASY",
+    "phut": 10,
+    "tieuDe": "A time range is exactly two numbers|||Khoảng giờ là đúng hai con số",
+    "moTa": "<p>In src/range.ts a <code>TimeRange</code> is a plain <code>number[]</code>, so a range with three numbers or one number is accepted, and under the course tsconfig (noUncheckedIndexedAccess) <code>r[0]</code> may be <code>undefined</code>. Turn <code>TimeRange</code> into a tuple <code>[start, end]</code> and simplify <code>minutesOf</code>.</p><p><strong>Done when:</strong> each marked line of kiem/sai.ts gets its expected error (TS2322, TS2493, TS2345), the unmarked line <code>const start: number = toRange(…)[0]</code> compiles, and the tests pass.</p>|||<p>Trong src/range.ts, <code>TimeRange</code> là một <code>number[]</code> thường, nên khoảng giờ có ba số hay một số vẫn được nhận, và với tsconfig của khoá (noUncheckedIndexedAccess) <code>r[0]</code> có thể là <code>undefined</code>. Đổi <code>TimeRange</code> thành tuple <code>[start, end]</code> và viết gọn <code>minutesOf</code>.</p><p><strong>Đạt khi:</strong> mỗi dòng đánh dấu trong kiem/sai.ts có đúng lỗi mong đợi (TS2322, TS2493, TS2345), dòng không đánh dấu <code>const start: number = toRange(…)[0]</code> biên dịch được, và test xanh.</p>",
+    "khoiDau": {
+      "src/range.ts": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\nexport type TimeRange = number[];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  const [start = 0, end = 0] = r;\n  return end - start;\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { toRange, minutesOf, type TimeRange } from '../src/range.ts';\n\nconst three: TimeRange = [480, 600, 660]; // expect TS2322\ntoRange('08:00-10:00')[2]; // expect TS2493\nminutesOf([600]); // expect TS2345\nconst start: number = toRange('08:00-10:00')[0];\nconsole.log(three, start);\n",
+      "test/range.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toRange, minutesOf } from '../src/range.ts';\n\ntest(\"'08:00-10:00' becomes [480, 600]\", () => assert.deepEqual(toRange('08:00-10:00'), [480, 600]));\ntest('a two-hour range lasts 120 minutes', () => assert.equal(minutesOf(toRange('08:00-10:00')), 120));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/range.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/range.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/range.ts": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\n// A tuple: exactly two numbers, and each position has a meaning (labels show up in the editor).\nexport type TimeRange = readonly [start: number, end: number];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  return r[1] - r[0];     // a tuple knows positions 0 and 1 exist: no undefined here\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "tuple with a rest element [number, number, ...number[]] — three numbers are still accepted",
+        "tep": {
+          "src/range.ts": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\n// A tuple: exactly two numbers, and each position has a meaning (labels show up in the editor).\nexport type TimeRange = [number, number, ...number[]];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  return r[1] - r[0];     // a tuple knows positions 0 and 1 exist: no undefined here\n}\n"
+        }
+      },
+      {
+        "nhan": "optional elements [start?: number, end?: number] — r[0] may be undefined again",
+        "tep": {
+          "src/range.ts": "// Turn '08:00-10:00' into [480, 600] — minutes since 00:00, start then end.\nexport type TimeRange = [start?: number, end?: number];\n\nfunction minutes(hhmm: string): number {\n  const [h, m] = hhmm.split(':');\n  return Number(h) * 60 + Number(m);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from = '', to = ''] = text.split('-');\n  return [minutes(from), minutes(to)];\n}\n\nexport function minutesOf(r: TimeRange): number {\n  const [start = 0, end = 0] = r;\n  return end - start;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-2-c",
+    "bai": "typescript-2-2-mang-tuple",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "tieuDe": "Close the push hole: a range that cannot grow or be edited|||Bịt lỗ push: khoảng giờ không thể dài ra hay bị sửa",
+    "moTa": "<p>A mutable tuple <code>[start: number, end: number]</code> still has <code>push</code>, and <code>shift</code> edits the caller's range in place. Make <code>TimeRange</code> read-only and rewrite <code>shift</code> so it returns a new range.</p><p><strong>Done when:</strong> in kiem/sai.ts <code>r.push(660)</code> is refused with TS2339 and <code>r[0] = 0</code> with TS2540, the other lines compile, and the tests (including \"the original range is unchanged\") pass.</p>|||<p>Tuple thường <code>[start: number, end: number]</code> vẫn còn <code>push</code>, và <code>shift</code> sửa thẳng khoảng giờ của người gọi. Đổi <code>TimeRange</code> thành chỉ đọc và viết lại <code>shift</code> để trả về khoảng giờ mới.</p><p><strong>Đạt khi:</strong> trong kiem/sai.ts, <code>r.push(660)</code> bị từ chối với TS2339 và <code>r[0] = 0</code> với TS2540, các dòng khác biên dịch được, và test (kể cả \"khoảng gốc không đổi\") xanh.</p>",
+    "khoiDau": {
+      "src/range.ts": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\nexport type TimeRange = [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  r[0] += by;\n  r[1] += by;\n  return r;\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { shift, type TimeRange } from '../src/range.ts';\n\nconst r: TimeRange = [480, 600];\nr.push(660); // expect TS2339\nr[0] = 0; // expect TS2540\nconst later: TimeRange = shift(r, 30);\nconsole.log(later);\n",
+      "test/range.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { shift } from '../src/range.ts';\n\ntest('08:00-10:00 shifted by 30 is 08:30-10:30', () => assert.deepEqual(shift([480, 600], 30), [510, 630]));\ntest('the original range is unchanged', () => {\n  const r: [number, number] = [480, 600];\n  shift(r, 30);\n  assert.deepEqual(r, [480, 600]);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/range.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/range.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/range.ts": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\n// readonly tuple: no push (a \"pair\" can never grow to 3), no assigning to a position.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  return [r[0] + by, r[1] + by];   // a NEW range; the caller's stays as it was\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "readonly type, but shift casts it away and still edits the caller's range",
+        "tep": {
+          "src/range.ts": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\n// readonly tuple: no push (a \"pair\" can never grow to 3), no assigning to a position.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  const w = r as [number, number];\n  w[0] += by;\n  w[1] += by;\n  return w;\n}\n"
+        }
+      },
+      {
+        "nhan": "shift returns a new range, but TimeRange is still a mutable tuple — push and r[0] = 0 compile",
+        "tep": {
+          "src/range.ts": "// Move a booking later or earlier by some minutes (e.g. the lab opens 30 minutes late).\n// readonly tuple: no push (a \"pair\" can never grow to 3), no assigning to a position.\nexport type TimeRange = [start: number, end: number];\n\nexport function shift(r: TimeRange, by: number): TimeRange {\n  return [r[0] + by, r[1] + by];   // a NEW range; the caller's stays as it was\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-2-d",
+    "bai": "typescript-2-2-mang-tuple",
+    "doKho": "HARD",
+    "phut": 20,
+    "tieuDe": "Free gaps of the day, typed with tuples|||Các khoảng trống trong ngày, gõ kiểu bằng tuple",
+    "moTa": "<p>Write <code>freeGaps(booked)</code>: given the booked ranges of one lab (any order, never overlapping), return the free ranges between 07:00 (420) and 21:00 (1260), in order. Type it with a read-only tuple <code>TimeRange</code>; the function must not reorder the caller's list.</p><p><strong>Done when:</strong> the 4 tests pass, kiem/sai.ts refuses a 3-number range and a text range (TS2322 each), and passing an <code>as const</code> list compiles.</p>|||<p>Viết <code>freeGaps(booked)</code>: nhận các khoảng đã đặt của một phòng (thứ tự bất kỳ, không chồng nhau), trả về các khoảng trống giữa 07:00 (420) và 21:00 (1260), theo thứ tự. Gõ kiểu bằng tuple chỉ đọc <code>TimeRange</code>; hàm không được xáo danh sách của người gọi.</p><p><strong>Đạt khi:</strong> 4 test xanh, kiem/sai.ts từ chối khoảng có ba số và khoảng dạng chữ (mỗi dòng TS2322), và truyền một danh sách <code>as const</code> biên dịch được.</p>",
+    "khoiDau": {
+      "src/gaps.ts": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport function freeGaps(booked) {\n  return [];\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { freeGaps } from '../src/gaps.ts';\n\nfreeGaps([[480, 600, 700]]); // expect TS2322\nfreeGaps(['08:00-10:00']); // expect TS2322\nconst shared = [[480, 600]] as const;\nconsole.log(freeGaps(shared).length);\n",
+      "test/gaps.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { freeGaps } from '../src/gaps.ts';\n\ntest('three bookings leave three gaps', () => {\n  assert.deepEqual(freeGaps([[780, 900], [480, 600], [600, 720]]), [[420, 480], [720, 780], [900, 1260]]);\n});\ntest('an empty day is one big gap', () => assert.deepEqual(freeGaps([]), [[420, 1260]]));\ntest('a booking until closing time leaves no gap at the end', () => assert.deepEqual(freeGaps([[420, 1260]]), []));\ntest(\"the caller's list is not reordered\", () => {\n  const mine: [number, number][] = [[780, 900], [480, 600]];\n  freeGaps(mine);\n  assert.deepEqual(mine, [[780, 900], [480, 600]]);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/gaps.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/gaps.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/gaps.ts": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport type TimeRange = readonly [start: number, end: number];\n\n// readonly TimeRange[]: we only read the caller's list (it may be shared with the page).\nexport function freeGaps(booked: readonly TimeRange[]): TimeRange[] {\n  const gaps: TimeRange[] = [];\n  let cursor = OPEN;\n  for (const [start, end] of booked.toSorted((a, b) => a[0] - b[0])) {   // a sorted COPY\n    if (start > cursor) gaps.push([cursor, start]);\n    cursor = Math.max(cursor, end);\n  }\n  if (cursor < CLOSE) gaps.push([cursor, CLOSE]);\n  return gaps;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "sorts the caller's array in place (booked: TimeRange[] + sort) — the as const caller is refused and the order test fails",
+        "tep": {
+          "src/gaps.ts": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport type TimeRange = readonly [start: number, end: number];\n\n// readonly TimeRange[]: we only read the caller's list (it may be shared with the page).\nexport function freeGaps(booked: TimeRange[]): TimeRange[] {\n  const gaps: TimeRange[] = [];\n  let cursor = OPEN;\n  for (const [start, end] of booked.sort((a, b) => a[0] - b[0])) {   // a sorted COPY\n    if (start > cursor) gaps.push([cursor, start]);\n    cursor = Math.max(cursor, end);\n  }\n  if (cursor < CLOSE) gaps.push([cursor, CLOSE]);\n  return gaps;\n}\n"
+        }
+      },
+      {
+        "nhan": "number[][] instead of a tuple — a 3-number range is accepted",
+        "tep": {
+          "src/gaps.ts": "// Which parts of the opening day (07:00-21:00) are still free?\n// booked: ranges [start, end] in minutes, in ANY order, never overlapping.\nexport const OPEN = 420;\nexport const CLOSE = 1260;\n\nexport type TimeRange = readonly number[];\n\n// readonly TimeRange[]: we only read the caller's list (it may be shared with the page).\nexport function freeGaps(booked: readonly TimeRange[]): TimeRange[] {\n  const gaps: TimeRange[] = [];\n  let cursor = OPEN;\n  for (const [start = 0, end = 0] of booked.toSorted((a, b) => (a[0] ?? 0) - (b[0] ?? 0))) {   // a sorted COPY\n    if (start > cursor) gaps.push([cursor, start]);\n    cursor = Math.max(cursor, end);\n  }\n  if (cursor < CLOSE) gaps.push([cursor, CLOSE]);\n  return gaps;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-3-a",
+    "bai": "typescript-2-3-kieu-dac-biet",
+    "tieuDe": "Give fail() the return type that means \"never comes back\"|||Cho fail() kiểu trả về nghĩa là \"không bao giờ quay lại\"",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>src/fail.ts always throws. Without a return type, tsc infers <code>void</code> for it, so <code>slot.ok ? slot.minutes : fail(slot.code)</code> becomes <code>number | void</code> and the correct code in kiem/dung.ts does not compile. Give fail the right return type so that (1) kiem/dung.ts compiles, (2) the wrong line in kiem/sai.ts is refused (a value that never exists has no methods), (3) the test passes. No any.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; kiem/sai.ts gets TS2339 on the marked line; node --test is green.</p>|||<p>src/fail.ts luôn ném lỗi. Không có kiểu trả về, tsc suy ra <code>void</code>, nên <code>slot.ok ? slot.minutes : fail(slot.code)</code> thành <code>number | void</code> và code đúng trong kiem/dung.ts không biên dịch được. Cho fail kiểu trả về đúng để (1) kiem/dung.ts biên dịch, (2) dòng sai trong kiem/sai.ts bị từ chối (một giá trị không bao giờ tồn tại thì không có phương thức nào), (3) test qua. Không dùng any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; kiem/sai.ts có TS2339 ở dòng đánh dấu; node --test xanh.</p>",
+    "khoiDau": {
+      "src/fail.ts": "// LabFlow helper: stop with an error message. It is used inside expressions.\nexport function fail(message: string) {\n  throw new Error(message);\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { fail } from '../src/fail.ts';\n\ntype SlotResult = { ok: true; minutes: number } | { ok: false; code: string };\ndeclare const slot: SlotResult;\n\nconst minutes: number = slot.ok ? slot.minutes : fail(slot.code);\nexport { minutes };\n",
+      "kiem/sai.ts": "import { fail } from '../src/fail.ts';\n\nfail('OFF_GRID').toFixed(); // expect TS2339\n",
+      "test/fail.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { fail } from '../src/fail.ts';\n\ntest('fail throws an Error with the message', () => {\n  assert.throws(() => fail('TOO_LONG'), { message: 'TOO_LONG' });\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/fail.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/fail.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/fail.ts": "// LabFlow helper: stop with an error message. It is used inside expressions.\n// never = this function never returns a value, so \"x ? n : fail(...)\" stays a plain number.\nexport function fail(message: string): never {\n  throw new Error(message);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "return type number — it compiles, but a never-returning call now pretends to have number methods",
+        "tep": {
+          "src/fail.ts": "// LabFlow helper: stop with an error message. It is used inside expressions.\nexport function fail(message: string): number {\n  throw new Error(message);\n}\n"
+        }
+      },
+      {
+        "nhan": "return type void written explicitly — same as the inferred one, dung.ts still fails",
+        "tep": {
+          "src/fail.ts": "// LabFlow helper: stop with an error message. It is used inside expressions.\nexport function fail(message: string): void {\n  throw new Error(message);\n}\n"
+        }
+      },
+      {
+        "nhan": "return type any — silences everything",
+        "tep": {
+          "src/fail.ts": "// LabFlow helper: stop with an error message. It is used inside expressions.\nexport function fail(message: string): any {\n  throw new Error(message);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-3-b",
+    "bai": "typescript-2-3-kieu-dac-biet",
+    "tieuDe": "Make a forgotten slot code a compile error|||Biến một mã slot bị quên thành lỗi biên dịch",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p>A teammate added <code>LAB_CLOSED</code> to <code>SlotCode</code>. <code>slotMessage</code> still compiles because its default branch returns a vague message. (1) Type <code>assertNever</code> in src/never.ts so that calling it with any value that is still possible is a compile error. (2) In src/messages.ts replace the vague default with <code>return assertNever(code)</code> and handle <code>LAB_CLOSED</code> (the message must contain the word \"closed\"). kiem/sai.ts has a switch that forgets a case — tsc must refuse it.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; kiem/sai.ts gets TS2345 on the marked line; node --test is green.</p>|||<p>Một bạn trong nhóm vừa thêm <code>LAB_CLOSED</code> vào <code>SlotCode</code>. <code>slotMessage</code> vẫn biên dịch được vì nhánh default trả một câu chung chung. (1) Gõ kiểu cho <code>assertNever</code> trong src/never.ts để gọi nó với một giá trị vẫn còn khả năng xảy ra là lỗi biên dịch. (2) Trong src/messages.ts thay default mơ hồ bằng <code>return assertNever(code)</code> và xử lý <code>LAB_CLOSED</code> (câu phải chứa chữ \"closed\"). kiem/sai.ts có một switch quên một nhánh — tsc phải từ chối nó.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; kiem/sai.ts có TS2345 ở dòng đánh dấu; node --test xanh.</p>",
+    "khoiDau": {
+      "src/never.ts": "// Used in the default branch of a switch that must handle every case.\nexport function assertNever(value) {\n  throw new Error('Unhandled value: ' + String(value));\n}\n",
+      "src/messages.ts": "import { assertNever } from './never.ts';\n\n// A teammate added LAB_CLOSED to the list of slot codes.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'LAB_CLOSED';\n\nexport function slotMessage(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Start and end must be on the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end time must be after the start time.';\n    case 'OUTSIDE_HOURS': return 'LabFlow is open from 07:00 to 21:00.';\n    case 'TOO_LONG': return 'A booking can last at most 4 hours.';\n    default: return 'Something is wrong with this slot.';\n  }\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { assertNever } from '../src/never.ts';\n\ntype Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\nexport function label(status: Status): string {\n  switch (status) {\n    case 'PENDING': return 'Waiting';\n    case 'CONFIRMED': return 'Confirmed';\n    default: return assertNever(status); // expect TS2345\n  }\n}\n",
+      "test/messages.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { slotMessage } from '../src/messages.ts';\nimport { assertNever } from '../src/never.ts';\n\ntest('every code has its own message', () => {\n  assert.match(slotMessage('TOO_LONG'), /4 hours/);\n  assert.match(slotMessage('LAB_CLOSED'), /closed/);\n});\ntest('assertNever throws at runtime if a bad value slips in', () => {\n  assert.throws(() => assertNever('X' as never), /Unhandled value: X/);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/messages.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/messages.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/never.ts": "// Used in the default branch of a switch that must handle every case.\n// The parameter is never: if a case is forgotten, the leftover value is not never and tsc refuses the call.\nexport function assertNever(value: never): never {\n  throw new Error('Unhandled value: ' + String(value));\n}\n",
+      "src/messages.ts": "import { assertNever } from './never.ts';\n\n// A teammate added LAB_CLOSED to the list of slot codes.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'LAB_CLOSED';\n\nexport function slotMessage(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Start and end must be on the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end time must be after the start time.';\n    case 'OUTSIDE_HOURS': return 'LabFlow is open from 07:00 to 21:00.';\n    case 'TOO_LONG': return 'A booking can last at most 4 hours.';\n    case 'LAB_CLOSED': return 'The lab is closed for maintenance on that day.';\n    default: return assertNever(code);\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "value: unknown — compiles, but a forgotten case is no longer refused",
+        "tep": {
+          "src/never.ts": "// Used in the default branch of a switch that must handle every case.\n// The parameter is never: if a case is forgotten, the leftover value is not never and tsc refuses the call.\nexport function assertNever(value: unknown): never {\n  throw new Error('Unhandled value: ' + String(value));\n}\n",
+          "src/messages.ts": "import { assertNever } from './never.ts';\n\n// A teammate added LAB_CLOSED to the list of slot codes.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'LAB_CLOSED';\n\nexport function slotMessage(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Start and end must be on the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end time must be after the start time.';\n    case 'OUTSIDE_HOURS': return 'LabFlow is open from 07:00 to 21:00.';\n    case 'TOO_LONG': return 'A booking can last at most 4 hours.';\n    case 'LAB_CLOSED': return 'The lab is closed for maintenance on that day.';\n    default: return assertNever(code);\n  }\n}\n"
+        }
+      },
+      {
+        "nhan": "value: string — the leftover CANCELLED is a string, so it is accepted",
+        "tep": {
+          "src/never.ts": "// Used in the default branch of a switch that must handle every case.\n// The parameter is never: if a case is forgotten, the leftover value is not never and tsc refuses the call.\nexport function assertNever(value: string): never {\n  throw new Error('Unhandled value: ' + String(value));\n}\n",
+          "src/messages.ts": "import { assertNever } from './never.ts';\n\n// A teammate added LAB_CLOSED to the list of slot codes.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'LAB_CLOSED';\n\nexport function slotMessage(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Start and end must be on the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end time must be after the start time.';\n    case 'OUTSIDE_HOURS': return 'LabFlow is open from 07:00 to 21:00.';\n    case 'TOO_LONG': return 'A booking can last at most 4 hours.';\n    case 'LAB_CLOSED': return 'The lab is closed for maintenance on that day.';\n    default: return assertNever(code);\n  }\n}\n"
+        }
+      },
+      {
+        "nhan": "assertNever typed, but LAB_CLOSED still not handled in slotMessage",
+        "tep": {
+          "src/never.ts": "// Used in the default branch of a switch that must handle every case.\n// The parameter is never: if a case is forgotten, the leftover value is not never and tsc refuses the call.\nexport function assertNever(value: never): never {\n  throw new Error('Unhandled value: ' + String(value));\n}\n",
+          "src/messages.ts": "import { assertNever } from './never.ts';\n\n// A teammate added LAB_CLOSED to the list of slot codes.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG' | 'LAB_CLOSED';\n\nexport function slotMessage(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Start and end must be on the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end time must be after the start time.';\n    case 'OUTSIDE_HOURS': return 'LabFlow is open from 07:00 to 21:00.';\n    case 'TOO_LONG': return 'A booking can last at most 4 hours.';\n    default: return assertNever(code);\n  }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-3-c",
+    "bai": "typescript-2-3-kieu-dac-biet",
+    "tieuDe": "Fix the empty list that nothing can be pushed into|||Sửa danh sách rỗng không push được gì vào",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>emptyDay</code> returns <code>{ lab, bookings: [] }</code>. tsc types that empty array as <code>never[]</code>, so the correct code in kiem/dung.ts (pushing a booking) does not compile. Declare what a day holds — a booking has <code>start</code>, <code>end</code> (strings) and <code>minutes</code> (number) — and give <code>emptyDay</code> that return type. kiem/sai.ts pushes a plain string: it must be refused.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and the test; TS2345 on the marked line of kiem/sai.ts; node --test is green. No any.</p>|||<p><code>emptyDay</code> trả về <code>{ lab, bookings: [] }</code>. tsc gán cho mảng rỗng đó kiểu <code>never[]</code>, nên code đúng trong kiem/dung.ts (push một lượt đặt) không biên dịch được. Khai báo một ngày chứa gì — một lượt đặt có <code>start</code>, <code>end</code> (chuỗi) và <code>minutes</code> (số) — và cho <code>emptyDay</code> kiểu trả về đó. kiem/sai.ts push một chuỗi trơn: phải bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test; TS2345 ở dòng đánh dấu của kiem/sai.ts; node --test xanh. Không dùng any.</p>",
+    "khoiDau": {
+      "src/day.ts": "// A lab's day starts with no bookings; bookings are pushed in during the day.\nexport function emptyDay(lab: string) {\n  return { lab, bookings: [] };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { emptyDay } from '../src/day.ts';\n\nconst day = emptyDay('BE-201');\nday.bookings.push({ start: '08:00', end: '10:00', minutes: 120 });\nconst total: number = day.bookings.reduce((sum, b) => sum + b.minutes, 0);\nexport { total };\n",
+      "kiem/sai.ts": "import { emptyDay } from '../src/day.ts';\n\nemptyDay('BE-201').bookings.push('08:00-10:00'); // expect TS2345\n",
+      "test/day.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { emptyDay } from '../src/day.ts';\n\ntest('a new day has the lab and no bookings', () => {\n  assert.deepEqual(emptyDay('AL-301'), { lab: 'AL-301', bookings: [] });\n});\ntest('two days do not share one list', () => {\n  const a = emptyDay('BE-201');\n  const b = emptyDay('BE-201');\n  a.bookings.push({ start: '08:00', end: '09:00', minutes: 60 });\n  assert.equal(b.bookings.length, 0);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/day.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/day.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/day.ts": "// A lab's day starts with no bookings; bookings are pushed in during the day.\n// Say what the empty list will hold — otherwise tsc types it never[] and nothing can be pushed.\nexport type DayBooking = { start: string; end: string; minutes: number };\nexport type LabDay = { lab: string; bookings: DayBooking[] };\n\nexport function emptyDay(lab: string): LabDay {\n  return { lab, bookings: [] };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "bookings: unknown[] — push works, but a plain string is accepted too (and b.minutes is not a number)",
+        "tep": {
+          "src/day.ts": "// A lab's day starts with no bookings; bookings are pushed in during the day.\n// Say what the empty list will hold — otherwise tsc types it never[] and nothing can be pushed.\nexport type DayBooking = { start: string; end: string; minutes: number };\nexport type LabDay = { lab: string; bookings: unknown[] };\n\nexport function emptyDay(lab: string): LabDay {\n  return { lab, bookings: [] };\n}\n"
+        }
+      },
+      {
+        "nhan": "bookings: any[] — compiles, checks nothing",
+        "tep": {
+          "src/day.ts": "// A lab's day starts with no bookings; bookings are pushed in during the day.\n// Say what the empty list will hold — otherwise tsc types it never[] and nothing can be pushed.\nexport type DayBooking = { start: string; end: string; minutes: number };\nexport type LabDay = { lab: string; bookings: any[] };\n\nexport function emptyDay(lab: string): LabDay {\n  return { lab, bookings: [] };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-3-d",
+    "bai": "typescript-2-3-kieu-dac-biet",
+    "tieuDe": "An audit log whose result nobody may test|||Hàm ghi nhật ký mà không ai được kiểm kết quả",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p><code>audit</code> only prints a line, but it returns <code>true</code> — and someone wrote <code>if (audit(...))</code> as if it reported success. Type it so the parameters are a string and a number, it returns <strong>nothing usable</strong>, and testing its result is refused (kiem/sai.ts). The test checks the printed line and that the function returns <code>undefined</code>.</p><p><strong>Done when:</strong> tsc is clean on src/ and the test; kiem/sai.ts gets TS1345 and TS2345 on the marked lines; node --test is green.</p>|||<p><code>audit</code> chỉ in một dòng, nhưng lại trả về <code>true</code> — và có người đã viết <code>if (audit(...))</code> như thể nó báo thành công. Gõ kiểu để tham số là chuỗi và số, hàm trả về <strong>không có gì dùng được</strong>, và việc kiểm kết quả của nó bị từ chối (kiem/sai.ts). Test kiểm dòng được in và việc hàm trả về <code>undefined</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test; kiem/sai.ts có TS1345 và TS2345 ở các dòng đánh dấu; node --test xanh.</p>",
+    "khoiDau": {
+      "src/audit.ts": "// Write one line to the audit log. Callers should not depend on what it returns.\nexport function audit(action, id) {\n  console.log('[audit] ' + action + ' booking ' + id);\n  return true;\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { audit } from '../src/audit.ts';\n\nif (audit('cancel', 7)) console.log('done'); // expect TS1345\naudit('cancel', '7'); // expect TS2345\n",
+      "test/audit.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { audit } from '../src/audit.ts';\n\ntest('audit prints one line and returns nothing', (t) => {\n  const lines: string[] = [];\n  t.mock.method(console, 'log', (line: string) => { lines.push(line); });\n  const result: unknown = audit('cancel', 7);\n  assert.deepEqual(lines, ['[audit] cancel booking 7']);\n  assert.equal(result, undefined);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/audit.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/audit.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/audit.ts": "// Write one line to the audit log. Callers should not depend on what it returns.\n// void says exactly that: there is no result to use, so \"if (audit(...))\" is a compile error.\nexport function audit(action: string, id: number): void {\n  console.log('[audit] ' + action + ' booking ' + id);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "typed, but still returns boolean — callers keep testing it",
+        "tep": {
+          "src/audit.ts": "// Write one line to the audit log. Callers should not depend on what it returns.\nexport function audit(action: string, id: number): boolean {\n  console.log('[audit] ' + action + ' booking ' + id);\n  return true;\n}\n"
+        }
+      },
+      {
+        "nhan": "return type unknown — \"if (audit(...))\" is still allowed",
+        "tep": {
+          "src/audit.ts": "// Write one line to the audit log. Callers should not depend on what it returns.\n// void says exactly that: there is no result to use, so \"if (audit(...))\" is a compile error.\nexport function audit(action: string, id: number): unknown {\n  console.log('[audit] ' + action + ' booking ' + id);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-4-a",
+    "bai": "typescript-2-4-literal-as-const",
+    "doKho": "EASY",
+    "phut": 8,
+    "tieuDe": "One list of labs: derive LabCode from LABS|||Một danh sách phòng: suy LabCode từ LABS",
+    "moTa": "<p>src/labs.ts keeps the lab codes twice: a hand-written union and a plain array. Make <code>LABS</code> the single source of truth and derive <code>LabCode</code> from it (no hand-written union of lab codes). The correct uses in kiem/dung.ts must compile, and the two lines of kiem/sai.ts must be refused (TS2322, TS2339).</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and test/, each line of kiem/sai.ts has its expected error, node --test is green.</p>|||<p>src/labs.ts giữ mã phòng hai lần: một union viết tay và một mảng thường. Biến <code>LABS</code> thành nguồn sự thật duy nhất và suy <code>LabCode</code> từ nó (không còn union mã phòng viết tay). Các cách dùng đúng trong kiem/dung.ts phải biên dịch, và hai dòng của kiem/sai.ts phải bị từ chối (TS2322, TS2339).</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test/, mỗi dòng của kiem/sai.ts có đúng lỗi mong đợi, node --test xanh.</p>",
+    "khoiDau": {
+      "src/labs.ts": "// The labs LabFlow can book.\nexport type LabCode = 'BE-201' | 'BE-202' | 'AL-301';\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'];\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { LABS } from '../src/labs.ts';\nimport type { LabCode } from '../src/labs.ts';\n\nconst lab: LabCode = 'BE-999'; // expect TS2322\nLABS.push('BE-999'); // expect TS2339\nexport { lab };\n",
+      "kiem/dung.ts": "import { LABS } from '../src/labs.ts';\nimport type { LabCode } from '../src/labs.ts';\n\n// Every element of LABS is a LabCode.\nconst all: readonly LabCode[] = LABS;\nconst first: LabCode = 'AL-301';\nexport { all, first };\n",
+      "test/labs.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LABS } from '../src/labs.ts';\n\ntest('three labs, AL-301 included', () => {\n  assert.equal(LABS.length, 3);\n  assert.ok(LABS.includes('AL-301'));\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/labs.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/labs.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "LabCode =\\s*'"
+      ]
+    },
+    "loiGiai": {
+      "src/labs.ts": "// The labs LabFlow can book — written ONCE, as data. The type is derived from it,\n// so adding a lab is a one-line change and the type can never drift from the list.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "derives the type but forgets as const — LabCode is just string",
+        "tep": {
+          "src/labs.ts": "export const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = (typeof LABS)[number];\n"
+        }
+      },
+      {
+        "nhan": "adds as const but keeps the hand-written union — still two lists",
+        "tep": {
+          "src/labs.ts": "export type LabCode = 'BE-201' | 'BE-202' | 'AL-301';\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-4-b",
+    "bai": "typescript-2-4-literal-as-const",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "tieuDe": "Check ?lab= against the list — without a cast|||Kiểm ?lab= với danh sách — không ép kiểu",
+    "moTa": "<p>labFromQuery in src/lab-query.ts does not compile: <code>LABS.includes(text)</code> is TS2345 (and <code>get</code> may return null). Fix it so it returns the lab code for <code>lab=AL-301</code> and <code>null</code> for a missing, lower-case or unknown code. Keep <code>as const</code>; no <code>any</code> and no <code>as</code> casts (only <code>as const</code>). Hint: a type guard <code>text is LabCode</code>.</p><p><strong>Done when:</strong> tsc is clean on src/, kiem/dung.ts and test/, node --test is green, the file has no cast.</p>|||<p>labFromQuery trong src/lab-query.ts không biên dịch: <code>LABS.includes(text)</code> là TS2345 (và <code>get</code> có thể trả null). Sửa để nó trả mã phòng với <code>lab=AL-301</code> và <code>null</code> khi thiếu, viết thường hoặc mã lạ. Giữ <code>as const</code>; không <code>any</code>, không ép kiểu bằng <code>as</code> (chỉ <code>as const</code>). Gợi ý: một type guard <code>text is LabCode</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, kiem/dung.ts và test/, node --test xanh, tệp không có phép ép kiểu.</p>",
+    "khoiDau": {
+      "src/lab-query.ts": "export const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// The lab code from a query string such as 'lab=BE-201', or null when it is missing or unknown.\nexport function labFromQuery(query: string): LabCode | null {\n  const text = new URLSearchParams(query).get('lab');\n  return LABS.includes(text) ? text : null;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { labFromQuery } from '../src/lab-query.ts';\nimport type { LabCode } from '../src/lab-query.ts';\n\nconst lab: LabCode | null = labFromQuery('lab=BE-201');\nexport { lab };\n",
+      "kiem/sai.ts": "import type { LabCode } from '../src/lab-query.ts';\n\nconst lab: LabCode = 'BE-999'; // expect TS2322\nexport { lab };\n",
+      "test/lab-query.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labFromQuery } from '../src/lab-query.ts';\n\ntest('a known lab is returned', () => assert.equal(labFromQuery('lab=AL-301'), 'AL-301'));\ntest('lower case is refused', () => assert.equal(labFromQuery('lab=be-201'), null));\ntest('an unknown lab is refused', () => assert.equal(labFromQuery('lab=BE-999'), null));\ntest('a missing lab is refused', () => assert.equal(labFromQuery('day=2026-11-02'), null));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/lab-query.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/lab-query.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas (?!(const|a|an|the)\\b)\\w"
+      ]
+    },
+    "loiGiai": {
+      "src/lab-query.ts": "export const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// Every LabCode is a string, so this widening is safe and checked (no cast).\nconst KNOWN: readonly string[] = LABS;\n\n// Type guard: when it returns true, tsc narrows text to LabCode.\nexport function isLab(text: string): text is LabCode {\n  return KNOWN.includes(text);\n}\n\n// The lab code from a query string such as 'lab=BE-201', or null when it is missing or unknown.\nexport function labFromQuery(query: string): LabCode | null {\n  const text = new URLSearchParams(query).get('lab');\n  if (text === null) return null;\n  return isLab(text) ? text : null;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "silences the error with casts",
+        "tep": {
+          "src/lab-query.ts": "export const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\nexport function labFromQuery(query: string): LabCode | null {\n  const text = new URLSearchParams(query).get('lab');\n  return LABS.includes(text as LabCode) ? (text as LabCode) : null;\n}\n"
+        }
+      },
+      {
+        "nhan": "drops as const so includes accepts a string — and the return type becomes string",
+        "tep": {
+          "src/lab-query.ts": "export const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = (typeof LABS)[number];\n\nexport function labFromQuery(query: string): LabCode | null {\n  const text = new URLSearchParams(query).get('lab');\n  if (text === null) return null;\n  return LABS.includes(text) ? text : null;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-4-c",
+    "bai": "typescript-2-4-literal-as-const",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "tieuDe": "A complete, read-only message table|||Bảng thông báo đầy đủ, chỉ đọc",
+    "moTa": "<p>src/messages.ts misses the message for TOO_LONG, so <code>SLOT_MESSAGES[code]</code> does not compile. Make the table complete (TOO_LONG: <code>A booking can last at most 4 hours.</code>), read-only, with every text kept as a literal, and let tsc check that every <code>SlotCode</code> has a message. Changing a message (kiem/sai.ts) must be refused with TS2540.</p><p><strong>Done when:</strong> tsc is clean on src/ and test/, kiem/sai.ts gets TS2540, node --test is green.</p>|||<p>src/messages.ts thiếu thông báo cho TOO_LONG, nên <code>SLOT_MESSAGES[code]</code> không biên dịch. Làm bảng đầy đủ (TOO_LONG: <code>A booking can last at most 4 hours.</code>), chỉ đọc, giữ mọi câu ở dạng literal, và để tsc kiểm rằng <code>SlotCode</code> nào cũng có thông báo. Sửa một thông báo (kiem/sai.ts) phải bị từ chối với TS2540.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test/, kiem/sai.ts có TS2540, node --test xanh.</p>",
+    "khoiDau": {
+      "src/messages.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\n// One message per slot code.\nexport const SLOT_MESSAGES = {\n  OFF_GRID: 'Start and end must be on the 30-minute grid.',\n  END_BEFORE_START: 'The end time must be after the start time.',\n  OUTSIDE_HOURS: 'Labs are open from 07:00 to 21:00.',\n};\n\nexport function messageFor(code: SlotCode): string {\n  return SLOT_MESSAGES[code];\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { SLOT_MESSAGES } from '../src/messages.ts';\n\nSLOT_MESSAGES.OFF_GRID = 'Use the grid!'; // expect TS2540\n",
+      "test/messages.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { messageFor } from '../src/messages.ts';\n\ntest('TOO_LONG has its message', () => assert.equal(messageFor('TOO_LONG'), 'A booking can last at most 4 hours.'));\ntest('OFF_GRID unchanged', () => assert.equal(messageFor('OFF_GRID'), 'Start and end must be on the 30-minute grid.'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/messages.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/messages.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/messages.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\n// One message per slot code: as const keeps the texts literal and the object read-only;\n// satisfies makes tsc check that EVERY SlotCode has a message.\nexport const SLOT_MESSAGES = {\n  OFF_GRID: 'Start and end must be on the 30-minute grid.',\n  END_BEFORE_START: 'The end time must be after the start time.',\n  OUTSIDE_HOURS: 'Labs are open from 07:00 to 21:00.',\n  TOO_LONG: 'A booking can last at most 4 hours.',\n} as const satisfies Record<SlotCode, string>;\n\nexport function messageFor(code: SlotCode): string {\n  return SLOT_MESSAGES[code];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "complete Record but no as const — messages can be overwritten",
+        "tep": {
+          "src/messages.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\nexport const SLOT_MESSAGES: Record<SlotCode, string> = {\n  OFF_GRID: 'Start and end must be on the 30-minute grid.',\n  END_BEFORE_START: 'The end time must be after the start time.',\n  OUTSIDE_HOURS: 'Labs are open from 07:00 to 21:00.',\n  TOO_LONG: 'A booking can last at most 4 hours.',\n};\n\nexport function messageFor(code: SlotCode): string {\n  return SLOT_MESSAGES[code];\n}\n"
+        }
+      },
+      {
+        "nhan": "hides the missing key behind a fallback text",
+        "tep": {
+          "src/messages.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\nexport const SLOT_MESSAGES = {\n  OFF_GRID: 'Start and end must be on the 30-minute grid.',\n  END_BEFORE_START: 'The end time must be after the start time.',\n  OUTSIDE_HOURS: 'Labs are open from 07:00 to 21:00.',\n} as const;\n\nconst TABLE: Partial<Record<string, string>> = SLOT_MESSAGES;\nexport function messageFor(code: SlotCode): string {\n  return TABLE[code] ?? 'Invalid time.';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-2-4-d",
+    "bai": "typescript-2-4-literal-as-const",
+    "doKho": "HARD",
+    "phut": 15,
+    "tieuDe": "Replace an enum with an as const object|||Thay enum bằng object as const",
+    "moTa": "<p>src/status.ts uses an <code>enum</code>: the course tsconfig refuses it (TS1294) and Node cannot run it. Replace it with an <code>as const</code> object and a type, both named <code>Status</code>, so the existing code (<code>Status.Pending</code>, <code>label(s: Status)</code>) keeps working, <code>label('CONFIRMED')</code> is accepted (a plain string from JSON) and <code>label('APPROVED')</code> is refused.</p><p><strong>Done when:</strong> tsc is clean on src/ and test/, kiem/sai.ts gets TS2345 and TS2540, node --test is green.</p>|||<p>src/status.ts dùng <code>enum</code>: tsconfig của khoá từ chối (TS1294) và Node không chạy được. Thay bằng một object <code>as const</code> và một kiểu, cùng tên <code>Status</code>, để code cũ (<code>Status.Pending</code>, <code>label(s: Status)</code>) vẫn chạy, <code>label('CONFIRMED')</code> được nhận (chuỗi thường từ JSON) còn <code>label('APPROVED')</code> bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test/, kiem/sai.ts có TS2345 và TS2540, node --test xanh.</p>",
+    "khoiDau": {
+      "src/status.ts": "// Node 22 cannot run this file, and the course tsconfig refuses it (erasableSyntaxOnly).\nexport enum Status {\n  Pending = 'PENDING',\n  Confirmed = 'CONFIRMED',\n}\n\nexport function label(s: Status): string {\n  return s === Status.Pending ? 'waiting for approval' : 'confirmed';\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { Status, label } from '../src/status.ts';\n\nlabel('APPROVED'); // expect TS2345\nStatus.Pending = 'WAITING'; // expect TS2540\n",
+      "test/status.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Status, label } from '../src/status.ts';\n\ntest('names still work', () => assert.equal(label(Status.Pending), 'waiting for approval'));\ntest('a plain string from JSON is accepted', () => assert.equal(label('CONFIRMED'), 'confirmed'));\ntest('the values exist at runtime', () => assert.deepEqual(Object.values(Status), ['PENDING', 'CONFIRMED']));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/status.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/status.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/status.ts": "// The erasable replacement for the enum: an ordinary object (it exists at runtime) ...\nexport const Status = { Pending: 'PENDING', Confirmed: 'CONFIRMED' } as const;\n// ... and a type with the same name, derived from its values: 'PENDING' | 'CONFIRMED'.\nexport type Status = (typeof Status)[keyof typeof Status];\n\nexport function label(s: Status): string {\n  return s === Status.Pending ? 'waiting for approval' : 'confirmed';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "type Status = keyof typeof Status — the NAMES, not the values",
+        "tep": {
+          "src/status.ts": "export const Status = { Pending: 'PENDING', Confirmed: 'CONFIRMED' } as const;\nexport type Status = keyof typeof Status;\n\nexport function label(s: Status): string {\n  return s === 'Pending' ? 'waiting for approval' : 'confirmed';\n}\n"
+        }
+      },
+      {
+        "nhan": "plain object and type Status = string — APPROVED slips through",
+        "tep": {
+          "src/status.ts": "export const Status = { Pending: 'PENDING', Confirmed: 'CONFIRMED' };\nexport type Status = string;\n\nexport function label(s: Status): string {\n  return s === Status.Pending ? 'waiting for approval' : 'confirmed';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-2",
+    "bai": "typescript-2-6-lab-lich-phong",
+    "tieuDe": "Lab 2 — Strict null on the lab schedule|||Lab 2 — Bật strict cho lịch phòng lab",
+    "doKho": "HARD",
+    "phut": 75,
+    "moTa": "<p><code>src/schedule.ts</code> was written while the project had <code>strict: false</code>. Make it honest under the course's strict tsconfig: (1) it compiles, (2) the correct uses in <code>kiem/phai-dung.ts</code> still compile, (3) the 13 tests pass, (4) each line of <code>kiem/sai.ts</code> is refused with its expected code. No <code>any</code>, no <code>as</code> cast except <code>as const</code>, no <code>!</code>, no <code>@ts-</code> directive.</p><p><strong>Done when:</strong> tsc is clean on src/, test/ and kiem/phai-dung.ts, all 8 lines of kiem/sai.ts get their error, node --test is green.</p>|||<p><code>src/schedule.ts</code> được viết khi dự án còn <code>strict: false</code>. Làm nó trung thực dưới tsconfig strict của khoá: (1) biên dịch được, (2) các cách dùng đúng trong <code>kiem/phai-dung.ts</code> vẫn biên dịch được, (3) 13 test qua, (4) mỗi dòng của <code>kiem/sai.ts</code> bị từ chối đúng mã mong đợi. Không <code>any</code>, không ép kiểu <code>as</code> trừ <code>as const</code>, không <code>!</code>, không chỉ thị <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/, test/ và kiem/phai-dung.ts, cả 8 dòng của kiem/sai.ts có đúng lỗi, node --test xanh.</p>",
+    "khoiDau": {
+      "src/schedule.ts": "// LabFlow — one lab's schedule for a day.\n// A teammate wrote this file while the project still had \"strict\": false (lab2/tsconfig.loose.json).\n// Lab 2: make it honest under the course's strict tsconfig.\nimport { parseTime, formatTime } from './time.ts';\n\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = string;\nexport type TimeRange = number[];   // [start, end] in minutes since 00:00\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string;          // the database column is NULL when the booker wrote no note\n  cancelledAt: string;   // only cancelled bookings have it\n};\n\nexport function isLab(text: string): boolean {\n  return LABS.includes(text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to] = text.split('-');\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note || '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings.\nexport function firstStart(schedule: ScheduleEntry[], lab: LabCode): number {\n  let best: number = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\nexport function sortByStart(schedule: ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.sort((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt ? ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')' : '';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+    },
+    "coDinh": {
+      "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "test/schedule.test.ts": "// Lab 2 — behaviour of the schedule module. Run: node --test --test-reporter=spec lab2/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { ScheduleEntry } from '../src/schedule.ts';\n\n// Three bookings of 2 Nov 2026, in the order the database returned them.\nconst e1: ScheduleEntry = { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null };\nconst e2: ScheduleEntry = { id: 2, lab: 'BE-201', range: [480, 600], bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' };\nconst e3: ScheduleEntry = { id: 3, lab: 'BE-202', range: [540, 660], bookedBy: 'chi.lm', note: 'Bring HDMI adapters' };\nconst today = (): ScheduleEntry[] => [e1, e2, e3];\n\ntest('LABS lists the three LabFlow labs', () => assert.deepEqual([...LABS], ['BE-201', 'BE-202', 'AL-301']));\ntest('isLab: BE-201 yes, BE-999 and be-201 no', () => {\n  assert.equal(isLab('BE-201'), true);\n  assert.equal(isLab('BE-999'), false);\n  assert.equal(isLab('be-201'), false);\n});\ntest('toRange: 08:00-10:00 is [480, 600]', () => assert.deepEqual([...toRange('08:00-10:00')], [480, 600]));\ntest('toRange: a single time is a TypeError', () => assert.throws(() => toRange('08:00'), TypeError));\ntest('toRange: three times is a TypeError', () => assert.throws(() => toRange('08:00-10:00-12:00'), TypeError));\ntest('findEntry: id 3 is the BE-202 booking', () => assert.equal(findEntry(today(), 3)?.bookedBy, 'chi.lm'));\ntest('findEntry: an unknown id gives undefined', () => assert.equal(findEntry(today(), 99), undefined));\ntest('noteOf: a NULL note reads \"(no note)\"', () => assert.equal(noteOf(e1), '(no note)'));\ntest('noteOf: an empty note stays empty', () => assert.equal(noteOf(e2), ''));\ntest('firstStart: BE-201 starts at 600 (the 480 booking is cancelled)', () => assert.equal(firstStart(today(), 'BE-201'), 600));\ntest('firstStart: AL-301 has no booking today, so null', () => assert.equal(firstStart(today(), 'AL-301'), null));\ntest('sortByStart: sorted copy, the input keeps its order', () => {\n  const input = today();\n  assert.deepEqual(sortByStart(input).map((e) => e.id), [2, 3, 1]);\n  assert.deepEqual(input.map((e) => e.id), [1, 2, 3]);\n});\ntest('labelOf: shows times, booker and cancellation date', () => {\n  assert.equal(labelOf(e2), 'BE-201 08:00–10:00 binh.tt (cancelled 2026-11-01)');\n  assert.equal(labelOf(e3), 'BE-202 09:00–11:00 chi.lm');\n});\n",
+      "kiem/phai-dung.ts": "// Lab 2 — CORRECT uses. They must keep compiling with your types (part B).\nimport { LABS, isLab, toRange, findEntry, noteOf, firstStart, sortByStart, labelOf } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry } from '../src/schedule.ts';\n\n// Rows as they come from the database: a NULL note, and no cancelledAt until a booking is cancelled.\nconst today: readonly ScheduleEntry[] = [\n  { id: 1, lab: 'BE-201', range: [600, 720], bookedBy: 'an.nv', note: null },\n  { id: 2, lab: 'BE-201', range: toRange('08:00-10:00'), bookedBy: 'binh.tt', note: '', cancelledAt: '2026-11-01T09:15:00Z' },\n];\n\nconst sorted: ScheduleEntry[] = sortByStart(today);    // a read-only list is accepted, a new list comes back\nconst start: number = toRange('08:00-10:00')[0];        // position 0 of a range is always there\nconst firstLab: LabCode = LABS[0];                      // so is position 0 of the fixed list of labs\n\nconst found = findEntry(today, 1);\nif (found !== undefined) console.log(noteOf(found), labelOf(found));\n\nconst first = firstStart(today, 'BE-201');\nif (first !== null) console.log(first + 30);\n\nconst fromQuery: string = 'AL-301';\nif (isLab(fromQuery)) {\n  const lab: LabCode = fromQuery;                       // after the check, the text IS a LabCode\n  console.log(lab, sorted.length, start, firstLab);\n}\n",
+      "kiem/sai.ts": "// Lab 2 — eight uses that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects one error, with this code, on each marked line.\nimport { LABS, findEntry, firstStart } from '../src/schedule.ts';\nimport type { LabCode, ScheduleEntry, TimeRange } from '../src/schedule.ts';\n\ndeclare const today: readonly ScheduleEntry[];\ndeclare const entry: ScheduleEntry;\n\nfindEntry(today, 7).bookedBy;                    // S1 booking 7 may not exist // expect TS2532\nentry.note.toUpperCase();                        // S2 a note may be NULL // expect TS18047\nentry.cancelledAt.slice(0, 10);                  // S3 only cancelled bookings have a date // expect TS18048\nfirstStart(today, 'BE-201') + 30;                // S4 a lab may have no booking today // expect TS2531\nconst three: TimeRange = [480, 600, 660];        // S5 a range is exactly [start, end] // expect TS2322\nentry.range[0] = 0;                              // S6 a range is never changed in place // expect TS2540\nconst lab: LabCode = 'BE-999';                   // S7 only the three LabFlow labs exist // expect TS2322\nLABS.push('BE-999');                             // S8 the list of labs is fixed // expect TS2339\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/schedule.test.ts",
+        "kiem/phai-dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/schedule.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(?!const\\b)\\w+",
+        "[\\w$]+!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/schedule.ts": "// LabFlow — one lab's schedule for a day (Chapter 2, = Lab 2 reference solution).\nimport { parseTime, formatTime } from './time.ts';\n\n// The one list of labs. `as const` keeps the exact strings, so the type below is derived from it, never copied.\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'] as const;\nexport type LabCode = (typeof LABS)[number];\n\n// [start, end] in minutes since 00:00 — exactly two numbers, never changed in place.\nexport type TimeRange = readonly [start: number, end: number];\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;      // NULL in the database: the booker wrote no note ('' is a real, empty note)\n  cancelledAt?: string;     // absent until the booking is cancelled\n};\n\n// A text from outside (a query string, a form) is checked at runtime before it is trusted to be a LabCode.\nexport function isLab(text: string): text is LabCode {\n  return LABS.some((lab) => lab === text);\n}\n\n// \"08:00-10:00\" -> [480, 600]\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\n// Earliest start of a lab today, ignoring cancelled bookings; null when the lab is free all day.\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt !== undefined) continue;\n    if (best === null || e.range[0] < best) best = e.range[0];\n  }\n  return best;\n}\n\n// A sorted COPY: the caller's list keeps its order.\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => a.range[0] - b.range[0]);\n}\n\n// \"BE-201 08:00–10:00 an.nv (cancelled 2026-11-02)\"\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "tests fixed, compiler silenced with ! and as",
+        "tep": {
+          "src/schedule.ts": "// Lab 2 — attempt A (\"yếu\" = weak): the runtime bugs the tests found are fixed (?? and a copy before sort),\n// but every compiler error was made to go away with \"!\" and \"as\". The types still say what they said under strict: false.\nimport { parseTime, formatTime } from './time.ts';\n\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = string;\nexport type TimeRange = number[];   // [start, end] in minutes since 00:00\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string;\n  cancelledAt: string;\n};\n\nexport function isLab(text: string): boolean {\n  return LABS.includes(text);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (extra !== undefined) throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  return [parseTime(from!), parseTime(to!)];\n}\n\nexport function findEntry(schedule: ScheduleEntry[], id: number): ScheduleEntry {\n  return schedule.find((e) => e.id === id) as ScheduleEntry;\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\nexport function firstStart(schedule: ScheduleEntry[], lab: LabCode): number {\n  let best = null as unknown as number;\n  for (const e of schedule) {\n    if (e.lab !== lab || e.cancelledAt) continue;\n    if (best === null || e.range[0]! < best) best = e.range[0]!;\n  }\n  return best;\n}\n\nexport function sortByStart(schedule: ScheduleEntry[]): ScheduleEntry[] {\n  return [...schedule].sort((a, b) => a.range[0]! - b.range[0]!);\n}\n\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start, end] = entry.range;\n  const state = entry.cancelledAt ? ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')' : '';\n  return entry.lab + ' ' + formatTime(start!) + '–' + formatTime(end!) + ' ' + entry.bookedBy + state;\n}\n"
+        }
+      },
+      {
+        "nhan": "honest null/undefined but number[] ranges and a string[] of labs",
+        "tep": {
+          "src/schedule.ts": "// Lab 2 — attempt B (\"vừa\" = so-so): null and undefined are honest now (no \"!\", no \"as\"),\n// but a range is still number[] and the labs are still a string[] — the shapes are not written down.\nimport { parseTime, formatTime } from './time.ts';\n\nexport const LABS = ['BE-201', 'BE-202', 'AL-301'];\nexport type LabCode = string;\nexport type TimeRange = number[];   // [start, end] in minutes since 00:00\n\nexport type ScheduleEntry = {\n  id: number;\n  lab: LabCode;\n  range: TimeRange;\n  bookedBy: string;\n  note: string | null;\n  cancelledAt?: string;\n};\n\nexport function isLab(text: string): boolean {\n  return LABS.includes(text);\n}\n\nexport function toRange(text: string): TimeRange {\n  const [from, to, extra] = text.split('-');\n  if (from === undefined || to === undefined || extra !== undefined) {\n    throw new TypeError('Invalid range \"' + text + '\", expected HH:MM-HH:MM');\n  }\n  return [parseTime(from), parseTime(to)];\n}\n\nexport function findEntry(schedule: readonly ScheduleEntry[], id: number): ScheduleEntry | undefined {\n  return schedule.find((e) => e.id === id);\n}\n\nexport function noteOf(entry: ScheduleEntry): string {\n  return entry.note ?? '(no note)';\n}\n\nexport function firstStart(schedule: readonly ScheduleEntry[], lab: LabCode): number | null {\n  let best: number | null = null;\n  for (const e of schedule) {\n    const start = e.range[0];\n    if (e.lab !== lab || e.cancelledAt !== undefined || start === undefined) continue;\n    if (best === null || start < best) best = start;\n  }\n  return best;\n}\n\nexport function sortByStart(schedule: readonly ScheduleEntry[]): ScheduleEntry[] {\n  return schedule.toSorted((a, b) => (a.range[0] ?? 0) - (b.range[0] ?? 0));\n}\n\nexport function labelOf(entry: ScheduleEntry): string {\n  const [start = 0, end = 0] = entry.range;\n  const state = entry.cancelledAt === undefined ? '' : ' (cancelled ' + entry.cancelledAt.slice(0, 10) + ')';\n  return entry.lab + ' ' + formatTime(start) + '–' + formatTime(end) + ' ' + entry.bookedBy + state;\n}\n"
+        }
+      }
+    ]
   }
 ]

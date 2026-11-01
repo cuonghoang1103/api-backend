@@ -198,18 +198,18 @@ const BAY = {
 
 /* Mốc video: [thời điểm hoặc null, EN, VI]. Thời điểm điền khi bản ghép -tron xong (mo-ta-chuong.txt). */
 const MOC_PE1 = [
-  [null, 'Part 1 — reading the paper: rules, grading, schema, data, every question, the 90-minute plan', 'Phần 1 — đọc đề: luật, cách chấm, lược đồ, dữ liệu, từng câu, chia 90 phút'],
-  [null, 'Part 2 — Q1 (OUTER JOIN + FILTER) · Q2 (no fan-out)', 'Phần 2 — câu 1 (OUTER JOIN + FILTER) · câu 2 (chống fan-out)'],
-  [null, 'Part 3 — Q3 (ranking with a tie) · Q4 (a tree with a cycle)', 'Phần 3 — câu 3 (xếp hạng có hoà) · câu 4 (cây có vòng)'],
-  [null, 'Part 4 — Q5 (typed values out of jsonb) · check & submit', 'Phần 4 — câu 5 (giá trị đúng kiểu từ jsonb) · soát & nộp'],
+  ['0:00', 'Part 1 — reading the paper: rules, grading, schema, data, every question, the 90-minute plan', 'Phần 1 — đọc đề: luật, cách chấm, lược đồ, dữ liệu, từng câu, chia 90 phút'],
+  ['10:42', 'Part 2 — Q1 (OUTER JOIN + FILTER) · Q2 (no fan-out)', 'Phần 2 — câu 1 (OUTER JOIN + FILTER) · câu 2 (chống fan-out)'],
+  ['19:28', 'Part 3 — Q3 (ranking with a tie) · Q4 (a tree with a cycle)', 'Phần 3 — câu 3 (xếp hạng có hoà) · câu 4 (cây có vòng)'],
+  ['28:01', 'Part 4 — Q5 (typed values out of jsonb) · check & submit', 'Phần 4 — câu 5 (giá trị đúng kiểu từ jsonb) · soát & nộp'],
 ];
 const MOC_PE2 = [
-  [null, 'Part 1 — reading the paper: CT Shop, the starter files, grading, all ten questions, the 120-minute plan', 'Phần 1 — đọc đề: CT Shop, tệp khởi đầu, cách chấm, cả mười câu, chia 120 phút'],
-  [null, 'Part 2 — Q1 (stable paging) · Q2 (outer join and time zones)', 'Phần 2 — câu 1 (phân trang ổn định) · câu 2 (outer join và múi giờ)'],
-  [null, 'Part 3 — Q3 (fan-out and HAVING) · Q4 (NOT EXISTS vs NOT IN)', 'Phần 3 — câu 3 (fan-out và HAVING) · câu 4 (NOT EXISTS vs NOT IN)'],
-  [null, 'Part 4 — Q5 (jsonb arrays) · Q6 (rank, lag, running total)', 'Phần 4 — câu 5 (mảng trong jsonb) · câu 6 (rank, lag, luỹ tiến)'],
-  [null, 'Part 5 — Q7 (a tree of any depth) · Q8 (DDL, UPSERT, SAVEPOINT)', 'Phần 5 — câu 7 (cây mọi độ sâu) · câu 8 (DDL, UPSERT, SAVEPOINT)'],
-  [null, 'Part 6 — Q9 (BEFORE trigger) · Q10 (prove an index with EXPLAIN) · submit', 'Phần 6 — câu 9 (trigger BEFORE) · câu 10 (chứng minh chỉ mục bằng EXPLAIN) · nộp'],
+  ['0:00', 'Part 1 — reading the paper: CT Shop, the starter files, grading, all ten questions, the 120-minute plan', 'Phần 1 — đọc đề: CT Shop, tệp khởi đầu, cách chấm, cả mười câu, chia 120 phút'],
+  ['9:57', 'Part 2 — Q1 (stable paging) · Q2 (outer join and time zones)', 'Phần 2 — câu 1 (phân trang ổn định) · câu 2 (outer join và múi giờ)'],
+  ['17:19', 'Part 3 — Q3 (fan-out and HAVING) · Q4 (NOT EXISTS vs NOT IN)', 'Phần 3 — câu 3 (fan-out và HAVING) · câu 4 (NOT EXISTS vs NOT IN)'],
+  ['24:27', 'Part 4 — Q5 (jsonb arrays) · Q6 (rank, lag, running total)', 'Phần 4 — câu 5 (mảng trong jsonb) · câu 6 (rank, lag, luỹ tiến)'],
+  ['33:14', 'Part 5 — Q7 (a tree of any depth) · Q8 (DDL, UPSERT, SAVEPOINT)', 'Phần 5 — câu 7 (cây mọi độ sâu) · câu 8 (DDL, UPSERT, SAVEPOINT)'],
+  ['41:59', 'Part 6 — Q9 (BEFORE trigger) · Q10 (prove an index with EXPLAIN) · submit', 'Phần 6 — câu 9 (trigger BEFORE) · câu 10 (chứng minh chỉ mục bằng EXPLAIN) · nộp'],
 ];
 const moc = (ds, vi) => '<ul>' + ds.map(([t, en, v]) => '<li>' + (t ? '<b>' + t + '</b> — ' : '') + (vi ? v : en) + '</li>').join('') + '</ul>';
 
@@ -529,22 +529,22 @@ const BAI_PG = {
   '17.3': ['postgresql-17-3-mongodb-vs-jsonb', '17.3 — MongoDB documents vs PostgreSQL JSONB', '17.3 — Document MongoDB và JSONB của PostgreSQL'],
 };
 const MOC_FE1 = [
-  [null, 'Part 1 — Q1–7 · Section 0, ch 1–2: Docker volumes, declarative SQL, atomicity, EXPLAIN ANALYZE, float vs numeric, char(n)', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: volume Docker, SQL khai báo, tính nguyên tử, EXPLAIN ANALYZE, float vs numeric, char(n)'],
-  [null, 'Part 2 — Q8–14 · ch 2–4: timestamptz, foreign keys, GENERATED ALWAYS, ALTER TABLE, NULL in WHERE and ORDER BY', 'Phần 2 — câu 8–14 · Ch2–4: timestamptz, khoá ngoại, GENERATED ALWAYS, ALTER TABLE, NULL trong WHERE và ORDER BY'],
-  [null, 'Part 3 — Q15–21 · ch 5–7: LEFT JOIN filters, fan-out, aggregates and NULL, HAVING, NOT IN', 'Phần 3 — câu 15–21 · Ch5–7: lọc LEFT JOIN, fan-out, tổng hợp và NULL, HAVING, NOT IN'],
-  [null, 'Part 4 — Q22–28 · ch 7–9: CTEs, recursion with a cycle, window functions, composite and expression indexes', 'Phần 4 — câu 22–28 · Ch7–9: CTE, đệ quy gặp vòng, hàm cửa sổ, chỉ mục ghép và chỉ mục biểu thức'],
-  [null, 'Part 5 — Q29–35 · ch 9–11: partial indexes, reading plans, cold vs warm cache, lost update, write skew', 'Phần 5 — câu 29–35 · Ch9–11: chỉ mục một phần, đọc kế hoạch, bộ đệm lạnh/nóng, lost update, write skew'],
-  [null, 'Part 6 — Q36–42 · ch 12–14: volatility, triggers, materialized views, JSONB and GIN, full-text, connections', 'Phần 6 — câu 36–42 · Ch12–14: volatility, trigger, materialized view, JSONB và GIN, full-text, kết nối'],
-  [null, 'Part 7 — Q43–50 · ch 14–16: PgBouncer, autovacuum, backups, slots, partitions, Prisma, incidents + chapter map', 'Phần 7 — câu 43–50 · Ch14–16: PgBouncer, autovacuum, sao lưu, slot, phân vùng, Prisma, sự cố + thống kê chương'],
+  ['0:00', 'Part 1 — Q1–7 · Section 0, ch 1–2: Docker volumes, declarative SQL, atomicity, EXPLAIN ANALYZE, float vs numeric, char(n)', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: volume Docker, SQL khai báo, tính nguyên tử, EXPLAIN ANALYZE, float vs numeric, char(n)'],
+  ['12:33', 'Part 2 — Q8–14 · ch 2–4: timestamptz, foreign keys, GENERATED ALWAYS, ALTER TABLE, NULL in WHERE and ORDER BY', 'Phần 2 — câu 8–14 · Ch2–4: timestamptz, khoá ngoại, GENERATED ALWAYS, ALTER TABLE, NULL trong WHERE và ORDER BY'],
+  ['24:02', 'Part 3 — Q15–21 · ch 5–7: LEFT JOIN filters, fan-out, aggregates and NULL, HAVING, NOT IN', 'Phần 3 — câu 15–21 · Ch5–7: lọc LEFT JOIN, fan-out, tổng hợp và NULL, HAVING, NOT IN'],
+  ['35:24', 'Part 4 — Q22–28 · ch 7–9: CTEs, recursion with a cycle, window functions, composite and expression indexes', 'Phần 4 — câu 22–28 · Ch7–9: CTE, đệ quy gặp vòng, hàm cửa sổ, chỉ mục ghép và chỉ mục biểu thức'],
+  ['47:23', 'Part 5 — Q29–35 · ch 9–11: partial indexes, reading plans, cold vs warm cache, lost update, write skew', 'Phần 5 — câu 29–35 · Ch9–11: chỉ mục một phần, đọc kế hoạch, bộ đệm lạnh/nóng, lost update, write skew'],
+  ['59:37', 'Part 6 — Q36–42 · ch 12–14: volatility, triggers, materialized views, JSONB and GIN, full-text, connections', 'Phần 6 — câu 36–42 · Ch12–14: volatility, trigger, materialized view, JSONB và GIN, full-text, kết nối'],
+  ['1:12:24', 'Part 7 — Q43–50 · ch 14–16: PgBouncer, autovacuum, backups, slots, partitions, Prisma, incidents + chapter map', 'Phần 7 — câu 43–50 · Ch14–16: PgBouncer, autovacuum, sao lưu, slot, phân vùng, Prisma, sự cố + thống kê chương'],
 ];
 const MOC_FE2 = [
-  [null, 'Part 1 — Q1–7 · Section 0, ch 1–2: search_path, || vs concat(), quoted names, the four stages, WAL, division and round(), month arithmetic', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: search_path, || vs concat(), tên có ngoặc kép, bốn chặng, WAL, phép chia và round(), cộng tháng'],
-  [null, 'Part 2 — Q8–14 · ch 3–5: per-FK delete rules, NOT VALID, DISTINCT ON, BETWEEN, self-join, comma join, USING (id)', 'Phần 2 — câu 8–14 · Ch3–5: luật xoá theo từng FK, NOT VALID, DISTINCT ON, BETWEEN, self-join, nối bằng dấu phẩy, USING (id)'],
-  [null, 'Part 3 — Q15–21 · ch 6–8: GROUP BY the key, HAVING aliases, empty aggregates, scalar subqueries, EXISTS, recursive types, LAG', 'Phần 3 — câu 15–21 · Ch6–8: GROUP BY khoá chính, alias trong HAVING, tổng hợp tập rỗng, truy vấn con vô hướng, EXISTS, kiểu đệ quy, LAG'],
-  [null, 'Part 4 — Q22–28 · ch 8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, extended statistics, Rows Removed by Filter', 'Phần 4 — câu 22–28 · Ch8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, thống kê mở rộng, Rows Removed by Filter'],
-  [null, 'Part 5 — Q29–35 · ch 10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC and ctid, CHECK OPTION, view updatability, procedures', 'Phần 5 — câu 29–35 · Ch10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC và ctid, CHECK OPTION, view cập nhật được, procedure'],
-  [null, 'Part 6 — Q36–42 · ch 13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigrams, VACUUM blocked, wraparound, pool arithmetic, pg_dump formats', 'Phần 6 — câu 36–42 · Ch13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigram, VACUUM bị chặn, wraparound, phép nhân pool, định dạng pg_dump'],
-  [null, 'Part 7 — Q43–50 · ch 15–17: DEFAULT partitions, async replicas, lock queues, read-your-writes, pg_stat_user_tables, four databases + chapter map', 'Phần 7 — câu 43–50 · Ch15–17: phân vùng DEFAULT, bản sao async, hàng đợi khoá, đọc sau ghi, pg_stat_user_tables, bốn hệ CSDL + thống kê chương'],
+  ['0:00', 'Part 1 — Q1–7 · Section 0, ch 1–2: search_path, || vs concat(), quoted names, the four stages, WAL, division and round(), month arithmetic', 'Phần 1 — câu 1–7 · Mục 0, Ch1–2: search_path, || vs concat(), tên có ngoặc kép, bốn chặng, WAL, phép chia và round(), cộng tháng'],
+  ['11:37', 'Part 2 — Q8–14 · ch 3–5: per-FK delete rules, NOT VALID, DISTINCT ON, BETWEEN, self-join, comma join, USING (id)', 'Phần 2 — câu 8–14 · Ch3–5: luật xoá theo từng FK, NOT VALID, DISTINCT ON, BETWEEN, self-join, nối bằng dấu phẩy, USING (id)'],
+  ['22:35', 'Part 3 — Q15–21 · ch 6–8: GROUP BY the key, HAVING aliases, empty aggregates, scalar subqueries, EXISTS, recursive types, LAG', 'Phần 3 — câu 15–21 · Ch6–8: GROUP BY khoá chính, alias trong HAVING, tổng hợp tập rỗng, truy vấn con vô hướng, EXISTS, kiểu đệ quy, LAG'],
+  ['33:10', 'Part 4 — Q22–28 · ch 8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, extended statistics, Rows Removed by Filter', 'Phần 4 — câu 22–28 · Ch8–10: ntile, count(*) OVER (), text_pattern_ops, Heap Fetches, BRIN, thống kê mở rộng, Rows Removed by Filter'],
+  ['44:42', 'Part 5 — Q29–35 · ch 10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC and ctid, CHECK OPTION, view updatability, procedures', 'Phần 5 — câu 29–35 · Ch10–12: work_mem, SAVEPOINT, SKIP LOCKED, MVCC và ctid, CHECK OPTION, view cập nhật được, procedure'],
+  ['55:28', 'Part 6 — Q36–42 · ch 13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigrams, VACUUM blocked, wraparound, pool arithmetic, pg_dump formats', 'Phần 6 — câu 36–42 · Ch13–15: -&gt; vs -&gt;&gt;, to_tsquery, trigram, VACUUM bị chặn, wraparound, phép nhân pool, định dạng pg_dump'],
+  ['1:07:19', 'Part 7 — Q43–50 · ch 15–17: DEFAULT partitions, async replicas, lock queues, read-your-writes, pg_stat_user_tables, four databases + chapter map', 'Phần 7 — câu 43–50 · Ch15–17: phân vùng DEFAULT, bản sao async, hàng đợi khoá, đọc sau ghi, pg_stat_user_tables, bốn hệ CSDL + thống kê chương'],
 ];
 /** [câu, chủ đề EN, chủ đề VI, bài 'x.y'] — thứ tự gốc của tệp đề (Phòng thi xáo câu). */
 const ROWS_FE1 = [

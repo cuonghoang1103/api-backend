@@ -590,7 +590,7 @@ git config --global push.autoSetupRemote true    <span class="tok-comment"># do 
 ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">The remote has commits you do not. Someone pushed while you were working. <strong>Pull (or fetch + rebase), then push.</strong> Never force.</span></div>
-  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.3).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.2).</span></div>
   <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.5).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
@@ -600,7 +600,7 @@ hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
 <pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># the correct response, nine times in ten</span></code></pre>
-<div class="callout danger">The wrong response is <code>git push --force</code>. It tells the server "discard whatever you have and take mine" — and whatever it had was your colleague's commits, which are now gone from the server. If they have them locally they can restore them; if the only copy was on the server, that work is destroyed. Chapter 8.3 covers <code>--force-with-lease</code>, which refuses in exactly this situation.</div>
+<div class="callout danger">The wrong response is <code>git push --force</code>. It tells the server "discard whatever you have and take mine" — and whatever it had was your colleague's commits, which are now gone from the server. If they have them locally they can restore them; if the only copy was on the server, that work is destroyed. Chapter 8.2 covers <code>--force-with-lease</code>, which refuses in exactly this situation.</div>
 <div class="callout warn"><strong>"non-fast-forward" does not always mean you rewrote history.</strong> Git picks the wording by what your machine already has. Real output from our test repository, same situation twice — An pushed, Cường has one commit of his own:
 <div class="out"><span class="tok-comment"># before fetching:</span>
  ! [rejected]        main -&gt; main (fetch first)
@@ -711,7 +711,7 @@ git config --global push.autoSetupRemote true    <span class="tok-comment"># t�
 ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">Remote có commit bạn chưa có. Ai đó đã push trong lúc bạn làm việc. <strong>Hãy pull (hoặc fetch + rebase), rồi push.</strong> Đừng bao giờ ép.</span></div>
-  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.3).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.2).</span></div>
   <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.5).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
@@ -721,7 +721,7 @@ hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
 <pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># cách đáp đúng, chín trên mười lần</span></code></pre>
-<div class="callout danger">Cách đáp SAI là <code>git push --force</code>. Nó nói với máy chủ "vứt đi cái ngươi đang có và nhận cái của ta" — và cái nó đang có là commit của đồng nghiệp bạn, giờ đã biến mất khỏi máy chủ. Nếu họ còn bản cục bộ thì khôi phục được; nếu bản duy nhất nằm trên máy chủ thì phần việc đó bị huỷ. Bài 8.3 nói về <code>--force-with-lease</code>, thứ sẽ từ chối đúng trong tình huống này.</div>
+<div class="callout danger">Cách đáp SAI là <code>git push --force</code>. Nó nói với máy chủ "vứt đi cái ngươi đang có và nhận cái của ta" — và cái nó đang có là commit của đồng nghiệp bạn, giờ đã biến mất khỏi máy chủ. Nếu họ còn bản cục bộ thì khôi phục được; nếu bản duy nhất nằm trên máy chủ thì phần việc đó bị huỷ. Bài 8.2 nói về <code>--force-with-lease</code>, thứ sẽ từ chối đúng trong tình huống này.</div>
 <div class="callout warn"><strong>"non-fast-forward" không phải lúc nào cũng có nghĩa là bạn đã viết lại lịch sử.</strong> Git chọn câu chữ theo thứ máy bạn đã có. Output thật từ kho thử, cùng một tình huống hai lần — An đã push, Cường có một commit của riêng mình:
 <div class="out"><span class="tok-comment"># trước khi fetch:</span>
  ! [rejected]        main -&gt; main (fetch first)

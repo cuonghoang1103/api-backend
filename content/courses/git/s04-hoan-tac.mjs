@@ -88,7 +88,7 @@ ${slide('git-04', 4, 'Cả chương trong một bảng')}
 ${slide('git-04', 5, 'Đã push chưa? — lằn ranh quyết định lệnh nào')}
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">local only</div><div class="lz-t">Anything goes</div><div class="lz-d">reset, rebase, amend. Nobody else can be affected, and the reflog protects you.</div></div>
-  <div class="lz-step"><div class="lz-k">pushed, branch is yours</div><div class="lz-t">Rewrite with care</div><div class="lz-d">reset/rebase then <code>--force-with-lease</code> (8.3). Fine on a personal feature branch.</div></div>
+  <div class="lz-step"><div class="lz-k">pushed, branch is yours</div><div class="lz-t">Rewrite with care</div><div class="lz-d">reset/rebase then <code>--force-with-lease</code> (8.2). Fine on a personal feature branch.</div></div>
   <div class="lz-step"><div class="lz-k">pushed and shared</div><div class="lz-t">revert only</div><div class="lz-d">Adding a new commit is the only operation that does not break other people's clones.</div></div>
 </div>
 <p>Check before acting, rather than guessing:</p>
@@ -175,7 +175,7 @@ ${slide('git-04', 4, 'Cả chương trong một bảng')}
 ${slide('git-04', 5, 'Đã push chưa? — lằn ranh quyết định lệnh nào')}
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">chỉ cục bộ</div><div class="lz-t">Làm gì cũng được</div><div class="lz-d">reset, rebase, amend. Không ai khác bị ảnh hưởng, và reflog bảo vệ bạn.</div></div>
-  <div class="lz-step"><div class="lz-k">đã push, nhánh của bạn</div><div class="lz-t">Viết lại cẩn thận</div><div class="lz-d">reset/rebase rồi <code>--force-with-lease</code> (bài 8.3). Ổn trên nhánh tính năng cá nhân.</div></div>
+  <div class="lz-step"><div class="lz-k">đã push, nhánh của bạn</div><div class="lz-t">Viết lại cẩn thận</div><div class="lz-d">reset/rebase rồi <code>--force-with-lease</code> (bài 8.2). Ổn trên nhánh tính năng cá nhân.</div></div>
   <div class="lz-step"><div class="lz-k">đã push và đã chia sẻ</div><div class="lz-t">Chỉ revert</div><div class="lz-d">Thêm một commit mới là thao tác duy nhất không làm hỏng bản clone của người khác.</div></div>
 </div>
 <p>Hãy kiểm trước khi hành động, thay vì đoán:</p>
@@ -554,7 +554,7 @@ prepared in #431.</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">Database migrations</span><span class="v">Reverting the code does <em>not</em> reverse a schema change or the data it transformed. You need a down-migration, planned separately.</span></div>
   <div class="kv"><span class="k">Anything already sent</span><span class="v">Emails, webhooks, payments, push notifications. The commit is undone; the effects are not.</span></div>
-  <div class="kv"><span class="k">Leaked secrets</span><span class="v">The credential is still in the old commit and in every clone. Rotate it, then clean history (8.4).</span></div>
+  <div class="kv"><span class="k">Leaked secrets</span><span class="v">The credential is still in the old commit and in every clone. Rotate it, then clean history (8.3).</span></div>
   <div class="kv"><span class="k">Deployed artefacts</span><span class="v">Reverting the source does nothing until you deploy again. Reverting <em>is not</em> rolling back.</span></div>
 </div>
 
@@ -661,7 +661,7 @@ thật. Lùi lại ngay bây giờ; bản gộp theo lô đang được chuẩn 
 <div class="kv-grid">
   <div class="kv"><span class="k">Migration cơ sở dữ liệu</span><span class="v">Revert mã <em>không</em> đảo ngược một thay đổi schema hay dữ liệu nó đã biến đổi. Bạn cần một migration đi xuống, lên kế hoạch riêng.</span></div>
   <div class="kv"><span class="k">Mọi thứ đã gửi đi</span><span class="v">Email, webhook, thanh toán, thông báo đẩy. Commit bị huỷ; tác dụng thì không.</span></div>
-  <div class="kv"><span class="k">Bí mật bị lộ</span><span class="v">Chứng chỉ vẫn nằm trong commit cũ và trong mọi bản clone. Hãy xoay khoá, rồi dọn lịch sử (bài 8.4).</span></div>
+  <div class="kv"><span class="k">Bí mật bị lộ</span><span class="v">Chứng chỉ vẫn nằm trong commit cũ và trong mọi bản clone. Hãy xoay khoá, rồi dọn lịch sử (bài 8.3).</span></div>
   <div class="kv"><span class="k">Thứ đã deploy</span><span class="v">Revert mã nguồn chẳng làm gì cho tới khi bạn deploy lại. Revert <em>không phải</em> là rollback.</span></div>
 </div>
 

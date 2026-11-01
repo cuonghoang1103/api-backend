@@ -597,7 +597,7 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p also prints the diff of each hit</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># every commit that touched an env var read</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># across ALL branches — a mini secret audit</span></code></pre>
-<div class="callout warn">That last one is worth running on any repository you inherit. <code>git log -G"password|api_key" --all</code> finds credentials that were committed and later deleted (use one regex with <code>|</code>: if you write <code>-S"password" -S"api_key"</code>, Git silently keeps only the <em>last</em> <code>-S</code> and searches for <code>api_key</code> alone) — deleted from the working tree, still in every clone. Chapter 8.4 covers removing them properly; finding them is step one.</div>
+<div class="callout warn">That last one is worth running on any repository you inherit. <code>git log -G"password|api_key" --all</code> finds credentials that were committed and later deleted (use one regex with <code>|</code>: if you write <code>-S"password" -S"api_key"</code>, Git silently keeps only the <em>last</em> <code>-S</code> and searches for <code>api_key</code> alone) — deleted from the working tree, still in every clone. Chapter 8.3 covers removing them properly; finding them is step one.</div>
 
 <h3>Following a file through renames</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}
@@ -703,7 +703,7 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p in luôn diff của từng kết quả</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># mọi commit chạm vào việc đọc biến môi trường</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># trên MỌI nhánh — một cuộc soát bí mật thu nhỏ</span></code></pre>
-<div class="callout warn">Lệnh cuối đáng chạy trên bất kỳ kho mã nào bạn tiếp quản. <code>git log -G"password|api_key" --all</code> tìm ra những chứng chỉ từng được commit rồi xoá đi (dùng MỘT biểu thức với <code>|</code>: nếu viết <code>-S"password" -S"api_key"</code> thì Git lặng lẽ chỉ giữ <code>-S</code> <em>cuối cùng</em> và chỉ tìm <code>api_key</code>) — xoá khỏi cây làm việc, nhưng vẫn nằm trong mọi bản clone. Chương 8.4 nói cách gỡ chúng cho đúng; tìm ra chúng là bước một.</div>
+<div class="callout warn">Lệnh cuối đáng chạy trên bất kỳ kho mã nào bạn tiếp quản. <code>git log -G"password|api_key" --all</code> tìm ra những chứng chỉ từng được commit rồi xoá đi (dùng MỘT biểu thức với <code>|</code>: nếu viết <code>-S"password" -S"api_key"</code> thì Git lặng lẽ chỉ giữ <code>-S</code> <em>cuối cùng</em> và chỉ tìm <code>api_key</code>) — xoá khỏi cây làm việc, nhưng vẫn nằm trong mọi bản clone. Chương 8.3 nói cách gỡ chúng cho đúng; tìm ra chúng là bước một.</div>
 
 <h3>Bám theo một file qua các lần đổi tên</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}

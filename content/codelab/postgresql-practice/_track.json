@@ -76,16 +76,64 @@
       "description": "Luyện: An enum for ticket priority · Posts tagged sql, with their tag count · Read product attributes from jsonb · API keys with a uuid primary key"
     },
     {
+      "slug": "postgresql-3-1-khoa-chinh",
+      "name": "3.1 Primary keys: the identity of a row",
+      "level": "BEGINNER",
+      "description": "Luyện: A natural key for tags · A composite key for a link table · Surrogate or natural key? · CT Shop wishlist: one heart per product"
+    },
+    {
+      "slug": "postgresql-3-2-khoa-ngoai",
+      "name": "3.2 Foreign keys & referential integrity",
+      "level": "BEGINNER",
+      "description": "Luyện: Delete a user the foreign key allows · Comments die with their post: ON DELETE CASCADE · Choose ON DELETE for every CT Shop link · Notes that outlive their author: ON DELETE SET NULL"
+    },
+    {
+      "slug": "postgresql-3-3-rang-buoc-cot",
+      "name": "3.3 Column constraints: NOT NULL, DEFAULT, UNIQUE, CHECK & generated columns",
+      "level": "BEGINNER",
+      "description": "Luyện: Five rules on one product table · A generated final price that can never be wrong · A named composite UNIQUE for enrollments · CT Shop promotions with a table-level CHECK"
+    },
+    {
+      "slug": "postgresql-3-4-alter-chuan-hoa",
+      "name": "3.4 Evolving a schema: ALTER TABLE & normalization",
+      "level": "BEGINNER",
+      "description": "Luyện: Grow a table that already has rows · Add a required column the safe way: add, backfill, enforce · Normalize orders_bad into customer + orders · Which ALTER is instant, which rewrites, which scans?"
+    },
+    {
+      "slug": "postgresql-lab-1-luoc-do-ct-shop",
+      "name": "3.5 Lab 1 — CT Shop: from ERD to a working schema",
+      "level": "BEGINNER",
+      "description": "Luyện: Lab 1 — CT Shop: the 8 tables, every rule enforced by the database"
+    },
+    {
       "slug": "postgresql-4-1-insert",
       "name": "4.1 INSERT: many rows, RETURNING & UPSERT",
       "level": "BEGINNER",
-      "description": "Luyện: Add a category and get its new id back · Three new books in one statement · Receive a delivery with UPSERT"
+      "description": "Luyện: Let DEFAULT do the work · Add a category and get its new id back · Three new books in one statement · Count tag hits with ON CONFLICT · Receive a delivery with UPSERT"
+    },
+    {
+      "slug": "postgresql-4-2-select-where",
+      "name": "4.2 SELECT & WHERE: getting exactly the rows you want",
+      "level": "BEGINNER",
+      "description": "Luyện: Computed columns: which notes are popular? · AND, IN and BETWEEN on dates · Search titles: LIKE vs ILIKE · The NULL trap: \"not sql\" must include untagged notes · Cheap pens that can ship today"
     },
     {
       "slug": "postgresql-4-3-order-limit-distinct",
       "name": "4.3 ORDER BY, LIMIT/OFFSET & DISTINCT ON",
       "level": "BEGINNER",
-      "description": "Luyện: The three most expensive products on sale · Page 2 of the catalogue · Each customer's latest order (DISTINCT ON)"
+      "description": "Luyện: Distinct tags, unknown last · The three most expensive products on sale · Page 2 of the catalogue · Each customer's latest order (DISTINCT ON)"
+    },
+    {
+      "slug": "postgresql-4-4-update-delete",
+      "name": "4.4 UPDATE & DELETE — safely",
+      "level": "BEGINNER",
+      "description": "Luyện: Count one more view · Unpin, and report only what really changed · Delete empty drafts and keep the receipt · Raise calculator prices by 10 % (UPDATE … FROM) · Purge old cancelled orders — exactly those"
+    },
+    {
+      "slug": "postgresql-lab-2-nap-truy-van-ct-shop",
+      "name": "4.5 Lab 2 — CT Shop: fill the shop, ask it questions",
+      "level": "BEGINNER",
+      "description": "Luyện: Lab 2 — CT Shop: a price list, four questions and one safe clean-up"
     },
     {
       "slug": "postgresql-7-4-recursive-cte",

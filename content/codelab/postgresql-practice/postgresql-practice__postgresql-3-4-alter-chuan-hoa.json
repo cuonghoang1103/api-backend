@@ -1,0 +1,711 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-3-4-alter-chuan-hoa",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-3-4-alter-chuan-hoa"
+  },
+  "exercises": [
+    {
+      "title": "Grow a table that already has rows",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ADD COLUMN",
+        "SET NOT NULL",
+        "ADD CONSTRAINT … CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "ddl",
+        "alter"
+      ],
+      "problemHtml": "<p>Evolve <code>contact</code> without losing rows: add an optional <code>email text</code>; add <code>status text</code> that is required and starts as <code>active</code> for everyone; make <code>name</code> required; and allow only <code>active</code> / <code>archived</code> as status through a CHECK named <code>contact_status_chk</code>.</p>\n<pre>contact (id int PK, name text NULL) — 3 rows</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Four ALTER TABLE statements (or one with four actions).</li>\n  <li>Existing rows end up with status <code>active</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nâng cấp <code>contact</code> mà không mất dòng: thêm <code>email text</code> không bắt buộc; thêm <code>status text</code> bắt buộc và mọi người bắt đầu là <code>active</code>; cho <code>name</code> thành bắt buộc; và chỉ cho status là <code>active</code> / <code>archived</code> bằng CHECK tên <code>contact_status_chk</code>.</p>\n<pre>contact (id int PK, name text NULL) — 3 dòng</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bốn lệnh ALTER TABLE (hoặc một lệnh với bốn hành động).</li>\n  <li>Dòng cũ kết thúc với status <code>active</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | name  | email | status\n---+-------+-------+-------\n1  | Cuong | NULL  | active\n2  | Lan   | NULL  | active\n3  | Minh  | NULL  | active",
+          "explanation": "Expected result of check \"Old rows: email NULL, status active\" (row order matters).|||Kết quả mong đợi của kiểm \"Dòng cũ: email NULL, status active\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>ADD COLUMN … NOT NULL DEFAULT 'active'</code> works on a table with rows because the default fills them.|||<code>ADD COLUMN … NOT NULL DEFAULT 'active'</code> chạy được trên bảng có dòng vì mặc định điền vào chúng.",
+        "<code>ALTER COLUMN name SET NOT NULL</code> succeeds only if no row has a NULL name.|||<code>ALTER COLUMN name SET NOT NULL</code> chỉ thành công khi không dòng nào có name NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "contact.sql",
+          "language": "sql",
+          "code": "-- contact.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- contact.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE contact ADD COLUMN email text;                              -- nullable: instant\nALTER TABLE contact ADD COLUMN status text NOT NULL DEFAULT 'active';    -- the default fills old rows\nALTER TABLE contact ALTER COLUMN name SET NOT NULL;                      -- checks every row, then enforces\nALTER TABLE contact ADD CONSTRAINT contact_status_chk CHECK (status IN ('active', 'archived'));\n"
+        },
+        {
+          "name": "contact.sql",
+          "language": "sql",
+          "code": "-- contact.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- contact.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Since PostgreSQL 11, ADD COLUMN with a constant default is instant (no rewrite). SET NOT NULL and ADD CONSTRAINT CHECK scan the table once to prove existing rows comply, then enforce the rule forever.</p>",
+      "solutionExplanationHtmlVi": "<p>Từ PostgreSQL 11, ADD COLUMN với mặc định hằng là tức thì (không viết lại bảng). SET NOT NULL và ADD CONSTRAINT CHECK quét bảng một lần để chứng minh dòng cũ thoả, rồi áp luật mãi mãi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Old rows: email NULL, status active|||Dòng cũ: email NULL, status active",
+            "kiemTra": "SELECT id, name, email, status FROM contact ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "name",
+                "email",
+                "status"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Cuong",
+                  null,
+                  "active"
+                ],
+                [
+                  2,
+                  "Lan",
+                  null,
+                  "active"
+                ],
+                [
+                  3,
+                  "Minh",
+                  null,
+                  "active"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "status = deleted is rejected|||status = deleted bị chặn",
+            "thu": "UPDATE contact SET status = 'deleted' WHERE id = 1",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A contact without name is rejected|||Liên hệ không tên bị chặn",
+            "thu": "INSERT INTO contact (id) VALUES (9)",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Archiving is allowed|||Lưu trữ thì được",
+            "thu": "UPDATE contact SET status = 'archived' WHERE id = 2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "status cannot be set to NULL|||Không đặt được status = NULL",
+            "thu": "UPDATE contact SET status = NULL WHERE id = 1",
+            "maLoi": "23502",
+            "an": true
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Constraint name|||Tên ràng buộc",
+            "kiemTra": "SELECT conname FROM pg_constraint WHERE conrelid = 'contact'::regclass AND contype = 'c'",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "conname"
+              ],
+              "hang": [
+                [
+                  "contact_status_chk"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>ADD COLUMN phone text NOT NULL</code> with no default on a table with rows: <code>column \"phone\" contains null values</code>.|||<code>ADD COLUMN phone text NOT NULL</code> không mặc định trên bảng có dòng: <code>column \"phone\" contains null values</code>."
+        },
+        {
+          "loi": "Default without NOT NULL: an explicit NULL status can still be written.|||Có mặc định mà thiếu NOT NULL: vẫn ghi được status NULL tường minh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ALTER TABLE",
+          "vi": "sửa cấu trúc bảng"
+        }
+      ]
+    },
+    {
+      "title": "Add a required column the safe way: add, backfill, enforce",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "expand → backfill → contract",
+        "UPDATE backfill",
+        "SET NOT NULL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "ddl",
+        "alter",
+        "migration"
+      ],
+      "problemHtml": "<p>Every contact now needs a <code>phone</code>. Support already collected two numbers: Cuong <code>0901000001</code>, Lan <code>0902000002</code>; Minh has none yet and must get the placeholder <code>unknown</code>. Afterwards new contacts must not be created without a phone, and there must be <b>no</b> default (a forgotten phone should fail loudly). <code>ALTER TABLE contact ADD COLUMN phone text NOT NULL</code> fails on a table with rows — do it in steps.</p>\n<pre>contact (id int PK, name text) — 1 Cuong, 2 Lan, 3 Minh</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>1) ADD COLUMN phone text (nullable) · 2) UPDATE the rows · 3) SET NOT NULL.</li>\n  <li>No DEFAULT left on the column at the end.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi liên hệ giờ cần <code>phone</code>. Bộ phận hỗ trợ đã có hai số: Cuong <code>0901000001</code>, Lan <code>0902000002</code>; Minh chưa có và nhận giá trị tạm <code>unknown</code>. Sau đó không được tạo liên hệ mới thiếu số, và <b>không</b> có mặc định (quên số phải lỗi rõ ràng). <code>ALTER TABLE contact ADD COLUMN phone text NOT NULL</code> lỗi trên bảng có dòng — làm theo từng bước.</p>\n<pre>contact (id int PK, name text) — 1 Cuong, 2 Lan, 3 Minh</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>1) ADD COLUMN phone text (cho phép NULL) · 2) UPDATE các dòng · 3) SET NOT NULL.</li>\n  <li>Cuối cùng cột không còn DEFAULT.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | name  | phone     \n---+-------+-----------\n1  | Cuong | 0901000001\n2  | Lan   | 0902000002\n3  | Minh  | unknown   ",
+          "explanation": "Expected result of check \"Phones after the migration\" (row order matters).|||Kết quả mong đợi của kiểm \"Số điện thoại sau migration\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Expand first (nullable column), contract last (NOT NULL).|||Mở rộng trước (cột cho phép NULL), siết lại sau cùng (NOT NULL).",
+        "Fill the unknown rows with <code>WHERE phone IS NULL</code>.|||Điền dòng chưa biết bằng <code>WHERE phone IS NULL</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "contact.sql",
+          "language": "sql",
+          "code": "-- contact.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- contact.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "ALTER TABLE contact ADD COLUMN phone text;                       -- expand: nullable, instant\nUPDATE contact SET phone = CASE id WHEN 1 THEN '0901000001'\n                                   WHEN 2 THEN '0902000002' END;  -- backfill what we know\nUPDATE contact SET phone = 'unknown' WHERE phone IS NULL;           -- placeholder for the rest\nALTER TABLE contact ALTER COLUMN phone SET NOT NULL;                -- contract: enforce from now on\n"
+        },
+        {
+          "name": "contact.sql",
+          "language": "sql",
+          "code": "-- contact.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- contact.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The expand → backfill → contract pattern is how production migrations add required data: each step is valid on its own, and the final constraint only goes on once the data obeys it. Chapter 16 uses the same pattern with Prisma.</p>",
+      "solutionExplanationHtmlVi": "<p>Mẫu mở rộng → điền dữ liệu → siết lại là cách migration trên production thêm dữ liệu bắt buộc: mỗi bước tự hợp lệ, và ràng buộc cuối chỉ được đặt khi dữ liệu đã tuân theo. Chương 16 dùng lại mẫu này với Prisma.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE contact (id int PRIMARY KEY, name text);\nINSERT INTO contact VALUES (1, 'Cuong'), (2, 'Lan'), (3, 'Minh');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Phones after the migration|||Số điện thoại sau migration",
+            "kiemTra": "SELECT id, name, phone FROM contact ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "name",
+                "phone"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Cuong",
+                  "0901000001"
+                ],
+                [
+                  2,
+                  "Lan",
+                  "0902000002"
+                ],
+                [
+                  3,
+                  "Minh",
+                  "unknown"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A new contact without phone fails loudly|||Liên hệ mới thiếu số lỗi rõ ràng",
+            "thu": "INSERT INTO contact (id, name) VALUES (9, 'Hoa')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "No default on phone|||Cột phone không có mặc định",
+            "kiemTra": "SELECT column_default IS NULL AS no_default, is_nullable FROM information_schema.columns WHERE table_name = 'contact' AND column_name = 'phone'",
+            "mongDoi": {
+              "cot": [
+                "no_default",
+                "is_nullable"
+              ],
+              "hang": [
+                [
+                  true,
+                  "NO"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Works when there are more contacts|||Đúng khi có thêm liên hệ",
+            "kiemTra": "SELECT count(*) FILTER (WHERE phone = 'unknown') AS unknown_phones FROM contact",
+            "an": true,
+            "themCsdl": "INSERT INTO contact VALUES (4, 'Hoa'), (5, 'Khoa')",
+            "mongDoi": {
+              "cot": [
+                "unknown_phones"
+              ],
+              "hang": [
+                [
+                  3
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding <code>NOT NULL DEFAULT 'unknown'</code>: it works, but the default stays and every future contact silently gets \"unknown\".|||Thêm <code>NOT NULL DEFAULT 'unknown'</code>: chạy được, nhưng mặc định ở lại và mọi liên hệ sau này lặng lẽ nhận \"unknown\"."
+        },
+        {
+          "loi": "SET NOT NULL before the backfill is complete: <code>column \"phone\" contains null values</code>.|||SET NOT NULL khi chưa điền xong: <code>column \"phone\" contains null values</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backfill",
+          "vi": "điền dữ liệu cho dòng cũ"
+        },
+        {
+          "en": "expand / contract",
+          "vi": "mở rộng / siết lại"
+        }
+      ]
+    },
+    {
+      "title": "Normalize orders_bad into customer + orders",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "INSERT … SELECT DISTINCT",
+        "join back to get ids",
+        "update anomaly"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "normalization",
+        "dml"
+      ],
+      "problemHtml": "<p>The old table repeats each customer's city on every order — the update anomaly of lesson 3.4. Move the data into the normalized tables (already created, empty): one row per customer in <code>customer</code> (name, city), then every order in <code>orders</code> with the same id, pointing at its customer's new id.</p>\n<pre>orders_bad (order_id PK, customer_name, customer_city, product, amount) — 5 rows, customers repeated\ncustomer (id identity PK, name UNIQUE, city)            — empty\norders   (id PK, customer_id → customer, product, amount) — empty</pre>\n<h4>Requirements</h4>\n<ul>\n  <li><code>INSERT INTO customer (name, city) SELECT DISTINCT … FROM orders_bad</code>.</li>\n  <li><code>INSERT INTO orders … SELECT … FROM orders_bad JOIN customer ON customer.name = orders_bad.customer_name</code> — never hard-code ids.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng cũ lặp thành phố của khách trên mọi đơn — dị thường cập nhật của bài 3.4. Chuyển dữ liệu sang các bảng đã chuẩn hoá (đã tạo sẵn, đang rỗng): mỗi khách một dòng trong <code>customer</code> (name, city), rồi mọi đơn vào <code>orders</code> giữ nguyên id, trỏ tới id mới của khách.</p>\n<pre>orders_bad (order_id PK, customer_name, customer_city, product, amount) — 5 dòng, khách lặp lại\ncustomer (id identity PK, name UNIQUE, city)            — rỗng\norders   (id PK, customer_id → customer, product, amount) — rỗng</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>INSERT INTO customer (name, city) SELECT DISTINCT … FROM orders_bad</code>.</li>\n  <li><code>INSERT INTO orders … SELECT … FROM orders_bad JOIN customer ON customer.name = orders_bad.customer_name</code> — không ghi cứng id.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name  | city  \n------+-------\nCuong | Hanoi \nLan   | Danang\nMinh  | Hue   ",
+          "explanation": "Expected result of check \"Three customers, each once\" (row order matters).|||Kết quả mong đợi của kiểm \"Ba khách, mỗi người một lần\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "First the parent rows (customer), then the children (orders) — the foreign key needs that order.|||Dòng cha (customer) trước, dòng con (orders) sau — khoá ngoại cần đúng thứ tự đó.",
+        "Find each order's customer id by joining on the name you just inserted.|||Tìm id khách của mỗi đơn bằng cách nối theo tên vừa chèn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "orders_bad.sql",
+          "language": "sql",
+          "code": "-- orders_bad.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- orders_bad.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE orders_bad (\n  order_id      int PRIMARY KEY,\n  customer_name text,\n  customer_city text,\n  product       text,\n  amount        numeric(12,2)\n);\nINSERT INTO orders_bad VALUES\n (1, 'Cuong', 'Hanoi',  'Keyboard', 100),\n (2, 'Cuong', 'Hanoi',  'Mouse',     50),\n (3, 'Lan',   'Danang', 'Monitor',  300),\n (4, 'Minh',  'Hue',    'Cable',     15),\n (5, 'Lan',   'Danang', 'Webcam',    80);\nCREATE TABLE customer (\n  id   int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name text NOT NULL UNIQUE,\n  city text\n);\nCREATE TABLE orders (\n  id          int PRIMARY KEY,\n  customer_id int NOT NULL REFERENCES customer(id),\n  product     text NOT NULL,\n  amount      numeric(12,2) NOT NULL CHECK (amount >= 0)\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "INSERT INTO customer (name, city)\nSELECT DISTINCT customer_name, customer_city      -- one fact, one place\nFROM orders_bad\nORDER BY customer_name;\n\nINSERT INTO orders (id, customer_id, product, amount)\nSELECT b.order_id, c.id, b.product, b.amount\nFROM orders_bad b\nJOIN customer c ON c.name = b.customer_name;      -- look the new id up, do not guess it\n"
+        },
+        {
+          "name": "orders_bad.sql",
+          "language": "sql",
+          "code": "-- orders_bad.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- orders_bad.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE orders_bad (\n  order_id      int PRIMARY KEY,\n  customer_name text,\n  customer_city text,\n  product       text,\n  amount        numeric(12,2)\n);\nINSERT INTO orders_bad VALUES\n (1, 'Cuong', 'Hanoi',  'Keyboard', 100),\n (2, 'Cuong', 'Hanoi',  'Mouse',     50),\n (3, 'Lan',   'Danang', 'Monitor',  300),\n (4, 'Minh',  'Hue',    'Cable',     15),\n (5, 'Lan',   'Danang', 'Webcam',    80);\nCREATE TABLE customer (\n  id   int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name text NOT NULL UNIQUE,\n  city text\n);\nCREATE TABLE orders (\n  id          int PRIMARY KEY,\n  customer_id int NOT NULL REFERENCES customer(id),\n  product     text NOT NULL,\n  amount      numeric(12,2) NOT NULL CHECK (amount >= 0)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Normalizing means each fact (where a customer lives) is stored once. INSERT … SELECT DISTINCT builds the parent table from the repeated data; joining back on the natural attribute (name) maps every old row to the new surrogate id.</p>",
+      "solutionExplanationHtmlVi": "<p>Chuẩn hoá nghĩa là mỗi sự kiện (khách sống ở đâu) chỉ lưu một lần. INSERT … SELECT DISTINCT dựng bảng cha từ dữ liệu lặp; nối ngược theo thuộc tính tự nhiên (tên) ánh xạ mỗi dòng cũ sang id thay thế mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE orders_bad (\n  order_id      int PRIMARY KEY,\n  customer_name text,\n  customer_city text,\n  product       text,\n  amount        numeric(12,2)\n);\nINSERT INTO orders_bad VALUES\n (1, 'Cuong', 'Hanoi',  'Keyboard', 100),\n (2, 'Cuong', 'Hanoi',  'Mouse',     50),\n (3, 'Lan',   'Danang', 'Monitor',  300),\n (4, 'Minh',  'Hue',    'Cable',     15),\n (5, 'Lan',   'Danang', 'Webcam',    80);\nCREATE TABLE customer (\n  id   int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name text NOT NULL UNIQUE,\n  city text\n);\nCREATE TABLE orders (\n  id          int PRIMARY KEY,\n  customer_id int NOT NULL REFERENCES customer(id),\n  product     text NOT NULL,\n  amount      numeric(12,2) NOT NULL CHECK (amount >= 0)\n);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Three customers, each once|||Ba khách, mỗi người một lần",
+            "kiemTra": "SELECT name, city FROM customer ORDER BY name",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "name",
+                "city"
+              ],
+              "hang": [
+                [
+                  "Cuong",
+                  "Hanoi"
+                ],
+                [
+                  "Lan",
+                  "Danang"
+                ],
+                [
+                  "Minh",
+                  "Hue"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Every order points at the right customer|||Mọi đơn trỏ đúng khách",
+            "kiemTra": "SELECT o.id, c.name, o.product, o.amount FROM orders o JOIN customer c ON c.id = o.customer_id ORDER BY o.id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "name",
+                "product",
+                "amount"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Cuong",
+                  "Keyboard",
+                  100
+                ],
+                [
+                  2,
+                  "Cuong",
+                  "Mouse",
+                  50
+                ],
+                [
+                  3,
+                  "Lan",
+                  "Monitor",
+                  300
+                ],
+                [
+                  4,
+                  "Minh",
+                  "Cable",
+                  15
+                ],
+                [
+                  5,
+                  "Lan",
+                  "Webcam",
+                  80
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Now a move to Saigon is ONE update|||Giờ chuyển nhà vào Sài Gòn chỉ là MỘT lệnh cập nhật",
+            "kiemTra": "UPDATE customer SET city = 'Saigon' WHERE name = 'Cuong'; SELECT o.id, c.city FROM orders o JOIN customer c ON c.id = o.customer_id WHERE c.name = 'Cuong' ORDER BY o.id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "city"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Saigon"
+                ],
+                [
+                  2,
+                  "Saigon"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Works with more customers|||Đúng khi có thêm khách",
+            "kiemTra": "SELECT count(*) AS customers, (SELECT count(*) FROM orders) AS orders FROM customer",
+            "an": true,
+            "themCsdl": "INSERT INTO orders_bad VALUES (6, 'Hoa', 'Hanoi', 'Pen', 5), (7, 'Hoa', 'Hanoi', 'Ink', 7)",
+            "mongDoi": {
+              "cot": [
+                "customers",
+                "orders"
+              ],
+              "hang": [
+                [
+                  4,
+                  7
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting DISTINCT: the UNIQUE on name rejects the second \"Cuong\" and the whole statement fails.|||Quên DISTINCT: UNIQUE trên name chặn \"Cuong\" thứ hai và cả lệnh hỏng."
+        },
+        {
+          "loi": "Guessing customer ids from order ids — orders end up assigned to the wrong people.|||Đoán id khách từ id đơn — đơn bị gán nhầm người."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normalization",
+          "vi": "chuẩn hoá"
+        },
+        {
+          "en": "update anomaly",
+          "vi": "dị thường cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "Which ALTER is instant, which rewrites, which scans?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "table rewrite",
+        "ACCESS EXCLUSIVE lock"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "alter",
+        "locks"
+      ],
+      "problemHtml": "<p>On a 50-million-row table, these statements cost very different amounts of downtime. Pick the right description (PostgreSQL 11+).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên bảng 50 triệu dòng, các lệnh này tốn thời gian ngừng rất khác nhau. Chọn mô tả đúng (PostgreSQL 11+).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does every existing row need to change, or only be checked, or neither?|||Tự hỏi: mọi dòng cũ phải đổi, hay chỉ cần kiểm, hay không cần gì?",
+        "Catalog-only changes are instant.|||Thay đổi chỉ trong catalog là tức thì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which ALTER is instant, which rewrites, which scans?\n\nAnswer in the answer panel (no code needed).\n\n1. ALTER TABLE t ADD COLUMN note text;ALTER TABLE t ADD COLUMN note text;\n2. ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';\n3. ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (was numeric(12,2))ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (trước là numeric(12,2))\n4. ALTER TABLE t ALTER COLUMN email SET NOT NULL;ALTER TABLE t ALTER COLUMN email SET NOT NULL;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which ALTER is instant, which rewrites, which scans? — answer key\n\n1. ALTER TABLE t ADD COLUMN note text;ALTER TABLE t ADD COLUMN note text;\n   Answer: c) instant — only the catalog changes\n   A nullable column without default is metadata only; old rows simply read NULL.VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.\n\n2. ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';\n   Answer: a) instant — a constant default is stored once in the catalog\n   Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.\n\n3. ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (was numeric(12,2))ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2); (trước là numeric(12,2))\n   Answer: b) instant in modern PostgreSQL — widening numeric precision needs no rewrite\n   Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.\n\n4. ALTER TABLE t ALTER COLUMN email SET NOT NULL;ALTER TABLE t ALTER COLUMN email SET NOT NULL;\n   Answer: a) scans the whole table under an exclusive lock (unless a validated CHECK already proves it)\n   PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> instant — only the catalog changes</p><p>A nullable column without default is metadata only; old rows simply read NULL.</p><p><i>VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.</i></p></li><li><p><b>a)</b> instant — a constant default is stored once in the catalog</p><p>Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.</p><p><i>VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.</i></p></li><li><p><b>b)</b> instant in modern PostgreSQL — widening numeric precision needs no rewrite</p><p>Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.</p><p><i>VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.</i></p></li><li><p><b>a)</b> scans the whole table under an exclusive lock (unless a validated CHECK already proves it)</p><p>PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.</p><p><i>VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p><code>ALTER TABLE t ADD COLUMN note text;</code></p><p style=\"opacity:.75;font-size:.92em\"><i><code>ALTER TABLE t ADD COLUMN note text;</code></i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "scans every row to check NULLs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "impossible on a non-empty table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "instant — only the catalog changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rewrites every row"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A nullable column without default is metadata only; old rows simply read NULL.</p><p><i>VI: Cột cho phép NULL không mặc định chỉ đổi metadata; dòng cũ đọc ra NULL.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p><code>ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';</code></p><p style=\"opacity:.75;font-size:.92em\"><i><code>ALTER TABLE t ADD COLUMN status text NOT NULL DEFAULT 'active';</code></i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "instant — a constant default is stored once in the catalog"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fails because rows exist"
+              },
+              {
+                "ma": "c",
+                "noiDung": "rewrites the table to write 'active' into each row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "scans the table but does not rewrite it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Since PostgreSQL 11 a non-volatile default is remembered in pg_attribute and returned for old rows without touching them.</p><p><i>VI: Từ PostgreSQL 11, mặc định không biến động được ghi một lần trong pg_attribute và trả cho dòng cũ mà không đụng tới chúng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p><code>ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2);</code> (was numeric(12,2))</p><p style=\"opacity:.75;font-size:.92em\"><i><code>ALTER TABLE t ALTER COLUMN price TYPE numeric(14,2);</code> (trước là numeric(12,2))</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only changes new rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "instant in modern PostgreSQL — widening numeric precision needs no rewrite"
+              },
+              {
+                "ma": "c",
+                "noiDung": "always a full rewrite"
+              },
+              {
+                "ma": "d",
+                "noiDung": "impossible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Some type changes are binary-compatible (varchar(n) → text, widening numeric) and skip the rewrite; others (int → bigint, text → int) rewrite the table under an exclusive lock.</p><p><i>VI: Một số đổi kiểu tương thích nhị phân (varchar(n) → text, nới numeric) nên bỏ qua việc viết lại; số khác (int → bigint, text → int) viết lại cả bảng dưới khoá độc quyền.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p><code>ALTER TABLE t ALTER COLUMN email SET NOT NULL;</code></p><p style=\"opacity:.75;font-size:.92em\"><i><code>ALTER TABLE t ALTER COLUMN email SET NOT NULL;</code></i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "scans the whole table under an exclusive lock (unless a validated CHECK already proves it)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "locks nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "rewrites every row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "instant"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>PostgreSQL must prove no NULL exists. The trick from lesson 3.4: add CHECK (email IS NOT NULL) NOT VALID, VALIDATE it (weaker lock), then SET NOT NULL uses it and skips the scan.</p><p><i>VI: PostgreSQL phải chứng minh không có NULL. Mẹo của bài 3.4: thêm CHECK (email IS NOT NULL) NOT VALID, VALIDATE nó (khoá nhẹ hơn), rồi SET NOT NULL dùng nó và bỏ qua lượt quét.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running ALTER COLUMN TYPE int → bigint on a big table at peak hour — the table is locked for the whole rewrite.|||Chạy ALTER COLUMN TYPE int → bigint trên bảng lớn giờ cao điểm — bảng bị khoá suốt lúc viết lại."
+        },
+        {
+          "loi": "Believing every ADD COLUMN with DEFAULT rewrites the table (true only before PostgreSQL 11 or with volatile defaults like random()).|||Tin rằng mọi ADD COLUMN có DEFAULT đều viết lại bảng (chỉ đúng trước PostgreSQL 11 hoặc với mặc định biến động như random())."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "table rewrite",
+          "vi": "viết lại bảng"
+        },
+        {
+          "en": "ACCESS EXCLUSIVE",
+          "vi": "khoá độc quyền, chặn cả đọc"
+        }
+      ]
+    }
+  ]
+}

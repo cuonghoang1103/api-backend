@@ -70,8 +70,8 @@ export const ma = (moTa, khop, phuDinh = false, tuy = {}) => ({ kiem: 'ma-nguon'
  * SKU, tên, giá; khách kh001–kh008 đặt tên đúng công thức của ctshop-data.sql; 14 đơn tháng 8–10/2026. Giờ theo
  * Asia/Ho_Chi_Minh như các lab (SET TimeZone ở đầu — PGlite mặc định lấy múi giờ của máy người học).
  */
-export const CT_SHOP = `SET TimeZone = 'Asia/Ho_Chi_Minh';
-CREATE TABLE customer (
+export const CT_DDL = {
+  customer: `CREATE TABLE customer (
   id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   email       text        NOT NULL,
   full_name   text        NOT NULL,
@@ -80,13 +80,13 @@ CREATE TABLE customer (
   created_at  timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT customer_email_key   UNIQUE (email),
   CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')
-);
-CREATE TABLE category (
+);`,
+  category: `CREATE TABLE category (
   id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name       text NOT NULL UNIQUE,
   parent_id  int  REFERENCES category(id) ON DELETE RESTRICT
-);
-CREATE TABLE product (
+);`,
+  product: `CREATE TABLE product (
   id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   sku          text          NOT NULL UNIQUE,
   name         text          NOT NULL,
@@ -96,38 +96,38 @@ CREATE TABLE product (
   attrs        jsonb         NOT NULL DEFAULT '{}',
   is_active    boolean       NOT NULL DEFAULT true,
   created_at   timestamptz   NOT NULL DEFAULT now()
-);
-CREATE TABLE orders (
+);`,
+  orders: `CREATE TABLE orders (
   id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   customer_id  bigint      NOT NULL REFERENCES customer(id),
   status       text        NOT NULL DEFAULT 'pending'
                CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),
   created_at   timestamptz NOT NULL DEFAULT now(),
   note         text
-);
-CREATE TABLE order_item (
+);`,
+  order_item: `CREATE TABLE order_item (
   order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   product_id  bigint        NOT NULL REFERENCES product(id),
   qty         int           NOT NULL CHECK (qty > 0),
   unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),
   PRIMARY KEY (order_id, product_id)
-);
-CREATE TABLE payment (
+);`,
+  payment: `CREATE TABLE payment (
   id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),
   amount    numeric(12,2) NOT NULL CHECK (amount > 0),
   method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),
   paid_at   timestamptz   NOT NULL DEFAULT now()
-);
-CREATE TABLE stock_movement (
+);`,
+  stock_movement: `CREATE TABLE stock_movement (
   id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   product_id  bigint      NOT NULL REFERENCES product(id),
   change      int         NOT NULL CHECK (change <> 0),
   reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),
   order_id    bigint      REFERENCES orders(id),
   created_at  timestamptz NOT NULL DEFAULT now()
-);
-CREATE TABLE review (
+);`,
+  review: `CREATE TABLE review (
   id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   product_id   bigint      NOT NULL REFERENCES product(id),
   customer_id  bigint      NOT NULL REFERENCES customer(id),
@@ -135,8 +135,13 @@ CREATE TABLE review (
   body         text,
   created_at   timestamptz NOT NULL DEFAULT now(),
   UNIQUE (product_id, customer_id)
-);
+);`,
+};
+/** DDL đủ 8 bảng (thứ tự tạo đúng khoá ngoại). */
+export const CT_SCHEMA = Object.values(CT_DDL).join('\n');
 
+export const CT_SHOP = `SET TimeZone = 'Asia/Ho_Chi_Minh';
+${CT_SCHEMA}
 INSERT INTO category (id, name, parent_id) OVERRIDING SYSTEM VALUE VALUES
   (1, 'Bút & mực', NULL), (2, 'Vở & giấy', NULL), (3, 'Dụng cụ học tập', NULL), (4, 'Sách & tài liệu', NULL),
   (5, 'Bút bi', 1), (6, 'Bút chì & tẩy', 1), (7, 'Bút dạ quang', 1), (8, 'Vở ô ly', 2), (9, 'Sổ tay', 2),

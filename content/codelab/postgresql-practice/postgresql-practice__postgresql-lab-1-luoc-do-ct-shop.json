@@ -1,0 +1,717 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-lab-1-luoc-do-ct-shop",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-lab-1-luoc-do-ct-shop"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1 — CT Shop: the 8 tables, every rule enforced by the database",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 90,
+      "points": 100,
+      "concepts": [
+        "CREATE TABLE",
+        "identity",
+        "PRIMARY/FOREIGN KEY",
+        "UNIQUE",
+        "CHECK",
+        "DEFAULT",
+        "ON DELETE CASCADE/RESTRICT",
+        "composite key"
+      ],
+      "prerequisites": [
+        "3.1–3.4 of this track"
+      ],
+      "tags": [
+        "postgresql",
+        "lab",
+        "ddl",
+        "constraints",
+        "ctshop"
+      ],
+      "problemHtml": "<h1>Lab 1 — CT Shop: the 8 tables, every rule enforced by the database</h1>\n<p class=\"bi-phu\">PostgreSQL course · after Chapter 3 · Suggested time: 90 minutes · 10 marks (5 × 2)</p>\n<h2>1. Overview</h2>\n<p>CT Shop sells school supplies online. You turn its ERD into the 8 tables every later lab uses. Column names and types are given — your job is the <b>keys and constraints</b> (rules R1–R16, the same as <code>lab1-start.sql</code> of the course). The grader then tries to break each rule the way <code>lab1-check.sql</code> does: valid rows must be accepted, bad rows rejected with the right kind of error. From Q3 on, the earlier tables are the <b>reference</b> versions (tab <code>ctshop-reference.sql</code>), so a mistake in Q1 never costs marks in Q3.</p>\n<h3>General requirements</h3>\n<ul>\n  <li>Every id: <code>GENERATED ALWAYS AS IDENTITY</code>. Let PostgreSQL name constraints, except the two on customer.email.</li>\n  <li>Columns in the order of the model. Graded by behaviour (accepted / rejected), plus the column list.</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_PG_Lab1/\n├── Q1.sql    -- customer (R1–R2) (2 marks)\n├── Q2.sql    -- category + product (R3–R6) (2 marks)\n├── Q3.sql    -- orders + order_item (R7–R11) (2 marks)\n├── Q4.sql    -- payment + stock_movement (R12–R15) (2 marks)\n├── Q5.sql    -- review (R16) (2 marks)</pre>\n<h2>3. Data model</h2>\n<p><b>customer</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>email</code></td><td>text</td><td>R1 required, UNIQUE (customer_email_key), lower-case and like a@b.cc (customer_email_check)</td></tr><tr><td><code>full_name</code></td><td>text</td><td>R2 required</td></tr><tr><td><code>phone</code></td><td>text</td><td>optional</td></tr><tr><td><code>city</code></td><td>text</td><td>required, default 'Hà Nội'</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>required, default now()</td></tr></tbody></table>\n<p><b>category</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>int</td><td>identity PK</td></tr><tr><td><code>name</code></td><td>text</td><td>R3 required, unique</td></tr><tr><td><code>parent_id</code></td><td>int</td><td>R4 → category; root = NULL; a category with children cannot be deleted</td></tr></tbody></table>\n<p><b>product</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>sku</code></td><td>text</td><td>R5 required, unique</td></tr><tr><td><code>name</code></td><td>text</td><td>required</td></tr><tr><td><code>category_id</code></td><td>int</td><td>required → category</td></tr><tr><td><code>price</code></td><td>numeric(12,2)</td><td>R6 > 0</td></tr><tr><td><code>stock</code></td><td>int</td><td>≥ 0, default 0</td></tr><tr><td><code>attrs</code></td><td>jsonb</td><td>default '{}'</td></tr><tr><td><code>is_active</code></td><td>boolean</td><td>default true</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>orders</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>R7 required → customer; a customer with orders cannot be deleted</td></tr><tr><td><code>status</code></td><td>text</td><td>R8 pending|paid|shipped|cancelled, default 'pending'</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr><tr><td><code>note</code></td><td>text</td><td>optional</td></tr></tbody></table>\n<p><b>order_item</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>bigint</td><td>R9 key part; R11 deleting the order deletes its lines</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>R9 key part; a sold product cannot be deleted</td></tr><tr><td><code>qty</code></td><td>int</td><td>R10 > 0</td></tr><tr><td><code>unit_price</code></td><td>numeric(12,2)</td><td>> 0 (price at purchase)</td></tr></tbody></table>\n<p><b>payment</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>order_id</code></td><td>bigint</td><td>R12 at most ONE payment per order</td></tr><tr><td><code>amount</code></td><td>numeric(12,2)</td><td>> 0</td></tr><tr><td><code>method</code></td><td>text</td><td>R13 cod|card|momo|bank</td></tr><tr><td><code>paid_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>stock_movement</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>required → product</td></tr><tr><td><code>change</code></td><td>int</td><td>R14 ≠ 0</td></tr><tr><td><code>reason</code></td><td>text</td><td>import|sale|return|adjust</td></tr><tr><td><code>order_id</code></td><td>bigint</td><td>R15 optional → orders</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>review</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>required → product</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>required → customer</td></tr><tr><td><code>rating</code></td><td>smallint</td><td>R16 1–5</td></tr><tr><td><code>body</code></td><td>text</td><td>optional</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now(); one review per (product, customer)</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. customer (R1–R2) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create customer with its two named email constraints.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>CONSTRAINT customer_email_key UNIQUE (email)</code> and <code>CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. category + product (R3–R6) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create category (a tree) and product.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>A category that still has children must not be deletable; every product belongs to exactly one category.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. orders + order_item (R7–R11) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create orders and order_item. customer, category and product are the reference tables, with 2 customers and 2 products.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>order_item has NO id: one product at most once per order. Deleting an order deletes its lines; a sold product and a customer with orders cannot be deleted.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. payment + stock_movement (R12–R15) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create payment and stock_movement. Reference tables up to order_item exist, with orders 1 (pending) and 2 (paid).</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>An order has at most ONE payment. A stock movement may or may not belong to an order.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. review (R16) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create review. Reference customer, category and product exist.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>rating 1–5; a customer reviews a product at most once; body optional.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>customer (R1–R2)</td><td>2</td></tr><tr><td>2</td><td>category + product (R3–R6)</td><td>2</td></tr><tr><td>3</td><td>orders + order_item (R7–R11)</td><td>2</td></tr><tr><td>4</td><td>payment + stock_movement (R12–R15)</td><td>2</td></tr><tr><td>5</td><td>review (R16)</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Hand-written ids, serial instead of identity, or a column order different from the model.</li>\n  <li>A rule only enforced \"in the app\" (a comment, a trigger-less convention) — the grader only trusts constraints.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Tabs Q1.sql … Q5.sql. <b>Run</b> = sample checks; <b>Submit</b> = every check and the 10-mark table. Q3–Q5 run on top of the reference tables in <code>ctshop-reference.sql</code>.</p>",
+      "problemHtmlVi": "<h1>Lab 1 — CT Shop: 8 bảng, mọi luật do CSDL giữ</h1>\n<p class=\"bi-phu\">Khoá PostgreSQL · sau Chương 3 · Thời gian gợi ý: 90 phút · 10 điểm (5 × 2)</p>\n<h2>1. Tổng quan</h2>\n<p>CT Shop bán đồ học tập online. Bạn biến ERD của nó thành 8 bảng mà mọi lab sau dùng. Tên cột và kiểu đã cho — việc của bạn là <b>khoá và ràng buộc</b> (luật R1–R16, y như <code>lab1-start.sql</code> của khoá). Máy chấm sau đó cố phá từng luật như <code>lab1-check.sql</code>: dòng hợp lệ phải vào được, dòng sai phải bị chặn với đúng loại lỗi. Từ Q3, các bảng trước là bản <b>chuẩn</b> (tab <code>ctshop-reference.sql</code>), nên sai ở Q1 không làm mất điểm Q3.</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mọi id: <code>GENERATED ALWAYS AS IDENTITY</code>. Để PostgreSQL tự đặt tên ràng buộc, trừ hai ràng buộc của customer.email.</li>\n  <li>Cột theo đúng thứ tự mô hình. Chấm theo hành vi (nhận / chặn), cộng danh sách cột.</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_PG_Lab1/\n├── Q1.sql    -- customer (R1–R2) (2 marks)\n├── Q2.sql    -- category + product (R3–R6) (2 marks)\n├── Q3.sql    -- orders + order_item (R7–R11) (2 marks)\n├── Q4.sql    -- payment + stock_movement (R12–R15) (2 marks)\n├── Q5.sql    -- review (R16) (2 marks)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>customer</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>email</code></td><td>text</td><td>R1 required, UNIQUE (customer_email_key), lower-case and like a@b.cc (customer_email_check)</td></tr><tr><td><code>full_name</code></td><td>text</td><td>R2 required</td></tr><tr><td><code>phone</code></td><td>text</td><td>optional</td></tr><tr><td><code>city</code></td><td>text</td><td>required, default 'Hà Nội'</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>required, default now()</td></tr></tbody></table>\n<p><b>category</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>int</td><td>identity PK</td></tr><tr><td><code>name</code></td><td>text</td><td>R3 required, unique</td></tr><tr><td><code>parent_id</code></td><td>int</td><td>R4 → category; root = NULL; a category with children cannot be deleted</td></tr></tbody></table>\n<p><b>product</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>sku</code></td><td>text</td><td>R5 required, unique</td></tr><tr><td><code>name</code></td><td>text</td><td>required</td></tr><tr><td><code>category_id</code></td><td>int</td><td>required → category</td></tr><tr><td><code>price</code></td><td>numeric(12,2)</td><td>R6 > 0</td></tr><tr><td><code>stock</code></td><td>int</td><td>≥ 0, default 0</td></tr><tr><td><code>attrs</code></td><td>jsonb</td><td>default '{}'</td></tr><tr><td><code>is_active</code></td><td>boolean</td><td>default true</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>orders</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>R7 required → customer; a customer with orders cannot be deleted</td></tr><tr><td><code>status</code></td><td>text</td><td>R8 pending|paid|shipped|cancelled, default 'pending'</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr><tr><td><code>note</code></td><td>text</td><td>optional</td></tr></tbody></table>\n<p><b>order_item</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>bigint</td><td>R9 key part; R11 deleting the order deletes its lines</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>R9 key part; a sold product cannot be deleted</td></tr><tr><td><code>qty</code></td><td>int</td><td>R10 > 0</td></tr><tr><td><code>unit_price</code></td><td>numeric(12,2)</td><td>> 0 (price at purchase)</td></tr></tbody></table>\n<p><b>payment</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>order_id</code></td><td>bigint</td><td>R12 at most ONE payment per order</td></tr><tr><td><code>amount</code></td><td>numeric(12,2)</td><td>> 0</td></tr><tr><td><code>method</code></td><td>text</td><td>R13 cod|card|momo|bank</td></tr><tr><td><code>paid_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>stock_movement</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>required → product</td></tr><tr><td><code>change</code></td><td>int</td><td>R14 ≠ 0</td></tr><tr><td><code>reason</code></td><td>text</td><td>import|sale|return|adjust</td></tr><tr><td><code>order_id</code></td><td>bigint</td><td>R15 optional → orders</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now()</td></tr></tbody></table>\n<p><b>review</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>id</code></td><td>bigint</td><td>identity PK</td></tr><tr><td><code>product_id</code></td><td>bigint</td><td>required → product</td></tr><tr><td><code>customer_id</code></td><td>bigint</td><td>required → customer</td></tr><tr><td><code>rating</code></td><td>smallint</td><td>R16 1–5</td></tr><tr><td><code>body</code></td><td>text</td><td>optional</td></tr><tr><td><code>created_at</code></td><td>timestamptz</td><td>default now(); one review per (product, customer)</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. customer (R1–R2) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo customer với hai ràng buộc email có tên.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>CONSTRAINT customer_email_key UNIQUE (email)</code> và <code>CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')</code>.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. category + product (R3–R6) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo category (dạng cây) và product.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Danh mục còn con thì không xoá được; mỗi sản phẩm thuộc đúng một danh mục.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. orders + order_item (R7–R11) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo orders và order_item. customer, category, product là bảng chuẩn, có 2 khách và 2 sản phẩm.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>order_item KHÔNG có id: mỗi sản phẩm tối đa một lần trong một đơn. Xoá đơn thì xoá dòng; sản phẩm đã bán và khách có đơn không xoá được.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. payment + stock_movement (R12–R15) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo payment và stock_movement. Bảng chuẩn tới order_item đã có, với đơn 1 (pending) và 2 (paid).</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Mỗi đơn tối đa MỘT lần thanh toán. Biến động kho có thể thuộc hoặc không thuộc một đơn.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. review (R16) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo review. Đã có customer, category, product chuẩn.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>rating 1–5; mỗi khách đánh giá một sản phẩm tối đa một lần; body không bắt buộc.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>customer (R1–R2)</td><td>2</td></tr><tr><td>2</td><td>category + product (R3–R6)</td><td>2</td></tr><tr><td>3</td><td>orders + order_item (R7–R11)</td><td>2</td></tr><tr><td>4</td><td>payment + stock_movement (R12–R15)</td><td>2</td></tr><tr><td>5</td><td>review (R16)</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Tự ghi id, dùng serial thay identity, hoặc thứ tự cột khác mô hình.</li>\n  <li>Luật chỉ giữ \"ở app\" (chú thích, quy ước) — máy chấm chỉ tin ràng buộc.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Các tab Q1.sql … Q5.sql. <b>Chạy thử</b> = kiểm mẫu; <b>Nộp</b> = mọi kiểm và bảng điểm thang 10. Q3–Q5 chạy trên các bảng chuẩn trong <code>ctshop-reference.sql</code>.</p>",
+      "inputSpec": "The database built by ctshop-reference.sql (schema below; full script in the ctshop-reference.sql tab).|||CSDL dựng bởi ctshop-reference.sql (lược đồ bên dưới; script đầy đủ ở tab ctshop-reference.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently on a fresh database.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập trên một CSDL sạch.",
+      "constraints": "Every id: <code>GENERATED ALWAYS AS IDENTITY</code>. Let PostgreSQL name constraints, except the two on customer.email.|||Mọi id: <code>GENERATED ALWAYS AS IDENTITY</code>. Để PostgreSQL tự đặt tên ràng buộc, trừ hai ràng buộc của customer.email.\nColumns in the order of the model. Graded by behaviour (accepted / rejected), plus the column list.|||Cột theo đúng thứ tự mô hình. Chấm theo hành vi (nhận / chặn), cộng danh sách cột.",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "column_name | data_type                | is_nullable\n------------+--------------------------+------------\nid          | bigint                   | NO         \nemail       | text                     | NO         \nfull_name   | text                     | NO         \nphone       | text                     | YES        \ncity        | text                     | NO         \ncreated_at  | timestamp with time zone | NO         ",
+          "explanation": "Expected result of check \"Q1 · columns\" (row order matters).|||Kết quả mong đợi của kiểm \"Q1 · các cột\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Write each table from the model, then for every rule ask \"which constraint makes the bad row impossible?\".|||Viết từng bảng theo mô hình, rồi với mỗi luật hỏi \"ràng buộc nào làm dòng sai không thể tồn tại?\".",
+        "R4 / R7 / R11: the default foreign-key action already refuses deleting a referenced parent; only the order → order_item link needs ON DELETE CASCADE.|||R4 / R7 / R11: hành động mặc định của khoá ngoại đã từ chối xoá cha còn được trỏ; chỉ mối nối orders → order_item cần ON DELETE CASCADE.",
+        "R9 / R12 / R16: \"at most once\" = a PRIMARY KEY or UNIQUE on exactly those columns.|||R9 / R12 / R16: \"tối đa một lần\" = PRIMARY KEY hoặc UNIQUE trên đúng các cột đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. customer (R1–R2)\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-reference.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-reference.sql sạch.\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. category + product (R3–R6)\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-reference.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-reference.sql sạch.\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. orders + order_item (R7–R11)\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-reference.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-reference.sql sạch.\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. payment + stock_movement (R12–R15)\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-reference.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-reference.sql sạch.\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. review (R16)\n-- Write only the statement(s) that answer this question. Each question is graded on a fresh copy of ctshop-reference.sql.\n-- Chỉ viết (các) lệnh trả lời câu này. Mỗi câu được chấm trên một bản ctshop-reference.sql sạch.\n"
+        },
+        {
+          "name": "ctshop-reference.sql",
+          "language": "sql",
+          "code": "-- ctshop-reference.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop-reference.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "CREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "CREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "CREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "CREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\n"
+        },
+        {
+          "name": "ctshop-reference.sql",
+          "language": "sql",
+          "code": "-- ctshop-reference.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctshop-reference.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference DDL is the course's <code>ctshop-schema.sql</code> (tab <code>ctshop-reference.sql</code>). Every rule R1–R16 is a constraint, so it holds for every client, every import and every hand-typed statement.</p>",
+      "solutionExplanationHtmlVi": "<p>DDL chuẩn là <code>ctshop-schema.sql</code> của khoá (tab <code>ctshop-reference.sql</code>). Mọi luật R1–R16 đều là ràng buộc, nên đúng với mọi client, mọi lần nhập dữ liệu và mọi lệnh gõ tay.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nCREATE TABLE payment (\n  id        bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  order_id  bigint        NOT NULL UNIQUE REFERENCES orders(id),\n  amount    numeric(12,2) NOT NULL CHECK (amount > 0),\n  method    text          NOT NULL CHECK (method IN ('cod', 'card', 'momo', 'bank')),\n  paid_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE stock_movement (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id  bigint      NOT NULL REFERENCES product(id),\n  change      int         NOT NULL CHECK (change <> 0),\n  reason      text        NOT NULL CHECK (reason IN ('import', 'sale', 'return', 'adjust')),\n  order_id    bigint      REFERENCES orders(id),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE TABLE review (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  product_id   bigint      NOT NULL REFERENCES product(id),\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  rating       smallint    NOT NULL CHECK (rating BETWEEN 1 AND 5),\n  body         text,\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  UNIQUE (product_id, customer_id)\n);",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · columns|||Q1 · các cột",
+            "kiemTra": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'customer' ORDER BY ordinal_position",
+            "thuTu": true,
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "column_name",
+                "data_type",
+                "is_nullable"
+              ],
+              "hang": [
+                [
+                  "id",
+                  "bigint",
+                  "NO"
+                ],
+                [
+                  "email",
+                  "text",
+                  "NO"
+                ],
+                [
+                  "full_name",
+                  "text",
+                  "NO"
+                ],
+                [
+                  "phone",
+                  "text",
+                  "YES"
+                ],
+                [
+                  "city",
+                  "text",
+                  "NO"
+                ],
+                [
+                  "created_at",
+                  "timestamp with time zone",
+                  "NO"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · city defaults to Hà Nội|||Q1 · city mặc định Hà Nội",
+            "kiemTra": "INSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'); SELECT email, phone, city, created_at IS NOT NULL AS has_time FROM customer",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "email",
+                "phone",
+                "city",
+                "has_time"
+              ],
+              "hang": [
+                [
+                  "an@ctshop.vn",
+                  null,
+                  "Hà Nội",
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · T01 duplicate email|||Q1 · T01 trùng email",
+            "thu": "INSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'A'), ('an@ctshop.vn', 'B')",
+            "maLoi": "23505",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · T02 capital letters in email|||Q1 · T02 email có chữ hoa",
+            "thu": "INSERT INTO customer (email, full_name) VALUES ('An@CTShop.vn', 'Viết hoa')",
+            "maLoi": "23514",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · T03 email without @|||Q1 · T03 email thiếu @",
+            "thu": "INSERT INTO customer (email, full_name) VALUES ('an.ctshop.vn', 'Thiếu a còng')",
+            "maLoi": "23514",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · T04 missing full_name|||Q1 · T04 thiếu full_name",
+            "thu": "INSERT INTO customer (email) VALUES ('chi@ctshop.vn')",
+            "maLoi": "23502",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · T05 typing the id yourself|||Q1 · T05 tự gõ id",
+            "thu": "INSERT INTO customer (id, email, full_name) VALUES (99, 'x@ctshop.vn', 'X')",
+            "maLoi": "428C9",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · constraint names|||Q1 · tên ràng buộc",
+            "kiemTra": "SELECT conname FROM pg_constraint WHERE conrelid = 'customer'::regclass AND contype IN ('u', 'c') ORDER BY conname",
+            "thuTu": true,
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "conname"
+              ],
+              "hang": [
+                [
+                  "customer_email_check"
+                ],
+                [
+                  "customer_email_key"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q2 · product columns|||Q2 · các cột của product",
+            "kiemTra": "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'product' ORDER BY ordinal_position",
+            "thuTu": true,
+            "csdl": "",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "column_name",
+                "data_type",
+                "is_nullable"
+              ],
+              "hang": [
+                [
+                  "id",
+                  "bigint",
+                  "NO"
+                ],
+                [
+                  "sku",
+                  "text",
+                  "NO"
+                ],
+                [
+                  "name",
+                  "text",
+                  "NO"
+                ],
+                [
+                  "category_id",
+                  "integer",
+                  "NO"
+                ],
+                [
+                  "price",
+                  "numeric",
+                  "NO"
+                ],
+                [
+                  "stock",
+                  "integer",
+                  "NO"
+                ],
+                [
+                  "attrs",
+                  "jsonb",
+                  "NO"
+                ],
+                [
+                  "is_active",
+                  "boolean",
+                  "NO"
+                ],
+                [
+                  "created_at",
+                  "timestamp with time zone",
+                  "NO"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q2 · product defaults|||Q2 · mặc định của product",
+            "kiemTra": "INSERT INTO category (name) VALUES ('Bút & mực'); INSERT INTO category (name, parent_id) VALUES ('Bút bi', 1); INSERT INTO product (sku, name, category_id, price) VALUES ('CT0202', 'Bút gel', 2, 28000); SELECT sku, stock, attrs, is_active FROM product",
+            "csdl": "",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock",
+                "attrs",
+                "is_active"
+              ],
+              "hang": [
+                [
+                  "CT0202",
+                  0,
+                  "{}",
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T07 price 0|||Q2 · T07 giá 0",
+            "thu": "INSERT INTO category (name) VALUES ('C'); INSERT INTO product (sku, name, category_id, price) VALUES ('X1', 'x', 1, 0)",
+            "maLoi": "23514",
+            "csdl": "",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T08 negative stock|||Q2 · T08 tồn kho âm",
+            "thu": "INSERT INTO category (name) VALUES ('C'); INSERT INTO product (sku, name, category_id, price, stock) VALUES ('X1', 'x', 1, 10, -1)",
+            "maLoi": "23514",
+            "csdl": "",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T09 product of an unknown category|||Q2 · T09 sản phẩm của danh mục không tồn tại",
+            "thu": "INSERT INTO product (sku, name, category_id, price) VALUES ('X1', 'x', 99, 10)",
+            "maLoi": "23503",
+            "csdl": "",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T10 duplicate category name|||Q2 · T10 trùng tên danh mục",
+            "thu": "INSERT INTO category (name) VALUES ('Bút bi'), ('Bút bi')",
+            "maLoi": "23505",
+            "csdl": "",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T11 delete a category that has children|||Q2 · T11 xoá danh mục còn con",
+            "thu": "INSERT INTO category (name) VALUES ('Bút & mực'); INSERT INTO category (name, parent_id) VALUES ('Bút bi', 1); DELETE FROM category WHERE id = 1",
+            "maLoi": "23001|23503",
+            "csdl": "",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · T12 duplicate SKU|||Q2 · T12 trùng SKU",
+            "thu": "INSERT INTO category (name) VALUES ('C'); INSERT INTO product (sku, name, category_id, price) VALUES ('X1', 'a', 1, 1), ('X1', 'b', 1, 2)",
+            "maLoi": "23505",
+            "csdl": "",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q3 · a valid order with two lines|||Q3 · một đơn hợp lệ hai dòng",
+            "kiemTra": "INSERT INTO orders (customer_id) VALUES (1); INSERT INTO order_item VALUES (1, 1, 2, 5000), (1, 2, 1, 28000); SELECT o.id, o.status, count(*) AS lines FROM orders o JOIN order_item i ON i.order_id = o.id GROUP BY o.id, o.status",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "status",
+                "lines"
+              ],
+              "hang": [
+                [
+                  1,
+                  "pending",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · T13 unknown status|||Q3 · T13 trạng thái lạ",
+            "thu": "INSERT INTO orders (customer_id, status) VALUES (1, 'done')",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · T14 same product twice in one order|||Q3 · T14 một sản phẩm hai lần trong một đơn",
+            "thu": "INSERT INTO orders (customer_id) VALUES (1); INSERT INTO order_item VALUES (1, 1, 1, 5000), (1, 1, 2, 5000)",
+            "maLoi": "23505",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · T15 quantity 0|||Q3 · T15 số lượng 0",
+            "thu": "INSERT INTO orders (customer_id) VALUES (1); INSERT INTO order_item VALUES (1, 1, 0, 5000)",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q3 · deleting an order deletes its lines|||Q3 · xoá đơn thì xoá dòng",
+            "kiemTra": "INSERT INTO orders (customer_id) VALUES (1); INSERT INTO order_item VALUES (1, 1, 2, 5000); DELETE FROM orders WHERE id = 1; SELECT count(*) AS lines_left FROM order_item",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "lines_left"
+              ],
+              "hang": [
+                [
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · deleting a customer with orders is refused|||Q3 · xoá khách có đơn bị từ chối",
+            "thu": "INSERT INTO orders (customer_id) VALUES (1); DELETE FROM customer WHERE id = 1",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · deleting a sold product is refused|||Q3 · xoá sản phẩm đã bán bị từ chối",
+            "thu": "INSERT INTO orders (customer_id) VALUES (1); INSERT INTO order_item VALUES (1, 2, 1, 28000); DELETE FROM product WHERE id = 2",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · order of an unknown customer|||Q3 · đơn của khách không tồn tại",
+            "thu": "INSERT INTO orders (customer_id) VALUES (99)",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q4 · a payment and an import movement|||Q4 · một thanh toán và một lần nhập kho",
+            "kiemTra": "INSERT INTO payment (order_id, amount, method) VALUES (2, 15000, 'momo'); INSERT INTO stock_movement (product_id, change, reason) VALUES (1, 100, 'import'); SELECT (SELECT count(*) FROM payment) AS payments, (SELECT order_id IS NULL FROM stock_movement) AS movement_without_order",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "payments",
+                "movement_without_order"
+              ],
+              "hang": [
+                [
+                  1,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · T17 a second payment for the same order|||Q4 · T17 thanh toán lần hai cho cùng đơn",
+            "thu": "INSERT INTO payment (order_id, amount, method) VALUES (2, 15000, 'momo'), (2, 15000, 'card')",
+            "maLoi": "23505",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · T18 method cash|||Q4 · T18 phương thức cash",
+            "thu": "INSERT INTO payment (order_id, amount, method) VALUES (2, 15000, 'cash')",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · T19 movement with change 0|||Q4 · T19 biến động bằng 0",
+            "thu": "INSERT INTO stock_movement (product_id, change, reason) VALUES (1, 0, 'adjust')",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · T20 payment amount 0|||Q4 · T20 số tiền 0",
+            "thu": "INSERT INTO payment (order_id, amount, method) VALUES (2, 0, 'card')",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · T21 reason gift|||Q4 · T21 lý do gift",
+            "thu": "INSERT INTO stock_movement (product_id, change, reason) VALUES (1, 5, 'gift')",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · payment of an unknown order|||Q4 · thanh toán cho đơn không tồn tại",
+            "thu": "INSERT INTO payment (order_id, amount, method) VALUES (99, 1, 'cod')",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nCREATE TABLE orders (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  customer_id  bigint      NOT NULL REFERENCES customer(id),\n  status       text        NOT NULL DEFAULT 'pending'\n               CHECK (status IN ('pending', 'paid', 'shipped', 'cancelled')),\n  created_at   timestamptz NOT NULL DEFAULT now(),\n  note         text\n);\nCREATE TABLE order_item (\n  order_id    bigint        NOT NULL REFERENCES orders(id) ON DELETE CASCADE,\n  product_id  bigint        NOT NULL REFERENCES product(id),\n  qty         int           NOT NULL CHECK (qty > 0),\n  unit_price  numeric(12,2) NOT NULL CHECK (unit_price > 0),\n  PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);\nINSERT INTO orders (customer_id) VALUES (1);\nINSERT INTO orders (customer_id, status) VALUES (1, 'paid');",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q5 · a valid review without body|||Q5 · đánh giá hợp lệ không có nội dung",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (1, 1, 5)",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q5 · T22 rating 6|||Q5 · T22 điểm 6",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (1, 1, 6)",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q5 · T23 second review of the same product|||Q5 · T23 đánh giá lần hai cùng sản phẩm",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (1, 1, 5), (1, 1, 1)",
+            "maLoi": "23505",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q5 · rating 0|||Q5 · điểm 0",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (1, 2, 0)",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q5 · unknown product|||Q5 · sản phẩm không tồn tại",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (99, 1, 4)",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q5 · two customers review the same product|||Q5 · hai khách đánh giá cùng một sản phẩm",
+            "thu": "INSERT INTO review (product_id, customer_id, rating) VALUES (1, 1, 5), (1, 2, 4), (2, 1, 3)",
+            "csdl": "CREATE TABLE customer (\n  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email       text        NOT NULL,\n  full_name   text        NOT NULL,\n  phone       text,\n  city        text        NOT NULL DEFAULT 'Hà Nội',\n  created_at  timestamptz NOT NULL DEFAULT now(),\n  CONSTRAINT customer_email_key   UNIQUE (email),\n  CONSTRAINT customer_email_check CHECK (email = lower(email) AND email LIKE '%_@_%.__%')\n);\nCREATE TABLE category (\n  id         int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  name       text NOT NULL UNIQUE,\n  parent_id  int  REFERENCES category(id) ON DELETE RESTRICT\n);\nCREATE TABLE product (\n  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku          text          NOT NULL UNIQUE,\n  name         text          NOT NULL,\n  category_id  int           NOT NULL REFERENCES category(id),\n  price        numeric(12,2) NOT NULL CHECK (price > 0),\n  stock        int           NOT NULL DEFAULT 0 CHECK (stock >= 0),\n  attrs        jsonb         NOT NULL DEFAULT '{}',\n  is_active    boolean       NOT NULL DEFAULT true,\n  created_at   timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO customer (email, full_name) VALUES ('an@ctshop.vn', 'Nguyễn Văn An'), ('binh@ctshop.vn', 'Trần Thị Bình');\nINSERT INTO category (name) VALUES ('Bút & mực');\nINSERT INTO category (name, parent_id) VALUES ('Bút bi', 1);\nINSERT INTO product (sku, name, category_id, price, stock) VALUES ('CT0201', 'Bút bi Thiên Long TL-027 (xanh)', 2, 5000, 100), ('CT0202', 'Bút gel Uni-ball Signo 0.5mm', 2, 28000, 50);",
+            "an": true,
+            "tep": "Q5.sql",
+            "nhom": "f5"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. customer (R1–R2)",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. category + product (R3–R6)",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. orders + order_item (R7–R11)",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. payment + stock_movement (R12–R15)",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. review (R16)",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Q1: UNIQUE but no lower-case CHECK — An@CTShop.vn and an@ctshop.vn become two customers.|||Q1: có UNIQUE mà thiếu CHECK chữ thường — An@CTShop.vn và an@ctshop.vn thành hai khách."
+        },
+        {
+          "loi": "Q2: ON DELETE CASCADE on category.parent_id — deleting \"Bút & mực\" wipes its sub-categories (and fails later on products).|||Q2: ON DELETE CASCADE trên category.parent_id — xoá \"Bút & mực\" là xoá sạch danh mục con."
+        },
+        {
+          "loi": "Q3: an id column on order_item — the same pen can appear twice in one order.|||Q3: thêm cột id cho order_item — cùng một cây bút xuất hiện hai lần trong một đơn."
+        },
+        {
+          "loi": "Q4: forgetting UNIQUE on payment.order_id — an order can be charged twice.|||Q4: quên UNIQUE trên payment.order_id — một đơn bị thu tiền hai lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL, có sẵn một chỉ mục B-tree."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả; NULL (UNKNOWN) vẫn lọt qua CHECK."
+        },
+        {
+          "en": "identity column",
+          "vi": "cột tự tăng",
+          "giaiThich": "GENERATED … AS IDENTITY: PostgreSQL tự cấp số từ một sequence khi INSERT bỏ cột đó."
+        },
+        {
+          "en": "ON DELETE RESTRICT",
+          "vi": "cấm xoá cha còn con"
+        },
+        {
+          "en": "composite key",
+          "vi": "khoá ghép"
+        }
+      ]
+    }
+  ]
+}

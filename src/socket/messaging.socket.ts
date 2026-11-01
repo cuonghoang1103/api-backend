@@ -509,15 +509,7 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     // array. Capped so a pathological client can't join unbounded rooms.
     const POST_ROOM_CAP = 500;
     socket.on('post:subscribe', (ids: number | number[]) => {
-      const arr = Array.isArray(ids) ? ids : [ids];
-      let joined = 0;
-      for (const id of arr) {
-        if (joined >= POST_ROOM_CAP) break;
-        if (typeof id === 'number' && Number.isInteger(id) && id > 0) {
-          socket.join(`post:${id}`);
-          joined += 1;
-        }
-      }
+      vaoPhongBaiViet(socket, ids, POST_ROOM_CAP);
     });
     socket.on('post:unsubscribe', (ids: number | number[]) => {
       const arr = Array.isArray(ids) ? ids : [ids];
@@ -593,4 +585,30 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
 
 export function getIO(): IOServer | null {
   return io;
+}
+
+/**
+ * Cho socket vào phòng `post:<id>` (nhận `post:reacted`) với trần tính theo MỖI SOCKET (01/11/2026).
+ * Trước đó trần đếm lại từ 0 mỗi lượt gọi ⇒ gọi lặp thì một socket vào được 100.000 phòng (~58 MB,
+ * đo ở bài Node.js 11.2). Nay đếm cả phòng `post:` đã vào từ các lượt trước; phòng đã vào thì bỏ qua.
+ * Trả về số phòng `post:` của socket sau lượt gọi.
+ */
+export function vaoPhongBaiViet(
+  socket: { rooms: Set<string>; join: (room: string) => unknown },
+  ids: unknown,
+  cap: number,
+): number {
+  const arr = Array.isArray(ids) ? ids : [ids];
+  let joined = 0;
+  for (const r of socket.rooms) if (r.startsWith('post:')) joined += 1;
+  for (const id of arr) {
+    if (joined >= cap) break;
+    if (typeof id === 'number' && Number.isInteger(id) && id > 0) {
+      const room = `post:${id}`;
+      if (socket.rooms.has(room)) continue;
+      socket.join(room);
+      joined += 1;
+    }
+  }
+  return joined;
 }

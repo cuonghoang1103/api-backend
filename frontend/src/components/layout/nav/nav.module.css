@@ -549,12 +549,6 @@
 :global(html.theme-dark) .menuRowDanger { color: #f87171; }
 .menuSep { height: 1px; margin: 0.3rem 0.4rem; background: var(--nv-line); }
 
-/* The robot FAB and music bar float above z-66; they must not cover the sheet. */
-:global(html.nav-sheet-open) :global(.ai-robot-fab),
-:global(html.nav-sheet-open) :global(.music-bar-fixed) {
-  display: none !important;
-}
-
 /* ── Mobile sheet ────────────────────────────────────────────────────────── */
 .sheetBackdrop {
   position: fixed;

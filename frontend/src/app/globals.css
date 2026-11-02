@@ -3935,6 +3935,14 @@ html.pwa-banner-open .ai-robot-fab {
   pointer-events: none;
 }
 
+/* The robot FAB and music bar float above the mobile nav sheet (z-66) and would
+   cover its footer. The class is toggled by nav/MobileSheet.tsx. It lives here,
+   not in nav.module.css: CSS modules reject selectors with no local class. */
+html.nav-sheet-open .ai-robot-fab,
+html.nav-sheet-open .music-bar-fixed {
+  display: none !important;
+}
+
 /* Touch devices: the top-nav icon buttons (cart, bell, user menu, …) are
    ~30px hit areas. Enlarge the tappable box without changing the icon size —
    pointer:coarse keeps desktop mouse layouts pixel-identical. */

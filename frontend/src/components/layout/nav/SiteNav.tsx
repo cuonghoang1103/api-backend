@@ -388,10 +388,18 @@ export default function SiteNav() {
               {theme === 'dark' ? <Sun /> : <Moon />}
             </button>
 
-            {CART_ENABLED && mounted && cartCount > 0 && (
-              <button type="button" className={s.iconBtn} onClick={openCart} aria-label={t.cart}>
+            {/* The drawer has no other way in, so the icon stays visible even when
+                empty — except on phones, where the row is tight and empty is rare. */}
+            {CART_ENABLED && mounted && (
+              <button
+                type="button"
+                className={`${s.iconBtn} ${cartCount > 0 ? '' : s.hideBelowSm}`}
+                onClick={openCart}
+                aria-label={t.cart}
+                title={t.cart}
+              >
                 <ShoppingBag />
-                <span className={s.badge}>{cartCount}</span>
+                {cartCount > 0 && <span className={s.badge}>{cartCount}</span>}
               </button>
             )}
 

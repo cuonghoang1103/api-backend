@@ -86,7 +86,7 @@ From github.com:cuonghoang1103/api-backend
 <p>New commits are downloaded and the remote-tracking branches move. Your local branches, your working directory and your index are <strong>untouched</strong>. Nothing can break, nothing can conflict, and nothing you were doing is interrupted.</p>
 <pre><code class="language-bash"><span class="tok-comment"># The safe review ritual, after fetching:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># what did they add?</span>
-git diff main origin/main --stat        <span class="tok-comment"># how big is it?</span>
+git diff main...origin/main --stat      <span class="tok-comment"># how big is it? (three dots: only their side, lesson 2.2)</span>
 git log --oneline origin/main..main     <span class="tok-comment"># what do I have that they do not?</span></code></pre>
 <div class="callout ok"><code>git fetch</code> is the only network command in Git that cannot possibly cause a problem. Run it whenever you want to know what is going on — before starting work, before pushing, before deciding whether to rebase. Some people run it on a timer.</div>
 
@@ -124,7 +124,8 @@ and have 2 and 3 different commits each, respectively.</div>
 <pre><code class="language-bash">git branch -vv               <span class="tok-comment"># every local branch, its upstream, and ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
-  experiment    9e2d4b7 no upstream — never pushed</div>
+  experiment    9e2d4b7 wip: try a new layout</div>
+<p>A line with no <code>[brackets]</code> — <code>experiment</code> here — has no upstream: that branch has never been pushed.</p>
 
 <h3>Cleaning up branches that were deleted on the server</h3>
 <pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># delete origin/* refs whose branch is gone from the server</span>
@@ -206,7 +207,7 @@ From github.com:cuonghoang1103/api-backend
 <p>Các commit mới được tải về và các nhánh theo dõi remote dịch chuyển. Nhánh cục bộ, thư mục làm việc và index của bạn <strong>không bị đụng tới</strong>. Không gì hỏng được, không gì xung đột được, và không có việc gì bạn đang làm bị cắt ngang.</p>
 <pre><code class="language-bash"><span class="tok-comment"># Nghi thức soi xét an toàn, sau khi fetch:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># họ đã thêm gì?</span>
-git diff main origin/main --stat        <span class="tok-comment"># nó to cỡ nào?</span>
+git diff main...origin/main --stat      <span class="tok-comment"># nó to cỡ nào? (ba chấm: chỉ phần của họ, bài 2.2)</span>
 git log --oneline origin/main..main     <span class="tok-comment"># tôi có gì mà họ chưa có?</span></code></pre>
 <div class="callout ok"><code>git fetch</code> là lệnh mạng DUY NHẤT trong Git không thể gây ra vấn đề gì. Hãy chạy nó bất cứ khi nào bạn muốn biết chuyện gì đang diễn ra — trước khi bắt đầu làm việc, trước khi push, trước khi quyết định có rebase hay không. Có người còn đặt hẹn giờ chạy nó.</div>
 
@@ -244,7 +245,8 @@ and have 2 and 3 different commits each, respectively.</div>
 <pre><code class="language-bash">git branch -vv               <span class="tok-comment"># mọi nhánh cục bộ, upstream của nó, và ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
-  experiment    9e2d4b7 no upstream — never pushed</div>
+  experiment    9e2d4b7 wip: thử bố cục mới</div>
+<p>Dòng không có <code>[ngoặc vuông]</code> — ở đây là <code>experiment</code> — là nhánh chưa có upstream: nó chưa từng được push.</p>
 
 <h3>Dọn những nhánh đã bị xoá trên máy chủ</h3>
 <pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># xoá các ref origin/* mà nhánh đã biến mất khỏi máy chủ</span>
@@ -399,7 +401,7 @@ git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Pair it with the per-repository identity from 0.3 so your commits carry the right email too:</p>
 <pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
-<div class="callout ok"><code>IdentitiesOnly yes</code> matters more than it looks. Without it, SSH offers every key in your agent in turn, and GitHub authenticates you as whichever account matches <em>first</em> — so you silently push to the work repository as your personal account. The flag forces exactly the key you named.</div>
+<div class="callout ok"><code>IdentitiesOnly yes</code> matters more than it looks. Without it, SSH also offers the other keys loaded in your agent — and when the work key is not loaded (after a reboot, say), your personal key from the agent is offered <em>before</em> the work key file, GitHub accepts it, and you silently push to the work repository as your personal account. The flag forces exactly the key you named.</div>
 
 <h3>Deploy keys and CI tokens</h3>
 <div class="kv-grid">
@@ -522,7 +524,7 @@ git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Hãy ghép nó với danh tính theo từng kho ở bài 0.3 để commit của bạn cũng mang đúng email:</p>
 <pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
-<div class="callout ok"><code>IdentitiesOnly yes</code> quan trọng hơn vẻ ngoài của nó. Thiếu nó, SSH lần lượt đưa ra mọi khoá trong agent, và GitHub xác thực bạn dưới danh nghĩa tài khoản nào khớp <em>ĐẦU TIÊN</em> — nên bạn âm thầm push vào kho công ty dưới tài khoản cá nhân. Cái cờ ép dùng đúng khoá bạn đã chỉ định.</div>
+<div class="callout ok"><code>IdentitiesOnly yes</code> quan trọng hơn vẻ ngoài của nó. Thiếu nó, SSH đưa ra cả những khoá khác đang nạp trong agent — và khi khoá công ty chưa được nạp (chẳng hạn vừa khởi động lại máy), khoá cá nhân trong agent được đưa ra <em>TRƯỚC</em> file khoá công ty, GitHub nhận nó, nên bạn âm thầm push vào kho công ty dưới tài khoản cá nhân. Cái cờ ép dùng đúng khoá bạn đã chỉ định.</div>
 
 <h3>Deploy key và token cho CI</h3>
 <div class="kv-grid">

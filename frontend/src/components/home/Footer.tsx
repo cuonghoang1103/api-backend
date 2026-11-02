@@ -6,7 +6,8 @@ import { SELLER_INFO } from '@/lib/sellerInfo';
 import { COMMERCE_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const L = (vi: string, en: string) => (locale === 'vi' ? vi : en);
   const currentYear = new Date().getFullYear();
 
   type FooterLink = { label: string; href: string };
@@ -18,9 +19,9 @@ export default function Footer() {
     { label: String(t('common.blog')), href: '/tech-trends' },
     { label: String(t('common.projects')), href: '/projects' },
     // Lối vào extension VS Code/Cursor… + CLI của AI Code — để người ghé trang chủ cũng thấy.
-    { label: 'AI Code cho VS Code', href: '/ai-code' },
+    { label: L('AI Code cho VS Code', 'AI Code for VS Code'), href: '/ai-code' },
     { label: 'CuongMini CLI', href: '/cli' },
-    { label: 'Tải app', href: '/download' },
+    { label: L('Tải app', 'Get the app'), href: '/download' },
     ...(CONTACT_ENABLED ? [{ label: String(t('contact.title')), href: '/#contact' }] : []),
   ];
 
@@ -39,14 +40,14 @@ export default function Footer() {
   const legal: FooterLink[] = [
     ...(COMMERCE_ENABLED
       ? [
-          { label: 'Hướng dẫn mua hàng', href: '/huong-dan-mua-hang' },
-          { label: 'Chính sách thanh toán', href: '/chinh-sach-thanh-toan' },
-          { label: 'Chính sách giao hàng', href: '/chinh-sach-giao-hang' },
-          { label: 'Chính sách đổi trả & hoàn tiền', href: '/chinh-sach-doi-tra' },
+          { label: L('Hướng dẫn mua hàng', 'How to buy'), href: '/huong-dan-mua-hang' },
+          { label: L('Chính sách thanh toán', 'Payment policy'), href: '/chinh-sach-thanh-toan' },
+          { label: L('Chính sách giao hàng', 'Delivery policy'), href: '/chinh-sach-giao-hang' },
+          { label: L('Chính sách đổi trả & hoàn tiền', 'Returns & refunds'), href: '/chinh-sach-doi-tra' },
         ]
       : []),
-    { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
-    { label: 'Điều khoản sử dụng', href: '/dieu-khoan-su-dung' },
+    { label: L('Chính sách bảo mật', 'Privacy policy'), href: '/chinh-sach-bao-mat' },
+    { label: L('Điều khoản sử dụng', 'Terms of use'), href: '/dieu-khoan-su-dung' },
   ];
 
   const footerLinks: Record<string, FooterLink[]> = {
@@ -167,14 +168,14 @@ export default function Footer() {
               code is exactly what signals an operating e-commerce business. */}
           {COMMERCE_ENABLED && (
           <div>
-            <h4 className="font-heading font-semibold text-text-primary mb-4">Thông tin người bán</h4>
+            <h4 className="font-heading font-semibold text-text-primary mb-4">{L('Thông tin người bán', 'Seller information')}</h4>
             <ul className="space-y-2 text-text-muted text-sm">
               <li>{SELLER_INFO.legalName} · cuongthai.com</li>
               <li>{SELLER_INFO.address}</li>
-              {SELLER_INFO.taxCode && <li>MST/ĐKKD: {SELLER_INFO.taxCode}</li>}
+              {SELLER_INFO.taxCode && <li>{L('MST/ĐKKD', 'Tax / business ID')}: {SELLER_INFO.taxCode}</li>}
               <li>
                 <a href={`tel:${SELLER_INFO.phone}`} className="hover:text-neon-violet transition-colors">
-                  ĐT/Zalo: {SELLER_INFO.phone}
+                  {L('ĐT/Zalo', 'Phone/Zalo')}: {SELLER_INFO.phone}
                 </a>
               </li>
               <li>

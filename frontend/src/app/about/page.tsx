@@ -1,1631 +1,509 @@
 'use client';
 
 /**
- * Trang /about — giữ NGUYÊN giao diện cyberpunk cũ (yêu cầu của user 08/08/2026:
- * "giữ nguyên như cũ, bạn chỉ bổ sung vào thôi"). Thay đổi là ở DỮ LIỆU và ở
- * phần thêm mới, không ở hình thức.
+ * /about — rebuilt 02/11/2026 in two parts, as the owner asked:
+ *   1. About this website — what CuongThai is and what you can do here, with
+ *      live counts from GET /api/v1/about/stats and the repo counts in
+ *      `codebaseStats.json`.
+ *   2. About me — the owner, using only what the site already stated (see
+ *      `aboutCopy.ts`). Unknown facts are placeholders for the owner, hidden
+ *      from visitors.
  *
- * ─── VÌ SAO ĐỘNG VÀO ─────────────────────────────────────────────────────────
- * Mọi con số trên trang này từng được gõ cứng, và kiểm lại thì không con nào
- * đứng vững:
- *   · "Supabase DB · 14ms"        — dự án KHÔNG dùng Supabase, Postgres tự host
- *   · "Uptime 99.97%" / "CDN Edge 47" / "AI Tokens Today 4.2M" — không đo gì
- *   · "SonarQube A+ · Maintainability 99%" — KHÔNG có SonarQube nào trong repo
- *   · "3+ Năm Kinh Nghiệm" đứng cạnh "~ 6 yrs" ở chân khung terminal
- *   · "20+ dự án · 50+ khách hàng"  — không đếm từ đâu cả
- * Số bịa trên trang giới thiệu bản thân là thứ người đọc bắt được nhanh nhất,
- * và nó phá đúng thứ trang này định xây.
+ * The 08/08/2026 rule still holds: every number must be COUNTED. A count that
+ * failed to load hides its figure — it is never replaced by 0 or a guess.
  *
- * ─── LUẬT MỚI CHO FILE NÀY ───────────────────────────────────────────────────
- * Mọi con số phải ĐẾM ĐƯỢC, từ đúng hai nguồn:
- *   · nội dung  → `useAboutStats()`  ⟶ GET /api/v1/about/stats (đếm từ DB)
- *   · mã nguồn  → `codebaseStats.json`, sinh bởi scripts/gen-codebase-stats.mjs
- *                 mỗi lần deploy (container không đếm được: `.git` bị loại khỏi
- *                 cả .dockerignore lẫn rsync)
- * Đếm không được ⇒ ẨN mục đó. Không bịa, không thay bằng 0.
- *
- * Phần trăm kỹ năng ở cuối trang là TỰ ĐÁNH GIÁ của chủ site, không phải số đo
- * — giữ nguyên theo yêu cầu, nhưng đừng nhầm nó với các con số đếm được ở trên.
+ * Language: copy is picked per render from `useTranslation().locale`, so the
+ * EN/VI switch in the top bar re-renders the page instantly, no reload.
  */
 import Link from 'next/link';
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { blogApi } from '@/lib/api';
-import type { Post, Category } from '@/types';
-import { useProjectStore } from '@/store/projectStore';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, ArrowUpRight, Check, Copy, Plus } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
-import BlogCard from '@/components/blog/BlogCard';
-import ServicesSection from '@/components/home/ServicesSection';
-import ContactSection from '@/components/home/ContactSection';
+import { contactApi } from '@/lib/api';
+import { useAboutStats, usePublicCv, fmt, type AboutStats } from '@/components/about/useAboutData';
 import Footer from '@/components/home/Footer';
-import StatsSection from '@/components/home/StatsSection';
-import HomeBackground from '@/components/home/HomeBackground';
-import { formatNumber } from '@/lib/utils';
-import { SHOP_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
-import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight, Download, GitCommit, ShieldAlert, Eye, Layers, Check, Copy } from 'lucide-react';
-import { useAboutStats, usePublicCv, fmt } from '@/components/about/useAboutData';
 import codebase from '@/data/codebaseStats.json';
+import { MENU_HUE, MENU_LABEL, MENU_ORDER, type MenuId } from '@/components/layout/nav/navLabels';
+import { NAV_TREE, type NavItem } from '@/components/layout/nav/navTree';
+import { INCIDENTS, SELF_ASSESSED_SKILLS, TECH_STACK, tx } from './aboutData';
+import { BIO, OWNER, OWNER_TODO, PLACEHOLDER_LABEL, aboutCopy } from './aboutCopy';
+import s from './about.module.css';
 
-// ─── Liên hệ ───────────────────────────────────────────────────────────────
-// Cùng bộ hồ sơ đang dùng ở Footer và trong khối JSON-LD của layout — đổi thì
-// phải đổi cả ba chỗ, vì `sameAs` trỏ sai người là khai báo danh tính sai.
-const CONTACT_EMAIL = 'cuongthaihnhe176322@gmail.com';
-const SOCIALS: { label: string; href: string }[] = [
-  { label: 'GitHub', href: 'https://github.com/cuonghoang1103' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/cuong-hoang-843a37258/' },
-  { label: 'X', href: 'https://x.com/Hncuong311' },
-  { label: 'Facebook', href: 'https://www.facebook.com/CuongHoangswit/' },
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/** Find a menu item (and the menu it sits in) by href. */
+function findItem(href: string): { item: NavItem; menu: MenuId } | null {
+  for (const m of NAV_TREE) for (const sec of m.sections) for (const it of sec.items) {
+    if (it.href === href) return { item: it, menu: m.id };
+  }
+  return null;
+}
+
+/** The features shown under "What you can do here", each tied to a live count. */
+const FEATURES: { href: string; stat?: keyof AboutStats; unit?: { en: string; vi: string } }[] = [
+  { href: '/academy', stat: 'courses', unit: { en: 'subjects & courses', vi: 'môn & khoá học' } },
+  { href: '/courses', stat: 'lessons', unit: { en: 'lessons', vi: 'bài học' } },
+  { href: '/code-lab', stat: 'exercises', unit: { en: 'graded exercises', vi: 'bài tập chấm tự động' } },
+  { href: '/exam', stat: 'examQuestions', unit: { en: 'exam questions', vi: 'câu hỏi thi' } },
+  { href: '/language', stat: 'vocabWords', unit: { en: 'words to learn', vi: 'từ vựng' } },
+  { href: '/interview', stat: 'interviewQuestions', unit: { en: 'interview questions', vi: 'câu hỏi phỏng vấn' } },
+  { href: '/roadmap', stat: 'roadmapNodes', unit: { en: 'roadmap steps', vi: 'mốc lộ trình' } },
+  { href: '/work' },
+  { href: '/chat' },
 ];
 
-export default function AboutPage() {
-  const { t, locale } = useTranslation();
-  const lang: 'vi' | 'en' = locale === 'en' ? 'en' : 'vi';
-  /** Song ngữ cho phần bổ sung. Bản cũ trộn `t()` với chữ Việt gõ thẳng
-   *  ("Bài viết mới nhất", "Đọc tiếp"…) nên người xem bản EN vẫn thấy tiếng
-   *  Việt; hàm này dọn luôn chỗ đó. */
-  const L = (vi: string, en: string): string => (lang === 'en' ? en : vi);
+const CODE_COUNTS: { key: keyof typeof codebase; label: { en: string; vi: string } }[] = [
+  { key: 'commits', label: { en: 'Commits', vi: 'Lượt commit' } },
+  { key: 'daysBuilding', label: { en: 'Days building', vi: 'Ngày xây dựng' } },
+  { key: 'pages', label: { en: 'Web pages', vi: 'Trang web' } },
+  { key: 'apiRouters', label: { en: 'API routers', vi: 'Router API' } },
+  { key: 'prismaModels', label: { en: 'Database tables', vi: 'Bảng dữ liệu' } },
+  { key: 'migrations', label: { en: 'Schema migrations', vi: 'Lần đổi lược đồ' } },
+  { key: 'sourceFiles', label: { en: 'Source files', vi: 'Tệp mã nguồn' } },
+  { key: 'sourceLines', label: { en: 'Lines of code', vi: 'Dòng mã' } },
+];
 
-  // Số liệu THẬT — xem ghi chú đầu file.
+const HIRE = ['/about/studio', '/about/nhan-du-an', '/about/quy-trinh'];
+
+type SectionId = 'site' | 'me' | 'contact';
+
+export default function AboutPage() {
+  const { locale } = useTranslation();
+  const lang: 'en' | 'vi' = locale === 'vi' ? 'vi' : 'en';
+  const c = aboutCopy(lang);
+  const reduce = useReducedMotion();
   const stats = useAboutStats();
   const cv = usePublicCv();
-  const n = (v: number | null | undefined): string => fmt(v, lang);
+  const n = (v: number | null | undefined) => fmt(v, lang);
 
-  // Sao chép email. `navigator.clipboard` chỉ tồn tại ở ngữ cảnh bảo mật và có
-  // thể bị chính sách quyền chặn — hỏng thì rơi về `mailto:` chứ không im lặng
-  // để người dùng bấm vào khoảng không.
+  // Owner placeholders: visible in dev, or with ?placeholders=1 — never to ordinary visitors.
+  const [showTodo, setShowTodo] = useState(process.env.NODE_ENV !== 'production');
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('placeholders')) setShowTodo(true);
+  }, []);
+
+  // ── Sticky section switch follows the scroll ───────────────────────────
+  const [active, setActive] = useState<SectionId>('site');
+  const refs = { site: useRef<HTMLElement>(null), me: useRef<HTMLElement>(null), contact: useRef<HTMLElement>(null) };
+  useEffect(() => {
+    const els = (['site', 'me', 'contact'] as SectionId[]).map((id) => refs[id].current).filter(Boolean) as HTMLElement[];
+    const io = new IntersectionObserver(
+      (entries) => {
+        const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (vis[0]) setActive(vis[0].target.id as SectionId);
+      },
+      { rootMargin: '-40% 0px -55% 0px' },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Honour /about#contact etc. after the client render.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const t = window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }), 120);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const mapRows = useMemo(
+    () => MENU_ORDER.map((id) => {
+      const menu = NAV_TREE.find((m) => m.id === id)!;
+      const first = menu.sections.flatMap((sec) => sec.items).find((it) => !it.gate) ?? menu.sections[0].items[0];
+      const names = menu.sections.flatMap((sec) => sec.items).slice(0, 4).map((it) => it.title[lang]);
+      return { id, href: first.href, icon: first.icon, names: names.join(', ') };
+    }),
+    [lang],
+  );
+
+  const reveal = (i = 0) => (reduce
+    ? {}
+    : {
+        initial: { opacity: 0, y: 14 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: '-60px' },
+        transition: { duration: 0.5, delay: i * 0.05, ease: EASE },
+      });
+
+  const countedAt = stats?.computedAt
+    ? new Date(stats.computedAt).toLocaleString(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+    : null;
+  const firstCommit = new Date(codebase.firstCommitDate).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', { month: 'long', year: 'numeric' });
+
+  // ── Contact ────────────────────────────────────────────────────────────
   const [copied, setCopied] = useState(false);
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      await navigator.clipboard.writeText(OWNER.email);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      window.location.href = `mailto:${CONTACT_EMAIL}`;
+      window.location.href = `mailto:${OWNER.email}`;
     }
   };
-  const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  // Project store binding is kept ready for the future
-  // admin/home/featured-projects section, but it's intentionally not
-  // dereferenced here while that surface is still WIP.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _bindFeaturedProjects = useProjectStore((s) => s.getFeaturedProjects);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [postsRes, categoriesRes] = await Promise.all([
-          blogApi.getPosts({ size: 6 }),
-          blogApi.getCategories(),
-        ]);
-        const posts = Array.isArray(postsRes.data?.data) ? postsRes.data.data : [];
-        setFeaturedPosts(posts);
-        setCategories(categoriesRes.data.data || []);
-      } catch (err) {
-        console.error('Failed to fetch data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  // --- Omni-Command Bar ---
-  const [placeholderIdx, setPlaceholderIdx] = useState(0);
-  const [placeholderText, setPlaceholderText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const placeholderPhrases = [
-    "Type /projects to explore...",
-    "Ask anything about Cuong's stack...",
-    ...(SHOP_ENABLED ? ["Type /shop to view AI tools..."] : []),
-    "Try /chat for AI assistance...",
-  ];
-  useEffect(() => {
-    const phrase = placeholderPhrases[placeholderIdx];
-    let charIdx = 0;
-    setIsTyping(true);
-    const typeInterval = setInterval(() => {
-      setPlaceholderText(phrase.slice(0, charIdx + 1));
-      charIdx++;
-      if (charIdx >= phrase.length) {
-        clearInterval(typeInterval);
-        setTimeout(() => setIsTyping(false), 2200);
-      }
-    }, 38);
-    return () => clearInterval(typeInterval);
-  }, [placeholderIdx]);
-  useEffect(() => {
-    if (!isTyping) {
-      const t = setTimeout(() => {
-        setPlaceholderIdx((p) => (p + 1) % placeholderPhrases.length);
-      }, 600);
-      return () => clearTimeout(t);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [sendState, setSendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSendState('sending');
+    try {
+      await contactApi.submit({ name: form.name, email: form.email, subject: form.subject || undefined, message: form.message });
+      setForm({ name: '', email: '', subject: '', message: '' });
+      setSendState('sent');
+    } catch {
+      setSendState('error');
     }
-  }, [isTyping]);
+  };
 
-  // --- Bento Benefit Cards ---
-  const bentoCards = [
-    {
-      icon: Zap,
-      titleKey: 'benefits.fastDelivery.title',
-      desc: 'MVP ready in 2-4 weeks. Ship fast, iterate faster.',
-      color: 'indigo',
-      colSpan: 'col-span-1',
-      accent: '#6366f1',
-    },
-    {
-      icon: Brain,
-      titleKey: 'benefits.aiPowered.title',
-      // Bản cũ ghi "RAG + Gemini + Spring Boot". Site này chạy Node + Express,
-      // không có Spring Boot ở đâu cả.
-      desc: L(
-        'RAG + LLM + Node — chấm phỏng vấn, mổ CV, gia sư ngôn ngữ.',
-        'RAG + LLM + Node — interview grading, CV critique, language tutoring.',
-      ),
-      color: 'violet',
-      colSpan: 'col-span-1',
-      accent: '#8b5cf6',
-    },
-    {
-      icon: Gem,
-      titleKey: 'benefits.highQuality.title',
-      // Bản cũ ghi "SonarQube A+, 99% maintainability" — KHÔNG có SonarQube nào
-      // trong repo. Thay bằng hai thứ kiểm được: kiểm kiểu chặn deploy, và
-      // deploy tự kiểm route lõi rồi mới coi là xong.
-      desc: L(
-        'Kiểm kiểu chặn deploy, deploy tự kiểm route lõi trước khi coi là xong.',
-        'Type checks gate every deploy, which then smoke-tests the core routes before it counts as done.',
-      ),
-      color: 'fuchsia',
-      colSpan: 'col-span-1',
-      accent: '#d946ef',
-    },
-  ];
+  const [openIncident, setOpenIncident] = useState<number | null>(0);
 
-  // --- Mouse tracking for avatar glow ---
-  const avatarRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 80, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 80, damping: 20 });
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!avatarRef.current) return;
-    const rect = avatarRef.current.getBoundingClientRect();
-    mouseX.set(((e.clientX - rect.left) / rect.width - 0.5) * 40);
-    mouseY.set(((e.clientY - rect.top) / rect.height - 0.5) * 40);
-  }, [mouseX, mouseY]);
-
-  // --- Floating tech tags ---
-  // ⚠️ Toạ độ đã dời khỏi DẢI TRÊN CÙNG. Bản cũ đặt 'Next.js' ở (12%, 8%) và
-  // 'Gemini AI' ở (50%, 0%) — cả hai nằm chồng lên hai huy hiệu `top-4` gắn
-  // trên ảnh và che mất chữ ("…perience" là tất cả những gì còn đọc được).
-  // Giữ y ≥ 22% thì thẻ nổi và huy hiệu không tranh chỗ nữa.
-  const techTags = [
-    { label: 'Next.js', color: 'bg-gray-800 border-gray-600 text-gray-200', x: '6%', y: '24%', delay: 0, float: '-8px' },
-    { label: 'Express', color: 'bg-green-900/60 border-green-600 text-green-300', x: '78%', y: '30%', delay: 0.4, float: '-12px' },
-    { label: 'TypeScript', color: 'bg-blue-900/60 border-blue-500 text-blue-300', x: '82%', y: '62%', delay: 0.8, float: '-6px' },
-    { label: 'PostgreSQL', color: 'bg-indigo-900/60 border-indigo-500 text-indigo-300', x: '4%', y: '70%', delay: 1.2, float: '-10px' },
-    { label: 'Prisma', color: 'bg-purple-900/60 border-purple-500 text-purple-300', x: '44%', y: '22%', delay: 1.6, float: '-7px' },
-    { label: 'Docker', color: 'bg-cyan-900/60 border-cyan-600 text-cyan-300', x: '66%', y: '86%', delay: 2.0, float: '-9px' },
-  ];
-
-  // --- System status ticker ---
-  // Bản cũ chạy sáu chỉ số gõ cứng, trong đó "Supabase DB · 14ms" còn nói sai
-  // cả công nghệ đang dùng. Nay mỗi mục là một phép đếm thật; mục nào chưa đếm
-  // được thì BIẾN MẤT khỏi băng chạy chứ không hiện 0.
-  const systemStats = [
-    { label: L('Bài tập', 'Exercises'), value: stats?.exercises },
-    { label: L('Câu hỏi thi', 'Exam questions'), value: stats?.examQuestions },
-    { label: L('Từ vựng', 'Vocabulary'), value: stats?.vocabWords },
-    { label: L('Chữ Hán & Kanji', 'Kanji & hanzi'), value: stats?.hanziChars },
-    { label: L('Mốc lộ trình', 'Roadmap nodes'), value: stats?.roadmapNodes },
-    { label: L('Câu hỏi phỏng vấn', 'Interview questions'), value: stats?.interviewQuestions },
-    { label: L('Môn & khoá học', 'Subjects & courses'), value: stats?.courses },
-    { label: L('Kho mã tuyển chọn', 'Curated repos'), value: stats?.curatedRepos },
-    { label: L('Trang web', 'Web pages'), value: codebase.pages },
-    { label: L('Router API', 'API routers'), value: codebase.apiRouters },
-    { label: L('Bảng dữ liệu', 'DB tables'), value: codebase.prismaModels },
-    { label: L('Lượt commit', 'Commits'), value: codebase.commits },
-  ].filter((s) => typeof s.value === 'number' && s.value > 0);
-
-  // --- Bốn ô thống kê lớn (thay 4 số bịa của bản cũ) ---
-  // Thứ tự cố ý: hai ô đầu là nội dung do chính mình soạn, hai ô sau là quy mô
-  // hệ thống. Ô nào chưa đếm được thì rụng khỏi hàng.
-  const statCards = [
-    { icon: Code2, value: stats?.exercises, suffix: '', label: L('Bài tập chấm tự động', 'Graded exercises'), glowColor: '#818cf8' },
-    { icon: Gem, value: stats?.examQuestions, suffix: '', label: L('Câu hỏi thi', 'Exam questions'), glowColor: '#a855f7' },
-    { icon: Terminal, value: codebase.pages, suffix: '', label: L('Trang trên site', 'Pages on the site'), glowColor: '#d946ef' },
-    { icon: GitCommit, value: codebase.commits, suffix: '', label: L('Lượt commit', 'Commits'), glowColor: '#22d3ee' },
-  ].filter((s): s is typeof s & { value: number } => typeof s.value === 'number' && s.value > 0);
-
-  // --- Quy mô mã nguồn (bổ sung) ---
-  // Đếm thẳng từ kho mã lúc deploy. `null` ⇒ ẩn ô.
-  const codeCounts = [
-    { label: L('Lượt commit', 'Commits'), value: codebase.commits },
-    { label: L('Ngày xây dựng', 'Days building'), value: codebase.daysBuilding },
-    { label: L('Trang web', 'Web pages'), value: codebase.pages },
-    { label: L('Router API', 'API routers'), value: codebase.apiRouters },
-    { label: L('Bảng dữ liệu', 'Database tables'), value: codebase.prismaModels },
-    { label: L('Lần đổi lược đồ', 'Schema migrations'), value: codebase.migrations },
-    { label: L('Tệp mã nguồn', 'Source files'), value: codebase.sourceFiles },
-    { label: L('Dòng mã', 'Lines of code'), value: codebase.sourceLines },
-  ].filter((s) => typeof s.value === 'number' && s.value > 0);
-
-  // --- Stack đầy đủ (bổ sung) ---
-  // Danh sách 15 thanh phần trăm phía dưới là TỰ ĐÁNH GIÁ và chỉ có 15 mục —
-  // nó bỏ sót gần hết những gì thực sự đang chạy. Khối này liệt kê đủ, KHÔNG
-  // chấm điểm, và mọi mục đều đối chiếu được với `package.json` / cây thư mục
-  // của repo. Đừng thêm gì vào đây mà repo không có.
-  const techStack: { group: string; accent: string; items: string[] }[] = [
-    {
-      group: L('Backend', 'Backend'),
-      accent: '#6366f1',
-      items: ['Node.js', 'Express', 'TypeScript', 'Prisma', 'Zod', 'JWT + bcrypt', 'Helmet', 'express-rate-limit', 'Multer', 'node-cron'],
-    },
-    {
-      group: L('Frontend', 'Frontend'),
-      accent: '#8b5cf6',
-      items: ['Next.js (App Router)', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Zustand', 'TanStack Query', 'TipTap', 'Monaco Editor', 'Recharts', 'Mermaid'],
-    },
-    {
-      group: L('Dữ liệu', 'Data'),
-      accent: '#d946ef',
-      items: ['PostgreSQL', 'Prisma ORM', 'Redis (ioredis)', 'pgvector', L('Migration có phiên bản', 'Versioned migrations')],
-    },
-    {
-      group: L('Hạ tầng', 'Infrastructure'),
-      accent: '#22d3ee',
-      items: ['Docker', 'Nginx', L('VPS tự quản', 'Self-managed VPS'), 'GitHub Actions', 'Cloudflare R2 (S3 API)', 'Sentry'],
-    },
-    {
-      group: L('AI', 'AI'),
-      accent: '#34d399',
-      items: ['LLM adapter (Anthropic / OpenAI-compatible)', 'RAG + pgvector', 'Transformers.js embeddings', L('Chặn prompt injection', 'Prompt-injection screening'), L('Cổng lọc dữ liệu cá nhân', 'PII gate'), L('Cầu dao nhà cung cấp', 'Provider circuit breaker')],
-    },
-    {
-      group: L('Thời gian thực', 'Real-time'),
-      accent: '#fbbf24',
-      items: ['Socket.IO', L('WebSocket thuần (/device-ws)', 'Raw WebSocket (/device-ws)'), 'Redis adapter'],
-    },
-    {
-      group: L('Media & tài liệu', 'Media & documents'),
-      accent: '#f472b6',
-      items: ['Sharp', 'FFmpeg', 'pdfkit', 'docx', 'mammoth', 'unpdf', 'music-metadata'],
-    },
-    {
-      group: L('Khác', 'Other'),
-      accent: '#a78bfa',
-      items: ['Three.js / WebGL', 'ESP32-S3 firmware', 'VNPay', 'Resend', 'Java', 'Spring Boot'],
-    },
-  ];
-
-  // --- Sự cố production đã xử lý (bổ sung) ---
-  // Lấy từ nhật ký sự cố có thật trong kho mã, không thêm thắt. Đây là phần
-  // nhà tuyển dụng kỹ thuật đọc kỹ nhất — ai cũng liệt kê được công nghệ.
-  const incidents = [
-    {
-      accent: '#6366f1',
-      symptom: L(
-        'Bộ chọn ảnh GIF chết, và các cuộc trò chuyện “biến mất” — đăng nhập lại không ăn thua.',
-        'The GIF picker died and chats “disappeared” — re-logging in did nothing.',
-      ),
-      cause: L(
-        'Một lần deploy chỉ đồng bộ mã mà KHÔNG dựng lại image: container vẫn chạy bản dựng cũ chưa hề gắn route GIF. Chat thì chưa từng mất — chỉ bị lọc bởi cờ xoá-riêng-mình.',
-        'A deploy that synced code but did NOT rebuild: the container kept serving an old build that never mounted the GIF route. The chats were never lost — a per-viewer delete flag filtered them out.',
-      ),
-      fix: L(
-        'Chẩn đoán route bằng `curl` không kèm token: 401 là đã gắn, 404 là bản dựng cũ. Deploy nay luôn dựng lại và tự kiểm route lõi.',
-        'Diagnose routes with an unauthenticated `curl`: 401 means mounted, 404 means stale build. Deploys now always rebuild and smoke-test the core routes.',
-      ),
-    },
-    {
-      accent: '#8b5cf6',
-      symptom: L(
-        'Bật chế độ tối toàn site làm hỏng bộ chuyển ba giao diện riêng của trang ghi chú.',
-        'Turning on the site-wide dark theme broke the Notes module’s own three-theme switcher.',
-      ),
-      cause: L(
-        'Lớp `dark` bị gắn lên thẻ `<html>`, kích hoạt cưỡng bức mọi biến thể `dark:` của Tailwind nằm bên trong — kể cả những chỗ có bảng màu riêng.',
-        'The `dark` class landed on `<html>`, force-activating every Tailwind `dark:` variant nested inside — including areas with their own palette.',
-      ),
-      fix: L(
-        'Lớp tối toàn site đổi sang tên riêng, `dark:` được giữ độc quyền cho vùng ghi chú, phần còn lại dùng biến CSS theo giao diện.',
-        'The global dark class got its own name, `dark:` is reserved for the Notes wrapper, and everything else uses theme CSS variables.',
-      ),
-    },
-    {
-      accent: '#d946ef',
-      symptom: L(
-        'Phiên đăng nhập chết im lặng sau đúng 24 giờ. Cookie vẫn còn, nhưng mọi lệnh gọi cần đăng nhập đều bị từ chối.',
-        'Sessions died silently after exactly 24 hours. The cookie was still there, but every authenticated call was rejected.',
-      ),
-      cause: L(
-        'Token hết hạn sau 24 giờ trong khi cookie sống 7 ngày, và đường làm mới token thì gọi tới một endpoint không tồn tại.',
-        'The token expired in 24h while the cookie lived 7 days — and the refresh path called an endpoint that did not exist.',
-      ),
-      fix: L(
-        'Thêm endpoint làm mới thật, cộng lớp chặn tự làm mới đúng một lần rồi gọi lại. Phiên tự lành, không phải đổi cấu hình.',
-        'A real refresh endpoint plus an interceptor that refreshes once and retries. Sessions self-heal; no config change needed.',
-      ),
-    },
-    {
-      accent: '#22d3ee',
-      symptom: L(
-        'Sân chơi 3D kẹt mãi ở màn hình tải suốt hai phiên làm việc, không một lỗi nào hiện ra.',
-        'The 3D playground hung on its loading screen across two sessions, with no error anywhere.',
-      ),
-      cause: L(
-        'Next.js chốt danh sách tệp tĩnh ngay lúc server khởi động. Dựng lại sân chơi làm gói JS đổi tên theo mã băm nội dung, server đang chạy trả 404 cho tệp có thật trên đĩa — không JS nào chạy nên cũng không có lỗi để thấy.',
-        'Next.js fixes its static-file list at server start. Rebuilding renamed the JS bundles by content hash, so the running server 404’d files that existed on disk — no JS ran, so nothing surfaced an error.',
-      ),
-      fix: L(
-        'Đổi tệp tĩnh thì phải khởi động lại server, và diệt tiến trình THEO CỔNG (Node đổi tên tiến trình nên diệt theo tên là trượt). Production không dính vì mỗi deploy là một container mới.',
-        'Changing static files means restarting the server, and killing it BY PORT (Node renames its process, so killing by name misses). Production was never affected — each deploy is a fresh container.',
-      ),
-    },
-    {
-      accent: '#f87171',
-      symptom: L(
-        '“Sập database, chỉ còn frontend sống.” Nhưng Postgres và backend đều báo healthy, và người dùng khác vẫn vào bình thường.',
-        '“The database is down, only the frontend works.” Yet Postgres and the backend both reported healthy, and other users were fine.',
-      ),
-      cause: L(
-        'Không phải sập — là giới hạn tần suất theo IP. Một trang thi bắn 18.297 request trong 10 phút (~32 mỗi giây), mỗi lần tải lên lại toàn bộ file ghi âm. Gốc là một vòng lặp tự nuôi: hết giờ thì effect tự nộp bài; nộp hỏng thì khối catch BUỘC phải gỡ cờ “đã nộp” để nút bấm tay còn dùng được; gỡ xong thì effect lại thấy đúng điều kiện cũ và nộp tiếp — nhanh hết mức đường truyền cho phép. Cái khoá tự mở ra ngay tại điều kiện đã kích hoạt nó.',
-        'Not an outage — a per-IP rate limit. One exam page fired 18,297 requests in 10 minutes (~32/s), re-uploading the whole audio recording each time. The root cause was a self-feeding loop: on timeout an effect auto-submits; when the submit fails the catch block MUST clear the “submitted” flag so the manual button still works; once cleared, the effect sees the same condition again and re-submits — as fast as the network allows. The latch released itself at exactly the condition that had tripped it.',
-      ),
-      fix: L(
-        'Một cờ RIÊNG “đã thử tự nộp” không bao giờ được gỡ, tách khỏi cờ của đường bấm tay. Luật rút ra: mọi effect tự hành động dựa trên điều kiện KHÔNG tự biến mất (hết giờ, lỗi mạng, cờ trạng thái) phải có cờ “đã thử” riêng. Truy thủ phạm bằng cách quét khoá rate-limit trong Redis xem cạn quota là một IP hay toàn cục, rồi đếm endpoint trong log nginx của đúng IP đó.',
-        'A separate “already attempted” flag that is never cleared, split from the manual path’s flag. The rule: any effect that acts on a condition which does NOT clear itself (a timeout, a network error, a status flag) needs its own attempt latch. Trace it by scanning the Redis rate-limit keys to see whether one IP or the whole bucket is drained, then counting endpoints in that IP’s nginx log lines.',
-      ),
-    },
-    {
-      accent: '#fb923c',
-      symptom: L(
-        'Giới hạn tần suất trông như đang chạy, nhưng một client cố ý có thể gọi API không giới hạn.',
-        'Rate limiting looked like it was working, yet a deliberate client could call the API without limit.',
-      ),
-      cause: L(
-        'Hàm sinh khoá lấy phần tử ĐẦU của header X-Forwarded-For. Phần tử đầu là do client gửi lên, nên chỉ cần đổi header mỗi lần gọi là mỗi lần lại được một xô đếm mới — đã chứng minh bằng curl. Trang này cũng không nằm sau Cloudflare, nên tin vào CF-Connecting-IP còn tệ hơn: header đó ai cũng đặt được.',
-        'The key generator read the FIRST entry of the X-Forwarded-For header. That entry is client-supplied, so changing it on each call yields a fresh counter bucket every time — proven with curl. The site also does not sit behind Cloudflare, so trusting CF-Connecting-IP would be worse still: anyone can set that header.',
-      ),
-      fix: L(
-        'Đổi sang phần tử CUỐI của X-Forwarded-For — phần tử do chính nginx nối thêm, client không chạm tới được — cho cả bộ giới hạn chung lẫn bộ giới hạn đăng nhập. Kiểm hồi quy bằng curl kèm header giả: sau khi vá thì vẫn phải rơi vào CÙNG một xô; nhận xô mới nghĩa là lỗ hổng quay lại.',
-        'Switch to the LAST X-Forwarded-For entry — the one nginx appends itself, which the client cannot touch — for both the general and the auth limiter. Regression check: curl with a forged header must still land in the SAME bucket after the fix; a fresh bucket means the hole is back.',
-      ),
-    },
-    {
-      accent: '#facc15',
-      symptom: L(
-        'Deploy hỏng với “no space left on device”, và mọi endpoint chạm cơ sở dữ liệu trả 500 — trong khi trang chủ vẫn 200 nên nhìn qua tưởng site khoẻ.',
-        'A deploy failed with “no space left on device”, and every database-backed endpoint returned 500 — while the home page still returned 200, so at a glance the site looked fine.',
-      ),
-      cause: L(
-        'Đĩa đầy 100%. Postgres không ghi nổi nhật ký ghi-trước nên kẹt trong trạng thái phục hồi: “database system is not yet accepting connections”. Chỗ chiếm đĩa cũng không nằm ở nơi ai cũng nhìn — máy này dùng containerd-snapshotter, nên image thật nằm ở /var/lib/containerd còn /var/lib/docker trông bé tí và đánh lừa.',
-        'The disk hit 100%. Postgres could not write its write-ahead log and got stuck in recovery: “database system is not yet accepting connections”. The space was not where you would look either — this host uses the containerd snapshotter, so the real images live under /var/lib/containerd while /var/lib/docker looks deceptively small.',
-      ),
-      fix: L(
-        'Thu hồi bằng chính docker (KHÔNG xoá tay trong containerd, và KHÔNG kèm --volumes vì đó là dữ liệu Postgres), khởi động lại Postgres là nó phục hồi xong trong dưới một phút. Về lâu dài: dọn bộ nhớ đệm dựng ảnh sau mỗi lần deploy, cộng một tác vụ định kỳ hàng tuần thu hồi đĩa. Bài học chẩn đoán: trang tĩnh trả 200 KHÔNG chứng minh được gì — phải gọi một endpoint có chạm cơ sở dữ liệu.',
-        'Reclaim through docker itself (never hand-delete inside containerd, and never pass --volumes — that is the Postgres data), then restart Postgres and it finishes recovery in under a minute. Long term: prune the build cache after every deploy, plus a weekly job that reclaims disk. The diagnostic lesson: a static page returning 200 proves nothing — call an endpoint that actually touches the database.',
-      ),
-    },
-    {
-      accent: '#38bdf8',
-      symptom: L(
-        'Deploy dừng ở P3009: “migration failed to apply”. Không migration nào chạy được nữa, kể cả cái hoàn toàn mới và vô hại.',
-        'The deploy stopped at P3009: “migration failed to apply”. No migration could run any more, not even a genuinely new and harmless one.',
-      ),
-      cause: L(
-        'Cơ sở dữ liệu đã lệch khỏi lịch sử migration: sáu migration cũ đã áp cấu trúc bảng vào production nhưng KHÔNG được ghi nhận trong bảng lịch sử — có dòng bỏ dở giữa chừng, có dòng chưa từng được chèn. Prisma thấy lịch sử dở dang nên chặn hết, đúng như nó nên làm.',
-        'The database had drifted from the migration history: six older migrations had their DDL applied to production but were NOT recorded in the history table — some rows left half-finished, some never inserted at all. Prisma saw a broken history and blocked everything, exactly as it should.',
-      ),
-      fix: L(
-        'Với TỪNG migration, mở psql xác nhận bảng và cột nó tạo ra đã thực sự tồn tại, rồi mới đánh dấu là đã áp; sau đó chạy tiếp migration mới. Đánh dấu nhầm một migration còn thiếu sẽ bỏ qua luôn phần cấu trúc cần thiết và làm hỏng dữ liệu trong im lặng — nên từ đó thành quy tắc: migration hỏng thì DỪNG và báo cáo, không bao giờ tự chữa, và tuyệt đối không vá bằng mấy mẹo ép cho chạy qua.',
-        'For EACH migration, confirm in psql that the tables and columns it creates really exist, and only then mark it applied; after that the genuinely new migration runs. Wrongly marking a truly-missing migration skips the DDL you needed and corrupts data silently — which is why the rule is now: a failed migration stops and reports, never auto-resolves, and never gets patched with tricks that force it through.',
-      ),
-    },
-  ];
+  const Placeholder = ({ k }: { k: keyof typeof OWNER_TODO }) => (
+    <span className={s.placeholder} title={c.placeholderHint}>+ {PLACEHOLDER_LABEL[k][lang]}</span>
+  );
 
   return (
-    <div className="min-h-screen" style={{ background: '#0a0a0f' }}>
-      {/* ── Multi-Layer Canvas Background ── */}
-      <HomeBackground />
-
-      {/* Hero Section */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-16 pb-8">
-        {/* Layered background glows — overflow-hidden clips the 500px blur divs
-            so they never widen the mobile viewport. */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[15%] left-[10%] w-[500px] h-[500px] bg-neon-indigo/15 rounded-full blur-[160px] animate-pulse" />
-          <div className="absolute bottom-[20%] right-[5%] w-[450px] h-[450px] bg-neon-violet/15 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '0.8s' }} />
-          <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-neon-fuchsia/8 rounded-full blur-[100px]" />
-          {/* Cyberpunk grid */}
-          <div className="absolute inset-0 opacity-10" style={{
-            backgroundImage: `linear-gradient(rgba(99,102,241,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.08) 1px, transparent 1px)`,
-            backgroundSize: '48px 48px',
-          }} />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-            {/* Left - Text Content */}
-            <div>
-              {/* Status badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-neon-violet/10 border border-neon-violet/30 rounded-full mb-6"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-violet opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-neon-violet" />
-                </span>
-                <span className="text-sm text-neon-violet font-medium">{t('hero.badge')}</span>
-              </motion.div>
-
-              {/* Main Title */}
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-4 leading-tight"
-              >
-                <span className="text-text-primary">{t('hero.greeting')}</span>
-                <br />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia">
-                  {t('hero.name')}
-                </span>
-              </motion.h1>
-
-              {/* Tagline */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-xl md:text-2xl font-bold mb-4"
-              >
-                <span className="text-neon-indigo">{t('hero.tagline')}</span>
-                <span className="text-text-muted"> + </span>
-                <span className="text-neon-fuchsia">{t('hero.tagline2')}</span>
-              </motion.p>
-
-              {/* Description */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-base md:text-lg text-text-secondary max-w-xl mb-6 leading-relaxed"
-              >
-                {t('hero.description')}
-              </motion.p>
-
-              {/* Bento Grid - Value Props */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="grid grid-cols-1 gap-3 mb-6 sm:grid-cols-3"
-              >
-                {bentoCards.map((card, idx) => (
-                  <motion.div
-                    key={card.titleKey}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + idx * 0.1, duration: 0.4 }}
-                    whileHover={{ y: -4, scale: 1.03 }}
-                    className={`relative group p-4 rounded-2xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm overflow-hidden ${card.colSpan}`}
-                    style={{ '--accent': card.accent } as React.CSSProperties}
-                  >
-                    {/* Glow on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                      style={{ background: `radial-gradient(ellipse at center, ${card.accent}18 0%, transparent 70%)` }} />
-                    {/* Top accent line */}
-                    <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity"
-                      style={{ background: `linear-gradient(90deg, transparent, ${card.accent}, transparent)` }} />
-
-                    <card.icon className="w-5 h-5 mb-2.5" style={{ color: card.accent }} strokeWidth={1.5} />
-
-                    {card.titleKey === 'benefits.fastDelivery.title' && (
-                      <div className="mb-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] text-text-muted font-mono">MVP</span>
-                          <span className="text-[10px] font-mono" style={{ color: card.accent }}>2-4 wks</span>
-                        </div>
-                        <div className="h-1.5 bg-darkbg rounded-full overflow-hidden">
-                          <motion.div
-                            className="h-full rounded-full"
-                            style={{ background: `linear-gradient(90deg, ${card.accent}, #a855f7)` }}
-                            initial={{ width: '0%' }}
-                            animate={{ width: '75%' }}
-                            transition={{ delay: 1, duration: 1.5, ease: 'easeOut' }}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {card.titleKey === 'benefits.aiPowered.title' && (
-                      <div className="mb-2 flex items-center gap-1.5">
-                        {/* 'Spring' → 'Node': site này chạy Node + Express. */}
-                        {['LLM', 'RAG', 'Node'].map((chip, i) => (
-                          <div key={chip} className="relative flex items-center">
-                            <motion.div
-                              className="w-5 h-5 rounded-full border flex items-center justify-center text-[8px] font-mono font-bold"
-                              style={{
-                                borderColor: card.accent,
-                                color: card.accent,
-                                background: `${card.accent}15`,
-                                zIndex: 3 - i,
-                              }}
-                              animate={{ y: [-2, 2, -2] }}
-                              transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
-                            >
-                              {chip[0]}
-                            </motion.div>
-                            {i < 2 && (
-                              <div className="absolute -right-2 w-2 h-[1px] bg-darkborder" style={{ zIndex: 2 }} />
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Hai dòng số ĐẾM ĐƯỢC, thay cho "SonarQube A+ / 99%"
-                        vốn không có gì chống lưng. Cùng bố cục, cùng cỡ chữ. */}
-                    {card.titleKey === 'benefits.highQuality.title' && (
-                      <div className="space-y-1 mb-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-text-muted">{L('Bảng dữ liệu', 'DB tables')}</span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-400">{n(codebase.prismaModels)}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-text-muted">{L('Migration', 'Migrations')}</span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-400">{n(codebase.migrations)}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    <h3 className="text-[11px] font-heading font-semibold text-text-primary leading-tight">
-                      {t(card.titleKey)}
-                    </h3>
-                    <p className="text-[10px] text-text-muted mt-0.5 leading-tight hidden group-hover:block">
-                      {card.desc}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Omni-Command Bar */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="relative group mb-8"
-              >
-                {/* Glassmorphism bar */}
-                <div className="relative flex items-center gap-3 px-5 py-3.5 rounded-2xl border border-white/[0.08]
-                  bg-white/[0.04] backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.06)]
-                  transition-all duration-300 group-focus-within:border-neon-violet/60 group-focus-within:shadow-[0_0_0_3px_rgba(139,92,246,0.15),0_8px_32px_rgba(0,0,0,0.4)]">
-                  <Search className="w-4 h-4 text-text-muted shrink-0" />
-                  <span className="w-[1px] h-5 bg-white/10 shrink-0" />
-                  <span className="text-sm text-text-muted font-mono">
-                    {placeholderText}
-                    <span className="animate-pulse text-neon-violet">|</span>
-                  </span>
-                  <div className="ml-auto flex items-center gap-1.5 shrink-0">
-                    {['/', 'p', 'r'].map((k, i) => (
-                      <kbd key={i} className="hidden sm:flex items-center justify-center w-5 h-5 rounded bg-white/10 border border-white/10 text-[10px] text-text-muted font-mono">
-                        {k}
-                      </kbd>
-                    ))}
-                  </div>
-                </div>
-                {/* Quick action pills below */}
-                <div className="flex flex-wrap gap-2 mt-3 ml-1">
-                  {[
-                    { label: '/projects', href: '/projects', icon: Code2 },
-                    ...(SHOP_ENABLED ? [{ label: '/shop', href: '/shop', icon: Zap }] : []),
-                    { label: '/chat', href: '/chat', icon: Brain },
-                  ].map(({ label, href, icon: Icon }) => (
-                    <Link key={label}
-                      href={href}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-darkborder/60 bg-darkcard/40 text-xs text-text-secondary hover:text-neon-violet hover:border-neon-violet/40 hover:bg-neon-violet/5 transition-all duration-200 group/btn"
-                    >
-                      <Icon className="w-3 h-3 opacity-60 group-hover/btn:opacity-100" />
-                      {label}
-                      <ChevronRight className="w-3 h-3 opacity-40" />
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                // Bốn nút (thêm Xem CV + Tải CV) không còn vừa một hàng ở cột
-                // hẹp của lưới 2 cột — `flex-wrap` cho xuống dòng, và
-                // `whitespace-nowrap` ở từng nút chặn kiểu vỡ chữ "Xem / Dự / Án".
-                className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-start gap-3"
-              >
-                <Link
-                  href="/projects"
-                  className="group relative px-6 py-3.5 bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia text-white font-semibold rounded-2xl overflow-hidden whitespace-nowrap"
-                >
-                  <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <span className="relative flex items-center justify-center gap-2">
-                    {t('hero.viewProjects')}
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-                <Link
-                  href="/chat"
-                  className="group px-6 py-3.5 bg-darkcard border-2 border-darkborder text-text-primary font-semibold rounded-2xl hover:border-neon-violet hover:bg-darkcard/80 transition-all duration-300 whitespace-nowrap"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Sparkles className="w-5 h-5 text-neon-fuchsia" />
-                    {t('hero.chatWithAI')}
-                  </span>
-                </Link>
-
-                {/* Tải CV — CHỈ hiện khi endpoint công khai xác nhận có CV thật
-                    để trả về (bật ở /admin/cv). Thà không có nút còn hơn có nút
-                    dẫn tới 404 hoặc tới một file trắng. */}
-                {/* XEM trước, TẢI sau — người đọc CV đầu tiên thường là nhà
-                    tuyển dụng đang lướt điện thoại; bắt họ tải file về máy chỉ
-                    để liếc 20 giây là mất người. */}
-                {cv?.available && (
-                  <>
-                    <Link
-                      href="/cv/xem"
-                      className="group px-6 py-3.5 bg-darkcard border-2 border-emerald-500/40 text-text-primary font-semibold rounded-2xl hover:border-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 whitespace-nowrap"
-                    >
-                      <span className="flex items-center justify-center gap-2">
-                        <Eye className="w-5 h-5 text-emerald-400" />
-                        {L('Xem CV', 'View CV')}
-                      </span>
-                    </Link>
-                    <a
-                      href="/api/v1/cv/public/download/pdf"
-                      className="group px-6 py-3.5 bg-darkcard border-2 border-darkborder text-text-primary font-semibold rounded-2xl hover:border-emerald-400/60 hover:bg-emerald-500/5 transition-all duration-300 whitespace-nowrap"
-                    >
-                      <span className="flex items-center justify-center gap-2">
-                        <Download className="w-5 h-5 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
-                        {L('Tải CV', 'Download CV')}
-                        <span className="text-[11px] font-mono text-text-muted">PDF</span>
-                      </span>
-                    </a>
-                  </>
-                )}
-              </motion.div>
-
-              {/* Dòng phụ dưới nút tải: ngày cập nhật + các định dạng khác. */}
-              {cv?.available && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                  className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-text-muted"
-                >
-                  {cv.updatedAt && (
-                    <span className="font-mono">
-                      {L('Cập nhật', 'Updated')}{' '}
-                      {new Date(cv.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN')}
-                    </span>
-                  )}
-                  <span className="text-text-muted/40">|</span>
-                  <span>{L('Định dạng khác:', 'Other formats:')}</span>
-                  {cv.formats.filter((f) => f !== 'pdf').map((f) => (
-                    <a
-                      key={f}
-                      href={`/api/v1/cv/public/download/${f}`}
-                      className="font-mono underline underline-offset-4 hover:text-neon-violet transition-colors"
-                    >
-                      {f.toUpperCase()}
-                    </a>
-                  ))}
-                </motion.p>
-              )}
-            </div>
-
-            {/* Right - Cyberpunk Dev Sandbox */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              ref={avatarRef}
-              onMouseMove={handleMouseMove}
-              className="hidden lg:flex justify-center items-center"
+    <div className={s.page}>
+      {/* ── Hero ───────────────────────────────────────────────────────── */}
+      <header className={s.hero}>
+        <div className={`${s.wrap} ${s.heroGrid}`}>
+          <div>
+            <motion.p className={s.heroLabel} initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
+              {c.pageLabel}
+            </motion.p>
+            <motion.h1
+              key={`h1-${lang}`}
+              className={`${s.display} ${s.heroTitle}`}
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: EASE }}
             >
-              <div className="relative w-[420px] xl:w-[460px]">
-                {/* Outer glow rings */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl"
-                  style={{
-                    x: springX,
-                    y: springY,
-                    background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.12) 0%, transparent 70%)',
-                  }}
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                />
-
-                {/* Terminal frame */}
-                <div className="relative rounded-3xl border border-white/[0.08] bg-darkcard/80 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(99,102,241,0.08)]">
-                  {/* Terminal header bar */}
-                  <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-black/20">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/70" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/70" />
-                    </div>
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="flex items-center gap-1.5 px-3 py-1 bg-black/30 rounded-md border border-white/[0.06]">
-                        <Terminal className="w-3 h-3 text-neon-violet" />
-                        <span className="text-[11px] font-mono text-text-muted">cuong@dev ~ main</span>
-                        <span className="text-[11px] font-mono text-emerald-400">●</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <div className="w-3 h-3 rounded bg-neon-indigo/40" />
-                      <div className="w-3 h-3 rounded bg-neon-violet/40" />
-                    </div>
-                  </div>
-
-                  {/* Avatar area with mesh */}
-                  <div className="relative h-[380px] overflow-hidden">
-                    {/* Mesh gradient that tracks mouse */}
-                    <motion.div
-                      className="absolute inset-0 pointer-events-none"
-                      animate={{
-                        background: `radial-gradient(ellipse 200px 200px at ${50 + (mouseX.get() / 40) * 25}% ${50 + (mouseY.get() / 40) * 25}%, rgba(139,92,246,0.25) 0%, rgba(99,102,241,0.1) 40%, transparent 70%)`,
-                      }}
-                      style={{ background: `radial-gradient(ellipse 200px 200px at 50% 50%, rgba(139,92,246,0.25) 0%, rgba(99,102,241,0.1) 40%, transparent 70%)` }}
-                    />
-                    {/* Floating grid overlay */}
-                    <div className="absolute inset-0 opacity-20" style={{
-                      backgroundImage: `linear-gradient(rgba(139,92,246,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.1) 1px, transparent 1px)`,
-                      backgroundSize: '24px 24px',
-                    }} />
-
-                    <img
-                      src="/images/avatar.png"
-                      alt="CuongHoang"
-                      className="relative w-full h-full object-cover object-top"
-                    />
-
-                    {/* Scanline effect */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                      <motion.div
-                        className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-neon-violet/40 to-transparent"
-                        animate={{ top: ['0%', '100%'] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
-                      />
-                    </div>
-
-                    {/* Status overlays on avatar */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.9 }}
-                      className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/70 backdrop-blur-md border border-emerald-500/30 rounded-xl"
-                    >
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-                      </span>
-                      {/* Bản cũ: "3+ Năm Kinh Nghiệm" — không kiểm được, và tự
-                          mâu thuẫn với "~ 6 yrs" ở chân khung ngay dưới. Thay
-                          bằng một con số đếm từ kho mã. */}
-                      <span className="text-xs font-mono text-emerald-400">
-                        {n(codebase.commits)} commits
-                      </span>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 1.0 }}
-                      className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-black/70 backdrop-blur-md border border-yellow-500/30 rounded-xl"
-                    >
-                      {/* Bản cũ: "★★★★★ 50+ Khách Hàng" — con số không đếm từ
-                          đâu cả. Thay bằng số trang thật của site. */}
-                      <Code2 className="w-3.5 h-3.5 text-yellow-400" strokeWidth={1.5} />
-                      <span className="text-xs font-mono text-yellow-400">
-                        {n(codebase.pages)} {L('trang', 'pages')}
-                      </span>
-                    </motion.div>
-
-                    {/* Floating tech tags */}
-                    {techTags.map((tag, i) => (
-                      <motion.div
-                        key={tag.label}
-                        initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{
-                          opacity: 1,
-                          scale: 1,
-                          y: [0, parseInt(tag.float), 0],
-                        }}
-                        transition={{
-                          opacity: { delay: 1.1 + i * 0.15 },
-                          scale: { delay: 1.1 + i * 0.15 },
-                          y: { duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: tag.delay },
-                        }}
-                        className="absolute px-2.5 py-1 rounded-lg border text-[11px] font-mono font-medium backdrop-blur-md"
-                        style={{
-                          left: tag.x,
-                          top: tag.y,
-                          borderColor: 'rgba(255,255,255,0.15)',
-                          backdropFilter: 'blur(12px)',
-                        }}
-                      >
-                        <div className={`absolute inset-0 rounded-lg ${tag.color} opacity-90`} />
-                        <span className="relative">{tag.label}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Terminal footer */}
-                  <div className="flex items-center gap-3 px-4 py-2.5 border-t border-white/[0.06] bg-black/20">
-                    <span className="text-[11px] font-mono text-text-muted">
-                      <span className="text-neon-violet">$</span> whoami
-                    </span>
-                    <span className="flex-1 h-[1px] border-b border-dashed border-white/10" />
-                    <span className="text-[11px] font-mono text-neon-indigo">Cuong Hoang Dev</span>
-                    {/* "~ 6 yrs" đã bỏ: nó mâu thuẫn ngay với huy hiệu phía
-                        trên và không có gì chống lưng. */}
-                    <span className="text-[11px] font-mono text-emerald-400">
-                      {n(codebase.daysBuilding)} {L('ngày', 'days')}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Ambient glow blobs */}
-                <div className="absolute -top-8 -right-8 w-40 h-40 bg-neon-fuchsia/15 rounded-full blur-3xl -z-10" />
-                <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-neon-indigo/15 rounded-full blur-3xl -z-10" />
-              </div>
+              {c.heroTitle}
+            </motion.h1>
+            <motion.p
+              className={s.heroBody}
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.1, ease: EASE }}
+            >
+              {c.heroBody}
+            </motion.p>
+            <motion.div
+              className={s.jump}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.18, ease: EASE }}
+            >
+              <a href="#site" className={s.jumpLink} data-primary="true">{c.jumpSite} <ArrowRight size={16} aria-hidden /></a>
+              <a href="#me" className={s.jumpLink}>{c.jumpMe}</a>
+              <a href="#contact" className={s.jumpLink}>{c.jumpContact}</a>
             </motion.div>
           </div>
 
-          {/* System Status Ticker */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="mt-8 relative"
-          >
-            <div className="flex items-center gap-4 overflow-hidden py-2">
-              {/* Left fade */}
-              <div className="w-20 h-6 bg-gradient-to-r from-darkbg to-transparent shrink-0 z-10 absolute left-0" />
-              {/* Right fade */}
-              <div className="w-20 h-6 bg-gradient-to-l from-darkbg to-transparent shrink-0 z-10 absolute right-0" />
-
-              {/* overflow-hidden clips the marquee animation on mobile (320-414px)
-                  where the ticker would otherwise widen the viewport. */}
-              <div className="overflow-hidden min-w-0 flex-1">
-              <div className="flex items-center gap-0 animate-[marquee_30s_linear_infinite] whitespace-nowrap"
-                style={{ animation: 'marquee 30s linear infinite' }}>
-                {[...systemStats, ...systemStats].map((stat, i) => (
-                  <div key={i} className="inline-flex items-center gap-2 px-4">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
-                        style={{ animationDuration: '2s' }} />
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
-                    </span>
-                    <span className="text-[11px] font-mono text-text-muted">{stat.label}:</span>
-                    <span className="text-[11px] font-mono font-medium text-emerald-400">{n(stat.value)}</span>
-                    <span className="text-text-muted/30 mx-2">|</span>
-                  </div>
-                ))}
-              </div>
-              </div>
-            </div>
-            <style>{`
-              @keyframes marquee {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-            `}</style>
-          </motion.div>
-
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-6 h-10 border-2 border-text-muted/30 rounded-full flex justify-center pt-2"
-            >
-              <motion.div
-                animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-1.5 h-3 bg-text-muted/50 rounded-full"
-              />
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Stats Section — bốn ô lớn. Giao diện y hệt bản cũ; chỉ khác là bốn con
-          số nay ĐẾM ĐƯỢC, và ô nào chưa đếm được thì không xuất hiện. */}
-      {statCards.length > 0 && <StatsSection items={statCards} />}
-
-      {/* Featured Projects (homepage) — temporarily hidden.
-          Will be replaced by an admin-managed carousel (admin/home/featured-projects)
-          in a follow-up. Keeping the fetch + state above so the future
-          section can drop in without re-wiring anything. */}
-
-      {/* About Section — overflow-hidden: the avatar card's decorative
-          -right-4 blob must not widen the mobile layout viewport. */}
-      <section className="py-24 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-4xl font-heading font-bold text-text-primary mb-6">
-                {t('about.title')} <span className="text-neon-violet">{t('about.subtitle')}</span>
-              </h2>
-              <p className="text-text-secondary text-lg leading-relaxed mb-6">
-                {t('about.description1')}
-              </p>
-              <p className="text-text-secondary text-lg leading-relaxed mb-8">
-                {t('about.description2')}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {['JavaScript', 'TypeScript', 'React', 'Next.js', 'Java', 'Spring Boot', 'PostgreSQL', 'Redis', 'Docker'].map((skill) => (
-                  <span key={skill} className="px-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-neon-indigo/20 to-neon-violet/20 border border-neon-violet/20 p-8 overflow-hidden">
-                <img
-                  src="/images/avatar.png"
-                  alt="CuongHoang"
-                  className="w-full h-full rounded-2xl object-cover"
-                  style={{ maxWidth: '100%', maxHeight: '100%' }}
-                />
-              </div>
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-neon-fuchsia/20 rounded-full blur-xl" />
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-neon-indigo/20 rounded-full blur-xl" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── BỔ SUNG: Quy mô mã nguồn ────────────────────────────────────────
-          Số đếm thẳng từ kho mã lúc deploy (scripts/gen-codebase-stats.mjs).
-          Đây là thứ trang giới thiệu một lập trình viên nên có mà bản cũ
-          không có: bằng chứng kiểm được, thay cho tính từ. */}
-      {codeCounts.length > 0 && (
-        <section className="py-20 border-y border-darkborder/60 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.07] pointer-events-none" style={{
-            backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
-            backgroundSize: '48px 48px',
-          }} />
-          <div className="max-w-6xl mx-auto px-4 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="mb-10"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <GitCommit className="w-4 h-4 text-neon-indigo" />
-                <span className="text-xs font-mono text-neon-indigo tracking-widest uppercase">
-                  {L('Đếm từ chính kho mã', 'Counted from the repository')}
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary">
-                {L('Quy mô', 'Size of the')} <span className="text-neon-indigo">{L('mã nguồn', 'codebase')}</span>
-              </h2>
-              <p className="text-text-secondary text-sm mt-2 max-w-2xl">
-                {L(
-                  'Không con số nào ở đây gõ tay — một script đếm lại toàn bộ kho mã trước mỗi lần triển khai.',
-                  'Not one of these is typed by hand — a script recounts the whole repository before every deploy.',
-                )}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {codeCounts.map((c, i) => (
+          <nav className={s.map} aria-label={c.mapTitle}>
+            <div className={s.mapTitle}>{c.mapTitle}</div>
+            {mapRows.map((r, i) => {
+              const Icon = r.icon;
+              return (
                 <motion.div
-                  key={c.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.05 }}
-                  className="relative group p-4 rounded-2xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm overflow-hidden"
+                  key={r.id}
+                  initial={reduce ? false : { opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.45, delay: 0.15 + i * 0.07, ease: EASE }}
                 >
-                  <div className="absolute top-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
-                    style={{ background: 'linear-gradient(90deg, transparent, #6366f1, transparent)' }} />
-                  <div className="text-2xl md:text-3xl font-heading font-bold text-text-primary tabular-nums">
-                    {n(c.value)}
-                  </div>
-                  <div className="text-[11px] font-mono text-text-muted uppercase tracking-wider mt-1 leading-tight">
-                    {c.label}
-                  </div>
+                  <Link href={r.href} className={s.mapRow} style={{ ['--hue' as string]: MENU_HUE[r.id] }}>
+                    <span className={s.tile} aria-hidden><Icon /></span>
+                    <span style={{ minWidth: 0 }}>
+                      <div className={s.mapName}>{MENU_LABEL[r.id][lang]}</div>
+                      <div className={s.mapSub}>{r.names}</div>
+                    </span>
+                    <ArrowRight size={16} className={s.mapArrow} aria-hidden />
+                  </Link>
                 </motion.div>
-              ))}
-            </div>
-
-            <p className="mt-6 text-[11px] font-mono text-text-muted/70">
-              {L('Làm mới mỗi lần triển khai', 'Refreshed on every deploy')} ·{' '}
-              {new Date(codebase.generatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN')}
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Latest Articles — AI Knowledge Stream */}
-      <section className="py-24 bg-gradient-to-b from-darkbg to-darkcard">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-10"
-          >
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-2 h-2 rounded-full bg-neon-violet animate-pulse" />
-              <span className="text-xs font-mono text-neon-violet tracking-widest uppercase">AI Knowledge Stream</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary">
-              {t('latestArticles')} <span className="text-neon-violet">{t('articles')}</span>
-            </h2>
-            <p className="text-text-secondary text-sm mt-1 max-w-xl">{t('blog.subtitle')}</p>
-          </motion.div>
-
-          {loading ? (
-            <div className="space-y-3">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-16 bg-darkcard rounded-xl border border-darkborder/50 animate-pulse" />
-              ))}
-            </div>
-          ) : featuredPosts.length > 0 ? (
-            <div className="space-y-3">
-              {/* Terminal window frame */}
-              <div className="rounded-2xl border border-darkborder/60 bg-darkcard/80 backdrop-blur-sm overflow-hidden">
-                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.05] bg-black/20">
-                  <div className="flex gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                  </div>
-                  <span className="text-[11px] font-mono text-text-muted ml-2">cuong@knowledge-stream ~ articles</span>
-                </div>
-                <div className="p-4 space-y-2 max-h-[500px] overflow-y-auto">
-                  {featuredPosts.slice(0, 6).map((post, index) => {
-                    const ts = post.createdAt ? new Date(post.createdAt) : new Date();
-                    const dateStr = ts.toLocaleDateString('en-CA');
-                    const timeStr = ts.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                    const categoryColors = ['text-neon-indigo', 'text-neon-violet', 'text-neon-fuchsia', 'text-neon-cyan', 'text-neon-emerald'];
-                    const catColor = categoryColors[index % categoryColors.length];
-                    return (
-                      <motion.div
-                        key={post.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: index * 0.07 }}
-                      >
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          className="group flex items-start gap-4 px-4 py-3 rounded-xl border border-transparent hover:border-neon-violet/20 hover:bg-neon-violet/[0.04] transition-all duration-200"
-                        >
-                          {/* Timestamp */}
-                          <span className="font-mono text-[11px] text-text-muted/50 shrink-0 mt-0.5 w-32 hidden sm:block">
-                            [{dateStr} {timeStr}]
-                          </span>
-                          {/* Neon dot */}
-                          <span className={`relative flex h-2 w-2 shrink-0 mt-1.5`}>
-                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${catColor} opacity-40`} style={{ animationDuration: '3s' }} />
-                            <span className={`relative inline-flex rounded-full h-2 w-2 ${catColor.replace('text-', 'bg-')}`} />
-                          </span>
-                          {/* Content */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap mb-1">
-                              <span className="text-[10px] font-mono text-neon-violet/70 uppercase tracking-wider hidden sm:inline">FETCH</span>
-                              <span className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1 leading-snug">
-                                {post.title}
-                              </span>
-                            </div>
-                            {post.excerpt && (
-                              <p className="text-xs text-text-muted line-clamp-1 leading-relaxed">{post.excerpt}</p>
-                            )}
-                          </div>
-                          {/* Status + arrow */}
-                          <div className="flex items-center gap-2 shrink-0">
-                            <span className="text-[11px] font-mono text-emerald-400">SUCCESS</span>
-                            <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:text-neon-violet group-hover:translate-x-0.5 transition-all" />
-                          </div>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="text-center mt-6">
-                <Link
-                  href="/tech-trends"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-medium rounded-xl hover:border-neon-violet hover:text-neon-violet transition-all duration-300 group"
-                >
-                  {t('viewAllArticles')}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          ) : (
-            /* No articles — AI Knowledge Stream terminal style */
-            <div className="rounded-2xl border border-darkborder/60 bg-darkcard/80 backdrop-blur-sm overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/[0.05] bg-black/20">
-                <div className="flex gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                </div>
-                <span className="text-[11px] font-mono text-text-muted ml-2">cuong@knowledge-stream ~ articles</span>
-              </div>
-              <div className="p-6 space-y-2 font-mono text-sm">
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-[11px] text-text-muted/50">[2026-06-06 12:00:00]</span>
-                  <span className="text-[11px] font-mono text-neon-violet/70">FETCH</span>
-                  <span className="text-text-muted">Query: articles.all()</span>
-                  <span className="text-yellow-400">→ PENDING</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-[11px] text-text-muted/50">[2026-06-06 12:00:01]</span>
-                  <span className="text-[11px] font-mono text-yellow-400/70">WARN</span>
-                  <span className="text-text-muted">ResultSet is empty. Waiting for content pipeline...</span>
-                </div>
-                <div className="flex items-center gap-3 pt-2 border-t border-darkborder/40">
-                  <span className="font-mono text-[11px] text-text-muted/50">[2026-06-06 12:00:02]</span>
-                  <span className="text-[11px] font-mono text-neon-indigo/70">HINT</span>
-                  <span className="text-text-muted">Add your first article via the admin dashboard to activate the stream.</span>
-                </div>
-              </div>
-            </div>
-          )}
+              );
+            })}
+          </nav>
         </div>
-      </section>
+      </header>
 
-      {/* Blog Posts — Latest 3 with cover image */}
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <span className="inline-block px-4 py-1.5 bg-neon-fuchsia/10 border border-neon-fuchsia/20 rounded-full text-sm text-neon-fuchsia font-medium mb-4">
-              {t('blogCategories') || 'Blog'}
-            </span>
-            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              {L('Bài viết', 'Latest')} <span className="text-neon-fuchsia">{L('mới nhất', 'articles')}</span>
-            </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-              {L('Những bài viết mới nhất được đăng tải lên hệ thống.', 'The most recent articles published on the site.')}
-            </p>
-          </motion.div>
+      {/* ── Sticky section switch ──────────────────────────────────────── */}
+      <div className={s.subnav}>
+        <div className={`${s.wrap} ${s.subnavInner}`}>
+          {([['site', c.jumpSite], ['me', c.jumpMe], ['contact', c.jumpContact]] as [SectionId, string][]).map(([id, label]) => (
+            <a key={id} href={`#${id}`} className={s.subnavLink} aria-current={active === id ? 'true' : undefined}>
+              {active === id && (
+                <motion.span layoutId="about-subnav-pill" className={s.subnavPill} transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 36 }} />
+              )}
+              <span>{label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
 
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-72 bg-darkcard rounded-2xl border border-darkborder/50 animate-pulse" />
-              ))}
+      {/* ── 1. About this website ─────────────────────────────────────── */}
+      <section id="site" ref={refs.site} className={s.section}>
+        <div className={s.wrap}>
+          <motion.h2 className={`${s.display} ${s.h2}`} {...reveal()}>{c.siteTitle}</motion.h2>
+          <motion.p className={s.lead} {...reveal(1)}>{c.siteLead}</motion.p>
+          <motion.p className={s.body} style={{ marginTop: '1rem' }} {...reveal(2)}>{c.siteBody}</motion.p>
+
+          <div className={s.sub}>
+            <div className={s.subHead}>
+              <h3 className={s.h3}>{c.doTitle}</h3>
+              {countedAt && <span className={s.meta}>{c.countedAt} {countedAt}</span>}
             </div>
-          ) : featuredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredPosts.slice(0, 3).map((post, index) => {
-                const ts = post.createdAt ? new Date(post.createdAt) : new Date();
-                const dateStr = ts.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                const accentColors = ['from-neon-indigo to-neon-violet', 'from-neon-violet to-neon-fuchsia', 'from-neon-fuchsia to-neon-pink'];
-                const accent = accentColors[index % accentColors.length];
+            <div className={s.features}>
+              {FEATURES.map((f, i) => {
+                const found = findItem(f.href);
+                if (!found) return null;
+                const { item, menu } = found;
+                const Icon = item.icon;
+                const value = f.stat ? (stats?.[f.stat] as number | null | undefined) : undefined;
                 return (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                  >
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="group block bg-darkcard rounded-2xl border border-darkborder/50 hover:border-neon-violet/40 transition-all duration-300 overflow-hidden h-full"
-                    >
-                      {/* Cover image */}
-                      <div className="aspect-[16/9] relative overflow-hidden bg-darkbg">
-                        {post.thumbnailUrl ? (
-                          <img
-                            src={post.thumbnailUrl}
-                            alt={post.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
-                        ) : (
-                          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${accent}`}>
-                            <span className="text-5xl font-heading font-bold text-white/30 group-hover:text-white/50 transition-colors">
-                              {post.title?.charAt(0).toUpperCase() || 'B'}
-                            </span>
-                          </div>
-                        )}
-                        {/* Top accent line */}
-                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-neon-fuchsia/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        {/* Date badge */}
-                        <div className="absolute bottom-3 left-3">
-                          <span className="px-2.5 py-1 text-[11px] font-mono text-white/80 bg-black/60 backdrop-blur-sm border border-white/[0.08] rounded-md">
-                            {dateStr}
+                  <motion.div key={f.href} {...reveal(i % 3)}>
+                    <Link href={f.href} className={s.feature} style={{ ['--hue' as string]: MENU_HUE[menu] }}>
+                      <div className={s.featureTop}>
+                        <span className={s.tile} aria-hidden><Icon /></span>
+                        {typeof value === 'number' && value > 0 && f.unit && (
+                          <span className={s.featureStat}>
+                            <div className={s.featureNum}>{n(value)}</div>
+                            <div className={s.featureUnit}>{f.unit[lang]}</div>
                           </span>
-                        </div>
-                      </div>
-
-                      <div className="p-5">
-                        <h3 className="text-lg font-heading font-bold text-text-primary group-hover:text-neon-fuchsia transition-colors line-clamp-2 mb-2">
-                          {post.title}
-                        </h3>
-                        {post.excerpt && (
-                          <p className="text-sm text-text-muted line-clamp-3 leading-relaxed">
-                            {post.excerpt}
-                          </p>
                         )}
-                        <div className="mt-4 flex items-center gap-2 text-xs text-text-muted group-hover:text-neon-violet transition-colors">
-                          <span>{L('Đọc tiếp', 'Read on')}</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                        </div>
                       </div>
+                      <div>
+                        <div className={s.featureTitle}>{item.title[lang]}</div>
+                        <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{item.desc[lang]}</p>
+                      </div>
+                      <span className={s.featureOpen}>{c.open} <ArrowRight size={14} aria-hidden /></span>
                     </Link>
                   </motion.div>
                 );
               })}
             </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-text-muted text-lg">{L('Chưa có bài viết nào', 'No articles yet')}</p>
+          </div>
+
+          <div className={s.sub}>
+            <div className={s.subHead}>
+              <h3 className={s.h3}>{c.codeTitle}</h3>
+              <span className={s.meta}>{c.codeBody}</span>
             </div>
-          )}
-
-          {featuredPosts.length > 0 && (
-            <div className="text-center mt-10">
-              <Link
-                href="/tech-trends"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-medium rounded-xl hover:border-neon-fuchsia hover:text-neon-fuchsia transition-all duration-300 group"
-              >
-                {L('Xem tất cả bài viết', 'View all articles')}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
+            <div className={s.counts}>
+              {CODE_COUNTS.map(({ key, label }) => {
+                const v = codebase[key];
+                if (typeof v !== 'number' || v <= 0) return null;
+                return (
+                  <div key={key} className={s.count}>
+                    <div className={s.countNum}>{n(v)}</div>
+                    <div className={s.countLabel}>{label[lang]}</div>
+                  </div>
+                );
+              })}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
 
-      {/* Skills Section */}
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              {t('skillsTech')} <span className="text-neon-indigo">{t('about.title')}</span>
-            </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-              {t('skillsTechSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {[
-              { name: 'Java', level: 95, color: 'from-orange-500 to-red-500' },
-              { name: 'Spring Boot', level: 90, color: 'from-green-500 to-emerald-500' },
-              { name: 'Node.JS', level: 72, color: 'from-emerald-500 to-green-600' },
-              { name: 'JavaScript', level: 85, color: 'from-yellow-400 to-orange-500' },
-              { name: 'TypeScript', level: 80, color: 'from-blue-500 to-indigo-500' },
-              { name: 'React', level: 85, color: 'from-cyan-400 to-blue-500' },
-              { name: 'Next.js', level: 80, color: 'from-gray-600 to-gray-900' },
-              { name: 'Golang', level: 60, color: 'from-cyan-500 to-teal-500' },
-              { name: 'Mobile App', level: 68, color: 'from-purple-500 to-pink-500' },
-              { name: 'VPS', level: 90, color: 'from-indigo-500 to-purple-600' },
-              { name: 'Linux', level: 88, color: 'from-yellow-500 to-amber-600' },
-              { name: 'Docker', level: 80, color: 'from-blue-400 to-cyan-500' },
-              { name: 'PostgreSQL', level: 85, color: 'from-blue-600 to-indigo-700' },
-              { name: 'Redis', level: 75, color: 'from-red-500 to-orange-500' },
-              { name: 'AWS', level: 65, color: 'from-orange-400 to-yellow-500' },
-            ].map((skill, i) => (
-              <motion.div
-                key={skill.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
-                className="p-4 bg-darkcard rounded-xl border border-darkborder/50 hover:border-neon-violet/30 transition-all group cursor-default"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors">
-                    {skill.name}
-                  </span>
-                  <span className="text-xs text-text-muted">{skill.level}%</span>
+          <div className={s.sub}>
+            <div className={s.subHead}><h3 className={s.h3}>{c.stackTitle}</h3></div>
+            <div className={s.stack}>
+              {TECH_STACK.map((g) => (
+                <div key={tx(g.group, 'en')} className={s.stackGroup} style={{ ['--hue' as string]: g.accent }}>
+                  <div className={s.stackName}><i aria-hidden />{tx(g.group, lang)}</div>
+                  <div className={s.stackItems}>{g.items.map((it) => tx(it, lang)).join(' · ')}</div>
                 </div>
-                <div className="h-1.5 bg-darkbg rounded-full overflow-hidden">
-                  <div
-                    className={`h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1000`}
-                    style={{ width: `${skill.level}%` }}
-                  />
-                </div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── BỔ SUNG: Stack đầy đủ ───────────────────────────────────────────
-          Mười lăm thanh phần trăm phía trên là tự đánh giá và bỏ sót gần hết
-          những gì thực sự đang chạy. Khối này liệt kê đủ, không chấm điểm. */}
-      <section className="py-24 border-t border-darkborder/50">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-neon-indigo/10 border border-neon-indigo/20 rounded-full text-sm text-neon-indigo font-medium mb-4">
-              <Layers className="w-3.5 h-3.5" />
-              {L('Stack đầy đủ', 'Full stack')}
-            </span>
-            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              {L('Mọi thứ', 'Everything')}{' '}
-              <span className="text-neon-indigo">{L('đang chạy trên site này', 'running on this site')}</span>
-            </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-              {L(
-                'Không chấm phần trăm. Mỗi mục dưới đây đều đối chiếu được với package.json hoặc cây thư mục của kho mã.',
-                'No percentages. Every entry below can be checked against package.json or the repository tree.',
-              )}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {techStack.map((g, i) => (
-              <motion.div
-                key={g.group}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="relative group p-5 rounded-2xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
-                  style={{ background: `linear-gradient(90deg, transparent, ${g.accent}, transparent)` }} />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{ background: `radial-gradient(ellipse at top left, ${g.accent}12 0%, transparent 70%)` }} />
-
-                <div className="relative">
-                  <div className="flex items-baseline justify-between mb-3">
-                    <h3 className="text-sm font-heading font-bold" style={{ color: g.accent }}>{g.group}</h3>
-                    {/* Đếm từ chính mảng đang vẽ — không gõ tay, không lệch khi thêm bớt. */}
-                    <span className="text-[10px] font-mono text-text-muted">{g.items.length}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {g.items.map((it) => (
-                      <span
-                        key={it}
-                        className="px-2.5 py-1 rounded-lg border border-darkborder/70 bg-darkbg/60 text-[12px] text-text-secondary"
-                      >
-                        {it}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BỔ SUNG: Sự cố production đã xử lý ──────────────────────────────
-          Ai cũng liệt kê được công nghệ; phần khó kể hơn là mình đã sai ở đâu.
-          Bốn ca dưới đây lấy từ nhật ký sự cố có thật trong kho mã. */}
-      <section className="py-24 bg-gradient-to-b from-darkcard to-darkbg">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-neon-violet/10 border border-neon-violet/20 rounded-full text-sm text-neon-violet font-medium mb-4">
-              <ShieldAlert className="w-3.5 h-3.5" />
-              {L('Nhật ký sự cố', 'Incident log')}
-            </span>
-            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              {incidents.length} {L('lần làm hỏng', 'times I broke')}{' '}
-              <span className="text-neon-violet">production</span>
-              {L(', và cách chữa', ', and how each got fixed')}
-            </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-              {L(
-                'Ai cũng liệt kê được công nghệ. Phần khó kể hơn là mình đã sai ở đâu và học được gì.',
-                'Anyone can list technologies. The harder thing to write down is where you got it wrong.',
-              )}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-            {incidents.map((inc, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="relative group p-5 rounded-2xl border border-darkborder/60 bg-darkcard/70 backdrop-blur-sm overflow-hidden"
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                  style={{ background: `radial-gradient(ellipse at top left, ${inc.accent}12 0%, transparent 70%)` }} />
-                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity"
-                  style={{ background: `linear-gradient(90deg, transparent, ${inc.accent}, transparent)` }} />
-
-                <div className="relative space-y-3">
-                  {([
-                    [L('Triệu chứng', 'Symptom'), inc.symptom, '#f87171'],
-                    [L('Nguyên nhân', 'Cause'), inc.cause, '#fbbf24'],
-                    [L('Cách chữa', 'Fix'), inc.fix, '#34d399'],
-                  ] as const).map(([label, text, color]) => (
-                    <div key={label}>
-                      <div className="text-[10px] font-mono uppercase tracking-[0.16em] mb-1" style={{ color }}>
-                        {label}
+      {/* ── 2. About me ───────────────────────────────────────────────── */}
+      <section id="me" ref={refs.me} className={s.section}>
+        <div className={s.wrap}>
+          <motion.h2 className={`${s.display} ${s.h2}`} {...reveal()}>{c.meTitle}</motion.h2>
+          <div className={s.meGrid}>
+            <aside className={s.card}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={OWNER.photo} alt={OWNER.name} className={s.photo} width={352} height={352} />
+              <div className={s.cardBody}>
+                <h3 className={`${s.display} ${s.name}`}>{OWNER.name}</h3>
+                <div className={s.role}>{OWNER.role[lang]}</div>
+                <dl className={s.facts}>
+                  <div className={s.fact}><dt>{c.meLocation}</dt><dd>{OWNER.location[lang]}</dd></div>
+                  <div className={s.fact}><dt>{c.meLanguages}</dt><dd>{OWNER.languages[lang]}</dd></div>
+                  <div className={s.fact}><dt>{c.meBuilding}</dt><dd>{firstCommit}</dd></div>
+                  {(['education', 'experience', 'currently'] as const).map((k) => {
+                    const v = OWNER_TODO[k];
+                    if (!v && !showTodo) return null;
+                    return (
+                      <div key={k} className={s.fact}>
+                        <dt>{PLACEHOLDER_LABEL[k][lang]}</dt>
+                        <dd>{v ? v[lang] : <Placeholder k={k} />}</dd>
                       </div>
-                      <p className="text-[13.5px] text-text-secondary leading-relaxed">{text}</p>
+                    );
+                  })}
+                </dl>
+                <div className={s.socials}>
+                  {OWNER.socials.map((so) => (
+                    <a key={so.label} href={so.href} target="_blank" rel="noopener noreferrer" className={s.chip}>
+                      {so.label} <ArrowUpRight size={13} aria-hidden />
+                    </a>
+                  ))}
+                  {cv?.available && <Link href="/cv/xem" className={s.chip}>{c.viewCv}</Link>}
+                </div>
+              </div>
+            </aside>
+
+            <div>
+              <div className={s.bio}>
+                {BIO.map((p, i) => <motion.p key={i} {...reveal(i)}>{p[lang]}</motion.p>)}
+                {OWNER_TODO.story
+                  ? <motion.p {...reveal(3)}>{OWNER_TODO.story[lang]}</motion.p>
+                  : showTodo && <p><Placeholder k="story" /></p>}
+                <p>{c.meOpenTo}</p>
+              </div>
+
+              <div className={s.sub}>
+                <div className={s.subHead}>
+                  <h3 className={s.h3}>{c.incidentsTitle}</h3>
+                </div>
+                <p className={s.body} style={{ marginBottom: '1.25rem' }}>{c.incidentsBody}</p>
+                <div className={s.incidents}>
+                  {INCIDENTS.map((inc, i) => {
+                    const isOpen = openIncident === i;
+                    return (
+                      <div key={i} className={s.incident}>
+                        <button
+                          type="button"
+                          className={s.incidentBtn}
+                          aria-expanded={isOpen}
+                          aria-controls={`incident-${i}`}
+                          onClick={() => setOpenIncident(isOpen ? null : i)}
+                        >
+                          <span className={s.incidentNo}>{String(i + 1).padStart(2, '0')}</span>
+                          <span>{inc.symptom[lang]}</span>
+                          <Plus size={18} aria-hidden />
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {isOpen && (
+                            <motion.div
+                              id={`incident-${i}`}
+                              className={s.incidentBody}
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: reduce ? 0 : 0.3, ease: EASE }}
+                            >
+                              <div className={s.incidentInner}>
+                                <div><h4>{c.cause}</h4><p>{inc.cause[lang]}</p></div>
+                                <div><h4>{c.fix}</h4><p>{inc.fix[lang]}</p></div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className={s.sub}>
+                <div className={s.subHead}>
+                  <h3 className={s.h3}>{c.skillsTitle}</h3>
+                  <span className={s.meta}>{c.skillsNote}</span>
+                </div>
+                <div className={s.skills}>
+                  {SELF_ASSESSED_SKILLS.map((sk, i) => (
+                    <div key={sk.name} className={s.skill}>
+                      <div className={s.skillTop}><span>{sk.name}</span><span>{sk.level}%</span></div>
+                      <div className={s.bar}>
+                        <motion.i
+                          style={{ width: `${sk.level}%` }}
+                          initial={reduce ? false : { scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.7, delay: (i % 6) * 0.04, ease: EASE }}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
-              </motion.div>
-            ))}
+              </div>
+
+              <div className={s.sub}>
+                <div className={s.subHead}><h3 className={s.h3}>{c.hireTitle}</h3></div>
+                <p className={s.body} style={{ marginBottom: '1.25rem' }}>{c.hireBody}</p>
+                <div className={s.hire}>
+                  {HIRE.map((href) => {
+                    const found = findItem(href);
+                    if (!found) return null;
+                    const Icon = found.item.icon;
+                    return (
+                      <Link key={href} href={href} className={s.feature} style={{ ['--hue' as string]: MENU_HUE.about }}>
+                        <span className={s.tile} aria-hidden><Icon /></span>
+                        <div>
+                          <div className={s.featureTitle}>{found.item.title[lang]}</div>
+                          <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{found.item.desc[lang]}</p>
+                        </div>
+                        <span className={s.featureOpen}>{c.open} <ArrowRight size={14} aria-hidden /></span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── BỔ SUNG 30/09/2026: lối vào luồng nhận dự án ──────────────────────
-          Chỉ CHÈN thêm một khối, không đổi phần nào của giao diện cũ.
-          01/10/2026 (bản 2): trỏ vào BƯỚC 1 của luồng /about/studio →
-          /about/nhan-du-an → /about/quy-trinh; bỏ số giai đoạn gõ cứng. */}
-      <section className="pt-20 pb-4">
-        <div className="max-w-6xl mx-auto px-4">
-          <Link
-            href="/about/studio"
-            className="group relative flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 rounded-2xl border border-neon-violet/30 bg-neon-violet/[0.06] p-5 sm:p-6 hover:border-neon-violet/60 transition-colors overflow-hidden"
-          >
-            <span className="shrink-0 w-12 h-12 rounded-xl bg-neon-gradient flex items-center justify-center text-white">
-              <Layers className="w-6 h-6" />
-            </span>
-            <span className="flex-1 min-w-0">
-              <span className="block text-xs font-mono uppercase tracking-wider text-neon-violet mb-1">
-                {L('Nhận dự án', 'Work with me')}
-              </span>
-              <span className="block text-lg sm:text-xl font-heading font-bold text-text-primary">
-                {L('Studio, nhận dự án & quy trình làm việc', 'Studio, project intake & delivery process')}
-              </span>
-              <span className="block text-sm text-text-secondary mt-1">
-                {L(
-                  'Giới thiệu studio, gửi yêu cầu dự án, rồi xem từng giai đoạn từ tiếp nhận tới bảo trì — với bộ phận phụ trách, RACI, cổng chất lượng và mẫu tài liệu.',
-                  'Meet the studio, send a project request, then walk through every stage from intake to maintenance — with owners, RACI, quality gates and document templates.',
-                )}
-              </span>
-            </span>
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-neon-violet shrink-0">
-              {L('Bắt đầu', 'Start here')}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <ServicesSection />
-
-      {/* Contact Section — hidden while the public contact form is disabled
-          (lib/featureFlags.ts) */}
-      {CONTACT_ENABLED && <ContactSection />}
-
-      {/* ── BỔ SUNG: Liên hệ trực tiếp ──────────────────────────────────────
-          Biểu mẫu liên hệ đang TẮT bằng feature flag, nên trước khối này cả
-          trang giới thiệu không có một chỗ liên hệ nào ngoài chân trang —
-          người vừa đọc xong CV muốn nhắn một câu thì phải đi tìm. */}
-      <section className="py-20 border-t border-darkborder/50">
-        <div className="max-w-6xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="rounded-3xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm p-8 sm:p-10 relative overflow-hidden"
-          >
-            <div className="absolute top-0 left-0 right-0 h-[2px]"
-              style={{ background: 'linear-gradient(90deg, transparent, #8b5cf6, transparent)' }} />
-
-            <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-              <div>
-                <h2 className="text-3xl font-heading font-bold text-text-primary">
-                  {L('Liên hệ', 'Get in touch')}
-                </h2>
-                <p className="mt-2 text-text-secondary max-w-xl">
-                  {L(
-                    'Mở với cơ hội công việc, cộng tác, hoặc chỉ là một câu hỏi về thứ gì đó trên site.',
-                    'Open to work, collaboration, or just a question about something on this site.',
-                  )}
-                </p>
-
-                <div className="mt-5 flex flex-wrap items-center gap-2.5">
-                  <a
-                    href={`mailto:${CONTACT_EMAIL}`}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 font-mono text-sm text-text-primary hover:border-neon-violet hover:text-neon-violet transition-colors"
-                  >
-                    {CONTACT_EMAIL}
-                  </a>
-                  <button
-                    onClick={copyEmail}
-                    aria-label={L('Sao chép địa chỉ email', 'Copy email address')}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 text-sm text-text-secondary hover:border-emerald-400/60 hover:text-emerald-400 transition-colors"
-                  >
-                    {copied
-                      ? <><Check className="w-4 h-4 text-emerald-400" /> {L('Đã sao chép', 'Copied')}</>
-                      : <><Copy className="w-4 h-4" /> {L('Sao chép', 'Copy')}</>}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2.5 lg:justify-end">
-                {SOCIALS.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 text-sm font-medium text-text-secondary hover:border-neon-violet hover:text-neon-violet transition-colors"
-                  >
-                    {s.label}
-                  </a>
-                ))}
-                {cv?.available && (
-                  <Link
-                    href="/cv/xem"
-                    className="px-4 py-2.5 rounded-xl border-2 border-emerald-500/40 bg-darkbg/60 text-sm font-semibold text-text-primary hover:border-emerald-400 transition-colors"
-                  >
-                    {L('Xem CV', 'View CV')}
-                  </Link>
-                )}
-              </div>
+      {/* ── Contact ───────────────────────────────────────────────────── */}
+      <section id="contact" ref={refs.contact} className={s.section}>
+        <div className={`${s.wrap} ${s.contactGrid}`}>
+          <div>
+            <motion.h2 className={`${s.display} ${s.h2}`} {...reveal()}>{c.contactTitle}</motion.h2>
+            <p className={s.body}>{c.contactBody}</p>
+            <div className={s.mailRow}>
+              <a href={`mailto:${OWNER.email}`} className={s.mail}>{OWNER.email}</a>
+              <button type="button" className={s.chip} onClick={copyEmail} aria-label={c.copyAria}>
+                {copied ? <><Check size={14} aria-hidden /> {c.copied}</> : <><Copy size={14} aria-hidden /> {c.copy}</>}
+              </button>
             </div>
-          </motion.div>
+            <div className={s.socials} style={{ marginTop: '1.5rem' }}>
+              {OWNER.socials.map((so) => (
+                <a key={so.label} href={so.href} target="_blank" rel="noopener noreferrer" className={s.chip}>
+                  {so.label} <ArrowUpRight size={13} aria-hidden />
+                </a>
+              ))}
+              <a href="https://zalo.me/0399360938" target="_blank" rel="noopener noreferrer" className={s.chip}>Zalo <ArrowUpRight size={13} aria-hidden /></a>
+            </div>
+          </div>
+
+          <form className={s.form} onSubmit={submit}>
+            <div className={s.formRow}>
+              <label className={s.field}>{c.formName}
+                <input className={s.input} required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} autoComplete="name" />
+              </label>
+              <label className={s.field}>{c.formEmail}
+                <input className={s.input} required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} autoComplete="email" />
+              </label>
+            </div>
+            <label className={s.field}>{c.formSubject}
+              <input className={s.input} value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} />
+            </label>
+            <label className={s.field}>{c.formMessage}
+              <textarea className={s.input} required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} style={{ resize: 'vertical' }} />
+            </label>
+            <button type="submit" className={s.submit} disabled={sendState === 'sending'}>
+              {sendState === 'sending' ? c.formSending : c.formSend}
+            </button>
+            <div aria-live="polite" className={s.formNote}>
+              {sendState === 'sent' && <span style={{ color: '#059669' }}>{c.formSent}</span>}
+              {sendState === 'error' && <span style={{ color: '#dc2626' }}>{c.formError}</span>}
+            </div>
+          </form>
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

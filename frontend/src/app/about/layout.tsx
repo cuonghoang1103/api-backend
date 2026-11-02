@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 // AI, and embedded products") described nothing a reader could check. The page
 // now leads with counted evidence, so the snippet should too.
 const DESCRIPTION =
-  'CuongHoang — full-stack developer. This site is the portfolio: the codebase, the content counted straight from its database, how it deploys, and four production incidents with their fixes. CV available as a direct download.';
+  'About CuongThai — a learning and career platform with curricula, graded exercises, past exam papers, language practice and AI tools — and about Cuong Hoang, the full-stack developer who builds and runs it, with the production incidents he has fixed.';
 
 export const metadata: Metadata = {
   title: 'About',

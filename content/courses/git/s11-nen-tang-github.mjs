@@ -656,6 +656,21 @@ ${slide('git-11', 13, 'CI chặn merge qua ruleset')}
 <div class="pitfall"><strong>Bẫy:</strong> dùng <code>pull_request_target</code> thay vì <code>pull_request</code> trên một kho công khai. Nó chạy với quyền <em>GHI</em> và có quyền truy cập secret của bạn, trong ngữ cảnh nhánh gốc — nhưng nếu bạn còn checkout luôn mã của pull request thì bạn đang thực thi mã của người lạ bằng chứng chỉ của mình. Nó tồn tại để gắn nhãn và bình luận trên các fork, không phải để dựng mã của họ. Nếu bạn không chủ ý cần nó thì thứ bạn muốn là <code>pull_request</code>.</div>
 <p class="note-ct"><strong>Luật quyết định cái gì thuộc về CI:</strong> bất cứ thứ gì mà nếu không có nó, người review sẽ phải kiểm bằng tay và có thể kiểm sai. Định dạng, kiểu, lint, test, quét bí mật — tất cả, để sự chú ý của con người dành cho tính đúng đắn và thiết kế (bài 6.2). Mỗi phép kiểm bạn tự động hoá là một phép kiểm không bao giờ bị bỏ qua vào một chiều thứ Sáu.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.4 — Mocking and tests in CI</span><span class="lc-sub">vi.fn for fetch, fake timers, and a GitHub Actions workflow checked with actionlint</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.4 — Giả lập và test trong CI</span><span class="lc-sub">vi.fn cho fetch, đồng hồ giả, và workflow GitHub Actions kiểm bằng actionlint</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1768,6 +1768,21 @@ ${LINK('https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposi
 ${LINK('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize', '📄', 'MDN — String.prototype.normalize()', 'NFC, NFD, NFKC, NFKD kèm ví dụ.')}
 ${LINK('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter', '📄', 'MDN — Intl.Segmenter', 'Đếm cụm tự vị, từ và câu.')}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-5-regex" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.5 — Regular expressions, just enough</span><span class="lc-sub">Validation with ^…$, groups, flags and Unicode-aware patterns, tested in Chromium</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-5-regex" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.5 — Biểu thức chính quy, vừa đủ dùng</span><span class="lc-sub">Kiểm tra với ^…$, nhóm, cờ và mẫu hiểu Unicode, chạy thử trong Chromium</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

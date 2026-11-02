@@ -108,6 +108,21 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
   <span class="lc-body"><span class="lc-title">Luyện tập: class trên Code Lab</span><span class="lc-sub">Dùng modifier truy cập và một parameter property.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-3-prototype-class" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.3 — Prototype and class</span><span class="lc-sub">The prototype chain behind class/extends, measured in the browser</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-3-prototype-class" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.3 — Prototype và class</span><span class="lc-sub">Chuỗi prototype đằng sau class/extends, đo ngay trong trình duyệt</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

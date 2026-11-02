@@ -173,5 +173,20 @@ ${ra(OUT['31-th'])}
 <li>Phụ thuộc truyền vào qua tham số làm đồ đóng thế trở nên đơn giản.</li>
 </ul>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.4 — Mocking and tests in CI</span><span class="lc-sub">vi.fn for fetch, fake timers, and a GitHub Actions workflow checked with actionlint</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.4 — Giả lập và test trong CI</span><span class="lc-sub">vi.fn cho fetch, đồng hồ giả, và workflow GitHub Actions kiểm bằng actionlint</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

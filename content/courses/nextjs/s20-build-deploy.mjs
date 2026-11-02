@@ -116,6 +116,21 @@ export default {
   <span class="lc-body"><span class="lc-title">nextjs.org — Deploying</span><span class="lc-sub">Bản build production, tự-host, Docker, và các lựa chọn hosting.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-1-build" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.1 — What a production build does</span><span class="lc-sub">Dev 225 KB vs build 1.4 KB, measured; bundle, minify, tree-shake, hash</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-1-build" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.1 — Bản dựng production làm gì</span><span class="lc-sub">Dev 225 KB so với build 1,4 KB, đo thật; gộp gói, thu gọn, rung cây, băm tên</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -220,6 +235,21 @@ export default {
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Environment Variables</span><span class="lc-sub">Server vs NEXT_PUBLIC_, nướng lúc build, và file .env.</span></span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.2 — Environment variables and secrets</span><span class="lc-sub">A VITE_ secret found in the built bundle, fail-fast config, rotate before cleaning history</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.2 — Biến môi trường và bí mật</span><span class="lc-sub">Bí mật VITE_ nằm trong bundle đã dựng, cấu hình chết sớm, xoay khoá trước khi dọn lịch sử</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,
@@ -436,6 +466,21 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
   <span class="lc-ico">🖧</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Self-hosting</span><span class="lc-sub">Tự chạy một server Next.js production, trên VPS hoặc container.</span></span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.3 — Deploying</span><span class="lc-sub">SPA fallback, cache headers and a smoke test, run against a real static server</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.3 — Deploy</span><span class="lc-sub">SPA fallback, header lưu đệm và smoke-test, chạy với một máy chủ tĩnh thật</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

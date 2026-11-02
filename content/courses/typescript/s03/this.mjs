@@ -355,5 +355,20 @@ ${nguon('🟦', 'MDN — Function.prototype.bind()', 'Tạo một hàm có this 
 ${nguon('🧹', 'typescript-eslint — unbound-method', '“Enforce unbound methods are called with their expected scope” — luật lint cho lỗ hổng callback. Đọc ngày 01/11/2026.', 'https://typescript-eslint.io/rules/unbound-method/')}
 ${lienKet({ khoa: 'react', bai: 'rx-2-2-su-kien', title: 'Cùng chuyện mất this trong React — React 2.2: Sự kiện', sub: 'Giống: method bị đưa đi làm callback (onClick={this.handleClick} trong class component FER202) mất this và ném “Cannot read properties of undefined”, sửa bằng bind hoặc arrow. Khác: ở đây bạn thấy vì sao — this do lời gọi quyết định — đo nó trong Node, và để tsc từ chối lời gọi trần bằng tham số this; function component của React né hẳn this, giống cách sửa bằng closure.', cta: 'MỞ BÀI REACT →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-2-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.2 — this: four rules</span><span class="lc-sub">The four rules in order, lost this in callbacks, arrow vs regular functions — with real output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-2-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.2 — this: bốn luật</span><span class="lc-sub">Bốn luật theo thứ tự, mất this trong callback, arrow so với hàm thường — output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

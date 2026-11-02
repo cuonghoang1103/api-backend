@@ -306,6 +306,21 @@ e4b1e45 wip
 <div class="pitfall"><strong>Bẫy:</strong> pull request kiểu "nhân tiện đang ở đó". Bạn vào sửa một lỗi, thấy ba chỗ xấu xí, và sửa luôn cả ba. Diff giờ dài 600 dòng, người review không phân biệt được phần nào mới là bản vá thật, và một lần rollback sẽ huỷ bốn thứ không liên quan cùng lúc. Hãy ghi lại mấy chỗ xấu xí, làm xong bản vá, rồi mở phần dọn dẹp riêng. PR thứ hai thường tốn mười phút và được duyệt ngay lập tức.</div>
 <p class="note-ct"><strong>Cách nghĩ về chuyện này:</strong> thời gian của người review mới là tài nguyên khan hiếm, không phải của bạn. Mười phút của bạn để viết một mô tả rõ ràng và chẻ một bản diff đều đặn tiết kiệm một giờ của họ — và quay về với bạn dưới dạng một lần merge trong ngày thay vì ba ngày nằm chờ.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -272,5 +272,20 @@ ${ra(PROP_BUG_GON)}
 </ul>
 ${LINKS_VI}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.2 — Your first unit tests</span><span class="lc-sub">Vitest from zero: Arrange–Act–Assert, matchers, edge cases</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.2 — Unit test đầu tiên</span><span class="lc-sub">Vitest từ số 0: Arrange–Act–Assert, matcher, trường hợp biên</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

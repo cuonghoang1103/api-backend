@@ -278,5 +278,20 @@ ${ra(OUT['11-tach'])}
 ${lienKet({ bai: 'swt301-lab2-vi-du-login', title: 'Đã gặp ở SWT301 — L2.13: ví dụ trọn vòng AuthService.login', sub: 'Giống: mỗi test một case, Arrange dựng Condition, Act gọi đúng một hàm, Assert so với kết quả mong đợi. Khác: SWT301 viết bằng JUnit có mock và gắn mỗi test với một cột UTCID của Report 5.1; ở đây là Vitest trên luật thuần của LabFlow Lite.', cta: 'MỞ BÀI SWT301 →' })}
 ${lienKet({ khoa: 'typescript', bai: 'typescript-1-1-ba-con-bug', title: 'Học tiếp ở khoá TypeScript — 1.1: ba con bug JavaScript đẩy thẳng lên production', sub: 'Giống: đúng các luật checkSlot, needsApproval, createBooking này. Khác: ở đây test bắt kết quả sai khi code chạy; bên đó trình biên dịch từ chối lỗi gõ tên, sai đối số hay role viết thường trước khi chạy — và bạn thấy loại bug nào chỉ test mới bắt được.', cta: 'MỞ BÀI TYPESCRIPT →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.2 — Your first unit tests</span><span class="lc-sub">Vitest from zero: Arrange–Act–Assert, matchers, edge cases</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.2 — Unit test đầu tiên</span><span class="lc-sub">Vitest từ số 0: Arrange–Act–Assert, matcher, trường hợp biên</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

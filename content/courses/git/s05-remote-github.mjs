@@ -291,6 +291,21 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># không có th
 <div class="pitfall"><strong>Bẫy:</strong> tin vào <code>git log origin/main</code> mà chưa fetch. Nó đọc bộ nhớ đệm cục bộ, nên sau một tuần vắng mặt nó vui vẻ cho bạn xem bức tranh của một tuần trước mà không hề cảnh báo — và những quyết định dựa trên đó (có nên rebase không, bản vá của mình đã lên thượng nguồn chưa) sẽ sai. Hãy để <code>git fetch</code> làm lệnh đầu tiên của mọi phiên làm việc.</div>
 <p class="note-ct"><strong>Phân biệt cần giữ lấy:</strong> <code>fetch</code> cập nhật <em>hiểu biết</em> của bạn; <code>merge</code>/<code>rebase</code> cập nhật <em>công việc</em> của bạn; <code>pull</code> làm cả hai trong một bước và giấu đi cái nào là cái nào. Khi có chuyện bất ngờ xảy ra sau một lần pull, hãy làm lại theo lối fetch-rồi-nhìn-rồi-tích-hợp, và cái bất ngờ thường tự nó giải thích.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -545,6 +560,21 @@ git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</co
 
 <div class="pitfall"><strong>Bẫy:</strong> nhét token vào URL remote cho "chạy được" — <code>git remote set-url origin https://ghp_xxx@github.com/user/repo.git</code>. Nó chạy thật, và nó ghi token dưới dạng chữ thô vào <code>.git/config</code>, vào lịch sử shell của bạn, và vào mọi bản log có in ra cái remote. Tệ hơn, <code>git remote -v</code> in nó ra, nên nó rốt cuộc bị dán vào các báo cáo lỗi. Hãy dùng credential helper; nó sinh ra chính là để tránh chuyện này.</div>
 <p class="note-ct"><strong>Một thói quen hữu ích:</strong> cho mọi token một hạn dùng (90 ngày là mặc định hợp lý) và một cái tên nói rõ nó sống ở đâu — "laptop-an", "vps-deploy", "ci-staging". Khi một cái bị lộ hay một cái máy bị thanh lý, bạn biết chính xác phải thu hồi cái nào, và thu hồi nó chỉ làm hỏng đúng một thứ.</p>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },

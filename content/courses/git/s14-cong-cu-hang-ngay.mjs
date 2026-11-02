@@ -297,6 +297,21 @@ All conflicts fixed but you are still merging.
 </a>
 <p class="note-ct"><strong>Nghĩ về nó thế này:</strong> GUI là một bàn phím nhanh hơn, không phải một Git khác. Dùng nó cho chín mươi lăm phần trăm công việc thường ngày, và giữ terminal cho khoảnh khắc trạng thái không rõ ràng — đó là lúc nút bấm đoán, còn lệnh thì nói thật.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-2-vscode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.2 — VS Code: your workshop</span><span class="lc-sub">From zero: Prettier, ESLint and F2 rename with real output, .vscode/ settings for a team</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-2-vscode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.2 — VS Code: xưởng làm việc</span><span class="lc-sub">Từ số 0: Prettier, ESLint và F2 với output thật, cài đặt .vscode/ cho cả nhóm</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 14.2 ─────────────────────────── */

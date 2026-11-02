@@ -1167,6 +1167,36 @@ ${LINK('https://vite.dev/guide/features#css-modules', '⚡', 'Vite — CSS Modul
 ${LINK('https://tailwindcss.com/docs/installation/using-vite', '🎨', 'Tailwind CSS — Using Vite', 'Cách cài plugin v4 dùng trong bài.')}
 ${LINK_TRONG('/courses/tailwind-css', '🌬️', 'Học tiếp — Khoá Tailwind CSS', 'Utility, token thiết kế, responsive và dark mode cho kỹ.')}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.3 — Naming and organising CSS</span><span class="lc-sub">BEM, CSS Modules, @layer and why class names collide</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.3 — Đặt tên và tổ chức CSS</span><span class="lc-sub">BEM, CSS Modules, @layer và vì sao tên class đụng nhau</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-4-tokens-theming" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.4 — Design tokens and theming</span><span class="lc-sub">Primitive and semantic tokens, dark mode with prefers-color-scheme and data-theme</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-4-tokens-theming" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.4 — Token thiết kế và giao diện</span><span class="lc-sub">Token nguyên thuỷ và ngữ nghĩa, chế độ tối với prefers-color-scheme và data-theme</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };
 

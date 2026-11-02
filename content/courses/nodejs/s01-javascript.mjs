@@ -316,6 +316,36 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
 </a>
 
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.1 — Closure: a function that remembers</span><span class="lc-sub">Closures from zero, run in Chromium: counters, the var-in-a-loop puzzle, private state</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.1 — Closure: hàm nhớ được nơi nó sinh ra</span><span class="lc-sub">Closure từ số 0, chạy trong Chromium: bộ đếm, câu đố var trong vòng lặp, state riêng tư</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-2-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.2 — this: four rules</span><span class="lc-sub">The four rules in order, lost this in callbacks, arrow vs regular functions — with real output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-2-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.2 — this: bốn luật</span><span class="lc-sub">Bốn luật theo thứ tự, mất this trong callback, arrow so với hàm thường — output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

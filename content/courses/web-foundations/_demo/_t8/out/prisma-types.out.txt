@@ -1,0 +1,3 @@
+$ npx tsc --noEmit --strict check.ts
+check.ts(7,55): error TS2561: Object literal may only specify known properties, but 'titel' does not exist in type 'PostWhereInput'. Did you mean to write 'title'?
+check.ts(9,27): error TS2339: Property 'toUpperCase' does not exist on type 'number'.

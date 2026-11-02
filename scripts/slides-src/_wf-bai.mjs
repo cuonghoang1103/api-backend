@@ -34,6 +34,7 @@ export const css = ma('css');
 export const html = ma('xml');
 export const ts = ma('typescript');
 export const bash = ma('bash');
+export const sqlm = ma('sql');   // mã SQL (Chương 8) — 'sql' đã là tên hàm khung trong _pg-chung
 /** Console Chromium: con('11-1/counter') lấy từ OUT; con(null, 'chữ'). */
 export const con = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'Chromium · console', sm: opts.sm ?? true, hl: opts.hl || [] })
   .replace('<pre>', '<pre style="white-space:pre-wrap;overflow-wrap:anywhere">');   // dòng console dài ⇒ xuống dòng, không tràn ngang

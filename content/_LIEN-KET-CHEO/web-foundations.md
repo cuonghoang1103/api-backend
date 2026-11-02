@@ -47,6 +47,11 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-7-3-jwt` | Authentication `auth-4-1-giai-ma-bang-tay` | `content/courses/authentication/s04-jwt.mjs` | JWT tự ký, alg none, vấn đề đăng xuất |
 | `wf-7-4-passwords` | Node.js `nodejs-8-1-mat-khau-va-bam` | `content/courses/nodejs/s08-auth.mjs` | muối, sha256 vs bcrypt đo thật |
 | `wf-7-5-https-cors` | API Design `api-6-4-cors` | `content/courses/api-design/s06-bao-mat.mjs` | TLS trong curl, CORS không chặn request |
+| `wf-8-1-databases` | PostgreSQL `postgresql-1-1-mo-hinh-quan-he` | `content/courses/postgresql/s01-vi-sao.mjs` | tệp JSON mất cập nhật, ràng buộc |
+| `wf-8-2-select` | PostgreSQL `postgresql-4-2-select-where` | `content/courses/postgresql/s04-chen-truy-van.mjs` | WHERE, NULL, GROUP BY, chỉ mục |
+| `wf-8-3-crud` | PostgreSQL `postgresql-4-4-update-delete` | `content/courses/postgresql/s04-chen-truy-van.mjs` | thiếu WHERE, giao dịch, injection |
+| `wf-8-4-relationships-joins` | PostgreSQL `postgresql-5-2-outer-join` | `content/courses/postgresql/s05-join.mjs` | INNER/LEFT, đếm 0, CASCADE, N+1 |
+| `wf-8-5-orm-prisma` | Prisma ORM `pr-1-3-thanh-sql` | `content/courses/prisma-orm/s01-orm.mjs` | lời gọi → SQL, P2002/P2025, $queryRaw |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

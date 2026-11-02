@@ -1,0 +1,25 @@
+sqlite> SELECT (SELECT count(*) FROM posts) AS posts, (SELECT count(*) FROM comments) AS comments;
++-------+----------+
+| posts | comments |
++-------+----------+
+|     6 |        5 |
++-------+----------+
+
+sqlite> DELETE FROM posts WHERE id = 1;
+
+sqlite> SELECT (SELECT count(*) FROM posts) AS posts, (SELECT count(*) FROM comments) AS comments;
++-------+----------+
+| posts | comments |
++-------+----------+
+|     5 |        3 |
++-------+----------+
+
+sqlite> SELECT id, post_id, body FROM comments ORDER BY id;
++----+---------+-----------------------------+
+| id | post_id |            body             |
++----+---------+-----------------------------+
+|  3 |       4 | Very clear, thanks          |
+|  4 |       4 | Can you cover Express next? |
+|  5 |       2 | SQL finally makes sense     |
++----+---------+-----------------------------+
+

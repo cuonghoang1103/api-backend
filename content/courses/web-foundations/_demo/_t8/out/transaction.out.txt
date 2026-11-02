@@ -1,0 +1,32 @@
+-- (a) Move 700 000 from Minh to Lan with two separate statements, no transaction:
+sqlite> UPDATE accounts SET balance = balance + 700000 WHERE id = 1;
+sqlite> UPDATE accounts SET balance = balance - 700000 WHERE id = 2;
+Error near line 2: CHECK constraint failed: balance >= 0
++----+-------+---------+
+| id | owner | balance |
++----+-------+---------+
+|  1 | Lan   | 1200000 |
+|  2 | Minh  |  100000 |
++----+-------+---------+
+
+-- (b) Inside BEGIN … COMMIT, but the script keeps going after the error:
+sqlite> BEGIN;
+sqlite> UPDATE accounts SET balance = balance + 700000 WHERE id = 1;
+sqlite> UPDATE accounts SET balance = balance - 700000 WHERE id = 2;
+sqlite> COMMIT;
+Error near line 3: CHECK constraint failed: balance >= 0
++----+-------+---------+
+| id | owner | balance |
++----+-------+---------+
+|  1 | Lan   | 1200000 |
+|  2 | Minh  |  100000 |
++----+-------+---------+
+
+-- (c) Inside BEGIN … COMMIT, stopping at the first error (sqlite3 -bail) — the transaction is rolled back:
+Error near line 3: CHECK constraint failed: balance >= 0
++----+-------+---------+
+| id | owner | balance |
++----+-------+---------+
+|  1 | Lan   |  500000 |
+|  2 | Minh  |  100000 |
++----+-------+---------+

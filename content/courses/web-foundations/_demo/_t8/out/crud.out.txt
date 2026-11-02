@@ -1,0 +1,33 @@
+sqlite> INSERT INTO posts (user_id, title, created_at) VALUES (3, 'My first post', '2026-11-02 10:00:00') RETURNING id, title, views, published;
++----+---------------+-------+-----------+
+| id |     title     | views | published |
++----+---------------+-------+-----------+
+|  7 | My first post |     0 |         0 |
++----+---------------+-------+-----------+
+
+sqlite> UPDATE posts SET published = 1, views = views + 1 WHERE id = 7 RETURNING id, title, views, published;
++----+---------------+-------+-----------+
+| id |     title     | views | published |
++----+---------------+-------+-----------+
+|  7 | My first post |     1 |         1 |
++----+---------------+-------+-----------+
+
+sqlite> DELETE FROM posts WHERE id = 3 RETURNING id, title;
++----+------------+
+| id |   title    |
++----+------------+
+|  3 | Draft Post |
++----+------------+
+
+sqlite> SELECT id, title FROM posts ORDER BY id;
++----+------------------+
+| id |      title       |
++----+------------------+
+|  1 | Hello World      |
+|  2 | Learning SQL     |
+|  4 | Node.js Basics   |
+|  5 | Old Announcement |
+|  6 | Orphan Draft     |
+|  7 | My first post    |
++----+------------------+
+

@@ -1,0 +1,28 @@
+sqlite> SELECT users.name, count(posts.id) AS posts FROM users LEFT JOIN posts ON posts.user_id = users.id GROUP BY users.id ORDER BY posts DESC;
++------+-------+
+| name | posts |
++------+-------+
+| Lan  |     3 |
+| Minh |     2 |
+| An   |     0 |
++------+-------+
+
+sqlite> SELECT users.name, count(posts.id) AS posts FROM users INNER JOIN posts ON posts.user_id = users.id GROUP BY users.id ORDER BY posts DESC;
++------+-------+
+| name | posts |
++------+-------+
+| Lan  |     3 |
+| Minh |     2 |
++------+-------+
+
+sqlite> SELECT p.title, u.name AS commenter, c.body FROM comments c JOIN posts p ON p.id = c.post_id JOIN users u ON u.id = c.user_id ORDER BY c.id;
++----------------+-----------+-----------------------------+
+|     title      | commenter |            body             |
++----------------+-----------+-----------------------------+
+| Hello World    | Minh      | Welcome!                    |
+| Hello World    | An        | Nice start                  |
+| Node.js Basics | Lan       | Very clear, thanks          |
+| Node.js Basics | An        | Can you cover Express next? |
+| Learning SQL   | Minh      | SQL finally makes sense     |
++----------------+-----------+-----------------------------+
+

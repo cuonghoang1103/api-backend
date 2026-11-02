@@ -881,6 +881,21 @@ Execution Time: 18.501 ms</div>
 <a class="link-card" href="/courses/postgresql/learn${REF}"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — PostgreSQL, chương EXPLAIN</span><span class="lc-sub">Đọc cho đúng cái kế hoạch ở trên: cost, rows, loops, và nút nào mới là nút đang làm bạn đau</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Bắt một sự kiện truy vấn, dựng lại SQL đầy đủ kèm tham số, rồi chạy EXPLAIN lên nó</span></span></a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-5-orm-prisma" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 8.5 — Prisma for beginners</span><span class="lc-sub">Every call with the SQL it sends, P2002/P2025, types, $queryRaw vs $queryRawUnsafe</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-5-orm-prisma" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 8.5 — Prisma cho người mới</span><span class="lc-sub">Mỗi lời gọi kèm câu SQL nó gửi, P2002/P2025, kiểu dữ liệu, $queryRaw và $queryRawUnsafe</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 1.4 ─────────────────────────── */

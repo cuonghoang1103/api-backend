@@ -1,0 +1,33 @@
+> prisma.post.findMany({ where: { published: true }, orderBy: { views: 'desc' }, take: 2, select: { title: true, views: true } })
+  SQL: SELECT Post.id, Post.title, Post.views FROM Post WHERE Post.published = ? ORDER BY Post.views DESC LIMIT ? OFFSET ?   params [true,2,0]
+  result: [{"title":"Node.js Basics","views":300},{"title":"Hello World","views":120}]
+
+> prisma.user.findUnique({ where: { email: 'minh@example.com' }, include: { posts: { select: { title: true } } } })
+  SQL: SELECT User.id, User.name, User.email FROM User WHERE (User.email = ? AND 1=1) LIMIT ? OFFSET ?   params ["minh@example.com",1,0]
+  SQL: SELECT Post.id, Post.title, Post.authorId FROM Post WHERE Post.authorId IN (?) LIMIT ? OFFSET ?   params [2,-1,0]
+  result: {"id":2,"name":"Minh","email":"minh@example.com","posts":[{"title":"Draft Post"},{"title":"Node.js Basics"}]}
+
+> prisma.post.create({ data: { title: 'My first post', author: { connect: { id: 1 } } } })
+  SQL: BEGIN IMMEDIATE 
+  SQL: SELECT User.id FROM User WHERE (User.id = ? AND 1=1) LIMIT ? OFFSET ?   params [1,-1,0]
+  SQL: INSERT INTO Post (title, views, published, authorId) VALUES (?,?,?,?) RETURNING id AS id   params ["My first post",0,false,1]
+  SQL: SELECT Post.id, Post.title, Post.views, Post.published, Post.authorId FROM Post WHERE Post.id = ? LIMIT ? OFFSET ?   params [5,1,0]
+  SQL: COMMIT 
+  result: {"id":5,"title":"My first post","views":0,"published":false,"authorId":1}
+
+> prisma.user.create({ data: { name: 'Lan 2', email: 'lan@example.com' } })   — email already used
+  SQL: INSERT INTO User (name, email) VALUES (?,?) RETURNING id AS id, name AS name, email AS email   params ["Lan 2","lan@example.com"]
+  threw: PrismaClientKnownRequestError P2002 — Unique constraint failed on the fields: (`email`)
+
+> prisma.post.update({ where: { id: 999 }, data: { views: 1 } })   — no such row
+  SQL: UPDATE Post SET views = ? WHERE (Post.id = ? AND 1=1) RETURNING id AS id, title AS title, views AS views, published AS published, authorId AS authorId   params [1,999]
+  threw: PrismaClientKnownRequestError P2025 — An operation failed because it depends on one or more records that were required but not found. Record to update not found.
+
+> prisma.$queryRaw`SELECT id, title FROM Post WHERE title LIKE ${search}`   — tagged template
+  SQL: SELECT id, title FROM Post WHERE title LIKE ?   params ["%' OR 1=1 --"]
+  result: []
+
+> prisma.$queryRawUnsafe("SELECT id, title FROM Post WHERE title LIKE '" + search + "'")   — string gluing
+  SQL: SELECT id, title FROM Post WHERE title LIKE '%' OR 1=1 --' 
+  result: [{"id":1,"title":"Hello World"},{"id":2,"title":"Learning SQL"},{"id":3,"title":"Draft Post"},{"id":4,"title":"Node.js Basics"},{"id":5,"title":"My first post"}]
+

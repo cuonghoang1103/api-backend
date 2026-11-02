@@ -1,0 +1,17 @@
+sqlite> .schema users
+CREATE TABLE users (
+  id         INTEGER PRIMARY KEY,
+  name       TEXT    NOT NULL,
+  email      TEXT    NOT NULL UNIQUE,
+  created_at TEXT    NOT NULL DEFAULT (datetime('now'))
+);
+
+sqlite> SELECT * FROM users;
++----+------+------------------+---------------------+
+| id | name |      email       |     created_at      |
++----+------+------------------+---------------------+
+|  1 | Lan  | lan@example.com  | 2026-09-01 08:00:00 |
+|  2 | Minh | minh@example.com | 2026-09-03 10:30:00 |
+|  3 | An   | an@example.com   | 2026-10-15 19:45:00 |
++----+------+------------------+---------------------+
+

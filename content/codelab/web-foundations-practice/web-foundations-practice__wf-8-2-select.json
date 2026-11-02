@@ -1,0 +1,705 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-8-2-select",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-8-2-select"
+  },
+  "exercises": [
+    {
+      "title": "LIKE thành RegExp",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "LIKE",
+        "% và _",
+        "thoát ký tự RegExp"
+      ],
+      "prerequisites": [
+        "RegExp",
+        "replace"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Viết <code>likeToRegExp(pattern)</code> trả RegExp khớp ĐÚNG như <code>LIKE</code> của SQLite: <code>%</code> = chuỗi bất kỳ (kể cả rỗng), <code>_</code> = đúng một ký tự, khớp TOÀN BỘ chuỗi (không phải một phần), không phân biệt hoa thường. Mọi ký tự khác là chữ thường của nó — kể cả <code>.</code>, <code>*</code>, <code>(</code> — phải được thoát.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>% → .*, _ → .</li>\n  <li>Khớp cả chuỗi: ^…$.</li>\n  <li>Cờ i.</li>\n  <li>Thoát ký tự đặc biệt của RegExp.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "pattern: string.",
+      "outputSpec": "RegExp.",
+      "constraints": "Không cần xử lý ESCAPE.",
+      "examplesJson": [
+        {
+          "input": "likeToRegExp(\"%SQL%\").test(\"Learning sql\")",
+          "output": "true",
+          "explanation": "LIKE của SQLite không phân biệt hoa thường với chữ ASCII."
+        }
+      ],
+      "hintsJson": [
+        "pattern.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\") thoát ký tự đặc biệt — nhưng làm TRƯỚC khi đổi % và _.",
+        "new RegExp(\"^\" + body + \"$\", \"is\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — LIKE thành RegExp\nfunction likeToRegExp(pattern) {\n  return new RegExp(pattern.replaceAll('%', '.*'));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — LIKE: % = bất kỳ, _ = một ký tự, khớp cả chuỗi, không phân biệt hoa thường\nfunction likeToRegExp(pattern) {\n  let body = '';\n  for (const ch of pattern) {\n    if (ch === '%') body += '.*';\n    else if (ch === '_') body += '.';\n    else body += ch.replace(/[.*+?^${}()|[\\]\\\\/]/g, '\\\\$&');   // mọi ký tự khác là chính nó\n  }\n  return new RegExp('^' + body + '$', 'is');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sai lầm hay gặp nhất khi tự làm bộ lọc kiểu LIKE là quên neo ^…$ (khi đó \"SQL\" khớp mọi chuỗi có chứa SQL dù mẫu không có %) và quên thoát ký tự — mẫu <code>\"v1.0\"</code> sẽ khớp <code>\"v1x0\"</code>. Trong SQL thật, nhớ rằng <code>%</code> và <code>_</code> do người dùng gõ cũng là ký tự đại diện (Bài 8.3 xử lý bằng ESCAPE).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không neo ^ và $.</li>\n  <li>Không thoát \".\" và \"(\".</li>\n  <li>Phân biệt hoa thường.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_expr.html#like",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "% and case-insensitive|||% và không phân biệt hoa thường",
+            "goi": "[likeToRegExp(\"%SQL%\").test(\"Learning sql\"), likeToRegExp(\"Hello%\").test(\"Hello World\"), likeToRegExp(\"Hello%\").test(\"Say Hello\")]",
+            "mongDoi": [
+              true,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "_ is exactly one character; whole-string match|||_ là đúng một ký tự; khớp cả chuỗi",
+            "goi": "[likeToRegExp(\"P_n\").test(\"Pen\"), likeToRegExp(\"P_n\").test(\"Pn\"), likeToRegExp(\"SQL\").test(\"Learning SQL\")]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Regex characters are literal|||Ký tự RegExp là chữ thường",
+            "goi": "[likeToRegExp(\"v1.0%\").test(\"v1.0 notes\"), likeToRegExp(\"v1.0%\").test(\"v1x0 notes\"), likeToRegExp(\"(draft)%\").test(\"(DRAFT) plan\"), likeToRegExp(\"a*b\").test(\"aaab\")]",
+            "mongDoi": [
+              true,
+              false,
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không neo ^ và $."
+        },
+        {
+          "loi": "Không thoát \".\" và \"(\"."
+        },
+        {
+          "loi": "Phân biệt hoa thường."
+        }
+      ]
+    },
+    {
+      "title": "NULL: logic ba giá trị",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "NULL",
+        "unknown",
+        "IS NULL"
+      ],
+      "prerequisites": [
+        "toán tử so sánh"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Trong SQL, so sánh với NULL không ra true hay false mà ra NULL (\"chưa biết\"). Viết <code>sqlEq(a, b)</code> trả <code>null</code> nếu <code>a</code> hoặc <code>b</code> là null, ngược lại <code>a === b</code>. Viết <code>whereKeeps(result)</code> trả <code>true</code> CHỈ khi <code>result === true</code> (WHERE bỏ cả false lẫn null). Viết <code>sqlNot(x)</code>: <code>null</code> giữ nguyên null, còn lại đảo boolean.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba hàm.</li>\n  <li>NULL lan truyền qua = và NOT.</li>\n  <li>WHERE chỉ giữ true.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "giá trị bất kỳ.",
+      "outputSpec": "true | false | null.",
+      "constraints": "Coi undefined như null.",
+      "examplesJson": [
+        {
+          "input": "whereKeeps(sqlEq(null, null))",
+          "output": "false",
+          "explanation": "\"WHERE user_id = NULL\" khớp 0 dòng — kể cả dòng có user_id là NULL."
+        }
+      ],
+      "hintsJson": [
+        "const isNull = (v) => v === null || v === undefined;",
+        "sqlNot: return x === null ? null : !x;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — NULL\nfunction sqlEq(a, b) { return a === b; }\nfunction whereKeeps(result) { return result !== false; }\nfunction sqlNot(x) { return !x; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — NULL là \"chưa biết\": so với nó ra chưa biết, và WHERE chỉ giữ dòng ĐÚNG\nconst isNull = (v) => v === null || v === undefined;\nfunction sqlEq(a, b) {\n  if (isNull(a) || isNull(b)) return null;                  // chưa biết, kể cả NULL = NULL\n  return a === b;\n}\nfunction whereKeeps(result) {\n  return result === true;                                    // false và null đều bị bỏ\n}\nfunction sqlNot(x) {\n  return isNull(x) ? null : !x;                              // NOT chưa biết vẫn là chưa biết\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây chính là lý do <code>WHERE user_id = NULL</code> trả 0 dòng và <code>WHERE status &lt;&gt; \"deleted\"</code> lặng lẽ bỏ các dòng NULL trong bài: <code>sqlNot(sqlEq(null, \"deleted\"))</code> là <code>null</code>, và WHERE không giữ null. Muốn hỏi \"có phải NULL không\" thì dùng <code>IS NULL</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>null === null là true trong JS — nhưng không trong SQL.</li>\n  <li>WHERE giữ cả null.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Null_(SQL)#Comparisons_with_NULL_and_the_three-valued_logic_(3VL)",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Comparisons with NULL are NULL|||So với NULL ra NULL",
+            "goi": "[sqlEq(1, 1), sqlEq(1, 2), sqlEq(null, 1), sqlEq(null, null), sqlEq(undefined, 0)]",
+            "mongDoi": [
+              true,
+              false,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": "WHERE keeps only true|||WHERE chỉ giữ true",
+            "goi": "[whereKeeps(true), whereKeeps(false), whereKeeps(null)]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "The <> trap from the lesson|||Bẫy <> của bài",
+            "goi": "[null, \"draft\", \"deleted\"].map((status) => whereKeeps(sqlNot(sqlEq(status, \"deleted\"))))",
+            "mongDoi": [
+              false,
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "null === null là true trong JS — nhưng không trong SQL."
+        },
+        {
+          "loi": "WHERE giữ cả null."
+        }
+      ]
+    },
+    {
+      "title": "ORDER BY nhiều khoá",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "ORDER BY",
+        "ASC/DESC",
+        "NULL khi sắp xếp"
+      ],
+      "prerequisites": [
+        "toSorted",
+        "hàm so sánh"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Viết <code>orderBy(rows, keys)</code>: <code>keys</code> là mảng <code>[cột, \"asc\" | \"desc\"]</code>, so lần lượt từng khoá cho tới khi khác nhau. Như SQLite: NULL nhỏ hơn mọi giá trị (đứng ĐẦU khi asc, CUỐI khi desc); số so bằng giá trị, chuỗi so bằng <code>&lt;</code>. Trả mảng MỚI, không sửa <code>rows</code>; các dòng bằng nhau trên mọi khoá giữ thứ tự cũ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhiều khoá.</li>\n  <li>NULL nhỏ nhất.</li>\n  <li>Ổn định, không đột biến.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: object[]; keys: [string, \"asc\"|\"desc\"][].",
+      "outputSpec": "object[].",
+      "constraints": "Không dùng localeCompare.",
+      "examplesJson": [
+        {
+          "input": "orderBy(posts, [[\"published\", \"desc\"], [\"views\", \"desc\"]])",
+          "output": "Node.js Basics, Hello World, Old Announcement, Learning SQL, Draft Post, Orphan Draft",
+          "explanation": "Bài đã đăng trước, trong mỗi nhóm xem nhiều trước."
+        }
+      ],
+      "hintsJson": [
+        "const cmp = (a, b) => a === b ? 0 : a === null ? -1 : b === null ? 1 : a < b ? -1 : 1;",
+        "rows.toSorted((x, y) => { for (const [k, dir] of keys) { const r = cmp(x[k], y[k]); if (r) return dir === \"desc\" ? -r : r; } return 0; })"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — ORDER BY\nfunction orderBy(rows, keys) {\n  const [k] = keys[0];\n  return rows.sort((a, b) => a[k] - b[k]);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — so từng khoá tới khi khác; NULL nhỏ nhất (đầu khi ASC, cuối khi DESC)\nfunction orderBy(rows, keys) {\n  const norm = (v) => (v === undefined ? null : v);\n  const cmp = (a, b) => {\n    a = norm(a); b = norm(b);\n    if (a === b) return 0;\n    if (a === null) return -1;\n    if (b === null) return 1;\n    return a < b ? -1 : 1;\n  };\n  return rows.toSorted((x, y) => {                          // toSorted: ổn định và không sửa mảng gốc\n    for (const [k, dir] of keys) {\n      const r = cmp(x[k], y[k]);\n      if (r !== 0) return dir === 'desc' ? -r : r;\n    }\n    return 0;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khoá thứ hai chỉ được xét khi khoá đầu bằng nhau — vì vậy bài nói \"luôn kết thúc bằng một khoá duy nhất như id\" để phân trang ổn định. PostgreSQL thì mặc định NULL đứng CUỐI khi ASC (ngược SQLite) và cho chọn bằng <code>NULLS FIRST / NULLS LAST</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>a - b với chuỗi ra NaN.</li>\n  <li>sort() sửa mảng gốc.</li>\n  <li>Bỏ qua khoá thứ hai.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_select.html#the_order_by_clause",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Two keys|||Hai khoá",
+            "goi": "orderBy([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], [[\"published\", \"desc\"], [\"views\", \"desc\"]]).map((p) => p.id)",
+            "mongDoi": [
+              4,
+              1,
+              5,
+              2,
+              3,
+              6
+            ]
+          },
+          {
+            "moTa": "NULL first when ascending, last when descending|||NULL đầu khi tăng, cuối khi giảm",
+            "goi": "[orderBy([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], [[\"user_id\", \"asc\"], [\"id\", \"asc\"]]).map((p) => p.id), orderBy([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], [[\"user_id\", \"desc\"], [\"id\", \"asc\"]]).map((p) => p.id)]",
+            "mongDoi": [
+              [
+                6,
+                1,
+                2,
+                5,
+                3,
+                4
+              ],
+              [
+                3,
+                4,
+                1,
+                2,
+                5,
+                6
+              ]
+            ]
+          },
+          {
+            "moTa": "Strings, stability, no mutation|||Chuỗi, ổn định, không đột biến",
+            "chuanBi": "const R = [{ n: \"b\", k: 1 }, { n: \"a\", k: 2 }, { n: \"b\", k: 3 }]; const S = orderBy(R, [[\"n\", \"asc\"]]);",
+            "goi": "[S.map((r) => r.k), R.map((r) => r.k)]",
+            "mongDoi": [
+              [
+                2,
+                1,
+                3
+              ],
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "a - b với chuỗi ra NaN."
+        },
+        {
+          "loi": "sort() sửa mảng gốc."
+        },
+        {
+          "loi": "Bỏ qua khoá thứ hai."
+        }
+      ]
+    },
+    {
+      "title": "LIMIT và OFFSET",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "phân trang",
+        "OFFSET"
+      ],
+      "prerequisites": [
+        "slice"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Viết <code>page(rows, pageNumber, size)</code> trả <code>{ items, page, size, total, pages }</code> như API của Bài 6.5 làm bằng <code>LIMIT size OFFSET (page − 1) × size</code>: <code>total</code> là tổng số dòng, <code>pages</code> là số trang (ít nhất 1). <code>pageNumber</code> hoặc <code>size</code> không phải số nguyên ≥ 1 ⇒ ném <code>RangeError</code>. Trang vượt quá ⇒ <code>items</code> rỗng (không lỗi).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>OFFSET = (page − 1) × size.</li>\n  <li>pages = ceil(total / size), tối thiểu 1.</li>\n  <li>Tham số sai ⇒ RangeError.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: any[]; pageNumber, size: number.",
+      "outputSpec": "object.",
+      "constraints": "Không sửa rows.",
+      "examplesJson": [
+        {
+          "input": "page(posts sắp theo id, 2, 2)",
+          "output": "{ items: [Draft Post, Node.js Basics], page: 2, size: 2, total: 6, pages: 3 }",
+          "explanation": "LIMIT 2 OFFSET 2 trong bài."
+        }
+      ],
+      "hintsJson": [
+        "if (!Number.isInteger(pageNumber) || pageNumber < 1 || …) throw new RangeError(…);",
+        "const offset = (pageNumber - 1) * size; rows.slice(offset, offset + size)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — LIMIT và OFFSET\nfunction page(rows, pageNumber, size) {\n  return { items: rows.slice(pageNumber * size, size) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — LIMIT size OFFSET (page − 1) × size, kèm tổng để vẽ thanh phân trang\nfunction page(rows, pageNumber, size) {\n  for (const [name, v] of [['page', pageNumber], ['size', size]]) {\n    if (!Number.isInteger(v) || v < 1) throw new RangeError(name + ' must be a whole number ≥ 1');\n  }\n  const offset = (pageNumber - 1) * size;\n  return {\n    items: rows.slice(offset, offset + size),\n    page: pageNumber,\n    size,\n    total: rows.length,\n    pages: Math.max(1, Math.ceil(rows.length / size)),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Công thức OFFSET là chỗ lệch một quen thuộc: trang 1 phải là OFFSET 0. Với bảng rất lớn, OFFSET 100 000 vẫn phải đi qua 100 000 dòng — các API lớn chuyển sang phân trang theo con trỏ (<code>WHERE id &gt; ? ORDER BY id LIMIT ?</code>).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>OFFSET = page × size (bỏ mất trang đầu).</li>\n  <li>slice(offset, size) thay vì slice(offset, offset + size).</li>\n  <li>pages = 0 khi rỗng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://use-the-index-luke.com/no-offset",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Page 2 of size 2|||Trang 2 cỡ 2",
+            "goi": "page([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], 2, 2)",
+            "mongDoi": {
+              "items": [
+                {
+                  "id": 3,
+                  "user_id": 2,
+                  "title": "Draft Post",
+                  "views": 3,
+                  "published": 0
+                },
+                {
+                  "id": 4,
+                  "user_id": 2,
+                  "title": "Node.js Basics",
+                  "views": 300,
+                  "published": 1
+                }
+              ],
+              "page": 2,
+              "size": 2,
+              "total": 6,
+              "pages": 3
+            }
+          },
+          {
+            "moTa": "Last partial page, past the end, empty table|||Trang cuối thiếu, quá cuối, bảng rỗng",
+            "goi": "[page([1, 2, 3, 4, 5], 2, 4).items, page([1, 2, 3], 5, 2).items, page([], 1, 10)]",
+            "mongDoi": [
+              [
+                5
+              ],
+              [],
+              {
+                "items": [],
+                "page": 1,
+                "size": 10,
+                "total": 0,
+                "pages": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Bad parameters throw|||Tham số sai ném lỗi",
+            "goi": "page([1], 0, 10)",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Fractional size throws|||Cỡ trang lẻ ném lỗi",
+            "goi": "page([1], 1, 2.5)",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "size"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "OFFSET = page × size (bỏ mất trang đầu)."
+        },
+        {
+          "loi": "slice(offset, size) thay vì slice(offset, offset + size)."
+        },
+        {
+          "loi": "pages = 0 khi rỗng."
+        }
+      ]
+    },
+    {
+      "title": "GROUP BY với count, sum, avg",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "GROUP BY",
+        "hàm tổng hợp",
+        "count(cột)"
+      ],
+      "prerequisites": [
+        "Map",
+        "reduce"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Viết <code>groupStats(rows, key, col)</code> trả mỗi nhóm của <code>key</code> một object <code>{ key, rows, count, sum, avg }</code> theo THỨ TỰ XUẤT HIỆN đầu tiên: <code>rows</code> = <code>count(*)</code> (số dòng); <code>count</code> = <code>count(col)</code> (bỏ null); <code>sum</code> = tổng các giá trị khác null của <code>col</code> (<code>null</code> nếu không có giá trị nào — như SQL); <code>avg</code> = trung bình các giá trị khác null làm tròn 1 chữ số (<code>null</code> nếu không có). Giá trị <code>null</code> của <code>key</code> tạo nhóm riêng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>count(*) khác count(cột).</li>\n  <li>sum/avg của nhóm toàn null là null.</li>\n  <li>NULL là một nhóm.</li>\n  <li>Giữ thứ tự xuất hiện.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: object[]; key: string; col: string.",
+      "outputSpec": "object[].",
+      "constraints": "Dùng Map (giữ thứ tự, phân biệt null).",
+      "examplesJson": [
+        {
+          "input": "groupStats(posts, \"user_id\", \"views\")",
+          "output": "[{ key: 1, rows: 3, count: 3, sum: 245, avg: 81.7 }, { key: 2, …, sum: 303 }, { key: null, …, sum: 0 }]",
+          "explanation": "Như GROUP BY user_id trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const groups = new Map(); for (const r of rows) { const k = r[key] ?? null; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }",
+        "const vals = g.map((r) => r[col]).filter((v) => v !== null && v !== undefined);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — GROUP BY\nfunction groupStats(rows, key, col) {\n  const out = {};\n  for (const r of rows) out[r[key]] = (out[r[key]] ?? 0) + r[col];\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — mỗi nhóm một dòng; hàm tổng hợp bỏ qua NULL, count(*) thì không\nfunction groupStats(rows, key, col) {\n  const groups = new Map();\n  for (const r of rows) {\n    const k = r[key] ?? null;\n    if (!groups.has(k)) groups.set(k, []);\n    groups.get(k).push(r);\n  }\n  return [...groups].map(([k, g]) => {\n    const vals = g.map((r) => r[col]).filter((v) => v !== null && v !== undefined);\n    const sum = vals.length ? vals.reduce((a, b) => a + b, 0) : null;\n    return {\n      key: k,\n      rows: g.length,                                        // count(*)\n      count: vals.length,                                    // count(col)\n      sum,\n      avg: vals.length ? Math.round((sum / vals.length) * 10) / 10 : null,\n    };\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai điều làm SQL khác JavaScript ngây thơ: hàm tổng hợp bỏ qua NULL (<code>avg</code> của [10, null] là 10, không phải 5), và <code>sum</code> của không giá trị nào là NULL chứ không phải 0. Object thường làm khoá null thành chuỗi \"null\" — Map thì không.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng object — null thành \"null\", số thành chuỗi.</li>\n  <li>Tính avg với mẫu số là count(*).</li>\n  <li>sum rỗng = 0.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_aggfunc.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Views per author, like the lesson|||Lượt xem theo tác giả, như bài",
+            "goi": "groupStats([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], \"user_id\", \"views\")",
+            "mongDoi": [
+              {
+                "key": 1,
+                "rows": 3,
+                "count": 3,
+                "sum": 245,
+                "avg": 81.7
+              },
+              {
+                "key": 2,
+                "rows": 2,
+                "count": 2,
+                "sum": 303,
+                "avg": 151.5
+              },
+              {
+                "key": null,
+                "rows": 1,
+                "count": 1,
+                "sum": 0,
+                "avg": 0
+              }
+            ]
+          },
+          {
+            "moTa": "count(*) vs count(col); all-NULL group|||count(*) và count(cột); nhóm toàn NULL",
+            "goi": "groupStats([{ g: \"a\", v: 10 }, { g: \"a\", v: null }, { g: \"b\", v: null }], \"g\", \"v\")",
+            "mongDoi": [
+              {
+                "key": "a",
+                "rows": 2,
+                "count": 1,
+                "sum": 10,
+                "avg": 10
+              },
+              {
+                "key": "b",
+                "rows": 1,
+                "count": 0,
+                "sum": null,
+                "avg": null
+              }
+            ]
+          },
+          {
+            "moTa": "Number keys stay numbers|||Khoá số vẫn là số",
+            "goi": "groupStats([{ k: 1, v: 1 }, { k: \"1\", v: 2 }], \"k\", \"v\").map((g) => typeof g.key)",
+            "mongDoi": [
+              "number",
+              "string"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng object — null thành \"null\", số thành chuỗi."
+        },
+        {
+          "loi": "Tính avg với mẫu số là count(*)."
+        },
+        {
+          "loi": "sum rỗng = 0."
+        }
+      ]
+    },
+    {
+      "title": "Chạy truy vấn đúng thứ tự SQL",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "thứ tự thực thi",
+        "WHERE vs HAVING",
+        "bí danh"
+      ],
+      "prerequisites": [
+        "filter",
+        "Map",
+        "toSorted"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.2 — SELECT.</em> Máy chấm không có CSDL, nên bạn tự viết lại bằng JavaScript đúng ngữ nghĩa của từng mệnh đề — cách chắc nhất để hiểu chúng.</p><p>Viết <code>runQuery(rows, q)</code> thực thi một truy vấn có gom nhóm theo đúng thứ tự SQL. <code>q</code>: <code>where(row)</code> (tuỳ chọn), <code>groupBy</code> (tên cột), <code>select</code> (object <code>tên → fn(nhómDòng, khoá)</code> — mỗi hàm tính một cột của kết quả), <code>having(kếtQuả)</code> (tuỳ chọn, nhận dòng KẾT QUẢ đã tính), <code>orderBy</code> (mảng <code>[cột-kết-quả, \"asc\"|\"desc\"]</code>, tuỳ chọn), <code>limit</code> (tuỳ chọn). Thứ tự: WHERE → GROUP BY (theo thứ tự xuất hiện; null là một nhóm) → SELECT → HAVING → ORDER BY (ổn định) → LIMIT.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>WHERE trước khi gom.</li>\n  <li>HAVING sau khi tính SELECT.</li>\n  <li>ORDER BY theo cột kết quả, ổn định.</li>\n  <li>LIMIT cuối cùng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: object[]; q: object.",
+      "outputSpec": "object[].",
+      "constraints": "Một hàm tự đủ.",
+      "examplesJson": [
+        {
+          "input": "tác giả có ≥ 2 bài đã đăng, tổng lượt xem giảm dần",
+          "output": "[{ author: 1, posts: 3, views: 245 }]",
+          "explanation": "Minh chỉ có 1 bài đã đăng sau WHERE."
+        }
+      ],
+      "hintsJson": [
+        "let data = q.where ? rows.filter(q.where) : rows;",
+        "Tính select cho mỗi nhóm thành một object, rồi mới having/orderBy/limit trên mảng kết quả."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — chạy truy vấn đúng thứ tự\nfunction runQuery(rows, q) {\n  return rows.slice(0, q.limit).filter(q.where ?? (() => true));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.2 — FROM → WHERE → GROUP BY → SELECT → HAVING → ORDER BY → LIMIT\nfunction runQuery(rows, q) {\n  const filtered = q.where ? rows.filter(q.where) : rows;                 // WHERE: trên dòng, trước khi gom\n  const groups = new Map();\n  for (const r of filtered) {                                             // GROUP BY\n    const k = r[q.groupBy] ?? null;\n    if (!groups.has(k)) groups.set(k, []);\n    groups.get(k).push(r);\n  }\n  let out = [...groups].map(([k, g]) =>                                   // SELECT: mỗi nhóm một dòng\n    Object.fromEntries(Object.entries(q.select).map(([name, fn]) => [name, fn(g, k)])));\n  if (q.having) out = out.filter(q.having);                               // HAVING: trên dòng kết quả\n  if (q.orderBy) {\n    out = out.toSorted((a, b) => {                                        // ORDER BY: ổn định\n      for (const [col, dir] of q.orderBy) {\n        if (a[col] === b[col]) continue;\n        const r = a[col] === null ? -1 : b[col] === null ? 1 : a[col] < b[col] ? -1 : 1;\n        return dir === 'desc' ? -r : r;\n      }\n      return 0;\n    });\n  }\n  return q.limit === undefined ? out : out.slice(0, q.limit);             // LIMIT: sau cùng\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đặt từng mệnh đề vào đúng chỗ là thấy ngay vì sao WHERE không dùng được <code>count(*)</code> (nhóm chưa tồn tại) mà HAVING thì được, và vì sao \"mười cái lớn nhất\" cần ORDER BY trước LIMIT. Code khởi đầu cắt LIMIT trước khi lọc — đúng lỗi làm trang đầu thiếu dòng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lọc having trên dòng gốc.</li>\n  <li>LIMIT trước ORDER BY.</li>\n  <li>Gom trước khi WHERE.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.2 SELECT: asking the database questions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_select.html#generation_of_the_set_of_result_rows",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Authors with ≥ 2 published posts|||Tác giả có ≥ 2 bài đã đăng",
+            "goi": "runQuery([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], { where: (p) => p.published === 1, groupBy: \"user_id\", select: { author: (g, k) => k, posts: (g) => g.length, views: (g) => g.reduce((s, p) => s + p.views, 0) }, having: (r) => r.posts >= 2, orderBy: [[\"views\", \"desc\"]] })",
+            "mongDoi": [
+              {
+                "author": 1,
+                "posts": 3,
+                "views": 245
+              }
+            ]
+          },
+          {
+            "moTa": "Without WHERE/HAVING; NULL group; LIMIT|||Không WHERE/HAVING; nhóm NULL; LIMIT",
+            "goi": "runQuery([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], { groupBy: \"user_id\", select: { author: (g, k) => k, posts: (g) => g.length }, orderBy: [[\"posts\", \"asc\"], [\"author\", \"asc\"]], limit: 2 })",
+            "mongDoi": [
+              {
+                "author": null,
+                "posts": 1
+              },
+              {
+                "author": 2,
+                "posts": 2
+              }
+            ]
+          },
+          {
+            "moTa": "HAVING sees computed columns|||HAVING thấy cột đã tính",
+            "goi": "runQuery([{ id: 1, user_id: 1, title: \"Hello World\", views: 120, published: 1 }, { id: 2, user_id: 1, title: \"Learning SQL\", views: 45, published: 1 }, { id: 3, user_id: 2, title: \"Draft Post\", views: 3, published: 0 }, { id: 4, user_id: 2, title: \"Node.js Basics\", views: 300, published: 1 }, { id: 5, user_id: 1, title: \"Old Announcement\", views: 80, published: 1 }, { id: 6, user_id: null, title: \"Orphan Draft\", views: 0, published: 0 }], { groupBy: \"published\", select: { published: (g, k) => k, avg: (g) => Math.round(g.reduce((s, p) => s + p.views, 0) / g.length) }, having: (r) => r.avg > 100 })",
+            "mongDoi": [
+              {
+                "published": 1,
+                "avg": 136
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lọc having trên dòng gốc."
+        },
+        {
+          "loi": "LIMIT trước ORDER BY."
+        },
+        {
+          "loi": "Gom trước khi WHERE."
+        }
+      ]
+    }
+  ]
+}

@@ -304,6 +304,21 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-4-relationships-joins" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 8.4 — relationships and JOINs</span><span class="lc-sub">INNER vs LEFT on a real blog, counting zeros, CASCADE, and N+1 measured</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-4-relationships-joins" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 8.4 — quan hệ và JOIN</span><span class="lc-sub">INNER và LEFT trên blog thật, đếm số không, CASCADE, và N+1 đo thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

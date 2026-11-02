@@ -1,0 +1,20 @@
+Search box: "SQL"
+  SQL sent: SELECT id, title FROM posts WHERE published = 1 AND title LIKE '%SQL%'
+  → 1 rows: 2 Learning SQL
+
+Search box: "%' OR 1=1 --"   (unsafe)
+  SQL sent: SELECT id, title FROM posts WHERE published = 1 AND title LIKE '%%' OR 1=1 --%'
+  → 6 rows: 1 Hello World | 2 Learning SQL | 3 Draft Post | 4 Node.js Basics | 5 Old Announcement | 6 Orphan Draft
+
+Search box: "x' UNION SELECT id, email FROM users --"   (unsafe)
+  SQL sent: SELECT id, title FROM posts WHERE published = 1 AND title LIKE '%x' UNION SELECT id, email FROM users --%'
+  → 3 rows: 1 lan@example.com | 2 minh@example.com | 3 an@example.com
+
+The same two inputs with a parameter (safe):
+  → 0 rows: (none)
+  → 0 rows: (none)
+
+Search box: "Bob's" — an honest apostrophe:
+  SQL sent: SELECT id, title FROM posts WHERE published = 1 AND title LIKE '%Bob's%'
+  unsafe → near "s": syntax error
+  → 0 rows: (none)

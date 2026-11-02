@@ -1,0 +1,4 @@
+N+1          → 1000 rows, 1001 queries, 1.16 ms per page (in-memory SQLite)
+one JOIN     → 1000 rows, 1 queries, 0.30 ms per page (in-memory SQLite)
+same result: true
+first row  : {"title":"post 1","author":"user 2"}

@@ -1,0 +1,30 @@
+sqlite> SELECT title, views FROM posts;
++------------------+-------+
+|      title       | views |
++------------------+-------+
+| Hello World      |   120 |
+| Learning SQL     |    45 |
+| Draft Post       |     3 |
+| Node.js Basics   |   300 |
+| Old Announcement |    80 |
+| Orphan Draft     |     0 |
++------------------+-------+
+
+sqlite> SELECT title, views FROM posts WHERE published = 1 AND views >= 80;
++------------------+-------+
+|      title       | views |
++------------------+-------+
+| Hello World      |   120 |
+| Node.js Basics   |   300 |
+| Old Announcement |    80 |
++------------------+-------+
+
+sqlite> SELECT title FROM posts WHERE title LIKE '%SQL%' OR user_id IN (2, 3);
++----------------+
+|     title      |
++----------------+
+| Learning SQL   |
+| Draft Post     |
+| Node.js Basics |
++----------------+
+

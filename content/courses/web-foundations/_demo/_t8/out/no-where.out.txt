@@ -1,0 +1,26 @@
+sqlite> UPDATE posts SET title = 'Hello World!' WHERE id = 1; SELECT changes() AS rows_changed;
++--------------+
+| rows_changed |
++--------------+
+|            1 |
++--------------+
+
+sqlite> UPDATE posts SET views = 0; SELECT changes() AS rows_changed;
++--------------+
+| rows_changed |
++--------------+
+|            6 |
++--------------+
+
+sqlite> SELECT id, title, views FROM posts;
++----+------------------+-------+
+| id |      title       | views |
++----+------------------+-------+
+|  1 | Hello World!     |     0 |
+|  2 | Learning SQL     |     0 |
+|  3 | Draft Post       |     0 |
+|  4 | Node.js Basics   |     0 |
+|  5 | Old Announcement |     0 |
+|  6 | Orphan Draft     |     0 |
++----+------------------+-------+
+

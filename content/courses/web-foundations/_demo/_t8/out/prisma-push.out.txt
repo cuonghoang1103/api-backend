@@ -1,0 +1,5 @@
+$ npx prisma db push
+SQLite database blog.db created at file:./blog.db
+🚀  Your database is now in sync with your Prisma schema. Done in 17ms
+Running generate... (Use --skip-generate to skip the generators)
+✔ Generated Prisma Client (v5.22.0) to ./client in 36ms

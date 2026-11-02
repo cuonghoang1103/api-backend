@@ -1,0 +1,30 @@
+sqlite> CREATE TABLE tags (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE);
+CREATE TABLE post_tags (
+  post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+  tag_id  INTEGER NOT NULL REFERENCES tags(id)  ON DELETE CASCADE,
+  PRIMARY KEY (post_id, tag_id)
+);
+INSERT INTO tags (id, name) VALUES (1, 'sql'), (2, 'beginner'), (3, 'node');
+INSERT INTO post_tags VALUES (1, 2), (2, 1), (2, 2), (4, 3), (4, 2);
+
+sqlite> SELECT p.title, group_concat(t.name, ', ') AS tags FROM posts p JOIN post_tags pt ON pt.post_id = p.id JOIN tags t ON t.id = pt.tag_id GROUP BY p.id ORDER BY p.id;
++----------------+----------------+
+|     title      |      tags      |
++----------------+----------------+
+| Hello World    | beginner       |
+| Learning SQL   | sql, beginner  |
+| Node.js Basics | node, beginner |
++----------------+----------------+
+
+sqlite> SELECT t.name, count(*) AS posts FROM tags t JOIN post_tags pt ON pt.tag_id = t.id GROUP BY t.id ORDER BY posts DESC;
++----------+-------+
+|   name   | posts |
++----------+-------+
+| beginner |     3 |
+| node     |     1 |
+| sql      |     1 |
++----------+-------+
+
+sqlite> INSERT INTO post_tags VALUES (2, 1);
+Error near line 1: UNIQUE constraint failed: post_tags.post_id, post_tags.tag_id
+

@@ -1,0 +1,19 @@
+sqlite> INSERT INTO users (name, email) VALUES ('Lan 2', 'lan@example.com');
+Error near line 1: UNIQUE constraint failed: users.email
+
+sqlite> INSERT INTO users (name, email) VALUES (NULL, 'x@example.com');
+Error near line 1: NOT NULL constraint failed: users.name
+
+sqlite> INSERT INTO posts (user_id, title, views, created_at) VALUES (1, 'Bad', -5, '2026-11-02');
+Error near line 1: CHECK constraint failed: views >= 0
+
+sqlite> INSERT INTO posts (user_id, title, created_at) VALUES (99, 'Ghost author', '2026-11-02');
+Error near line 1: FOREIGN KEY constraint failed
+
+sqlite> SELECT count(*) AS users, (SELECT count(*) FROM posts) AS posts FROM users;
++-------+-------+
+| users | posts |
++-------+-------+
+|     3 |     6 |
++-------+-------+
+

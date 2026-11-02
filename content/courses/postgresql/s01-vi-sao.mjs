@@ -160,6 +160,21 @@ DETAIL:  Key (user_id)=(999) is not present in table "users".</div>
   <span class="lc-body"><span class="lc-title">Thực hành: tự mô hình hai bảng có quan hệ</span><span class="lc-sub">Track Code Lab cho bạn thiết kế bảng và mối nối từ đầu.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-1-databases" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 8.1 — why a database, measured</span><span class="lc-sub">A JSON file loses likes under load, constraints refuse bad rows — SQLite from zero</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-1-databases" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 8.1 — vì sao cần CSDL, đo thật</span><span class="lc-sub">Tệp JSON mất lượt thích khi có tải, ràng buộc từ chối dữ liệu sai — SQLite từ số 0</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1,0 +1,706 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-8-5-orm-prisma",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-8-5-orm-prisma"
+  },
+  "exercises": [
+    {
+      "title": "Lỗi Prisma thành response HTTP",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "mã lỗi Prisma",
+        "ánh xạ lỗi"
+      ],
+      "prerequisites": [
+        "switch",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "prisma",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p>Viết <code>toHttp(err)</code> trả <code>{ status, body }</code> cho một lỗi Prisma: <code>err.code</code> <code>\"P2002\"</code> (trùng unique) ⇒ <code>409</code> <code>{ error: \"Already exists\", fields: err.meta.target }</code> (<code>target</code> có thể vắng ⇒ <code>[]</code>); <code>\"P2025\"</code> (không tìm thấy) ⇒ <code>404</code> <code>{ error: \"Not found\" }</code>; <code>\"P2003\"</code> (vi phạm khoá ngoại) ⇒ <code>409</code> <code>{ error: \"Related record missing or still in use\" }</code>; mọi lỗi khác ⇒ <code>500</code> <code>{ error: \"Internal error\" }</code> — KHÔNG bao giờ để lộ <code>err.message</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba mã P đã biết.</li>\n  <li>Còn lại 500 với câu chung chung.</li>\n  <li>Không lộ message.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "err: { code?, meta?, message? }.",
+      "outputSpec": "{ status, body }.",
+      "constraints": "err có thể không có code.",
+      "examplesJson": [
+        {
+          "input": "toHttp({ code: \"P2002\", meta: { target: [\"email\"] } })",
+          "output": "{ status: 409, body: { error: \"Already exists\", fields: [\"email\"] } }",
+          "explanation": "Email trùng ở Bước 4 của bài."
+        }
+      ],
+      "hintsJson": [
+        "switch (err?.code) { case \"P2002\": … }",
+        "fields: err.meta?.target ?? []"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — lỗi Prisma thành HTTP\nfunction toHttp(err) {\n  return { status: 500, body: { error: err.message } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — lỗi chờ sẵn có mã riêng; lỗi lạ là bug ⇒ 500 và không lộ chi tiết\nfunction toHttp(err) {\n  switch (err?.code) {\n    case 'P2002': return { status: 409, body: { error: 'Already exists', fields: err.meta?.target ?? [] } };\n    case 'P2025': return { status: 404, body: { error: 'Not found' } };\n    case 'P2003': return { status: 409, body: { error: 'Related record missing or still in use' } };\n    default: return { status: 500, body: { error: 'Internal error' } };   // chi tiết chỉ vào log máy chủ\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là khối <code>catch</code> ở Bước 4 của bài gói thành một hàm dùng chung (thường đặt trong middleware xử lý lỗi của Express). <code>err.message</code> của Prisma chứa tên bảng, câu truy vấn và đôi khi dữ liệu — đưa nó ra response là lộ thông tin (Bài 6.3).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả err.message cho client.</li>\n  <li>Coi P2025 là 500.</li>\n  <li>meta.target vắng ⇒ undefined.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/reference/error-reference#prisma-client-query-engine",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Duplicate and not found|||Trùng và không tìm thấy",
+            "goi": "[toHttp({ code: \"P2002\", meta: { target: [\"email\"] } }), toHttp({ code: \"P2025\", message: \"Record to update not found.\" })]",
+            "mongDoi": [
+              {
+                "status": 409,
+                "body": {
+                  "error": "Already exists",
+                  "fields": [
+                    "email"
+                  ]
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Not found"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": "Foreign key and missing target|||Khoá ngoại và thiếu target",
+            "goi": "[toHttp({ code: \"P2003\" }).status, toHttp({ code: \"P2002\" }).body.fields]",
+            "mongDoi": [
+              409,
+              []
+            ]
+          },
+          {
+            "moTa": "Anything else: 500 without details|||Mọi thứ khác: 500 không lộ chi tiết",
+            "goi": "[toHttp({ code: \"P1001\", message: \"Can't reach database server at db:5432\" }), toHttp(new TypeError(\"x is undefined\")), toHttp(null)]",
+            "mongDoi": [
+              {
+                "status": 500,
+                "body": {
+                  "error": "Internal error"
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "Internal error"
+                }
+              },
+              {
+                "status": 500,
+                "body": {
+                  "error": "Internal error"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả err.message cho client."
+        },
+        {
+          "loi": "Coi P2025 là 500."
+        },
+        {
+          "loi": "meta.target vắng ⇒ undefined."
+        }
+      ]
+    },
+    {
+      "title": "select lồng nhau",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "select",
+        "chống lấy thừa"
+      ],
+      "prerequisites": [
+        "Object.entries",
+        "đệ quy"
+      ],
+      "tags": [
+        "javascript",
+        "prisma"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p>Viết <code>applySelect(obj, select)</code> như <code>select</code> của Prisma: chỉ giữ các khoá có giá trị <code>true</code>; khoá có giá trị <code>{ select: {…} }</code> là quan hệ — áp đệ quy cho object con, hoặc cho TỪNG phần tử nếu là mảng (<code>null</code> giữ nguyên <code>null</code>); khoá <code>false</code> hoặc vắng thì bỏ. Khoá trong <code>select</code> mà <code>obj</code> không có ⇒ bỏ qua. Không sửa <code>obj</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>true ⇒ giữ.</li>\n  <li>{ select } ⇒ đệ quy, cả mảng.</li>\n  <li>Không đột biến.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "obj: object; select: object.",
+      "outputSpec": "object.",
+      "constraints": "Không dùng thư viện lodash.pick.",
+      "examplesJson": [
+        {
+          "input": "applySelect(user, { name: true, posts: { select: { title: true } } })",
+          "output": "{ name: \"Minh\", posts: [{ title: \"Draft Post\" }, { title: \"Node.js Basics\" }] }",
+          "explanation": "passwordHash không bao giờ lọt ra."
+        }
+      ],
+      "hintsJson": [
+        "for (const [k, v] of Object.entries(select)) { if (!(k in obj)) continue; if (v === true) out[k] = obj[k]; else if (v && v.select) … }",
+        "Array.isArray(x) ? x.map((e) => applySelect(e, v.select)) : x === null ? null : applySelect(x, v.select)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — select lồng nhau\nfunction applySelect(obj, select) {\n  for (const k of Object.keys(obj)) if (!select[k]) delete obj[k];\n  return obj;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — chỉ trả đúng các trường được chọn, kể cả trong quan hệ lồng\nfunction applySelect(obj, select) {\n  const out = {};\n  for (const [k, v] of Object.entries(select)) {\n    if (!(k in obj)) continue;\n    if (v === true) out[k] = obj[k];\n    else if (v && typeof v === 'object' && v.select) {\n      const x = obj[k];\n      out[k] = x === null ? null : Array.isArray(x) ? x.map((e) => applySelect(e, v.select)) : applySelect(x, v.select);\n    }\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không có <code>select</code>, Prisma trả mọi trường thường của model — kể cả <code>passwordHash</code> nếu có. Chọn trường ở truy vấn (không phải xoá sau) vừa an toàn hơn vừa nhẹ hơn: CSDL không gửi những cột đó về.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>delete trên object gốc.</li>\n  <li>Không xử lý quan hệ là mảng.</li>\n  <li>Giữ khoá có giá trị false.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-client/queries/select-fields",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Nested select hides the password hash|||select lồng giấu hash mật khẩu",
+            "goi": "applySelect({ id: 2, name: \"Minh\", email: \"minh@example.com\", passwordHash: \"$2b$10$x\", posts: [{ id: 3, title: \"Draft Post\", views: 3 }, { id: 4, title: \"Node.js Basics\", views: 300 }] }, { name: true, posts: { select: { title: true } } })",
+            "mongDoi": {
+              "name": "Minh",
+              "posts": [
+                {
+                  "title": "Draft Post"
+                },
+                {
+                  "title": "Node.js Basics"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "Single relation, null relation, false and unknown keys|||Quan hệ đơn, quan hệ null, khoá false và khoá lạ",
+            "goi": "[applySelect({ title: \"A\", author: { id: 1, name: \"Lan\" } }, { title: true, author: { select: { name: true } }, views: false, nope: true }), applySelect({ title: \"B\", author: null }, { author: { select: { name: true } } })]",
+            "mongDoi": [
+              {
+                "title": "A",
+                "author": {
+                  "name": "Lan"
+                }
+              },
+              {
+                "author": null
+              }
+            ]
+          },
+          {
+            "moTa": "Input is not changed|||Dữ liệu vào không bị sửa",
+            "chuanBi": "const U = { id: 1, name: \"Lan\", secret: \"x\" }; applySelect(U, { name: true });",
+            "goi": "U",
+            "mongDoi": {
+              "id": 1,
+              "name": "Lan",
+              "secret": "x"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "delete trên object gốc."
+        },
+        {
+          "loi": "Không xử lý quan hệ là mảng."
+        },
+        {
+          "loi": "Giữ khoá có giá trị false."
+        }
+      ]
+    },
+    {
+      "title": "Bộ lọc where như Prisma",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 22,
+      "points": 20,
+      "concepts": [
+        "toán tử lọc",
+        "AND/OR/NOT"
+      ],
+      "prerequisites": [
+        "every",
+        "some",
+        "đệ quy"
+      ],
+      "tags": [
+        "javascript",
+        "prisma"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p>Viết <code>matches(row, where)</code> trả boolean. Mỗi khoá thường của <code>where</code> là một cột: giá trị trực tiếp (kể cả <code>null</code>) nghĩa là bằng; object nghĩa là toán tử: <code>equals</code>, <code>not</code> (khác), <code>gt</code>, <code>gte</code>, <code>lt</code>, <code>lte</code>, <code>in</code> (mảng), <code>notIn</code>, <code>contains</code>, <code>startsWith</code> — có thể kết hợp nhiều toán tử (tất cả phải đúng); <code>mode: \"insensitive\"</code> làm <code>contains</code>/<code>startsWith</code>/<code>equals</code> của chuỗi không phân biệt hoa thường. Khoá đặc biệt: <code>AND</code> (mảng, tất cả), <code>OR</code> (mảng, ít nhất một), <code>NOT</code> (object). Mọi khoá cùng cấp kết hợp bằng AND. Toán tử so sánh với giá trị null của cột ⇒ false.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bằng trực tiếp.</li>\n  <li>Đủ các toán tử.</li>\n  <li>AND/OR/NOT lồng được.</li>\n  <li>mode insensitive.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "row: object; where: object.",
+      "outputSpec": "boolean.",
+      "constraints": "where rỗng ⇒ true.",
+      "examplesJson": [
+        {
+          "input": "matches(post, { published: true, views: { gte: 80 } })",
+          "output": "true cho Hello World, Node.js Basics, Old Announcement",
+          "explanation": "Cùng truy vấn với Bước 1 của Bài 8.2."
+        }
+      ],
+      "hintsJson": [
+        "if (k === \"AND\") return v.every((w) => matches(row, w));",
+        "const ops = { gt: (x, y) => x !== null && x > y, … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — bộ lọc where\nfunction matches(row, where) {\n  return Object.entries(where).every(([k, v]) => row[k] === v);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — where của Prisma: cột → giá trị hoặc toán tử; AND / OR / NOT lồng được\nfunction matches(row, where) {\n  return Object.entries(where).every(([k, v]) => {\n    if (k === 'AND') return v.every((w) => matches(row, w));\n    if (k === 'OR') return v.some((w) => matches(row, w));\n    if (k === 'NOT') return !matches(row, v);\n    const x = row[k];\n    if (v === null || typeof v !== 'object' || Array.isArray(v)) return x === v;   // giá trị trực tiếp\n    const ci = v.mode === 'insensitive';\n    const norm = (s) => (ci && typeof s === 'string' ? s.toLowerCase() : s);\n    return Object.entries(v).every(([op, arg]) => {\n      if (op === 'mode') return true;\n      if (op === 'equals') return norm(x) === norm(arg);\n      if (op === 'not') return norm(x) !== norm(arg);\n      if (op === 'in') return arg.includes(x);\n      if (op === 'notIn') return !arg.includes(x);\n      if (x === null || x === undefined) return false;       // so sánh với NULL không bao giờ đúng\n      if (op === 'gt') return x > arg;\n      if (op === 'gte') return x >= arg;\n      if (op === 'lt') return x < arg;\n      if (op === 'lte') return x <= arg;\n      if (op === 'contains') return norm(x).includes(norm(arg));\n      if (op === 'startsWith') return norm(x).startsWith(norm(arg));\n      throw new TypeError('unknown operator ' + op);\n    });\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi nhánh ở đây là một mảnh WHERE trong SQL mà Prisma sinh ra: <code>gte</code> → <code>&gt;=</code>, <code>contains</code> → <code>LIKE '%…%'</code>, <code>in</code> → <code>IN (…)</code>, OR → <code>OR</code>. Trong CSDL thật, <code>mode: \"insensitive\"</code> của PostgreSQL thành <code>ILIKE</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi object toán tử như giá trị so sánh.</li>\n  <li>Quên NOT.</li>\n  <li>gt với null trả true vì null > -1.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Direct values and comparisons|||Giá trị trực tiếp và phép so sánh",
+            "goi": "([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]).filter((p) => matches(p, { published: true, views: { gte: 80 } })).map((p) => p.id)",
+            "mongDoi": [
+              1,
+              4,
+              5
+            ]
+          },
+          {
+            "moTa": "contains, insensitive, in, not, null|||contains, không phân biệt hoa thường, in, not, null",
+            "goi": "[([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]).filter((p) => matches(p, { title: { contains: \"sql\", mode: \"insensitive\" } })).map((p) => p.id), ([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]).filter((p) => matches(p, { authorId: { in: [2] }, title: { not: \"Draft Post\" } })).map((p) => p.id), ([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]).filter((p) => matches(p, { authorId: null })).map((p) => p.id)]",
+            "mongDoi": [
+              [
+                2
+              ],
+              [
+                4
+              ],
+              [
+                6
+              ]
+            ]
+          },
+          {
+            "moTa": "OR, NOT, nested AND; NULL never compares|||OR, NOT, AND lồng; NULL không so được",
+            "goi": "[([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]).filter((p) => matches(p, { OR: [{ views: { gt: 200 } }, { AND: [{ published: false }, { NOT: { authorId: null } }] }] })).map((p) => p.id), matches({ v: null }, { v: { gt: -1 } }), matches({ a: 1 }, {})]",
+            "mongDoi": [
+              [
+                3,
+                4
+              ],
+              false,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi object toán tử như giá trị so sánh."
+        },
+        {
+          "loi": "Quên NOT."
+        },
+        {
+          "loi": "gt với null trả true vì null > -1."
+        }
+      ]
+    },
+    {
+      "title": "findMany đầy đủ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "findMany",
+        "orderBy",
+        "skip/take"
+      ],
+      "prerequisites": [
+        "filter",
+        "toSorted",
+        "slice"
+      ],
+      "tags": [
+        "javascript",
+        "prisma"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p>Viết <code>findMany(rows, args = {})</code> theo đúng thứ tự Prisma (và SQL) áp dụng: <code>where</code> (dùng lại logic bài trước — tối thiểu hỗ trợ giá trị trực tiếp và <code>gt/gte/lt/lte/contains</code>; viết lại trong tệp này), rồi <code>orderBy</code> (object <code>{ cột: \"asc\"|\"desc\" }</code> hoặc mảng các object như vậy cho nhiều khoá, ổn định), rồi <code>skip</code>, rồi <code>take</code>, rồi <code>select</code> (chỉ cột <code>true</code>, không lồng). Trả bản sao, không sửa <code>rows</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự where → orderBy → skip → take → select.</li>\n  <li>orderBy object hoặc mảng.</li>\n  <li>Không đột biến.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: object[]; args: { where?, orderBy?, skip?, take?, select? }.",
+      "outputSpec": "object[].",
+      "constraints": "Một tệp tự đủ.",
+      "examplesJson": [
+        {
+          "input": "findMany(posts, { where: { published: true }, orderBy: { views: 'desc' }, take: 2, select: { title: true, views: true } })",
+          "output": "[{ title: \"Node.js Basics\", views: 300 }, { title: \"Hello World\", views: 120 }]",
+          "explanation": "Đúng kết quả của lời gọi đầu tiên ở Bước 3 của bài."
+        }
+      ],
+      "hintsJson": [
+        "const keys = (Array.isArray(orderBy) ? orderBy : [orderBy]).flatMap((o) => Object.entries(o));",
+        "out.slice(skip ?? 0, take === undefined ? undefined : (skip ?? 0) + take)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — findMany\nfunction findMany(rows, args = {}) {\n  return rows.slice(0, args.take);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — where → orderBy → skip → take → select, như câu SELECT mà Prisma sinh ra\nfunction matchOne(row, where = {}) {\n  return Object.entries(where).every(([k, v]) => {\n    const x = row[k];\n    if (v === null || typeof v !== 'object') return x === v;\n    return Object.entries(v).every(([op, arg]) => {\n      if (x === null || x === undefined) return false;\n      if (op === 'gt') return x > arg;\n      if (op === 'gte') return x >= arg;\n      if (op === 'lt') return x < arg;\n      if (op === 'lte') return x <= arg;\n      if (op === 'contains') return String(x).includes(arg);\n      if (op === 'equals') return x === arg;\n      throw new TypeError('unsupported operator ' + op);\n    });\n  });\n}\n\nfunction findMany(rows, args = {}) {\n  let out = rows.filter((r) => matchOne(r, args.where));\n  if (args.orderBy) {\n    const keys = (Array.isArray(args.orderBy) ? args.orderBy : [args.orderBy]).flatMap((o) => Object.entries(o));\n    out = out.toSorted((a, b) => {\n      for (const [k, dir] of keys) {\n        if (a[k] === b[k]) continue;\n        const r = a[k] === null ? -1 : b[k] === null ? 1 : a[k] < b[k] ? -1 : 1;\n        return dir === 'desc' ? -r : r;\n      }\n      return 0;\n    });\n  }\n  const skip = args.skip ?? 0;\n  out = out.slice(skip, args.take === undefined ? undefined : skip + args.take);\n  return out.map((r) => (args.select\n    ? Object.fromEntries(Object.entries(args.select).filter(([, on]) => on === true).map(([k]) => [k, r[k]]))\n    : { ...r }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Câu SQL trong output của bài — <code>WHERE … ORDER BY … LIMIT ? OFFSET ?</code> — chính là năm bước này. <code>skip</code> là OFFSET, <code>take</code> là LIMIT; vì thế phân trang <code>skip: (page − 1) * size, take: size</code> y hệt Bài 8.2.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>take trước skip.</li>\n  <li>select trước orderBy (sắp theo cột đã bị bỏ).</li>\n  <li>sort() sửa mảng gốc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-client/queries/pagination",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The first call of the lesson|||Lời gọi đầu tiên của bài",
+            "goi": "findMany([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }], { where: { published: true }, orderBy: { views: \"desc\" }, take: 2, select: { title: true, views: true } })",
+            "mongDoi": [
+              {
+                "title": "Node.js Basics",
+                "views": 300
+              },
+              {
+                "title": "Hello World",
+                "views": 120
+              }
+            ]
+          },
+          {
+            "moTa": "skip/take paging with two sort keys|||Phân trang skip/take với hai khoá sắp",
+            "goi": "findMany([{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }], { orderBy: [{ published: \"desc\" }, { id: \"asc\" }], skip: 2, take: 3, select: { id: true } }).map((p) => p.id)",
+            "mongDoi": [
+              4,
+              5,
+              3
+            ]
+          },
+          {
+            "moTa": "No args: a copy of everything; operators|||Không tham số: bản sao toàn bộ; toán tử",
+            "chuanBi": "const P = [{ id: 1, authorId: 1, title: \"Hello World\", views: 120, published: true }, { id: 2, authorId: 1, title: \"Learning SQL\", views: 45, published: true }, { id: 3, authorId: 2, title: \"Draft Post\", views: 3, published: false }, { id: 4, authorId: 2, title: \"Node.js Basics\", views: 300, published: true }, { id: 5, authorId: 1, title: \"Old Announcement\", views: 80, published: true }, { id: 6, authorId: null, title: \"Orphan Draft\", views: 0, published: false }]; const all = findMany(P); all[0].title = \"X\";",
+            "goi": "[all.length, P[0].title, findMany(P, { where: { views: { lt: 50 }, title: { contains: \"a\" } } }).map((p) => p.id)]",
+            "mongDoi": [
+              6,
+              "Hello World",
+              [
+                2,
+                3,
+                6
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "take trước skip."
+        },
+        {
+          "loi": "select trước orderBy (sắp theo cột đã bị bỏ)."
+        },
+        {
+          "loi": "sort() sửa mảng gốc."
+        }
+      ]
+    },
+    {
+      "title": "Dịch where sang SQL có tham số",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "sinh SQL",
+        "tham số",
+        "IS NULL"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "join"
+      ],
+      "tags": [
+        "javascript",
+        "prisma",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p>Viết <code>whereToSql(where)</code> trả <code>{ sql, params }</code> như Prisma sinh ra: mỗi điều kiện cột thành <code>\"&lt;cột&gt; &lt;op&gt; ?\"</code> với giá trị trong <code>params</code> theo thứ tự; giá trị trực tiếp ⇒ <code>=</code>, nhưng <code>null</code> ⇒ <code>\"&lt;cột&gt; IS NULL\"</code> (không tham số); toán tử <code>gt</code> ⇒ <code>&gt;</code>, <code>gte</code> ⇒ <code>&gt;=</code>, <code>lt</code> ⇒ <code>&lt;</code>, <code>lte</code> ⇒ <code>&lt;=</code>, <code>not</code> ⇒ <code>&lt;&gt;</code> (<code>not: null</code> ⇒ <code>IS NOT NULL</code>), <code>in</code> ⇒ <code>IN (?, ?)</code>, <code>contains</code> ⇒ <code>LIKE ?</code> với tham số <code>'%' + giá trị + '%'</code>. Các điều kiện nối bằng <code> AND </code>; <code>OR: [...]</code> ⇒ <code>(a OR b)</code> với mỗi nhánh là kết quả đệ quy (nhánh nhiều điều kiện được bọc ngoặc). Tên cột phải khớp <code>/^[A-Za-z_][A-Za-z0-9_]*$/</code> (sai ⇒ <code>TypeError</code>). <code>where</code> rỗng ⇒ <code>{ sql: \"1=1\", params: [] }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị chỉ ở params.</li>\n  <li>null ⇒ IS NULL.</li>\n  <li>OR có ngoặc.</li>\n  <li>Kiểm tên cột.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "where: object.",
+      "outputSpec": "{ sql, params }.",
+      "constraints": "Không cần AND/NOT lồng ngoài OR.",
+      "examplesJson": [
+        {
+          "input": "whereToSql({ published: true, views: { gte: 80 } })",
+          "output": "{ sql: \"published = ? AND views >= ?\", params: [true, 80] }",
+          "explanation": "Như \"WHERE Post.published = ?\" trong log của bài."
+        }
+      ],
+      "hintsJson": [
+        "const OPS = { gt: \">\", gte: \">=\", lt: \"<\", lte: \"<=\", not: \"<>\" };",
+        "OR: \"(\" + v.map((w) => { const r = whereToSql(w); … }).join(\" OR \") + \")\""
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — where thành SQL\nfunction whereToSql(where) {\n  const parts = Object.entries(where).map(([k, v]) => k + \" = '\" + v + \"'\");\n  return { sql: parts.join(' AND '), params: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — điều kiện thành SQL, giá trị thành tham số; NULL dùng IS NULL\nconst IDENT = /^[A-Za-z_][A-Za-z0-9_]*$/;\nconst OPS = { gt: '>', gte: '>=', lt: '<', lte: '<=' };\n\nfunction whereToSql(where) {\n  const parts = [];\n  const params = [];\n  for (const [k, v] of Object.entries(where)) {\n    if (k === 'OR') {\n      const branches = v.map((w) => {\n        const r = whereToSql(w);\n        params.push(...r.params);\n        return Object.keys(w).length > 1 ? '(' + r.sql + ')' : r.sql;\n      });\n      parts.push('(' + branches.join(' OR ') + ')');\n      continue;\n    }\n    if (!IDENT.test(k)) throw new TypeError('bad column name: ' + k);\n    if (v === null) { parts.push(k + ' IS NULL'); continue; }\n    if (typeof v !== 'object' || Array.isArray(v)) { parts.push(k + ' = ?'); params.push(v); continue; }\n    for (const [op, arg] of Object.entries(v)) {\n      if (op in OPS) { parts.push(`${k} ${OPS[op]} ?`); params.push(arg); }\n      else if (op === 'not') {\n        if (arg === null) parts.push(k + ' IS NOT NULL');\n        else { parts.push(k + ' <> ?'); params.push(arg); }\n      } else if (op === 'in') { parts.push(`${k} IN (${arg.map(() => '?').join(', ')})`); params.push(...arg); }\n      else if (op === 'contains') { parts.push(k + ' LIKE ?'); params.push('%' + arg + '%'); }\n      else throw new TypeError('unsupported operator ' + op);\n    }\n  }\n  return { sql: parts.length ? parts.join(' AND ') : '1=1', params };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là trái tim của một ORM: đổi một object JavaScript thành SQL mà giá trị KHÔNG BAO GIỜ nằm trong chuỗi. <code>{ authorId: null }</code> phải thành <code>IS NULL</code> — sinh <code>authorId = ?</code> với tham số null sẽ khớp 0 dòng (bẫy NULL của Bài 8.2). Ngoặc quanh OR quan trọng: thiếu nó, <code>a AND b OR c</code> được hiểu là <code>(a AND b) OR c</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt giá trị trong chuỗi SQL.</li>\n  <li>null thành \"= ?\".</li>\n  <li>Quên ngoặc quanh OR.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "AND of simple conditions|||AND các điều kiện đơn",
+            "goi": "whereToSql({ published: true, views: { gte: 80, lt: 200 } })",
+            "mongDoi": {
+              "sql": "published = ? AND views >= ? AND views < ?",
+              "params": [
+                true,
+                80,
+                200
+              ]
+            }
+          },
+          {
+            "moTa": "NULL, not, in, contains|||NULL, not, in, contains",
+            "goi": "whereToSql({ authorId: null, title: { not: null, contains: \"SQL\" }, id: { in: [1, 2, 3] } })",
+            "mongDoi": {
+              "sql": "authorId IS NULL AND title IS NOT NULL AND title LIKE ? AND id IN (?, ?, ?)",
+              "params": [
+                "%SQL%",
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          {
+            "moTa": "OR with parentheses; empty where|||OR có ngoặc; where rỗng",
+            "goi": "[whereToSql({ published: true, OR: [{ views: { gt: 200 } }, { authorId: 1, views: { lt: 50 } }] }), whereToSql({})]",
+            "mongDoi": [
+              {
+                "sql": "published = ? AND (views > ? OR (authorId = ? AND views < ?))",
+                "params": [
+                  true,
+                  200,
+                  1,
+                  50
+                ]
+              },
+              {
+                "sql": "1=1",
+                "params": []
+              }
+            ]
+          },
+          {
+            "moTa": "Bad column names throw|||Tên cột sai thì ném lỗi",
+            "goi": "whereToSql({ \"1=1; DROP TABLE Post; --\": 1 })",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt giá trị trong chuỗi SQL."
+        },
+        {
+          "loi": "null thành \"= ?\"."
+        },
+        {
+          "loi": "Quên ngoặc quanh OR."
+        }
+      ]
+    },
+    {
+      "title": "Kế hoạch db push",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "so sánh lược đồ",
+        "thay đổi phá huỷ",
+        "migration"
+      ],
+      "prerequisites": [
+        "Object.keys",
+        "Set"
+      ],
+      "tags": [
+        "javascript",
+        "prisma",
+        "migration"
+      ],
+      "problemHtml": "<p><em>Bài 8.5 — ORM với Prisma.</em> Mỗi bài tự viết lại một mảnh nhỏ của Prisma bằng JavaScript thuần — để hiểu một lời gọi <code>findMany</code> thật sự làm gì.</p><p><code>prisma db push</code> so lược đồ mới với CSDL và cảnh báo khi phải xoá dữ liệu. Viết <code>pushPlan(current, next)</code>: mỗi lược đồ là object <code>{ TênModel: { tênCột: { type, optional? } } }</code>. Trả <code>{ steps, destructive }</code>: <code>steps</code> là mảng chuỗi, theo thứ tự: tạo bảng mới (<code>\"create table X\"</code>, theo thứ tự trong next), xoá bảng (<code>\"drop table X\"</code>, theo thứ tự trong current), rồi với mỗi bảng còn ở cả hai (theo thứ tự trong next): thêm cột (<code>\"add column X.c\"</code>), xoá cột (<code>\"drop column X.c\"</code>), đổi kiểu (<code>\"change type X.c: A -&gt; B\"</code>). Thêm cột BẮT BUỘC (không optional) vào bảng đã có ⇒ thêm hậu tố <code>\" (required: existing rows need a default)\"</code>. <code>destructive</code> là <code>true</code> nếu có drop table, drop column hoặc change type.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự các bước.</li>\n  <li>Đánh dấu thêm cột bắt buộc.</li>\n  <li>destructive đúng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "current, next: object.",
+      "outputSpec": "{ steps: string[], destructive: boolean }.",
+      "constraints": "Không cần xét quan hệ hay chỉ mục.",
+      "examplesJson": [
+        {
+          "input": "đổi tên cột views thành viewCount",
+          "output": "[\"add column Post.viewCount …\", \"drop column Post.views\"], destructive: true",
+          "explanation": "db push hiểu \"đổi tên\" là xoá + thêm — mất dữ liệu cột cũ. Migration viết tay mới làm được RENAME."
+        }
+      ],
+      "hintsJson": [
+        "const tablesNow = Object.keys(current), tablesNext = Object.keys(next);",
+        "for (const t of tablesNext.filter((t) => t in current)) { const a = current[t], b = next[t]; … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — kế hoạch db push\nfunction pushPlan(current, next) {\n  const steps = Object.keys(next).filter((t) => !(t in current)).map((t) => 'create table ' + t);\n  return { steps, destructive: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.5 — so hai lược đồ; mọi bước làm mất dữ liệu đều phải bị gắn cờ\nfunction pushPlan(current, next) {\n  const steps = [];\n  let destructive = false;\n  for (const t of Object.keys(next)) if (!(t in current)) steps.push('create table ' + t);\n  for (const t of Object.keys(current)) if (!(t in next)) { steps.push('drop table ' + t); destructive = true; }\n  for (const t of Object.keys(next)) {\n    if (!(t in current)) continue;\n    const a = current[t];\n    const b = next[t];\n    for (const col of Object.keys(b)) {\n      if (!(col in a)) {\n        steps.push(`add column ${t}.${col}` + (b[col].optional ? '' : ' (required: existing rows need a default)'));\n      }\n    }\n    for (const col of Object.keys(a)) {\n      if (!(col in b)) { steps.push(`drop column ${t}.${col}`); destructive = true; }\n    }\n    for (const col of Object.keys(b)) {\n      if (col in a && a[col].type !== b[col].type) {\n        steps.push(`change type ${t}.${col}: ${a[col].type} -> ${b[col].type}`);\n        destructive = true;\n      }\n    }\n  }\n  return { steps, destructive };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là phần cảnh báo \"You are about to drop the column…\" của <code>db push</code>. Chú ý ví dụ đổi tên: công cụ so lược đồ không thể biết <code>views</code> và <code>viewCount</code> là cùng một cột, nên nó xoá và tạo mới — mất hết dữ liệu. Vì thế dữ liệu thật đi bằng migration viết rõ (<code>ALTER TABLE … RENAME COLUMN</code>), được review trước khi chạy.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không gắn cờ đổi kiểu.</li>\n  <li>Coi đổi tên cột là an toàn.</li>\n  <li>Sai thứ tự các bước.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.5 ORMs with Prisma.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-migrate/workflows/prototyping-your-schema",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A rename is a drop plus an add|||Đổi tên là xoá cộng thêm",
+            "goi": "pushPlan({ Post: { id: { type: \"Int\" }, title: { type: \"String\" }, views: { type: \"Int\" } } }, { Post: { id: { type: \"Int\" }, title: { type: \"String\" }, viewCount: { type: \"Int\" } } })",
+            "mongDoi": {
+              "steps": [
+                "add column Post.viewCount (required: existing rows need a default)",
+                "drop column Post.views"
+              ],
+              "destructive": true
+            }
+          },
+          {
+            "moTa": "Safe changes only|||Chỉ thay đổi an toàn",
+            "goi": "pushPlan({ User: { id: { type: \"Int\" } } }, { User: { id: { type: \"Int\" }, bio: { type: \"String\", optional: true } }, Tag: { id: { type: \"Int\" }, name: { type: \"String\" } } })",
+            "mongDoi": {
+              "steps": [
+                "create table Tag",
+                "add column User.bio"
+              ],
+              "destructive": false
+            }
+          },
+          {
+            "moTa": "Drop table and change type|||Xoá bảng và đổi kiểu",
+            "goi": "pushPlan({ User: { id: { type: \"Int\" }, age: { type: \"String\" } }, Legacy: { id: { type: \"Int\" } } }, { User: { id: { type: \"Int\" }, age: { type: \"Int\" } } })",
+            "mongDoi": {
+              "steps": [
+                "drop table Legacy",
+                "change type User.age: String -> Int"
+              ],
+              "destructive": true
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không gắn cờ đổi kiểu."
+        },
+        {
+          "loi": "Coi đổi tên cột là an toàn."
+        },
+        {
+          "loi": "Sai thứ tự các bước."
+        }
+      ]
+    }
+  ]
+}

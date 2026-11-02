@@ -1,0 +1,16 @@
+sqlite> SELECT title, views FROM posts WHERE published = 1 ORDER BY views DESC LIMIT 2;
++----------------+-------+
+|     title      | views |
++----------------+-------+
+| Node.js Basics |   300 |
+| Hello World    |   120 |
++----------------+-------+
+
+sqlite> SELECT id, title FROM posts ORDER BY id LIMIT 2 OFFSET 2;
++----+----------------+
+| id |     title      |
++----+----------------+
+|  3 | Draft Post     |
+|  4 | Node.js Basics |
++----+----------------+
+

@@ -1,0 +1,21 @@
+sqlite> SELECT count(*) FROM posts WHERE user_id = NULL;
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+sqlite> SELECT id, title FROM posts WHERE user_id IS NULL;
++----+--------------+
+| id |    title     |
++----+--------------+
+|  6 | Orphan Draft |
++----+--------------+
+
+sqlite> SELECT count(*) AS all_rows, count(user_id) AS with_author FROM posts;
++----------+-------------+
+| all_rows | with_author |
++----------+-------------+
+|        6 |           5 |
++----------+-------------+
+

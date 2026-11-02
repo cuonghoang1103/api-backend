@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-1-2-vscode",
@@ -200,6 +200,36 @@
       "name": "7.5 HTTPS và CORS",
       "level": "INTERMEDIATE",
       "description": "Lấy origin của một URL, so cùng origin, nhận ra request cần preflight, dựng header CORS theo danh sách cho phép (kèm credentials), trả lời preflight, kiểm một chứng chỉ (hạn dùng, tên miền có *), và mô phỏng trình duyệt quyết định trang có đọc được response — 7 bài."
+    },
+    {
+      "slug": "wf-8-1-databases",
+      "name": "8.1 Vì sao cần cơ sở dữ liệu",
+      "level": "BEGINNER",
+      "description": "Kiểu dữ liệu kiểu SQLite, đổi kết quả cột/giá trị thành object, mô phỏng mất cập nhật khi hai request đọc-đổi-ghi xen kẽ, kiểm ràng buộc NOT NULL/UNIQUE/CHECK đúng thông báo của SQLite, tìm dòng vi phạm khoá ngoại, và dựng một bảng nhỏ trong bộ nhớ — 6 bài."
+    },
+    {
+      "slug": "wf-8-2-select",
+      "name": "8.2 SELECT",
+      "level": "INTERMEDIATE",
+      "description": "Đổi mẫu LIKE thành RegExp, logic ba giá trị của NULL, ORDER BY nhiều khoá với NULL đứng trước khi tăng dần, phân trang LIMIT/OFFSET, GROUP BY kèm count/sum/avg (count(cột) bỏ NULL), và một bộ chạy truy vấn theo đúng thứ tự thực thi của SQL — 6 bài, dữ liệu là bảng posts của blog.sql."
+    },
+    {
+      "slug": "wf-8-3-crud",
+      "name": "8.3 INSERT, UPDATE, DELETE và giao dịch",
+      "level": "INTERMEDIATE",
+      "description": "Dựng câu INSERT và UPDATE có tham số với tên cột kiểm theo danh sách cho phép, phát hiện UPDATE/DELETE thiếu WHERE, chuyển tiền tất-cả-hoặc-không, tìm kiếm LIKE thoát % và _, và tự viết tagged template sql`…` như $queryRaw — 6 bài."
+    },
+    {
+      "slug": "wf-8-4-relationships-joins",
+      "name": "8.4 Quan hệ và JOIN",
+      "level": "INTERMEDIATE",
+      "description": "INNER JOIN và LEFT JOIN bằng chỉ mục Map, đếm dòng con kể cả 0, gom dòng phẳng của JOIN thành object lồng như ORM, nhiều-nhiều qua bảng nối, mô phỏng ON DELETE CASCADE/RESTRICT/SET NULL, và tìm N+1 trong nhật ký truy vấn — 6 bài."
+    },
+    {
+      "slug": "wf-8-5-orm-prisma",
+      "name": "8.5 ORM với Prisma",
+      "level": "INTERMEDIATE",
+      "description": "Đổi lỗi Prisma (P2002, P2025, P2003) thành response HTTP, áp select lồng nhau, dựng bộ lọc where như Prisma (equals, gt/gte/lt/lte, contains, in, not, AND/OR/NOT), findMany có orderBy/skip/take, dịch where sang SQL có tham số, và lập kế hoạch db push (phát hiện bước phá huỷ) — 6 bài."
     },
     {
       "slug": "wf-11-1-closure",

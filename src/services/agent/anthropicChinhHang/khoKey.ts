@@ -77,6 +77,15 @@ export function dauChuKy(ngayLamMoi: number, luc = new Date()): Date {
   return new Date(dau - VN_MS);
 }
 
+/**
+ * Ngày làm mới THỰC DÙNG của một key (02/11/2026, user: "giữ nguyên chuẩn cũ để quan sát + kiểm soát").
+ * Key CÓ ngày hết hạn = gói credit dùng tới hết hạn ⇒ coi như 0 (cộng dồn từ lúc thêm, không về 0 mỗi tháng).
+ * Key không có hạn ⇒ theo `ngayLamMoi` (0 = không làm mới; 1–28 = chu kỳ tháng).
+ */
+export function ngayLamMoiHieuLuc(r: { ngayLamMoi: number; hetHanLuc: Date | null }): number {
+  return r.hetHanLuc ? 0 : r.ngayLamMoi;
+}
+
 /** Mốc làm mới KẾ TIẾP (để hiện trên trang admin). */
 export function chuKyKe(ngayLamMoi: number, luc = new Date()): Date | null {
   if (Math.round(ngayLamMoi) === 0) return null; // không làm mới ⇒ không có mốc kế
@@ -169,12 +178,12 @@ export async function keyKhaDung(luc = new Date()): Promise<KeyDungDuoc[]> {
   for (const r of rows) {
     if (r.hetHanLuc && r.hetHanLuc <= luc) continue;
     if (r.trangThai === 'hetCredit') {
-      const dau = dauChuKy(r.ngayLamMoi, luc);
+      const dau = dauChuKy(ngayLamMoiHieuLuc(r), luc);
       if (!r.hetCreditLuc || r.hetCreditLuc >= dau) continue;
       await prisma.anthropicKey.update({ where: { id: r.id }, data: { trangThai: 'hoatDong', hetCreditLuc: null } });
       logger.info('[anthropic] key qua ngày làm mới — mở lại', { keyId: r.id, nhan: r.nhan });
     }
-    if (r.nganSachThangUsd > 0 && (await daDungChuKy(r.id, r.ngayLamMoi, luc)) >= r.nganSachThangUsd) continue;
+    if (r.nganSachThangUsd > 0 && (await daDungChuKy(r.id, ngayLamMoiHieuLuc(r), luc)) >= r.nganSachThangUsd) continue;
     let khoa: string;
     try {
       khoa = giaiMaKhoa(r.khoaMaHoa);

@@ -10,7 +10,7 @@ import { chonModelPhu, docMucModelPhu } from './modelPhu.js';
 import { sapTool, thanAnToan } from './thanYeuCau.js';
 import { tinhUsd, giaCua } from './gia.js';
 import { phanLoaiLoi, ganCache } from './goi.js';
-import { docKhoaMoiTruong, dauChuKy, chuKyKe } from './khoKey.js';
+import { docKhoaMoiTruong, dauChuKy, chuKyKe, ngayLamMoiHieuLuc } from './khoKey.js';
 import { giaiMaKhoa, maHoaKhoa, duoiKhoa } from './maHoa.js';
 
 test('phân loại lỗi HTTP ⇒ đúng hành động chuyển key', () => {
@@ -72,6 +72,11 @@ test('ngày làm mới 0 = không làm mới: cộng dồn từ đầu, không c
   assert.equal(chuKyKe(0, luc), null);
   // Chế độ tháng giữ nguyên: ngày 1 ⇒ chu kỳ từ 1/11 00:00 VN.
   assert.equal(dauChuKy(1, luc).toISOString(), '2026-10-31T17:00:00.000Z');
+});
+
+test('key có ngày hết hạn ⇒ tự coi là gói credit (không làm mới)', () => {
+  assert.equal(ngayLamMoiHieuLuc({ ngayLamMoi: 1, hetHanLuc: new Date('2026-11-14T00:00:00Z') }), 0);
+  assert.equal(ngayLamMoiHieuLuc({ ngayLamMoi: 15, hetHanLuc: null }), 15);
 });
 
 test('chu kỳ tháng theo giờ Việt Nam', () => {

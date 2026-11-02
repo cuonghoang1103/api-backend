@@ -93,6 +93,7 @@ for (const d of dirs) {
       if (mp) await page.emulateMedia(Object.fromEntries(mp[1].split(',').map((kv) => kv.trim().split('='))));
       await page.goto(`${GOC_URL}/${d}/${f}`, { waitUntil: 'load' });
     } else {
+      const wj = /^\/\/ cho: (\d+)/.exec(src); if (wj) cho = +wj[1];   // "// cho: 1500" ở dòng đầu ⇒ chờ lâu hơn
       await page.goto(`${GOC_URL}/__trong`, { waitUntil: 'load' });
       await page.addScriptTag(ext === '.mjs' ? { url: `${GOC_URL}/${d}/${f}`, type: 'module' } : { url: `${GOC_URL}/${d}/${f}` }).catch(() => {});
     }

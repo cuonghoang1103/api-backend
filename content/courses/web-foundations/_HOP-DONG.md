@@ -78,6 +78,7 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 | Ch2 | 2.1–2.5 | ✅ 02/11 — bài 29–33k chữ, tệp `s02/`; demo `_demo/2-1…2-5`, `_t2/chay.mjs` (ariaSnapshot, phím Tab thật, form tới máy chủ thật, ảnh chậm 1 s); deck wf-2-1…5 (52 slide); Code Lab giữ nguyên 7 đề/bài |
 | Ch3 | 3.1–3.5 | ✅ 02/11 — bài 23–33k chữ, tệp `s03/`; demo `_demo/3-1…3-5`, `_t3/chay.mjs` (phím Tab với order, iPhone 13 giả lập, ba bề rộng); deck wf-3-1…5 (51 slide); Code Lab giữ nguyên 7 đề/bài |
 | Ch4 | 4.1–4.5 | ✅ 02/11 — bài 24–36k chữ, tệp `s04/`; demo `_demo/4-1…4-5` (34 tệp, gồm XSS đo thật và app todo có ảnh); deck wf-4-1…5 (47 slide); Code Lab giữ nguyên 7 đề/bài |
+| Ch5 | 5.1–5.5 | ✅ 02/11 — bài 24–29k chữ, tệp `s05/`; demo `_demo/5-1…5-5`, `_t5/api.mjs` + `_t5/chay.mjs` (API Node thật: POST 201/400, timeout; module mở bằng file:// bị CORS chặn); deck wf-5-1…5 (46 slide). ⚠️ Demo đo thời gian (5-1/chan, dong-bang; 5-2/ket-hop; 5-3) cho số hơi khác mỗi lần chạy — chạy lại thì soát chữ bài khớp output. JS demo cần chờ lâu: dòng đầu `// cho: 1500` (chay-demo đọc, sinh-ma bỏ dòng đó) |
 
 
 ## ✅ HOÀN TẤT ĐỢT NÂNG CẤP 02/11/2026

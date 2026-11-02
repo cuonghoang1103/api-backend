@@ -691,6 +691,21 @@ Node.js v22.21.0
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 5.3 — async/await from zero</span><span class="lc-sub">Missing await, 600 ms versus 200 ms, and forEach that does not wait</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 5.3 — async/await từ số 0</span><span class="lc-sub">Thiếu await, 600 ms so với 200 ms, và forEach không chờ</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -837,6 +852,21 @@ ESM  : top-level await chạy được</div>
   <span class="lc-body"><span class="lc-title">Node.js — ESM và CommonJS phối hợp</span><span class="lc-sub">Cái gì import được cái gì, và cái giới hạn về named export hay làm người ta vấp.</span></span>
 </a>
 
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 5.5 — ES modules in the browser</span><span class="lc-sub">Exports, run-once state and the real errors: missing .js, file:// blocked</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 5.5 — ES module trong trình duyệt</span><span class="lc-sub">Export, trạng thái chạy một lần và lỗi thật: thiếu .js, file:// bị chặn</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },

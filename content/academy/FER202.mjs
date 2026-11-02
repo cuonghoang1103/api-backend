@@ -2433,6 +2433,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 5.4 — fetch without React</span><span class="lc-sub">res.ok, four loading states, POST JSON to a real server, timeouts</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 5.4 — fetch khi chưa có React</span><span class="lc-sub">res.ok, bốn trạng thái tải, POST JSON tới máy chủ thật, giới hạn thời gian</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {

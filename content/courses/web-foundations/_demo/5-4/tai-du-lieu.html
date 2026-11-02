@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Loading states</title><meta name="chup" content="560x220"><meta name="cho-xong">
+<style>body{font-family:system-ui,sans-serif;margin:16px} .muted{color:#888} .error{color:#b03a2e} li{margin:4px 0}</style></head>
+<body>
+  <h3>Posts</h3>
+  <p id="status" class="muted"></p>
+  <ul id="list"></ul>
+<script>
+  const status = document.getElementById('status'), list = document.getElementById('list');
+
+  async function loadPosts() {
+    status.textContent = 'Loading…';                       // 1. show that something is happening
+    try {
+      const res = await fetch('api/posts.json');
+      if (!res.ok) throw new Error('HTTP ' + res.status);   // 2. fetch does not do this for you
+      const posts = await res.json();
+      if (posts.length === 0) { status.textContent = 'No posts yet.'; return; }   // 3. the empty case
+      list.replaceChildren(...posts.map((p) => {
+        const li = document.createElement('li');
+        li.textContent = `${p.title} (${p.likes} ♥)`;
+        return li;
+      }));
+      status.textContent = '';
+    } catch (err) {
+      status.textContent = 'Could not load posts: ' + err.message;   // 4. the error case
+      status.className = 'error';
+    }
+  }
+  loadPosts().then(() => { console.log('items shown:', list.children.length); window.__xong = true; });
+</script>
+</body>
+</html>

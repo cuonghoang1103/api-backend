@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Frozen page</title><meta name="cho-xong"></head>
+<body>
+<script>
+  // How many frames does the browser paint per second? Normally about 60.
+  function countFrames(ms) {
+    return new Promise((done) => {
+      let frames = 0;
+      const stop = performance.now() + ms;
+      const tick = () => { frames++; if (performance.now() < stop) requestAnimationFrame(tick); else done(frames); };
+      requestAnimationFrame(tick);
+    });
+  }
+  (async () => {
+    const calm = await countFrames(1000);
+    // the same second, but with 800 ms of heavy work in the middle of it
+    const busy = countFrames(1000);
+    setTimeout(() => { const end = performance.now() + 800; while (performance.now() < end) {} }, 100);
+    console.log('frames painted in 1 s, calm:', calm);
+    console.log('frames painted in 1 s, with an 800 ms busy loop:', await busy);
+    window.__xong = true;
+  })();
+</script>
+</body>
+</html>

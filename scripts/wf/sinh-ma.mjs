@@ -17,7 +17,7 @@ const walk = (dir, rel = '') => {
     if (/\.png$|\.webp$|\.webm$/.test(f)) continue;
     const s = fs.readFileSync(p, 'utf8');
     if (f.endsWith('.out.txt')) OUT[r.replace(/\.out\.txt$/, '')] = s.replace(/\n+$/, '');
-    else CODE[r] = s.replace(/^\/\/ chay: tay.*\n/, '').replace(/^<!-- chay: tay.*-->\n/, '');
+    else CODE[r] = s.replace(/^\/\/ chay: tay.*\n/, '').replace(/^<!-- chay: tay.*-->\n/, '').replace(/^\/\/ cho: \d+.*\n/, '');
   }
 };
 walk(DEMO);

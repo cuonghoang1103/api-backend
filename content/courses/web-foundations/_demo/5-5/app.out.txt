@@ -1,0 +1,9 @@
+counter.js is running (this prints once, however many files import it)
+5 3.14159 12.57
+Hi, I am Linh
+['PI', 'add', 'circleArea']
+shared state: 1 2 3
+this at the top of a module: undefined
+variables are private to the module: undefined
+SyntaxError: The requested module './math.js' does not provide an export named 'ad'
+TypeError: Failed to fetch dynamically imported module: /5-5/mod/math

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Modules</title><meta name="cho-xong"></head>
+<body>
+<script type="module">
+  import { add, PI as pi, circleArea } from './mod/math.js';
+  import User from './mod/user.js';
+  import * as math from './mod/math.js';
+  import { next } from './mod/counter.js';
+  import { next as nextAgain } from './mod/counter.js';
+
+  console.log(add(2, 3), pi, circleArea(2).toFixed(2));
+  console.log(new User('Linh').greet());
+  console.log(Object.keys(math));
+  console.log('shared state:', next(), nextAgain(), next());
+  console.log('this at the top of a module:', this);
+  console.log('variables are private to the module:', typeof window.add);
+
+  try {
+    await import('./mod/sai-ten.js');
+  } catch (err) {
+    console.log(err.name + ':', err.message);
+  }
+  try {
+    await import('./mod/math');                         // forgot the .js
+  } catch (err) {
+    console.log(err.name + ':', err.message.replace(location.origin, ''));
+  }
+  window.__xong = true;
+</script>
+</body>
+</html>

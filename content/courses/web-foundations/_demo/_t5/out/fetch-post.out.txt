@@ -1,0 +1,5 @@
+POST with JSON body       → 201 true {"id":2,"title":"Write the report","done":false}
+POST, forgot JSON.stringify → 400 false {"error":"Body must be JSON"}
+POST, missing title       → 400 false {"error":"title is required"}
+GET /api/todos now has 2 items
+slow endpoint, 500 ms timeout → TimeoutError after about 500 ms

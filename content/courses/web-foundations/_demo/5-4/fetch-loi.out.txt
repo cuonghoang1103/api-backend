@@ -1,0 +1,3 @@
+404 → resolved anyway. ok = false status = 404
+res.json() on the 404 page → SyntaxError
+network failure → TypeError: Failed to fetch

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>fetch</title><meta name="cho-xong"></head>
+<body>
+<script>
+  (async () => {
+    const res = await fetch('api/user.json');          // 1. the response arrives: status + headers
+    console.log('status', res.status, res.ok, res.headers.get('content-type'));
+    const user = await res.json();                      // 2. read and parse the body (also async)
+    console.log('user', user.name, user.roles);
+
+    const posts = await (await fetch('api/posts.json')).json();
+    const top = posts.toSorted((a, b) => b.likes - a.likes)[0];
+    console.log(posts.length, 'posts; most liked:', top.title);
+    window.__xong = true;
+  })();
+</script>
+</body>
+</html>

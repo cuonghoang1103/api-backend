@@ -1,0 +1,4 @@
+Hello [object Promise]
+false function
+Hello Linh
+[object Promise][object Promise]

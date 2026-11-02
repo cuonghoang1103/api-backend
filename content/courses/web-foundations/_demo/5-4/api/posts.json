@@ -1,0 +1,5 @@
+[
+  { "id": 1, "title": "Hello HTTP", "likes": 12 },
+  { "id": 2, "title": "Promises in practice", "likes": 30 },
+  { "id": 3, "title": "Why fetch does not throw on 404", "likes": 21 }
+]

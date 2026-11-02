@@ -1,0 +1,4 @@
+right away: Promise {}
+caught: server said no
+finally runs either way
+100 ms later: coffee

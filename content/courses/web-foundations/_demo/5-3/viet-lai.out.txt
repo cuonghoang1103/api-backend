@@ -1,0 +1,3 @@
+an async function always returns a promise: true
+then : Linh 2 orders
+await: Linh 2 orders

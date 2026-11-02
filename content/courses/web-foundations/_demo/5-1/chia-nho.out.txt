@@ -1,0 +1,2 @@
+another timer got a turn in between
+total 4499998500000 in 3 chunks; other timer ran first: true

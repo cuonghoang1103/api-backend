@@ -33,6 +33,10 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-4-3-functions` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | hàm từ số 0 trước closure |
 | `wf-4-4-arrays-objects` | React `rx-0-3-js-cho-react` | `content/courses/react/s00-intro.mjs` | map/filter/reduce, sao chép nông, JSON |
 | `wf-4-5-dom-events` | WED201c (Academy) `wed201c-dom` | `content/academy/WED201c.mjs` | XSS đo thật, defer, ủy quyền, app todo |
+| `wf-5-1-event-loop` | Node.js `nodejs-2-2-event-loop` | `content/courses/nodejs/s02-runtime.mjs` | thứ tự microtask/task, trang đơ đo bằng khung hình |
+| `wf-5-3-async-await` | Node.js `nodejs-1-4-bat-dong-bo` | `content/courses/nodejs/s01-javascript.mjs` | thiếu await, tuần tự vs song song, forEach |
+| `wf-5-4-fetch-apis` | FER202 (Academy) `fer202-11-1-fetch-async` | `content/academy/FER202.mjs` | res.ok, bốn trạng thái, POST JSON, timeout |
+| `wf-5-5-es-modules` | Node.js `nodejs-1-5-module` | `content/courses/nodejs/s01-javascript.mjs` | export/import, chạy một lần, file:// bị chặn |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

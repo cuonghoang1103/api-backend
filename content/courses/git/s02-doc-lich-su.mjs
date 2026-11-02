@@ -1266,7 +1266,7 @@ done</code></pre>
 </a>
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Debugging-with-Git" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.10 (tiếng Việt) — Gỡ lỗi với Git</span><span class="lc-sub">Chương chính thức về blame và bisect, kèm một ví dụ chạy trọn vẹn.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.10 (tiếng Anh) — Debugging with Git</span><span class="lc-sub">Chương chính thức về blame và bisect, kèm một ví dụ chạy trọn vẹn.</span></span>
 </a>
 
 <div class="pitfall"><strong>Cái bẫy tốn thời gian nhất:</strong> bắt đầu bằng <code>git log</code> trên cả kho mã rồi ngồi đọc. Nó cho cảm giác đang tiến triển và gần như không bao giờ tìm ra gì — 2.400 dòng tiêu đề không phải thứ tìm được bằng mắt. Hãy bắt đầu từ <em>mã</em> (grep), lấy một mã băm (blame), rồi thu hẹp lịch sử bằng một bộ lọc khớp với đúng câu hỏi (<code>-S</code>, một đường dẫn, một khoảng). Lướt là việc cuối cùng, không bao giờ là việc đầu tiên.</div>

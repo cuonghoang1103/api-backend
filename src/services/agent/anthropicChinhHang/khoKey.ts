@@ -67,6 +67,8 @@ export function docKhoaMoiTruong(raw: string | undefined): KhoaMoiTruong[] {
  * lần gần nhất đồng hồ VN qua 00:00 ngày `ngayLamMoi`.
  */
 export function dauChuKy(ngayLamMoi: number, luc = new Date()): Date {
+  // 0 = KHÔNG làm mới (02/11/2026): key là gói credit dùng tới hết hạn ⇒ cộng dồn từ đầu, không về 0 hằng tháng.
+  if (Math.round(ngayLamMoi) === 0) return new Date(0);
   const ngay = Math.min(28, Math.max(1, Math.round(ngayLamMoi) || 1));
   const vn = new Date(luc.getTime() + VN_MS);
   const y = vn.getUTCFullYear();
@@ -76,7 +78,8 @@ export function dauChuKy(ngayLamMoi: number, luc = new Date()): Date {
 }
 
 /** Mốc làm mới KẾ TIẾP (để hiện trên trang admin). */
-export function chuKyKe(ngayLamMoi: number, luc = new Date()): Date {
+export function chuKyKe(ngayLamMoi: number, luc = new Date()): Date | null {
+  if (Math.round(ngayLamMoi) === 0) return null; // không làm mới ⇒ không có mốc kế
   const dau = dauChuKy(ngayLamMoi, luc);
   const vn = new Date(dau.getTime() + VN_MS);
   return new Date(Date.UTC(vn.getUTCFullYear(), vn.getUTCMonth() + 1, vn.getUTCDate()) - VN_MS);
@@ -265,7 +268,7 @@ export async function themKey(d: KeyNhap): Promise<number> {
       vanTay,
       thuTu: d.thuTu !== undefined ? Math.round(docSo(d.thuTu, 'Thứ tự', 0, 10_000)) : (cuoi._max.thuTu ?? -1) + 1,
       nganSachThangUsd: d.nganSachThangUsd !== undefined ? docSo(d.nganSachThangUsd, 'Ngân sách', 0, 1_000_000) : 0,
-      ngayLamMoi: d.ngayLamMoi !== undefined ? Math.round(docSo(d.ngayLamMoi, 'Ngày làm mới', 1, 28)) : 1,
+      ngayLamMoi: d.ngayLamMoi !== undefined ? Math.round(docSo(d.ngayLamMoi, 'Ngày làm mới (0 = không làm mới)', 0, 28)) : 1,
       hetHanLuc: d.hetHanLuc !== undefined ? docNgay(d.hetHanLuc) : null,
     },
   });
@@ -287,7 +290,7 @@ export async function suaKey(id: number, d: KeyNhap): Promise<void> {
     });
   }
   if (d.nganSachThangUsd !== undefined) data.nganSachThangUsd = docSo(d.nganSachThangUsd, 'Ngân sách', 0, 1_000_000);
-  if (d.ngayLamMoi !== undefined) data.ngayLamMoi = Math.round(docSo(d.ngayLamMoi, 'Ngày làm mới', 1, 28));
+  if (d.ngayLamMoi !== undefined) data.ngayLamMoi = Math.round(docSo(d.ngayLamMoi, 'Ngày làm mới (0 = không làm mới)', 0, 28));
   if (d.hetHanLuc !== undefined) data.hetHanLuc = docNgay(d.hetHanLuc);
   if (d.thuTu !== undefined) data.thuTu = Math.round(docSo(d.thuTu, 'Thứ tự', 0, 10_000));
   if (d.trangThai !== undefined) {

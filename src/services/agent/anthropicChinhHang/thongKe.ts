@@ -42,7 +42,7 @@ export async function dsKeyAdmin(luc = new Date()) {
       loiCuoi: r.loiCuoi,
       loiCuoiLuc: r.loiCuoiLuc?.toISOString() ?? null,
       hetCreditLuc: r.hetCreditLuc?.toISOString() ?? null,
-      chuKy: { tu: dau.toISOString(), lamMoiLuc: chuKyKe(r.ngayLamMoi, luc).toISOString() },
+      chuKy: { tu: dau.toISOString(), lamMoiLuc: chuKyKe(r.ngayLamMoi, luc)?.toISOString() ?? null },
       daDungUsd: Math.round(daDung * 10_000) / 10_000,
       conLaiUocUsd: r.nganSachThangUsd > 0 ? Math.max(0, Math.round((r.nganSachThangUsd - daDung) * 100) / 100) : null,
       soLuot: tong._count,

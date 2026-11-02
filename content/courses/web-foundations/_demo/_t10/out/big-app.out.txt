@@ -1,0 +1,12 @@
+$ node big-app.mjs
+[ ] 2026-03-01  Pay rent
+[x] 2026-01-15  Learn Git
+[ ] 2026-02-10  Buy milk
+[ ] 2026-02-28  Read MDN on sort
+[ ] 2026-01-02  Call Lan
+5 notes, 4 open
+
+$ node big-app.mjs study
+[x] 2026-01-15  Learn Git
+[ ] 2026-02-28  Read MDN on sort
+2 notes, 1 open

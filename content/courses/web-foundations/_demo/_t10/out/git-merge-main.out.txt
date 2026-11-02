@@ -1,0 +1,21 @@
+# Binh's branch is behind main: bring main in before asking for review
+$ git fetch origin
+$ git merge origin/main
+Auto-merging notes.js
+Merge made by the 'ort' strategy.
+ notes.js | 5 +++++
+ 1 file changed, 5 insertions(+)
+$ git status --short
+$ cat notes.js
+const notes = ['Buy milk', 'Learn Git', 'Call Lan'];
+
+function list() {
+  return [...notes].sort().join('\n');
+}
+
+console.log(list());
+
+function search(term) {
+  return notes.filter((n) => n.toLowerCase().includes(term.toLowerCase()));
+}
+console.log(search('git'));

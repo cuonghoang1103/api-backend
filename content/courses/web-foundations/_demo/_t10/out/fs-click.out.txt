@@ -1,0 +1,21 @@
+── browser (DevTools console) ──
+event   submit #add
+fetch   POST /api/notes {"title":"Ship the capstone"}
+reply   201 {"id":3,"title":"Ship the capstone"} (7 ms)
+fetch   GET /api/notes
+reply   200 {"items":[{"id":1,"title":"Learn HTTP"},{"id":2,"title":"Learn SQL"},{"id":3,"title":"Ship the capstone"}]} (1 ms)
+dom     3 <li> in #notes
+
+── server (terminal) ──
+[req 5] http   POST /api/notes (cookie: sid=…)
+[req 5] auth   session ok → user 1
+[req 5] valid  ok {"title":"Ship the capstone"}
+[req 5] sql    INSERT INTO notes (user_id, title) VALUES (?, ?) [1,"Ship the capstone"] → id 3
+[req 5] reply  201 Created
+[req 6] http   GET /api/notes (cookie: sid=…)
+[req 6] auth   session ok → user 1
+[req 6] sql    SELECT id, title FROM notes WHERE user_id = ? ORDER BY id [1] → 3 rows
+[req 6] reply  200 OK
+
+── page ──
+#notes: ["Learn HTTP","Learn SQL","Ship the capstone"]

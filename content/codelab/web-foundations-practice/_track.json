@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 9 TypeScript + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 9 TypeScript + Chương 10 tư duy & gỡ lỗi + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-1-2-vscode",
@@ -260,6 +260,36 @@
       "name": "9.5 TypeScript trong dự án thật",
       "level": "INTERMEDIATE",
       "description": "Soát package.json có đủ script dev/typecheck/build/start, soát tsconfig (strict, rootDir/outDir, NodeNext), nạp cấu hình từ env và hỏng sớm, tìm cú pháp TypeScript không xoá được mà Node từ chối, và tự viết bộ kiểm schema kiểu zod với safeParse + issues — 6 bài."
+    },
+    {
+      "slug": "wf-10-1-think-like-a-programmer",
+      "name": "10.1 Tư duy như lập trình viên",
+      "level": "BEGINNER",
+      "description": "Sáu bài toán nhỏ mà ca biên mới là phần khó: đảo từ với khoảng trắng thừa, viết hoa tiêu đề trừ từ nhỏ, ba từ hay gặp nhất, N khách chi nhiều nhất, nén chuỗi lặp, và kiểm ngoặc cân bằng kèm vị trí lỗi đầu tiên — 6 bài."
+    },
+    {
+      "slug": "wf-10-2-reading-errors-debugging",
+      "name": "10.2 Đọc lỗi & gỡ lỗi",
+      "level": "INTERMEDIATE",
+      "description": "Đọc một dòng stack trace, tìm khung đầu tiên thuộc mã của bạn (bỏ node:internal và node_modules), gợi ý theo tên lỗi, chỉ đúng chỗ undefined trên đường dẫn a.b.c, bisect lịch sử commit đếm số lần chạy kiểm, và tự viết trace() ghi mọi lời gọi có thụt lề — 6 bài."
+    },
+    {
+      "slug": "wf-10-3-git-workflow",
+      "name": "10.3 Quy trình Git",
+      "level": "INTERMEDIATE",
+      "description": "Soát thông điệp commit, đặt tên nhánh từ tiêu đề việc, đọc các khối xung đột <<<<<<< ======= >>>>>>>, gỡ xung đột theo ours/theirs/both, quyết định push/pull/merge từ hai lịch sử, và tự viết phép gộp ba bên theo dòng — 6 bài."
+    },
+    {
+      "slug": "wf-10-4-keep-learning",
+      "name": "10.4 Cách tiếp tục học",
+      "level": "INTERMEDIATE",
+      "description": "Sắp số cho đúng (sort mặc định so chuỗi), sortBy theo khoá với hàm so sánh đúng hợp đồng, tự viết ms() sau khi đọc mã nguồn thư viện, soát một câu hỏi trước khi gửi, che bí mật trước khi chia sẻ log, và tự động thu nhỏ một ca lỗi — 6 bài."
+    },
+    {
+      "slug": "wf-10-5-full-stack-picture",
+      "name": "10.5 Bức tranh full-stack",
+      "level": "INTERMEDIATE",
+      "description": "Đoán tầng có lỗi từ triệu chứng, đọc cookie sid, khớp route kèm tham số và 404/405 + Allow, kiểm phần thân ghi chú (422), che log theo tầng, và ghép cả máy chủ ghi chú (đăng nhập, phiên, GET/POST/DELETE theo người dùng) trong một hàm handle() — 6 bài."
     },
     {
       "slug": "wf-11-1-closure",

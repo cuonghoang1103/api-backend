@@ -805,6 +805,21 @@ config.txt:7: leftover conflict marker</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> commit luôn cả ký hiệu xung đột. Bỏ sót một dòng <code>=======</code> hay <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> là nó đi thẳng vào lịch sử — file trở nên sai cú pháp và CI hỏng với một thông báo chỉ vào chỗ chẳng ích gì. Trước khi kết thúc một lần merge, hãy chạy <code>git diff --check</code> (nó báo ký hiệu còn sót) hoặc đơn giản là <code>git grep -n "^&lt;&lt;&lt;&lt;&lt;&lt;&lt;"</code>. Chương 12 chỉ cách làm một hook pre-commit tự động từ chối việc đó.</div>
 <p class="note-ct"><strong>Bước mà người ta hay bỏ qua:</strong> chạy test sau khi giải xung đột. Một bản giải xung đột là mã MỚI chưa từng được chạy ở đâu — bạn viết nó bằng tay, dưới áp lực nhẹ, ghép ý định của hai người lại. Đó đúng là loại mã biên dịch trót lọt và hành xử sai. Hãy giải, rồi <em>chạy nó</em>, rồi mới commit.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.3 — Git workflow for real work</span><span class="lc-sub">Two people, one origin: a rejected push, an automatic merge and a real conflict resolved step by step</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.3 — Quy trình Git cho công việc thật</span><span class="lc-sub">Hai người, một origin: push bị từ chối, gộp tự động và một xung đột thật được gỡ từng bước</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1,0 +1,6 @@
+[click "Add pen"]
+console.log: total is 5500015000 string
+Uncaught TypeError: Cannot set properties of undefined (setting 'textContent')
+    at HTMLButtonElement.<anonymous> (cart.js:16:32)
+
+#total now shows: "Total: 5500015000 VND"

@@ -699,6 +699,21 @@ git add . &amp;&amp; git commit -m "chore: empty project"</code></pre>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực RESTful API</span><span class="lc-sub">10 bài tập luyện đúng hình dạng API mà ta xây từ chương 6 trở đi.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.5 — The full-stack picture</span><span class="lc-sub">One click traced through every layer of a 130-line notes app with no framework — the starting point for this course</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.5 — Bức tranh full-stack</span><span class="lc-sub">Một cú bấm đi qua mọi tầng của app ghi chú 130 dòng không framework — điểm xuất phát của khoá này</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
   ],

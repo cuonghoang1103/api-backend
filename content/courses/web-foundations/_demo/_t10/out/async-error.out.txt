@@ -1,0 +1,17 @@
+$ node async-error.mjs
+this line still runs first — the rejection arrives later
+async-error.mjs:4
+  if (!res.ok) throw new Error('HTTP ' + res.status + ' for user ' + id, { cause: { id } });
+                     ^
+
+Error: HTTP 404 for user 42
+    at loadProfile (async-error.mjs:4:22)
+    at async-error.mjs:7:1
+    at ModuleJob.run (node:internal/…)
+    at async onImport.tracePromise.__proto__ (node:internal/…)
+    at async asyncRunEntryPointWithESMLoader (node:internal/…) {
+  [cause]: { id: 42 }
+}
+
+Node.js v22.23.3
+(exit code 1)

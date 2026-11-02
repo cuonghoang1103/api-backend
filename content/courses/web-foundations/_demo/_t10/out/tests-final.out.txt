@@ -1,0 +1,15 @@
+$ node --test top-words.test.mjs     (after fixing one case at a time)
+✔ simple case (…ms)
+✔ capital letters and punctuation do not create new words (…ms)
+✔ stop words are ignored (…ms)
+✔ empty text gives no words (…ms)
+✔ ties are alphabetical (…ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms …
+(exit code 0)

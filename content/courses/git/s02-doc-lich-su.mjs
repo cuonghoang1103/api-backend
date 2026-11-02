@@ -1007,6 +1007,21 @@ done</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> bisect với một test chớp nháy. Nếu test hỏng lúc được lúc không, một câu trả lời sai đẩy cuộc tìm xuống nửa sai và "commit hỏng đầu tiên" trở thành vô nghĩa — mà không có một lời cảnh báo nào. Trước khi bắt đầu, hãy chạy phép kiểm ba lần trên một commit đã biết là hỏng và ba lần trên một commit đã biết là tốt. Nếu nó không tất định, hãy sửa phép kiểm trước; bisect khuếch đại sự chớp nháy thành những câu trả lời sai đầy tự tin.</div>
 <p class="note-ct"><strong>Vì sao commit nhỏ sinh lời ở đây:</strong> bisect chỉ vào MỘT commit. Nếu commit đó đổi 40 file, bạn mới thu hẹp được thành "đâu đó trong cái thay đổi khổng lồ này" — hữu ích, nhưng chưa phải câu trả lời. Nếu nó đổi một hàm, bạn xong việc. Lời khuyên commit nhỏ ở bài 1.3 sinh lời lớn nhất vào đúng ngày bạn chạy lệnh này.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.2 — Reading errors and debugging</span><span class="lc-sub">Stack traces, a real breakpoint in Chromium, and git bisect run finding a broken price commit</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.2 — Đọc lỗi và gỡ lỗi</span><span class="lc-sub">Stack trace, breakpoint thật trong Chromium, và git bisect run tìm commit làm hỏng giá</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

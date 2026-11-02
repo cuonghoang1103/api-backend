@@ -1,0 +1,95 @@
+$ IMPL=./top-words-v1.mjs node --test top-words.test.mjs     (the first version)
+✔ simple case (…ms)
+✖ capital letters and punctuation do not create new words (…ms)
+✖ stop words are ignored (…ms)
+✖ empty text gives no words (…ms)
+✖ ties are alphabetical (…ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms …
+✖ failing tests:
+test at top-words.test.mjs:9:1
+✖ capital letters and punctuation do not create new words (…ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+    [
+      {
+  +     count: 1,
+  +     word: 'Cache.'
+  -     count: 3,
+  -     word: 'cache'
+      }
+    ]
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { word: 'Cache.', count: 1 } ],
+    expected: [ { word: 'cache', count: 3 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+test at top-words.test.mjs:12:1
+✖ stop words are ignored (…ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+    [
+      {
+  +     count: 3,
+  +     word: 'the'
+  -     count: 1,
+  -     word: 'sql'
+      }
+    ]
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { word: 'the', count: 3 } ],
+    expected: [ { word: 'sql', count: 1 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+test at top-words.test.mjs:15:1
+✖ empty text gives no words (…ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  + [
+  +   {
+  +     count: 1,
+  +     word: ''
+  +   }
+  + ]
+  - []
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { word: '', count: 1 } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+test at top-words.test.mjs:18:1
+✖ ties are alphabetical (…ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+    [
+      {
+        count: 1,
+  +     word: 'pear'
+  -     word: 'apple'
+      },
+      {
+        count: 1,
+  +     word: 'apple'
+  -     word: 'pear'
+      }
+    ]
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { word: 'pear', count: 1 }, { word: 'apple', count: 1 } ],
+    expected: [ { word: 'apple', count: 1 }, { word: 'pear', count: 1 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+(exit code 1)

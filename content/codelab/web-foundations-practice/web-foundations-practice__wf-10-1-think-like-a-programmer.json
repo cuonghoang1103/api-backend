@@ -1,0 +1,695 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-10-1-think-like-a-programmer",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-10-1-think-like-a-programmer"
+  },
+  "exercises": [
+    {
+      "title": "Đảo thứ tự từ",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "chia nhỏ bài toán",
+        "ca biên"
+      ],
+      "prerequisites": [
+        "split",
+        "trim"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Viết <code>reverseWords(sentence)</code> trả các TỪ theo thứ tự ngược, nối bằng đúng một dấu cách. Mọi chuỗi khoảng trắng (dấu cách, tab, xuống dòng) là MỘT dấu ngăn; khoảng trắng hai đầu bị bỏ. Câu rỗng hoặc chỉ có khoảng trắng ⇒ <code>\"\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đảo từ, không đảo chữ.</li>\n  <li>Mọi loại khoảng trắng là dấu ngăn.</li>\n  <li>Không có từ rỗng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "sentence: string.",
+      "outputSpec": "string.",
+      "constraints": "Không sửa thứ tự chữ trong từ.",
+      "examplesJson": [
+        {
+          "input": "reverseWords(\"  the   sky\\tis blue \")",
+          "output": "\"blue is sky the\"",
+          "explanation": "Khoảng trắng thừa và tab bị gộp."
+        }
+      ],
+      "hintsJson": [
+        "Kế hoạch: tách → đảo → nối. Bước tách là chỗ khó.",
+        "sentence.trim().split(/\\s+/) — rồi xử lý riêng câu rỗng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — đảo từ\n// 1. tách thành từ   2. đảo   3. nối\nfunction reverseWords(sentence) {\n  return sentence.split(' ').reverse().join(' ');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — kế hoạch: (1) tách theo MỌI chuỗi khoảng trắng, bỏ hai đầu  (2) đảo  (3) nối bằng một dấu cách\nfunction reverseWords(sentence) {\n  const trimmed = sentence.trim();\n  if (trimmed === '') return '';                 // ca biên: không có từ nào\n  return trimmed.split(/\\s+/).reverse().join(' ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kế hoạch \"tách, đảo, nối\" đúng ngay từ đầu; chỗ sai nằm ở cách hiểu \"tách\". <code>split(' ')</code> tạo từ rỗng giữa hai dấu cách liền nhau và coi tab là một phần của từ. Ca biên buộc bạn định nghĩa \"từ\" cho chính xác.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>split(' ') với khoảng trắng thừa.</li>\n  <li>Quên tab/xuống dòng.</li>\n  <li>\"   \" trả về \" \".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/split",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The normal sentence|||Câu bình thường",
+            "goi": "reverseWords(\"the sky is blue\")",
+            "mongDoi": "blue is sky the"
+          },
+          {
+            "moTa": "Extra spaces, tabs and newlines|||Khoảng trắng thừa, tab, xuống dòng",
+            "goi": "[reverseWords(\"  the   sky  \"), reverseWords(\"one\\ttwo\\nthree\")]",
+            "mongDoi": [
+              "sky the",
+              "three two one"
+            ]
+          },
+          {
+            "moTa": "Empty and single word|||Rỗng và một từ",
+            "goi": "[reverseWords(\"\"), reverseWords(\"   \"), reverseWords(\"hello\")]",
+            "mongDoi": [
+              "",
+              "",
+              "hello"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split(' ') với khoảng trắng thừa."
+        },
+        {
+          "loi": "Quên tab/xuống dòng."
+        },
+        {
+          "loi": "\"   \" trả về \" \"."
+        }
+      ]
+    },
+    {
+      "title": "Viết hoa tiêu đề",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "quy tắc có ngoại lệ"
+      ],
+      "prerequisites": [
+        "map",
+        "Set"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Viết <code>titleCase(text)</code>: viết hoa chữ cái đầu mỗi từ, các chữ còn lại viết thường — TRỪ các từ nhỏ <code>a, an, the, and, or, of, in, on, to, for</code> thì viết thường hoàn toàn, nhưng từ ĐẦU và từ CUỐI luôn viết hoa. Từ có dấu gạch nối viết hoa từng phần (<code>\"full-stack\"</code> → <code>\"Full-Stack\"</code>). Khoảng trắng gộp như bài trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Từ nhỏ viết thường ở giữa.</li>\n  <li>Từ đầu/cuối luôn viết hoa.</li>\n  <li>Gạch nối viết hoa từng phần.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "string.",
+      "constraints": "Chữ có dấu tiếng Việt cũng phải đúng (toUpperCase lo được).",
+      "examplesJson": [
+        {
+          "input": "titleCase(\"the art OF debugging\")",
+          "output": "\"The Art of Debugging\"",
+          "explanation": "\"the\" ở đầu vẫn viết hoa; \"of\" ở giữa viết thường."
+        }
+      ],
+      "hintsJson": [
+        "const words = text.trim().split(/\\s+/).filter(Boolean);",
+        "const cap = (w) => w.split(\"-\").map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join(\"-\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — viết hoa tiêu đề\nfunction titleCase(text) {\n  return text.toUpperCase();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — quy tắc chính (viết hoa) + ngoại lệ (từ nhỏ) + ngoại lệ của ngoại lệ (đầu/cuối)\nconst SMALL = new Set(['a', 'an', 'the', 'and', 'or', 'of', 'in', 'on', 'to', 'for']);\nconst cap = (w) => w.split('-').map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join('-');\n\nfunction titleCase(text) {\n  const words = text.trim().split(/\\s+/).filter(Boolean);\n  return words.map((w, i) => {\n    const lower = w.toLowerCase();\n    const edge = i === 0 || i === words.length - 1;\n    return SMALL.has(lower) && !edge ? lower : cap(w);\n  }).join(' ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Viết quy tắc thành ba dòng chú thích trước (chính, ngoại lệ, ngoại lệ của ngoại lệ) làm mã gần như tự viết. Bộ kiểm có đúng các ca: từ nhỏ ở đầu, ở cuối, chữ hoa lộn xộn, gạch nối.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết thường \"The\" ở đầu.</li>\n  <li>Không hạ phần còn lại (\"OF\" → \"OF\").</li>\n  <li>Gạch nối chỉ hoa phần đầu.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toUpperCase",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Small words in the middle|||Từ nhỏ ở giữa",
+            "goi": "titleCase(\"the art OF debugging\")",
+            "mongDoi": "The Art of Debugging"
+          },
+          {
+            "moTa": "First and last word always capitalised|||Từ đầu và cuối luôn hoa",
+            "goi": "[titleCase(\"what is it for\"), titleCase(\"of mice and men\")]",
+            "mongDoi": [
+              "What Is It For",
+              "Of Mice and Men"
+            ]
+          },
+          {
+            "moTa": "Hyphens, accents and extra spaces|||Gạch nối, dấu và khoảng trắng thừa",
+            "goi": "[titleCase(\"  a full-stack   guide \"), titleCase(\"đà nẵng in summer\")]",
+            "mongDoi": [
+              "A Full-Stack Guide",
+              "Đà Nẵng in Summer"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết thường \"The\" ở đầu."
+        },
+        {
+          "loi": "Không hạ phần còn lại (\"OF\" → \"OF\")."
+        },
+        {
+          "loi": "Gạch nối chỉ hoa phần đầu."
+        }
+      ]
+    },
+    {
+      "title": "Ba từ hay gặp nhất",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "dò tay",
+        "đếm",
+        "phân định hoà"
+      ],
+      "prerequisites": [
+        "Map",
+        "sort",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Viết <code>topWords(text, n = 3)</code> trả mảng <code>{ word, count }</code>: từ là chuỗi chữ/số liên tiếp (chữ mọi ngôn ngữ, <code>/[\\p{L}\\p{N}']+/gu</code>), không phân biệt hoa thường (trả về chữ thường), bỏ từ dừng <code>the, a, an, is, and, of, to, in, it</code>. Sắp theo số lần giảm dần, hoà thì theo bảng chữ cái (<code>localeCompare</code>), lấy <code>n</code> phần tử đầu. Văn bản rỗng ⇒ <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ dấu câu và chữ hoa.</li>\n  <li>Bỏ từ dừng.</li>\n  <li>Phân định hoà theo chữ cái.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string; n?: number.",
+      "outputSpec": "{ word, count }[].",
+      "constraints": "match trả null khi không có từ.",
+      "examplesJson": [
+        {
+          "input": "topWords(\"The cache is fast. The cache is small; a small cache is a fast cache!\")",
+          "output": "[{ word: \"cache\", count: 4 }, { word: \"fast\", count: 2 }, { word: \"small\", count: 2 }]",
+          "explanation": "Đúng phần dò tay trong bài."
+        }
+      ],
+      "hintsJson": [
+        "1. tách  2. bỏ từ dừng  3. đếm bằng Map  4. sắp + cắt",
+        ".sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — ba từ hay gặp nhất (bản viết một mạch — chạy bộ kiểm xem nó hỏng ở đâu)\nfunction topWords(text, n = 3) {\n  const counts = {};\n  for (const w of text.split(' ')) counts[w] = (counts[w] || 0) + 1;\n  return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, n).map(([word, count]) => ({ word, count }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — bốn bước của kế hoạch, mỗi bước một dòng chú thích\nconst STOP = new Set(['the', 'a', 'an', 'is', 'and', 'of', 'to', 'in', 'it']);\n\nfunction topWords(text, n = 3) {\n  const words = text.toLowerCase().match(/[\\p{L}\\p{N}']+/gu) ?? [];   // 1. tách (chữ mọi ngôn ngữ)\n  const counts = new Map();\n  for (const w of words) if (!STOP.has(w)) counts.set(w, (counts.get(w) ?? 0) + 1);   // 2–3. bỏ từ dừng, đếm\n  return [...counts]\n    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))          // 4. nhiều trước, hoà theo chữ cái\n    .slice(0, n)\n    .map(([word, count]) => ({ word, count }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bản khởi đầu là bản v1 của bài học: đúng ca đơn giản, hỏng bốn ca còn lại (chữ hoa + dấu câu, từ dừng, văn bản rỗng, hoà). Sửa từng ca một, chạy lại sau mỗi lần.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"Cache.\" và \"cache\" thành hai từ.</li>\n  <li>Văn bản rỗng đếm \"\" là một từ.</li>\n  <li>Hoà theo thứ tự xuất hiện.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The traced example|||Ví dụ đã dò tay",
+            "goi": "topWords(\"The cache is fast. The cache is small; a small cache is a fast cache!\")",
+            "mongDoi": [
+              {
+                "word": "cache",
+                "count": 4
+              },
+              {
+                "word": "fast",
+                "count": 2
+              },
+              {
+                "word": "small",
+                "count": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Case, punctuation, stop words|||Hoa thường, dấu câu, từ dừng",
+            "goi": "[topWords(\"Cache. cache, CACHE!\", 1), topWords(\"the the the sql\", 1)]",
+            "mongDoi": [
+              [
+                {
+                  "word": "cache",
+                  "count": 3
+                }
+              ],
+              [
+                {
+                  "word": "sql",
+                  "count": 1
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": "Empty text and ties|||Văn bản rỗng và hoà",
+            "goi": "[topWords(\"\"), topWords(\"pear apple\", 2)]",
+            "mongDoi": [
+              [],
+              [
+                {
+                  "word": "apple",
+                  "count": 1
+                },
+                {
+                  "word": "pear",
+                  "count": 1
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": "Letters in any language|||Chữ mọi ngôn ngữ",
+            "goi": "topWords(\"Đà Nẵng, đà nẵng và Huế\", 2)",
+            "mongDoi": [
+              {
+                "word": "đà",
+                "count": 2
+              },
+              {
+                "word": "nẵng",
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Cache.\" và \"cache\" thành hai từ."
+        },
+        {
+          "loi": "Văn bản rỗng đếm \"\" là một từ."
+        },
+        {
+          "loi": "Hoà theo thứ tự xuất hiện."
+        }
+      ]
+    },
+    {
+      "title": "N khách chi nhiều nhất",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cộng dồn theo khoá",
+        "ca biên"
+      ],
+      "prerequisites": [
+        "Map",
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Đây là bài luyện của bài học. Viết <code>topCustomers(orders, n)</code> với <code>orders</code> là mảng <code>{ customer, total }</code>. Trả mảng <code>{ customer, spent, orders }</code> (tổng tiền và số đơn) của N khách chi nhiều nhất; hoà thì khách có NHIỀU đơn hơn trước, vẫn hoà thì theo tên (<code>localeCompare</code>). Tên khách so khớp sau khi trim và không phân biệt hoa thường, nhưng trả về đúng cách viết ở đơn ĐẦU TIÊN. Đơn có <code>total</code> không phải số hữu hạn ≥ 0 bị bỏ qua. <code>n</code> lớn hơn số khách ⇒ trả hết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cộng dồn theo khách.</li>\n  <li>Ba tầng sắp xếp.</li>\n  <li>Gộp tên khác hoa thường.</li>\n  <li>Bỏ đơn sai.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "orders: { customer: string, total: number }[]; n: number.",
+      "outputSpec": "{ customer, spent, orders }[].",
+      "constraints": "Không sửa mảng đầu vào.",
+      "examplesJson": [
+        {
+          "input": "topCustomers([{ customer: \"Lan\", total: 50000 }, { customer: \"Minh\", total: 80000 }, { customer: \"lan \", total: 40000 }], 1)",
+          "output": "[{ customer: \"Lan\", spent: 90000, orders: 2 }]",
+          "explanation": "\"lan \" là cùng một khách."
+        }
+      ],
+      "hintsJson": [
+        "const key = o.customer.trim().toLowerCase(); — lưu { customer, spent, orders } trong Map theo key",
+        "sort((a, b) => b.spent - a.spent || b.orders - a.orders || a.customer.localeCompare(b.customer))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — N khách chi nhiều nhất\n// 1. bỏ đơn sai  2. cộng dồn theo khách  3. sắp  4. lấy n\nfunction topCustomers(orders, n) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — cùng hình dạng với topWords: \"đếm\" thành \"cộng dồn\"\nfunction topCustomers(orders, n) {\n  const byKey = new Map();\n  for (const o of orders) {\n    if (!Number.isFinite(o.total) || o.total < 0) continue;             // 1. bỏ đơn sai\n    const key = String(o.customer).trim().toLowerCase();\n    const row = byKey.get(key) ?? { customer: String(o.customer).trim(), spent: 0, orders: 0 };\n    row.spent += o.total;                                               // 2. cộng dồn\n    row.orders += 1;\n    byKey.set(key, row);\n  }\n  return [...byKey.values()]\n    .sort((a, b) => b.spent - a.spent || b.orders - a.orders || a.customer.localeCompare(b.customer))   // 3.\n    .slice(0, n);                                                       // 4.\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kế hoạch giống hệt <code>topWords</code> — đó là điểm của bài: nhận ra hình dạng đã giải rồi. Ca biên nằm ở định nghĩa \"cùng một khách\" và \"đơn hợp lệ\", phải quyết định TRƯỚC khi viết.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"Lan\" và \"lan \" thành hai khách.</li>\n  <li>Cộng \"50000\" (chuỗi).</li>\n  <li>Quên tầng sắp theo số đơn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Same customer, different spelling|||Cùng khách, viết khác",
+            "goi": "topCustomers([{ customer: \"Lan\", total: 50000 }, { customer: \"Minh\", total: 80000 }, { customer: \"lan \", total: 40000 }], 1)",
+            "mongDoi": [
+              {
+                "customer": "Lan",
+                "spent": 90000,
+                "orders": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Ties: more orders first, then name|||Hoà: nhiều đơn trước, rồi theo tên",
+            "goi": "topCustomers([{ customer: \"Binh\", total: 100 }, { customer: \"An\", total: 60 }, { customer: \"An\", total: 40 }, { customer: \"Chi\", total: 100 }], 5)",
+            "mongDoi": [
+              {
+                "customer": "An",
+                "spent": 100,
+                "orders": 2
+              },
+              {
+                "customer": "Binh",
+                "spent": 100,
+                "orders": 1
+              },
+              {
+                "customer": "Chi",
+                "spent": 100,
+                "orders": 1
+              }
+            ]
+          },
+          {
+            "moTa": "Bad totals ignored; empty list|||Bỏ đơn sai; danh sách rỗng",
+            "goi": "[topCustomers([{ customer: \"X\", total: \"500\" }, { customer: \"Y\", total: -1 }, { customer: \"Z\", total: NaN }, { customer: \"W\", total: 0 }], 3), topCustomers([], 3)]",
+            "mongDoi": [
+              [
+                {
+                  "customer": "W",
+                  "spent": 0,
+                  "orders": 1
+                }
+              ],
+              []
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Lan\" và \"lan \" thành hai khách."
+        },
+        {
+          "loi": "Cộng \"50000\" (chuỗi)."
+        },
+        {
+          "loi": "Quên tầng sắp theo số đơn."
+        }
+      ]
+    },
+    {
+      "title": "Nén chuỗi lặp",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "duyệt có trạng thái",
+        "bài toán ngược"
+      ],
+      "prerequisites": [
+        "vòng lặp",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Viết <code>compress(s)</code>: mỗi nhóm ký tự giống nhau liên tiếp thành ký tự đó kèm số lần nếu lớn hơn 1 (<code>\"aaabcc\"</code> → <code>\"a3bc2\"</code>). Chỉ áp cho chuỗi CHỮ CÁI (a–z, A–Z); chuỗi có chữ số ⇒ ném <code>TypeError(\"digits are not allowed\")</code> (vì không giải nén được). Rồi viết <code>expand(s)</code> làm ngược lại, sao cho <code>expand(compress(x)) === x</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Số chỉ khi > 1.</li>\n  <li>Phân biệt hoa thường (\"aA\" giữ nguyên).</li>\n  <li>expand là phép ngược.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "s: string.",
+      "outputSpec": "string.",
+      "constraints": "Nhóm có thể dài hơn 9 (\"a12\").",
+      "examplesJson": [
+        {
+          "input": "compress(\"aaaaaaaaaaaab\")",
+          "output": "\"a12b\"",
+          "explanation": "Số có hai chữ số."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt, giữ ký tự hiện tại và số đếm; khi ký tự đổi thì ghi nhóm cũ.",
+        "expand: s.replace(/([a-zA-Z])(\\d*)/g, (_, ch, n) => ch.repeat(n ? Number(n) : 1))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — nén chuỗi lặp\nfunction compress(s) {\n  return s;\n}\nfunction expand(s) {\n  return s;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — duyệt một lượt, nhớ (ký tự, số lần); ghi ra khi ký tự đổi VÀ ở cuối chuỗi\nfunction compress(s) {\n  if (/\\d/.test(s)) throw new TypeError('digits are not allowed');\n  let out = '';\n  for (let i = 0; i < s.length; ) {\n    let j = i;\n    while (j < s.length && s[j] === s[i]) j++;\n    out += s[i] + (j - i > 1 ? String(j - i) : '');\n    i = j;\n  }\n  return out;\n}\n\nfunction expand(s) {\n  return s.replace(/([a-zA-Z])(\\d*)/g, (_, ch, n) => ch.repeat(n ? Number(n) : 1));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ca biên kinh điển của bài này là nhóm CUỐI chuỗi (vòng lặp kiểu \"ghi khi ký tự đổi\" quên ghi nó) và số nhiều chữ số. Viết <code>expand</code> rồi kiểm <code>expand(compress(x)) === x</code> là một cách kiểm mạnh: đúng cho mọi x.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên nhóm cuối.</li>\n  <li>Viết \"a1\".</li>\n  <li>Đọc số từng chữ số khi giải nén.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Run-length_encoding",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Basic compression|||Nén cơ bản",
+            "goi": "[compress(\"aaabcc\"), compress(\"abc\"), compress(\"\"), compress(\"aA\")]",
+            "mongDoi": [
+              "a3bc2",
+              "abc",
+              "",
+              "aA"
+            ]
+          },
+          {
+            "moTa": "Long groups and the last group|||Nhóm dài và nhóm cuối",
+            "goi": "[compress(\"aaaaaaaaaaaab\"), compress(\"bzzz\")]",
+            "mongDoi": [
+              "a12b",
+              "bz3"
+            ]
+          },
+          {
+            "moTa": "expand undoes compress|||expand đảo ngược compress",
+            "goi": "[\"aaabcc\", \"a\", \"xyzzzzzzzzzzzzzz\", \"AAaa\"].map((x) => expand(compress(x)) === x)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Digits are refused|||Chữ số bị từ chối",
+            "goi": "compress(\"a1\")",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^digits are not allowed$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên nhóm cuối."
+        },
+        {
+          "loi": "Viết \"a1\"."
+        },
+        {
+          "loi": "Đọc số từng chữ số khi giải nén."
+        }
+      ]
+    },
+    {
+      "title": "Ngoặc cân bằng và vị trí lỗi",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "ngăn xếp",
+        "thông báo lỗi hữu ích"
+      ],
+      "prerequisites": [
+        "mảng như ngăn xếp"
+      ],
+      "tags": [
+        "javascript",
+        "tư duy"
+      ],
+      "problemHtml": "<p><em>Bài 10.1 — Tư duy như lập trình viên.</em> Trước khi gõ: nói lại đầu vào/đầu ra, viết kế hoạch bằng lời thành chú thích, liệt kê ca biên. Bộ kiểm dưới đây cố ý dồn vào ca biên.</p><p>Viết <code>checkBrackets(code)</code> kiểm <code>()</code> <code>[]</code> <code>{}</code>. Trả <code>{ ok: true }</code> hoặc <code>{ ok: false, line, col, message }</code> cho lỗi ĐẦU TIÊN (dòng, cột đánh số từ 1): ngoặc đóng không khớp ⇒ <code>\"expected ) but found ]\"</code>; ngoặc đóng thừa ⇒ <code>\"unexpected }\"</code>; hết văn bản mà còn ngoặc mở ⇒ báo ở VỊ TRÍ ngoặc mở đó (ngoặc mở gần nhất chưa đóng) với <code>\"unclosed (\"</code>. Ngoặc nằm trong chuỗi <code>'...'</code> hoặc <code>\"...\"</code> không tính (không cần xử lý ký tự thoát).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng ngăn xếp.</li>\n  <li>Dòng/cột chính xác.</li>\n  <li>Bỏ qua ngoặc trong chuỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "code: string (nhiều dòng).",
+      "outputSpec": "{ ok } | { ok, line, col, message }.",
+      "constraints": "Báo lỗi đầu tiên theo thứ tự đọc.",
+      "examplesJson": [
+        {
+          "input": "checkBrackets(\"if (a[0] > 1) {\\n  run(a];\\n}\")",
+          "output": "{ ok: false, line: 2, col: 8, message: \"expected ) but found ]\" }",
+          "explanation": "Như cách trình biên dịch chỉ đúng chỗ."
+        }
+      ],
+      "hintsJson": [
+        "Ngăn xếp lưu { ch, line, col } của ngoặc mở.",
+        "Giữ biến quote (null, \"'\" hoặc '\"'): đang trong chuỗi thì chỉ tìm dấu nháy đóng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — ngoặc cân bằng\nfunction checkBrackets(code) {\n  const opens = (code.match(/[([{]/g) || []).length;\n  const closes = (code.match(/[)\\]}]/g) || []).length;\n  return { ok: opens === closes };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.1 — ngăn xếp các ngoặc mở kèm vị trí; lỗi đầu tiên thắng\nconst PAIR = { ')': '(', ']': '[', '}': '{' };\nconst CLOSE = { '(': ')', '[': ']', '{': '}' };\n\nfunction checkBrackets(code) {\n  const stack = [];\n  let line = 1, col = 0, quote = null;\n  for (const ch of code) {\n    if (ch === '\\n') { line++; col = 0; continue; }\n    col++;\n    if (quote) { if (ch === quote) quote = null; continue; }        // trong chuỗi: bỏ qua ngoặc\n    if (ch === \"'\" || ch === '\"') { quote = ch; continue; }\n    if ('([{'.includes(ch)) stack.push({ ch, line, col });\n    else if (ch in PAIR) {\n      const top = stack.pop();\n      if (!top) return { ok: false, line, col, message: 'unexpected ' + ch };\n      if (top.ch !== PAIR[ch]) return { ok: false, line, col, message: 'expected ' + CLOSE[top.ch] + ' but found ' + ch };\n    }\n  }\n  const open = stack.pop();\n  return open ? { ok: false, line: open.line, col: open.col, message: 'unclosed ' + open.ch } : { ok: true };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đếm số ngoặc (mã khởi đầu) nói \"có sai\" mà không nói \"ở đâu\", và còn cho qua <code>)(</code>. Thông báo lỗi tốt có vị trí và nói thứ được mong đợi — đúng kiểu thông báo bạn tập đọc ở Bài 10.2. Ngăn xếp là cấu trúc tự nhiên vì ngoặc mở sau phải đóng trước.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ đếm số lượng.</li>\n  <li>Báo ngoặc mở đầu tiên thay vì gần nhất khi thiếu đóng.</li>\n  <li>Đếm cột lệch sau xuống dòng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.1 Thinking like a programmer.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Stack_(abstract_data_type)",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Balanced code|||Mã cân bằng",
+            "goi": "[checkBrackets(\"function f(a) { return [a, {b: (1)}]; }\"), checkBrackets(\"\")]",
+            "mongDoi": [
+              {
+                "ok": true
+              },
+              {
+                "ok": true
+              }
+            ]
+          },
+          {
+            "moTa": "Mismatch with line and column|||Không khớp kèm dòng và cột",
+            "goi": "checkBrackets(\"if (a[0] > 1) {\\n  run(a];\\n}\")",
+            "mongDoi": {
+              "ok": false,
+              "line": 2,
+              "col": 8,
+              "message": "expected ) but found ]"
+            }
+          },
+          {
+            "moTa": "Unexpected close and unclosed open|||Đóng thừa và mở chưa đóng",
+            "goi": "[checkBrackets(\")(\"), checkBrackets(\"a(b[c]\\n{d\")]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "line": 1,
+                "col": 1,
+                "message": "unexpected )"
+              },
+              {
+                "ok": false,
+                "line": 2,
+                "col": 1,
+                "message": "unclosed {"
+              }
+            ]
+          },
+          {
+            "moTa": "Brackets inside strings are ignored|||Ngoặc trong chuỗi bị bỏ qua",
+            "goi": "[checkBrackets(\"log(\\\")\\\", '[')\"), checkBrackets(\"x = '(' + (y\")]",
+            "mongDoi": [
+              {
+                "ok": true
+              },
+              {
+                "ok": false,
+                "line": 1,
+                "col": 11,
+                "message": "unclosed ("
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ đếm số lượng."
+        },
+        {
+          "loi": "Báo ngoặc mở đầu tiên thay vì gần nhất khi thiếu đóng."
+        },
+        {
+          "loi": "Đếm cột lệch sau xuống dòng."
+        }
+      ]
+    }
+  ]
+}

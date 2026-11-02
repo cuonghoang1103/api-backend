@@ -1,0 +1,12 @@
+$ curl -i -X POST localhost:3460/api/notes -d '{"title":"from curl"}'      (no cookie)
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+Transfer-Encoding: chunked
+
+{"error":"log in first"}
+
+$ curl -c jar -X POST localhost:3460/login -d '{"email":"an@example.com","password":"…"}'
+{"ok":true}
+
+$ curl -b jar localhost:3460/api/notes
+{"items":[{"id":1,"title":"Learn HTTP"},{"id":2,"title":"Learn SQL"},{"id":3,"title":"Ship the capstone"}]}

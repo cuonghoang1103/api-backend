@@ -1,0 +1,7 @@
+$ node errors.mjs
+typo in a name             → ReferenceError: totl is not defined
+calling a non-function     → TypeError: user.getName is not a function
+reading through undefined  → TypeError: Cannot read properties of undefined (reading 'name')
+invalid JSON               → SyntaxError: Expected property name or '}' in JSON at position 2 (line 1 column 3)
+number out of range        → RangeError: toFixed() digits argument must be between 0 and 100
+too much recursion         → RangeError: Maximum call stack size exceeded

@@ -1,0 +1,16 @@
+$ node shop/index.mjs
+order 1 { total: 50000, label: 'Lan, DA NANG' }
+shop/format.mjs:3
+  return order.customer.name + ', ' + order.customer.address.city.toUpperCase();
+                                                             ^
+
+TypeError: Cannot read properties of undefined (reading 'city')
+    at shippingLabel (shop/format.mjs:3:62)
+    at checkout (shop/checkout.mjs:5:26)
+    at shop/index.mjs:9:34
+    at ModuleJob.run (node:internal/…)
+    at async onImport.tracePromise.__proto__ (node:internal/…)
+    at async asyncRunEntryPointWithESMLoader (node:internal/…)
+
+Node.js v22.23.3
+(exit code 1)

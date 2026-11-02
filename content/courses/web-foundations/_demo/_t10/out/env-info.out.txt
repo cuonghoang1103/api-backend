@@ -1,0 +1,4 @@
+$ node env-info.mjs
+Node    v22.23.3
+V8      12.4.254.21-node.57
+OS      <your OS, version, arch>

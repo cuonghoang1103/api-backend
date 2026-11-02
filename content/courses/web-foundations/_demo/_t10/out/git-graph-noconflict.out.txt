@@ -1,0 +1,12 @@
+# no conflict this time: the two changes touched different lines — Git combined them
+$ git log --oneline --graph --all
+*   2c0fec3 Merge remote-tracking branch 'origin/main' into feature/sort
+|\  
+| *   057bbcf Merge pull request #1 from feature/search
+| |\  
+| | * 60c327d Print search results for 'git'
+| | * 227333d Add search(term) to notes
+| |/  
+* / 75d4ef8 Sort notes alphabetically
+|/  
+* 365679b Initial notes app

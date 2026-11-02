@@ -1249,6 +1249,21 @@ To ../oss-fork.git
 
 <div class="pitfall co-tieu-de"><strong>Lần đóng góp đầu hỏng thế nào.</strong> <b>Làm trên <code>main</code> của fork.</b> PR thứ hai sẽ kéo theo commit của PR thứ nhất, và đồng bộ biến thành một đống merge commit — luôn tạo nhánh. <b>Một PR 2.000 dòng "refactor toàn bộ" không ai nhờ</b>: nó sẽ không được review, dù hay đến đâu. <b>Hai mươi PR sửa một chữ chính tả</b> để tô xanh biểu đồ đóng góp — maintainer nhận ra, và nhà tuyển dụng bấm vào xem cũng vậy. <b>Dán nguyên câu trả lời của AI vào issue</b> mà chưa tự tái hiện lỗi. <b><code>git push --force</code> không có <code>-with-lease</code></b> sau khi maintainer đã push một bản sửa lên nhánh của bạn — bạn vừa xoá commit của họ.</div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.4 — How to keep learning</span><span class="lc-sub">Shrink a bug to one line, read the docs, ask a good question, read a library source in node_modules</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.4 — Cách tiếp tục học</span><span class="lc-sub">Thu lỗi về một dòng, đọc tài liệu, đặt câu hỏi tốt, đọc mã nguồn thư viện trong node_modules</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 15.5 Quiz ─────────────────────────── */

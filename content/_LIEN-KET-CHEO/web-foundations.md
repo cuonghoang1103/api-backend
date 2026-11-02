@@ -57,6 +57,11 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-9-3-interfaces` | TypeScript `typescript-4-2-interface-vs-type` | `content/courses/typescript/s04/interface-type.mjs` | kiểu cho API Chương 6, Omit/Partial/Record, kind + never |
 | `wf-9-4-functions-generics` | TypeScript `typescript-6-1-why-generics` | `content/courses/typescript/s06-generics.mjs` | tham số/kiểu trả về, first<T>, T extends, generic nói dối |
 | `wf-9-5-ts-in-practice` | TypeScript `typescript-9-1-tsc-and-tsconfig` | `content/courses/typescript/s09-tsconfig-compiler.mjs` | strict 0→7 lỗi, build dist, @types, strip-types, zod |
+| `wf-10-1-think-like-a-programmer` | Node.js `nodejs-14-1-vi-sao-test` | `content/courses/nodejs/s14-testing.mjs` | kế hoạch → dò tay → ca biên thành node --test (1/5 → 5/5) |
+| `wf-10-2-reading-errors-debugging` | Git `git-2-4-bisect` | `content/courses/git/s02-doc-lich-su.mjs` | stack trace, breakpoint thật qua CDP, git bisect run |
+| `wf-10-3-git-workflow` | Git `git-3-3-xung-dot` | `content/courses/git/s03-nhanh-hop-nhat.mjs` | hai người + origin trần, push bị từ chối, xung đột thật + gỡ |
+| `wf-10-4-keep-learning` | Git `git-15-4-dong-gop-ma-nguon-mo` | `content/courses/git/s15-github-sinh-vien.mjs` | thu lỗi về 1 dòng, đọc MDN, câu hỏi tốt, đọc mã nguồn ms |
+| `wf-10-5-full-stack-picture` | Node.js `nodejs-0-4-du-an` | `content/courses/nodejs/s00-intro.mjs` | một cú bấm qua mọi tầng (http/auth/valid/sql/dom), curl |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

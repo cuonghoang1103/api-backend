@@ -883,11 +883,11 @@ git rebase --abort             <span class="tok-comment"># give up entirely, bac
 <p>And this is where <code>rerere</code> (3.3) earns its keep: on a rebase of ten commits through the same conflicting region, it resolves nine of them for you after you solve the first.</p>
 
 <h3>git pull is merge or rebase — pick deliberately</h3>
-<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (default)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># with pull.rebase false (lesson 0.3) = git fetch + git merge origin/main</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># make --rebase the default</span>
 git config --global pull.ff only          <span class="tok-comment"># or: refuse to pull unless fast-forward</span></code></pre>
-<p>The default creates a merge commit every time your local branch and the remote have both moved. On a busy <code>main</code> this produces a stream of noise commits saying "Merge branch 'main' of github.com:…" — pure bookkeeping that tells a reader nothing.</p>
+<p>Git 2.33 and later have no silent default here: if your local branch and the remote have both moved and neither setting is configured, <code>git pull</code> stops with <code>fatal: Need to specify how to reconcile divergent branches.</code> That is why lesson 0.3 sets <code>pull.rebase false</code>. With that setting, every pull where both sides moved creates a merge commit. On a busy <code>main</code> this produces a stream of noise commits saying "Merge branch 'main' of github.com:…" — pure bookkeeping that tells a reader nothing.</p>
 <div class="callout ok"><code>pull.rebase true</code> is safe for the everyday case even under the golden rule: you are rebasing <em>your own unpushed commits</em> onto what the server already has. Nobody else has your local commits, so nothing is being rewritten out from under anyone. This is the setting most teams end up standardising on.</div>
 
 <h3>Rebasing onto a different base</h3>
@@ -1006,11 +1006,11 @@ git rebase --abort             <span class="tok-comment"># bỏ hẳn, về trư
 <p>Và đây là chỗ <code>rerere</code> (bài 3.3) trả công: khi rebase mười commit đi qua cùng một vùng xung đột, nó giải hộ bạn chín cái sau khi bạn giải cái đầu tiên.</p>
 
 <h3>git pull là merge hay rebase — hãy chọn có chủ ý</h3>
-<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (mặc định)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># với pull.rebase false (bài 0.3) = git fetch + git merge origin/main</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># lấy --rebase làm mặc định</span>
 git config --global pull.ff only          <span class="tok-comment"># hoặc: từ chối pull trừ khi fast-forward</span></code></pre>
-<p>Mặc định tạo một commit hợp nhất mỗi lần nhánh cục bộ và remote cùng tiến lên. Trên một <code>main</code> sôi động, nó sinh ra một dòng commit nhiễu ghi "Merge branch 'main' of github.com:…" — thuần sổ sách, chẳng nói gì với người đọc.</p>
+<p>Từ Git 2.33 không còn mặc định ngầm ở đây: nếu nhánh cục bộ và remote cùng tiến lên mà chưa cấu hình gì, <code>git pull</code> dừng lại với <code>fatal: Need to specify how to reconcile divergent branches.</code> Vì thế bài 0.3 đặt <code>pull.rebase false</code>. Với thiết lập đó, mỗi lần pull mà hai bên cùng tiến sẽ tạo một commit hợp nhất. Trên một <code>main</code> sôi động, nó sinh ra một dòng commit nhiễu ghi "Merge branch 'main' of github.com:…" — thuần sổ sách, chẳng nói gì với người đọc.</p>
 <div class="callout ok"><code>pull.rebase true</code> an toàn cho trường hợp hằng ngày kể cả dưới luật vàng: bạn đang rebase <em>những commit chưa push của chính mình</em> lên trên thứ máy chủ đã có. Không ai khác có commit cục bộ của bạn, nên không có gì bị viết lại dưới chân người khác. Đây là thiết lập mà đa số nhóm rốt cuộc chuẩn hoá theo.</div>
 
 <h3>Rebase lên một gốc khác</h3>

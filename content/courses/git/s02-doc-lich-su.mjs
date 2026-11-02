@@ -1068,14 +1068,14 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// must REJECT</span></code></pre>
 <pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># fails on HEAD → the bug is real</span>
-git stash                                       <span class="tok-comment"># keep the test out of the checkouts</span>
+git stash -u                                    <span class="tok-comment"># -u: the test file is NEW (untracked) — plain git stash leaves it behind</span>
 git bisect start HEAD v1.3.0
-git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
+git bisect run sh -c <span class="tok-string">'git stash pop -q || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u -q; exit \$r'</span></code></pre>
 <div class="out">c4a8f2e1… is the first bad commit
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
  src/services/auth.service.ts | 22 ++++++++++++++++++++++</div>
 <p>Bisect lands on the same commit blame pointed at. Two independent methods agreeing is what turns a theory into a diagnosis.</p>
-<div class="callout warn">Note the awkward stash dance. The test file does not exist in old commits, so it must be carried across each checkout. In a real repository the cleaner route is to put the test in <code>/tmp</code> and run it from there — bisect changes tracked files, and anything untracked survives the checkouts untouched.</div>
+<div class="callout warn">Note the awkward stash dance. The test file does not exist in old commits, so it must be carried across each checkout — with <code>-u</code>, because a plain <code>git stash</code> ignores untracked files and answers "No local changes to save". The script is in <strong>single</strong> quotes on purpose: inside double quotes your own shell expands <code>$?</code> and <code>$r</code> the moment you press Enter, and bisect receives a broken command. In a real repository the cleaner route is to put the test in <code>/tmp</code> and run it from there — bisect changes tracked files, and anything untracked survives the checkouts untouched.</div>
 
 <h3>Step 6 — The second dead end: blaming the config</h3>
 <p>A plausible competing theory: someone changed <code>JWT_EXPIRES_IN</code> on the server. Check whether the code could even express that:</p>
@@ -1196,14 +1196,14 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// phải TỪ CHỐI</span></code></pre>
 <pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># hỏng trên HEAD → lỗi là thật</span>
-git stash                                       <span class="tok-comment"># giữ file test ra khỏi các lần checkout</span>
+git stash -u                                    <span class="tok-comment"># -u: file test là file MỚI (chưa theo dõi) — git stash trơn bỏ nó lại</span>
 git bisect start HEAD v1.3.0
-git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
+git bisect run sh -c <span class="tok-string">'git stash pop -q || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u -q; exit \$r'</span></code></pre>
 <div class="out">c4a8f2e1… is the first bad commit
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
  src/services/auth.service.ts | 22 ++++++++++++++++++++++</div>
 <p>Bisect đáp xuống đúng commit mà blame đã chỉ tới. Hai phương pháp độc lập đồng ý với nhau là thứ biến một giả thuyết thành một chẩn đoán.</p>
-<div class="callout warn">Để ý màn stash lúng túng đó. File test không tồn tại trong các commit cũ, nên phải mang nó qua từng lần checkout. Trong kho mã thật, đường sạch hơn là để file test ở <code>/tmp</code> và chạy từ đó — bisect chỉ đổi các file được theo dõi, còn thứ chưa theo dõi thì sống sót nguyên vẹn qua mọi lần checkout.</div>
+<div class="callout warn">Để ý màn stash lúng túng đó. File test không tồn tại trong các commit cũ, nên phải mang nó qua từng lần checkout — bằng <code>-u</code>, vì <code>git stash</code> trơn bỏ qua file chưa theo dõi và chỉ đáp "No local changes to save". Đoạn script cố ý nằm trong ngoặc <strong>đơn</strong>: trong ngoặc kép, chính shell của bạn nở <code>$?</code> và <code>$r</code> ngay lúc bấm Enter, và bisect nhận một lệnh đã hỏng. Trong kho mã thật, đường sạch hơn là để file test ở <code>/tmp</code> và chạy từ đó — bisect chỉ đổi các file được theo dõi, còn thứ chưa theo dõi thì sống sót nguyên vẹn qua mọi lần checkout.</div>
 
 <h3>Bước 6 — Ngã cụt thứ hai: đổ cho cấu hình</h3>
 <p>Một giả thuyết cạnh tranh nghe rất hợp lý: ai đó đã đổi <code>JWT_EXPIRES_IN</code> trên máy chủ. Hãy kiểm xem mã có diễn đạt nổi điều đó không:</p>

@@ -4,7 +4,7 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 import L14 from './s01/wf-1-4-github.mjs';
 import L12 from './s01/wf-1-2-vscode.mjs';
 
@@ -26,7 +26,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: bộ công cụ trong 13 slide</h2>
 <p>Dùng như một tờ tra nhanh. Slide terminal và git là hai cái bạn sẽ quay lại nhiều nhất.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-tools', [
+${galleryGiang('wf-tools', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Terminal — mười lệnh đủ dùng"],

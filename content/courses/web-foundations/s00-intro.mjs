@@ -5,7 +5,7 @@
  * escape thành \${. Bài QUIZ (nếu có) phải có field content (string).
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Section 0 — Introduction, Foundations & Setup|||Mục 0 — Giới thiệu, Nền tảng & Cài đặt',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: Mục 0 trong 11 slide</h2>
 <p>Lướt bộ này trước tiên. Nó là bản đồ của cả khoá: sắp học gì và theo thứ tự nào.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-web0', [
+${galleryGiang('wf-web0', [
   [1, "Bìa"],
   [2, "Nội dung mục 0"],
   [3, "Khoá này dành cho ai"],

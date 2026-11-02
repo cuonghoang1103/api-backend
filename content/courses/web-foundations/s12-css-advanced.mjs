@@ -4,7 +4,7 @@
  * ⚠️ KHÔNG backtick trần trong content (dùng &#96;); `${` trong code escape thành \${.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 import L124 from './s12/wf-12-4-tokens-theming.mjs';
 import L123 from './s12/wf-12-3-css-architecture.mjs';
 import L122 from './s12/wf-12-2-transition-animation.mjs';
@@ -28,7 +28,7 @@ export default {
 <div class="ml-vi"><h2>📑 CSS nâng cao trong 12 slide</h2>
 <p>Slide 4 giải thích vì sao z-index: 9999 vẫn có thể thua. Đó là hành vi khó hiểu nhất của cả CSS.</p>
 <p>Lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-css2', [
+${galleryGiang('wf-css2', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Năm giá trị của position"],

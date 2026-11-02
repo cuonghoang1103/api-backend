@@ -6,7 +6,7 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 10 — Thinking, debugging & Git workflow|||Chương 10 — Tư duy lập trình, gỡ lỗi & quy trình Git',
@@ -26,7 +26,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: tư duy & gỡ lỗi trong 12 slide</h2>
 <p>Deck này không có cú pháp mới — nó nói về cách làm việc. Slide 5 và 6 (đọc lỗi, vòng lặp gỡ lỗi) đáng đọc lại mỗi khi bạn thấy bí.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-think', [
+${galleryGiang('wf-think', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Chia nhỏ — kỹ năng quan trọng nhất"],

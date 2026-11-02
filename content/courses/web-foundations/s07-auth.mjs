@@ -6,7 +6,7 @@
  * thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 7 — Authentication & security|||Chương 7 — Xác thực & bảo mật',
@@ -26,7 +26,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: xác thực & bảo mật trong 12 slide</h2>
 <p>Slide 10 là CORS. Bạn chắc chắn gặp lỗi đó trong tuần đầu nối React với backend — đọc trước khi cần thì đỡ hoảng.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-auth', [
+${galleryGiang('wf-auth', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Xác thực vs phân quyền"],

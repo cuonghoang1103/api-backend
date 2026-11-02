@@ -4,7 +4,7 @@
  * ⚠️ KHÔNG backtick trần trong content (dùng &#96;); `${` trong code escape thành \${.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 import L134 from './s13/wf-13-4-mocking-ci.mjs';
 import L133 from './s13/wf-13-3-testing-library.mjs';
 import L132 from './s13/wf-13-2-unit-tests.mjs';
@@ -28,7 +28,7 @@ export default {
 <div class="ml-vi"><h2>📑 Kiểm thử trong 12 slide</h2>
 <p>Slide 12 là luật quan trọng nhất: cố ý làm hỏng mã và chứng minh test biết chuyển đỏ.</p>
 <p>Lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-test', [
+${galleryGiang('wf-test', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Vì sao kiểm bằng tay thất bại"],

@@ -5,7 +5,7 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 9 — TypeScript basics|||Chương 9 — TypeScript cơ bản',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: TypeScript trong 12 slide</h2>
 <p>Mục tiêu ở đây là ĐỌC HIỂU, chưa phải viết. Bạn sẽ gặp TypeScript trong mã người khác từ lâu trước khi tự chọn dùng nó.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-ts', [
+${galleryGiang('wf-ts', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Vì sao thêm một bước biên dịch"],

@@ -5,7 +5,7 @@
  * Mọi câu "in ra gì" đã CHẠY THẬT bằng node để lấy đáp án. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 4 — JavaScript fundamentals|||Chương 4 — JavaScript nền tảng',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Chương 4 trong 22 slide</h2>
 <p>Có hai cách dùng bộ slide này. <strong>Trước khi học chương</strong> — lướt một lượt để thấy bản đồ: sắp học gì, theo thứ tự nào. <strong>Sau khi học xong</strong> — quay lại ôn; slide nào chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p>
 <p>Nhãn <strong>⭐ FER202</strong> đánh dấu những thứ bạn sẽ gặp lại ở môn React — arrow function, <code>.map()</code>, destructuring và spread. Đó là những chỗ cần nắm chắc nhất.</p></div>
-${gallery('wf-js1', [
+${galleryGiang('wf-js1', [
   [1, 'Bìa chương'],
   [2, 'Nội dung chương — tám phần'],
   [3, 'JavaScript chạy ở đâu: trình duyệt và Node.js'],

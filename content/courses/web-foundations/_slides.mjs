@@ -13,6 +13,8 @@
  * Dùng lại đúng các class đang sống trong globals.css (.anh-slide /
  * .chu-thich) và cặp .ml-en / .ml-vi của khoá — không phải sửa frontend.
  */
+import { GIANG } from './_giang/index.mjs';
+
 export const CDN = 'https://media.cuongthai.com/images/academy/WF/v1';
 
 const W = 1280, H = 720;
@@ -58,6 +60,14 @@ export function slide(deck, n, caption) {
 
 /** Cả bộ: rows = [[n, caption], …] */
 export const gallery = (deck, rows) => rows.map((r) => slide(deck, ...r)).join('\n');
+
+/** Cả bộ KÈM lời giảng EN/VI dưới từng slide (02/11/2026) — lời giảng ở _giang/<deck>.mjs, đủ 1..total. */
+export const galleryGiang = (deck, rows) => {
+  const g = GIANG[deck];
+  if (!g || g.length !== DECKS[deck].total) throw new Error(`_giang/${deck}.mjs thiếu lời giảng (cần ${DECKS[deck].total})`);
+  return rows.map(([n, caption]) => slide(deck, n, caption) +
+    `\n<div class="ml-en giang">${g[n - 1][0]}</div>\n<div class="ml-vi giang">${g[n - 1][1]}</div>`).join('\n');
+};
 
 /* ═══════════════ Deck BÀI (01/11/2026) — khuôn _pg-chung, slide tiếng Anh, lời giảng EN/VI ═══════════════
  * Deck mỗi bài `wf-N-M` (vd wf-11-1), dựng từ scripts/slides-src/wf-N-M.mjs, đẩy lên WF/v1/<deck>/.

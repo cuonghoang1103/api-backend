@@ -5,7 +5,7 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 6 — HTTP & APIs|||Chương 6 — HTTP & API',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: HTTP & API trong 12 slide</h2>
 <p>Slide 6 (401 vs 403 vs 404) và slide 10 (đọc tab Network) là hai cái có ích ngay lần đầu bạn gặp "sao dữ liệu không hiện".</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-http', [
+${galleryGiang('wf-http', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Một lượt trao đổi HTTP"],

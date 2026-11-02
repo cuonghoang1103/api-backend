@@ -4,7 +4,7 @@
  * ⚠️ KHÔNG backtick trần trong content (dùng &#96;); `${` trong code escape thành \${.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 import L144 from './s14/wf-14-4-performance.mjs';
 import L143 from './s14/wf-14-3-deploy.mjs';
 import L142 from './s14/wf-14-2-env-secrets.mjs';
@@ -28,7 +28,7 @@ export default {
 <div class="ml-vi"><h2>📑 Đưa lên mạng trong 12 slide</h2>
 <p>Slide 5 nên đọc hai lần: một cái khoá để trong biến frontend là đi tới mọi khách truy cập.</p>
 <p>Lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-ship', [
+${galleryGiang('wf-ship', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Dev server và bản build là HAI chương trình"],

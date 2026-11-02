@@ -5,7 +5,7 @@
  * trong code escape thành \${. Câu "in ra gì" (thứ tự event loop) đã CHẠY THẬT.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 5 — Asynchronous JavaScript & modules|||Chương 5 — JavaScript bất đồng bộ & modules',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Chương 5 trong 15 slide</h2>
 <p>Đây là chương khó nhất của khoá, nên dùng bộ slide này hai lần: lướt trước khi học để quen từ ngữ, rồi quay lại sau khi học xong để kiểm xem mỗi slide giờ tự nó đã dễ hiểu chưa.</p>
 <p>Slide 4 (event loop) và slide 8 (<code>res.ok</code>) là hai chỗ người ta hay bỏ qua rồi mất cả buổi chiều vì nó. Dành thêm một phút cho chúng.</p></div>
-${gallery('wf-js2', [
+${galleryGiang('wf-js2', [
   [1, 'Bìa chương'],
   [2, 'Nội dung chương — bảy phần'],
   [3, 'JavaScript chỉ có MỘT luồng — vì sao trang bị đứng hình'],

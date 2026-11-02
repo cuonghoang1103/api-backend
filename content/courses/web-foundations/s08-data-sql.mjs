@@ -5,7 +5,7 @@
  * trong content (dùng &#96;); `${` trong code escape thành \${. Quiz có field content.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 
 export default {
   title: 'Chapter 8 — Data & SQL|||Chương 8 — Dữ liệu & SQL',
@@ -25,7 +25,7 @@ export default {
 <div class="ml-vi"><h2>📑 Slide bài giảng: dữ liệu & SQL trong 13 slide</h2>
 <p>Slide 7 mang lỗi đắt nhất của cả chương: quên WHERE khi UPDATE hoặc DELETE.</p>
 <p>Hai cách dùng: lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-sql', [
+${galleryGiang('wf-sql', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Vì sao không lưu vào file cho xong"],

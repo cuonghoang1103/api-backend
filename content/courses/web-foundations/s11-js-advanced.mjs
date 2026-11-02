@@ -4,7 +4,7 @@
  * ⚠️ KHÔNG backtick trần trong content (dùng &#96;); `${` trong code escape thành \${.
  */
 
-import { gallery } from './_slides.mjs';
+import { gallery, galleryGiang } from './_slides.mjs';
 import L115 from './s11/wf-11-5-regex.mjs';
 import L114 from './s11/wf-11-4-map-set-immutable.mjs';
 import L113 from './s11/wf-11-3-prototype-class.mjs';
@@ -29,7 +29,7 @@ export default {
 <div class="ml-vi"><h2>📑 JavaScript nâng cao trong 12 slide</h2>
 <p>Slide 4 (var vs let) và slide 8 (bất biến) là hai cái đổi hẳn cách bạn viết React.</p>
 <p>Lướt trước khi học chương để biết sắp học gì, rồi quay lại ôn sau. Slide nào còn chưa hiểu thì bài dạy nó nằm ngay bên dưới.</p></div>
-${gallery('wf-js3', [
+${galleryGiang('wf-js3', [
   [1, "Bìa"],
   [2, "Nội dung chương"],
   [3, "Closure — ví dụ nhỏ nhất"],

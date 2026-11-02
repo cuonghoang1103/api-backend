@@ -43,8 +43,7 @@ import '@fontsource/jetbrains-mono/500.css'
 // File có subset `vietnamese` riêng kèm unicode-range nên tiếng Việt vẫn đúng dấu.
 import '@fontsource-variable/fraunces/opsz.css'
 import dynamic from 'next/dynamic'
-import Navbar from '@/components/layout/Navbar'
-import DockLayout from '@/components/layout/DockLayout'
+import SiteNav from '@/components/layout/nav/SiteNav'
 import CartDrawer from '@/components/shop/CartDrawer'
 import { CART_ENABLED } from '@/lib/featureFlags'
 import AuthProvider from '@/components/providers/AuthProvider'
@@ -412,14 +411,16 @@ export default function RootLayout({
             <ServiceWorkerRegister />
             <AppBootSplash />
             <ClientOnly>
-              <Navbar />
+              <SiteNav />
               {CART_ENABLED && <CartDrawer />}
             </ClientOnly>
 
-            {/* DockLayout provides the collapsible left sidebar + animated content shift */}
-            <DockLayout>
+            {/* The ☰ drawer (NavigationDock) is gone since 02/11/2026 — every
+                destination now lives in SiteNav's mega menus. `.app-main` is
+                still the hook globals.css pads for the phone bottom tabs. */}
+            <main className="app-main min-h-screen w-full">
               {children}
-            </DockLayout>
+            </main>
 
             <ClientOnly>
               <MusicAudioController />

@@ -1,87 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import { ArrowUpRight, Crown, Moon, Sun } from 'lucide-react';
-import { useTheme } from '@/context/ThemeContext';
-import { useTranslation } from '@/hooks/useTranslation';
-import { usePro } from '@/hooks/usePro';
-import { useAuthStore } from '@/store/authStore';
-import { getLandingCopy } from './landingCopy';
 import LandingRobotRail from './LandingRobotRail';
 
+/**
+ * Home header strip (02/11/2026).
+ *
+ * The brand / language / theme / sign-in row that used to live here moved into
+ * the site-wide top bar (`components/layout/nav/SiteNav.tsx`), which now shows
+ * on "/" too — the home page needs the same menus as every other page, and two
+ * stacked bars with the same buttons read as a mistake.
+ *
+ * What stays is the robot rail. Its scene rises ~3.6rem above the rail line on
+ * desktop, so the empty `landing-header-stage` keeps that much room below the
+ * fixed nav for the robot to walk in (see `.landing-header-stage` in
+ * globals.css). The strip is no longer sticky: the fixed nav already is.
+ */
 export default function LandingHeader() {
-  const { locale, setLocale } = useTranslation();
-  const { theme, toggleTheme } = useTheme();
-  const { data: session } = useSession();
-  const { isPro } = usePro();
-  const isBackendAuth = useAuthStore((state) => state.isAuthenticated);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const copy = getLandingCopy(locale);
-  const isAuthenticated = mounted && (isBackendAuth || !!session);
-
   return (
-    <header className="landing-header">
-      <div className="landing-header-main">
-        <div className="landing-brand-cluster">
-          <Link href="/" className="landing-wordmark" aria-label={`${copy.header.identity} — home`}>
-            <span className="landing-avatar-frame" data-pro={isPro ? 'true' : 'false'} aria-hidden>
-              <Image
-                src="/images/avatar.png"
-                alt=""
-                width={40}
-                height={40}
-                priority
-                sizes="40px"
-                className="landing-brand-avatar"
-              />
-            </span>
-            <span className="landing-brand-name">{copy.header.identity}</span>
-            {isPro && (
-              <span className="landing-brand-pro" aria-label="Pro account">
-                <Crown aria-hidden size={11} />
-                PRO
-              </span>
-            )}
-          </Link>
-        </div>
-
-        <div className="landing-header-actions">
-          <button
-            type="button"
-            className="landing-icon-button"
-            onClick={() => setLocale(locale === 'vi' ? 'en' : 'vi')}
-            aria-label={copy.header.languageLabel}
-            title={copy.header.languageLabel}
-          >
-            <span aria-hidden>{locale === 'vi' ? 'VI' : 'EN'}</span>
-          </button>
-
-          <button
-            type="button"
-            className="landing-icon-button"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? copy.header.lightLabel : copy.header.darkLabel}
-            title={theme === 'dark' ? copy.header.lightLabel : copy.header.darkLabel}
-          >
-            {theme === 'dark' ? <Sun aria-hidden size={16} /> : <Moon aria-hidden size={16} />}
-          </button>
-
-          <Link
-            href={isAuthenticated ? '/about' : '/login'}
-            className="landing-header-cta"
-          >
-            <span>{isAuthenticated ? copy.header.memberCta : copy.header.guestCta}</span>
-            <ArrowUpRight aria-hidden size={15} />
-          </Link>
-        </div>
-      </div>
-
+    <header className="landing-header landing-header--under-nav">
+      <div className="landing-header-stage" aria-hidden />
       <LandingRobotRail />
     </header>
   );

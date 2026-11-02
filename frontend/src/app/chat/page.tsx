@@ -1275,9 +1275,10 @@ export default function ChatPage() {
         )}
       </AnimatePresence>
 
-      {/* Chat-aside toggle button — to the RIGHT of the
-          global dock toggle (which is at top-4 left-4).
-          Only relevant on /chat. Sits at top-4 left-16. */}
+      {/* Chat-aside toggle button. The global ☰ dock toggle that used to
+          sit at top-4 left-4 is gone (02/11/2026, SiteNav has a full top
+          bar now), so this button moved BELOW the bar — at top-4 it would
+          sit on the CuongThai logo. */}
       <motion.button
         type="button"
         aria-label={chatAsideOpen ? 'Close chat sessions' : 'Open chat sessions'}
@@ -1288,12 +1289,12 @@ export default function ChatPage() {
         transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.55 }}
         className={
           isStudio
-            ? `fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
+            ? `fixed top-[calc(var(--app-nav-h)+0.75rem)] left-4 z-[39] w-11 h-11 rounded-2xl
                flex items-center justify-center
                bg-[var(--studio-panel)] border border-[color:var(--studio-border)]
                text-[color:var(--studio-text)]
                focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--studio-accent)]`
-            : `fixed top-4 left-16 z-[70] w-11 h-11 rounded-2xl
+            : `fixed top-[calc(var(--app-nav-h)+0.75rem)] left-4 z-[39] w-11 h-11 rounded-2xl
                flex items-center justify-center
                bg-[#0d1117]/85 backdrop-blur-2xl
                border border-white/10

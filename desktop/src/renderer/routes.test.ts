@@ -109,7 +109,7 @@ describe('bảng điều hướng khớp với website', () => {
  * trang academy như trên web mà… Khi ấn vào academy thì sẽ có các bước chọn
  * ngành, ngành hẹp,… trình tự như trên web ấy cho những người mới dùng"*.
  *
- * Trên web, `NavigationDock.tsx` nhóm `learn` chỉ có `/academy`; hai trang kia
+ * Trên web, menu Learn (`components/layout/nav/navTree.ts`, trước 02/11/2026 là `NavigationDock.tsx`) chỉ có `/academy`; hai trang kia
  * KHÔNG có mục điều hướng nào, chỉ tới được từ bên trong Học viện.
  *
  * Một mục thanh bên là một lời hứa: "đây là tính năng riêng, vào lúc nào cũng
@@ -153,10 +153,10 @@ describe('trang con', () => {
     expect(tatCa).toContain('/academy/so-do-mon-hoc');
   });
 
-  it('⭐ khớp với WEB: nhóm learn của NavigationDock chỉ có /academy dưới cây academy', () => {
+  it('⭐ khớp với WEB: menu của web (navTree) chỉ có /academy dưới cây academy', () => {
     // Đọc thẳng file của web — hai danh sách này phải không được trôi khỏi nhau.
     const dock = fs.readFileSync(
-      path.resolve(here, '../../../frontend/src/components/layout/NavigationDock.tsx'), 'utf8');
+      path.resolve(here, '../../../frontend/src/components/layout/nav/navTree.ts'), 'utf8');
     const duongWeb = [...dock.matchAll(/\{\s*href:\s*'([^']+)'/g)].map((m) => m[1]!);
     const academyWeb = duongWeb.filter((d) => d.startsWith('/academy'));
     expect(academyWeb).toEqual(['/academy']);

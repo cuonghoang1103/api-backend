@@ -4422,6 +4422,18 @@ body:has(.landing-root) {
   background: var(--color-paper);
 }
 
+/* Under the site-wide nav (02/11/2026): not sticky, pushed below the fixed bar,
+   with an empty stage tall enough for the robot scene that rises above the rail. */
+.landing-header.landing-header--under-nav {
+  position: relative !important;
+  top: auto;
+  padding-top: 4rem; /* .app-main already adds the notch inset in the installed PWA */
+}
+.landing-header-stage { height: 3.75rem; }
+@media (max-width: 959px) {
+  .landing-header-stage { height: 0.5rem; }
+}
+
 .landing-header-main {
   display: flex;
   min-height: 5rem;

@@ -473,22 +473,6 @@ export default function SocialPage() {
     window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
   }, [reducedMotion]);
 
-  // Track whether the NavigationDock is open so we can push the page
-  // content left and avoid the panel covering the header / composer.
-  const [dockOpen, setDockOpen] = useState(false);
-  useEffect(() => {
-    const saved = sessionStorage.getItem('dock-open');
-    if (saved === 'true') setDockOpen(true);
-    const handler = () => {
-      setDockOpen(sessionStorage.getItem('dock-open') === 'true');
-    };
-    window.addEventListener('storage', handler);
-    window.addEventListener('focus', handler);
-    return () => {
-      window.removeEventListener('storage', handler);
-      window.removeEventListener('focus', handler);
-    };
-  }, []);
 
   // Phase 5 home upgrade: when the user clicks the "X bài viết mới"
   // banner we invalidate the feed query so the cursor resets to
@@ -688,14 +672,9 @@ export default function SocialPage() {
           - Right: trending/AI widget (hidden on small screens)
           - On <lg: single-column centred feed
 
-          When the NavigationDock is open (280px wide), the left edge
-          of the feed gets covered. We push the grid to the right so
-          the Feed header + composer are never hidden.
        */}
       <div
-        className={`relative z-10 mx-auto w-full px-6 lg:px-12 xl:px-16 py-6 transition-[padding-left] duration-300 ${
-          dockOpen ? 'lg:pl-[calc(280px+1.5rem)]' : ''
-        }`}
+        className="relative z-10 mx-auto w-full px-6 lg:px-12 xl:px-16 py-6"
       >
         <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)_300px] xl:grid-cols-[220px_minmax(0,1fr)_300px]">
           {/* Left sidebar (icons) */}

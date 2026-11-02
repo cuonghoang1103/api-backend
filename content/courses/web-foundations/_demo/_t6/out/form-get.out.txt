@@ -1,0 +1,3 @@
+<form action="/api/products" method="get"> with q = "desk lamp", category = "home" — clicked Search
+Address bar: /api/products?q=desk+lamp&category=home
+Page shows: {"items":[{"id":2,"name":"Desk lamp","price":320000,"category":"home"}],"page":1,"limit":10,"total":1}

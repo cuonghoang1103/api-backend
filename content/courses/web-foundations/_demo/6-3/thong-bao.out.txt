@@ -1,0 +1,4 @@
+api/product.json → data: {"id":3,"name":"Pen","price":5000}
+api/missing.json → HttpError 404 → show: We could not find that item.
+http://127.0.0.1:9/api → TypeError - → show: You seem to be offline. Check your connection and try again.
+422 → Please fix: name is required, price must be a whole number ≥ 0

@@ -1,0 +1,7 @@
+GET /api/products/1          status 200  ok true   redirected false  url /api/products/1
+GET /old-products (301)      status 200  ok true   redirected true   url /api/products
+GET /api/products/999        status 404  ok false  redirected false  url /api/products/999
+GET /api/admin/stats         status 401  ok false  redirected false  url /api/admin/stats
+POST invalid product         status 422  ok false  redirected false  url /api/products
+GET /api/crash               status 500  ok false  redirected false  url /api/crash
+GET a port nobody listens on threw TypeError: Failed to fetch

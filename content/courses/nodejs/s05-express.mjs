@@ -437,6 +437,21 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-5-rest-params-query" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 6.5 — REST, params and query strings</span><span class="lc-sub">Path or query, URLSearchParams, values that arrive as strings, and the IDOR bug</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-5-rest-params-query" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 6.5 — REST, tham số và query string</span><span class="lc-sub">Đường dẫn hay query, URLSearchParams, giá trị đến dạng chuỗi, và lỗi IDOR</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

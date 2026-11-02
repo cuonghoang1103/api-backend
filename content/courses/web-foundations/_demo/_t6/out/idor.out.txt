@@ -1,0 +1,6 @@
+--- without owner check — logged in as "an" ---
+GET /api/notes/12 → 200 {"id":12,"owner":"an","text":"Buy milk"}
+GET /api/notes/13 → 200 {"id":13,"owner":"binh","text":"Bank PIN hint: birthday"}
+--- with owner check — logged in as "an" ---
+GET /api/notes/12 → 200 {"id":12,"owner":"an","text":"Buy milk"}
+GET /api/notes/13 → 404 {"error":"Not found"}

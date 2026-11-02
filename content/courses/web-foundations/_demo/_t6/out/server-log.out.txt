@@ -1,0 +1,14 @@
+$ node server.mjs   (its own log while the commands above ran — first 12 lines)
+API on http://localhost:3456
+GET /api/products/1
+GET /api/products/3
+GET /api/products?limit=2
+POST /api/products
+POST /api/products
+PATCH /api/products/2
+PUT /api/products/2
+PUT /api/products/2
+DELETE /api/products/7
+DELETE /api/products/7
+POST /api/products/1
+HEAD /api/products/1

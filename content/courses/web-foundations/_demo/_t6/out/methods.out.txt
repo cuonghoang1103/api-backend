@@ -1,0 +1,42 @@
+$ curl -s http://localhost:3456/api/products?limit=2
+{"items":[{"id":1,"name":"Notebook","price":25000,"category":"office"},{"id":2,"name":"Desk lamp","price":320000,"category":"home"}],"page":1,"limit":2,"total":5}
+
+$ curl -s -X POST http://localhost:3456/api/products -H 'Content-Type: application/json' -d '{"name":"Ruler","price":8000}'
+{"id":6,"name":"Ruler","price":8000,"category":"other"}
+
+$ curl -s -X POST http://localhost:3456/api/products -H 'Content-Type: application/json' -d '{"name":"Ruler","price":8000}'
+{"id":7,"name":"Ruler","price":8000,"category":"other"}
+
+$ curl -s -X PATCH http://localhost:3456/api/products/2 -H 'Content-Type: application/json' -d '{"price":299000}'
+{"id":2,"name":"Desk lamp","price":299000,"category":"home"}
+
+$ curl -s -X PUT http://localhost:3456/api/products/2 -H 'Content-Type: application/json' -d '{"name":"Desk lamp","price":299000}'
+{"id":2,"name":"Desk lamp","price":299000,"category":"other"}
+
+$ curl -s -X PUT http://localhost:3456/api/products/2 -H 'Content-Type: application/json' -d '{"name":"Desk lamp","price":299000}'
+{"id":2,"name":"Desk lamp","price":299000,"category":"other"}
+
+$ curl -s -i -X DELETE http://localhost:3456/api/products/7
+HTTP/1.1 204 No Content
+
+
+$ curl -s -i -X DELETE http://localhost:3456/api/products/7
+HTTP/1.1 404 Not Found
+Content-Type: application/json; charset=utf-8
+
+{"error":"Product 7 not found"}
+
+$ curl -s -i -X POST http://localhost:3456/api/products/1
+HTTP/1.1 405 Method Not Allowed
+Content-Type: application/json; charset=utf-8
+Allow: GET, HEAD, PUT, PATCH, DELETE
+
+{"error":"Method not allowed"}
+
+$ curl -s -I http://localhost:3456/api/products/1
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+ETag: "8c508e8ba06f"
+Cache-Control: no-cache
+
+

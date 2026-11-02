@@ -1,0 +1,14 @@
+200  GET an existing product
+201  POST a valid new product
+204  DELETE it
+301  GET an old address that moved
+304  GET again, sending the ETag we already have
+400  POST broken JSON
+401  GET admin stats, not logged in
+403  GET admin stats as a normal user
+404  GET a product that does not exist
+405  POST to a single product
+415  POST a form instead of JSON
+422  POST JSON with invalid values
+429  a 4th request within a minute
+500  the server has a bug

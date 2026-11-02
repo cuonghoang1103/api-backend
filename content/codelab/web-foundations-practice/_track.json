@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-1-2-vscode",
@@ -140,6 +140,36 @@
       "name": "5.5 ES modules: chia code thành nhiều file",
       "level": "BEGINNER",
       "description": "export có tên và export default, import đúng dạng, đường dẫn tương đối có đuôi .js, tách một tệp lớn thành module, module chạy một lần và trạng thái dùng chung, gom export qua index.js, ghép một ứng dụng nhỏ nhiều module — 7 bài, máy chấm nạp module thật."
+    },
+    {
+      "slug": "wf-6-1-request-response",
+      "name": "6.1 Request và response",
+      "level": "BEGINNER",
+      "description": "Đọc dòng request và dòng trạng thái, gom header không phân biệt hoa thường, tách các phần của URL, dựng một request thô có Content-Length, đọc trọn một thông điệp HTTP kể cả phần thân chunked — 6 bài."
+    },
+    {
+      "slug": "wf-6-2-http-methods",
+      "name": "6.2 HTTP method",
+      "level": "BEGINNER",
+      "description": "Method an toàn và idempotent, khi nào được tự thử lại, method + đường dẫn → hành động (kèm 404/405), PUT thay thế và PATCH sửa một phần, dựng header Allow, rồi cả một kho sản phẩm trong bộ nhớ trả đúng 201/204/404/405 — 7 bài."
+    },
+    {
+      "slug": "wf-6-3-status-codes",
+      "name": "6.3 Mã trạng thái",
+      "level": "BEGINNER",
+      "description": "Họ mã theo chữ số đầu, res.ok, chọn 401 hay 403, chọn 415/400/422/201 cho một POST, quyết định có tự thử lại, tính thời gian chờ theo Retry-After, và hàm requestJson ném HttpError — 7 bài."
+    },
+    {
+      "slug": "wf-6-4-headers-json",
+      "name": "6.4 Header, JSON và phần thân",
+      "level": "INTERMEDIATE",
+      "description": "Tra header không phân biệt hoa thường, tách Content-Type và charset, parse JSON không ném lỗi, đọc Cache-Control, hồi sinh chuỗi ngày giờ thành Date, chọn định dạng theo Accept có trọng số q, và trả 304 theo ETag/If-None-Match — 7 bài."
+    },
+    {
+      "slug": "wf-6-5-rest-params-query",
+      "name": "6.5 REST, tham số và query string",
+      "level": "INTERMEDIATE",
+      "description": "Dựng và đọc query string bằng URLSearchParams, khớp route có :tham số, kiểm page/limit/sort và trả lỗi rõ, lọc-sắp-chia trang danh sách, chặn IDOR bằng kiểm chủ sở hữu, và bộ định tuyến trả 200/404/405 kèm Allow — 7 bài."
     },
     {
       "slug": "wf-11-1-closure",

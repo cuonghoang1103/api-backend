@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>status to message</title><meta name="cho-xong"></head>
+<body>
+<script>
+  // One place that turns any HTTP outcome into something the page can show.
+  class HttpError extends Error {
+    constructor(status, body) {
+      super(`HTTP ${status}`);
+      this.name = 'HttpError';
+      this.status = status;
+      this.body = body;
+    }
+  }
+
+  async function requestJson(url, init) {
+    const res = await fetch(url, init);              // rejects only if there is no response at all
+    const isJson = (res.headers.get('Content-Type') ?? '').includes('application/json');
+    const body = isJson ? await res.json() : await res.text();
+    if (!res.ok) throw new HttpError(res.status, body);
+    return body;
+  }
+
+  function messageFor(err) {
+    if (!(err instanceof HttpError)) return 'You seem to be offline. Check your connection and try again.';
+    if (err.status === 401) return 'Please log in again.';
+    if (err.status === 403) return 'You do not have permission to do this.';
+    if (err.status === 404) return 'We could not find that item.';
+    if (err.status === 422) return 'Please fix: ' + err.body.errors.join(', ');
+    if (err.status === 429) return 'Too many tries. Wait a minute.';
+    if (err.status >= 500) return 'Our server had a problem. Try again later.';
+    return 'Something is wrong with this request (' + err.status + ').';
+  }
+
+  (async () => {
+    for (const url of ['api/product.json', 'api/missing.json', 'http://127.0.0.1:9/api']) {
+      try {
+        const data = await requestJson(url);
+        console.log(url, '→ data:', JSON.stringify(data));
+      } catch (err) {
+        console.log(url, '→', err.name, err.status ?? '-', '→ show:', messageFor(err));
+      }
+    }
+    // the 422 case, as our product API sends it
+    console.log('422 →', messageFor(new HttpError(422, { errors: ['name is required', 'price must be a whole number ≥ 0'] })));
+    window.__xong = true;
+  })();
+</script>
+</body>
+</html>

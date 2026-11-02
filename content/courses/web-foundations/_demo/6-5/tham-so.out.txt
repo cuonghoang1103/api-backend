@@ -1,0 +1,7 @@
+by hand : /api/products?q=bút & sổ tay&page=2
+encoded : /api/products?q=b%C3%BAt+%26+s%E1%BB%95+tay&page=2&sort=-price
+q       : bút & sổ tay
+page    : 2 string
+tag     : ['a', 'b']
+missing : null
+segment : /api/users/%C4%90%E1%BB%A9c%20Anh%2F1

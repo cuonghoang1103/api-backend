@@ -1,0 +1,18 @@
+$ curl -v http://localhost:3456/api/products/1
+> GET /api/products/1 HTTP/1.1
+> Host: localhost:3456
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Type: application/json; charset=utf-8
+< ETag: "8c508e8ba06f"
+< Cache-Control: no-cache
+< Date: Mon, 02 Nov 2026 09:43:42 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+< Transfer-Encoding: chunked
+< 
+{ [71 bytes data]
+{"id":1,"name":"Notebook","price":25000,"category":"office"}
+

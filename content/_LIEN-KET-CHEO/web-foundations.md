@@ -37,6 +37,11 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-5-3-async-await` | Node.js `nodejs-1-4-bat-dong-bo` | `content/courses/nodejs/s01-javascript.mjs` | thiếu await, tuần tự vs song song, forEach |
 | `wf-5-4-fetch-apis` | FER202 (Academy) `fer202-11-1-fetch-async` | `content/academy/FER202.mjs` | res.ok, bốn trạng thái, POST JSON, timeout |
 | `wf-5-5-es-modules` | Node.js `nodejs-1-5-module` | `content/courses/nodejs/s01-javascript.mjs` | export/import, chạy một lần, file:// bị chặn |
+| `wf-6-1-request-response` | API Design `api-0-1-http` | `content/courses/api-design/s00-intro.mjs` | request/response thô, curl -v, phi trạng thái |
+| `wf-6-2-http-methods` | API Design `api-1-2-phuong-thuc` | `content/courses/api-design/s01-tai-nguyen.mjs` | POST hai lần, PUT vs PATCH, prefetch GET-xoá |
+| `wf-6-3-status-codes` | API Design `api-1-3-status` | `content/courses/api-design/s01-tai-nguyen.mjs` | 14 mã thật, fetch thấy gì, requestJson |
+| `wf-6-4-headers-json` | Node.js `nodejs-3-5-http-server` | `content/courses/nodejs/s03-core-modules.mjs` | Content-Type/415, Accept, ETag/304, JSON |
+| `wf-6-5-rest-params-query` | Node.js `nodejs-5-2-dinh-tuyen` | `content/courses/nodejs/s05-express.mjs` | đường dẫn vs query, chuỗi, IDOR |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

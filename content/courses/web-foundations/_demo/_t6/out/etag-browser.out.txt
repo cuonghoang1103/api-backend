@@ -1,0 +1,5 @@
+1st fetch: JS sees status 200, ETag "91b1903b4bd7"
+2nd fetch: JS sees status 200, body {"id":2,"name":"Desk lamp","price":320000,"category":"home"}
+On the network (Chrome DevTools Protocol):
+  request 1: sent If-None-Match (none) → server answered 200, JS was given 200
+  request 2: sent If-None-Match "91b1903b4bd7" → server answered 304, JS was given 200

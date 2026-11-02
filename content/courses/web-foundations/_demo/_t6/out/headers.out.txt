@@ -1,0 +1,35 @@
+$ curl -s -i http://localhost:3456/api/products/1
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+ETag: "8c508e8ba06f"
+Cache-Control: no-cache
+
+{"id":1,"name":"Notebook","price":25000,"category":"office"}
+
+$ curl -s -i http://localhost:3456/api/products/1 -H 'If-None-Match: "8c508e8ba06f"'
+HTTP/1.1 304 Not Modified
+ETag: "8c508e8ba06f"
+
+
+$ curl -s -i 'http://localhost:3456/api/products?limit=3' -H 'Accept: text/csv'
+HTTP/1.1 200 OK
+Content-Type: text/csv; charset=utf-8
+
+id,name,price
+1,Notebook,25000
+2,Desk lamp,299000
+3,Pen,5000
+
+$ curl -s -i -X POST http://localhost:3456/api/products -H 'Content-Type: application/json' -d '{"name":"Tape","price":15000}'
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /api/products/9
+
+{"id":9,"name":"Tape","price":15000,"category":"other"}
+
+$ curl -s -i -X POST http://localhost:3456/api/products -d '{"name":"Tape","price":15000}'
+HTTP/1.1 415 Unsupported Media Type
+Content-Type: application/json; charset=utf-8
+
+{"error":"Send JSON"}
+

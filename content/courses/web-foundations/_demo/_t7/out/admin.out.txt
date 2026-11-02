@@ -1,0 +1,2 @@
+$ curl -s -b admin-cookies.txt http://localhost:3457/api/admin/users
+[{"id":1,"email":"an@example.com","role":"user"},{"id":2,"email":"lan@example.com","role":"admin"}]

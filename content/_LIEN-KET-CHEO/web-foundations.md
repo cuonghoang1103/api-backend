@@ -42,6 +42,11 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-6-3-status-codes` | API Design `api-1-3-status` | `content/courses/api-design/s01-tai-nguyen.mjs` | 14 mã thật, fetch thấy gì, requestJson |
 | `wf-6-4-headers-json` | Node.js `nodejs-3-5-http-server` | `content/courses/nodejs/s03-core-modules.mjs` | Content-Type/415, Accept, ETag/304, JSON |
 | `wf-6-5-rest-params-query` | Node.js `nodejs-5-2-dinh-tuyen` | `content/courses/nodejs/s05-express.mjs` | đường dẫn vs query, chuỗi, IDOR |
+| `wf-7-1-auth-basics` | API Design `api-6-1-xac-thuc` | `content/courses/api-design/s06-bao-mat.mjs` | 401 vs 403, Basic = base64, không tin vai trò client |
+| `wf-7-2-cookies-sessions` | Node.js `nodejs-8-4-cookie-csrf-thu-hoi` | `content/courses/nodejs/s08-auth.mjs` | HttpOnly, đăng xuất thật, CSRF Lax vs None |
+| `wf-7-3-jwt` | Authentication `auth-4-1-giai-ma-bang-tay` | `content/courses/authentication/s04-jwt.mjs` | JWT tự ký, alg none, vấn đề đăng xuất |
+| `wf-7-4-passwords` | Node.js `nodejs-8-1-mat-khau-va-bam` | `content/courses/nodejs/s08-auth.mjs` | muối, sha256 vs bcrypt đo thật |
+| `wf-7-5-https-cors` | API Design `api-6-4-cors` | `content/courses/api-design/s06-bao-mat.mjs` | TLS trong curl, CORS không chặn request |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

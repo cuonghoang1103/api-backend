@@ -1,0 +1,6 @@
+$ CREDS='an@example.com:secret123'
+$ curl -s -v -u "$CREDS" http://localhost:3457/ -o /dev/null 2>&1 | grep -i '^> authorization'
+> Authorization: Basic YW5AZXhhbXBsZS5jb206c2VjcmV0MTIz
+
+$ echo 'YW5AZXhhbXBsZS5jb206c2VjcmV0MTIz' | base64 --decode
+an@example.com:secret123

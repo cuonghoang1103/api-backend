@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-1-2-vscode",
@@ -170,6 +170,36 @@
       "name": "6.5 REST, tham số và query string",
       "level": "INTERMEDIATE",
       "description": "Dựng và đọc query string bằng URLSearchParams, khớp route có :tham số, kiểm page/limit/sort và trả lỗi rõ, lọc-sắp-chia trang danh sách, chặn IDOR bằng kiểm chủ sở hữu, và bộ định tuyến trả 200/404/405 kèm Allow — 7 bài."
+    },
+    {
+      "slug": "wf-7-1-auth-basics",
+      "name": "7.1 Xác thực và phân quyền",
+      "level": "INTERMEDIATE",
+      "description": "Tách header Authorization, lọc trường client không được gửi (role, id), bảng quyền theo vai trò và chủ sở hữu, luật theo route trả 401/403/200, giới hạn đăng nhập sai theo cửa sổ thời gian, và luồng đăng nhập hoàn chỉnh với cùng một câu báo lỗi và 429 — 6 bài."
+    },
+    {
+      "slug": "wf-7-2-cookies-sessions",
+      "name": "7.2 Cookie và phiên",
+      "level": "INTERMEDIATE",
+      "description": "Đọc header Cookie, dựng Set-Cookie đúng thứ tự cờ, đọc ngược Set-Cookie, kho phiên có hạn dùng và \"đăng xuất mọi thiết bị\", mô phỏng luật SameSite Strict/Lax/None của trình duyệt, và kiểm CSRF bằng Origin + token — 6 bài."
+    },
+    {
+      "slug": "wf-7-3-jwt",
+      "name": "7.3 JWT",
+      "level": "INTERMEDIATE",
+      "description": "Tách ba phần của JWT, giải mã header/payload (không cần khoá), kiểm hết hạn có độ lệch đồng hồ, kiểm nbf/iss/aud, từ chối alg none và thuật toán ngoài danh sách, và xoay vòng refresh token có phát hiện dùng lại — 6 bài."
+    },
+    {
+      "slug": "wf-7-4-passwords",
+      "name": "7.4 Lưu mật khẩu",
+      "level": "INTERMEDIATE",
+      "description": "Luật mật khẩu kiểu NIST (dài, không ép ký tự, chặn mật khẩu phổ biến), đọc chuỗi bcrypt, quyết định khi nào hash lại, đổi số lần đoán thành thời gian dễ đọc, so sánh thời gian cố định, và đếm chi phí tấn công từ điển khi có và không có muối — 6 bài."
+    },
+    {
+      "slug": "wf-7-5-https-cors",
+      "name": "7.5 HTTPS và CORS",
+      "level": "INTERMEDIATE",
+      "description": "Lấy origin của một URL, so cùng origin, nhận ra request cần preflight, dựng header CORS theo danh sách cho phép (kèm credentials), trả lời preflight, kiểm một chứng chỉ (hạn dùng, tên miền có *), và mô phỏng trình duyệt quyết định trang có đọc được response — 7 bài."
     },
     {
       "slug": "wf-11-1-closure",

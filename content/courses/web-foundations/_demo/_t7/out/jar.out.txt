@@ -1,0 +1,2 @@
+$ cat cookies.txt   (curl's cookie jar — what a browser keeps for this site)
+#HttpOnly_localhost	FALSE	/	FALSE	1793616395	sid	(43 random characters)

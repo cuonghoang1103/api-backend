@@ -1,0 +1,21 @@
+token  : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0.pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g
+length : 176 characters (a session id was 43)
+header : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+payload: eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0
+sig    : pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g
+
+decoded payload, without the secret: {"sub":"1","name":"An","role":"user","iat":1793600000,"exp":1793600900}
+
+verify(original)          → {"ok":true,"payload":{"sub":"1","name":"An","role":"user","iat":1793600000,"exp":1793600900}}
+verify(role changed)      → {"ok":false,"why":"bad signature"}
+verify(alg: none)         → {"ok":false,"why":"alg \"none\" refused"}
+verify(16 minutes later)  → {"ok":false,"why":"expired"}
+
+jsonwebtoken.sign gives the same string: true
+jsonwebtoken.verify(original): {"sub":"1","name":"An","role":"user","iat":1793600000,"exp":1793600900}
+jsonwebtoken.verify(role changed): JsonWebTokenError: invalid signature
+
+GET /api/me (no Authorization header)          → 401 {"error":"no token"}
+GET /api/me  Bearer <token>                    → 200 {"hello":"An"}
+GET /api/me  Bearer <role changed>             → 401 {"error":"bad signature"}
+after "Log out": a copied token, same request  → 200 {"hello":"An"}

@@ -1,0 +1,32 @@
+page origin: http://127.0.0.1:<port>   api: http://localhost:<port>  (different host and port ⇒ different origins)
+
+> fetch(api + '/nocors')   — the API sends no CORS header
+  JavaScript got: TypeError: Failed to fetch
+  server saw: GET /nocors  (Origin: http://127.0.0.1:<port>)
+  console: Access to fetch at '<api>/nocors' from origin '<page origin>' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+  console: Failed to load resource: net::ERR_FAILED
+
+> fetch(api + '/cors')     — Access-Control-Allow-Origin: <page origin>
+  JavaScript got: status 200, body {"products":3}
+  server saw: GET /cors  (Origin: http://127.0.0.1:<port>)
+
+> fetch(api + '/no-preflight', { method: 'PUT', JSON body }) — OPTIONS answered without permission
+  JavaScript got: TypeError: Failed to fetch
+  server saw: OPTIONS /no-preflight  (Origin: http://127.0.0.1:<port>)
+  console: Access to fetch at '<api>/no-preflight' from origin '<page origin>' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+  console: Failed to load resource: net::ERR_FAILED
+
+> fetch(api + '/products/2', { method: 'PUT', JSON body }) — preflight allowed
+  JavaScript got: status 200, body {"updated":true}
+  server saw: OPTIONS /products/2  (Origin: http://127.0.0.1:<port>)
+  server saw: PUT /products/2  (Origin: http://127.0.0.1:<port>)
+
+> fetch(api + '/star', { credentials: 'include' }) — Allow-Origin: *
+  JavaScript got: TypeError: Failed to fetch
+  server saw: GET /star  (Origin: http://127.0.0.1:<port>)
+  console: Access to fetch at '<api>/star' from origin '<page origin>' has been blocked by CORS policy: The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+  console: Failed to load resource: net::ERR_FAILED
+
+> fetch(api + '/creds', { credentials: 'include' }) — exact origin + Allow-Credentials: true
+  JavaScript got: status 200, body {"ok":true}
+  server saw: GET /creds  (Origin: http://127.0.0.1:<port>)

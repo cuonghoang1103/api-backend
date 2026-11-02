@@ -263,5 +263,20 @@ ${L('https://everything.curl.dev/usingcurl/verbose/writeout.html', '⏱️', 'Ev
 ${L('https://github.com/alex/what-happens-when', '🧭', 'What happens when… (GitHub)', 'Câu trả lời dài kinh điển cho câu hỏi phỏng vấn, xuống tới tận bàn phím.', 'Mở')}
 ${L('https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview', '📘', 'MDN — Tổng quan về HTTP', 'Request, response và kết nối nhìn từ phía trình duyệt.', 'Mở')}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-2-web-hoat-dong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 0.2 — the same journey for beginners</span><span class="lc-sub">Five steps with a 13-line server you run yourself</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-2-web-hoat-dong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 0.2 — cùng hành trình đó cho người mới</span><span class="lc-sub">Năm bước kèm máy chủ 13 dòng do chính bạn chạy</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

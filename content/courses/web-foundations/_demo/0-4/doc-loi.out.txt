@@ -1,0 +1,2 @@
+step 1: user loaded → Linh
+Uncaught TypeError: Cannot read properties of null (reading 'city')

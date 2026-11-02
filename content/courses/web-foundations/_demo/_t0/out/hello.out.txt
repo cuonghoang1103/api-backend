@@ -1,0 +1,3 @@
+$ node hello.js
+Hello, Linh! Node.js is working.
+2 + 3 = 5

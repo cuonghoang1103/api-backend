@@ -1,0 +1,4 @@
+$ nodee --version
+zsh:1: command not found: nodee
+$ echo $?
+127

@@ -1,0 +1,4 @@
+$ node server.mjs
+listening on http://localhost:3000
+GET /
+GET /about

@@ -1,0 +1,3 @@
+clicked, likes = 1
+clicked, likes = 2
+clicked, likes = 3

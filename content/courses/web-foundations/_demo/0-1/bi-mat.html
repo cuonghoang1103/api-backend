@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Secrets in the browser</title></head>
+<body>
+  <h1>My shop</h1>
+  <script id="app">
+    // ❌ a "secret" written into front-end code
+    const PAYMENT_KEY = 'sk_live_DEMO_123456';
+    console.log('shop ready');
+  </script>
+  <script>
+    // what ANY visitor can do — the same as View Source or DevTools → Sources
+    const source = document.querySelector('#app').textContent;
+    const found = source.match(/sk_live_\w+/);
+    console.log('a visitor found:', found[0]);
+  </script>
+</body>
+</html>

@@ -7,6 +7,10 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 
 | Nền tảng Web | Bên kia | Tệp phía bên kia | Nền tảng Web dạy gì ở đây |
 |---|---|---|---|
+| `wf-0-1-gioi-thieu-lo-trinh` | Node.js `nodejs-0-1-gioi-thieu` | `content/courses/nodejs/s00-intro.mjs` | bốn tầng, bản đồ 15 chương — chưa vững thì quay về đây |
+| `wf-0-2-web-hoat-dong` | Mạng cho lập trình viên `netdev-0-2-go-dia-chi` | `content/courses/networking-for-developers/bai/002-go-dia-chi.mjs` | năm bước tải trang, máy chủ 13 dòng cho người mới |
+| `wf-0-3-cai-dat-may` | Node.js `nodejs-0-3-cai-dat` | `content/courses/nodejs/s00-intro.mjs` | PATH, command not found, script kiểm máy |
+| `wf-0-4-cach-hoc` | Node.js `nodejs-0-2-cach-hoc` | `content/courses/nodejs/s00-intro.mjs` | bảy thói quen học trên mã thật |
 | `wf-1-2-vscode` | Git & GitHub `git-14-1-vs-code` | `content/courses/git/s14-cong-cu-hang-ngay.mjs` | Prettier/ESLint/F2 cho người mới, output thật |
 | `wf-1-4-github` | Git & GitHub `git-15-1-ho-so-github` | `content/courses/git/s15-github-sinh-vien.mjs` | push/clone/rejected → pull --rebase trên kho trần |
 | `wf-1-4-github` | Git & GitHub `git-5-1-remote-fetch-pull` | `content/courses/git/s05-remote-github.mjs` | push/clone/rejected → pull --rebase trên kho trần |

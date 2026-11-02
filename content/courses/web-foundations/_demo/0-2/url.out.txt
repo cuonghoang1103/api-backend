@@ -1,0 +1,8 @@
+protocol: https:
+hostname: cuongthai.com
+port: (default for https = 443)
+pathname: /courses/web-foundations/learn
+search: ?lessonSlug=wf-0-2&lang=vi
+lessonSlug = wf-0-2
+hash: #journey
+origin: https://cuongthai.com

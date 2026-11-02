@@ -193,6 +193,21 @@ export default {
   <span class="lc-body"><span class="lc-title">expressjs.com — framework Express</span><span class="lc-sub">Web framework khoá này dựng lên từ Chương 5 trở đi.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-1-gioi-thieu-lo-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 0.1 — not ready yet? Start here</span><span class="lc-sub">HTML, CSS, JavaScript, HTTP and SQL from zero: the layers this course assumes</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-1-gioi-thieu-lo-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 0.1 — chưa vững? Bắt đầu từ đây</span><span class="lc-sub">HTML, CSS, JavaScript, HTTP và SQL từ số 0: những tầng khoá này mặc định bạn đã có</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -322,6 +337,21 @@ export default {
   <div class="kv"><span class="k">Commit nhỏ và thường xuyên</span><span class="v">Một trạng thái chạy được để quay về đáng giá hơn đoạn code thông minh mà bạn không undo nổi.</span></div>
 </div>
 <div class="note-ct">Nếu bạn vừa học vừa quay bài giảng: hãy quay <em>sau</em> bước 4, đừng bao giờ quay trước. Giảng trước ống kính một thứ mình mới chỉ "thấy quen" sẽ đẻ ra những câu nói sai nhưng nghe rất tự tin — và loại đó cực khó rút lại sau khi đã đăng.</div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-4-cach-hoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 0.4 — seven study habits on real code</span><span class="lc-sub">Predict, read errors, shrink bugs, ask good questions, spaced review</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-4-cach-hoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 0.4 — bảy thói quen học trên mã thật</span><span class="lc-sub">Đoán trước, đọc lỗi, thu nhỏ lỗi, hỏi đúng cách, ôn giãn cách</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -527,6 +557,21 @@ Type ".help" for more information.
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học tiếp ở khoá TypeScript — 0.3: Node 22, TypeScript 7 và VS Code</span><span class="lc-sub">Giống: Node 22 cài bằng nvm, npm init, một thư mục dự án. Khác: trên nền đó bạn ghim typescript 7.0.2 và @types/node, viết tsconfig của khoá, và để Node 22 chạy thẳng tệp .ts còn tsc lo phần kiểm kiểu.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-3-cai-dat-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 0.3 — PATH and command not found</span><span class="lc-sub">If node or npm is not found: how the shell finds programs, and a script that checks the machine</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-0-3-cai-dat-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 0.3 — PATH và command not found</span><span class="lc-sub">Nếu không tìm thấy node hay npm: shell tìm chương trình thế nào, và script tự kiểm máy</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

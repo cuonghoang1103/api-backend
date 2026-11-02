@@ -1,0 +1,4 @@
+TypeError: Cannot read properties of null (reading 'city')
+    at showCity (/0-4/doc-loi-stack.js:3:23)
+    at renderPage (/0-4/doc-loi-stack.js:7:10)
+    at /0-4/doc-loi-stack.js:10:3

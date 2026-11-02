@@ -1,0 +1,6 @@
+$ node kiem-may.mjs      # on a machine where Git and VS Code are not installed yet
+✓ Node.js         v22.23.3
+✓ npm             10.9.9
+✗ Git             not found  ← install it, then open a NEW terminal
+✗ VS Code (code)  not found  ← install it, then open a NEW terminal
+2/4 tools ready

@@ -1,0 +1,6 @@
+$ node kiem-may.mjs
+✓ Node.js         v22.23.3
+✓ npm             10.9.9
+✓ Git             git version 2.51.1
+✓ VS Code (code)  1.124.2
+4/4 tools ready

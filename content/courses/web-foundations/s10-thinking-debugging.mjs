@@ -7,6 +7,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 10 — Thinking, debugging & Git workflow|||Chương 10 — Tư duy lập trình, gỡ lỗi & quy trình Git',
@@ -683,6 +684,7 @@ Tốt: "Tôi mong fetch("/api/users") trả về một mảng, nhưng tôi nhậ
 </div>
 <p class="note-ct"><strong>Bạn đã học xong phần nền tảng.</strong> Việc tiếp theo nên làm không phải là thêm một khoá học nữa — mà là một ứng dụng nhỏ do chính bạn thiết kế, có người dùng, có cơ sở dữ liệu, và có triển khai. Mọi thứ được dạy ở đây sẽ bị nó đem ra thử, và những phần bạn mới học được một nửa sẽ tự lộ ra.</p>
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div></div>
+${onTapBai('wf-10-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 import L144 from './s14/wf-14-4-performance.mjs';
 import L143 from './s14/wf-14-3-deploy.mjs';
 import L142 from './s14/wf-14-2-env-secrets.mjs';
@@ -75,6 +76,7 @@ ${galleryGiang('wf-ship', [
 <div class="lz-node"><span class="lz-k">SPA trả 404 khi tải lại</span><span class="lz-t">tới khi hosting rewrite về index.html</span><span class="lz-d">Bấm link thì không hỏi máy chủ; tải lại thì có, mà đường dẫn đó không phải file thật.</span></div>
 <div class="lz-node"><span class="lz-k">Đo trước khi tối ưu</span><span class="lz-t">tab Network, sắp theo Size</span><span class="lz-d">Dòng to nhất thường là toàn bộ vấn đề. Ngồi đoán thì tốn ngày mà không đổi gì.</span></div>
 </div></div>
+${onTapBai('wf-14-5-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 480,

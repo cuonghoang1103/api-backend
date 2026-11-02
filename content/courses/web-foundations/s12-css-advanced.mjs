@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 import L124 from './s12/wf-12-4-tokens-theming.mjs';
 import L123 from './s12/wf-12-3-css-architecture.mjs';
 import L122 from './s12/wf-12-2-transition-animation.mjs';
@@ -75,6 +76,7 @@ ${galleryGiang('wf-css2', [
 <div class="lz-node"><span class="lz-k">Làm động transform và opacity</span><span class="lz-t">đừng bao giờ width, height hay left</span><span class="lz-d">Thuộc tính bố cục buộc tính lại mỗi khung hình; hai cái kia bộ hợp thành lo miễn phí.</span></div>
 <div class="lz-node"><span class="lz-k">Tên toàn cục sẽ đụng nhau</span><span class="lz-t">khoanh vùng hoặc gắn tiền tố</span><span class="lz-d">.card và button ở phạm vi toàn cục sẽ đánh nhau với framework CSS, trên những trang bạn chưa từng đụng tới.</span></div>
 </div></div>
+${onTapBai('wf-12-5-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 480,

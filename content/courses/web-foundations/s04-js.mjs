@@ -6,6 +6,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 4 — JavaScript fundamentals|||Chương 4 — JavaScript nền tảng',
@@ -698,6 +699,7 @@ btn.addEventListener("click", () =&gt; {
 </div>
 <p class="note-ct"><strong>Những câu hỏi "đoạn này in ra gì" mới là câu quan trọng.</strong> Nếu bạn đoán sai, đừng chỉ đọc đáp án — hãy dán đoạn đó vào Node REPL hoặc console của trình duyệt rồi đổi từng thứ một cho tới khi hành vi của nó trở nên có lý.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-4-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 4</a></div></div>
+${onTapBai('wf-4-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

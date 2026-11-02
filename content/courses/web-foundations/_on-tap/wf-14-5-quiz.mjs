@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`14.1 The production build`, `14.1 Bản dựng production`,
+      [`Measured: dev server 6 requests / 225 KB, build 3 requests / 1.4 KB.`, `Four jobs: bundle, minify, tree-shake, hash file names; <code>import.meta.env.DEV</code> blocks are removed.`, `Preview the build over HTTP; never commit <code>dist/</code>.`],
+      [`Đo thật: máy chủ dev 6 request / 225 KB, bản build 3 request / 1,4 KB.`, `Bốn việc: gộp gói, thu gọn, rung cây, băm tên file; khối <code>import.meta.env.DEV</code> bị xoá.`, `Xem trước bản build qua HTTP; không bao giờ commit <code>dist/</code>.`]],
+    [`14.2 Environment variables and secrets`, `14.2 Biến môi trường và bí mật`,
+      [`<code>VITE_</code> / <code>NEXT_PUBLIC_</code> values are baked into the public bundle.`, `Secrets live only on the server; load config and fail fast when something is missing.`, `A leaked key: rotate first, then clean history.`],
+      [`Giá trị <code>VITE_</code> / <code>NEXT_PUBLIC_</code> bị nướng vào bundle công khai.`, `Bí mật chỉ sống ở máy chủ; nạp cấu hình và chết sớm khi thiếu.`, `Lộ khoá: xoay khoá trước, rồi mới dọn lịch sử.`]],
+    [`14.3 Deploying`, `14.3 Deploy`,
+      [`build → upload → serve → verify.`, `SPA fallback: unknown paths without an extension serve <code>index.html</code>; missing assets stay 404.`, `HTML <code>no-cache</code>; hashed assets <code>max-age=31536000, immutable</code>; smoke-test after every deploy.`],
+      [`build → tải lên → phục vụ → kiểm chứng.`, `SPA fallback: đường dẫn lạ không có đuôi file thì trả <code>index.html</code>; asset thiếu vẫn 404.`, `HTML <code>no-cache</code>; asset có băm <code>max-age=31536000, immutable</code>; smoke-test sau mỗi lần deploy.`]],
+    [`14.4 Performance`, `14.4 Hiệu năng`,
+      [`LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1.`, `Measured fixes: right-sized image (LCP 12.3 s → 1.2 s), reserved space (CLS 0.209 → 0), split long tasks (TBT 1,150 ms → 0).`],
+      [`LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1.`, `Sửa có đo: ảnh đúng cỡ (LCP 12,3 s → 1,2 s), giữ chỗ (CLS 0,209 → 0), chia việc dài (TBT 1.150 ms → 0).`]],
+  ],
+  bay: [
+    [`Putting a secret in a <code>VITE_</code> variable.`, `Đặt bí mật vào biến <code>VITE_</code>.`],
+    [`Changing a front-end env value and only restarting — it needs a rebuild.`, `Đổi giá trị env phía frontend rồi chỉ khởi động lại — phải build lại.`],
+    [`Caching <code>index.html</code> for a long time — users get stuck on old assets.`, `Lưu đệm <code>index.html</code> lâu — người dùng kẹt ở asset cũ.`],
+    [`<code>loading="lazy"</code> on the hero image.`, `<code>loading="lazy"</code> cho ảnh hero.`],
+  ],
+  hoi: [
+    [`Why can hashed assets be cached for a year?`, `Any change produces a new file name, and the new HTML points to it, so a stale copy is never used.`, `Vì sao asset có băm được lưu đệm cả năm?`, `Mọi thay đổi sinh tên file mới, và HTML mới trỏ tới nó, nên bản cũ không bao giờ bị dùng.`],
+    [`Refreshing <code>/products/42</code> on a static host gives 404. Fix?`, `Enable SPA fallback: serve <code>index.html</code> for unknown paths without an extension.`, `Tải lại <code>/products/42</code> trên hosting tĩnh ra 404. Sửa thế nào?`, `Bật SPA fallback: trả <code>index.html</code> cho đường dẫn lạ không có đuôi file.`],
+    [`A secret was pushed to GitHub an hour ago. First action?`, `Revoke and rotate the key at the provider — before cleaning the repository.`, `Một bí mật đã bị push lên GitHub từ một giờ trước. Việc đầu tiên?`, `Thu hồi và xoay khoá ở nhà cung cấp — trước khi dọn repository.`],
+    [`Which metric does a banner inserted above the content hurt?`, `CLS — layout shift. Reserve its space in advance.`, `Một banner chèn lên trên nội dung làm hỏng chỉ số nào?`, `CLS — bố cục nhảy. Hãy giữ chỗ cho nó từ trước.`],
+    [`A 300 ms task blocks the main thread. What is its TBT contribution, and how do you reduce it?`, `250 ms (the part above 50 ms); split it into small chunks that yield to the main thread.`, `Một việc 300 ms chặn luồng chính. Nó đóng góp bao nhiêu TBT, giảm thế nào?`, `250 ms (phần vượt 50 ms); chia thành mẩu nhỏ, nhường luồng chính giữa các mẩu.`],
+    [`What does <code>npm run build</code> remove from <code>if (import.meta.env.DEV) { … }</code>?`, `The whole block: DEV is replaced by false at build time and the dead branch is dropped.`, `<code>npm run build</code> xoá gì trong <code>if (import.meta.env.DEV) { … }</code>?`, `Cả khối: DEV được thay bằng false lúc build và nhánh chết bị bỏ đi.`],
+    [`Lab data says the page is fast, but real users complain. Why can both be true?`, `Lab data uses one simulated device and network; field data covers real phones and networks, judged at the 75th percentile.`, `Số đo lab nói trang nhanh, nhưng người dùng thật than phiền. Vì sao cả hai đều có thể đúng?`, `Số đo lab dùng một thiết bị và mạng giả lập; số đo thực tế phủ điện thoại và mạng thật, đánh giá ở phân vị 75.`],
+    [`Which Cache-Control header should <code>index.html</code> get, and what does it mean?`, `<code>no-cache</code> — the browser may store it but must check with the server every time, so a new deploy is seen immediately.`, `<code>index.html</code> nên nhận header Cache-Control nào, nghĩa là gì?`, `<code>no-cache</code> — trình duyệt được lưu nhưng phải hỏi lại máy chủ mỗi lần, nên bản deploy mới được thấy ngay.`],
+  ],
+};

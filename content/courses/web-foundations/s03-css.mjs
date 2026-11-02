@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 3 — CSS & responsive design|||Chương 3 — CSS & thiết kế responsive',
@@ -1112,6 +1113,7 @@ CHỈ dựng bộ khung HTML + một file CSS:
 </div>
 <p class="note-ct"><strong>Đừng học thuộc các thuộc tính CSS.</strong> Chẳng ai làm thế. Hãy học bốn mô hình ở trên — cascade, hộp, trục flex, rãnh grid — rồi tra thuộc tính khi cần. Chính các mô hình mới là thứ giúp bạn đọc được bảng kiểu của người khác.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-3-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 3, từ dễ đến khó</a></div></div>
+${onTapBai('wf-3-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

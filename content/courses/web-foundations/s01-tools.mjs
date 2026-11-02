@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 import L14 from './s01/wf-1-4-github.mjs';
 import L12 from './s01/wf-1-2-vscode.mjs';
 
@@ -454,6 +455,7 @@ found 0 vulnerabilities</div>
 <p class="note-ct"><strong>Nếu một câu làm bạn bí</strong>, đừng đoán — hãy mở terminal và chạy thử cái lệnh đó. Mọi đáp án trong bài kiểm tra này đều kiểm được dưới một phút trên chính máy bạn, và việc kiểm ấy đáng giá hơn cái điểm.</p>
 <div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div>
 <div class="link-card"><a href="/code-lab/linux-bash">Luyện tập ở Code Lab → track Linux &amp; Bash (terminal)</a></div></div>
+${onTapBai('wf-1-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

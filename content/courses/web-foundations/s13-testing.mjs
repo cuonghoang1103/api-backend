@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 import L134 from './s13/wf-13-4-mocking-ci.mjs';
 import L133 from './s13/wf-13-3-testing-library.mjs';
 import L132 from './s13/wf-13-2-unit-tests.mjs';
@@ -75,6 +76,7 @@ ${galleryGiang('wf-test', [
 <div class="lz-node"><span class="lz-k">Tìm theo role và label</span><span class="lz-t">đừng bao giờ theo class CSS</span><span class="lz-d">Đổi tên một class không nên biến cái nút đang chạy tốt thành một test đỏ.</span></div>
 <div class="lz-node"><span class="lz-k">Cố ý làm hỏng</span><span class="lz-t">để chứng minh test BIẾT đỏ</span><span class="lz-d">Test xanh trên mã hỏng còn tệ hơn không có — nó bán cho bạn sự yên tâm bạn chưa xứng đáng có.</span></div>
 </div></div>
+${onTapBai('wf-13-5-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 480,

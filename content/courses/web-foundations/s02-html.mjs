@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 2 — HTML: the structure of every web page|||Chương 2 — HTML: cấu trúc của mọi trang web',
@@ -679,6 +680,7 @@ ${galleryGiang('wf-html', [
 </div>
 <p class="note-ct"><strong>Một phép kiểm năm phút hơn mọi bài kiểm tra:</strong> mở một trang bạn tự viết, cất con chuột đi, rồi đi khắp trang bằng phím Tab. Nếu bạn không tới được mọi điều khiển và không thấy mình đang ở đâu thì HTML còn thứ cần sửa.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-2-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 2, từ dễ đến khó</a></div></div>
+${onTapBai('wf-2-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

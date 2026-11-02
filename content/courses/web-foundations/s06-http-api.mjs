@@ -6,6 +6,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 6 — HTTP & APIs|||Chương 6 — HTTP & API',
@@ -602,6 +603,7 @@ Content-Type: application/json
 </div>
 <p class="note-ct"><strong>Hãy luyện trên một endpoint thật.</strong> Chĩa <code>curl -i</code> vào một API công khai bất kỳ rồi đọc cả phản hồi: dòng trạng thái, từng header, rồi mới tới thân. Mười phút như thế làm phần còn lại của khoá học dễ gỡ lỗi hơn hẳn.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Luyện tập ở Code Lab → track Node.js (Express)</a></div></div>
+${onTapBai('wf-6-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

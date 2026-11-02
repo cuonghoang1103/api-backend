@@ -6,6 +6,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 5 — Asynchronous JavaScript & modules|||Chương 5 — JavaScript bất đồng bộ & modules',
@@ -647,6 +648,7 @@ import { useState } from "react";  // một named export từ React</code></pre>
 </div>
 <p class="note-ct"><strong>Lỗi bất đồng bộ là lỗi thứ tự.</strong> Khi một thứ đang là <code>undefined</code> mà lẽ ra phải có giá trị, hãy thêm một <code>console.log</code> có nhãn ở từng bước rồi đọc thứ tự chúng in ra — nó gần như chẳng bao giờ là thứ tự bạn đã giả định.</p>
 <div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-5-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 5</a></div></div>
+${onTapBai('wf-5-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`7.1 Authentication vs authorisation`, `7.1 Xác thực và phân quyền`,
+      [`Authentication: who are you (failure 401). Authorisation: what may you do (failure 403).`, `Checks in the browser are for convenience; the server must check again.`],
+      [`Xác thực: bạn là ai (sai thì 401). Phân quyền: bạn được làm gì (không đủ quyền thì 403).`, `Kiểm ở trình duyệt là để tiện; máy chủ phải kiểm lại.`]],
+    [`7.2 Cookies and sessions`, `7.2 Cookie và session`,
+      [`The server stores the session; the browser keeps an id in a cookie and sends it automatically.`, `Flags: HttpOnly (no JS access), Secure (HTTPS only), SameSite (blocks cross-site sending), Max-Age.`],
+      [`Máy chủ giữ session; trình duyệt giữ mã trong cookie và tự gửi kèm.`, `Cờ: HttpOnly (JS không đọc được), Secure (chỉ HTTPS), SameSite (chặn gửi từ trang khác), Max-Age.`]],
+    [`7.3 JWT`, `7.3 JWT`,
+      [`header.payload.signature, sent as <code>Authorization: Bearer …</code>.`, `The payload is base64, not encrypted — never put secrets in it; the signature only proves it was not altered.`],
+      [`header.payload.signature, gửi bằng <code>Authorization: Bearer …</code>.`, `Payload là base64, không mã hoá — đừng đặt bí mật vào đó; chữ ký chỉ chứng minh nó không bị sửa.`]],
+    [`7.4 Passwords`, `7.4 Mật khẩu`,
+      [`Never store plain text; hash with bcrypt or argon2, never MD5/SHA-1.`, `One login error message: "email or password is incorrect".`],
+      [`Không bao giờ lưu dạng chữ thường; băm bằng bcrypt hoặc argon2, không MD5/SHA-1.`, `Một thông báo lỗi đăng nhập duy nhất: "email hoặc mật khẩu không đúng".`]],
+    [`7.5 HTTPS and CORS`, `7.5 HTTPS và CORS`,
+      [`HTTPS encrypts the connection; certificates are free.`, `CORS is a browser rule; the fix is on the server (<code>Access-Control-Allow-Origin</code>).`, `XSS, CSRF and SQL injection: never <code>innerHTML</code> user data, SameSite cookies, parameterised queries.`],
+      [`HTTPS mã hoá đường truyền; chứng chỉ miễn phí.`, `CORS là luật của trình duyệt; cách sửa nằm ở máy chủ (<code>Access-Control-Allow-Origin</code>).`, `XSS, CSRF và SQL injection: không <code>innerHTML</code> dữ liệu người dùng, cookie SameSite, truy vấn tham số hoá.`]],
+  ],
+  bay: [
+    [`Storing a token in <code>localStorage</code> where any injected script can read it.`, `Lưu token trong <code>localStorage</code>, nơi mọi script bị chèn vào đều đọc được.`],
+    [`Trying to fix a CORS error in the React code.`, `Cố sửa lỗi CORS trong mã React.`],
+    [`Two different messages for "unknown email" and "wrong password".`, `Hai thông báo khác nhau cho "email không tồn tại" và "sai mật khẩu".`],
+    [`Putting a role or personal data in a JWT and assuming nobody can read it.`, `Đặt vai trò hay dữ liệu cá nhân vào JWT rồi tưởng không ai đọc được.`],
+  ],
+  hoi: [
+    [`Why does an HttpOnly cookie help against XSS?`, `JavaScript cannot read it, so an injected script cannot steal the session id.`, `Vì sao cookie HttpOnly giúp chống XSS?`, `JavaScript không đọc được nó, nên script bị chèn vào không lấy cắp được mã phiên.`],
+    [`Can you read the payload of a JWT without the secret key?`, `Yes — it is only base64-encoded. The key is needed to create a valid signature, not to read it.`, `Đọc được payload của JWT mà không cần khoá bí mật không?`, `Được — nó chỉ mã hoá base64. Khoá cần để tạo chữ ký hợp lệ, không phải để đọc.`],
+    [`Sessions or tokens: which are easier to revoke immediately?`, `Sessions — delete them on the server. A token stays valid until it expires.`, `Session hay token: cái nào dễ thu hồi ngay lập tức hơn?`, `Session — xoá ở máy chủ. Token vẫn hợp lệ tới khi hết hạn.`],
+    [`Postman gets data from an API, but the browser shows a CORS error. Why?`, `CORS is enforced only by browsers; the server has not allowed your page's origin.`, `Postman lấy được dữ liệu từ API, nhưng trình duyệt báo lỗi CORS. Vì sao?`, `CORS chỉ do trình duyệt áp; máy chủ chưa cho phép origin của trang bạn.`],
+    [`Why is SHA-1 a bad choice for passwords, even though it is a hash?`, `It is designed to be fast, so attackers can test billions of guesses; bcrypt and argon2 are deliberately slow and salted.`, `Vì sao SHA-1 là lựa chọn tồi cho mật khẩu, dù nó là hàm băm?`, `Nó được thiết kế để nhanh, nên kẻ tấn công thử được hàng tỉ lần đoán; bcrypt và argon2 cố tình chậm và có muối.`],
+  ],
+};

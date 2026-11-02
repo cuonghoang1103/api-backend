@@ -1,0 +1,31 @@
+export default {
+  bai: [
+    [`12.1 Position and stacking`, `12.1 Position và xếp chồng`,
+      [`relative = shifted, and the anchor for absolute children; absolute = out of flow, attached to the nearest positioned ancestor; fixed = viewport; sticky needs <code>top</code>.`, `z-index only competes inside one stacking context; transform, opacity &lt; 1 and filter create contexts silently.`],
+      [`relative = dịch được, và làm mốc cho con absolute; absolute = rời dòng chảy, neo vào tổ tiên được định vị gần nhất; fixed = khung nhìn; sticky cần <code>top</code>.`, `z-index chỉ so trong một ngữ cảnh xếp chồng; transform, opacity &lt; 1 và filter âm thầm tạo ngữ cảnh.`]],
+    [`12.2 Transitions and animations`, `12.2 Transition và animation`,
+      [`List the properties (never <code>all</code>), 150–250 ms for hover, ease-out for appearing.`, `Animate <code>transform</code> and <code>opacity</code>; width, top or margin force layout every frame.`, `Respect <code>prefers-reduced-motion</code>.`],
+      [`Ghi rõ thuộc tính (không bao giờ <code>all</code>), 150–250 ms cho hover, ease-out cho thứ đang xuất hiện.`, `Làm động <code>transform</code> và <code>opacity</code>; width, top hay margin buộc tính lại bố cục mỗi khung hình.`, `Tôn trọng <code>prefers-reduced-motion</code>.`]],
+    [`12.3 Organising CSS`, `12.3 Tổ chức CSS`,
+      [`BEM: <code>.block__element--modifier</code>; flat single-class selectors.`, `Collisions are avoided by BEM, CSS Modules or utility classes; <code>@layer</code> orders whole groups of rules.`],
+      [`BEM: <code>.block__element--modifier</code>; bộ chọn phẳng một class.`, `Tránh đụng tên bằng BEM, CSS Modules hoặc class tiện ích; <code>@layer</code> xếp thứ tự cả nhóm quy tắc.`]],
+    [`12.4 Tokens and theming`, `12.4 Token và giao diện`,
+      [`Primitive tokens (<code>--blue-600</code>) feed semantic tokens (<code>--color-primary</code>); components use only semantic ones.`, `Dark mode: redeclare semantic tokens under <code>prefers-color-scheme</code>, with a <code>data-theme</code> override.`],
+      [`Token nguyên thuỷ (<code>--blue-600</code>) nuôi token ngữ nghĩa (<code>--color-primary</code>); component chỉ dùng token ngữ nghĩa.`, `Chế độ tối: khai lại token ngữ nghĩa trong <code>prefers-color-scheme</code>, kèm ghi đè bằng <code>data-theme</code>.`]],
+  ],
+  bay: [
+    [`Raising z-index to 9999 when the real cause is a stacking context on a parent.`, `Tăng z-index lên 9999 trong khi nguyên nhân thật là ngữ cảnh xếp chồng ở cha.`],
+    [`Animating <code>left</code> or <code>width</code> and getting janky motion.`, `Làm động <code>left</code> hay <code>width</code> và bị giật.`],
+    [`Long descendant selectors that break when the HTML changes.`, `Bộ chọn con cháu dài, vỡ ngay khi HTML đổi.`],
+    [`Hard-coded colours in components, so dark mode needs edits everywhere.`, `Viết cứng màu trong component, nên chế độ tối phải sửa khắp nơi.`],
+  ],
+  hoi: [
+    [`A badge with <code>position: absolute; top: 0; right: 0</code> sticks to the page corner instead of its card. Fix?`, `Give the card <code>position: relative</code> so it becomes the badge's containing block.`, `Một nhãn <code>position: absolute; top: 0; right: 0</code> dính vào góc trang thay vì góc thẻ. Sửa thế nào?`, `Cho thẻ <code>position: relative</code> để nó thành khối chứa của nhãn.`],
+    [`A modal with z-index 9999 is hidden behind a header with z-index 10. Most likely cause?`, `The modal sits inside a parent that creates its own stacking context (for example with <code>transform</code>); render it at the top level.`, `Modal z-index 9999 bị che bởi header z-index 10. Nguyên nhân khả dĩ nhất?`, `Modal nằm trong một cha tự tạo ngữ cảnh xếp chồng (ví dụ có <code>transform</code>); hãy vẽ nó ở tầng trên cùng.`],
+    [`Which two properties are cheap to animate?`, `<code>transform</code> and <code>opacity</code>.`, `Hai thuộc tính nào làm động rẻ?`, `<code>transform</code> và <code>opacity</code>.`],
+    [`Name the parts of <code>.card__title--large</code>.`, `Block <code>card</code>, element <code>title</code>, modifier <code>large</code>.`, `Gọi tên các phần của <code>.card__title--large</code>.`, `Block <code>card</code>, element <code>title</code>, modifier <code>large</code>.`],
+    [`Why do components use <code>--color-surface</code> rather than <code>--gray-50</code>?`, `The semantic name survives a theme change: dark mode redefines what surface means without touching components.`, `Vì sao component dùng <code>--color-surface</code> thay vì <code>--gray-50</code>?`, `Tên ngữ nghĩa sống sót qua đổi giao diện: chế độ tối định nghĩa lại "surface" mà không đụng component.`],
+    [`A sticky header does not stick. What is the first thing to check?`, `That it has a <code>top</code> value, and that no ancestor has <code>overflow: hidden</code>, which would make it stick inside that ancestor instead.`, `Header sticky không dính. Kiểm gì đầu tiên?`, `Nó có giá trị <code>top</code> chưa, và có tổ tiên nào mang <code>overflow: hidden</code> không — khi đó nó chỉ dính bên trong tổ tiên ấy.`],
+    [`How should a page react to <code>prefers-reduced-motion: reduce</code>?`, `Shorten or remove non-essential animations and transitions; keep the state changes, drop the movement.`, `Trang nên phản ứng thế nào với <code>prefers-reduced-motion: reduce</code>?`, `Rút ngắn hoặc bỏ các animation và transition không cần thiết; giữ thay đổi trạng thái, bỏ chuyển động.`],
+  ],
+};

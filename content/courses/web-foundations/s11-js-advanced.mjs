@@ -5,6 +5,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 import L115 from './s11/wf-11-5-regex.mjs';
 import L114 from './s11/wf-11-4-map-set-immutable.mjs';
 import L113 from './s11/wf-11-3-prototype-class.mjs';
@@ -80,6 +81,7 @@ ${galleryGiang('wf-js3', [
 <div class="lz-node"><span class="lz-k">Thay, đừng sửa</span><span class="lz-t">và nhớ spread chỉ chép NÔNG</span><span class="lz-d">React so sánh tham chiếu. Cùng tham chiếu nghĩa là "không có gì đổi", dù ruột đã khác.</span></div>
 </div>
 <p class="note-ct">Câu "in ra gì" nào bạn đoán sai thì dán đoạn code vào Console và đổi từng thứ một cho tới khi hiểu vì sao. Đọc đáp án dạy được ít hơn nhiều so với tự nhìn nó xảy ra.</p></div>
+${onTapBai('wf-11-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 600,

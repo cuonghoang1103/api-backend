@@ -6,6 +6,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 8 — Data & SQL|||Chương 8 — Dữ liệu & SQL',
@@ -709,6 +710,7 @@ const postsWithAuthor = await prisma.post.findMany({
 </div>
 <p class="note-ct"><strong>Hãy bật ghi log truy vấn trong lúc học.</strong> Dùng ORM nào cũng được, hãy bắt nó in ra đoạn SQL mà nó sinh ra. Nhìn thấy một N+1 dưới dạng năm mươi dòng y hệt nhau chạy qua màn hình dạy bài học đó nhanh hơn mọi lời giải thích.</p>
 <div class="link-card"><a href="/code-lab/sql">Luyện tập ở Code Lab → track SQL</a></div></div>
+${onTapBai('wf-8-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

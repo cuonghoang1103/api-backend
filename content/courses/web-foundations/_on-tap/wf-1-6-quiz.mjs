@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`1.1 The terminal`, `1.1 Terminal`,
+      [`<code>pwd</code> shows where you are; <code>ls</code> what is here; <code>cd</code> moves; <code>cd ..</code> goes up one level.`, `An absolute path starts at the root (<code>/Users/…</code>, <code>C:\\…</code>); a relative path starts from the current folder.`, `<code>rm</code> deletes without a trash bin; Tab completes names; ↑ recalls the last command.`],
+      [`<code>pwd</code> cho biết đang ở đâu; <code>ls</code> ở đây có gì; <code>cd</code> di chuyển; <code>cd ..</code> lùi lên một cấp.`, `Đường dẫn tuyệt đối bắt đầu từ gốc (<code>/Users/…</code>, <code>C:\\…</code>); đường dẫn tương đối bắt đầu từ thư mục hiện tại.`, `<code>rm</code> xoá không qua thùng rác; Tab tự điền tên; ↑ gọi lại lệnh vừa chạy.`]],
+    [`1.2 VS Code`, `1.2 VS Code`,
+      [`Open the project folder, never single files — search, terminal, linter and project settings need it.`, `Prettier changes layout only; ESLint reports likely bugs without running the code.`, `F2 renames a symbol (scope-aware); find-and-replace changes text.`],
+      [`Mở thư mục dự án, không mở file lẻ — tìm kiếm, terminal, linter và cài đặt dự án đều cần nó.`, `Prettier chỉ đổi bố cục; ESLint báo lỗi khả dĩ mà không cần chạy mã.`, `F2 đổi tên ký hiệu (hiểu phạm vi); tìm-và-thay thì đổi theo chữ.`]],
+    [`1.3 Git`, `1.3 Git`,
+      [`Three places: working folder → staging (<code>git add</code>) → history (<code>git commit</code>).`, `<code>git status</code> tells you where every change is; <code>git log --oneline</code> shows the history.`, `<code>.gitignore</code> keeps <code>node_modules</code>, <code>.env</code> and build output out of Git.`],
+      [`Ba nơi: thư mục làm việc → staging (<code>git add</code>) → lịch sử (<code>git commit</code>).`, `<code>git status</code> cho biết mỗi thay đổi đang ở đâu; <code>git log --oneline</code> hiện lịch sử.`, `<code>.gitignore</code> giữ <code>node_modules</code>, <code>.env</code> và đầu ra build ngoài Git.`]],
+    [`1.4 GitHub`, `1.4 GitHub`,
+      [`Commit is local; push uploads to the remote <code>origin</code>; <code>[ahead 1]</code> means one unpushed commit.`, `Clone once; pull before you start work; "rejected (fetch first)" ⇒ <code>git pull --rebase</code> then push.`, `A pull request is a branch on the remote plus review; log in with a token or SSH key, never your password.`],
+      [`Commit là cục bộ; push tải lên remote <code>origin</code>; <code>[ahead 1]</code> nghĩa là một commit chưa push.`, `Clone một lần; pull trước khi làm; "rejected (fetch first)" ⇒ <code>git pull --rebase</code> rồi push.`, `Pull request là một nhánh trên remote cộng phần review; đăng nhập bằng token hoặc khoá SSH, không bằng mật khẩu.`]],
+    [`1.5 Node &amp; npm`, `1.5 Node &amp; npm`,
+      [`Node runs JavaScript outside the browser; npm installs libraries listed in <code>package.json</code>.`, `<code>package-lock.json</code> pins exact versions; commit both files, never <code>node_modules</code>.`, `<code>npm start</code> / <code>npm test</code> run directly; other scripts need <code>npm run name</code>; <code>npx</code> runs a tool once.`],
+      [`Node chạy JavaScript ngoài trình duyệt; npm cài các thư viện khai trong <code>package.json</code>.`, `<code>package-lock.json</code> ghim phiên bản chính xác; commit cả hai file, không bao giờ commit <code>node_modules</code>.`, `<code>npm start</code> / <code>npm test</code> chạy thẳng; script khác cần <code>npm run tên</code>; <code>npx</code> chạy công cụ một lần.`]],
+  ],
+  bay: [
+    [`Typing <code>rm -r</code> in the wrong folder — always check <code>pwd</code> first.`, `Gõ <code>rm -r</code> ở sai thư mục — luôn kiểm <code>pwd</code> trước.`],
+    [`"Command not found" right after installing: the terminal window still has the old PATH — open a new one.`, `"Command not found" ngay sau khi cài: cửa sổ terminal vẫn giữ PATH cũ — mở cửa sổ mới.`],
+    [`Committing <code>node_modules</code> or <code>.env</code> because <code>.gitignore</code> was created too late.`, `Commit nhầm <code>node_modules</code> hay <code>.env</code> vì tạo <code>.gitignore</code> quá muộn.`],
+    [`Fixing a rejected push with <code>--force</code> — it deletes teammates' commits from the remote.`, `"Sửa" push bị từ chối bằng <code>--force</code> — nó xoá commit của đồng đội khỏi remote.`],
+  ],
+  hoi: [
+    [`You are in <code>/home/an/shop/src</code>. Where does <code>cd ../images</code> take you?`, `<code>/home/an/shop/images</code> — <code>..</code> goes up to <code>shop</code>, then into <code>images</code>.`, `Bạn đang ở <code>/home/an/shop/src</code>. <code>cd ../images</code> đưa bạn tới đâu?`, `<code>/home/an/shop/images</code> — <code>..</code> lùi lên <code>shop</code>, rồi vào <code>images</code>.`],
+    [`You edited three files but want to commit only one. Which commands?`, `<code>git add that-file</code>, then <code>git commit -m "…"</code>. The other two stay modified but unstaged.`, `Bạn sửa ba file nhưng chỉ muốn commit một. Dùng lệnh nào?`, `<code>git add tên-file</code>, rồi <code>git commit -m "…"</code>. Hai file kia vẫn đang sửa nhưng chưa vào staging.`],
+    [`<code>git status -sb</code> prints <code>## main...origin/main [ahead 2]</code>. What does it mean?`, `Two commits exist on your machine but not on the remote — run <code>git push</code>.`, `<code>git status -sb</code> in <code>## main...origin/main [ahead 2]</code>. Nghĩa là gì?`, `Có hai commit trên máy bạn mà remote chưa có — hãy chạy <code>git push</code>.`],
+    [`A teammate cloned your project and the app does not start. What did they forget?`, `<code>npm install</code> — <code>node_modules</code> is not in Git; it is rebuilt from <code>package.json</code> and the lock file.`, `Đồng đội clone dự án và ứng dụng không chạy. Họ quên gì?`, `<code>npm install</code> — <code>node_modules</code> không có trong Git; nó được dựng lại từ <code>package.json</code> và file lock.`],
+    [`Why is Format on Save better than formatting by hand?`, `It is automatic and identical for everyone, so Git diffs show only real changes and nobody argues about spacing.`, `Vì sao Format on Save tốt hơn tự định dạng bằng tay?`, `Nó tự động và giống nhau cho mọi người, nên diff của Git chỉ hiện thay đổi thật và không ai phải cãi nhau về khoảng trắng.`],
+  ],
+};

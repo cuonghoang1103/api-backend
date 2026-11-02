@@ -7,6 +7,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 7 — Authentication & security|||Chương 7 — Xác thực & bảo mật',
@@ -591,6 +592,7 @@ Thiếu header đó → trình duyệt chặn JS đọc phản hồi
 </div>
 <p class="note-ct"><strong>An toàn là lĩnh vực duy nhất mà "nó chạy được" chẳng chứng minh gì.</strong> Một phép kiểm quyền bị hỏng vẫn chạy hoàn hảo với người dùng ngay thẳng đang thử nó. Với mỗi endpoint bạn viết, hãy hỏi chuyện gì xảy ra khi có người gọi nó bằng một id khác, không có token, hoặc một token hết hạn — rồi thử thật.</p>
 <div class="link-card"><a href="/code-lab/nodejs-express">Luyện tập ở Code Lab → track Node.js (Express)</a></div></div>
+${onTapBai('wf-7-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

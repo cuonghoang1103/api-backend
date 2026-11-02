@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`6.1 Request and response`, `6.1 Yêu cầu và phản hồi`,
+      [`A request: method + path, headers, an empty line, an optional body.`, `HTTP is stateless: every request carries everything it needs, including who you are.`],
+      [`Một request: method + đường dẫn, header, một dòng trống, phần thân tuỳ chọn.`, `HTTP không nhớ trạng thái: mỗi request tự mang mọi thứ cần thiết, kể cả bạn là ai.`]],
+    [`6.2 Methods`, `6.2 Method`,
+      [`GET reads, POST creates, PUT replaces, PATCH updates part, DELETE removes.`, `GET must be safe — never change data in a GET.`],
+      [`GET đọc, POST tạo, PUT thay toàn bộ, PATCH sửa một phần, DELETE xoá.`, `GET phải an toàn — không bao giờ đổi dữ liệu trong GET.`]],
+    [`6.3 Status codes`, `6.3 Mã trạng thái`,
+      [`2xx success, 3xx redirect, 4xx your request is wrong, 5xx the server failed.`, `401 = not logged in; 403 = logged in but not allowed; 404 = no such path.`],
+      [`2xx thành công, 3xx chuyển hướng, 4xx request của bạn sai, 5xx máy chủ hỏng.`, `401 = chưa đăng nhập; 403 = đã đăng nhập nhưng không đủ quyền; 404 = không có đường dẫn đó.`]],
+    [`6.4 Headers and JSON`, `6.4 Header và JSON`,
+      [`<code>Content-Type</code>, <code>Authorization</code>, <code>Cache-Control</code>, <code>Accept</code>, <code>Set-Cookie</code>.`, `JSON: double-quoted keys, no trailing commas, no comments; <code>JSON.stringify</code> / <code>JSON.parse</code>.`],
+      [`<code>Content-Type</code>, <code>Authorization</code>, <code>Cache-Control</code>, <code>Accept</code>, <code>Set-Cookie</code>.`, `JSON: khoá nháy kép, không dấu phẩy thừa, không chú thích; <code>JSON.stringify</code> / <code>JSON.parse</code>.`]],
+    [`6.5 REST, params, query strings`, `6.5 REST, param, query string`,
+      [`<code>/api/pizzas</code> is the collection; <code>/api/pizzas/3</code> one item (route parameter).`, `<code>?loai=chay&amp;page=2</code> filters and paginates the same collection.`],
+      [`<code>/api/pizzas</code> là tập hợp; <code>/api/pizzas/3</code> là một phần tử (route param).`, `<code>?loai=chay&amp;page=2</code> lọc và phân trang cùng tập hợp đó.`]],
+  ],
+  bay: [
+    [`A delete button implemented with GET — caches and prefetchers may trigger it.`, `Nút xoá làm bằng GET — bộ nhớ đệm và trình tải trước có thể tự kích hoạt nó.`],
+    [`Sending JSON without <code>Content-Type: application/json</code>; the server sees an empty body.`, `Gửi JSON mà thiếu <code>Content-Type: application/json</code>; máy chủ thấy phần thân rỗng.`],
+    [`Debugging a 5xx on the client, or a 4xx on the server — start on the right side.`, `Gỡ lỗi 5xx ở client, hay 4xx ở máy chủ — hãy bắt đầu ở đúng phía.`],
+    [`Trailing commas or single quotes in JSON.`, `Dấu phẩy thừa hay nháy đơn trong JSON.`],
+  ],
+  hoi: [
+    [`A logged-in student opens an admin page and the API answers 403. Is it a bug?`, `No — the server knows who they are (otherwise 401) and refuses because they lack permission.`, `Một sinh viên đã đăng nhập mở trang quản trị và API trả 403. Đó có phải lỗi không?`, `Không — máy chủ biết họ là ai (nếu không đã là 401) và từ chối vì họ không đủ quyền.`],
+    [`Which method updates only the price of pizza 3?`, `<code>PATCH /api/pizzas/3</code> with a body containing just the new price.`, `Method nào chỉ sửa giá của pizza 3?`, `<code>PATCH /api/pizzas/3</code> với phần thân chỉ chứa giá mới.`],
+    [`An unauthenticated GET to a route returns 404 instead of 401. What does that tell you?`, `The route is not mounted at all (missing or stale deploy); a mounted protected route would answer 401.`, `Một GET chưa đăng nhập tới một route trả 404 thay vì 401. Điều đó cho biết gì?`, `Route hoàn toàn chưa được gắn (thiếu hoặc deploy cũ); route có bảo vệ đã gắn sẽ trả 401.`],
+    [`Route parameter or query string for "page 2 of vegetarian pizzas"?`, `Query string: <code>/api/pizzas?loai=chay&amp;page=2</code> — it filters the collection, not one item.`, `Route param hay query string cho "trang 2 của các pizza chay"?`, `Query string: <code>/api/pizzas?loai=chay&amp;page=2</code> — nó lọc tập hợp, không chỉ một phần tử.`],
+    [`Where in DevTools do you see the exact headers a request sent?`, `Network → click the request → Headers.`, `Trong DevTools xem chính xác các header mà request đã gửi ở đâu?`, `Network → bấm vào request → Headers.`],
+  ],
+};

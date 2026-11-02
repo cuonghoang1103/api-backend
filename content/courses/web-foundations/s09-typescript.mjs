@@ -6,6 +6,7 @@
  */
 
 import { gallery, galleryGiang } from './_slides.mjs';
+import { onTapBai } from './_on-tap/index.mjs';
 
 export default {
   title: 'Chapter 9 — TypeScript basics|||Chương 9 — TypeScript cơ bản',
@@ -578,6 +579,7 @@ npx tsc              // biên dịch mọi file .ts sang .js, theo tsconfig.json
 </div>
 <p class="note-ct"><strong>Chính những cái lỗi mới là sản phẩm.</strong> Khi TypeScript từ chối một thứ, phản xạ hữu ích là "nó biết gì mà mình không biết?" — chứ không phải "làm sao cho cái thông báo này biến mất". Gần như mọi vệt gạch đỏ bạn dập bằng <code>!</code> hay <code>any</code> đều là một cú sập bạn đã đồng ý gặp lại sau này.</p>
 <div class="link-card"><a href="/code-lab/typescript">Luyện tập ở Code Lab → track TypeScript</a></div></div>
+${onTapBai('wf-9-6-quiz')}
 `,
       quiz: {
         timeLimitSeconds: 720,

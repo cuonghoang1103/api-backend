@@ -188,8 +188,8 @@ const tuChoi = (ma: Extract<QuyetDinhNhom, { loai: 'tuChoi' }>['ma'], vi: string
 export async function quyetDinhNhom(userId: number, projectId: number | null, o: { kiemTran?: boolean; luc?: Date } = {}): Promise<QuyetDinhNhom> {
   if (!projectId) {
     return tuChoi('NHOM_KHONG_GAN',
-      'CuongMini cần gói Pro. Nếu bạn ở trong một nhóm CT Work mà trưởng nhóm có Pro: gắn thư mục với dự án đó (gõ /ctwork → Chọn dự án) rồi hỏi lại.',
-      'CuongMini needs a Pro plan. If you are in a CT Work team whose lead has Pro, bind this folder to that project (/ctwork → Pick project) and ask again.');
+      'CuongMini cần gói Pro, hoặc bạn phải là thành viên ít nhất 1 dự án CT Work được tài trợ. Hiện bạn chưa có dự án nào như vậy: nhờ trưởng nhóm thêm bạn vào dự án, hoặc nâng cấp Pro.',
+      'CuongMini needs a Pro plan, or membership of at least one sponsored CT Work project. You have none yet: ask your team lead to add you to a project, or upgrade to Pro.');
   }
   try {
     const u = await prisma.user.findUnique({ where: { id: userId }, select: { kind: true } });

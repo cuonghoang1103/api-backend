@@ -47,6 +47,7 @@ import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 import { xemHanMucFable } from '../services/agent/fable.js';
 import { dsKyNangSan } from '../services/agent/kyNangSan.js';
 import { docDuAnId, duAnNhomCuaNguoi, quyetDinhNhom, stepNhom, type NguonNhom } from '../services/agent/hanMucNhom.js';
+import { duAnChoPhamViRong } from '../services/agent/phamViRong.js';
 import {
   cauHinhTaiTroCua, datCauHinhTaiTro, duAnTaiTroCuaNguoi, dungChoTaiTro, kiemVaGhiLuotTaiTro, quyetDinhTaiTro, stepTaiTro, timAdminTaiTro, type NguonTaiTro,
 } from '../services/agent/taiTroAdmin.js';
@@ -124,6 +125,22 @@ async function chanNeuBiChan(req: any, res: Response<ApiResponse>): Promise<bool
   return true;
 }
 
+/**
+ * Người không Pro, cuộc KHÔNG gắn dự án (phạm vi "tất cả dự án" / "cả workspace"): thử lần lượt các dự án được tài trợ
+ * (`phamViRong.ts`). Trả `null` = đã gắn đường tài trợ admin. Không dự án nào ⇒ quyết định NHOM_KHONG_GAN (vẫn khoá).
+ */
+async function thuPhamViRong(req: any): Promise<Awaited<ReturnType<typeof quyetDinhNhom>> | null> {
+  let hetTran: Awaited<ReturnType<typeof quyetDinhNhom>> | null = null;
+  for (const d of await duAnChoPhamViRong(req.userId)) {
+    req.body = { ...(req.body ?? {}), ctworkDuAn: d.projectId };
+    if (await thuTaiTro(req)) return null;
+    const q = await quyetDinhNhom(req.userId, d.projectId);
+    if (q.loai === 'nhom') return q;
+    if (q.ma === 'NHOM_HET_TRAN') hetTran ??= q;
+  }
+  return hetTran ?? quyetDinhNhom(req.userId, null);
+}
+
 async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
     if (await chanNeuBiChan(req, res)) return;
@@ -131,7 +148,8 @@ async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFu
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown } };
     const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
-    const q = await quyetDinhNhom(req.userId, pid);
+    const q = pid ? await quyetDinhNhom(req.userId, pid) : await thuPhamViRong(req);
+    if (!q) return next();
     if (q.loai === 'nhom') { req.nguonNhom = q; return next(); }
     if (q.ma === 'NHOM_HET_TRAN') {
       /* Mã gia hạn theo $ (19/10/2026): trần NGƯỜI/NGÀY ⇒ kèm thẻ nhập mã (`data.giaHanTien`) + câu cho app cũ. */
@@ -143,7 +161,7 @@ async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFu
        dùng được, và câu báo là câu của đường nhóm khi cuộc CÓ gắn dự án. */
     res.status(403).json({
       success: false,
-      message: pid ? q.cau : await cauChanPro(req.userId, 'Chế độ Lập trình là tính năng của tài khoản Pro. Nâng cấp để agent đọc được dự án trên máy bạn.'),
+      message: q.ma === 'NHOM_KHONG_GAN' ? await cauChanPro(req.userId, q.cau) : q.cau,
       code: 'PRO_REQUIRED',
       data: { nhom: q.ma },
     } as any);
@@ -177,7 +195,8 @@ async function chiProHoacNhomHoacFree(req: any, res: Response<ApiResponse>, next
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown }; model?: unknown };
     const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
-    const q = await quyetDinhNhom(req.userId, pid);
+    const q = pid ? await quyetDinhNhom(req.userId, pid) : await thuPhamViRong(req);
+    if (!q) return next();
     if (q.loai === 'nhom') { req.nguonNhom = q; return next(); }
     if (q.ma === 'NHOM_HET_TRAN' && !laDefault(b.model)) {
       const gh = q.tranCham === 'nguoiNgay' && q.nguon ? await giaHanChoLoi(req.userId, tranChamNhom(q.nguon)) : { them: '' };
@@ -185,12 +204,10 @@ async function chiProHoacNhomHoacFree(req: any, res: Response<ApiResponse>, next
       return;
     }
     /* 27/10/2026: CuongMini Pro chạy cổng chính hãng (tốn tiền) ⇒ tài khoản Free KHÔNG còn đường dùng riêng (rambo ngừng).
-       Free chỉ dùng được qua dự án CT Work có hạn mức nhóm / admin tài trợ (đã xử lý ở trên). */
+       Free chỉ dùng được qua dự án CT Work có hạn mức nhóm / admin tài trợ (đã xử lý ở trên, kể cả phạm vi "tất cả dự án"). */
     res.status(403).json({
       success: false,
-      message: pid && q.ma !== 'NHOM_KHONG_GAN'
-        ? q.cau
-        : await cauChanPro(req.userId, 'CuongMini (AI Code, CLI, VS Code) dành cho tài khoản Pro. Nâng cấp Pro để dùng, hoặc dùng trong dự án CT Work được tài trợ. / CuongMini needs a Pro account — upgrade, or use it inside a sponsored CT Work project.'),
+      message: q.ma === 'NHOM_KHONG_GAN' ? await cauChanPro(req.userId, q.cau) : q.cau,
       code: 'PRO_REQUIRED',
       data: { nhom: q.ma },
     } as any);
@@ -507,14 +524,18 @@ router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
   try {
     /* Đợt 8A: `cuongMini` = hạn mức THẬT đang chặn (trần $ theo model, ví 5 giờ, nhóm / admin tài trợ, chống spam, gia
        hạn, khối admin) — `usageCuongMini.ts`. App mới gửi `?model=&ctworkDuAn=`; trường cũ (bể token 5 giờ) giữ cho app cũ. */
+    const duAnGan = docDuAnId(req.query.ctworkDuAn);
+    const coPro = await duocDungAiCode(req.userId).catch(() => false);
+    /* Phạm vi "tất cả dự án": hiện hạn mức của dự án được tài trợ đầu tiên (`phamViRong.ts`). */
+    const duAnUsage = duAnGan ?? (coPro ? null : (await duAnChoPhamViRong(req.userId).catch(() => []))[0]?.projectId ?? null);
     const cuongMini = await xemUsageCuongMini(req.userId, {
       model: typeof req.query.model === 'string' ? req.query.model : undefined,
-      projectId: docDuAnId(req.query.ctworkDuAn),
+      projectId: duAnUsage,
     }).catch((err) => { logger.warn('agent/usage: không dựng được hạn mức CuongMini', { error: (err as Error).message }); return null; });
     res.json({
       success: true,
       data: {
-        pro: await duocDungAiCode(req.userId).catch(() => false),
+        pro: coPro,
         ...(await goiUsage(req.userId)),
         ...(cuongMini ? { cuongMini } : {}),
       },

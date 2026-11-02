@@ -4,7 +4,7 @@
  *
  * Người KHÔNG có Pro, cuộc gắn dự án CT Work (`ctworkDuAn`):
  *   • là thành viên + trưởng nhóm (ADMIN) có Pro + đang bật ⇒ ĐƯỢC (tuyến tiêu model đi qua cửa `chiProHoacNhom`);
- *   • không gắn dự án ⇒ 403 PRO_REQUIRED · không phải thành viên ⇒ 403 (`data.nhom = NHOM_KHONG_THANH_VIEN`);
+ *   • không gắn dự án: có dự án được tài trợ ⇒ qua, không có dự án nào ⇒ 403 PRO_REQUIRED · không phải thành viên ⇒ 403 (`data.nhom = NHOM_KHONG_THANH_VIEN`);
  *   • trưởng nhóm TẮT ⇒ 403 NHOM_TAT · trưởng nhóm hết Pro ⇒ 403 NHOM_KHONG_CHU;
  *   • vượt trần người/ngày hoặc nhóm/tháng (sổ mang dấu `nhom:p<pid>:u<chủ>`) ⇒ 429 NHOM_HET_TRAN;
  *   • AI agent của CT Work ⇒ không bao giờ (403);
@@ -98,14 +98,20 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
     await prisma.$disconnect();
   });
 
-  it('không Pro + là thành viên ⇒ ĐƯỢC; không gắn dự án ⇒ 403 PRO_REQUIRED; người ngoài ⇒ 403', async () => {
+  it('không Pro + là thành viên ⇒ ĐƯỢC; không có dự án nào ⇒ 403 PRO_REQUIRED; người ngoài ⇒ 403', async () => {
     const ok = await thuCua(mem, pid);
     assert.equal(ok.status, 400, `phải QUA cửa (400 thiếu cauHoi): ${JSON.stringify(ok.raw)}`);
     assert.equal(ok.code, 'BAD_INPUT');
-    const khongGan = await thuCua(mem);
+    /* Phạm vi "tất cả dự án": app không gửi mã dự án, có ít nhất 1 dự án được tài trợ ⇒ vẫn qua. */
+    const tatCa = await thuCua(mem);
+    assert.equal(tatCa.status, 400, `phải QUA cửa: ${JSON.stringify(tatCa.raw)}`);
+    assert.equal(tatCa.code, 'BAD_INPUT');
+    /* Không thuộc dự án nào ⇒ khoá, câu báo nói rõ cần ít nhất 1 dự án. */
+    const khongGan = await thuCua(out);
     assert.equal(khongGan.status, 403);
     assert.equal(khongGan.code, 'PRO_REQUIRED');
     assert.equal(khongGan.data?.nhom, 'NHOM_KHONG_GAN');
+    assert.match(khongGan.message ?? '', /ít nhất 1 dự án/);
     const ngoai = await thuCua(out, pid);
     assert.equal(ngoai.status, 403);
     assert.equal(ngoai.data?.nhom, 'NHOM_KHONG_THANH_VIEN');
@@ -123,6 +129,14 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
     assert.equal(r.status, 403);
     assert.equal(r.data?.nhom, 'NHOM_TAT');
     assert.match(r.message ?? '', /TẮT/);
+    /* Dự án duy nhất đã tắt ⇒ phạm vi "tất cả dự án" cũng khoá. */
+    assert.equal((await thuCua(mem)).data?.nhom, 'NHOM_KHONG_GAN');
+    /* Có dự án thứ hai còn bật ⇒ phạm vi "tất cả dự án" đi qua dự án đó. */
+    const p2 = await call(lead, 'POST', `/work/workspaces/${wsId}/projects`, { key: 'NT2', name: 'Dự án 2', template: 'BLANK', kind: 'SCHOOL' });
+    assert.equal(p2.status, 201, JSON.stringify(p2.raw));
+    assert.equal((await call(lead, 'PUT', `/work/projects/${p2.data.id}/members/${mem.id}`, { role: 'MEMBER' })).status, 200);
+    assert.equal((await thuCua(mem)).status, 400);
+    assert.equal((await call(lead, 'DELETE', `/work/projects/${p2.data.id}/members/${mem.id}`)).status < 300, true);
     await call(lead, 'PUT', `/work/projects/${pid}/cuongmini-team`, { bat: true });
     assert.equal((await thuCua(mem, pid)).status, 400);
   });

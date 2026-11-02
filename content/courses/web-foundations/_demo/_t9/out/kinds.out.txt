@@ -1,0 +1,7 @@
+$ npx tsc --noEmit --strict kinds.ts
+kinds.ts(27,13): error TS2322: Type '{ kind: "empty"; }' is not assignable to type 'never'.
+(exit code 2)
+
+$ node --experimental-strip-types kinds.ts
+Error: HTTP 404
+2 items

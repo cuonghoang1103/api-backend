@@ -260,5 +260,20 @@ ${nguon('📘', 'TypeScript Handbook — Declaration Merging', 'Interface và na
 ${nguon('📗', 'TypeScript wiki — Performance: Preferring Interfaces Over Intersections', 'Interface phát hiện xung đột thuộc tính và được lưu đệm; intersection có thể ra never. Đọc ngày 1/11/2026.', 'https://github.com/microsoft/TypeScript/wiki/Performance')}
 ${lienKet({ khoa: 'prisma-orm', bai: 'pr-1-2-generate-viet-gi', title: 'Ai viết kiểu cho bạn — Prisma 1.2: prisma generate thật sự viết ra cái gì', sub: 'Giống: một model thành một kiểu TypeScript có tên, mọi kết quả truy vấn được kiểm theo nó. Khác: Prisma sinh type alias tính toán (export type User = $Result.DefaultSelection&lt;…&gt;) — thứ interface không diễn đạt được; ở đây bạn tự viết các dáng làm tay và chọn interface hay type có chủ ý.', cta: 'MỞ BÀI PRISMA →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-3-interfaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 9.3 — Interfaces and types</span><span class="lc-sub">Typing a real REST API with Omit/Partial/Record and a kind-tagged loading state</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-3-interfaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 9.3 — interface và type</span><span class="lc-sub">Gắn kiểu cho một REST API thật bằng Omit/Partial/Record và trạng thái tải có trường kind</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

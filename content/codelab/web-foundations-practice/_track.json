@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 9 TypeScript + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-1-2-vscode",
@@ -230,6 +230,36 @@
       "name": "8.5 ORM với Prisma",
       "level": "INTERMEDIATE",
       "description": "Đổi lỗi Prisma (P2002, P2025, P2003) thành response HTTP, áp select lồng nhau, dựng bộ lọc where như Prisma (equals, gt/gte/lt/lte, contains, in, not, AND/OR/NOT), findMany có orderBy/skip/take, dịch where sang SQL có tham số, và lập kế hoạch db push (phát hiện bước phá huỷ) — 6 bài."
+    },
+    {
+      "slug": "wf-9-1-why-typescript",
+      "name": "9.1 Vì sao TypeScript",
+      "level": "BEGINNER",
+      "description": "Gọi đúng tên kiểu của giá trị (null, mảng, NaN…), tự kiểm một món hàng theo hình dạng CartItem, tính tổng giỏ hàng mà KHÔNG để \"5000\" nối chuỗi, đọc một dòng lỗi tsc, tổng hợp cả output tsc thành báo cáo, và tự suy kiểu một giá trị JSON như tsc --declaration — 6 bài."
+    },
+    {
+      "slug": "wf-9-2-basic-types",
+      "name": "9.2 Kiểu cơ bản",
+      "level": "BEGINNER",
+      "description": "Thu hẹp string | number để định dạng giá, type guard cho union literal SortDir, mô phỏng kiểu literal const vs let, đọc unknown an toàn, nhãn trạng thái với nhánh đủ (never), và đổi giá trị form (luôn là chuỗi) sang number/boolean/date kèm lỗi rõ ràng — 6 bài."
+    },
+    {
+      "slug": "wf-9-3-interfaces",
+      "name": "9.3 interface và type",
+      "level": "BEGINNER",
+      "description": "pick/omit lúc chạy (Pick/Omit), đếm theo khoá (Record), áp PATCH theo Partial mà giữ id readonly, render union phân biệt bằng kind, kiểm một Record<Genre, number> thiếu hay thừa khoá, và một bộ kiểm hình dạng theo cấu trúc có trường tuỳ chọn và kiểm thuộc tính thừa — 6 bài."
+    },
+    {
+      "slug": "wf-9-4-functions-generics",
+      "name": "9.4 Hàm và generic",
+      "level": "INTERMEDIATE",
+      "description": "Tham số mặc định + kiểm số đối số (priceWithTax), first/last<T>, findById<T extends { id: number }>, groupBy<T, K>, getJson<T> với vị từ kiểu không nói dối, memoize<A, R> và pipe — 6 bài, mỗi bài kèm chữ ký TypeScript."
+    },
+    {
+      "slug": "wf-9-5-ts-in-practice",
+      "name": "9.5 TypeScript trong dự án thật",
+      "level": "INTERMEDIATE",
+      "description": "Soát package.json có đủ script dev/typecheck/build/start, soát tsconfig (strict, rootDir/outDir, NodeNext), nạp cấu hình từ env và hỏng sớm, tìm cú pháp TypeScript không xoá được mà Node từ chối, và tự viết bộ kiểm schema kiểu zod với safeParse + issues — 6 bài."
     },
     {
       "slug": "wf-11-1-closure",

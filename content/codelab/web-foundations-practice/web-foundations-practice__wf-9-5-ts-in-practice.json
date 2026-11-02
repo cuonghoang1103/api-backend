@@ -1,0 +1,730 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-9-5-ts-in-practice",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-9-5-ts-in-practice"
+  },
+  "exercises": [
+    {
+      "title": "Script npm của một dự án TypeScript",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "npm scripts",
+        "tsc --noEmit"
+      ],
+      "prerequisites": [
+        "object",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>Viết <code>scriptProblems(pkg)</code> nhận object <code>package.json</code>, trả mảng vấn đề theo thứ tự: thiếu <code>scripts.typecheck</code> ⇒ <code>\"missing typecheck\"</code>; có nhưng không chứa <code>\"tsc\"</code> và <code>\"--noEmit\"</code> ⇒ <code>\"typecheck must run tsc --noEmit\"</code>; thiếu <code>build</code> ⇒ <code>\"missing build\"</code>; thiếu <code>start</code> ⇒ <code>\"missing start\"</code>; <code>start</code> chạy tệp <code>.ts</code> (chứa <code>\".ts\"</code>) ⇒ <code>\"start should run built JavaScript\"</code>; <code>typescript</code> nằm trong <code>dependencies</code> thay vì <code>devDependencies</code> ⇒ <code>\"typescript belongs in devDependencies\"</code>. Không có <code>scripts</code> thì coi như object rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự vấn đề.</li>\n  <li>Chịu được thiếu scripts/dependencies.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "pkg: object.",
+      "outputSpec": "string[].",
+      "constraints": "Không cần kiểm script dev.",
+      "examplesJson": [
+        {
+          "input": "scriptProblems({ scripts: { dev: \"tsx src/index.ts\", typecheck: \"tsc --noEmit\", build: \"tsc -p .\", start: \"node dist/index.js\" }, devDependencies: { typescript: \"5.9.2\" } })",
+          "output": "[]",
+          "explanation": "Đúng bộ script trong bài luyện 9.5."
+        }
+      ],
+      "hintsJson": [
+        "const s = pkg.scripts ?? {};",
+        "Object.hasOwn(pkg.dependencies ?? {}, \"typescript\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — soát script npm\nfunction scriptProblems(pkg) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — kiểm (tsc --noEmit), build (tsc -p .), start chạy JavaScript đã build\nfunction scriptProblems(pkg) {\n  const s = pkg.scripts ?? {};\n  const problems = [];\n  if (!s.typecheck) problems.push('missing typecheck');\n  else if (!s.typecheck.includes('tsc') || !s.typecheck.includes('--noEmit')) problems.push('typecheck must run tsc --noEmit');\n  if (!s.build) problems.push('missing build');\n  if (!s.start) problems.push('missing start');\n  else if (s.start.includes('.ts')) problems.push('start should run built JavaScript');\n  if (Object.hasOwn(pkg.dependencies ?? {}, 'typescript')) problems.push('typescript belongs in devDependencies');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>tsx và Vite chạy mã mà không kiểm kiểu, nên <code>typecheck</code> là script riêng — chạy trong CI và hook trước khi push. Production chạy <code>dist/</code>; TypeScript chỉ cần lúc phát triển và build nên thuộc <code>devDependencies</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi \"tsc\" là đủ (nó sẽ ghi tệp ra).</li>\n  <li>Không chịu được pkg không có scripts.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.npmjs.com/cli/v10/using-npm/scripts",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A complete project|||Dự án đủ script",
+            "goi": "scriptProblems({ scripts: { dev: \"tsx src/index.ts\", typecheck: \"tsc --noEmit\", build: \"tsc -p .\", start: \"node dist/index.js\" }, devDependencies: { typescript: \"5.9.2\" } })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Running .ts in production, no typecheck|||Chạy .ts ở production, không typecheck",
+            "goi": "scriptProblems({ scripts: { start: \"tsx src/index.ts\" }, dependencies: { typescript: \"5.9.2\" } })",
+            "mongDoi": [
+              "missing typecheck",
+              "missing build",
+              "start should run built JavaScript",
+              "typescript belongs in devDependencies"
+            ]
+          },
+          {
+            "moTa": "typecheck that emits files; no scripts at all|||typecheck ghi tệp; không có scripts",
+            "goi": "[scriptProblems({ scripts: { typecheck: \"tsc\", build: \"tsc\", start: \"node dist/index.js\" } }), scriptProblems({})]",
+            "mongDoi": [
+              [
+                "typecheck must run tsc --noEmit"
+              ],
+              [
+                "missing typecheck",
+                "missing build",
+                "missing start"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"tsc\" là đủ (nó sẽ ghi tệp ra)."
+        },
+        {
+          "loi": "Không chịu được pkg không có scripts."
+        }
+      ]
+    },
+    {
+      "title": "Soát tsconfig.json",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "strict",
+        "rootDir/outDir",
+        "NodeNext"
+      ],
+      "prerequisites": [
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>Viết <code>tsconfigWarnings(cfg)</code> với <code>cfg</code> là object tsconfig. Trả mảng cảnh báo theo thứ tự: <code>compilerOptions.strict !== true</code> ⇒ <code>\"turn on strict\"</code>; <code>outDir</code> trùng <code>rootDir</code> (cùng chuỗi sau khi bỏ <code>\"./\"</code> đầu và <code>\"/\"</code> cuối) ⇒ <code>\"outDir must differ from rootDir\"</code>; <code>module</code> là <code>\"NodeNext\"</code> (không phân biệt hoa thường) mà <code>moduleResolution</code> có và khác <code>\"NodeNext\"</code> ⇒ <code>\"moduleResolution must match module NodeNext\"</code>; không có <code>include</code> cũng không có <code>files</code> ⇒ <code>\"add include\"</code>; <code>noImplicitAny === false</code> ⇒ <code>\"noImplicitAny is turned off\"</code> (strict không bật lại được nó).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự.</li>\n  <li>Chuẩn hoá đường dẫn đơn giản.</li>\n  <li>Chịu được thiếu compilerOptions.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "cfg: object.",
+      "outputSpec": "string[].",
+      "constraints": "Không đọc tệp — cfg đã là object.",
+      "examplesJson": [
+        {
+          "input": "tsconfigWarnings({ compilerOptions: { target: \"ES2022\", module: \"NodeNext\", moduleResolution: \"NodeNext\", strict: true, outDir: \"dist\", rootDir: \"src\" }, include: [\"src\"] })",
+          "output": "[]",
+          "explanation": "tsconfig của dự án shop trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const o = cfg.compilerOptions ?? {};",
+        "const norm = (p) => String(p ?? \"\").replace(/^\\.\\//, \"\").replace(/\\/$/, \"\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — soát tsconfig\nfunction tsconfigWarnings(cfg) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — những thiết lập làm dự án TypeScript kiểm ít hơn bạn tưởng (hoặc build đè lên nguồn)\nconst norm = (p) => String(p).replace(/^\\.\\//, '').replace(/\\/$/, '');\n\nfunction tsconfigWarnings(cfg) {\n  const o = cfg.compilerOptions ?? {};\n  const out = [];\n  if (o.strict !== true) out.push('turn on strict');\n  if (o.outDir !== undefined && o.rootDir !== undefined && norm(o.outDir) === norm(o.rootDir)) out.push('outDir must differ from rootDir');\n  if (String(o.module ?? '').toLowerCase() === 'nodenext' && o.moduleResolution !== undefined\n      && String(o.moduleResolution).toLowerCase() !== 'nodenext') out.push('moduleResolution must match module NodeNext');\n  if (!cfg.include && !cfg.files) out.push('add include');\n  if (o.noImplicitAny === false) out.push('noImplicitAny is turned off');\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bài đo thật: cùng một tệp, 0 lỗi khi tắt strict và 7 khi bật. <code>\"strict\": true, \"noImplicitAny\": false</code> trông như strict mà vẫn để tham số thành <code>any</code> lặng lẽ — cờ riêng thắng cờ chung.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi strict: \"true\" (chuỗi) là bật.</li>\n  <li>So \"./src\" với \"src\" là khác.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/tsconfig/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The shop project is clean|||Dự án shop sạch",
+            "goi": "tsconfigWarnings({ compilerOptions: { target: \"ES2022\", module: \"NodeNext\", moduleResolution: \"NodeNext\", strict: true, outDir: \"dist\", rootDir: \"src\" }, include: [\"src\"] })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Every warning in order|||Mọi cảnh báo đúng thứ tự",
+            "goi": "tsconfigWarnings({ compilerOptions: { module: \"nodenext\", moduleResolution: \"node\", outDir: \"./src/\", rootDir: \"src\", noImplicitAny: false } })",
+            "mongDoi": [
+              "turn on strict",
+              "outDir must differ from rootDir",
+              "moduleResolution must match module NodeNext",
+              "add include",
+              "noImplicitAny is turned off"
+            ]
+          },
+          {
+            "moTa": "strict as a string is not strict; files counts as include|||strict dạng chuỗi không tính; files thay include được",
+            "goi": "tsconfigWarnings({ compilerOptions: { strict: \"true\" }, files: [\"index.ts\"] })",
+            "mongDoi": [
+              "turn on strict"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi strict: \"true\" (chuỗi) là bật."
+        },
+        {
+          "loi": "So \"./src\" với \"src\" là khác."
+        }
+      ]
+    },
+    {
+      "title": "Nạp cấu hình và hỏng sớm",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "fail fast",
+        "process.env là string | undefined"
+      ],
+      "prerequisites": [
+        "regex",
+        "throw"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>Viết <code>loadConfig(env)</code> (<code>env</code> thay cho <code>process.env</code>: object chuỗi). Trả <code>{ port, databaseUrl, logLevel }</code>: <code>PORT</code> không có/rỗng ⇒ <code>3000</code>, có thì phải toàn chữ số và trong 1–65535; <code>DATABASE_URL</code> bắt buộc, phải bắt đầu bằng <code>postgres://</code> hoặc <code>postgresql://</code>; <code>LOG_LEVEL</code> mặc định <code>\"info\"</code>, chỉ nhận <code>\"debug\" | \"info\" | \"warn\" | \"error\"</code>. Gom MỌI lỗi, rồi nếu có lỗi ném <code>Error(\"invalid config: \" + lỗi nối bằng \"; \")</code> với lỗi dạng <code>\"PORT must be 1-65535\"</code>, <code>\"DATABASE_URL is required\"</code>, <code>\"DATABASE_URL must be a postgres URL\"</code>, <code>\"LOG_LEVEL must be one of debug, info, warn, error\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị mặc định.</li>\n  <li>Gom mọi lỗi rồi ném một lần.</li>\n  <li>port là number.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "env: { [k]: string | undefined }.",
+      "outputSpec": "{ port, databaseUrl, logLevel }.",
+      "constraints": "Không đọc process.env thật.",
+      "examplesJson": [
+        {
+          "input": "loadConfig({ DATABASE_URL: \"postgres://localhost/shop\", PORT: \"8080\" })",
+          "output": "{ port: 8080, databaseUrl: \"postgres://localhost/shop\", logLevel: \"info\" }",
+          "explanation": "Như lần chạy thứ hai của dự án shop."
+        }
+      ],
+      "hintsJson": [
+        "const errors = []; … if (errors.length) throw new Error(\"invalid config: \" + errors.join(\"; \"));",
+        "/^\\d+$/.test(raw) && Number(raw) >= 1 && Number(raw) <= 65535"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — nạp cấu hình\nfunction loadConfig(env) {\n  return { port: env.PORT || 3000, databaseUrl: env.DATABASE_URL, logLevel: env.LOG_LEVEL };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — biến môi trường là string | undefined; biến chúng thành Config có kiểu ở MỘT chỗ, lúc khởi động\nconst LEVELS = ['debug', 'info', 'warn', 'error'];\n\nfunction loadConfig(env) {\n  const errors = [];\n\n  const rawPort = (env.PORT ?? '').trim();\n  let port = 3000;\n  if (rawPort !== '') {\n    port = Number(rawPort);\n    if (!/^\\d+$/.test(rawPort) || port < 1 || port > 65535) errors.push('PORT must be 1-65535');\n  }\n\n  const databaseUrl = (env.DATABASE_URL ?? '').trim();\n  if (databaseUrl === '') errors.push('DATABASE_URL is required');\n  else if (!/^postgres(ql)?:\\/\\//.test(databaseUrl)) errors.push('DATABASE_URL must be a postgres URL');\n\n  const logLevel = (env.LOG_LEVEL ?? '').trim() || 'info';\n  if (!LEVELS.includes(logLevel)) errors.push('LOG_LEVEL must be one of ' + LEVELS.join(', '));\n\n  if (errors.length) throw new Error('invalid config: ' + errors.join('; '));\n  return { port, databaseUrl, logLevel };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hỏng ngay lúc khởi động, với MỌI vấn đề trong một thông báo, tốt hơn nhiều so với sập ở truy vấn đầu tiên lúc 2 giờ sáng. Sau hàm này, phần còn lại của chương trình dùng <code>config.port</code> kiểu <code>number</code> — không ai phải nghĩ tới <code>undefined</code> nữa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>env.PORT || 3000 trả chuỗi \"8080\".</li>\n  <li>Ném ở lỗi đầu tiên.</li>\n  <li>Nhận \"80abc\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://12factor.net/config",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Defaults and conversion|||Mặc định và đổi kiểu",
+            "goi": "[loadConfig({ DATABASE_URL: \"postgres://localhost/shop\", PORT: \"8080\" }), loadConfig({ DATABASE_URL: \"postgresql://db/app\", LOG_LEVEL: \"debug\" })]",
+            "mongDoi": [
+              {
+                "port": 8080,
+                "databaseUrl": "postgres://localhost/shop",
+                "logLevel": "info"
+              },
+              {
+                "port": 3000,
+                "databaseUrl": "postgresql://db/app",
+                "logLevel": "debug"
+              }
+            ]
+          },
+          {
+            "moTa": "Missing DATABASE_URL fails fast|||Thiếu DATABASE_URL hỏng ngay",
+            "goi": "loadConfig({})",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^invalid config: DATABASE_URL is required$"
+            }
+          },
+          {
+            "moTa": "Every problem in one message|||Mọi vấn đề trong một thông báo",
+            "goi": "loadConfig({ PORT: \"80abc\", DATABASE_URL: \"mysql://x\", LOG_LEVEL: \"verbose\" })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^invalid config: PORT must be 1-65535; DATABASE_URL must be a postgres URL; LOG_LEVEL must be one of debug, info, warn, error$"
+            }
+          },
+          {
+            "moTa": "Port range|||Khoảng cổng",
+            "goi": "loadConfig({ PORT: \"70000\", DATABASE_URL: \"postgres://x\" })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "PORT must be 1-65535"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "env.PORT || 3000 trả chuỗi \"8080\"."
+        },
+        {
+          "loi": "Ném ở lỗi đầu tiên."
+        },
+        {
+          "loi": "Nhận \"80abc\"."
+        }
+      ]
+    },
+    {
+      "title": "Cú pháp không xoá được",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "type stripping",
+        "erasable syntax"
+      ],
+      "prerequisites": [
+        "regex",
+        "split"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>Node chạy TypeScript bằng cách XOÁ kiểu, nên từ chối cú pháp sinh ra mã JavaScript thật. Viết <code>nonErasable(source)</code> trả mảng <code>{ line, kind }</code> (dòng đánh số từ 1) cho từng dòng chứa: <code>enum</code> (dòng bắt đầu — sau khoảng trắng và tuỳ chọn <code>export </code>/<code>const </code>/<code>declare </code> — bằng <code>enum &lt;Tên&gt;</code>) ⇒ <code>kind: \"enum\"</code>, NHƯNG <code>declare enum</code> thì bỏ qua (chỉ là kiểu); <code>namespace &lt;Tên&gt;</code> hoặc <code>module &lt;Tên&gt; {</code> ở đầu dòng (tuỳ chọn <code>export </code>) ⇒ <code>\"namespace\"</code>; tham số thuộc tính trong constructor — dòng chứa <code>constructor(</code> và một trong <code>public </code>, <code>private </code>, <code>protected </code>, <code>readonly </code> bên trong ngoặc ⇒ <code>\"parameter property\"</code>. Bỏ qua dòng chú thích bắt đầu bằng <code>//</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng số dòng.</li>\n  <li>Bỏ declare enum.</li>\n  <li>Bỏ dòng chú thích.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "source: string.",
+      "outputSpec": "{ line, kind }[].",
+      "constraints": "Mỗi dòng tối đa một kết quả (ưu tiên enum, namespace, parameter property).",
+      "examplesJson": [
+        {
+          "input": "nonErasable(\"enum Role { User, Admin }\\nconsole.log(Role.Admin);\")",
+          "output": "[{ line: 1, kind: \"enum\" }]",
+          "explanation": "Đúng dòng Node báo ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX trong bài."
+        }
+      ],
+      "hintsJson": [
+        "/^\\s*(export\\s+)?(const\\s+)?enum\\s+\\w+/",
+        "/constructor\\s*\\([^)]*\\b(public|private|protected|readonly)\\s/"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — tìm cú pháp không xoá được\nfunction nonErasable(source) {\n  return source.includes('enum') ? [{ line: 1, kind: 'enum' }] : [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — enum / namespace / tham số thuộc tính sinh ra mã JS ⇒ không \"bóc kiểu\" được\nconst ENUM = /^\\s*(export\\s+)?(const\\s+)?enum\\s+\\w+/;\nconst NAMESPACE = /^\\s*(export\\s+)?(namespace\\s+\\w+|module\\s+\\w+\\s*\\{)/;\nconst PARAM_PROP = /constructor\\s*\\([^)]*\\b(public|private|protected|readonly)\\s/;\n\nfunction nonErasable(source) {\n  const found = [];\n  String(source).split('\\n').forEach((text, i) => {\n    if (/^\\s*\\/\\//.test(text)) return;                          // dòng chú thích\n    if (/^\\s*(export\\s+)?declare\\s/.test(text)) return;         // declare chỉ là kiểu, xoá được\n    let kind = null;\n    if (ENUM.test(text)) kind = 'enum';\n    else if (NAMESPACE.test(text)) kind = 'namespace';\n    else if (PARAM_PROP.test(text)) kind = 'parameter property';\n    if (kind) found.push({ line: i + 1, kind });\n  });\n  return found;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>enum Role { User, Admin }</code> biên dịch thành một object JavaScript thật — xoá đi là mất <code>Role.Admin</code>. Cả ba loại ở đây là lý do TypeScript có cờ <code>erasableSyntaxOnly</code>: bật nó lên thì tsc báo lỗi đúng những dòng mà Node sẽ từ chối. Thay enum bằng union literal + <code>as const</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bắt cả từ \"enum\" trong chuỗi/chú thích.</li>\n  <li>Báo declare enum.</li>\n  <li>Đánh số dòng từ 0.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://nodejs.org/api/typescript.html#type-stripping",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The enum from the lesson|||enum trong bài",
+            "goi": "nonErasable(\"// Lesson 9.5 — enum test\\nenum Role { User, Admin }\\nconsole.log(Role.Admin);\")",
+            "mongDoi": [
+              {
+                "line": 2,
+                "kind": "enum"
+              }
+            ]
+          },
+          {
+            "moTa": "All three kinds|||Đủ ba loại",
+            "goi": "nonErasable([\"export const enum Dir { Up }\", \"export namespace Utils {\", \"  export const x = 1;\", \"}\", \"class Repo {\", \"  constructor(private db: Db, name: string) {}\", \"}\"].join(\"\\n\"))",
+            "mongDoi": [
+              {
+                "line": 1,
+                "kind": "enum"
+              },
+              {
+                "line": 2,
+                "kind": "namespace"
+              },
+              {
+                "line": 6,
+                "kind": "parameter property"
+              }
+            ]
+          },
+          {
+            "moTa": "Erasable code passes|||Mã xoá được thì qua",
+            "goi": "nonErasable([\"declare enum Legacy { A }\", \"type Role = 'user' | 'admin';\", \"const ROLES = ['user', 'admin'] as const;\", \"const label = 'enum Role';\", \"class A { constructor(db: Db) { this.db = db; } }\"].join(\"\\n\"))",
+            "mongDoi": []
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bắt cả từ \"enum\" trong chuỗi/chú thích."
+        },
+        {
+          "loi": "Báo declare enum."
+        },
+        {
+          "loi": "Đánh số dòng từ 0."
+        }
+      ]
+    },
+    {
+      "title": "Thông báo lỗi kiểu zod",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "issues",
+        "path"
+      ],
+      "prerequisites": [
+        "map",
+        "join"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>zod trả lỗi dạng <code>issues: [{ path: [\"items\", 0, \"price\"], message: \"Expected number, received string\" }]</code>. Viết <code>formatIssues(issues)</code> trả <code>{ body, status }</code> cho một response 422 (Bài 6.3): <code>status</code> là <code>422</code>; <code>body</code> là <code>{ errors: [...] }</code> với mỗi phần tử <code>\"&lt;đường dẫn&gt; - &lt;message&gt;\"</code>, đường dẫn ghép kiểu JavaScript: khoá chữ nối bằng <code>\".\"</code>, chỉ số số viết <code>\"[0]\"</code> (vd <code>\"items[0].price\"</code>); path rỗng ⇒ <code>\"(root)\"</code>. Bỏ trùng (cùng chuỗi chỉ giữ lần đầu). Không có issue nào ⇒ <code>{ body: { errors: [] }, status: 200 }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ghép đường dẫn đúng.</li>\n  <li>(root) cho path rỗng.</li>\n  <li>Bỏ trùng giữ thứ tự.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "issues: { path: (string | number)[], message: string }[].",
+      "outputSpec": "{ body, status }.",
+      "constraints": "Không sắp xếp lại.",
+      "examplesJson": [
+        {
+          "input": "formatIssues([{ path: [\"name\"], message: \"Required\" }, { path: [\"price\"], message: \"Expected number, received string\" }])",
+          "output": "{ body: { errors: [\"name - Required\", \"price - Expected number, received string\"] }, status: 422 }",
+          "explanation": "Đúng hai dòng \"invalid:\" của validate.ts."
+        }
+      ],
+      "hintsJson": [
+        "path.reduce((s, k) => typeof k === \"number\" ? s + \"[\" + k + \"]\" : (s ? s + \".\" + k : k), \"\")",
+        "[...new Set(lines)]"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — issues của zod thành response 422\nfunction formatIssues(issues) {\n  return { body: { errors: issues }, status: 400 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — lỗi kiểm dữ liệu ⇒ 422 + danh sách đọc được, đường dẫn viết như trong JavaScript\nfunction pathText(path) {\n  const s = path.reduce((acc, key) => (typeof key === 'number' ? acc + '[' + key + ']' : acc ? acc + '.' + key : String(key)), '');\n  return s === '' ? '(root)' : s;\n}\n\nfunction formatIssues(issues) {\n  if (issues.length === 0) return { body: { errors: [] }, status: 200 };\n  const errors = [...new Set(issues.map((i) => pathText(i.path) + ' - ' + i.message))];\n  return { body: { errors }, status: 422 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>422 Unprocessable Content nói \"JSON đọc được nhưng nội dung sai\" — khác 400 (không đọc được). Trả MỌI lỗi một lần, có đường dẫn, để form trên trình duyệt tô đúng ô nhập.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"items.0.price\" thay vì \"items[0].price\".</li>\n  <li>Path bắt đầu bằng số: \"[0].name\".</li>\n  <li>Trả 400.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://zod.dev/ERROR_HANDLING",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The validate.ts issues|||Các lỗi của validate.ts",
+            "goi": "formatIssues([{ path: [\"name\"], message: \"Required\" }, { path: [\"price\"], message: \"Expected number, received string\" }])",
+            "mongDoi": {
+              "body": {
+                "errors": [
+                  "name - Required",
+                  "price - Expected number, received string"
+                ]
+              },
+              "status": 422
+            }
+          },
+          {
+            "moTa": "Nested paths, root and duplicates|||Đường dẫn lồng, gốc và trùng",
+            "goi": "formatIssues([{ path: [\"items\", 0, \"price\"], message: \"Too small\" }, { path: [], message: \"Expected object\" }, { path: [2, \"id\"], message: \"Required\" }, { path: [\"items\", 0, \"price\"], message: \"Too small\" }])",
+            "mongDoi": {
+              "body": {
+                "errors": [
+                  "items[0].price - Too small",
+                  "(root) - Expected object",
+                  "[2].id - Required"
+                ]
+              },
+              "status": 422
+            }
+          },
+          {
+            "moTa": "No issues|||Không có lỗi",
+            "goi": "formatIssues([])",
+            "mongDoi": {
+              "body": {
+                "errors": []
+              },
+              "status": 200
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"items.0.price\" thay vì \"items[0].price\"."
+        },
+        {
+          "loi": "Path bắt đầu bằng số: \"[0].name\"."
+        },
+        {
+          "loi": "Trả 400."
+        }
+      ]
+    },
+    {
+      "title": "Một zod thu nhỏ",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "schema validation",
+        "safeParse",
+        "ép kiểu có kiểm"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.5 — TypeScript trong dự án thật.</em> Thiết lập, script, cấu hình và ranh giới dữ liệu. Mỗi bài là một công cụ nhỏ bạn có thể dùng thật trong dự án của mình.</p><p>Viết object <code>z</code> với <code>z.string()</code>, <code>z.number()</code>, <code>z.boolean()</code>, <code>z.array(schema)</code>, <code>z.object({ ... })</code>. Mỗi schema có <code>safeParse(value)</code> trả <code>{ success: true, data }</code> hoặc <code>{ success: false, issues }</code> (issue = <code>{ path, message }</code>) và các phương thức nối được (trả schema MỚI, không sửa schema cũ): <code>.optional()</code> (undefined ⇒ thành công, data undefined), <code>.min(n)</code> (chuỗi: độ dài ≥ n, message <code>\"Too short\"</code>; số: ≥ n, <code>\"Too small\"</code>), <code>.int()</code> (số nguyên, <code>\"Expected integer\"</code>). Message sai kiểu: <code>\"Expected &lt;kiểu&gt;, received &lt;kiểu thật&gt;\"</code> (kiểu thật: <code>\"null\"</code>, <code>\"array\"</code>, hoặc typeof; NaN coi là <code>\"nan\"</code>); thiếu (undefined) ở schema bắt buộc ⇒ <code>\"Required\"</code>. <code>z.object</code> kiểm mọi khoá của shape theo thứ tự (gom mọi issue, path có tên khoá), BỎ khoá thừa khỏi <code>data</code>; <code>z.array</code> kiểm từng phần tử (path có chỉ số).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gom mọi issue với path.</li>\n  <li>object bỏ khoá thừa.</li>\n  <li>Phương thức trả schema mới.</li>\n  <li>Đúng chữ message.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: unknown.",
+      "outputSpec": "{ success, data } | { success, issues }.",
+      "constraints": "Không dùng thư viện.\nz.object chỉ nhận object thường (không null, không mảng).",
+      "examplesJson": [
+        {
+          "input": "z.object({ id: z.number().int(), name: z.string().min(1), price: z.number().int().min(0) }).safeParse({ id: 7, title: \"Ruler\", price: \"8000\" })",
+          "output": "{ success: false, issues: [{ path: [\"name\"], message: \"Required\" }, { path: [\"price\"], message: \"Expected number, received string\" }] }",
+          "explanation": "Cùng hai lỗi validate.ts in ra."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi schema là { check(value, path, issues) => data, … }; safeParse gọi check với path [] và mảng issues rỗng.",
+        "Phương thức nối: tạo schema mới bọc check cũ rồi thêm luật — const next = make(base, [...rules, rule])."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — một zod thu nhỏ\nconst z = {\n  string: () => ({ safeParse: (v) => ({ success: true, data: v }) }),\n  number: () => ({ safeParse: (v) => ({ success: true, data: v }) }),\n  boolean: () => ({ safeParse: (v) => ({ success: true, data: v }) }),\n  array: (s) => ({ safeParse: (v) => ({ success: true, data: v }) }),\n  object: (shape) => ({ safeParse: (v) => ({ success: true, data: v }) }),\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.5 — một schema = hàm kiểm (giá trị, path, issues) ⇒ data; phương thức nối tạo schema MỚI\nconst kindOf = (v) => (v === null ? 'null' : Array.isArray(v) ? 'array' : Number.isNaN(v) ? 'nan' : typeof v);\n\nfunction makeSchema(check, optional = false) {\n  const schema = {\n    run(value, path, issues) {\n      if (value === undefined) {\n        if (!optional) issues.push({ path, message: 'Required' });\n        return undefined;\n      }\n      return check(value, path, issues);\n    },\n    safeParse(value) {\n      const issues = [];\n      const data = schema.run(value, [], issues);\n      return issues.length ? { success: false, issues } : { success: true, data };\n    },\n    optional: () => makeSchema(check, true),\n    refine: (ok, message) => makeSchema((value, path, issues) => {\n      const before = issues.length;\n      const data = check(value, path, issues);\n      if (issues.length === before && !ok(data)) issues.push({ path, message });\n      return data;\n    }, optional),\n  };\n  return schema;\n}\n\nfunction primitive(type) {\n  const base = makeSchema((value, path, issues) => {\n    if (kindOf(value) !== type) issues.push({ path, message: 'Expected ' + type + ', received ' + kindOf(value) });\n    return value;\n  });\n  return withExtras(base, type);\n}\n\nfunction withExtras(schema, type) {                    // .min() / .int() trả schema mới và vẫn nối tiếp được\n  return {\n    ...schema,\n    optional: () => withExtras(schema.optional(), type),\n    min: (n) => withExtras(type === 'string'\n      ? schema.refine((v) => v.length >= n, 'Too short')\n      : schema.refine((v) => v >= n, 'Too small'), type),\n    int: () => withExtras(schema.refine((v) => Number.isInteger(v), 'Expected integer'), type),\n  };\n}\n\nconst z = {\n  string: () => primitive('string'),\n  number: () => primitive('number'),\n  boolean: () => primitive('boolean'),\n  array: (item) => makeSchema((value, path, issues) => {\n    if (!Array.isArray(value)) { issues.push({ path, message: 'Expected array, received ' + kindOf(value) }); return value; }\n    return value.map((v, i) => item.run(v, [...path, i], issues));\n  }),\n  object: (shape) => makeSchema((value, path, issues) => {\n    if (kindOf(value) !== 'object') { issues.push({ path, message: 'Expected object, received ' + kindOf(value) }); return value; }\n    const data = {};\n    for (const [key, s] of Object.entries(shape)) {\n      const v = s.run(value[key], [...path, key], issues);\n      if (v !== undefined) data[key] = v;              // khoá thừa không được chép sang data\n    }\n    return data;\n  }),\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thư viện thật làm thêm một việc quan trọng mà JavaScript không thể làm: <code>z.infer&lt;typeof Product&gt;</code> — kiểu TypeScript được SUY RA từ schema, nên kiểu và phép kiểm không bao giờ lệch nhau. Phần lúc chạy thì đúng như ở đây: kiểm, gom issue có path, và trả về data sạch (khoá thừa như <code>passwordHash</code> bị bỏ — khác hẳn một kiểu TypeScript, thứ không bao giờ gỡ trường).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa schema cũ khi gọi .min().</li>\n  <li>Dừng ở issue đầu tiên.</li>\n  <li>Giữ khoá thừa trong data.</li>\n  <li>Kiểm min trên giá trị sai kiểu (báo hai lỗi cho một trường).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.5 TypeScript in a real project.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://zod.dev/basics",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The validate.ts product passes|||Sản phẩm hợp lệ của validate.ts",
+            "goi": "z.object({ id: z.number().int(), name: z.string().min(1), price: z.number().int().min(0) }).safeParse({ id: 7, name: \"Ruler\", price: 8000, secret: \"x\" })",
+            "mongDoi": {
+              "success": true,
+              "data": {
+                "id": 7,
+                "name": "Ruler",
+                "price": 8000
+              }
+            }
+          },
+          {
+            "moTa": "The wrong shape gives the same two issues|||Hình dạng sai cho đúng hai issue",
+            "goi": "z.object({ id: z.number().int(), name: z.string().min(1), price: z.number().int().min(0) }).safeParse({ id: 7, title: \"Ruler\", price: \"8000\" })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "name"
+                  ],
+                  "message": "Required"
+                },
+                {
+                  "path": [
+                    "price"
+                  ],
+                  "message": "Expected number, received string"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "min, int and received types|||min, int và kiểu thật",
+            "goi": "[z.string().min(3).safeParse(\"ab\"), z.number().int().safeParse(2.5), z.number().min(0).safeParse(-1), z.number().safeParse(NaN), z.boolean().safeParse(null)]",
+            "mongDoi": [
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Too short"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Expected integer"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Too small"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Expected number, received nan"
+                  }
+                ]
+              },
+              {
+                "success": false,
+                "issues": [
+                  {
+                    "path": [],
+                    "message": "Expected boolean, received null"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "Arrays, nesting and optional|||Mảng, lồng nhau và optional",
+            "goi": "z.object({ items: z.array(z.object({ price: z.number() })), note: z.string().optional() }).safeParse({ items: [{ price: 1 }, { price: \"2\" }, null] })",
+            "mongDoi": {
+              "success": false,
+              "issues": [
+                {
+                  "path": [
+                    "items",
+                    1,
+                    "price"
+                  ],
+                  "message": "Expected number, received string"
+                },
+                {
+                  "path": [
+                    "items",
+                    2
+                  ],
+                  "message": "Expected object, received null"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "Chaining returns a new schema|||Nối phương thức tạo schema mới",
+            "goi": "(() => { const s = z.string(); const s3 = s.min(3); return [s.safeParse(\"a\").success, s3.safeParse(\"a\").success, s3.optional().safeParse(undefined)]; })()",
+            "mongDoi": [
+              true,
+              false,
+              {
+                "success": true,
+                "data": {
+                  "$js": "undefined"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa schema cũ khi gọi .min()."
+        },
+        {
+          "loi": "Dừng ở issue đầu tiên."
+        },
+        {
+          "loi": "Giữ khoá thừa trong data."
+        },
+        {
+          "loi": "Kiểm min trên giá trị sai kiểu (báo hai lỗi cho một trường)."
+        }
+      ]
+    }
+  ]
+}

@@ -371,5 +371,20 @@ ${nguon('📗', 'MDN — Toán tử nullish coalescing (??)', 'Vì sao ?? khác 
 ${nguon('📗', 'MDN — BigInt', 'Số nguyên vượt 2^53, không trộn với number, mặc định không chuyển được sang JSON. Đọc ngày 1/11/2026.', 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt')}
 ${lienKet({ khoa: 'postgresql', bai: 'postgresql-4-2-select-where', title: 'NULL ở phía CSDL — PostgreSQL 4.2: SELECT &amp; WHERE', sub: 'Giống: NULL nghĩa là “không có giá trị”, và phải xử lý tường minh, không thì dòng (hay màn hình) lặng lẽ sai. Khác: SQL xử lý nó lúc truy vấn bằng IS NULL và logic ba giá trị; ở đây cột đó đến dưới dạng string | null và tsc từ chối mọi chỗ dùng không kiểm trước.', cta: 'MỞ BÀI POSTGRESQL →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-2-basic-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 9.2 — Basic types</span><span class="lc-sub">Inference, unions and narrowing, literal types, any vs unknown — with real tsc output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-2-basic-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 9.2 — Kiểu cơ bản</span><span class="lc-sub">Suy kiểu, union và thu hẹp, kiểu literal, any và unknown — kèm output tsc thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

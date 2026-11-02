@@ -1,0 +1,640 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-9-3-interfaces",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-9-3-interfaces"
+  },
+  "exercises": [
+    {
+      "title": "pick và omit",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Pick",
+        "Omit"
+      ],
+      "prerequisites": [
+        "Object.entries",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p>Viết <code>pick(obj, keys)</code> trả object MỚI chỉ có các khoá trong <code>keys</code> mà <code>obj</code> thật sự có (theo thứ tự của <code>keys</code>), và <code>omit(obj, keys)</code> trả object mới có mọi khoá trừ <code>keys</code> (giữ thứ tự của <code>obj</code>). Không sửa <code>obj</code>. Dùng <code>omit(user, [\"passwordHash\"])</code> trước khi gửi JSON — kiểu không bao giờ tự bỏ trường (bẫy ở Bài 9.3).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả object mới.</li>\n  <li>pick bỏ qua khoá không có.</li>\n  <li>Không sửa object gốc.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "obj: object; keys: string[].",
+      "outputSpec": "object.",
+      "constraints": "Không dùng delete trên object gốc.",
+      "examplesJson": [
+        {
+          "input": "omit({ id: 1, email: \"lan@x.vn\", passwordHash: \"$2b$…\" }, [\"passwordHash\"])",
+          "output": "{ id: 1, email: \"lan@x.vn\" }",
+          "explanation": "Tự chọn trường gửi đi."
+        }
+      ],
+      "hintsJson": [
+        "Object.fromEntries(keys.filter((k) => k in obj).map((k) => [k, obj[k]]))",
+        "Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — pick và omit lúc chạy\nfunction pick(obj, keys) {\n  return obj;\n}\nfunction omit(obj, keys) {\n  for (const k of keys) delete obj[k];\n  return obj;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — Pick<T, K> / Omit<T, K> chỉ là kiểu; đây là phần làm thật lúc chạy\nfunction pick(obj, keys) {\n  return Object.fromEntries(keys.filter((k) => Object.hasOwn(obj, k)).map((k) => [k, obj[k]]));\n}\n\nfunction omit(obj, keys) {\n  return Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>const safe: Omit&lt;User, \"passwordHash\"&gt; = user</code> vẫn biên dịch — TypeScript theo cấu trúc, trường thừa được phép — và <code>JSON.stringify(safe)</code> vẫn gửi <code>passwordHash</code>. Muốn trường thật sự biến mất thì phải tạo object mới như <code>omit</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>delete trên object gốc.</li>\n  <li>pick tạo khoá undefined cho trường không có.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "omit removes the secret|||omit bỏ trường bí mật",
+            "goi": "omit({ id: 1, email: \"lan@x.vn\", passwordHash: \"h\" }, [\"passwordHash\"])",
+            "mongDoi": {
+              "id": 1,
+              "email": "lan@x.vn"
+            }
+          },
+          {
+            "moTa": "pick keeps only existing keys, in order|||pick giữ khoá có thật, đúng thứ tự",
+            "goi": "pick({ id: 7, name: \"Ruler\", price: 8000 }, [\"name\", \"id\", \"colour\"])",
+            "mongDoi": {
+              "name": "Ruler",
+              "id": 7
+            }
+          },
+          {
+            "moTa": "The original is not changed|||Object gốc không đổi",
+            "goi": "(() => { const u = { id: 1, passwordHash: \"h\" }; omit(u, [\"passwordHash\"]); pick(u, [\"id\"]); return u; })()",
+            "mongDoi": {
+              "id": 1,
+              "passwordHash": "h"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "delete trên object gốc."
+        },
+        {
+          "loi": "pick tạo khoá undefined cho trường không có."
+        }
+      ]
+    },
+    {
+      "title": "Đếm thành Record",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Record<string, number>"
+      ],
+      "prerequisites": [
+        "reduce",
+        "object đếm"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p><code>type ViewsByCategory = Record&lt;string, number&gt;</code>. Viết <code>sumBy(items, keyField, valueField)</code> trả object <code>{ &lt;giá trị keyField&gt;: tổng valueField }</code>, khoá theo thứ tự xuất hiện lần đầu. Món có <code>keyField</code> không phải chuỗi hoặc rỗng gộp vào khoá <code>\"(none)\"</code>. Rồi viết <code>getCount(record, key)</code> trả <code>record[key]</code> nếu khoá CÓ THẬT (<code>Object.hasOwn</code>), ngược lại <code>0</code> — đúng chỗ bẫy <code>views[\"offce\"] + 1</code> ra <code>NaN</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cộng dồn theo khoá.</li>\n  <li>\"(none)\" cho khoá thiếu.</li>\n  <li>getCount không tin khoá gõ sai.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: object[]; tên trường.",
+      "outputSpec": "object; number.",
+      "constraints": "getCount không được trả undefined.",
+      "examplesJson": [
+        {
+          "input": "sumBy([{ category: \"office\", views: 50000 }, { category: \"home\", views: 380000 }, { category: \"office\", views: 25000 }], \"category\", \"views\")",
+          "output": "{ office: 75000, home: 380000 }",
+          "explanation": "Đúng ví dụ Record trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const k = typeof it[keyField] === \"string\" && it[keyField] !== \"\" ? it[keyField] : \"(none)\";",
+        "Object.hasOwn(record, key) ? record[key] : 0"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — Record<string, number>\nfunction sumBy(items, keyField, valueField) {\n  return {};\n}\nfunction getCount(record, key) {\n  return record[key];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — Record là từ điển; tra khoá phải tính tới chuyện khoá KHÔNG có\nfunction sumBy(items, keyField, valueField) {\n  const out = {};\n  for (const it of items) {\n    const raw = it[keyField];\n    const k = typeof raw === 'string' && raw !== '' ? raw : '(none)';\n    out[k] = (out[k] ?? 0) + it[valueField];\n  }\n  return out;\n}\n\nfunction getCount(record, key) {\n  return Object.hasOwn(record, key) ? record[key] : 0;   // không tin \"toString\" hay \"offce\"\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>Record&lt;string, number&gt;</code> hứa mọi khoá đều có số — TypeScript cho <code>views[\"offce\"]</code> kiểu <code>number</code>. Bật <code>noUncheckedIndexedAccess</code> (Bài 9.5) thì kiểu thành <code>number | undefined</code> và tsc buộc bạn viết đúng như <code>getCount</code>. <code>Object.hasOwn</code> còn chặn khoá thừa kế như <code>\"toString\"</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>record[key] ?? 0 — \"toString\" trả về một hàm.</li>\n  <li>Không gom khoá thiếu.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Sum by category|||Cộng theo danh mục",
+            "goi": "sumBy([{ category: \"office\", views: 50000 }, { category: \"home\", views: 380000 }, { category: \"office\", views: 25000 }], \"category\", \"views\")",
+            "mongDoi": {
+              "office": 75000,
+              "home": 380000
+            }
+          },
+          {
+            "moTa": "Missing keys go to \"(none)\"|||Khoá thiếu vào \"(none)\"",
+            "goi": "sumBy([{ c: \"a\", n: 1 }, { n: 2 }, { c: \"\", n: 3 }, { c: 5, n: 4 }], \"c\", \"n\")",
+            "mongDoi": {
+              "a": 1,
+              "(none)": 9
+            }
+          },
+          {
+            "moTa": "A typo or inherited key gives 0, not NaN|||Khoá gõ sai hay thừa kế trả 0",
+            "goi": "(() => { const v = { office: 75000 }; return [getCount(v, \"office\"), getCount(v, \"offce\") + 1, getCount(v, \"toString\")]; })()",
+            "mongDoi": [
+              75000,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "record[key] ?? 0 — \"toString\" trả về một hàm."
+        },
+        {
+          "loi": "Không gom khoá thiếu."
+        }
+      ]
+    },
+    {
+      "title": "PATCH theo Partial, id chỉ đọc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Partial",
+        "readonly",
+        "PATCH"
+      ],
+      "prerequisites": [
+        "Object.entries",
+        "spread"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p><code>UpdateProductInput = Partial&lt;Omit&lt;Product, \"id\"&gt;&gt;</code> với Product là <code>{ readonly id: number; name: string; price: number; category: string }</code>. Viết <code>applyPatch(product, patch)</code> trả <code>{ ok: true, product: &lt;object MỚI&gt; }</code> hoặc <code>{ ok: false, errors }</code>. Luật theo thứ tự khoá của <code>patch</code>: <code>id</code> ⇒ lỗi <code>\"id is read-only\"</code>; khoá lạ ⇒ <code>\"unknown field: &lt;khoá&gt;\"</code>; <code>name</code>/<code>category</code> phải là chuỗi khác rỗng, <code>price</code> số nguyên ≥ 0, sai ⇒ <code>\"&lt;khoá&gt; has the wrong type\"</code>. Có lỗi thì không đổi gì. Patch rỗng ⇒ ok với bản sao y nguyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ đổi trường được gửi.</li>\n  <li>id không bao giờ đổi.</li>\n  <li>Có lỗi ⇒ không áp phần nào.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "product: object; patch: object.",
+      "outputSpec": "{ ok, product } | { ok, errors }.",
+      "constraints": "Không sửa product gốc.",
+      "examplesJson": [
+        {
+          "input": "applyPatch({ id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { price: 299000 })",
+          "output": "{ ok: true, product: { id: 2, name: \"Desk lamp\", price: 299000, category: \"home\" } }",
+          "explanation": "PATCH giữ mọi trường không gửi (Bài 6.2)."
+        }
+      ],
+      "hintsJson": [
+        "const RULES = { name: isText, price: isPrice, category: isText };",
+        "return errors.length ? { ok: false, errors } : { ok: true, product: { ...product, ...patch } };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — PATCH theo Partial\nfunction applyPatch(product, patch) {\n  return { ok: true, product: Object.assign(product, patch) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — Partial cho phép GỬI ÍT trường; readonly id và kiểu từng trường vẫn phải giữ\nconst isText = (v) => typeof v === 'string' && v.trim() !== '';\nconst isPrice = (v) => Number.isInteger(v) && v >= 0;\nconst RULES = { name: isText, price: isPrice, category: isText };\n\nfunction applyPatch(product, patch) {\n  const errors = [];\n  for (const [key, value] of Object.entries(patch)) {\n    if (key === 'id') errors.push('id is read-only');\n    else if (!Object.hasOwn(RULES, key)) errors.push('unknown field: ' + key);\n    else if (!RULES[key](value)) errors.push(key + ' has the wrong type');\n  }\n  if (errors.length) return { ok: false, errors };\n  return { ok: true, product: { ...product, ...patch } };   // object mới; trường không gửi giữ nguyên\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trong mã của bạn, tsc chặn <code>patch.id</code> (readonly) và <code>colour</code> (thuộc tính thừa) lúc biên dịch. Body PATCH đến từ mạng thì không — phải kiểm lại, và \"tất cả hoặc không gì\" để không lưu nửa bản cập nhật.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Object.assign sửa object gốc.</li>\n  <li>Áp các trường đúng rồi mới báo lỗi trường sai.</li>\n  <li>Cho đổi id.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Only sent fields change|||Chỉ trường được gửi thay đổi",
+            "goi": "applyPatch({ id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { price: 299000 })",
+            "mongDoi": {
+              "ok": true,
+              "product": {
+                "id": 2,
+                "name": "Desk lamp",
+                "price": 299000,
+                "category": "home"
+              }
+            }
+          },
+          {
+            "moTa": "id, unknown and wrong types — all reported|||id, khoá lạ, sai kiểu — báo hết",
+            "goi": "applyPatch({ id: 2, name: \"Lamp\", price: 1, category: \"home\" }, { id: 9, colour: \"blue\", price: \"299000\", name: \"\" })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "id is read-only",
+                "unknown field: colour",
+                "price has the wrong type",
+                "name has the wrong type"
+              ]
+            }
+          },
+          {
+            "moTa": "The original is untouched|||Object gốc không đổi",
+            "goi": "(() => { const p = { id: 1, name: \"Pen\", price: 5000, category: \"office\" }; applyPatch(p, { name: \"Gel pen\" }); return p.name; })()",
+            "mongDoi": "Pen"
+          },
+          {
+            "moTa": "An empty patch is a copy|||Patch rỗng là bản sao",
+            "goi": "applyPatch({ id: 1, name: \"Pen\", price: 5000, category: \"office\" }, {})",
+            "mongDoi": {
+              "ok": true,
+              "product": {
+                "id": 1,
+                "name": "Pen",
+                "price": 5000,
+                "category": "office"
+              }
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Object.assign sửa object gốc."
+        },
+        {
+          "loi": "Áp các trường đúng rồi mới báo lỗi trường sai."
+        },
+        {
+          "loi": "Cho đổi id."
+        }
+      ]
+    },
+    {
+      "title": "Render union phân biệt bằng kind",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "discriminated union",
+        "never"
+      ],
+      "prerequisites": [
+        "switch"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p><code>type LoadState = { kind: \"loading\" } | { kind: \"error\"; message: string } | { kind: \"done\"; items: string[] } | { kind: \"empty\" }</code>. Viết <code>render(state)</code>: loading ⇒ <code>\"Loading...\"</code>; error ⇒ <code>\"Error: &lt;message&gt;\"</code>; done ⇒ <code>\"&lt;n&gt; item\"</code> khi n = 1, ngược lại <code>\"&lt;n&gt; items\"</code>, rồi nếu n > 0 thêm <code>\": \"</code> và tối đa 3 tên nối bằng <code>\", \"</code>, còn hơn 3 thì thêm <code>\" and &lt;phần còn lại&gt; more\"</code>; empty ⇒ <code>\"Nothing here yet\"</code>. kind khác ⇒ ném <code>Error(\"unhandled kind: &lt;kind&gt;\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một switch theo kind.</li>\n  <li>Số ít/số nhiều.</li>\n  <li>Tối đa 3 tên.</li>\n  <li>default ném lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "state: LoadState.",
+      "outputSpec": "string.",
+      "constraints": "Không đọc state.message ngoài nhánh error.",
+      "examplesJson": [
+        {
+          "input": "render({ kind: \"done\", items: [\"Pen\", \"Mug\", \"Lamp\", \"Ruler\", \"Desk\"] })",
+          "output": "\"5 items: Pen, Mug, Lamp and 2 more\"",
+          "explanation": "Ba tên đầu rồi phần còn lại."
+        }
+      ],
+      "hintsJson": [
+        "case \"done\": { const n = state.items.length; … }",
+        "state.items.slice(0, 3).join(\", \")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — render một LoadState\nfunction render(state) {\n  if (state.message) return 'Error: ' + state.message;\n  return 'Loading...';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — kind cho biết hình dạng; trong mỗi case chỉ đọc trường của hình dạng đó\nfunction render(state) {\n  switch (state.kind) {\n    case 'loading':\n      return 'Loading...';\n    case 'error':\n      return 'Error: ' + state.message;\n    case 'done': {\n      const n = state.items.length;\n      let text = n + (n === 1 ? ' item' : ' items');\n      if (n > 0) text += ': ' + state.items.slice(0, 3).join(', ') + (n > 3 ? ' and ' + (n - 3) + ' more' : '');\n      return text;\n    }\n    case 'empty':\n      return 'Nothing here yet';\n    default:\n      throw new Error('unhandled kind: ' + state.kind);   // trong TS: const x: never = state;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mã khởi đầu đoán hình dạng bằng \"có message không\" — đúng kiểu bug mà union phân biệt ngăn được. Trong TypeScript, <code>state.message</code> ở nhánh <code>done</code> là lỗi biên dịch, và quên nhánh <code>empty</code> thì phép gán <code>never</code> báo lỗi (kinds.ts dòng 27).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đoán hình dạng bằng trường tuỳ chọn.</li>\n  <li>\"1 items\".</li>\n  <li>In cả 5 tên.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "loading, error, empty|||loading, error, empty",
+            "goi": "[render({ kind: \"loading\" }), render({ kind: \"error\", message: \"HTTP 404\" }), render({ kind: \"empty\" })]",
+            "mongDoi": [
+              "Loading...",
+              "Error: HTTP 404",
+              "Nothing here yet"
+            ]
+          },
+          {
+            "moTa": "done with 0, 1, 2 items|||done với 0, 1, 2 món",
+            "goi": "[render({ kind: \"done\", items: [] }), render({ kind: \"done\", items: [\"Pen\"] }), render({ kind: \"done\", items: [\"Pen\", \"Mug\"] })]",
+            "mongDoi": [
+              "0 items",
+              "1 item: Pen",
+              "2 items: Pen, Mug"
+            ]
+          },
+          {
+            "moTa": "More than three names|||Hơn ba tên",
+            "goi": "render({ kind: \"done\", items: [\"Pen\", \"Mug\", \"Lamp\", \"Ruler\", \"Desk\"] })",
+            "mongDoi": "5 items: Pen, Mug, Lamp and 2 more"
+          },
+          {
+            "moTa": "An unknown kind throws|||kind lạ ném lỗi",
+            "goi": "render({ kind: \"stale\" })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^unhandled kind: stale$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đoán hình dạng bằng trường tuỳ chọn."
+        },
+        {
+          "loi": "\"1 items\"."
+        },
+        {
+          "loi": "In cả 5 tên."
+        }
+      ]
+    },
+    {
+      "title": "Record<Genre, number> có đủ khoá?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Record với khoá literal"
+      ],
+      "prerequisites": [
+        "Object.keys",
+        "filter"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p><code>type Genre = \"novel\" | \"science\" | \"history\"</code> và <code>BooksByGenre = Record&lt;Genre, number&gt;</code> đòi ĐỦ ba khoá, không thừa. Viết <code>checkRecord(record, keys)</code> trả <code>{ missing, extra, badValues }</code>: <code>missing</code> = khoá trong <code>keys</code> không có trong record (thứ tự của <code>keys</code>); <code>extra</code> = khoá của record không thuộc <code>keys</code> (thứ tự của record); <code>badValues</code> = khoá hợp lệ có giá trị không phải số nguyên ≥ 0. Rồi viết <code>isComplete(record, keys)</code> ⇒ <code>true</code> khi cả ba mảng đều rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba danh sách đúng thứ tự.</li>\n  <li>isComplete dùng lại checkRecord.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "record: object; keys: string[].",
+      "outputSpec": "{ missing, extra, badValues }; boolean.",
+      "constraints": "Không sửa record.",
+      "examplesJson": [
+        {
+          "input": "checkRecord({ novel: 12, science: 4 }, [\"novel\", \"science\", \"history\"])",
+          "output": "{ missing: [\"history\"], extra: [], badValues: [] }",
+          "explanation": "Lỗi tsc mà bài luyện của Bài 9.3 cho bạn tự thấy."
+        }
+      ],
+      "hintsJson": [
+        "keys.filter((k) => !Object.hasOwn(record, k))",
+        "Object.keys(record).filter((k) => !keys.includes(k))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — kiểm một Record có khoá literal\nfunction checkRecord(record, keys) {\n  return { missing: [], extra: [], badValues: [] };\n}\nfunction isComplete(record, keys) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — Record<Genre, number>: đủ khoá, không thừa, đúng kiểu giá trị\nfunction checkRecord(record, keys) {\n  return {\n    missing: keys.filter((k) => !Object.hasOwn(record, k)),\n    extra: Object.keys(record).filter((k) => !keys.includes(k)),\n    badValues: keys.filter((k) => Object.hasOwn(record, k) && !(Number.isInteger(record[k]) && record[k] >= 0)),\n  };\n}\n\nfunction isComplete(record, keys) {\n  const r = checkRecord(record, keys);\n  return r.missing.length === 0 && r.extra.length === 0 && r.badValues.length === 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khác <code>Record&lt;string, number&gt;</code> (khoá nào cũng được), <code>Record&lt;Genre, number&gt;</code> liệt kê chính xác các khoá. Thêm <code>\"poetry\"</code> vào <code>Genre</code> là tsc chỉ ra mọi object đang thiếu nó — cùng ý tưởng với kiểm đủ nhánh bằng <code>never</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng record[k] === undefined thay vì hasOwn.</li>\n  <li>Coi 2.5 hay -1 là số đếm hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A missing genre|||Thiếu một thể loại",
+            "goi": "checkRecord({ novel: 12, science: 4 }, [\"novel\", \"science\", \"history\"])",
+            "mongDoi": {
+              "missing": [
+                "history"
+              ],
+              "extra": [],
+              "badValues": []
+            }
+          },
+          {
+            "moTa": "Extra keys and bad values|||Khoá thừa và giá trị sai",
+            "goi": "checkRecord({ poetry: 1, novel: -1, science: 2.5, history: \"3\" }, [\"novel\", \"science\", \"history\"])",
+            "mongDoi": {
+              "missing": [],
+              "extra": [
+                "poetry"
+              ],
+              "badValues": [
+                "novel",
+                "science",
+                "history"
+              ]
+            }
+          },
+          {
+            "moTa": "isComplete|||isComplete",
+            "goi": "[isComplete({ novel: 12, science: 4, history: 0 }, [\"novel\", \"science\", \"history\"]), isComplete({ novel: 12, science: 4 }, [\"novel\", \"science\", \"history\"])]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng record[k] === undefined thay vì hasOwn."
+        },
+        {
+          "loi": "Coi 2.5 hay -1 là số đếm hợp lệ."
+        }
+      ]
+    },
+    {
+      "title": "Bộ kiểm hình dạng theo cấu trúc",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "structural typing",
+        "trường tuỳ chọn",
+        "kiểm thuộc tính thừa"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "Object.entries"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.3 — interface và type.</em> Kiểu object mô tả hình dạng; các utility type suy ra hình dạng mới. Mỗi bài dưới đây làm phần tương ứng lúc chạy — thứ bạn cần khi dữ liệu không đi qua tsc.</p><p>Viết <code>checkShape(shape, value, options)</code>. <code>shape</code> là object mô tả: khoá có thể kết thúc bằng <code>\"?\"</code> (tuỳ chọn); giá trị là <code>\"string\"</code>, <code>\"number\"</code>, <code>\"boolean\"</code>, <code>\"string[]\"</code>, <code>\"number[]\"</code>, hoặc một shape lồng. Trả mảng lỗi dạng <code>\"&lt;đường dẫn&gt;: &lt;vấn đề&gt;\"</code> với đường dẫn nối bằng dấu chấm: thiếu trường bắt buộc ⇒ <code>\"missing\"</code>; sai kiểu ⇒ <code>\"expected &lt;kiểu&gt;\"</code> (shape lồng ⇒ <code>\"expected object\"</code>); với <code>options.exact === true</code> (như object literal viết trực tiếp), khoá không có trong shape ⇒ <code>\"unexpected property\"</code>; không exact thì khoá thừa được phép (theo cấu trúc). Trường tuỳ chọn có giá trị <code>undefined</code> coi như không có. Thứ tự: theo khoá của shape, rồi tới khoá thừa theo thứ tự của value. Mảng: mọi phần tử phải đúng kiểu, lỗi ở phần tử ghi <code>\"&lt;đường dẫn&gt;.&lt;chỉ số&gt;: expected &lt;kiểu phần tử&gt;\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trường tuỳ chọn ?.</li>\n  <li>Đệ quy với đường dẫn.</li>\n  <li>exact ⇒ báo khoá thừa, cả ở mức lồng.</li>\n  <li>Kiểm từng phần tử mảng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "shape: object; value: bất kỳ; options?: { exact?: boolean }.",
+      "outputSpec": "string[].",
+      "constraints": "null không phải object.\nGiá trị gốc không phải object ⇒ [\": expected object\"] (đường dẫn rỗng).",
+      "examplesJson": [
+        {
+          "input": "checkShape({ id: \"number\", name: \"string\", \"category?\": \"string\" }, { id: 1, name: \"Pen\", colour: \"blue\" }, { exact: true })",
+          "output": "[\"colour: unexpected property\"]",
+          "explanation": "Lỗi TS2353 của shapes.ts dòng 14 — và không exact thì nó lọt qua (bẫy của bài)."
+        }
+      ],
+      "hintsJson": [
+        "function walk(shape, value, path, out) { … } — gọi lại walk cho shape lồng với path + \".\" + key",
+        "const join = (p, k) => (p ? p + \".\" + k : String(k));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — kiểm hình dạng theo cấu trúc\nfunction checkShape(shape, value, options = {}) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.3 — một bộ kiểm hình dạng nhỏ: thứ tsc làm cho object, làm lại lúc chạy\nconst join = (path, key) => (path ? path + '.' + key : String(key));\nconst isObject = (v) => typeof v === 'object' && v !== null && !Array.isArray(v);\n\nfunction checkType(type, value, path, out, exact) {\n  if (typeof type === 'object') {                                  // shape lồng\n    if (!isObject(value)) { out.push(path + ': expected object'); return; }\n    walk(type, value, path, out, exact);\n    return;\n  }\n  if (type.endsWith('[]')) {\n    const item = type.slice(0, -2);\n    if (!Array.isArray(value)) { out.push(path + ': expected ' + type); return; }\n    value.forEach((v, i) => { if (typeof v !== item) out.push(join(path, i) + ': expected ' + item); });\n    return;\n  }\n  if (typeof value !== type) out.push(path + ': expected ' + type);\n}\n\nfunction walk(shape, value, path, out, exact) {\n  const known = new Set();\n  for (const [rawKey, type] of Object.entries(shape)) {\n    const optional = rawKey.endsWith('?');\n    const key = optional ? rawKey.slice(0, -1) : rawKey;\n    known.add(key);\n    const v = value[key];\n    if (v === undefined) {\n      if (!optional) out.push(join(path, key) + ': missing');\n      continue;\n    }\n    checkType(type, v, join(path, key), out, exact);\n  }\n  if (exact) {\n    for (const key of Object.keys(value)) if (!known.has(key)) out.push(join(path, key) + ': unexpected property');\n  }\n}\n\nfunction checkShape(shape, value, options = {}) {\n  if (!isObject(value)) return [': expected object'];\n  const out = [];\n  walk(shape, value, '', out, options.exact === true);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai chế độ là hai cách TypeScript nhìn một object: viết trực tiếp ở chỗ cần <code>Product</code> thì bị kiểm thuộc tính thừa (exact); đi qua một biến thì chỉ cần ĐỦ trường đúng kiểu (theo cấu trúc). Đó là lý do <code>colour</code> bị bắt ở dòng 14 nhưng lọt qua <code>const mug: Product = raw</code>. Bài 9.5 thay bộ kiểm tự viết này bằng zod.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi null là object.</li>\n  <li>Quên đường dẫn ở mức lồng.</li>\n  <li>Báo \"missing\" cho trường tuỳ chọn.</li>\n  <li>Báo khoá thừa khi không exact.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.3 Interfaces and types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/type-compatibility.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Structural: extra fields allowed|||Theo cấu trúc: được thừa trường",
+            "goi": "checkShape({ id: \"number\", name: \"string\", \"category?\": \"string\" }, { id: 1, name: \"Pen\", colour: \"blue\" })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Exact: the colour typo is caught|||Exact: bắt được colour",
+            "goi": "checkShape({ id: \"number\", name: \"string\", \"category?\": \"string\" }, { id: 1, name: \"Pen\", colour: \"blue\" }, { exact: true })",
+            "mongDoi": [
+              "colour: unexpected property"
+            ]
+          },
+          {
+            "moTa": "Missing, wrong type, optional undefined|||Thiếu, sai kiểu, tuỳ chọn undefined",
+            "goi": "checkShape({ id: \"number\", name: \"string\", price: \"number\", \"category?\": \"string\" }, { id: 2, name: \"Desk lamp\", category: undefined, price: \"320000\" })",
+            "mongDoi": [
+              "price: expected number"
+            ]
+          },
+          {
+            "moTa": "Nested shapes and arrays with paths|||Shape lồng và mảng có đường dẫn",
+            "goi": "checkShape({ items: \"string[]\", page: { number: \"number\", \"size?\": \"number\" }, author: { name: \"string\" } }, { items: [\"a\", 2], page: { number: \"1\", extra: true }, author: null }, { exact: true })",
+            "mongDoi": [
+              "items.1: expected string",
+              "page.number: expected number",
+              "page.extra: unexpected property",
+              "author: expected object"
+            ]
+          },
+          {
+            "moTa": "Not an object at all|||Hoàn toàn không phải object",
+            "goi": "[checkShape({ id: \"number\" }, null), checkShape({ id: \"number\" }, [1])]",
+            "mongDoi": [
+              [
+                ": expected object"
+              ],
+              [
+                ": expected object"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi null là object."
+        },
+        {
+          "loi": "Quên đường dẫn ở mức lồng."
+        },
+        {
+          "loi": "Báo \"missing\" cho trường tuỳ chọn."
+        },
+        {
+          "loi": "Báo khoá thừa khi không exact."
+        }
+      ]
+    }
+  ]
+}

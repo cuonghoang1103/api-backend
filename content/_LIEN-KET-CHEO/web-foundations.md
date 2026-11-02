@@ -52,6 +52,11 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-8-3-crud` | PostgreSQL `postgresql-4-4-update-delete` | `content/courses/postgresql/s04-chen-truy-van.mjs` | thiếu WHERE, giao dịch, injection |
 | `wf-8-4-relationships-joins` | PostgreSQL `postgresql-5-2-outer-join` | `content/courses/postgresql/s05-join.mjs` | INNER/LEFT, đếm 0, CASCADE, N+1 |
 | `wf-8-5-orm-prisma` | Prisma ORM `pr-1-3-thanh-sql` | `content/courses/prisma-orm/s01-orm.mjs` | lời gọi → SQL, P2002/P2025, $queryRaw |
+| `wf-9-1-why-typescript` | TypeScript `typescript-1-1-ba-con-bug` | `content/courses/typescript/s01/ba-con-bug.mjs` | lỗi giỏ hàng "5000", tsc bắt, kiểu bị xoá lúc chạy |
+| `wf-9-2-basic-types` | TypeScript `typescript-2-1-primitive` | `content/courses/typescript/s02/primitive.mjs` | suy kiểu, union, literal, any vs unknown |
+| `wf-9-3-interfaces` | TypeScript `typescript-4-2-interface-vs-type` | `content/courses/typescript/s04/interface-type.mjs` | kiểu cho API Chương 6, Omit/Partial/Record, kind + never |
+| `wf-9-4-functions-generics` | TypeScript `typescript-6-1-why-generics` | `content/courses/typescript/s06-generics.mjs` | tham số/kiểu trả về, first<T>, T extends, generic nói dối |
+| `wf-9-5-ts-in-practice` | TypeScript `typescript-9-1-tsc-and-tsconfig` | `content/courses/typescript/s09-tsconfig-compiler.mjs` | strict 0→7 lỗi, build dist, @types, strip-types, zod |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

@@ -1,0 +1,642 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-9-1-why-typescript",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-9-1-why-typescript"
+  },
+  "exercises": [
+    {
+      "title": "Tên kiểu thật của một giá trị",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "typeof",
+        "kiểu lúc chạy"
+      ],
+      "prerequisites": [
+        "typeof",
+        "Array.isArray"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p><code>typeof</code> nói dối ba lần: <code>typeof null</code> là <code>\"object\"</code>, mảng cũng là <code>\"object\"</code>, và <code>NaN</code> là <code>\"number\"</code>. Viết <code>typeName(value)</code> trả: <code>\"null\"</code>, <code>\"array\"</code>, <code>\"nan\"</code> cho ba trường hợp đó; còn lại đúng kết quả của <code>typeof</code> (<code>\"string\"</code>, <code>\"number\"</code>, <code>\"boolean\"</code>, <code>\"undefined\"</code>, <code>\"object\"</code>, <code>\"function\"</code>…).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>null ⇒ \"null\".</li>\n  <li>Mảng ⇒ \"array\".</li>\n  <li>NaN ⇒ \"nan\".</li>\n  <li>Còn lại ⇒ typeof.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: bất kỳ.",
+      "outputSpec": "string.",
+      "constraints": "Kiểm null TRƯỚC khi dùng typeof.",
+      "examplesJson": [
+        {
+          "input": "typeName(\"5000\")",
+          "output": "\"string\"",
+          "explanation": "Giá trị lấy từ ô nhập luôn là chuỗi — gốc của lỗi 250 005 000 VND."
+        }
+      ],
+      "hintsJson": [
+        "if (value === null) return \"null\";",
+        "Number.isNaN(value) chỉ đúng với NaN thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — tên kiểu thật\nfunction typeName(value) {\n  return typeof value;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — typeof đúng cho hầu hết, trừ ba chỗ nói dối\nfunction typeName(value) {\n  if (value === null) return 'null';                 // typeof null === 'object' — lỗi lịch sử của JavaScript\n  if (Array.isArray(value)) return 'array';          // mảng cũng là 'object'\n  if (Number.isNaN(value)) return 'nan';             // NaN là 'number' nhưng không phải con số dùng được\n  return typeof value;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là những gì bạn phải tự kiểm khi không có TypeScript — và cả khi có, với dữ liệu đến lúc chạy (Bài 9.1, Bước 4). TypeScript có kiểu riêng cho <code>null</code> và mảng, nhưng <code>NaN</code> vẫn chỉ là <code>number</code>: kiểu không bắt được <code>Number(\"abc\")</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Kiểm typeof trước null.</li>\n  <li>Dùng isNaN (toàn cục) — nó đổi chuỗi sang số trước.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The three lies of typeof|||Ba chỗ typeof nói sai",
+            "goi": "[typeName(null), typeName([1, 2]), typeName(NaN)]",
+            "mongDoi": [
+              "null",
+              "array",
+              "nan"
+            ]
+          },
+          {
+            "moTa": "Ordinary values|||Giá trị thường",
+            "goi": "[typeName(\"5000\"), typeName(5000), typeName(true), typeName(undefined), typeName({}), typeName(() => 1)]",
+            "mongDoi": [
+              "string",
+              "number",
+              "boolean",
+              "undefined",
+              "object",
+              "function"
+            ]
+          },
+          {
+            "moTa": "A string that looks like NaN is still a string|||Chuỗi \"NaN\" vẫn là chuỗi",
+            "goi": "[typeName(\"NaN\"), typeName(Number(\"abc\"))]",
+            "mongDoi": [
+              "string",
+              "nan"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm typeof trước null."
+        },
+        {
+          "loi": "Dùng isNaN (toàn cục) — nó đổi chuỗi sang số trước."
+        }
+      ]
+    },
+    {
+      "title": "Tự kiểm một CartItem",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "interface",
+        "kiểm lúc chạy"
+      ],
+      "prerequisites": [
+        "typeof",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p>Bài học mô tả <code>interface CartItem { name: string; price: number; qty: number }</code>. Viết <code>cartItemErrors(item)</code> trả mảng lỗi theo đúng thứ tự trường <code>name</code>, <code>price</code>, <code>qty</code>: thiếu trường ⇒ <code>\"&lt;trường&gt; is missing\"</code>; sai kiểu ⇒ <code>\"&lt;trường&gt; must be &lt;kiểu&gt;, got &lt;kiểu thật&gt;\"</code> (kiểu thật theo <code>typeof</code>, riêng <code>null</code> ghi <code>\"null\"</code>). Nếu <code>item</code> không phải object (hoặc là <code>null</code>/mảng) ⇒ <code>[\"item must be an object\"]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự name, price, qty.</li>\n  <li>Phân biệt thiếu và sai kiểu.</li>\n  <li>Đúng chữ thông báo.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "item: bất kỳ.",
+      "outputSpec": "string[] (rỗng = hợp lệ).",
+      "constraints": "Trường có mặt nhưng giá trị undefined tính là thiếu.",
+      "examplesJson": [
+        {
+          "input": "cartItemErrors({ name: \"Pen\", price: \"5000\", qty: 3 })",
+          "output": "[\"price must be number, got string\"]",
+          "explanation": "Đúng lỗi tsc báo ở cart.ts(16,18) — nhưng lần này lúc chạy."
+        }
+      ],
+      "hintsJson": [
+        "const shape = [[\"name\", \"string\"], [\"price\", \"number\"], [\"qty\", \"number\"]];",
+        "const t = v === null ? \"null\" : typeof v;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — kiểm một món hàng theo hình dạng CartItem\nfunction cartItemErrors(item) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — chính việc tsc làm lúc biên dịch, làm lại lúc chạy cho dữ liệu đến từ ngoài\nconst CART_ITEM = [['name', 'string'], ['price', 'number'], ['qty', 'number']];\n\nfunction cartItemErrors(item) {\n  if (typeof item !== 'object' || item === null || Array.isArray(item)) return ['item must be an object'];\n  const errors = [];\n  for (const [field, want] of CART_ITEM) {\n    const v = item[field];\n    if (v === undefined) { errors.push(field + ' is missing'); continue; }\n    const got = v === null ? 'null' : typeof v;\n    if (got !== want) errors.push(field + ' must be ' + want + ', got ' + got);\n  }\n  return errors;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với mã bạn tự viết, tsc kiểm hình dạng này miễn phí, trước khi chạy. Với JSON từ máy chủ hay <code>input.value</code>, kiểu bị xoá rồi — phải kiểm như trên (Bài 9.5 dùng zod để khỏi viết tay).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi null là object hợp lệ.</li>\n  <li>Báo \"missing\" cho giá trị 0 hay chuỗi rỗng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/objects.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A valid item has no errors|||Món hợp lệ không có lỗi",
+            "goi": "cartItemErrors({ name: \"Notebook\", price: 25000, qty: 2 })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "The string price from the lesson|||Giá dạng chuỗi trong bài",
+            "goi": "cartItemErrors({ name: \"Pen\", price: \"5000\", qty: 3 })",
+            "mongDoi": [
+              "price must be number, got string"
+            ]
+          },
+          {
+            "moTa": "Missing, null and wrong types in order|||Thiếu, null, sai kiểu đúng thứ tự",
+            "goi": "cartItemErrors({ price: null, qty: \"2\" })",
+            "mongDoi": [
+              "name is missing",
+              "price must be number, got null",
+              "qty must be number, got string"
+            ]
+          },
+          {
+            "moTa": "Not an object|||Không phải object",
+            "goi": "[cartItemErrors(null), cartItemErrors([]), cartItemErrors(\"Pen\")]",
+            "mongDoi": [
+              [
+                "item must be an object"
+              ],
+              [
+                "item must be an object"
+              ],
+              [
+                "item must be an object"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi null là object hợp lệ."
+        },
+        {
+          "loi": "Báo \"missing\" cho giá trị 0 hay chuỗi rỗng."
+        }
+      ]
+    },
+    {
+      "title": "Tổng giỏ hàng không bị nối chuỗi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ép kiểu ngầm",
+        "TypeError"
+      ],
+      "prerequisites": [
+        "reduce",
+        "throw"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p>Trong bài, <code>\"Total: \" + … + item.price</code> ra <code>250005000</code> vì <code>+</code> nối chuỗi. Viết <code>cartLabel(items)</code> trả <code>\"Total: &lt;tổng price × qty&gt; VND\"</code>. Trước khi cộng, kiểm từng món: <code>price</code> và <code>qty</code> phải là số hữu hạn (<code>Number.isFinite</code>), <code>qty</code> là số nguyên ≥ 1. Món sai ⇒ ném <code>TypeError</code> với thông điệp <code>\"item &lt;chỉ số&gt;: price must be a finite number\"</code> hoặc <code>\"item &lt;chỉ số&gt;: qty must be a positive integer\"</code>. KHÔNG tự đổi <code>\"5000\"</code> thành số — dữ liệu sai phải bị chặn, không bị \"sửa lặng lẽ\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm trước khi tính.</li>\n  <li>Ném TypeError đúng thông điệp.</li>\n  <li>Giỏ rỗng ⇒ \"Total: 0 VND\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: mảng { name, price, qty }.",
+      "outputSpec": "string.",
+      "constraints": "Không dùng Number(), parseInt hay + đơn ngôi để \"cứu\" giá trị sai.",
+      "examplesJson": [
+        {
+          "input": "cartLabel([{ name: \"Notebook\", price: 25000, qty: 2 }, { name: \"Pen\", price: 5000, qty: 3 }])",
+          "output": "\"Total: 65000 VND\"",
+          "explanation": "25 000 × 2 + 5 000 × 3."
+        }
+      ],
+      "hintsJson": [
+        "items.forEach((it, i) => { if (!Number.isFinite(it.price)) throw new TypeError(`item ${i}: …`); });",
+        "Number.isInteger(qty) && qty >= 1"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — tổng giỏ hàng\nfunction cartLabel(items) {\n  return 'Total: ' + items.reduce((sum, item) => sum + item.price * item.qty, 0) + ' VND';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — chặn dữ liệu sai rồi mới tính; không \"cứu\" \"5000\" thành 5000\nfunction cartLabel(items) {\n  items.forEach((item, i) => {\n    if (!Number.isFinite(item.price)) throw new TypeError('item ' + i + ': price must be a finite number');\n    if (!Number.isInteger(item.qty) || item.qty < 1) throw new TypeError('item ' + i + ': qty must be a positive integer');\n  });\n  const total = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n  return 'Total: ' + total + ' VND';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>Number.isFinite(\"5000\")</code> là <code>false</code> — khác <code>isFinite(\"5000\")</code> (toàn cục, ép kiểu trước). Thông báo lỗi rõ ràng lúc chạy là thứ tốt nhất JavaScript cho bạn; TypeScript cho bạn cùng thông báo đó sớm hơn, lúc viết mã — nhưng chỉ cho mã bạn kiểm soát.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng isFinite toàn cục.</li>\n  <li>Ép Number(price) — \"5,000\" thành NaN, \"\" thành 0.</li>\n  <li>Kiểm qty bằng typeof — NaN lọt qua.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Correct total|||Tổng đúng",
+            "goi": "[cartLabel([{ name: \"Notebook\", price: 25000, qty: 2 }, { name: \"Pen\", price: 5000, qty: 3 }]), cartLabel([])]",
+            "mongDoi": [
+              "Total: 65000 VND",
+              "Total: 0 VND"
+            ]
+          },
+          {
+            "moTa": "A string price is refused, not concatenated|||Giá chuỗi bị chặn, không nối chuỗi",
+            "goi": "cartLabel([{ name: \"Notebook\", price: 25000, qty: 2 }, { name: \"Pen\", price: \"5000\", qty: 3 }])",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^item 1: price must be a finite number$"
+            }
+          },
+          {
+            "moTa": "qty must be a positive integer|||qty phải là số nguyên dương",
+            "goi": "cartLabel([{ name: \"Mug\", price: 75000, qty: 1.5 }])",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^item 0: qty must be a positive integer$"
+            }
+          },
+          {
+            "moTa": "NaN is not a price|||NaN không phải giá",
+            "goi": "cartLabel([{ name: \"Mug\", price: NaN, qty: 1 }])",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "price must be a finite number"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng isFinite toàn cục."
+        },
+        {
+          "loi": "Ép Number(price) — \"5,000\" thành NaN, \"\" thành 0."
+        },
+        {
+          "loi": "Kiểm qty bằng typeof — NaN lọt qua."
+        }
+      ]
+    },
+    {
+      "title": "Đọc một dòng lỗi tsc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "định dạng lỗi tsc",
+        "regex"
+      ],
+      "prerequisites": [
+        "regex",
+        "Number"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p>tsc in lỗi dạng <code>cart.ts(16,18): error TS2322: Type 'string' is not assignable to type 'number'.</code>. Viết <code>parseTscError(line)</code> trả <code>{ file, line, col, code, message }</code> (<code>line</code>, <code>col</code>, <code>code</code> là SỐ — <code>code</code> bỏ tiền tố <code>TS</code>). Dòng không đúng định dạng (dòng giải thích thụt lề, <code>(exit code 2)</code>, dòng trống) ⇒ <code>null</code>. Tên tệp có thể chứa thư mục và dấu chấm (<code>src/index.ts</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Số là number.</li>\n  <li>message giữ nguyên.</li>\n  <li>Không khớp ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "line: string.",
+      "outputSpec": "object hoặc null.",
+      "constraints": "Một biểu thức chính quy là đủ.",
+      "examplesJson": [
+        {
+          "input": "parseTscError(\"shapes.ts(13,7): error TS2741: Property 'price' is missing in type '{ id: number; name: string; }' but required in type 'Product'.\")",
+          "output": "{ file: \"shapes.ts\", line: 13, col: 7, code: 2741, message: \"Property 'price' is missing …\" }",
+          "explanation": "Output thật của Bài 9.3."
+        }
+      ],
+      "hintsJson": [
+        "/^(.+)\\((\\d+),(\\d+)\\): error TS(\\d+): (.*)$/",
+        "Number(m[2])"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — đọc một dòng lỗi tsc\nfunction parseTscError(line) {\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — tệp(dòng,cột): error TSmã: thông điệp\nconst TSC_LINE = /^(.+)\\((\\d+),(\\d+)\\): error TS(\\d+): (.*)$/;\n\nfunction parseTscError(line) {\n  const m = TSC_LINE.exec(String(line));\n  if (!m) return null;\n  return { file: m[1], line: Number(m[2]), col: Number(m[3]), code: Number(m[4]), message: m[5] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình soạn thảo, CI và các công cụ như \"problem matcher\" của GitHub Actions đọc đúng định dạng này để gạch đỏ đúng dòng. Biết đọc <code>(dòng,cột)</code> và mã <code>TS2322</code> là kỹ năng đầu tiên với TypeScript: mã lỗi tra được trên mạng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để line/col là chuỗi.</li>\n  <li>Regex không có ^ … $ — khớp cả dòng giải thích.</li>\n  <li>Tên tệp có ngoặc bị cắt sai (.+ tham lam vẫn đúng vì có \\( ở cuối).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/compiler-options.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The cart.ts error from the lesson|||Lỗi cart.ts trong bài",
+            "goi": "parseTscError(\"cart.ts(16,18): error TS2322: Type 'string' is not assignable to type 'number'.\")",
+            "mongDoi": {
+              "file": "cart.ts",
+              "line": 16,
+              "col": 18,
+              "code": 2322,
+              "message": "Type 'string' is not assignable to type 'number'."
+            }
+          },
+          {
+            "moTa": "A path with a folder|||Đường dẫn có thư mục",
+            "goi": "parseTscError(\"src/index.ts(4,27): error TS2591: Cannot find name 'process'.\")",
+            "mongDoi": {
+              "file": "src/index.ts",
+              "line": 4,
+              "col": 27,
+              "code": 2591,
+              "message": "Cannot find name 'process'."
+            }
+          },
+          {
+            "moTa": "Non-error lines give null|||Dòng không phải lỗi trả null",
+            "goi": "[parseTscError(\"  Property 'email' is missing in type\"), parseTscError(\"(exit code 2)\"), parseTscError(\"\")]",
+            "mongDoi": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để line/col là chuỗi."
+        },
+        {
+          "loi": "Regex không có ^ … $ — khớp cả dòng giải thích."
+        },
+        {
+          "loi": "Tên tệp có ngoặc bị cắt sai (.+ tham lam vẫn đúng vì có \\( ở cuối)."
+        }
+      ]
+    },
+    {
+      "title": "Tổng hợp output tsc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "exit code",
+        "nhóm lỗi"
+      ],
+      "prerequisites": [
+        "split",
+        "object đếm"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p>Viết <code>summarizeTsc(output)</code> nhận cả khối output tsc (nhiều dòng). Trả <code>{ errors, files, codes, exitCode }</code>: <code>errors</code> = số dòng lỗi; <code>files</code> = object <code>{ tệp: số lỗi }</code>; <code>codes</code> = mảng mã lỗi KHÁC NHAU dạng <code>\"TS2322\"</code>, sắp tăng dần theo số; <code>exitCode</code> = <code>0</code> nếu không có lỗi, ngược lại <code>2</code>. Dòng giải thích thụt lề không tính là lỗi riêng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ đếm dòng lỗi thật.</li>\n  <li>codes không trùng, tăng dần.</li>\n  <li>exitCode 0 hoặc 2.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "output: string.",
+      "outputSpec": "{ errors, files, codes, exitCode }.",
+      "constraints": "Tự viết phần đọc dòng (có thể giống bài trước).",
+      "examplesJson": [
+        {
+          "input": "summarizeTsc(output của mistakes.ts — 5 lỗi)",
+          "output": "{ errors: 5, files: { \"mistakes.ts\": 5 }, codes: [\"TS2339\", \"TS2345\", \"TS18047\"], exitCode: 2 }",
+          "explanation": "Dòng \"Property 'email' is missing…\" thụt lề không tính."
+        }
+      ],
+      "hintsJson": [
+        "output.split(\"\\n\").map(parse).filter(Boolean)",
+        "[...new Set(codes)].sort((a, b) => a - b).map((n) => \"TS\" + n)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — tổng hợp output tsc\nfunction summarizeTsc(output) {\n  const lines = output.split('\\n');\n  return { errors: lines.length, files: {}, codes: [], exitCode: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — đọc từng dòng lỗi, đếm theo tệp, gom mã lỗi, suy ra mã thoát\nconst TSC_LINE = /^(.+)\\((\\d+),(\\d+)\\): error TS(\\d+): (.*)$/;\n\nfunction summarizeTsc(output) {\n  const files = {};\n  const codes = new Set();\n  let errors = 0;\n  for (const line of String(output).split('\\n')) {\n    const m = TSC_LINE.exec(line);\n    if (!m) continue;                                   // dòng giải thích, dòng (exit code N), dòng trống\n    errors++;\n    files[m[1]] = (files[m[1]] ?? 0) + 1;\n    codes.add(Number(m[4]));\n  }\n  return {\n    errors,\n    files,\n    codes: [...codes].sort((a, b) => a - b).map((n) => 'TS' + n),   // so SỐ: 2339 < 18047\n    exitCode: errors === 0 ? 0 : 2,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CI chỉ nhìn mã thoát: <code>0</code> cho gộp, khác <code>0</code> chặn lại. Sắp mã lỗi theo SỐ chứ không theo chuỗi — so chuỗi đặt <code>\"TS18047\"</code> trước <code>\"TS2339\"</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đếm cả dòng thụt lề.</li>\n  <li>Sắp mã lỗi theo chuỗi.</li>\n  <li>Không bỏ trùng mã.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/compiler-options.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The mistakes.ts output (5 errors)|||Output mistakes.ts (5 lỗi)",
+            "goi": "summarizeTsc([\"$ npx tsc --noEmit --strict mistakes.ts\", \"mistakes.ts(8,27): error TS2339: Property 'nmae' does not exist on type 'User'.\", \"mistakes.ts(11,10): error TS18047: 'user.email' is possibly 'null'.\", \"mistakes.ts(14,13): error TS18047: 'input' is possibly 'null'.\", \"mistakes.ts(14,19): error TS2339: Property 'value' does not exist on type 'Element'.\", \"mistakes.ts(15,7): error TS2345: Argument of type '{ id: number; name: string; }' is not assignable to parameter of type 'User'.\", \"  Property 'email' is missing in type '{ id: number; name: string; }' but required in type 'User'.\", \"(exit code 2)\"].join(\"\\n\"))",
+            "mongDoi": {
+              "errors": 5,
+              "files": {
+                "mistakes.ts": 5
+              },
+              "codes": [
+                "TS2339",
+                "TS2345",
+                "TS18047"
+              ],
+              "exitCode": 2
+            }
+          },
+          {
+            "moTa": "A clean run|||Lần chạy sạch",
+            "goi": "summarizeTsc(\"$ npx tsc -p .\\n(exit code 0)\")",
+            "mongDoi": {
+              "errors": 0,
+              "files": {},
+              "codes": [],
+              "exitCode": 0
+            }
+          },
+          {
+            "moTa": "Several files|||Nhiều tệp",
+            "goi": "summarizeTsc(\"a.ts(1,1): error TS2322: x\\nsrc/b.ts(2,2): error TS2322: y\\na.ts(3,3): error TS7006: z\")",
+            "mongDoi": {
+              "errors": 3,
+              "files": {
+                "a.ts": 2,
+                "src/b.ts": 1
+              },
+              "codes": [
+                "TS2322",
+                "TS7006"
+              ],
+              "exitCode": 2
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm cả dòng thụt lề."
+        },
+        {
+          "loi": "Sắp mã lỗi theo chuỗi."
+        },
+        {
+          "loi": "Không bỏ trùng mã."
+        }
+      ]
+    },
+    {
+      "title": "Tự suy kiểu như tsc --declaration",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "suy kiểu",
+        "union",
+        "đệ quy"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "Set"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.1 — Vì sao TypeScript.</em> TypeScript kiểm kiểu lúc biên dịch rồi xoá hết kiểu. Các bài dưới đây làm bằng JavaScript đúng những việc đó — để bạn thấy bộ kiểm \"nghĩ\" gì, và thấy phần nào vẫn phải kiểm lúc chạy.</p><p>Viết <code>inferType(value)</code> trả chuỗi kiểu TypeScript cho một giá trị JSON, giống thứ <code>tsc --declaration</code> in ra cho <code>let</code>: <code>\"string\"</code>, <code>\"number\"</code>, <code>\"boolean\"</code>, <code>\"null\"</code>; object ⇒ <code>\"{ a: number; b: string }\"</code> (giữ thứ tự khoá, object rỗng ⇒ <code>\"{}\"</code>); mảng ⇒ <code>\"T[]\"</code> với T là kiểu phần tử; nếu các phần tử có nhiều kiểu khác nhau ⇒ <code>\"(A | B)[]\"</code> theo thứ tự xuất hiện lần đầu, không trùng; mảng rỗng ⇒ <code>\"unknown[]\"</code>. Áp dụng đệ quy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng định dạng \"{ a: T; b: U }\".</li>\n  <li>Union trong mảng bọc ngoặc.</li>\n  <li>Đệ quy cho object/mảng lồng nhau.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: giá trị JSON.",
+      "outputSpec": "string.",
+      "constraints": "Không dùng thư viện.\nMảng một kiểu thì KHÔNG có ngoặc: \"string[]\".",
+      "examplesJson": [
+        {
+          "input": "inferType({ id: 1, title: \"Hello World\", tags: [\"sql\", \"beginner\"], published: true })",
+          "output": "\"{ id: number; title: string; tags: string[]; published: boolean }\"",
+          "explanation": "Giống cách tsc mô tả biến post ở Bài 9.2."
+        }
+      ],
+      "hintsJson": [
+        "if (Array.isArray(v)) { const kinds = [...new Set(v.map(inferType))]; … }",
+        "Object.entries(v).map(([k, x]) => k + \": \" + inferType(x)).join(\"; \")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — tự suy kiểu cho một giá trị JSON\nfunction inferType(value) {\n  return typeof value;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.1 — đệ quy: nguyên thuỷ → tên; mảng → kiểu phần tử (union nếu nhiều); object → { khoá: kiểu; khoá: kiểu }\nfunction inferType(value) {\n  if (value === null) return 'null';\n  if (Array.isArray(value)) {\n    if (value.length === 0) return 'unknown[]';\n    const kinds = [...new Set(value.map(inferType))];          // thứ tự xuất hiện lần đầu, không trùng\n    return kinds.length === 1 ? kinds[0] + '[]' : '(' + kinds.join(' | ') + ')[]';\n  }\n  if (typeof value === 'object') {\n    const fields = Object.entries(value).map(([k, v]) => k + ': ' + inferType(v));\n    return fields.length === 0 ? '{}' : '{ ' + fields.join('; ') + ' }';\n  }\n  return typeof value;                                          // 'string' | 'number' | 'boolean'\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là phiên bản thu nhỏ của suy kiểu (Bài 9.2): tsc nhìn giá trị khởi tạo và dựng ra kiểu, nên bạn hiếm khi phải viết kiểu cho biến. Cái nó không làm được là đoán giá trị đến lúc chạy — vì vậy kiểu của <code>JSON.parse</code> là <code>any</code>, và bạn nên coi nó là <code>unknown</code>. (tsc thật suy mảng rỗng thành <code>any[]</code> hay <code>never[]</code> tuỳ thiết lập; ở đây ta chọn <code>unknown[]</code> cho an toàn.)</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên ngoặc quanh union: \"string | number[]\" nghĩa là KHÁC.</li>\n  <li>Trùng kiểu trong union.</li>\n  <li>null thành \"object\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.1 Why TypeScript.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/type-inference.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Primitives and null|||Nguyên thuỷ và null",
+            "goi": "[inferType(\"Hello World\"), inferType(25000), inferType(true), inferType(null)]",
+            "mongDoi": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          },
+          {
+            "moTa": "The post object from Lesson 9.2|||Object post của Bài 9.2",
+            "goi": "inferType({ id: 1, title: \"Hello World\", tags: [\"sql\", \"beginner\"], published: true })",
+            "mongDoi": "{ id: number; title: string; tags: string[]; published: boolean }"
+          },
+          {
+            "moTa": "Mixed arrays become a union in parentheses|||Mảng lẫn kiểu thành union có ngoặc",
+            "goi": "[inferType([1, \"two\", true]), inferType([1, 2, \"x\", 3]), inferType([])]",
+            "mongDoi": [
+              "(number | string | boolean)[]",
+              "(number | string)[]",
+              "unknown[]"
+            ]
+          },
+          {
+            "moTa": "Nested objects and arrays|||Object và mảng lồng nhau",
+            "goi": "inferType({ items: [{ id: 1, name: \"Pen\" }], meta: {}, page: null })",
+            "mongDoi": "{ items: { id: number; name: string }[]; meta: {}; page: null }"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên ngoặc quanh union: \"string | number[]\" nghĩa là KHÁC."
+        },
+        {
+          "loi": "Trùng kiểu trong union."
+        },
+        {
+          "loi": "null thành \"object\"."
+        }
+      ]
+    }
+  ]
+}

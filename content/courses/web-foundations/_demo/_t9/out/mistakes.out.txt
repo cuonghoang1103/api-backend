@@ -1,0 +1,8 @@
+$ npx tsc --noEmit --strict mistakes.ts
+mistakes.ts(8,27): error TS2339: Property 'nmae' does not exist on type 'User'.
+mistakes.ts(11,10): error TS18047: 'user.email' is possibly 'null'.
+mistakes.ts(14,13): error TS18047: 'input' is possibly 'null'.
+mistakes.ts(14,19): error TS2339: Property 'value' does not exist on type 'Element'.
+mistakes.ts(15,7): error TS2345: Argument of type '{ id: number; name: string; }' is not assignable to parameter of type 'User'.
+  Property 'email' is missing in type '{ id: number; name: string; }' but required in type 'User'.
+(exit code 2)

@@ -1,0 +1,7 @@
+$ npx tsc --noEmit --strict functions.ts
+functions.ts(6,14): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+functions.ts(7,26): error TS2554: Expected 1-2 arguments, but got 3.
+functions.ts(9,33): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+functions.ts(17,15): error TS2345: Argument of type '"warning"' is not assignable to parameter of type '"info" | "error" | undefined'.
+functions.ts(21,31): error TS2339: Property 'time' does not exist on type '{ type: string; at: number; }'.
+(exit code 2)

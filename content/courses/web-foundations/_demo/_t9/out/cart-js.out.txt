@@ -1,0 +1,3 @@
+$ node cart.js
+65000
+Total: 250005000 VND

@@ -1,0 +1,673 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-9-2-basic-types",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-9-2-basic-types"
+  },
+  "exercises": [
+    {
+      "title": "Thu hẹp string | number",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "union",
+        "thu hẹp bằng typeof"
+      ],
+      "prerequisites": [
+        "typeof",
+        "chuỗi"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p>Kiểu tham số là <code>price: string | number</code>. Viết <code>formatPrice(price)</code>: nếu là số ⇒ làm tròn tới số nguyên và chèn dấu chấm mỗi 3 chữ số, thêm <code>\" VND\"</code> (<code>25000 → \"25.000 VND\"</code>); nếu là chuỗi ⇒ bỏ khoảng trắng hai đầu, phải toàn chữ số (có thể có dấu chấm ngăn nghìn, vd <code>\"1.250.000\"</code>) rồi định dạng như số; chuỗi khác ⇒ ném <code>TypeError(\"not a price: &lt;chuỗi gốc&gt;\")</code>. Giá âm (số) ⇒ <code>TypeError(\"negative price\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhánh typeof === \"number\".</li>\n  <li>Nhánh chuỗi kiểm định dạng.</li>\n  <li>Ném TypeError đúng chữ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "price: string | number.",
+      "outputSpec": "string.",
+      "constraints": "Không dùng toLocaleString (khác nhau giữa môi trường).",
+      "examplesJson": [
+        {
+          "input": "formatPrice(\" 1.250.000 \")",
+          "output": "\"1.250.000 VND\"",
+          "explanation": "Chuỗi hợp lệ được chuẩn hoá."
+        }
+      ],
+      "hintsJson": [
+        "String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, \".\")",
+        "/^\\d{1,3}(\\.\\d{3})*$|^\\d+$/"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — định dạng giá: string | number\nfunction formatPrice(price) {\n  return price.toFixed(0) + ' VND';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — thu hẹp bằng typeof: trong mỗi nhánh, price chỉ còn MỘT kiểu\nfunction group(n) {\n  return String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.');\n}\n\nfunction formatPrice(price) {\n  if (typeof price === 'number') {\n    if (price < 0) throw new TypeError('negative price');\n    return group(Math.round(price)) + ' VND';\n  }\n  const s = String(price).trim();\n  if (!/^\\d+$|^\\d{1,3}(\\.\\d{3})+$/.test(s)) throw new TypeError('not a price: ' + price);\n  return group(Number(s.replaceAll('.', ''))) + ' VND';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Gọi <code>price.toFixed</code> trên <code>string | number</code> là lỗi tsc ở Bài 9.2 (basics.ts dòng 13) — vì chuỗi không có <code>toFixed</code>. Sau <code>typeof price === \"number\"</code>, TypeScript biết chắc là số; ở nhánh còn lại, nó biết là chuỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gọi toFixed trước khi thu hẹp.</li>\n  <li>Number(\"1.250.000\") là NaN — phải bỏ dấu chấm trước.</li>\n  <li>Nhận cả \"12a\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Numbers are grouped and rounded|||Số được nhóm và làm tròn",
+            "goi": "[formatPrice(25000), formatPrice(27500.4), formatPrice(999), formatPrice(1250000)]",
+            "mongDoi": [
+              "25.000 VND",
+              "27.500 VND",
+              "999 VND",
+              "1.250.000 VND"
+            ]
+          },
+          {
+            "moTa": "Valid strings are normalised|||Chuỗi hợp lệ được chuẩn hoá",
+            "goi": "[formatPrice(\"5000\"), formatPrice(\" 1.250.000 \")]",
+            "mongDoi": [
+              "5.000 VND",
+              "1.250.000 VND"
+            ]
+          },
+          {
+            "moTa": "Bad strings throw|||Chuỗi sai ném lỗi",
+            "goi": "formatPrice(\"12a\")",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^not a price: 12a$"
+            }
+          },
+          {
+            "moTa": "Negative numbers throw|||Số âm ném lỗi",
+            "goi": "formatPrice(-1)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^negative price$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi toFixed trước khi thu hẹp."
+        },
+        {
+          "loi": "Number(\"1.250.000\") là NaN — phải bỏ dấu chấm trước."
+        },
+        {
+          "loi": "Nhận cả \"12a\"."
+        }
+      ]
+    },
+    {
+      "title": "Type guard cho union literal",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "kiểu literal",
+        "type guard"
+      ],
+      "prerequisites": [
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p><code>type SortDir = \"asc\" | \"desc\"</code>. Giá trị đến từ URL (<code>?dir=…</code>) là chuỗi bất kỳ. Viết <code>isSortDir(v)</code> trả <code>true</code> chỉ khi <code>v</code> đúng là <code>\"asc\"</code> hoặc <code>\"desc\"</code> (phân biệt hoa thường, không cắt khoảng trắng). Rồi viết <code>sortParam(query)</code> nhận object query: không có <code>dir</code> ⇒ <code>\"asc\"</code>; hợp lệ ⇒ giá trị đó; sai ⇒ ném <code>RangeError(\"dir must be asc or desc\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>isSortDir chỉ nhận đúng hai chuỗi.</li>\n  <li>Mặc định \"asc\".</li>\n  <li>Sai ⇒ RangeError.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "v: unknown; query: object.",
+      "outputSpec": "boolean; \"asc\" | \"desc\".",
+      "constraints": "Dùng một mảng hằng [\"asc\", \"desc\"] làm nguồn duy nhất.",
+      "examplesJson": [
+        {
+          "input": "sortParam({ dir: \"descending\" })",
+          "output": "RangeError",
+          "explanation": "\"descending\" cũng là lỗi tsc ở basics.ts dòng 22 — nhưng chuỗi từ URL thì tsc không thấy."
+        }
+      ],
+      "hintsJson": [
+        "const SORT_DIRS = [\"asc\", \"desc\"];",
+        "return SORT_DIRS.includes(v);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — type guard cho SortDir\nfunction isSortDir(v) {\n  return typeof v === 'string';\n}\nfunction sortParam(query) {\n  return query.dir || 'asc';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — một mảng hằng là nguồn duy nhất của các giá trị được phép\nconst SORT_DIRS = ['asc', 'desc'];              // trong TS: as const ⇒ type SortDir = typeof SORT_DIRS[number]\n\nfunction isSortDir(v) {                          // trong TS: function isSortDir(v: unknown): v is SortDir\n  return SORT_DIRS.includes(v);\n}\n\nfunction sortParam(query) {\n  if (query.dir === undefined) return 'asc';\n  if (!isSortDir(query.dir)) throw new RangeError('dir must be asc or desc');\n  return query.dir;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Union literal chặn <code>\"descending\"</code> trong mã bạn viết; type guard chặn nó trong dữ liệu đến lúc chạy. Viết <code>SORT_DIRS as const</code> trong TypeScript thì kiểu <code>SortDir</code> được suy ra từ chính mảng đó — thêm giá trị mới chỉ sửa một chỗ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chấp nhận \"ASC\" hay \" asc\".</li>\n  <li>Dùng || — chuỗi rỗng thành \"asc\" lặng lẽ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Only the two literals pass|||Chỉ hai giá trị literal được nhận",
+            "goi": "[isSortDir(\"asc\"), isSortDir(\"desc\"), isSortDir(\"ASC\"), isSortDir(\" asc\"), isSortDir(null), isSortDir(1)]",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Default and valid values|||Mặc định và giá trị hợp lệ",
+            "goi": "[sortParam({}), sortParam({ dir: \"desc\" })]",
+            "mongDoi": [
+              "asc",
+              "desc"
+            ]
+          },
+          {
+            "moTa": "\"descending\" is refused|||\"descending\" bị từ chối",
+            "goi": "sortParam({ dir: \"descending\" })",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "^dir must be asc or desc$"
+            }
+          },
+          {
+            "moTa": "An empty string is not silently \"asc\"|||Chuỗi rỗng không lặng lẽ thành \"asc\"",
+            "goi": "sortParam({ dir: \"\" })",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chấp nhận \"ASC\" hay \" asc\"."
+        },
+        {
+          "loi": "Dùng || — chuỗi rỗng thành \"asc\" lặng lẽ."
+        }
+      ]
+    },
+    {
+      "title": "const hay let: kiểu literal được suy ra",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "nới rộng kiểu",
+        "as const"
+      ],
+      "prerequisites": [
+        "JSON.stringify",
+        "typeof"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p>Ở Bài 9.2, <code>const title = \"Hello World\"</code> có kiểu <code>\"Hello World\"</code> còn <code>let price = 27500</code> có kiểu <code>number</code>. Viết <code>declaredType(kind, value)</code> với <code>kind</code> là <code>\"const\"</code>, <code>\"let\"</code> hoặc <code>\"as const\"</code>, <code>value</code> là chuỗi, số, boolean hay null: <code>\"let\"</code> ⇒ nới rộng (<code>\"string\"</code>, <code>\"number\"</code>, <code>\"boolean\"</code>; riêng <code>null</code> ⇒ <code>\"null\"</code>); <code>\"const\"</code> và <code>\"as const\"</code> ⇒ giữ literal: chuỗi trong nháy kép (<code>JSON.stringify</code>), số và boolean viết như giá trị. Riêng object với <code>\"const\"</code>: các trường vẫn bị nới rộng ⇒ <code>\"{ dir: string; size: number }\"</code>; với <code>\"as const\"</code> ⇒ <code>\"{ readonly dir: \\\"asc\\\"; readonly size: 10 }\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>let nới rộng.</li>\n  <li>const giữ literal cho giá trị nguyên thuỷ.</li>\n  <li>Object: const nới rộng trường, as const thêm readonly + literal.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "kind: \"const\" | \"let\" | \"as const\"; value.",
+      "outputSpec": "string.",
+      "constraints": "Object chỉ có một cấp (không lồng).",
+      "examplesJson": [
+        {
+          "input": "declaredType(\"as const\", { dir: \"asc\", size: 10 })",
+          "output": "\"{ readonly dir: \\\"asc\\\"; readonly size: 10 }\"",
+          "explanation": "Đúng dòng fixedSettings trong output infer.ts."
+        }
+      ],
+      "hintsJson": [
+        "const wide = (v) => v === null ? \"null\" : typeof v;",
+        "const lit = (v) => typeof v === \"string\" ? JSON.stringify(v) : String(v);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — kiểu được suy ra cho const / let / as const\nfunction declaredType(kind, value) {\n  return typeof value;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — let nới rộng (giá trị còn đổi được), const giữ literal; object const vẫn nới rộng TRƯỜNG\nconst wide = (v) => (v === null ? 'null' : typeof v);\nconst lit = (v) => (typeof v === 'string' ? JSON.stringify(v) : String(v));\n\nfunction declaredType(kind, value) {\n  if (value !== null && typeof value === 'object') {\n    const fields = Object.entries(value).map(([k, v]) =>\n      kind === 'as const' ? 'readonly ' + k + ': ' + lit(v) : k + ': ' + wide(v));\n    return '{ ' + fields.join('; ') + ' }';\n  }\n  return kind === 'let' ? wide(value) : lit(value);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>let</code> có thể gán lại nên TypeScript chọn kiểu rộng. <code>const</code> giữ literal — nhưng trường của một object const vẫn gán lại được (<code>settings.dir = \"x\"</code>), nên chúng bị nới rộng. <code>as const</code> khoá cả hai: readonly và literal. Đó là lý do <code>settings</code> không gán được vào <code>{ dir: SortDir }</code> còn <code>fixedSettings</code> thì được.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên readonly ở as const.</li>\n  <li>Chuỗi literal không có nháy.</li>\n  <li>null thành \"object\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "let widens|||let nới rộng",
+            "goi": "[declaredType(\"let\", 5), declaredType(\"let\", \"asc\"), declaredType(\"let\", true), declaredType(\"let\", null)]",
+            "mongDoi": [
+              "number",
+              "string",
+              "boolean",
+              "null"
+            ]
+          },
+          {
+            "moTa": "const keeps the literal|||const giữ literal",
+            "goi": "[declaredType(\"const\", \"Hello World\"), declaredType(\"const\", 10), declaredType(\"const\", false)]",
+            "mongDoi": [
+              "\"Hello World\"",
+              "10",
+              "false"
+            ]
+          },
+          {
+            "moTa": "const object widens its fields|||Object const nới rộng trường",
+            "goi": "declaredType(\"const\", { dir: \"asc\", size: 10 })",
+            "mongDoi": "{ dir: string; size: number }"
+          },
+          {
+            "moTa": "as const: readonly literals|||as const: readonly + literal",
+            "goi": "declaredType(\"as const\", { dir: \"asc\", size: 10 })",
+            "mongDoi": "{ readonly dir: \"asc\"; readonly size: 10 }"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên readonly ở as const."
+        },
+        {
+          "loi": "Chuỗi literal không có nháy."
+        },
+        {
+          "loi": "null thành \"object\"."
+        }
+      ]
+    },
+    {
+      "title": "Đọc unknown an toàn",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "unknown",
+        "thu hẹp bằng in"
+      ],
+      "prerequisites": [
+        "JSON.parse",
+        "try/catch"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p>Viết <code>productName(text)</code>: <code>text</code> là phần thân response. Parse JSON (lỗi parse ⇒ <code>{ ok: false, reason: \"invalid JSON\" }</code>). Kết quả là <code>unknown</code>: chỉ khi nó là object (không null, không mảng), có khoá <code>name</code> kiểu chuỗi KHÔNG rỗng sau khi trim ⇒ <code>{ ok: true, name: &lt;name viết hoa&gt; }</code>; không phải object ⇒ <code>reason: \"not an object\"</code>; thiếu hoặc sai kiểu ⇒ <code>reason: \"name must be a non-empty string\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>try/catch quanh JSON.parse.</li>\n  <li>Thu hẹp từng bước.</li>\n  <li>Đúng ba lý do.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "{ ok, name } hoặc { ok, reason }.",
+      "constraints": "Không truy cập .name trước khi kiểm là object.",
+      "examplesJson": [
+        {
+          "input": "productName('{\"id\": 7, \"title\": \"Ruler\"}')",
+          "output": "{ ok: false, reason: \"name must be a non-empty string\" }",
+          "explanation": "Đúng JSON làm sập runtime.ts ở Bài 9.1 — giờ được báo lỗi tử tế."
+        }
+      ],
+      "hintsJson": [
+        "let data; try { data = JSON.parse(text); } catch { … }",
+        "typeof data === \"object\" && data !== null && !Array.isArray(data) && \"name\" in data"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — đọc unknown an toàn\nfunction productName(text) {\n  const data = JSON.parse(text);\n  return { ok: true, name: data.name.toUpperCase() };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — unknown: kiểm từng bước rồi mới dùng\nfunction productName(text) {\n  let data;                                                  // trong TS: let data: unknown;\n  try {\n    data = JSON.parse(text);\n  } catch {\n    return { ok: false, reason: 'invalid JSON' };\n  }\n  if (typeof data !== 'object' || data === null || Array.isArray(data)) return { ok: false, reason: 'not an object' };\n  if (!('name' in data) || typeof data.name !== 'string' || data.name.trim() === '') {\n    return { ok: false, reason: 'name must be a non-empty string' };\n  }\n  return { ok: true, name: data.name.toUpperCase() };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với <code>any</code>, mã khởi đầu biên dịch được rồi sập (any-run.ts). Với <code>unknown</code>, tsc buộc bạn đi đúng các bước trong lời giải: là object? có khoá? đúng kiểu? Mỗi bước thu hẹp kiểu thêm một chút, đến cuối thì <code>data.name</code> chắc chắn là chuỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên null (typeof null === \"object\").</li>\n  <li>Không bắt lỗi JSON.parse.</li>\n  <li>Chấp nhận name là \"   \".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#the-in-operator-narrowing",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A valid product|||Sản phẩm hợp lệ",
+            "goi": "productName('{\"id\": 7, \"name\": \"Ruler\", \"price\": 8000}')",
+            "mongDoi": {
+              "ok": true,
+              "name": "RULER"
+            }
+          },
+          {
+            "moTa": "The wrong shape from Lesson 9.1|||Hình dạng sai của Bài 9.1",
+            "goi": "[productName('{\"id\": 7, \"title\": \"Ruler\"}'), productName('{\"name\": 42}'), productName('{\"name\": \"  \"}')]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "name must be a non-empty string"
+              },
+              {
+                "ok": false,
+                "reason": "name must be a non-empty string"
+              },
+              {
+                "ok": false,
+                "reason": "name must be a non-empty string"
+              }
+            ]
+          },
+          {
+            "moTa": "Not an object, or not JSON|||Không phải object, hoặc không phải JSON",
+            "goi": "[productName(\"null\"), productName(\"[1]\"), productName(\"\\\"Ruler\\\"\"), productName(\"<html>\")]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "not an object"
+              },
+              {
+                "ok": false,
+                "reason": "not an object"
+              },
+              {
+                "ok": false,
+                "reason": "not an object"
+              },
+              {
+                "ok": false,
+                "reason": "invalid JSON"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên null (typeof null === \"object\")."
+        },
+        {
+          "loi": "Không bắt lỗi JSON.parse."
+        },
+        {
+          "loi": "Chấp nhận name là \"   \"."
+        }
+      ]
+    },
+    {
+      "title": "Nhãn trạng thái — đủ mọi nhánh",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "union literal",
+        "never",
+        "kiểm đủ nhánh"
+      ],
+      "prerequisites": [
+        "switch"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p><code>type OrderStatus = \"pending\" | \"paid\" | \"shipped\" | \"cancelled\"</code>. Viết <code>statusBadge(status)</code> trả <code>{ label, color }</code>: pending ⇒ <code>{ label: \"Waiting for payment\", color: \"amber\" }</code>, paid ⇒ <code>{ label: \"Paid\", color: \"blue\" }</code>, shipped ⇒ <code>{ label: \"On the way\", color: \"green\" }</code>, cancelled ⇒ <code>{ label: \"Cancelled\", color: \"gray\" }</code>. Mọi giá trị khác ⇒ ném <code>Error(\"unhandled status: &lt;giá trị&gt;\")</code> từ nhánh <code>default</code> (trong TS đây là chỗ gán vào biến <code>never</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một switch.</li>\n  <li>default ném lỗi có giá trị.</li>\n  <li>Không có giá trị mặc định \"lặng lẽ\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "status: string.",
+      "outputSpec": "{ label, color }.",
+      "constraints": "Không trả về nhãn chung kiểu \"Unknown\".",
+      "examplesJson": [
+        {
+          "input": "statusBadge(\"refunded\")",
+          "output": "Error: unhandled status: refunded",
+          "explanation": "Ai đó thêm trạng thái mới mà quên giao diện ⇒ lỗi to, không phải nhãn sai."
+        }
+      ],
+      "hintsJson": [
+        "Một switch với bốn case, mỗi case return một object.",
+        "default: { const unhandled = status; throw new Error(\"unhandled status: \" + unhandled); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — nhãn trạng thái\nfunction statusBadge(status) {\n  if (status === 'paid') return { label: 'Paid', color: 'blue' };\n  return { label: 'Unknown', color: 'gray' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — mỗi giá trị của union một nhánh; default là lưới an toàn\nfunction statusBadge(status) {\n  switch (status) {\n    case 'pending': return { label: 'Waiting for payment', color: 'amber' };\n    case 'paid': return { label: 'Paid', color: 'blue' };\n    case 'shipped': return { label: 'On the way', color: 'green' };\n    case 'cancelled': return { label: 'Cancelled', color: 'gray' };\n    default: {\n      const unhandled = status;                    // trong TS: const unhandled: never = status; ⇒ lỗi biên dịch nếu thiếu nhánh\n      throw new Error('unhandled status: ' + unhandled);\n    }\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trong TypeScript, khi mọi nhánh đã xử lý, <code>status</code> ở <code>default</code> có kiểu <code>never</code>; thêm <code>\"refunded\"</code> vào union là tsc báo lỗi ngay ở đó (Bài 9.3 cho thấy output thật). Lúc chạy, ném lỗi to hơn trả về một nhãn sai lặng lẽ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả \"Unknown\" — lỗi bị giấu.</li>\n  <li>Viết if/else không có nhánh cuối.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "All four statuses|||Đủ bốn trạng thái",
+            "goi": "[\"pending\", \"paid\", \"shipped\", \"cancelled\"].map(statusBadge)",
+            "mongDoi": [
+              {
+                "label": "Waiting for payment",
+                "color": "amber"
+              },
+              {
+                "label": "Paid",
+                "color": "blue"
+              },
+              {
+                "label": "On the way",
+                "color": "green"
+              },
+              {
+                "label": "Cancelled",
+                "color": "gray"
+              }
+            ]
+          },
+          {
+            "moTa": "A new status is loud, not silent|||Trạng thái mới báo lỗi to",
+            "goi": "statusBadge(\"refunded\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^unhandled status: refunded$"
+            }
+          },
+          {
+            "moTa": "Case matters|||Phân biệt hoa thường",
+            "goi": "statusBadge(\"Paid\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "unhandled status: Paid"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả \"Unknown\" — lỗi bị giấu."
+        },
+        {
+          "loi": "Viết if/else không có nhánh cuối."
+        }
+      ]
+    },
+    {
+      "title": "Giá trị form sang đúng kiểu",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "dữ liệu form là chuỗi",
+        "đổi kiểu có kiểm"
+      ],
+      "prerequisites": [
+        "regex",
+        "Date"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.2 — Kiểu cơ bản.</em> Union, literal và unknown là ba công cụ bạn dùng hằng ngày. Mỗi bài dưới đây là phần \"lúc chạy\" của một ý trong bài: thu hẹp, kiểm giá trị cho phép, và kiểm trước khi tin.</p><p>Mọi <code>input.value</code> là chuỗi. Viết <code>parseForm(raw, schema)</code>: <code>raw</code> là object chuỗi (từ <code>FormData</code>), <code>schema</code> là object <code>{ tên: kiểu }</code> với kiểu là <code>\"string\"</code>, <code>\"int\"</code>, <code>\"number\"</code>, <code>\"boolean\"</code>, <code>\"date\"</code>; thêm <code>\"?\"</code> ở cuối (vd <code>\"int?\"</code>) nghĩa là tuỳ chọn. Luật: chuỗi được trim; rỗng/thiếu ⇒ tuỳ chọn thì <code>null</code>, bắt buộc thì lỗi <code>\"&lt;tên&gt;: required\"</code>; <code>int</code> chỉ chữ số có thể có dấu trừ; <code>number</code> theo <code>/^-?\\d+(\\.\\d+)?$/</code>; <code>boolean</code> chỉ <code>\"true\"/\"false\"/\"on\"/\"off\"</code>; <code>date</code> dạng <code>YYYY-MM-DD</code> và là ngày có thật (trả lại chính chuỗi đó). Sai ⇒ lỗi <code>\"&lt;tên&gt;: expected &lt;kiểu&gt;\"</code>. Trả <code>{ ok: true, data }</code> hoặc <code>{ ok: false, errors }</code> (mọi lỗi, theo thứ tự khoá trong schema). Trường không có trong schema bị bỏ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trim trước khi kiểm.</li>\n  <li>Tuỳ chọn rỗng ⇒ null.</li>\n  <li>Ngày phải có thật (2026-02-30 sai).</li>\n  <li>Gom mọi lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "raw: { [k]: string }; schema: { [k]: string }.",
+      "outputSpec": "{ ok, data } | { ok, errors }.",
+      "constraints": "Không dùng Number() một mình — \"\" thành 0, \"1e3\" thành 1000.",
+      "examplesJson": [
+        {
+          "input": "parseForm({ qty: \" 3 \", gift: \"on\" }, { qty: \"int\", gift: \"boolean\", note: \"string?\" })",
+          "output": "{ ok: true, data: { qty: 3, gift: true, note: null } }",
+          "explanation": "Checkbox gửi \"on\"; ô ghi chú bỏ trống."
+        }
+      ],
+      "hintsJson": [
+        "const optional = type.endsWith(\"?\"); const base = type.replace(\"?\", \"\");",
+        "Ngày có thật: new Date(s + \"T00:00:00Z\").toISOString().slice(0, 10) === s"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — giá trị form sang đúng kiểu\nfunction parseForm(raw, schema) {\n  return { ok: true, data: raw };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.2 — form chỉ gửi chuỗi; đổi sang đúng kiểu ở MỘT chỗ, kèm lỗi rõ ràng\nconst PARSERS = {\n  string: (s) => s,\n  int: (s) => (/^-?\\d+$/.test(s) ? Number(s) : undefined),\n  number: (s) => (/^-?\\d+(\\.\\d+)?$/.test(s) ? Number(s) : undefined),\n  boolean: (s) => (s === 'true' || s === 'on' ? true : s === 'false' || s === 'off' ? false : undefined),\n  date: (s) => {\n    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(s)) return undefined;\n    const d = new Date(s + 'T00:00:00Z');\n    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s ? s : undefined;   // 2026-02-30 bị trượt sang tháng 3\n  },\n};\n\nfunction parseForm(raw, schema) {\n  const data = {};\n  const errors = [];\n  for (const [name, type] of Object.entries(schema)) {\n    const optional = type.endsWith('?');\n    const base = optional ? type.slice(0, -1) : type;\n    const s = String(raw[name] ?? '').trim();\n    if (s === '') {\n      if (optional) data[name] = null;\n      else errors.push(name + ': required');\n      continue;\n    }\n    const value = PARSERS[base](s);\n    if (value === undefined) errors.push(name + ': expected ' + base);\n    else data[name] = value;\n  }\n  return errors.length ? { ok: false, errors } : { ok: true, data };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là \"ranh giới\" mà Bài 9.5 nói tới: bên ngoài là chuỗi không ai bảo đảm; bên trong là <code>{ qty: number; gift: boolean; note: string | null }</code> đáng tin. <code>Number(\"\")</code> là <code>0</code> và <code>Number(\"1e3\")</code> là <code>1000</code> — vì thế kiểm định dạng bằng regex trước khi đổi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Number(\"\") = 0 lọt qua như số hợp lệ.</li>\n  <li>new Date(\"2026-02-30\") tự trượt sang 2026-03-02.</li>\n  <li>Dừng ở lỗi đầu tiên.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.2 Basic types.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/FormData",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Checkbox, trimmed int and empty optional|||Checkbox, int có khoảng trắng, tuỳ chọn trống",
+            "goi": "parseForm({ qty: \" 3 \", gift: \"on\", extra: \"x\" }, { qty: \"int\", gift: \"boolean\", note: \"string?\" })",
+            "mongDoi": {
+              "ok": true,
+              "data": {
+                "qty": 3,
+                "gift": true,
+                "note": null
+              }
+            }
+          },
+          {
+            "moTa": "Every error, in schema order|||Mọi lỗi, theo thứ tự schema",
+            "goi": "parseForm({ qty: \"\", price: \"1e3\", gift: \"yes\", born: \"2026-02-30\" }, { qty: \"int\", price: \"number\", gift: \"boolean\", born: \"date\" })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "qty: required",
+                "price: expected number",
+                "gift: expected boolean",
+                "born: expected date"
+              ]
+            }
+          },
+          {
+            "moTa": "Valid numbers and dates|||Số và ngày hợp lệ",
+            "goi": "parseForm({ price: \"-12.5\", born: \"2024-02-29\", n: \"-7\", name: \" Lan \" }, { price: \"number\", born: \"date\", n: \"int?\", name: \"string\" })",
+            "mongDoi": {
+              "ok": true,
+              "data": {
+                "price": -12.5,
+                "born": "2024-02-29",
+                "n": -7,
+                "name": "Lan"
+              }
+            }
+          },
+          {
+            "moTa": "A decimal is not an int|||Số thập phân không phải int",
+            "goi": "parseForm({ qty: \"2.5\" }, { qty: \"int\" })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "qty: expected int"
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Number(\"\") = 0 lọt qua như số hợp lệ."
+        },
+        {
+          "loi": "new Date(\"2026-02-30\") tự trượt sang 2026-03-02."
+        },
+        {
+          "loi": "Dừng ở lỗi đầu tiên."
+        }
+      ]
+    }
+  ]
+}

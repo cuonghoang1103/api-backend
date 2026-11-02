@@ -1,0 +1,23 @@
+$ npx tsc --declaration --emitDeclarationOnly infer.ts   (the types TypeScript inferred)
+export declare let count: number;
+export declare const title = "Hello World";
+export declare let price: number;
+export declare const tags: string[];
+export declare const mixed: (string | number | boolean)[];
+export declare const post: {
+    id: number;
+    title: string;
+    views: number;
+    published: boolean;
+};
+export declare let maybe: string | null;
+export declare const sortDir: string;
+export declare function double(n: number): number;
+export declare const settings: {
+    dir: string;
+    size: number;
+};
+export declare const fixedSettings: {
+    readonly dir: "asc";
+    readonly size: 10;
+};

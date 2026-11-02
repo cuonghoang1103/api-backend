@@ -1,0 +1,4 @@
+$ npx tsx validate.ts
+valid: RULER
+invalid: name - Required
+invalid: price - Expected number, received string

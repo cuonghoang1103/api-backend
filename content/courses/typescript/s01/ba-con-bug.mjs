@@ -322,5 +322,20 @@ ${nguon('📘', 'TypeScript Handbook — The Basics', 'Kiểm tra kiểu tĩnh, 
 ${nguon('📗', 'TypeScript Handbook — Everyday Types', 'Chú thích kiểu cho tham số và giá trị trả về, kiểu object, kiểu literal và union. Đọc ngày 1/11/2026.', 'https://www.typescriptlang.org/docs/handbook/2/everyday-types.html')}
 ${lienKet({ khoa: 'testing', bai: 'tst-1-1-cau-truc', title: 'Cùng bộ luật ở khoá Testing — 1.1: Giải phẫu một test', sub: 'Giống: checkSlot, needsApproval và createBooking của LabFlow Lite, cùng luật BR-04 và BR-06. Khác: bên đó bạn bắt bug bằng test chạy code; ở đây trình biên dịch từ chối cả một lớp bug trước khi chạy — và bẫy >= cho thấy vì sao vẫn cần những test kia.', cta: 'MỞ BÀI TESTING →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 9.1 — Why TypeScript</span><span class="lc-sub">The short version: a cart bug JavaScript runs happily, tsc catching it, and why types vanish at runtime</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 9.1 — Vì sao TypeScript</span><span class="lc-sub">Bản ngắn: lỗi giỏ hàng JavaScript vẫn chạy, tsc bắt được, và vì sao kiểu biến mất lúc chạy</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

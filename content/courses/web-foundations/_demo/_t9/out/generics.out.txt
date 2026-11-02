@@ -1,0 +1,29 @@
+$ npx tsc --declaration --emitDeclarationOnly generics.ts   (the types TypeScript inferred)
+export declare function first<T>(items: T[]): T | undefined;
+export declare function findById<T extends {
+    id: number;
+}>(items: T[], id: number): T | undefined;
+export interface ApiResponse<T> {
+    data: T;
+    fetchedAt: string;
+}
+export declare function wrap<T>(data: T): ApiResponse<T>;
+export declare const a: {
+    id: number;
+    name: string;
+    price: number;
+} | undefined;
+export declare const b: string | undefined;
+export declare const c: {
+    id: number;
+    name: string;
+    price: number;
+} | undefined;
+export declare const d: ApiResponse<{
+    id: number;
+    name: string;
+    price: number;
+}[]>;
+
+$ node --experimental-strip-types generics.ts
+Notebook SQL 5000 2

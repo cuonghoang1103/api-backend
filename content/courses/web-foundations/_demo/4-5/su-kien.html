@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Events</title></head>
+<body>
+  <div id="outer"><button id="btn">Click</button></div>
+  <input id="field">
+<script>
+  const btn = document.getElementById('btn'), outer = document.getElementById('outer');
+  btn.addEventListener('click', (event) => {
+    console.log('button', event.type, 'target:', event.target.id, 'at', typeof event.timeStamp);
+  });
+  outer.addEventListener('click', (event) => {
+    console.log('outer also heard it; target is still', event.target.id, '· currentTarget', event.currentTarget.id);
+  });
+  btn.click();
+
+  // a second listener does not replace the first
+  btn.addEventListener('click', () => console.log('second listener'));
+  btn.click();
+
+  // stopPropagation keeps it from bubbling
+  const once = (e) => e.stopPropagation();
+  btn.addEventListener('click', once);
+  console.log('-- with stopPropagation --');
+  btn.click();
+  btn.removeEventListener('click', once);
+
+  const field = document.getElementById('field');
+  field.addEventListener('input', (e) => console.log('input event, value =', e.target.value));
+  field.value = 'hi';
+  field.dispatchEvent(new Event('input', { bubbles: true }));
+</script>
+</body>
+</html>

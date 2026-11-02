@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><title>Script too early</title>
+<script>
+  console.log('script in head sees button:', document.querySelector('#go'));
+</script>
+<script src="js/defer.js" defer></script>
+</head>
+<body>
+  <button id="go">Go</button>
+  <script>
+    console.log('script after the button sees:', document.querySelector('#go').textContent);
+    addEventListener('DOMContentLoaded', () => console.log('DOMContentLoaded: page parsed'));
+  </script>
+</body>
+</html>

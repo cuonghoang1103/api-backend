@@ -1,0 +1,11 @@
+0.30000000000000004
+0.30
+string
+false
+true
+42 NaN 0 7
+12 3.5 NaN
+Infinity -Infinity NaN
+false true
+9007199254740991 9007199254740992
+3 -2 2 3

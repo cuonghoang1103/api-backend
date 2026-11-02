@@ -1,0 +1,9 @@
+in : 0 string
+in : 1 string
+in : extra string
+of : a
+of : b
+name = Linh
+age = 20
+name Linh
+age 20

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Selecting</title></head>
+<body>
+  <h1 id="title" class="big">Hello</h1>
+  <ul>
+    <li class="item">One</li>
+    <li class="item">Two</li>
+  </ul>
+<script>
+  const h = document.querySelector('#title');
+  console.log(h, h.textContent, h.tagName);
+  console.log(document.querySelector('.item').textContent);       // the first match
+  const items = document.querySelectorAll('.item');
+  console.log(items.length, items[1].textContent);
+  items.forEach((li) => console.log(li.textContent));
+  console.log(document.querySelector('.nope'));                   // null, not an error
+  try {
+    document.querySelector('.nope').textContent = 'x';
+  } catch (err) {
+    console.log(err.name + ': ' + err.message);
+  }
+  console.log(h.parentElement.tagName, h.nextElementSibling.tagName);
+  console.log(document.querySelector('ul').children.length);
+</script>
+</body>
+</html>

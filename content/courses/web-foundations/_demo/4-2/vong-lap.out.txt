@@ -1,0 +1,14 @@
+0 apple
+1 banana
+2 cherry
+apple
+banana
+cherry
+0: apple
+1: banana
+2: cherry
+countdown 3
+countdown 2
+countdown 1
+i = 1
+i = 3

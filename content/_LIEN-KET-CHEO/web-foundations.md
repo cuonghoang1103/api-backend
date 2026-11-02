@@ -29,6 +29,10 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-3-3-flexbox` | WED201c (Academy) `wed201c-flexbox-grid` | `content/academy/WED201c.mjs` | hai trục, lỗi min-width |
 | `wf-3-4-css-grid` | WED201c (Academy) `wed201c-flexbox-grid` | `content/academy/WED201c.mjs` | fr, vùng có tên, auto-fit |
 | `wf-3-5-responsive` | WED201c (Academy) `wed201c-responsive` | `content/academy/WED201c.mjs` | viewport, mobile first, clamp |
+| `wf-4-1-variables-types` | WED201c (Academy) `wed201c-js-co-ban` | `content/academy/WED201c.mjs` | ép kiểu, ===, truthy, tham chiếu |
+| `wf-4-3-functions` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | hàm từ số 0 trước closure |
+| `wf-4-4-arrays-objects` | React `rx-0-3-js-cho-react` | `content/courses/react/s00-intro.mjs` | map/filter/reduce, sao chép nông, JSON |
+| `wf-4-5-dom-events` | WED201c (Academy) `wed201c-dom` | `content/academy/WED201c.mjs` | XSS đo thật, defer, ủy quyền, app todo |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

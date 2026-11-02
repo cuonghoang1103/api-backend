@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Delegation</title></head>
+<body>
+  <ul id="list"><li>first <button data-id="1">x</button></li></ul>
+<script>
+  const list = document.getElementById('list');
+  list.addEventListener('click', (event) => {            // one listener on the parent
+    const btn = event.target.closest('button');
+    if (!btn) return;
+    console.log('delete item', btn.dataset.id);
+    btn.closest('li').remove();
+  });
+  list.insertAdjacentHTML('beforeend', '<li>added later <button data-id="2">x</button></li>');
+  list.querySelector('[data-id="2"]').click();           // works for elements added later
+  list.querySelector('[data-id="1"]').click();
+  console.log('items left:', list.children.length);
+</script>
+</body>
+</html>

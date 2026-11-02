@@ -346,6 +346,21 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
   <span class="lc-cta">Mở bài</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-3-functions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.3 — functions from zero</span><span class="lc-sub">return, parameters, scope and callbacks before closures</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-3-functions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.3 — hàm từ số 0</span><span class="lc-sub">return, tham số, phạm vi và callback trước khi tới closure</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Changing the page</title><meta name="chup" content="640x280">
+<style>body{font-family:system-ui,sans-serif;margin:16px} .done{color:#2f9d58;text-decoration:line-through} .tag{background:#e8eef7;padding:2px 8px;border-radius:6px}</style></head>
+<body>
+  <h2 id="t">Old title</h2>
+  <p id="p">A paragraph</p>
+  <a id="a" href="#">A link</a>
+  <div id="box"></div>
+<script>
+  const $ = (s) => document.querySelector(s);
+  $('#t').textContent = 'New title';                // change text
+  $('#p').classList.add('done');                    // change class
+  console.log($('#p').className, $('#p').classList.contains('done'));
+  $('#a').setAttribute('href', 'https://example.com');   // change attribute
+  $('#a').href = 'https://example.com/docs';             // property works too
+  console.log($('#a').getAttribute('href'));
+  $('#t').style.color = '#1f4e8c';                  // inline style; prefer classes
+  console.log($('#t').style.color);
+
+  const tag = document.createElement('span');       // create
+  tag.className = 'tag';
+  tag.textContent = 'created by JavaScript';
+  $('#box').append(tag);                            // attach to the page
+  console.log($('#box').innerHTML);
+</script>
+</body>
+</html>

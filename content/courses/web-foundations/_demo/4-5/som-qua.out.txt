@@ -1,0 +1,4 @@
+script in head sees button: null
+script after the button sees: Go
+deferred script sees button: true
+DOMContentLoaded: page parsed

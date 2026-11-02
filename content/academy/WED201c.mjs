@@ -1290,6 +1290,21 @@ Cũng việc đó viết bằng vòng for kinh điển thì mất sáu dòng và
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Toán tử chuỗi tuỳ chọn và hợp nhất null xoá gần hết mã phòng thủ.</b> <span class="badge">user?.address?.city</span> trả về undefined thay vì ném lỗi khi thiếu <span class="badge">address</span>, còn <span class="badge">const page = input ?? 1</span> chỉ lấy 1 khi giá trị là null hoặc undefined — khác với <span class="badge">||</span> vốn thay thế cả số 0 lẫn chuỗi rỗng. Hai toán tử xoá đi cả khối kiểm <span class="badge">if (x &amp;&amp; x.y &amp;&amp; x.y.z)</span>. <em>Ngoài giáo trình vì MOOC ra đời trước chúng, còn mọi mã nguồn hiện đại thì mặc định là có.</em></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-1-variables-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.1 — types and coercion, measured</span><span class="lc-sub">Why "5" + 1 is 51, == vs ===, truthiness, references</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-1-variables-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.1 — kiểu và ép kiểu, đo thật</span><span class="lc-sub">Vì sao "5" + 1 là 51, == và ===, truthy, tham chiếu</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -1407,6 +1422,21 @@ li.remove();                             <span class="tok-comment">// xoá nó �
 <div class="pitfall"><b>Đặt thẻ <span class="badge">&lt;script&gt;</span> ngay trước <span class="badge">&lt;/body&gt;</span>, hoặc dùng <span class="badge">defer</span>.</b> Script nằm trong <span class="badge">&lt;head&gt;</span> chạy trước khi HTML tồn tại, nên <span class="badge">querySelector</span> trả về <span class="badge">null</span> và bạn nhận lỗi "Cannot read properties of null". Chỉ riêng lỗi đó chiếm phần lớn các ca "JavaScript của em không chạy gì cả".</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thuộc tính data mang trạng thái mà không cần biến toàn cục.</b> Viết <span class="badge">&lt;button data-id="42" data-action="delete"&gt;</span> rồi đọc bằng <span class="badge">btn.dataset.id</span> và <span class="badge">btn.dataset.action</span>. Phần tử tự mang ngữ cảnh của nó, nên một hàm xử lý phục vụ được cả danh sách — và đó đúng là lý do uỷ quyền sự kiện (bài 3.4) vẫn đơn giản. Quy ước này là HTML5 chuẩn và cũng là thứ mà props của React hay directive của Vue rốt cuộc biên dịch xuống. <em>Ngoài giáo trình vì MOOC giữ trạng thái trong biến toàn cục, cách làm hỏng ngay khi danh sách trở nên động.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.5 — the DOM, safely</span><span class="lc-sub">XSS measured, defer, bubbling, delegation and a todo app</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.5 — DOM, một cách an toàn</span><span class="lc-sub">XSS đo thật, defer, nổi bọt, ủy quyền và app todo</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },

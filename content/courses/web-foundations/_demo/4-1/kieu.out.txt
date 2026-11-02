@@ -1,0 +1,12 @@
+42                 number
+3.14               number
+hello              string
+true               boolean
+undefined          undefined
+null               object
+Symbol(id)         symbol
+10                 bigint
+[object Object]    object
+1,2                object
+function f() {}    function
+is it an array? true

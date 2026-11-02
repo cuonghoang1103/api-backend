@@ -1,0 +1,5 @@
+global outer inner
+undefined
+block x 2
+outer x 1
+2

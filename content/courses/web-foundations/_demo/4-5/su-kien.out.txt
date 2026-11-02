@@ -1,0 +1,9 @@
+button click target: btn at number
+outer also heard it; target is still btn · currentTarget outer
+button click target: btn at number
+second listener
+outer also heard it; target is still btn · currentTarget outer
+-- with stopPropagation --
+button click target: btn at number
+second listener
+input event, value = hi

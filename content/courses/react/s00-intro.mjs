@@ -3287,6 +3287,21 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
   <span class="lc-cta">MỞ BÀI FER202 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.4 — arrays and objects from zero</span><span class="lc-sub">map/filter/reduce, shallow copies and JSON, all with real output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.4 — mảng và object từ số 0</span><span class="lc-sub">map/filter/reduce, sao chép nông và JSON, kèm output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

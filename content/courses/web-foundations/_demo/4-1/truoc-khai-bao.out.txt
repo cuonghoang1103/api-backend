@@ -1,0 +1,3 @@
+undefined undefined
+ReferenceError: Cannot access 'newStyle' before initialization
+ReferenceError: notDeclared is not defined

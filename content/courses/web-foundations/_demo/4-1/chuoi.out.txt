@@ -1,0 +1,11 @@
+29
+Xin chào, Web Foundations
+XIN CHÀO, WEB FOUNDATIONS
+true 12
+Xin chào
+['a', 'b', 'c']
+a/b/c
+Hello Linh, next year you will be 21.
+cat
+bat
+2 1

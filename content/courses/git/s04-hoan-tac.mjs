@@ -295,7 +295,7 @@ git restore --staged src/app.ts  <span class="tok-comment"># same thing, modern 
 git commit -m <span class="tok-string">"revert: restore the pre-refactor auth helper"</span></code></pre>
 
 <h3>Why --hard is the most dangerous command in Git</h3>
-<div class="callout danger">It is the only command in normal daily use that <strong>silently destroys work Git has never seen</strong>. No confirmation, no output, nothing in the reflog for the uncommitted part. Two minutes of unstaged edits and two hours of unstaged edits vanish the same way.</div>
+<div class="callout danger">It is the only command in normal daily use that <strong>silently destroys work Git has never seen</strong>. No confirmation, one line of output (<code>HEAD is now at …</code>) that never mentions what was lost, nothing in the reflog for the uncommitted part. Two minutes of unstaged edits and two hours of unstaged edits vanish the same way.</div>
 <p>Two habits remove the risk entirely:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Look before you leap</span><span class="v"><code>git status</code> first, every time. If it lists modified files you care about, do not run <code>--hard</code> yet.</span></div>
@@ -312,7 +312,7 @@ git status --short</code></pre>
 git clean -f        <span class="tok-comment"># delete untracked files</span>
 git clean -fd       <span class="tok-comment"># …and untracked directories</span>
 git clean -fdx      <span class="tok-comment"># …and ignored files too (node_modules, .env — careful!)</span></code></pre>
-<div class="callout danger"><code>git clean -fdx</code> deletes your <code>.env</code>, your local database file, and anything else that is ignored but irreplaceable. There is no undo — these files were never in Git. Run <code>git clean -n</code> first, every single time, and read the list.</div>
+<div class="callout danger"><code>git clean -fdx</code> deletes your <code>.env</code>, your local database file, and anything else that is ignored but irreplaceable. There is no undo — these files were never in Git. Before running it, dry-run <strong>the same flags</strong>: <code>git clean -ndx</code>, every single time, and read the list. Plain <code>git clean -n</code> is not a preview of <code>-fdx</code>: run on a real repo it listed one file, while <code>-ndx</code> listed three, <code>.env</code> included.</div>
 
 <h3>Reset vs revert, in one line</h3>
 <div class="kv-grid">
@@ -415,7 +415,7 @@ git restore --staged src/app.ts  <span class="tok-comment"># cùng việc, cách
 git commit -m <span class="tok-string">"revert: khoi phuc helper auth truoc lan refactor"</span></code></pre>
 
 <h3>Vì sao --hard là lệnh nguy hiểm nhất của Git</h3>
-<div class="callout danger">Nó là lệnh duy nhất dùng hằng ngày mà <strong>âm thầm huỷ công sức Git chưa từng nhìn thấy</strong>. Không hỏi xác nhận, không in gì, không để lại gì trong reflog cho phần chưa commit. Hai phút sửa đổi chưa staging và hai giờ sửa đổi chưa staging đều bốc hơi y như nhau.</div>
+<div class="callout danger">Nó là lệnh duy nhất dùng hằng ngày mà <strong>âm thầm huỷ công sức Git chưa từng nhìn thấy</strong>. Không hỏi xác nhận, chỉ in đúng một dòng <code>HEAD is now at …</code> mà không nhắc tới thứ vừa mất, không để lại gì trong reflog cho phần chưa commit. Hai phút sửa đổi chưa staging và hai giờ sửa đổi chưa staging đều bốc hơi y như nhau.</div>
 <p>Hai thói quen xoá sạch rủi ro đó:</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nhìn trước khi nhảy</span><span class="v"><code>git status</code> trước, mỗi lần. Nếu nó liệt kê những file đã sửa mà bạn còn cần, đừng chạy <code>--hard</code> vội.</span></div>
@@ -432,7 +432,7 @@ git status --short</code></pre>
 git clean -f        <span class="tok-comment"># xoá file chưa theo dõi</span>
 git clean -fd       <span class="tok-comment"># …và cả thư mục chưa theo dõi</span>
 git clean -fdx      <span class="tok-comment"># …và cả file bị ignore (node_modules, .env — cẩn thận!)</span></code></pre>
-<div class="callout danger"><code>git clean -fdx</code> xoá luôn <code>.env</code> của bạn, file database cục bộ, và mọi thứ khác bị ignore nhưng không thay thế được. Không có hoàn tác — những file đó chưa bao giờ ở trong Git. Hãy chạy <code>git clean -n</code> trước, mọi lần không sót lần nào, và đọc cái danh sách.</div>
+<div class="callout danger"><code>git clean -fdx</code> xoá luôn <code>.env</code> của bạn, file database cục bộ, và mọi thứ khác bị ignore nhưng không thay thế được. Không có hoàn tác — những file đó chưa bao giờ ở trong Git. Trước khi chạy, hãy chạy thử với <strong>đúng bộ cờ đó</strong>: <code>git clean -ndx</code>, mọi lần không sót lần nào, và đọc cái danh sách. <code>git clean -n</code> trần không phải bản xem trước của <code>-fdx</code>: chạy thật trên một kho, nó liệt kê một file, còn <code>-ndx</code> liệt kê ba, có cả <code>.env</code>.</div>
 
 <h3>Reset vs revert, trong một dòng</h3>
 <div class="kv-grid">
@@ -776,7 +776,7 @@ git reflog show feature/login</code></pre>
 <pre><code class="language-bash">git show main@{yesterday}     <span class="tok-comment"># time-based selectors work too</span>
 git diff main@{<span class="tok-string">"2 hours ago"</span>} main
 git log main@{1}..main --oneline</code></pre>
-<div class="callout warn">Time selectors read the <em>local</em> reflog, so <code>main@{yesterday}</code> means "where main pointed on this machine yesterday", not "what the project looked like yesterday". On a fresh clone the reflog is nearly empty and these expressions silently fall back to the oldest entry.</div>
+<div class="callout warn">Time selectors read the <em>local</em> reflog, so <code>main@{yesterday}</code> means "where main pointed on this machine yesterday", not "what the project looked like yesterday". On a fresh clone the reflog is nearly empty, so these expressions fall back to the oldest entry; the only sign is one line, <code>warning: log for 'main' only goes back to …</code>, easy to miss above the output.</div>
 
 <h3>Finding commits the reflog missed</h3>
 <pre><code class="language-bash">git fsck --lost-found</code></pre>
@@ -903,7 +903,7 @@ git reflog show feature/login</code></pre>
 <pre><code class="language-bash">git show main@{yesterday}     <span class="tok-comment"># chọn theo thời gian cũng được</span>
 git diff main@{<span class="tok-string">"2 hours ago"</span>} main
 git log main@{1}..main --oneline</code></pre>
-<div class="callout warn">Bộ chọn theo thời gian đọc reflog <em>CỤC BỘ</em>, nên <code>main@{yesterday}</code> nghĩa là "chỗ main trỏ tới trên máy này hôm qua", không phải "dự án trông thế nào hôm qua". Trên một bản clone mới, reflog gần như trống và các biểu thức này âm thầm rơi về dòng cũ nhất.</div>
+<div class="callout warn">Bộ chọn theo thời gian đọc reflog <em>CỤC BỘ</em>, nên <code>main@{yesterday}</code> nghĩa là "chỗ main trỏ tới trên máy này hôm qua", không phải "dự án trông thế nào hôm qua". Trên một bản clone mới, reflog gần như trống nên các biểu thức này rơi về dòng cũ nhất; dấu hiệu duy nhất là một dòng <code>warning: log for 'main' only goes back to …</code>, rất dễ bỏ sót phía trên kết quả.</div>
 
 <h3>Tìm những commit mà reflog bỏ sót</h3>
 <pre><code class="language-bash">git fsck --lost-found</code></pre>
@@ -993,7 +993,7 @@ Changes to be committed:
 Changes not staged for commit:
         modified:   src/routes/auth.routes.ts
 Dropped refs/stash@{0} (a7c2f91d…)</div>
-<div class="callout ok">Notice the staged/unstaged split survived exactly as it was — because of <code>--index</code>. <code>git stash</code> records both the index and the working directory as separate commits internally, which is what makes a faithful restore <em>possible</em>; but a plain <code>git stash pop</code> only re-applies the changes, and everything that was staged comes back unstaged (we ran both on git 2.51: without <code>--index</code>, <code>M&nbsp; login.js</code> came back as <code>&nbsp;M login.js</code>). Add <code>--index</code> whenever the staged part matters.</div>
+<div class="callout ok">Notice the staged/unstaged split survived exactly as it was — because of <code>--index</code>. <code>git stash</code> records both the index and the working directory as separate commits internally, which is what makes a faithful restore <em>possible</em>; but a plain <code>git stash pop</code> only re-applies the changes, and staged edits to tracked files come back unstaged (a brand-new file you had added stays staged as <code>A</code>) (we ran both on git 2.51: without <code>--index</code>, <code>M&nbsp; login.js</code> came back as <code>&nbsp;M login.js</code>). Add <code>--index</code> whenever the staged part matters.</div>
 
 <h3>pop vs apply</h3>
 ${slide('git-04', 15, 'git stash — ngăn kéo cất việc dở')}
@@ -1109,7 +1109,7 @@ Changes to be committed:
 Changes not staged for commit:
         modified:   src/routes/auth.routes.ts
 Dropped refs/stash@{0} (a7c2f91d…)</div>
-<div class="callout ok">Để ý phần chia staging/chưa-staging sống sót y nguyên — là nhờ <code>--index</code>. <code>git stash</code> ghi lại cả index lẫn thư mục làm việc thành các commit riêng ở bên trong, và chính điều đó làm cho việc khôi phục trung thực <em>có thể</em> xảy ra; nhưng <code>git stash pop</code> trần chỉ áp lại thay đổi, và mọi thứ từng ở staging quay về dạng chưa staging (đã chạy thử cả hai trên git 2.51: thiếu <code>--index</code> thì <code>M&nbsp; login.js</code> trở về thành <code>&nbsp;M login.js</code>). Hãy thêm <code>--index</code> mỗi khi phần đã staging quan trọng.</div>
+<div class="callout ok">Để ý phần chia staging/chưa-staging sống sót y nguyên — là nhờ <code>--index</code>. <code>git stash</code> ghi lại cả index lẫn thư mục làm việc thành các commit riêng ở bên trong, và chính điều đó làm cho việc khôi phục trung thực <em>có thể</em> xảy ra; nhưng <code>git stash pop</code> trần chỉ áp lại thay đổi, và sửa đổi đã staging trên file được theo dõi quay về dạng chưa staging (file mới tinh đã add thì vẫn giữ <code>A</code>) (đã chạy thử cả hai trên git 2.51: thiếu <code>--index</code> thì <code>M&nbsp; login.js</code> trở về thành <code>&nbsp;M login.js</code>). Hãy thêm <code>--index</code> mỗi khi phần đã staging quan trọng.</div>
 
 <h3>pop vs apply</h3>
 ${slide('git-04', 15, 'git stash — ngăn kéo cất việc dở')}

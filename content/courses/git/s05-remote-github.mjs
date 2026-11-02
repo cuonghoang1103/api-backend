@@ -281,7 +281,7 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># không có th
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 2.5 (tiếng Việt) — Làm việc với Remote</span><span class="lc-sub">remote add/rename/remove, và "nhánh theo dõi remote" nghĩa là gì.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 2.5 (tiếng Anh) — Làm việc với Remote</span><span class="lc-sub">remote add/rename/remove, và "nhánh theo dõi remote" nghĩa là gì.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-fetch" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>

@@ -275,7 +275,7 @@ hint: If you are sure you want to delete it, run 'git branch -D thu/nhanh'</code
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.1 (tiếng Việt) — Nhánh trong Git là gì</span><span class="lc-sub">Cùng ý "một nhánh là một con trỏ", kèm sơ đồ của sách.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.1 (tiếng Anh) — Nhánh trong Git là gì</span><span class="lc-sub">Cùng ý "một nhánh là một con trỏ", kèm sơ đồ của sách.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-switch" target="_blank" rel="noopener">
   <span class="lc-ico">🔀</span>
@@ -524,7 +524,7 @@ git show --no-patch --format="%h cha: %p" HEAD
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.2 (tiếng Việt) — Căn bản về nhánh và hoà trộn</span><span class="lc-sub">Sơ đồ fast-forward và ba chiều, trong sách chính thức.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.2 (tiếng Anh) — Căn bản về nhánh và hoà trộn</span><span class="lc-sub">Sơ đồ fast-forward và ba chiều, trong sách chính thức.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
@@ -795,7 +795,7 @@ config.txt:7: leftover conflict marker</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.8 (tiếng Việt) — Hoà trộn nâng cao</span><span class="lc-sub">Kiểu hiển thị xung đột, ours/theirs, rerere, và hợp nhất file nhị phân.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.8 (tiếng Anh) — Hoà trộn nâng cao</span><span class="lc-sub">Kiểu hiển thị xung đột, ours/theirs, rerere, và hợp nhất file nhị phân.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -1050,7 +1050,7 @@ c17550f HEAD@{4}: checkout: moving from main to feature/rebase</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.6 (tiếng Việt) — Rebase</span><span class="lc-sub">Gồm cả mục "Hiểm hoạ của Rebase", chính là luật vàng kèm sơ đồ.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.6 (tiếng Anh) — Rebase</span><span class="lc-sub">Gồm cả mục "Hiểm hoạ của Rebase", chính là luật vàng kèm sơ đồ.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-rebase" target="_blank" rel="noopener">
   <span class="lc-ico">♻️</span>
@@ -1339,7 +1339,7 @@ git reflog -6
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.6 (tiếng Việt) — Viết lại lịch sử</span><span class="lc-sub">Rebase tương tác, chẻ commit, và quy trình amend.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.6 (tiếng Anh) — Viết lại lịch sử</span><span class="lc-sub">Rebase tương tác, chẻ commit, và quy trình amend.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>

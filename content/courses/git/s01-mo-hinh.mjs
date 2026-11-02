@@ -248,7 +248,7 @@ MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M ph�
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Việt) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Anh) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>

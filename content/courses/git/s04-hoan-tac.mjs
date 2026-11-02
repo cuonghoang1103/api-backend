@@ -214,7 +214,7 @@ bd06a69 style: thêm style.css</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.7 (tiếng Việt) — Giải mã Reset</span><span class="lc-sub">Cách giải thích reset theo ba cây, kèm bảng cho từng chế độ.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.7 (tiếng Anh) — Giải mã Reset</span><span class="lc-sub">Cách giải thích reset theo ba cây, kèm bảng cho từng chế độ.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>

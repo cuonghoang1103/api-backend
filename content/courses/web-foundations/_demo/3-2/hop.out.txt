@@ -1,0 +1,2 @@
+.a width: 300px · drawn width (offsetWidth): 350px · inner text area: 300px
+.b width: 300px · drawn width (offsetWidth): 300px · inner text area: 250px

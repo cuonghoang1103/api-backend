@@ -23,6 +23,12 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-2-4-forms` | WED201c (Academy) `wed201c-html-form` | `content/academy/WED201c.mjs` | form thật gửi tới máy chủ thật |
 | `wf-2-4-forms` | React `rx-3-1-controlled` | `content/courses/react/s03-form.mjs` | form khi chưa có React |
 | `wf-2-5-tables-media-a11y` | WED201c (Academy) `wed201c-a11y-xuat-ban` | `content/academy/WED201c.mjs` | tương phản, thứ tự Tab, phép kiểm năm phút |
+| `wf-3-1-css-basics` | WED201c (Academy) `wed201c-cascade` | `content/academy/WED201c.mjs` | sáu cuộc đấu cascade, độ cụ thể |
+| `wf-3-1-css-basics` | Next.js `nextjs-13-1-styling-va-tailwind` | `content/courses/nextjs/s13-styling-tailwind.mjs` | cascade bên dưới Tailwind |
+| `wf-3-2-box-model` | WED201c (Academy) `wed201c-css-basics` | `content/academy/WED201c.mjs` | box-sizing đo thật, gộp margin |
+| `wf-3-3-flexbox` | WED201c (Academy) `wed201c-flexbox-grid` | `content/academy/WED201c.mjs` | hai trục, lỗi min-width |
+| `wf-3-4-css-grid` | WED201c (Academy) `wed201c-flexbox-grid` | `content/academy/WED201c.mjs` | fr, vùng có tên, auto-fit |
+| `wf-3-5-responsive` | WED201c (Academy) `wed201c-responsive` | `content/academy/WED201c.mjs` | viewport, mobile first, clamp |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

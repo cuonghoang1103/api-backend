@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>auto-fit</title><meta name="cho" content="500"></head>
+<body>
+<script>
+  const css = `<style>body{margin:0}.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g div{height:40px;background:#1f4e8c}</style>`;
+  const html = css + '<div class="g">' + '<div></div>'.repeat(6) + '</div>';
+  Promise.all([360, 640, 900, 1300].map((w) => new Promise((done) => {
+    const f = document.createElement('iframe');
+    f.width = w; f.height = 100; f.style.border = 0; f.srcdoc = html;
+    f.onload = () => {
+      const g = f.contentDocument.querySelector('.g');
+      const cols = getComputedStyle(g).gridTemplateColumns.split(' ');
+      done('window ' + String(w).padStart(4) + 'px → ' + cols.length + ' columns of ' + Math.round(parseFloat(cols[0])) + 'px');
+    };
+    document.body.append(f);
+  }))).then((lines) => lines.forEach((l) => console.log(l)));
+</script>
+</body>
+</html>

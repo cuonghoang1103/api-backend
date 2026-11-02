@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Grid tracks</title><meta name="chup" content="640x260">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; font-size: 13px; }
+  .g { display: grid; gap: 8px; width: 600px; margin-bottom: 12px; }
+  .g > div { background: #e8eef7; padding: 8px; text-align: center; }
+  .a { grid-template-columns: 1fr 2fr 1fr; }
+  .b { grid-template-columns: 200px 1fr; }
+  .c { grid-template-columns: repeat(4, 1fr); }
+  .wide { grid-column: span 2; background: #ffe6cc !important; }
+</style></head>
+<body>
+  <div class="g a"><div>1fr</div><div>2fr</div><div>1fr</div></div>
+  <div class="g b"><div>200px</div><div>1fr</div></div>
+  <div class="g c"><div class="wide">span 2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div></div>
+<script>
+  for (const s of ['.a', '.b', '.c']) console.log(s, getComputedStyle(document.querySelector(s)).gridTemplateColumns);
+  console.log('.c rows (implicit, created automatically):', getComputedStyle(document.querySelector('.c')).gridTemplateRows);
+</script>
+</body>
+</html>

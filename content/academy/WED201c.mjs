@@ -686,6 +686,21 @@ export default {
   <span class="lc-cta">COURSERA →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.2 — the box model, measured</span><span class="lc-sub">box-sizing 350 vs 300 px, margin collapse, three ways to hide</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.2 — mô hình hộp, có đo đạc</span><span class="lc-sub">box-sizing 350 so với 300 px, gộp margin, ba cách ẩn</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -734,6 +749,36 @@ export default {
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: CSS3 — bố cục & định vị</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
   <span class="lc-cta">COURSERA →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.3 — Flexbox from zero</span><span class="lc-sub">Two axes, grow/shrink/basis and the min-width bug</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.3 — Flexbox từ số 0</span><span class="lc-sub">Hai trục, grow/shrink/basis và lỗi min-width</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.4 — CSS Grid from zero</span><span class="lc-sub">fr, named areas and a gallery with no media query</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.4 — CSS Grid từ số 0</span><span class="lc-sub">fr, vùng có tên và thư viện không cần media query</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,
@@ -829,6 +874,21 @@ export default {
 <div class="pitfall"><b><span class="badge">!important</span> là một khoản nợ, không phải cách chữa.</b> Hôm nay nó thắng, thế là lần ghi đè sau lại cần thêm một <span class="badge">!important</span> nữa, và chẳng mấy chốc không sửa được gì nếu không có nó. Phản ứng chuyên nghiệp khi "luật của tôi bị thua" là <em>hạ</em> độ ưu tiên của luật đối thủ — thay <span class="badge">#nav ul li a</span> bằng một class đơn — chứ không phải nâng luật của mình lên.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các quy ước đặt tên sinh ra để giữ độ ưu tiên luôn phẳng.</b> BEM viết mỗi phần tử một class — <span class="badge">.card</span>, <span class="badge">.card__title</span>, <span class="badge">.card--featured</span> — nên mọi luật đều là (0,1,0) và chỉ thứ tự xuất hiện quyết định. Các framework tiện ích như Tailwind còn đi xa hơn: mọi luật là một class đơn, và bạn ghép chúng ngay trong HTML. Cả hai hướng cùng chữa một căn bệnh: một tệp CSS mà không ai đoán nổi cái gì sẽ thắng. <em>Ngoài giáo trình vì MOOC dạy bộ chọn nhưng không dạy kỷ luật giữ cho một tệp CSS 2.000 dòng còn bảo trì được.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.1 — which rule wins?</span><span class="lc-sub">Six cascade fights measured in Chromium, specificity as three counters</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.1 — luật nào thắng?</span><span class="lc-sub">Sáu cuộc đấu cascade đo trong Chromium, độ cụ thể như ba bộ đếm</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },
@@ -1577,6 +1637,21 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Responsive Design</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
   <span class="lc-cta">COURSERA →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.5 — responsive, measured</span><span class="lc-sub">Viewport on an emulated phone, mobile first at three widths, clamp</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.5 — responsive, có đo đạc</span><span class="lc-sub">Viewport trên điện thoại giả lập, mobile first ở ba bề rộng, clamp</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

@@ -1,0 +1,31 @@
+<!-- chay: tay — chụp ở ba bề rộng bằng _t3/chay.mjs -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mobile first</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; margin: 0; }
+  header { background: #1f4e8c; color: #fff; padding: 12px 16px; font-weight: 700; }
+  .cards { display: grid; gap: 12px; padding: 12px; grid-template-columns: 1fr; }   /* phones first: one column */
+  .card { background: #e8eef7; border-radius: 8px; padding: 14px; }
+  aside { display: none; }                                                           /* no sidebar on phones */
+  @media (min-width: 640px) {                                                        /* tablets */
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 960px) {                                                        /* laptops */
+    .layout { display: grid; grid-template-columns: 220px 1fr; }
+    aside { display: block; background: #ffe6cc; padding: 14px; }
+    .cards { grid-template-columns: repeat(3, 1fr); }
+  }
+</style></head>
+<body>
+  <header>Shop</header>
+  <div class="layout">
+    <aside>Filters</aside>
+    <main class="cards">
+      <div class="card">Product 1</div><div class="card">Product 2</div><div class="card">Product 3</div>
+      <div class="card">Product 4</div><div class="card">Product 5</div><div class="card">Product 6</div>
+    </main>
+  </div>
+</body>
+</html>

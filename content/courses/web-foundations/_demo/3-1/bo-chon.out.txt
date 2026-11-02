@@ -1,0 +1,11 @@
+a                    3
+.link                2
+#top                 1
+nav a                2
+article > p          2
+a.link.active        1
+a[href^="https"]     1
+input[required]      1
+p:first-of-type      1
+h2 + p               1
+h1, h2               1

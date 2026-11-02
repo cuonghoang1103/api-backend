@@ -1,0 +1,2 @@
+.pct box 400 · content needs 460 ← overflow
+.fr box 400 · content needs 400 · fits

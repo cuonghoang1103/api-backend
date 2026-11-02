@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Inheritance</title><meta name="chup" content="640x210">
+<style>
+  article { color: #1f4e8c; font-family: Georgia, serif; font-size: 18px; border: 2px solid #1f4e8c; padding: 10px; }
+</style></head>
+<body>
+  <article>
+    <p>A paragraph with a <a href="#">link</a> and a <strong>strong</strong>.</p>
+    <button>A button</button> <input value="An input">
+  </article>
+<script>
+  const css = (s, p) => getComputedStyle(document.querySelector(s)).getPropertyValue(p);
+  console.log('p color inherited:', css('p', 'color'));
+  console.log('p font inherited:', css('p', 'font-family'));
+  console.log('p border inherited?', css('p', 'border-top-style'));
+  console.log('a color:', css('a', 'color'), '(browser style for links wins)');
+  console.log('button font:', css('button', 'font-family').slice(0, 24), '(controls do not inherit)');
+</script>
+</body>
+</html>

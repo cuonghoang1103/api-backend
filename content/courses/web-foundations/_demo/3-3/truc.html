@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Flex axes</title><meta name="chup" content="720x360">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; }
+  .f { display: flex; height: 90px; border: 2px dashed #1f4e8c; padding: 4px; gap: 6px; }
+  .f b { background: #1f4e8c; color: #fff; padding: 4px 10px; border-radius: 4px; }
+  .a { justify-content: flex-start; align-items: stretch; }
+  .b { justify-content: center; align-items: center; }
+  .c { justify-content: space-between; align-items: flex-end; }
+  .d { flex-direction: column; justify-content: center; align-items: flex-start; height: 120px; }
+</style></head>
+<body>
+  <div>default (stretch)<div class="f a"><b>1</b><b>2</b><b>3</b></div></div>
+  <div>center + center<div class="f b"><b>1</b><b>2</b><b>3</b></div></div>
+  <div>space-between + flex-end<div class="f c"><b>1</b><b>2</b><b>3</b></div></div>
+  <div>flex-direction: column<div class="f d"><b>1</b><b>2</b><b>3</b></div></div>
+<script>
+  for (const s of ['.a', '.b', '.c', '.d']) {
+    const box = document.querySelector(s), r = box.getBoundingClientRect();
+    const xy = [...box.children].map((c) => { const q = c.getBoundingClientRect(); return `(${Math.round(q.x - r.x)},${Math.round(q.y - r.y)}) ${Math.round(q.width)}×${Math.round(q.height)}`; });
+    console.log(s, xy.join('  '));
+  }
+</script>
+</body>
+</html>

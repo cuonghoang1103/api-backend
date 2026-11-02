@@ -1,0 +1,2 @@
+nowrap: lines = 1 · overflow: true
+wrap  : lines = 2 · overflow: false

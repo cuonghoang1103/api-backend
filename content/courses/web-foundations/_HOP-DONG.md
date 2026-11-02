@@ -76,6 +76,7 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 | Ch1 | 1.2, 1.4 | ✅ 01/11 — bài 1.2 VS Code (40,6k chữ) + 1.4 GitHub (41,9k chữ), giữ video YouTube cũ; demo `_demo/_t1/vscode` (Prettier 3.9.10, ESLint 10.14.0, TypeScript 5.9.3 cho F2) và `_demo/_t1/github` (`sim.sh`: kho trần đóng vai github.com, git 2.51.1; `ssh.sh`: khoá tạo trong thư mục tạm rồi xoá); deck wf-1-2, wf-1-4 (22 slide, WF/v1). ⏳ CHƯA có Code Lab cho 1.2/1.4 |
 | Mục 0 | 0.1–0.4 | ✅ 02/11 — bài 30–36k chữ, tệp `s00/`; demo `_demo/0-1`, `0-2`, `0-4`, `_t0` (`chay-web.sh`, `chay-may.sh`: máy chủ Node + curl + dig + kiem-may.mjs); deck wf-0-1…4 (41 slide) |
 | Ch2 | 2.1–2.5 | ✅ 02/11 — bài 29–33k chữ, tệp `s02/`; demo `_demo/2-1…2-5`, `_t2/chay.mjs` (ariaSnapshot, phím Tab thật, form tới máy chủ thật, ảnh chậm 1 s); deck wf-2-1…5 (52 slide); Code Lab giữ nguyên 7 đề/bài |
+| Ch3 | 3.1–3.5 | ✅ 02/11 — bài 23–33k chữ, tệp `s03/`; demo `_demo/3-1…3-5`, `_t3/chay.mjs` (phím Tab với order, iPhone 13 giả lập, ba bề rộng); deck wf-3-1…5 (51 slide); Code Lab giữ nguyên 7 đề/bài |
 
 
 ## ✅ HOÀN TẤT ĐỢT NÂNG CẤP 02/11/2026

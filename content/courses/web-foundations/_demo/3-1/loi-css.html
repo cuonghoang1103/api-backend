@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>CSS fails silently</title>
+<style>
+  .a { color: blu; }                 /* unknown value */
+  .b { colour: green; }              /* unknown property */
+  .c { color: green background: yellow; }   /* missing semicolon */
+  .d { color: green; background: yellow; }  /* correct */
+  .Card { color: green; }            /* class names are case-sensitive */
+  .e { color: green }
+</style></head>
+<body>
+  <p class="a">a</p><p class="b">b</p><p class="c">c</p><p class="d">d</p><p class="card">card</p><p class="e">e</p>
+<script>
+  for (const p of document.querySelectorAll('p')) {
+    const s = getComputedStyle(p);
+    console.log(p.className.padEnd(5), 'color', s.color.padEnd(18), 'background', s.backgroundColor);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Selectors</title></head>
+<body>
+  <nav id="top">
+    <a href="/" class="link active">Home</a>
+    <a href="/about" class="link">About</a>
+  </nav>
+  <article class="post">
+    <h2>Title</h2>
+    <p>First <a href="https://example.com">outside link</a></p>
+    <p>Second</p>
+  </article>
+  <input type="email" required>
+<script>
+  // The same selectors CSS uses work in querySelectorAll, so we can count what each one matches.
+  const tests = [
+    'a',                   // every a
+    '.link',               // class
+    '#top',                // id
+    'nav a',               // a anywhere inside nav (descendant)
+    'article > p',         // p that is a direct child
+    'a.link.active',       // both classes on the same a
+    'a[href^="https"]',    // attribute starts with
+    'input[required]',     // has the attribute
+    'p:first-of-type',     // first p among its siblings
+    'h2 + p',              // the p right after an h2
+    'h1, h2',              // either
+  ];
+  for (const s of tests) console.log(s.padEnd(20), document.querySelectorAll(s).length);
+</script>
+</body>
+</html>

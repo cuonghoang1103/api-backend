@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>% plus gap overflows</title>
+<style>
+  .box { width: 400px; margin-bottom: 10px; }
+  .pct { display: grid; gap: 20px; grid-template-columns: repeat(4, 25%); }
+  .fr  { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); }
+  .box div { height: 20px; background: #1f4e8c; }
+</style></head>
+<body>
+  <div class="box pct"><div></div><div></div><div></div><div></div></div>
+  <div class="box fr"><div></div><div></div><div></div><div></div></div>
+<script>
+  for (const s of ['.pct', '.fr']) {
+    const b = document.querySelector(s);
+    console.log(s, 'box', b.clientWidth, '· content needs', b.scrollWidth, b.scrollWidth > b.clientWidth ? '← overflow' : '· fits');
+  }
+</script>
+</body>
+</html>

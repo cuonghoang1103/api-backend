@@ -1,0 +1,8 @@
+.c1 computed color = rgb(31, 78, 140)
+.c2 computed color = rgb(31, 78, 140)
+.c3 computed color = rgb(31, 79, 142)
+.c4 computed color = rgba(31, 78, 140, 0.5)
+.s1 50% of a 400px parent = 200px
+.s2 1.5em of parent 20px  = 30px
+.s3 1.5rem of root 16px   = 24px
+.s4 10vw of a 1000px window = 100px

@@ -131,6 +131,21 @@ export default {
   <span class="lc-body"><span class="lc-title">tailwindcss.com — Cài với Next.js</span><span class="lc-sub">Quét content, các directive, và config.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.1 — the cascade under Tailwind</span><span class="lc-sub">Specificity and inheritance: what utility classes are avoiding</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.1 — cascade bên dưới Tailwind</span><span class="lc-sub">Độ cụ thể và kế thừa: thứ mà class tiện ích đang tránh</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

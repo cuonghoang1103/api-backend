@@ -1,0 +1,2 @@
+without viewport tag: layout width 980px on a 390px-wide phone
+with viewport tag   : layout width 390px on a 390px-wide phone

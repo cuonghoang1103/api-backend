@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>grow, shrink, basis</title>
+<style>
+  .row { display: flex; width: 600px; margin-bottom: 8px; background: #eee; }
+  .row div { height: 30px; background: #1f4e8c; outline: 1px solid #fff; }
+  .g1 div { flex: 0 0 100px; }                /* no grow, no shrink, 100 */
+  .g2 div { flex: 1; }                        /* share equally */
+  .g3 div:nth-child(1) { flex: 2; }           /* double share */
+  .g3 div:nth-child(2) { flex: 1; }
+  .g3 div:nth-child(3) { flex: 1; }
+  .g4 div:nth-child(1) { flex: 0 0 200px; }   /* sidebar fixed */
+  .g4 div:nth-child(2) { flex: 1; }           /* content takes the rest */
+  .g5 div { flex: 0 1 300px; }                /* want 300 each, must shrink */
+  .g6 div { flex: 0 0 300px; }                /* refuse to shrink: overflow */
+</style></head>
+<body>
+  <div class="row g1"><div></div><div></div><div></div></div>
+  <div class="row g2"><div></div><div></div><div></div></div>
+  <div class="row g3"><div></div><div></div><div></div></div>
+  <div class="row g4"><div></div><div></div></div>
+  <div class="row g5"><div></div><div></div><div></div></div>
+  <div class="row g6"><div></div><div></div><div></div></div>
+<script>
+  const css = { g1: 'flex: 0 0 100px', g2: 'flex: 1', g3: 'flex: 2 / 1 / 1', g4: '200px + flex: 1', g5: 'flex: 0 1 300px', g6: 'flex: 0 0 300px' };
+  for (const g of Object.keys(css)) {
+    const ws = [...document.querySelectorAll('.' + g + ' div')].map((d) => Math.round(d.getBoundingClientRect().width));
+    const sum = ws.reduce((a, b) => a + b, 0);
+    console.log(css[g].padEnd(18), ws.join(' + '), '=', sum, sum > 600 ? '← overflows 600' : '');
+  }
+</script>
+</body>
+</html>

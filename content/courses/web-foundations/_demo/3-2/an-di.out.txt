@@ -1,0 +1,3 @@
+a · height 0 · takes space: false · real mouse click lands on it: false · can be focused: false
+b · height 30 · takes space: true · real mouse click lands on it: false · can be focused: false
+c · height 30 · takes space: true · real mouse click lands on it: true · can be focused: true

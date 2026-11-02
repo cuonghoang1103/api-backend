@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>auto-fit vs auto-fill</title><meta name="chup" content="760x170">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; font-size: 13px; }
+  .g { display: grid; gap: 8px; margin-bottom: 10px; border: 2px dashed #1f4e8c; }
+  .fit { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  .fill { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .g div { background: #e8eef7; height: 40px; }
+</style></head>
+<body>
+  auto-fit
+  <div class="g fit"><div></div><div></div></div>
+  auto-fill
+  <div class="g fill"><div></div><div></div></div>
+<script>
+  for (const s of ['.fit', '.fill']) {
+    const w = [...document.querySelectorAll(s + ' div')].map((d) => Math.round(d.getBoundingClientRect().width));
+    console.log(s, 'columns:', getComputedStyle(document.querySelector(s)).gridTemplateColumns.split(' ').length, '· item widths:', w.join(', '));
+  }
+</script>
+</body>
+</html>

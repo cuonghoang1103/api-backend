@@ -1,0 +1,3 @@
+gap between .a and .b: 30 px (not 50)
+wrap top to h2 top, plain div : 0 px — the margin escaped the parent
+wrap top to h2 top, flow-root : 24 px — contained

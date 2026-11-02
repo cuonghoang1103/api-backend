@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>flex-wrap</title><meta name="chup" content="640x300">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; font-size: 13px; }
+  .row { display: flex; gap: 8px; margin-bottom: 12px; border: 2px dashed #1f4e8c; padding: 6px; }
+  .wrap { flex-wrap: wrap; }
+  .card { flex: 1 1 180px; background: #e8eef7; padding: 10px; border-radius: 6px; }
+  .nowrap .card { flex: 0 0 180px; }
+</style></head>
+<body>
+  no wrap (overflows the box)
+  <div class="row nowrap"><div class="card">1</div><div class="card">2</div><div class="card">3</div><div class="card">4</div></div>
+  flex-wrap: wrap + flex: 1 1 180px
+  <div class="row wrap"><div class="card">1</div><div class="card">2</div><div class="card">3</div><div class="card">4</div></div>
+<script>
+  const rows = (s) => new Set([...document.querySelectorAll(s + ' .card')].map((c) => Math.round(c.getBoundingClientRect().top))).size;
+  console.log('nowrap: lines =', rows('.nowrap'), '· overflow:', document.querySelector('.nowrap').scrollWidth > document.querySelector('.nowrap').clientWidth);
+  console.log('wrap  : lines =', rows('.wrap'), '· overflow:', document.querySelector('.wrap').scrollWidth > document.querySelector('.wrap').clientWidth);
+</script>
+</body>
+</html>

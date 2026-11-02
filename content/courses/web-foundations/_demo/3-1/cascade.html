@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Which rule wins?</title>
+<style>
+  /* Case 1: order — same specificity, the later rule wins */
+  .one   { color: red; }
+  .one   { color: green; }
+  /* Case 2: specificity — class beats tag, even if the tag rule comes later */
+  .two   { color: green; }
+  p      { color: red; }
+  /* Case 3: id beats class */
+  #three { color: green; }
+  .three { color: red; }
+  /* Case 4: two classes beat one */
+  .a.b   { color: green; }
+  .b     { color: red; }
+  /* Case 5: !important beats everything — and starts a war */
+  .five  { color: green !important; }
+  #five  { color: red; }
+  /* Case 6: a rule on the element beats any rule on its parent */
+  .six   { color: red; }
+  .six span { color: green; }
+</style></head>
+<body>
+  <p class="one">1</p>
+  <p class="two">2</p>
+  <p id="three" class="three">3</p>
+  <p class="a b">4</p>
+  <p id="five" class="five">5</p>
+  <p class="six"><span id="s">6</span></p>
+<script>
+  const name = (c) => ({ 'rgb(255, 0, 0)': 'red', 'rgb(0, 128, 0)': 'green' }[c] || c);
+  const all = [...document.querySelectorAll('p')];
+  all.forEach((p, i) => console.log('case', i + 1, name(getComputedStyle(p.firstElementChild || p).color)));
+</script>
+</body>
+</html>

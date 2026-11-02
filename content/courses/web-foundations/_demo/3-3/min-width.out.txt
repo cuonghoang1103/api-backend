@@ -1,0 +1,2 @@
+.bad row inner width 420 · main width 593 · row overflows: true
+.fix row inner width 420 · main width 322 · row overflows: false

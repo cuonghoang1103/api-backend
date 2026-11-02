@@ -1,0 +1,4 @@
+.a 146px 292px 146px
+.b 200px 392px
+.c 144px 144px 144px 144px
+.c rows (implicit, created automatically): 32px 32px

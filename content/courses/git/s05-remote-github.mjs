@@ -623,7 +623,7 @@ ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">The remote has commits you do not. Someone pushed while you were working. <strong>Pull (or fetch + rebase), then push.</strong> Never force.</span></div>
   <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.2).</span></div>
-  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.5).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.4).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
@@ -662,7 +662,7 @@ git push origin main</code></pre>
 git push origin --tags            <span class="tok-comment"># every local tag</span>
 git push --follow-tags            <span class="tok-comment"># push commits + the ANNOTATED tags that point into them</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># delete a tag from the remote</span></code></pre>
-<div class="callout ok"><code>--follow-tags</code> is the sane default for a release workflow: it pushes annotated tags reachable from what you are pushing, and ignores stray local tags. Chapter 7.3 covers tags and semantic versioning properly.</div>
+<div class="callout ok"><code>--follow-tags</code> is the sane default for a release workflow: it pushes annotated tags reachable from what you are pushing, and ignores stray local tags. Lesson 7.2 covers tags and semantic versioning properly.</div>
 
 <h3>Pushing everything, and what not to do</h3>
 <pre><code class="language-bash">git push origin --all             <span class="tok-comment"># every local branch — rarely what you want</span>
@@ -744,7 +744,7 @@ ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">Remote có commit bạn chưa có. Ai đó đã push trong lúc bạn làm việc. <strong>Hãy pull (hoặc fetch + rebase), rồi push.</strong> Đừng bao giờ ép.</span></div>
   <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.2).</span></div>
-  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.5).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.4).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
@@ -783,7 +783,7 @@ git push origin main</code></pre>
 git push origin --tags            <span class="tok-comment"># mọi tag cục bộ</span>
 git push --follow-tags            <span class="tok-comment"># push commit + những tag CÓ CHÚ THÍCH trỏ vào chúng</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># xoá một tag khỏi remote</span></code></pre>
-<div class="callout ok"><code>--follow-tags</code> là mặc định hợp lý cho quy trình phát hành: nó push những tag có chú thích với tới được từ thứ bạn đang push, và bỏ qua các tag cục bộ lạc lõng. Bài 7.3 nói tử tế về tag và đánh phiên bản ngữ nghĩa.</div>
+<div class="callout ok"><code>--follow-tags</code> là mặc định hợp lý cho quy trình phát hành: nó push những tag có chú thích với tới được từ thứ bạn đang push, và bỏ qua các tag cục bộ lạc lõng. Bài 7.2 nói tử tế về tag và đánh phiên bản ngữ nghĩa.</div>
 
 <h3>Push mọi thứ, và những thứ không nên làm</h3>
 <pre><code class="language-bash">git push origin --all             <span class="tok-comment"># mọi nhánh cục bộ — hiếm khi là thứ bạn muốn</span>

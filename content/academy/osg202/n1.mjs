@@ -1445,7 +1445,7 @@ const walk = (n, m) =&gt; n * m + n + m;
 for (const [n, m] of [[4, 4], [5, 4], [5, 3], [4, 3], [3, 3]]) console.log(&#96;walk &#36;{n}+&#36;{m} levels: &#36;{walk(n, m)} reads (native &#36;{n}) = &#36;{(walk(n, m) / n).toFixed(2)}x&#96;);
 // (b) average extra reads per memory access for a TLB miss rate
 for (const miss of [0.001, 0.01, 0.05]) console.log(&#96;TLB miss rate &#36;{miss * 100}%: &#36;{(miss * walk(4, 4)).toFixed(3)} table reads per access in a VM, &#36;{(miss * 4).toFixed(3)} native&#96;);
-// (c) overcommit: host with 16 cores and 64 GiB; 12 VMs of 4 vCPU and 20 VMs of 8 GiB? (one fleet of 12 VMs: 4 vCPU, 8 GiB each)
+// (c) overcommit: host with 16 cores and 64 GiB; 12 VMs, each with 4 vCPU and 8 GiB
 const vms = 12, vcpu = 4, gib = 8, cores = 16, ram = 64;
 console.log(&#96;vCPU promised &#36;{vms * vcpu} on &#36;{cores} cores = &#36;{(vms * vcpu / cores).toFixed(1)}:1 ; RAM promised &#36;{vms * gib} GiB on &#36;{ram} GiB = &#36;{(vms * gib / ram).toFixed(2)}:1&#96;);
 const idle = 0.4;                                   // if 40% of the promised RAM is idle and the balloon reclaims it
@@ -1885,7 +1885,7 @@ const walk = (n, m) =&gt; n * m + n + m;
 for (const [n, m] of [[4, 4], [5, 4], [5, 3], [4, 3], [3, 3]]) console.log(&#96;walk &#36;{n}+&#36;{m} levels: &#36;{walk(n, m)} reads (native &#36;{n}) = &#36;{(walk(n, m) / n).toFixed(2)}x&#96;);
 // (b) average extra reads per memory access for a TLB miss rate
 for (const miss of [0.001, 0.01, 0.05]) console.log(&#96;TLB miss rate &#36;{miss * 100}%: &#36;{(miss * walk(4, 4)).toFixed(3)} table reads per access in a VM, &#36;{(miss * 4).toFixed(3)} native&#96;);
-// (c) overcommit: host with 16 cores and 64 GiB; 12 VMs of 4 vCPU and 20 VMs of 8 GiB? (one fleet of 12 VMs: 4 vCPU, 8 GiB each)
+// (c) overcommit: host with 16 cores and 64 GiB; 12 VMs, each with 4 vCPU and 8 GiB
 const vms = 12, vcpu = 4, gib = 8, cores = 16, ram = 64;
 console.log(&#96;vCPU promised &#36;{vms * vcpu} on &#36;{cores} cores = &#36;{(vms * vcpu / cores).toFixed(1)}:1 ; RAM promised &#36;{vms * gib} GiB on &#36;{ram} GiB = &#36;{(vms * gib / ram).toFixed(2)}:1&#96;);
 const idle = 0.4;                                   // if 40% of the promised RAM is idle and the balloon reclaims it

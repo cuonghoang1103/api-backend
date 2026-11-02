@@ -7,8 +7,20 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
+    {
+      "slug": "wf-1-2-vscode",
+      "name": "1.2 VS Code: tính năng trình soạn thảo",
+      "level": "BEGINNER",
+      "description": "Bật/tắt chú thích (Ctrl+/), dời dòng (Alt+↑↓), chọn lần xuất hiện kế (Ctrl+D), khớp tên file kiểu Ctrl+P, đọc settings.json có chú thích (JSONC), đổi tên định danh bỏ qua chuỗi và chú thích — 6 bài."
+    },
+    {
+      "slug": "wf-1-4-github",
+      "name": "1.4 GitHub: remote, push, pull",
+      "level": "BEGINNER",
+      "description": "Đọc URL remote HTTPS/SSH, dựng dòng git status -sb, đếm ahead/behind, quyết định push (up-to-date / fast-forward / rejected), soát lời nhắn commit, khớp mẫu .gitignore — 6 bài."
+    },
     {
       "slug": "wf-2-1-html-basics",
       "name": "2.1 HTML là gì: phần tử, thẻ, thuộc tính",

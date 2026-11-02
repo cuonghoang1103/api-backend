@@ -1,0 +1,18 @@
+$ nodee -v
+bash: nodee: command not found
+$ echo $?
+127
+$ node -v
+v22.23.3
+$ echo $?
+0
+$ which node
+/Users/lan/.nvm/versions/node/v22.23.3/bin/node
+$ cat missing.txt
+cat: missing.txt: No such file or directory
+$ echo $?
+1
+$ mkdir projects
+mkdir: projects: File exists
+$ echo $?
+1

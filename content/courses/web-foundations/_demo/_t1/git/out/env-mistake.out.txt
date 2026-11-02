@@ -1,0 +1,28 @@
+# the mistake: .env was committed BEFORE anyone wrote a .gitignore
+$ git commit -m "First version"
+[main (root-commit) 609f9a4] First version
+ 2 files changed, 2 insertions(+)
+ create mode 100644 .env
+ create mode 100644 index.html
+$ echo '.env' > .gitignore
+$ echo 'API_KEY=dev-only-456' > .env
+$ git status --short
+ M .env
+?? .gitignore
+# .gitignore does not stop tracking a file Git already tracks — untrack it:
+$ git rm --cached .env
+rm '.env'
+$ git add .gitignore
+$ git commit -m "Stop tracking .env"
+[main 2c7e7ce] Stop tracking .env
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ delete mode 100644 .env
+ create mode 100644 .gitignore
+$ echo 'API_KEY=dev-only-789' > .env
+$ git status --short
+# …but the old value is still in history
+$ git log --oneline -- .env
+2c7e7ce Stop tracking .env
+609f9a4 First version
+$ git show HEAD~1:.env
+API_KEY=dev-only-123

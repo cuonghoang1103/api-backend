@@ -1,0 +1,17 @@
+$ cd projects/shop
+$ touch .env .gitignore
+$ ls
+index.html
+src
+$ ls -a
+.
+..
+.env
+.gitignore
+index.html
+src
+$ ls -A
+.env
+.gitignore
+index.html
+src

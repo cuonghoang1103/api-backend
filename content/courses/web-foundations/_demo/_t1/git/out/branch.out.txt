@@ -1,0 +1,27 @@
+$ git switch -c feature/contact
+Switched to a new branch 'feature/contact'
+$ echo '<a href="contact.html">Contact</a>' >> index.html
+$ git commit -m "Link to contact page"
+[feature/contact 810a524] Link to contact page
+ 1 file changed, 1 insertion(+)
+$ git log --oneline --graph --all -3
+* 810a524 Link to contact page
+* b7656ed Ignore dependencies, secrets and logs
+* 6b74f73 Revert "Add basic styles"
+$ git switch main
+Switched to branch 'main'
+$ grep -c Contact index.html
+0
+$ git merge feature/contact
+Updating b7656ed..810a524
+Fast-forward
+ index.html | 1 +
+ 1 file changed, 1 insertion(+)
+$ grep -c Contact index.html
+1
+$ git branch -d feature/contact
+Deleted branch feature/contact (was 810a524).
+$ git log --oneline -3
+810a524 Link to contact page
+b7656ed Ignore dependencies, secrets and logs
+6b74f73 Revert "Add basic styles"

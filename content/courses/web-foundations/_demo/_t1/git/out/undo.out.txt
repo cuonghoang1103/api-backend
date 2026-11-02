@@ -1,0 +1,29 @@
+# 1. undo an edit you have NOT staged
+$ echo 'BROKEN' > index.html
+$ git status --short
+ M index.html
+$ git restore index.html
+$ head -1 index.html
+<h1>My shop</h1>
+
+# 2. unstage a file (keep the edit)
+$ echo '<footer>(c) 2026</footer>' >> index.html
+$ git add index.html
+$ git restore --staged index.html
+$ git status --short
+ M index.html
+$ git restore index.html
+
+# 3. undo a COMMIT safely: a new commit that reverses it
+$ git revert --no-edit HEAD
+[main 6b74f73] Revert "Add basic styles"
+ Date: Sun Nov 1 12:00:00 2026 +0700
+ 2 files changed, 2 deletions(-)
+ delete mode 100644 style.css
+$ git log --oneline
+6b74f73 Revert "Add basic styles"
+b151d3e Add basic styles
+e0de3f3 Add opening message
+a5600e9 Add home page
+$ git show HEAD~1:style.css
+body { font-family: sans-serif; }

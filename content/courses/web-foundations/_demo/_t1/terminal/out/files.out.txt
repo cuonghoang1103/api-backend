@@ -1,0 +1,23 @@
+$ mkdir site
+$ cd site
+$ echo "<h1>Hello</h1>" > index.html
+$ cat index.html
+<h1>Hello</h1>
+$ echo "<p>Second line</p>" >> index.html
+$ cat index.html
+<h1>Hello</h1>
+<p>Second line</p>
+$ cp index.html about.html
+$ mv about.html contact.html
+$ ls
+contact.html
+index.html
+$ mkdir old
+$ mv contact.html old/
+$ ls old
+contact.html
+$ rmdir old
+rmdir: old: Directory not empty
+$ rm -r old
+$ ls
+index.html

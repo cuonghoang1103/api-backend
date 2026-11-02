@@ -1,0 +1,19 @@
+$ git status --short
+?? .env
+?? node_modules/
+?? npm-debug.log
+$ cat .gitignore
+node_modules/
+.env
+*.log
+$ git status --short
+?? .gitignore
+$ git check-ignore -v .env npm-debug.log node_modules/left-pad/index.js
+.gitignore:2:.env	.env
+.gitignore:3:*.log	npm-debug.log
+.gitignore:1:node_modules/	node_modules/left-pad/index.js
+$ git add .gitignore
+$ git commit -m "Ignore dependencies, secrets and logs"
+[main b7656ed] Ignore dependencies, secrets and logs
+ 1 file changed, 3 insertions(+)
+ create mode 100644 .gitignore

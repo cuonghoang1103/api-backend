@@ -1,0 +1,20 @@
+$ cd projects/shop/src
+$ pwd
+/Users/lan/projects/shop/src
+$ ls ../index.html
+../index.html
+$ ls /Users/lan/projects/notes.txt
+/Users/lan/projects/notes.txt
+$ ls ../../notes.txt
+../../notes.txt
+$ ls notes.txt
+ls: notes.txt: No such file or directory
+$ cd ~
+$ pwd
+/Users/lan
+$ cd projects/blog
+$ cd ../shop
+$ pwd
+/Users/lan/projects/shop
+$ cd -
+/Users/lan/projects/blog

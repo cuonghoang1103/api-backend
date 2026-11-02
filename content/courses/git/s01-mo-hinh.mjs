@@ -258,6 +258,21 @@ MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M ph�
 <div class="pitfall"><strong>Lỗi kinh điển của người mới:</strong> bạn <code>git add file.js</code>, rồi sửa tiếp <code>file.js</code>, rồi <code>git commit</code>. Chỉ phiên bản bạn đã staging được commit — những sửa đổi cuối vẫn nằm ở thư mục làm việc. Không có gì cảnh báo bạn cả. Thói quen phòng nó: chạy <code>git diff --staged</code> ngay trước khi commit và đọc xem thứ gì thật sự sắp được ghi.</div>
 <p class="note-ct"><strong>Mang điều này theo suốt các chương sau:</strong> khi một lệnh Git làm bạn rối, hãy hỏi "lệnh này đụng vào cây nào trong ba cây?". <code>git checkout</code>, <code>git restore</code>, <code>git reset</code> và <code>git stash</code> đều bí hiểm cho tới khi bạn nhận ra chúng chỉ khác nhau ở <em>chỗ chúng đổi cây nào</em> — một bảng mà bạn sẽ dựng ở Chương 4.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-3-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.3 — Git: a time machine</span><span class="lc-sub">The three areas with real diffs, safe undo (restore, revert), .gitignore and a .env committed by mistake</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-3-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.3 — Git: cỗ máy thời gian</span><span class="lc-sub">Ba vùng với diff thật, hoàn tác an toàn (restore, revert), .gitignore và một .env lỡ commit</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

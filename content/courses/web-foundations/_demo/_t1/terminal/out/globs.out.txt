@@ -1,0 +1,15 @@
+$ mkdir demo && cd demo
+$ touch a.js b.js c.css notes.txt
+$ echo *.js
+a.js b.js
+$ ls *.css
+c.css
+$ ls *.py
+ls: *.py: No such file or directory
+$ echo $?
+1
+$ ls -1 | wc -l
+       4
+$ ls -1 | grep js
+a.js
+b.js

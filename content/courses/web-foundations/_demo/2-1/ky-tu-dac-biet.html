@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Special characters</title><meta name="chup" content="640x210"></head>
+<body>
+  <p id="p1">Use the <p> tag for paragraphs</p>
+  <p id="p2">Use the &lt;p&gt; tag for paragraphs</p>
+  <p id="p3">Tom &amp; Jerry, 5 &lt; 7, price: 100&nbsp;000 ₫</p>
+<script>
+  console.log('paragraphs on the page:', document.querySelectorAll('p').length);
+  console.log('p2 text:', document.querySelector('#p2').textContent);
+  console.log('p3 text:', document.querySelector('#p3').textContent);
+</script>
+</body>
+</html>

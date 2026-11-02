@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Missing name</title></head>
+<body>
+<form>
+  <input id="email" type="email" value="linh@example.com">
+  <input name="password" type="password" value="secret123">
+  <input name="newsletter" type="checkbox">
+  <input name="agree" type="checkbox" checked>
+  <input name="city" value="Hanoi" disabled>
+</form>
+<script>
+  // FormData contains exactly what the browser would send
+  console.log([...new FormData(document.forms[0])]);
+</script>
+</body>
+</html>

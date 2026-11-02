@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Table</title><meta name="chup" content="640x270">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 16px; }
+  table { border-collapse: collapse; width: 100%; }
+  caption { text-align: left; font-weight: 700; margin-bottom: 6px; }
+  th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+  thead th { background: #1f4e8c; color: #fff; }
+  tfoot td { font-weight: 700; background: #f2f2f2; }
+</style></head>
+<body>
+<table>
+  <caption>Exam results, Semester 1</caption>
+  <thead>
+    <tr><th scope="col">Student</th><th scope="col">HTML</th><th scope="col">CSS</th></tr>
+  </thead>
+  <tbody>
+    <tr><th scope="row">An</th><td>9</td><td>8</td></tr>
+    <tr><th scope="row">Binh</th><td>7</td><td>9</td></tr>
+  </tbody>
+  <tfoot>
+    <tr><td>Average</td><td colspan="2">8.25</td></tr>
+  </tfoot>
+</table>
+<script>
+  const t = document.querySelector('table');
+  console.log('rows:', t.rows.length, '· first data cell:', t.tBodies[0].rows[0].cells[1].textContent);
+  console.log('footer cell spans', t.tFoot.rows[0].cells[1].colSpan, 'columns');
+</script>
+</body>
+</html>

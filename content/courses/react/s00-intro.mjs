@@ -2012,6 +2012,21 @@ ${slide('rx-00', 22, 'Lớp phủ lỗi của Vite — ảnh chụp thật')}
   <span class="lc-cta">MỞ BÀI FER202 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.1 — the HTML under JSX</span><span class="lc-sub">Elements, attributes and the DOM tree that JSX finally produces</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.1 — HTML bên dưới JSX</span><span class="lc-sub">Phần tử, thuộc tính và cây DOM mà JSX rốt cuộc tạo ra</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

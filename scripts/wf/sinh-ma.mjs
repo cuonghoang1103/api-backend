@@ -14,7 +14,7 @@ const walk = (dir, rel = '') => {
   for (const f of fs.readdirSync(dir).sort()) {
     const p = path.join(dir, f), r = rel ? `${rel}/${f}` : f;
     if (fs.statSync(p).isDirectory()) { if (f !== 'node_modules' && f !== '.git') walk(p, r); continue; }
-    if (/\.png$|\.webp$/.test(f)) continue;
+    if (/\.png$|\.webp$|\.webm$/.test(f)) continue;
     const s = fs.readFileSync(p, 'utf8');
     if (f.endsWith('.out.txt')) OUT[r.replace(/\.out\.txt$/, '')] = s.replace(/\n+$/, '');
     else CODE[r] = s.replace(/^\/\/ chay: tay.*\n/, '').replace(/^<!-- chay: tay.*-->\n/, '');

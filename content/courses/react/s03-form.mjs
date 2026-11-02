@@ -775,6 +775,21 @@ ${LINK('https://react.dev/reference/react-dom/components/form', '📄', 'react.d
   <span class="lc-cta">MỞ BÀI FER202 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.4 — forms without React</span><span class="lc-sub">What the browser sends by itself: name, FormData, built-in validation</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.4 — form khi chưa có React</span><span class="lc-sub">Trình duyệt tự gửi gì: name, FormData, kiểm tra hợp lệ có sẵn</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

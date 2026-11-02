@@ -16,6 +16,13 @@ Ghi 02/11/2026 khi nâng cấp Ch1 (1.2, 1.4) và Ch11–14. Mỗi cặp có th�
 | `wf-1-4-github` | Git & GitHub `git-5-1-remote-fetch-pull` | `content/courses/git/s05-remote-github.mjs` | push/clone/rejected → pull --rebase trên kho trần |
 | `wf-1-4-github` | Git & GitHub `git-5-2-xac-thuc` | `content/courses/git/s05-remote-github.mjs` | push/clone/rejected → pull --rebase trên kho trần |
 | `wf-1-4-github` | Git & GitHub `git-6-1-giai-phau-pr` | `content/courses/git/s06-pull-request.mjs` | push/clone/rejected → pull --rebase trên kho trần |
+| `wf-2-1-html-basics` | WED201c (Academy) `wed201c-html` | `content/academy/WED201c.mjs` | cây DOM, sửa lỗi âm thầm, thuộc tính boolean |
+| `wf-2-1-html-basics` | React `rx-0-2-jsx` | `content/courses/react/s00-intro.mjs` | HTML bên dưới JSX |
+| `wf-2-2-text-links-images` | WED201c (Academy) `wed201c-html-noi-dung` | `content/academy/WED201c.mjs` | liên kết tương đối, alt, nhảy bố cục đo thật |
+| `wf-2-3-semantic-html` | Testing `tst-6-1-testing-library` | `content/courses/testing/s06/testing-library.mjs` | cây trợ năng mà getByRole truy vấn |
+| `wf-2-4-forms` | WED201c (Academy) `wed201c-html-form` | `content/academy/WED201c.mjs` | form thật gửi tới máy chủ thật |
+| `wf-2-4-forms` | React `rx-3-1-controlled` | `content/courses/react/s03-form.mjs` | form khi chưa có React |
+| `wf-2-5-tables-media-a11y` | WED201c (Academy) `wed201c-a11y-xuat-ban` | `content/academy/WED201c.mjs` | tương phản, thứ tự Tab, phép kiểm năm phút |
 | `wf-11-1-closure` | FER202 (Academy) `fer202-2-1-es6-basics` | `content/academy/FER202.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | Node.js `nodejs-1-2-ham-closure-this` | `content/courses/nodejs/s01-javascript.mjs` | closure từ số 0, câu đố var |
 | `wf-11-1-closure` | React `rx-4-3-vong-lap` | `content/courses/react/s04-effect.mjs` | closure từ số 0, câu đố var |

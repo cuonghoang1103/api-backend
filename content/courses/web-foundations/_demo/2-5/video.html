@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Video</title><meta name="chup" content="520x300"><meta name="cho-xong"></head>
+<body style="margin:12px;font-family:system-ui,sans-serif">
+<figure style="margin:0">
+  <video id="v" controls width="320" height="180" preload="metadata">
+    <source src="media/clip.webm" type="video/webm">
+    <track kind="captions" src="media/clip.vtt" srclang="en" label="English" default>
+    Your browser cannot play this video. <a href="media/clip.webm">Download it</a>.
+  </video>
+  <figcaption>Figure 1 — a 3-second test clip with captions.</figcaption>
+</figure>
+<script>
+  const v = document.getElementById('v');
+  v.addEventListener('loadedmetadata', () => {
+    console.log('duration:', v.duration, 's · size:', v.videoWidth + '×' + v.videoHeight);
+    console.log('playing by itself?', !v.paused);
+    const t = v.textTracks[0];
+    t.mode = 'showing';
+    const wait = setInterval(() => {
+      if (t.cues && t.cues.length) {
+        clearInterval(wait);
+        console.log('caption track:', t.label, '·', t.cues.length, 'cues · first:', t.cues[0].text);
+        window.__xong = true;
+      }
+    }, 50);
+  });
+</script>
+</body>
+</html>

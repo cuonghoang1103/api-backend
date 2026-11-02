@@ -1,0 +1,4 @@
+i1 loaded: true · box: 200×100
+i2 loaded: false · box: 191×18
+i3 loaded: false · box: 16×16
+i4 loaded: false · box: 0×0

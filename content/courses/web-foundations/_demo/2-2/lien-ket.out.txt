@@ -1,0 +1,9 @@
+page: /2-2/lien-ket.html
+about.html                 → /2-2/about.html
+./about.html               → /2-2/about.html
+../index.html              → /index.html
+/contact                   → /contact
+#pricing                   → /2-2/lien-ket.html#pricing
+https://example.com/docs   → https://example.com/docs
+mailto:hello@example.com   → mailto:hello@example.com
+tel:+84900000000           → tel:+84900000000

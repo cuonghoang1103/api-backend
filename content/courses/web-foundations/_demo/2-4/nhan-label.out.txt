@@ -1,0 +1,6 @@
+click on l1 → focus goes to: email
+  email labels: 1
+click on l2 → focus goes to: name
+  name labels: 1
+click on s3 → focus goes to: BODY
+  phone labels: 0

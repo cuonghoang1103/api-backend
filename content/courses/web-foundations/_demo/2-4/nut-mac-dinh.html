@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Default button type</title></head>
+<body>
+<form id="f">
+  <input name="q" value="hello">
+  <button id="a">no type</button>
+  <button id="b" type="button">type="button"</button>
+  <button id="c" type="submit">type="submit"</button>
+</form>
+<script>
+  let submits = 0;
+  document.getElementById('f').addEventListener('submit', (event) => {
+    event.preventDefault();              // stop the page from reloading in this demo
+    submits++;
+    console.log('form submitted by', event.submitter.id);
+  });
+  for (const id of ['a', 'b', 'c']) {
+    const btn = document.getElementById(id);
+    console.log(id, 'type property =', btn.type);
+    btn.click();
+  }
+  console.log('total submits:', submits);
+</script>
+</body>
+</html>

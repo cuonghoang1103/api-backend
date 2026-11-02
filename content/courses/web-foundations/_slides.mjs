@@ -96,11 +96,14 @@ export function walkWf(deck, tenEn, tenVi, rows) {
 }
 
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+/** Bỏ thẻ <meta> điều khiển chay-demo (chup/cho/cho-xong/mo-phong) khỏi mã hiển thị cho người học. */
+export const boMetaDemo = (s) => String(s).replace(/^[ \t]*<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>[ \t]*\n/gm, '').replace(/<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>/g, '');
 /** Khối mã (nguồn lấy từ _ma.mjs — tự thoát HTML). dong = [từ, tới] (1-based, gồm cả hai đầu) ⇒ chỉ lấy đoạn đó. */
 export const ma = (lang, src, dong) => {
   if (src == null) throw new Error('ma(): thiếu mã — chạy lại scripts/wf/sinh-ma.mjs?');
   let s = String(src);
   if (dong) s = s.split('\n').slice(dong[0] - 1, dong[1]).join('\n');
+  s = boMetaDemo(s);
   return `<pre><code class="language-${lang}">${escHtml(s.replace(/^\n/, '').replace(/\n+$/, ''))}</code></pre>`;
 };
 /** Output chạy thật (từ _ma.mjs). */

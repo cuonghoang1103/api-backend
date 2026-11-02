@@ -1,0 +1,16 @@
+html
+  head
+    meta
+    title
+      "DOM tree"
+  body
+    h1
+      "My"
+      em
+        "first"
+      "page"
+    ul
+      li
+        "Home"
+      li
+        "About"

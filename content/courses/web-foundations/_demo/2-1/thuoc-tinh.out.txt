@@ -1,0 +1,7 @@
+href: https://cuongthai.com
+class list: ['nav', 'big']
+data-track: menu
+all attributes: ['id', 'href', 'title', 'class', 'data-track']
+b1 disabled? true
+b2 disabled? true
+b3 disabled? false

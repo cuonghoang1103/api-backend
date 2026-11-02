@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Validation</title></head>
+<body>
+<form id="f">
+  <input name="a" required>
+  <input name="b" type="email" value="not-an-email">
+  <input name="c" type="number" min="18" value="15">
+  <input name="d" pattern="[0-9]{10}" value="abc" title="10 digits">
+  <input name="e" value="ok" required>
+</form>
+<script>
+  const f = document.getElementById('f');
+  for (const el of f.elements) {
+    const flags = Object.keys(Object.getOwnPropertyDescriptors(ValidityState.prototype))
+      .filter((k) => k !== 'valid' && el.validity[k] === true);
+    console.log(el.name + ':', el.checkValidity() ? 'valid' : 'INVALID', flags.join(' '), '—', el.validationMessage);
+  }
+  console.log('whole form valid?', f.checkValidity());
+</script>
+</body>
+</html>

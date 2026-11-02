@@ -238,6 +238,21 @@ export default {
   <span class="lc-cta">COURSERA →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.1 — what the browser really builds</span><span class="lc-sub">The DOM tree, silent repairs, boolean attributes, all measured in Chromium</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.1 — trình duyệt thật sự dựng gì</span><span class="lc-sub">Cây DOM, sửa lỗi âm thầm, thuộc tính boolean, đo trong Chromium</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -351,6 +366,21 @@ export default {
 <div class="pitfall"><b>Ảnh không có <span class="badge">alt</span> là trượt bộ kiểm W3C và bộ kiểm khả năng tiếp cận — mà đồ án cuối MOOC 1 chấm cả hai.</b> Điều tương tự với việc thiếu <span class="badge">&lt;title&gt;</span> và nhảy cóc cấp tiêu đề (h1 → h3). Hãy chạy <span class="badge">validator.w3.org</span> trước khi nộp; mất mười giây và bắt được cả ba lỗi.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b><span class="badge">loading="lazy"</span> — một thuộc tính, một khoản lợi đo được.</b> Thêm nó vào các ảnh nằm dưới màn hình đầu là bảo trình duyệt đừng tải chúng cho tới khi người dùng cuộn tới gần. Với một trang thư viện ảnh, đó thường là một nửa tổng dung lượng và một giây thời gian tải, mà không cần JavaScript hay thư viện nào. Kết hợp với <span class="badge">decoding="async"</span> và width/height đúng là bạn đã làm gần hết những gì một chuyên gia "tối ưu ảnh" tính tiền. <em>Ngoài giáo trình vì MOOC dạy thẻ <span class="badge">&lt;img&gt;</span> như cú pháp, còn hiệu năng mới là thứ trang của bạn thật sự bị đánh giá.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-2-text-links-images" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.2 — text, links and images, measured</span><span class="lc-sub">How relative links resolve, alt text, 186 px of layout shift, srcset</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-2-text-links-images" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.2 — chữ, liên kết, ảnh, có đo đạc</span><span class="lc-sub">Liên kết tương đối được phân giải thế nào, alt, nhảy bố cục 186 px, srcset</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },
@@ -470,6 +500,21 @@ export default {
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Autocomplete là tính năng trợ năng, không phải chỉ là tiện lợi.</b> Thêm <span class="badge">autocomplete="email"</span>, <span class="badge">"given-name"</span>, <span class="badge">"street-address"</span>, <span class="badge">"cc-number"</span> giúp trình duyệt và trình quản lý mật khẩu điền đúng trường — với người dùng bị hạn chế vận động, đó có thể là ranh giới giữa một biểu mẫu dùng được và một biểu mẫu bất khả, và trên các trang thương mại nó nâng tỉ lệ hoàn tất thanh toán một cách đo được. Danh sách đầy đủ các giá trị nằm trong đặc tả HTML. <em>Ngoài giáo trình vì MOOC không hề nhắc tới, nhưng đó là khoản lợi về trải nghiệm rẻ nhất mà một biểu mẫu có thể nhận.</em></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.4 — what a form really sends</span><span class="lc-sub">A real browser posting to a real server: name, encoding, GET and POST</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.4 — form thật sự gửi gì</span><span class="lc-sub">Trình duyệt thật gửi tới máy chủ thật: name, mã hoá, GET và POST</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -563,6 +608,21 @@ export default {
 <div class="pitfall"><b>Đừng bao giờ viết <span class="badge">*:focus { outline: none; }</span> để "cho sạch" cái viền xanh.</b> Nó xoá đi dấu hiệu duy nhất cho người dùng bàn phím biết mình đang đứng ở đâu trên trang — trượt trợ năng ngay lập tức. Nếu thấy kiểu mặc định xấu thì hãy thay nó: <span class="badge">:focus-visible { outline: 3px solid #0a84ff; outline-offset: 2px; }</span>.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trợ năng là yêu cầu pháp lý, không phải điểm cộng.</b> WCAG 2.1 mức AA được luật hoá ở châu Âu (EN 301 549), ở Mỹ (Section 508 / ADA), và được viện dẫn trong các chuẩn chính phủ điện tử của Việt Nam; các trang khu vực công và trang thương mại lớn bị kiểm toán theo nó, và những trang không tiếp cận được đã thua kiện thật. Cũng chính đoạn mã làm hài lòng trình đọc màn hình sẽ cho bạn SEO tốt hơn — công cụ tìm kiếm phân tích tiêu đề, chữ alt và vùng mốc đúng như công nghệ trợ giúp. <em>Ngoài giáo trình vì MOOC đóng khung trợ năng như phép lịch sự, còn trong nghề đó là một đặc tả mà bạn bị soi theo.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.5 — accessibility you can measure</span><span class="lc-sub">Accessibility tree of a table, contrast ratios, real Tab order, a five-minute check</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.5 — khả năng tiếp cận đo được</span><span class="lc-sub">Cây trợ năng của bảng, tỉ số tương phản, thứ tự Tab thật, phép kiểm năm phút</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },

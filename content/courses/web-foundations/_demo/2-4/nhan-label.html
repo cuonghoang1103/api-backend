@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Labels</title></head>
+<body>
+  <label id="l1" for="email">Email</label> <input id="email">
+  <label id="l2">Name <input id="name"></label>
+  <span id="s3">Phone</span> <input id="phone">
+<script>
+  for (const [lab, input] of [['l1', 'email'], ['l2', 'name'], ['s3', 'phone']]) {
+    document.body.focus(); document.activeElement.blur();
+    document.getElementById(lab).click();
+    console.log('click on', lab, '→ focus goes to:', document.activeElement.id || document.activeElement.tagName);
+    console.log('  ' + input, 'labels:', document.getElementById(input).labels.length);
+  }
+</script>
+</body>
+</html>

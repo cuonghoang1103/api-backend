@@ -74,6 +74,8 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 | Ch13 | 13.1–13.4 | ✅ 01/11 — bài 28–33k chữ; dự án Vitest `_demo/_t13` (Vitest 5.0.5, jsdom 30.1.3, Testing Library 10.4.2, user-event 14.6.8, Node 22.23.3, actionlint) chạy thật, output ở `_t13/out/`; deck wf-13-1…4 (47 slide); Code Lab 4 module × 6 đề (js + dom), máy chấm trình duyệt 218/218 |
 | Ch14 | 14.1–14.4 | ✅ 01/11 — bài 25–35k chữ; dự án Vite `_demo/_t14` (Vite 8.3.5, Node 22.23.3, Lighthouse 13.6.0) dựng/đo thật: dev 6 req/224,9 KB vs build 3 req/1,4 KB, lộ VITE_ trong bundle, fail-fast config, lịch sử git giữ bí mật, máy chủ tĩnh + SPA fallback + smoke-test, 3 phiên bản trang đo LCP/CLS/TBT; deck wf-14-1…4 (44 slide); Code Lab 4 module (6+6+6+7 đề, js), máy chấm trình duyệt 243/243 · 1440 kiểm |
 | Ch1 | 1.2, 1.4 | ✅ 01/11 — bài 1.2 VS Code (40,6k chữ) + 1.4 GitHub (41,9k chữ), giữ video YouTube cũ; demo `_demo/_t1/vscode` (Prettier 3.9.10, ESLint 10.14.0, TypeScript 5.9.3 cho F2) và `_demo/_t1/github` (`sim.sh`: kho trần đóng vai github.com, git 2.51.1; `ssh.sh`: khoá tạo trong thư mục tạm rồi xoá); deck wf-1-2, wf-1-4 (22 slide, WF/v1). ⏳ CHƯA có Code Lab cho 1.2/1.4 |
+| Mục 0 | 0.1–0.4 | ✅ 02/11 — bài 30–36k chữ, tệp `s00/`; demo `_demo/0-1`, `0-2`, `0-4`, `_t0` (`chay-web.sh`, `chay-may.sh`: máy chủ Node + curl + dig + kiem-may.mjs); deck wf-0-1…4 (41 slide) |
+| Ch2 | 2.1–2.5 | ✅ 02/11 — bài 29–33k chữ, tệp `s02/`; demo `_demo/2-1…2-5`, `_t2/chay.mjs` (ariaSnapshot, phím Tab thật, form tới máy chủ thật, ảnh chậm 1 s); deck wf-2-1…5 (52 slide); Code Lab giữ nguyên 7 đề/bài |
 
 
 ## ✅ HOÀN TẤT ĐỢT NÂNG CẤP 02/11/2026

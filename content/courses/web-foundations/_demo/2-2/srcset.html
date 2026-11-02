@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>srcset</title><meta name="cho" content="800"></head>
+<body>
+<script>
+  // The same <img> inside frames of different widths — the browser picks the file itself.
+  const img = `<img src="/2-2/anh/m.svg" alt="banner" style="width:100%"
+    srcset="/2-2/anh/s.svg 400w, /2-2/anh/m.svg 800w, /2-2/anh/l.svg 1600w" sizes="100vw">`;
+  Promise.all([360, 700, 1200].map((w) => new Promise((done) => {
+    const f = document.createElement('iframe');
+    f.width = w; f.height = 50; f.srcdoc = img;
+    f.onload = () => done('viewport ' + w + 'px → ' + new URL(f.contentDocument.images[0].currentSrc).pathname);
+    document.body.append(f);
+  }))).then((lines) => lines.forEach((l) => console.log(l)));
+</script>
+</body>
+</html>

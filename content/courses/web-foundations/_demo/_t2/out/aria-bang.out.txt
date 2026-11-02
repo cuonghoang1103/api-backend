@@ -1,0 +1,20 @@
+- table "Exam results, Semester 1":
+  - caption: Exam results, Semester 1
+  - rowgroup:
+    - row "Student HTML CSS":
+      - columnheader "Student"
+      - columnheader "HTML"
+      - columnheader "CSS"
+  - rowgroup:
+    - row "An 9 8":
+      - rowheader "An"
+      - cell "9"
+      - cell "8"
+    - row "Binh 7 9":
+      - rowheader "Binh"
+      - cell "7"
+      - cell "9"
+  - rowgroup:
+    - row "Average 8.25":
+      - cell "Average"
+      - cell "8.25"

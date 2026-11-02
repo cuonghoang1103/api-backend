@@ -1,0 +1,5 @@
+black on white             21.00:1 AA pass
+#767676 grey on white      4.54:1 AA pass
+#aaa light grey on white   2.32:1 AA FAIL
+white on orange            2.68:1 AA FAIL
+white on blue              8.31:1 AA pass

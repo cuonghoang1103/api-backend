@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Broken images</title><meta name="chup" content="640x330"><meta name="cho" content="500"></head>
+<body>
+  <p>1 (good file, alt): <img id="i1" src="anh/s.svg" alt="A green banner" width="200" height="100"></p>
+  <p>2 (wrong path, alt): <img id="i2" src="anh/nope.png" alt="A chocolate cake on a plate"></p>
+  <p>3 (wrong path, no alt): <img id="i3" src="anh/nope.png"></p>
+  <p>4 (wrong path, alt="" ): <img id="i4" src="anh/nope.png" alt=""></p>
+<script>
+  addEventListener('load', () => {
+    for (const id of ['i1', 'i2', 'i3', 'i4']) {
+      const img = document.getElementById(id), r = img.getBoundingClientRect();
+      console.log(id, 'loaded:', img.naturalWidth > 0, '· box:', Math.round(r.width) + '×' + Math.round(r.height));
+    }
+  });
+</script>
+</body>
+</html>

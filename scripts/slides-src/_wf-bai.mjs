@@ -23,6 +23,7 @@ const lay = (k, bang, ten) => { if (bang[k] == null) throw new Error(`${ten}['${
 const ma = (lang) => (k, tay, opts = {}) => {
   let s = k ? lay(k, CODE, 'CODE') : tay;
   if (opts.chi) s = s.split('\n').slice(opts.chi[0] - 1, opts.chi[1]).join('\n');
+  s = s.replace(/^[ \t]*<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>[ \t]*\n/gm, '').replace(/<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>/g, '');
   // gon: bỏ chú thích cuối dòng (// …) và dòng chỉ có chú thích — slide hẹp, bài đọc vẫn giữ đủ chú thích
   if (opts.gon !== false) s = s.split('\n').filter((l) => !/^\s*\/\/(?!\s*-)/.test(l) && !/^\s*\/\*.*\*\/\s*$/.test(l))
     .map((l) => l.replace(/\s+\/\/ .*$/, '').replace(/(\S)\s+\/\*.*\*\/\s*$/, '$1')).join('\n');

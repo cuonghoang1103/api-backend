@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>DOM tree</title></head>
+<body>
+  <h1>My <em>first</em> page</h1>
+  <ul>
+    <li>Home</li>
+    <li>About</li>
+  </ul>
+<script>
+  // Walk the tree the browser built and print it, indented by depth.
+  function show(node, depth = 0) {
+    const pad = '  '.repeat(depth);
+    if (node.nodeType === Node.ELEMENT_NODE) console.log(pad + node.tagName.toLowerCase());
+    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) console.log(pad + '"' + node.textContent.trim() + '"');
+    for (const child of node.childNodes) if (child.nodeName !== 'SCRIPT') show(child, depth + 1);
+  }
+  show(document.documentElement);
+</script>
+</body>
+</html>

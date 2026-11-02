@@ -1,0 +1,12 @@
+- banner: My Blog
+- navigation:
+  - link "Home":
+    - /url: /
+  - link "About":
+    - /url: /about
+- main:
+  - article:
+    - heading "Why semantic HTML matters" [level=1]
+    - paragraph: Screen readers and search engines read the structure.
+    - button "Like"
+- contentinfo: © 2026 My Blog

@@ -1,0 +1,13 @@
+<!-- chay: tay — đo bằng phím Tab thật trong _t2/chay.mjs -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Tab order</title></head>
+<body>
+  <a href="#a" id="first">Link A</a>
+  <button id="save" tabindex="2">Save (tabindex=2)</button>
+  <div id="fake" onclick="go()">Fake button (div)</div>
+  <input id="name" aria-label="Name">
+  <button id="cancel" tabindex="1">Cancel (tabindex=1)</button>
+  <div id="fixed" tabindex="0" role="button">Div with tabindex=0 + role</div>
+</body>
+</html>

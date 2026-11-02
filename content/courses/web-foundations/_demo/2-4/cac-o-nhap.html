@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Input types</title><meta name="chup" content="720x500">
+<style>body{font-family:system-ui,sans-serif;margin:16px} label{display:block;margin:8px 0} input,select,textarea{font:inherit;margin-left:6px} fieldset{margin-top:10px}</style></head>
+<body>
+<form>
+  <label>Name <input type="text" name="name" value="Linh"></label>
+  <label>Email <input type="email" name="email" value="linh@example.com"></label>
+  <label>Password <input type="password" name="password" value="secret123"></label>
+  <label>Age <input type="number" name="age" value="20" min="16" max="99"></label>
+  <label>Birthday <input type="date" name="birthday" value="2006-05-01"></label>
+  <label>Level <input type="range" name="level" value="60"></label>
+  <label>City
+    <select name="city"><option value="hn" selected>Hà Nội</option><option value="hcm">TP.HCM</option></select>
+  </label>
+  <label><input type="checkbox" name="news" checked> Send me news</label>
+  <fieldset><legend>Plan</legend>
+    <label><input type="radio" name="plan" value="free" checked> Free</label>
+    <label><input type="radio" name="plan" value="pro"> Pro</label>
+  </fieldset>
+  <label>Note <textarea name="note" rows="1">Hello</textarea></label>
+</form>
+<script>
+  console.log(new URLSearchParams(new FormData(document.forms[0])).toString());
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+items directly in the first list: 3
+all li on the page: 9

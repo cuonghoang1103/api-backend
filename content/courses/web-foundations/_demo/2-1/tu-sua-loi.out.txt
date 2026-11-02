@@ -1,0 +1,3 @@
+a: <p>Unclosed paragraph</p><p>Second paragraph</p>
+b: <p>A paragraph with </p><div>a div inside</div> it<p></p>
+c: <b>bold <i>both</i></b><i> italic</i>

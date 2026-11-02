@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Attributes</title></head>
+<body>
+  <a id="home" href="https://cuongthai.com" title="Go home" class="nav big" data-track="menu">Home</a>
+  <button id="b1" disabled>disabled</button>
+  <button id="b2" disabled="false">disabled="false"</button>
+  <button id="b3">no attribute</button>
+<script>
+  const a = document.querySelector('#home');
+  console.log('href:', a.getAttribute('href'));
+  console.log('class list:', [...a.classList]);
+  console.log('data-track:', a.dataset.track);
+  console.log('all attributes:', a.getAttributeNames());
+  for (const id of ['b1', 'b2', 'b3']) console.log(id, 'disabled?', document.getElementById(id).disabled);
+</script>
+</body>
+</html>

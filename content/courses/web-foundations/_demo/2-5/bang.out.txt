@@ -1,0 +1,2 @@
+rows: 4 · first data cell: 9
+footer cell spans 2 columns

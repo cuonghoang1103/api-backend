@@ -63,7 +63,7 @@ const UI = {
     paletteAccount: 'Your account',
     paletteHint: 'to open · Esc to close',
     menuTitle: 'Menu',
-    signedOutHint: 'Sign in to save progress, chat and use AI tools.',
+    signedOutHint: 'Sign in to save your progress.',
   },
   vi: {
     home: 'Trang chủ CuongThai',
@@ -98,7 +98,7 @@ const UI = {
     paletteAccount: 'Tài khoản của bạn',
     paletteHint: 'để mở · Esc để đóng',
     menuTitle: 'Menu',
-    signedOutHint: 'Đăng nhập để lưu tiến độ, nhắn tin và dùng công cụ AI.',
+    signedOutHint: 'Đăng nhập để lưu tiến độ học.',
   },
 } as const;
 

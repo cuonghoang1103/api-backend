@@ -165,7 +165,7 @@ export const NAV_TREE: NavMenu[] = [
       },
     ],
     footer: {
-      text: { en: 'Practise for free. Pro adds unlimited AI grading.', vi: 'Luyện tập miễn phí. Pro mở chấm AI không giới hạn.' },
+      text: { en: 'Pro adds AI grading and AI coaching to your practice.', vi: 'Pro mở thêm AI chấm và AI kèm khi luyện tập.' },
       cta: { href: '/pro', label: { en: 'See Pro', vi: 'Xem gói Pro' } },
     },
   },
@@ -179,7 +179,7 @@ export const NAV_TREE: NavMenu[] = [
         items: [
           { href: '/chat', icon: Sparkles,
             title: { en: 'AI Chat', vi: 'AI Chat' },
-            desc: { en: 'Ask anything, attach images and PDFs.', vi: 'Hỏi gì cũng được, đính kèm ảnh và PDF.' } },
+            desc: { en: 'Talk to CuongMini, the site’s AI assistant.', vi: 'Trò chuyện với CuongMini, trợ lý AI của trang.' } },
           { href: '/voice-mini', icon: AudioLines,
             title: { en: 'Voice CuongMini', vi: 'Voice CuongMini' },
             desc: { en: 'Paste text, pick a voice, listen right away.', vi: 'Dán văn bản, chọn giọng, nghe ngay.' },
@@ -215,7 +215,7 @@ export const NAV_TREE: NavMenu[] = [
         items: [
           { href: '/work', icon: KanbanSquare,
             title: { en: 'CT Work', vi: 'CT Work' },
-            desc: { en: 'Projects, sprints, docs and tests for student teams.', vi: 'Dự án, sprint, tài liệu và kiểm thử cho nhóm sinh viên.' },
+            desc: { en: 'Projects, sprints, docs and tests for teams.', vi: 'Dự án, sprint, tài liệu và kiểm thử cho nhóm.' },
             keywords: 'jira project quan ly du an' },
           { href: '/notes', icon: NotebookPen,
             title: { en: 'Notes', vi: 'Ghi chú' },
@@ -249,20 +249,20 @@ export const NAV_TREE: NavMenu[] = [
         items: [
           { href: '/pro', icon: Crown,
             title: { en: 'CuongThai Pro', vi: 'CuongThai Pro' },
-            desc: { en: 'More AI, more grading, no daily caps.', vi: 'Thêm AI, thêm lượt chấm, bỏ giới hạn ngày.' },
+            desc: { en: 'Every Academy course, AI tutors and higher AI limits.', vi: 'Mở mọi khoá Academy, gia sư AI và hạn mức AI cao hơn.' },
             keywords: 'update pro nang cap' },
           { href: '/shop', icon: ShoppingBag, gate: 'shop',
             title: { en: 'Shop', vi: 'Cửa hàng' },
             desc: { en: 'AI tools and keys.', vi: 'Công cụ AI và key.' } },
           { href: '/download', icon: MonitorDown,
             title: { en: 'Desktop app', vi: 'App máy tính' },
-            desc: { en: 'CuongThai for macOS and Windows.', vi: 'CuongThai cho macOS và Windows.' },
+            desc: { en: 'CuongThai for macOS, Windows and Linux.', vi: 'CuongThai cho macOS, Windows và Linux.' },
             keywords: 'get app tai app' },
         ],
       },
     ],
     footer: {
-      text: { en: 'Everything here also runs in the desktop app.', vi: 'Mọi thứ ở đây cũng chạy trong app máy tính.' },
+      text: { en: 'CuongThai also comes as a desktop app.', vi: 'CuongThai cũng có app máy tính.' },
       cta: { href: '/download', label: { en: 'Get the app', vi: 'Tải app' } },
     },
   },
@@ -272,7 +272,7 @@ export const NAV_TREE: NavMenu[] = [
     sections: [
       {
         id: 'read',
-        heading: { en: 'Read & discuss', vi: 'Đọc & thảo luận' },
+        heading: { en: 'Read & follow', vi: 'Đọc & theo dõi' },
         items: [
           { href: '/feed', icon: Newspaper,
             title: { en: 'Feed', vi: 'Bảng tin' },
@@ -283,7 +283,7 @@ export const NAV_TREE: NavMenu[] = [
             keywords: 'tech trends bai viet' },
           { href: '/forum', icon: Megaphone,
             title: { en: 'Forum', vi: 'Diễn đàn' },
-            desc: { en: 'Announcements and open discussion.', vi: 'Thông báo và thảo luận chung.' },
+            desc: { en: 'Announcements from the site.', vi: 'Thông báo từ trang.' },
             keywords: 'dien dan' },
         ],
       },
@@ -322,8 +322,8 @@ export const NAV_TREE: NavMenu[] = [
       },
     ],
     footer: {
-      text: { en: 'Got a question? Ask it in the forum.', vi: 'Có câu hỏi? Hỏi trên diễn đàn.' },
-      cta: { href: '/forum', label: { en: 'Open the forum', vi: 'Vào diễn đàn' } },
+      text: { en: 'Looking for someone? Search by name.', vi: 'Đang tìm ai đó? Tìm theo tên.' },
+      cta: { href: '/friends', label: { en: 'Find people', vi: 'Tìm người' } },
     },
   },
   {
@@ -350,7 +350,7 @@ export const NAV_TREE: NavMenu[] = [
         items: [
           { href: '/about/studio', icon: Store,
             title: { en: 'Studio', vi: 'Studio' },
-            desc: { en: 'What the studio builds, with real case studies.', vi: 'Studio làm gì, kèm dự án thật.' } },
+            desc: { en: 'What the studio builds, with case studies.', vi: 'Studio làm gì, kèm các dự án mẫu.' } },
           { href: '/about/nhan-du-an', icon: Send,
             title: { en: 'Start a project', vi: 'Gửi yêu cầu dự án' },
             desc: { en: 'Pick a package and send a request.', vi: 'Chọn gói và gửi yêu cầu.' },

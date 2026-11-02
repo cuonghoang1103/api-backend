@@ -132,6 +132,8 @@ export default function AboutPage() {
     : null;
   const firstCommit = new Date(codebase.firstCommitDate).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', { month: 'long', year: 'numeric' });
 
+  const codeCountedOn = new Date(codebase.generatedAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
   // ── Contact ────────────────────────────────────────────────────────────
   const [copied, setCopied] = useState(false);
   const copyEmail = async () => {
@@ -287,7 +289,7 @@ export default function AboutPage() {
           <div className={s.sub}>
             <div className={s.subHead}>
               <h3 className={s.h3}>{c.codeTitle}</h3>
-              <span className={s.meta}>{c.codeBody}</span>
+              <span className={s.meta}>{c.codeBody} {codeCountedOn}</span>
             </div>
             <div className={s.counts}>
               {CODE_COUNTS.map(({ key, label }) => {

@@ -63,12 +63,12 @@ const C = {
     siteLead:
       'Read for free, practise with real feedback. Everything is organised the way you would study: follow a path, practise until it sticks, sit a real exam paper, then use what you learned at work.',
     siteBody:
-      'Content is counted, not estimated: the figures below come straight from the database each time you load this page.',
+      'Content is counted, not estimated: the figures below come from the database, with the time of the count shown.',
     doTitle: 'What you can do here',
     countedTitle: 'Counted from the database',
     countedAt: 'Counted',
     codeTitle: 'Built in the open',
-    codeBody: 'Recounted from the repository before every deploy — not one of these is typed by hand.',
+    codeBody: 'Counted from the repository on',
     stackTitle: 'What it runs on',
     open: 'Open',
 
@@ -91,7 +91,7 @@ const C = {
     hireBody: 'The studio takes on projects. Start with what it builds, then send a request.',
 
     contactTitle: 'Get in touch',
-    contactBody: 'Email is fastest. The form below reaches the same inbox.',
+    contactBody: 'Email me directly, or use the form.',
     copy: 'Copy',
     copied: 'Copied',
     copyAria: 'Copy email address',
@@ -101,7 +101,7 @@ const C = {
     formMessage: 'Message',
     formSend: 'Send message',
     formSending: 'Sending…',
-    formSent: 'Message sent. I will reply by email.',
+    formSent: 'Message sent.',
     formError: 'The message could not be sent. Try again, or email me directly.',
     placeholderHint: 'Owner: add this in app/about/aboutCopy.ts → OWNER_TODO',
   },
@@ -119,12 +119,12 @@ const C = {
     siteLead:
       'Đọc miễn phí, luyện tập có phản hồi thật. Mọi thứ xếp theo đúng cách bạn học: đi theo lộ trình, luyện đến khi nhớ, làm đề thi thật, rồi đem điều đã học vào công việc.',
     siteBody:
-      'Nội dung được đếm, không ước lượng: các con số dưới đây lấy thẳng từ cơ sở dữ liệu mỗi lần bạn mở trang.',
+      'Nội dung được đếm, không ước lượng: các con số dưới đây lấy từ cơ sở dữ liệu, kèm thời điểm đếm.',
     doTitle: 'Bạn làm được gì ở đây',
     countedTitle: 'Đếm từ cơ sở dữ liệu',
     countedAt: 'Đếm lúc',
     codeTitle: 'Xây dựng công khai',
-    codeBody: 'Đếm lại từ kho mã trước mỗi lần triển khai — không con số nào gõ tay.',
+    codeBody: 'Đếm từ kho mã ngày',
     stackTitle: 'Chạy trên nền gì',
     open: 'Mở',
 
@@ -147,7 +147,7 @@ const C = {
     hireBody: 'Studio nhận làm dự án. Xem studio làm gì trước, rồi gửi yêu cầu.',
 
     contactTitle: 'Liên hệ',
-    contactBody: 'Email là nhanh nhất. Biểu mẫu dưới đây gửi về cùng hộp thư.',
+    contactBody: 'Email trực tiếp cho mình, hoặc dùng biểu mẫu.',
     copy: 'Sao chép',
     copied: 'Đã sao chép',
     copyAria: 'Sao chép địa chỉ email',
@@ -157,7 +157,7 @@ const C = {
     formMessage: 'Nội dung',
     formSend: 'Gửi tin nhắn',
     formSending: 'Đang gửi…',
-    formSent: 'Đã gửi. Mình sẽ trả lời qua email.',
+    formSent: 'Đã gửi.',
     formError: 'Chưa gửi được. Thử lại, hoặc email trực tiếp cho mình.',
     placeholderHint: 'Chủ trang: điền ở app/about/aboutCopy.ts → OWNER_TODO',
   },

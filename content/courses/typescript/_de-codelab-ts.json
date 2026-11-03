@@ -3685,5 +3685,617 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-5-1-a",
+    "bai": "typescript-5-1-union-narrowing",
+    "tieuDe": "Badge a lab id that is a string or a number|||Gắn nhãn mã phòng là chuỗi hoặc số",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>A lab id arrives as a <code>string</code> from the URL and a <code>number</code> from an old table. <code>badge</code> calls <code>id.padStart</code> — which numbers do not have (TS2339). Narrow with <code>typeof</code> so both work. No <code>any</code>.</p><p><strong>Done when:</strong> tsc is clean on src and the test, and the test is green.</p>|||<p>Mã phòng đến từ URL là <code>string</code> và từ bảng cũ là <code>number</code>. <code>badge</code> gọi <code>id.padStart</code> — thứ số không có (TS2339). Thu hẹp bằng <code>typeof</code> để cả hai chạy. Không <code>any</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và test, test xanh.</p>",
+    "khoiDau": {
+      "src/badge.ts": "export type Id = string | number;\n\nexport function badge(id: Id): string {\n  return 'LAB-' + id.padStart(4, '0');\n}\n"
+    },
+    "coDinh": {
+      "test/badge.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { badge } from '../src/badge.ts';\n\ntest('string id', () => assert.equal(badge('42'), 'LAB-0042'));\ntest('number id', () => assert.equal(badge(42), 'LAB-0042'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/badge.test.ts"
+      ],
+      "chay": [
+        "node --test test/badge.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/badge.ts": "export type Id = string | number;\n\n// typeof narrows id to string in the if, number after it.\nexport function badge(id: Id): string {\n  if (typeof id === 'string') return 'LAB-' + id.padStart(4, '0');\n  return 'LAB-' + String(id).padStart(4, '0');\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "cast with as string — crashes on a number at runtime",
+        "tep": {
+          "src/badge.ts": "export type Id = string | number;\n\nexport function badge(id: Id): string {\n  return 'LAB-' + (id as string).padStart(4, '0');\n}\n"
+        }
+      },
+      {
+        "nhan": "id typed any — padStart compiles but the number call throws",
+        "tep": {
+          "src/badge.ts": "export type Id = any;\n\nexport function badge(id: Id): string {\n  return 'LAB-' + id.padStart(4, '0');\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-1-b",
+    "bai": "typescript-5-1-union-narrowing",
+    "tieuDe": "The truthiness 0 trap: a real zero-seat room|||Bẫy 0 của tính đúng/sai: một phòng 0 chỗ thật",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>seatsLabel(seats: number | undefined)</code> uses <code>if (seats)</code>, so a real <code>0</code> falls into \"unknown\". tsc is happy — the bug is only in the test. Fix the guard so <code>0</code> prints \"0 seats\" and only <code>undefined</code> is unknown.</p><p><strong>Done when:</strong> the test passes (it checks 0, 30 and undefined).</p>|||<p><code>seatsLabel(seats: number | undefined)</code> dùng <code>if (seats)</code>, nên một <code>0</code> thật rơi vào \"unknown\". tsc không báo gì — bug chỉ nằm ở test. Sửa guard để <code>0</code> in \"0 seats\" và chỉ <code>undefined</code> là unknown.</p><p><strong>Đạt khi:</strong> test qua (kiểm 0, 30 và undefined).</p>",
+    "khoiDau": {
+      "src/seats.ts": "export function seatsLabel(seats: number | undefined): string {\n  if (seats) return seats + ' seats';\n  return 'seats unknown';\n}\n"
+    },
+    "coDinh": {
+      "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsLabel } from '../src/seats.ts';\n\ntest('a real zero', () => assert.equal(seatsLabel(0), '0 seats'));\ntest('a normal count', () => assert.equal(seatsLabel(30), '30 seats'));\ntest('truly unknown', () => assert.equal(seatsLabel(undefined), 'seats unknown'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/seats.test.ts"
+      ],
+      "chay": [
+        "node --test test/seats.test.ts"
+      ],
+      "ra": "",
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "export function seatsLabel(seats: number | undefined): string {\n  // Test for what you mean: 0 is a real value, only undefined is \"unknown\".\n  if (seats !== undefined) return seats + ' seats';\n  return 'seats unknown';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "seats || 0 still drops the difference (0 vs undefined both unknown)",
+        "tep": {
+          "src/seats.ts": "export function seatsLabel(seats: number | undefined): string {\n  const n = seats || 0;\n  if (n) return n + ' seats';\n  return 'seats unknown';\n}\n"
+        }
+      },
+      {
+        "nhan": "typeof check but still falsy branch for 0",
+        "tep": {
+          "src/seats.ts": "export function seatsLabel(seats: number | undefined): string {\n  if (typeof seats === 'number' && seats) return seats + ' seats';\n  return 'seats unknown';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-1-c",
+    "bai": "typescript-5-1-union-narrowing",
+    "tieuDe": "Narrow a string | null note|||Thu hẹp một ghi chú string | null",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>A note is <code>string | null</code> (NULL in the database, 2.1). <code>preview</code> calls <code>.slice</code> on it blind — TS18047. Narrow so a null note returns \"(no note)\".</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p>Một ghi chú là <code>string | null</code> (NULL trong CSDL, 2.1). <code>preview</code> gọi <code>.slice</code> mù — TS18047. Thu hẹp để ghi chú null trả \"(no note)\".</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/note.ts": "export function preview(note: string | null): string {\n  return note.slice(0, 10);\n}\n"
+    },
+    "coDinh": {
+      "test/note.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { preview } from '../src/note.ts';\n\ntest('a real note', () => assert.equal(preview('Weekly backend sync'), 'Weekly bac'));\ntest('a null note', () => assert.equal(preview(null), '(no note)'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/note.test.ts"
+      ],
+      "chay": [
+        "node --test test/note.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/note.ts": "export function preview(note: string | null): string {\n  if (note === null) return '(no note)';\n  return note.slice(0, 10);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "non-null assertion note! — lies, crashes on null",
+        "tep": {
+          "src/note.ts": "export function preview(note: string | null): string {\n  return note!.slice(0, 10);\n}\n"
+        }
+      },
+      {
+        "nhan": "returns the wrong label for null (empty string)",
+        "tep": {
+          "src/note.ts": "export function preview(note: string | null): string {\n  if (note === null) return '';\n  return note.slice(0, 10);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-1-d",
+    "bai": "typescript-5-1-union-narrowing",
+    "tieuDe": "Label a value that is a string, number or boolean|||Gắn nhãn một giá trị là chuỗi, số hoặc boolean",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>A config value is <code>string | number | boolean</code>. <code>label</code> calls <code>value.toUpperCase()</code> — only strings have it (TS2339). Narrow with <code>typeof</code> into three branches: a string in quotes, a number as text, a boolean as \"on\"/\"off\". No <code>any</code>, no <code>as</code>.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p>Một giá trị cấu hình là <code>string | number | boolean</code>. <code>label</code> gọi <code>value.toUpperCase()</code> — chỉ chuỗi mới có (TS2339). Thu hẹp bằng <code>typeof</code> thành ba nhánh: chuỗi trong ngoặc kép, số dạng chữ, boolean là \"on\"/\"off\". Không <code>any</code>, không <code>as</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/label.ts": "export type Value = string | number | boolean;\n\nexport function label(v: Value): string {\n  return v.toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "test/label.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label } from '../src/label.ts';\n\ntest('string', () => assert.equal(label('dark'), '\"dark\"'));\ntest('number', () => assert.equal(label(30), '30'));\ntest('boolean', () => assert.equal(label(true), 'on'));\ntest('boolean false', () => assert.equal(label(false), 'off'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/label.test.ts"
+      ],
+      "chay": [
+        "node --test test/label.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/label.ts": "export type Value = string | number | boolean;\n\nexport function label(v: Value): string {\n  if (typeof v === 'string') return '\"' + v + '\"';\n  if (typeof v === 'number') return String(v);\n  return v ? 'on' : 'off';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "String(v) for everything — a string loses its quotes, a boolean is \"true\"",
+        "tep": {
+          "src/label.ts": "export type Value = string | number | boolean;\n\nexport function label(v: Value): string {\n  return String(v);\n}\n"
+        }
+      },
+      {
+        "nhan": "v typed any — toUpperCase compiles but the number/boolean calls throw",
+        "tep": {
+          "src/label.ts": "export type Value = any;\n\nexport function label(v: Value): string {\n  return v.toUpperCase();\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-2-a",
+    "bai": "typescript-5-2-literal-union",
+    "tieuDe": "Narrow a tagged result (SlotResult)|||Thu hẹp một kết quả gắn nhãn (SlotResult)",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>SlotResult</code> is <code>{ ok: true; minutes } | { ok: false; code }</code>. <code>line</code> reads <code>r.minutes</code> blind — TS2339, because the <code>{ ok: false }</code> member has no minutes. Narrow on <code>r.ok</code>.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p><code>SlotResult</code> là <code>{ ok: true; minutes } | { ok: false; code }</code>. <code>line</code> đọc <code>r.minutes</code> mù — TS2339, vì thành viên <code>{ ok: false }</code> không có minutes. Thu hẹp trên <code>r.ok</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/slot.ts": "export type SlotResult = { ok: true; minutes: number } | { ok: false; code: string };\n\nexport function line(r: SlotResult): string {\n  return 'OK, ' + r.minutes + ' minutes';\n}\n"
+    },
+    "coDinh": {
+      "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { line } from '../src/slot.ts';\n\ntest('ok', () => assert.equal(line({ ok: true, minutes: 120 }), 'OK, 120 minutes'));\ntest('failed', () => assert.equal(line({ ok: false, code: 'OFF_GRID' }), 'REFUSED: OFF_GRID'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/slot.test.ts"
+      ],
+      "chay": [
+        "node --test test/slot.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/slot.ts": "export type SlotResult = { ok: true; minutes: number } | { ok: false; code: string };\n\nexport function line(r: SlotResult): string {\n  if (r.ok) return 'OK, ' + r.minutes + ' minutes';\n  return 'REFUSED: ' + r.code;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "cast to the ok member — the failed case reads undefined minutes",
+        "tep": {
+          "src/slot.ts": "export type SlotResult = { ok: true; minutes: number } | { ok: false; code: string };\n\nexport function line(r: SlotResult): string {\n  return 'OK, ' + (r as { ok: true; minutes: number }).minutes + ' minutes';\n}\n"
+        }
+      },
+      {
+        "nhan": "uses the tag but swaps the branches",
+        "tep": {
+          "src/slot.ts": "export type SlotResult = { ok: true; minutes: number } | { ok: false; code: string };\n\nexport function line(r: SlotResult): string {\n  if (!r.ok) return 'OK, ' + r.minutes + ' minutes';\n  return 'REFUSED: ' + r.code;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-2-b",
+    "bai": "typescript-5-2-literal-union",
+    "tieuDe": "A switch over a literal union|||Một switch trên union literal",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>SlotCode</code> is four exact strings. <code>message</code> only handles two and falls back to \"unknown error\" for the rest — the test for a real code fails. Write a <code>switch</code> that returns the right message for each of the four; no catch-all needed.</p><p><strong>Done when:</strong> the test (all four codes) passes.</p>|||<p><code>SlotCode</code> là bốn chuỗi chính xác. <code>message</code> chỉ xử lý hai và rơi về \"unknown error\" cho phần còn lại — test cho một mã thật trượt. Viết một <code>switch</code> trả đúng thông báo cho cả bốn; không cần bắt-hết.</p><p><strong>Đạt khi:</strong> test (cả bốn mã) qua.</p>",
+    "khoiDau": {
+      "src/message.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\nexport function message(code: SlotCode): string {\n  if (code === 'OFF_GRID') return 'Use the 30-minute grid.';\n  if (code === 'TOO_LONG') return 'At most 4 hours.';\n  return 'unknown error';\n}\n"
+    },
+    "coDinh": {
+      "test/message.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { message } from '../src/message.ts';\n\ntest('off grid', () => assert.equal(message('OFF_GRID'), 'Use the 30-minute grid.'));\ntest('end before start', () => assert.equal(message('END_BEFORE_START'), 'The end is before the start.'));\ntest('outside hours', () => assert.equal(message('OUTSIDE_HOURS'), 'The lab is open 07:00-21:00.'));\ntest('too long', () => assert.equal(message('TOO_LONG'), 'At most 4 hours.'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/message.test.ts"
+      ],
+      "chay": [
+        "node --test test/message.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/message.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\nexport function message(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Use the 30-minute grid.';\n    case 'END_BEFORE_START': return 'The end is before the start.';\n    case 'OUTSIDE_HOURS': return 'The lab is open 07:00-21:00.';\n    case 'TOO_LONG': return 'At most 4 hours.';\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still misses END_BEFORE_START (catch-all hides it)",
+        "tep": {
+          "src/message.ts": "export type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\n\nexport function message(code: SlotCode): string {\n  switch (code) {\n    case 'OFF_GRID': return 'Use the 30-minute grid.';\n    case 'OUTSIDE_HOURS': return 'The lab is open 07:00-21:00.';\n    case 'TOO_LONG': return 'At most 4 hours.';\n    default: return 'unknown error';\n  }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-2-c",
+    "bai": "typescript-5-2-literal-union",
+    "tieuDe": "instanceof: narrow the error in a catch|||instanceof: thu hẹp lỗi trong một catch",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>parseSeats</code> throws a <code>RangeError</code> for bad input. <code>safe</code> catches it and reads <code>e.message</code> — but the catch variable is <code>unknown</code> (TS18046). Narrow with <code>instanceof RangeError</code>; for any other throw, return \"unknown error\".</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p><code>parseSeats</code> ném một <code>RangeError</code> khi input xấu. <code>safe</code> bắt nó và đọc <code>e.message</code> — nhưng biến catch là <code>unknown</code> (TS18046). Thu hẹp bằng <code>instanceof RangeError</code>; với mọi throw khác, trả \"unknown error\".</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/safe.ts": "export function parseSeats(text: string): number {\n  const n = Number(text);\n  if (!Number.isInteger(n) || n < 1) throw new RangeError('bad seats: ' + text);\n  return n;\n}\n\nexport function safe(text: string): string {\n  try {\n    return 'seats: ' + parseSeats(text);\n  } catch (e) {\n    return e.message;\n  }\n}\n"
+    },
+    "coDinh": {
+      "test/safe.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { safe } from '../src/safe.ts';\n\ntest('ok', () => assert.equal(safe('30'), 'seats: 30'));\ntest('bad', () => assert.equal(safe('x'), 'bad seats: x'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/safe.test.ts"
+      ],
+      "chay": [
+        "node --test test/safe.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/safe.ts": "export function parseSeats(text: string): number {\n  const n = Number(text);\n  if (!Number.isInteger(n) || n < 1) throw new RangeError('bad seats: ' + text);\n  return n;\n}\n\nexport function safe(text: string): string {\n  try {\n    return 'seats: ' + parseSeats(text);\n  } catch (e) {\n    if (e instanceof RangeError) return e.message;\n    return 'unknown error';\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "cast e as Error — compiles but trusts every throw is an Error",
+        "tep": {
+          "src/safe.ts": "export function parseSeats(text: string): number {\n  const n = Number(text);\n  if (!Number.isInteger(n) || n < 1) throw new RangeError('bad seats: ' + text);\n  return n;\n}\n\nexport function safe(text: string): string {\n  try {\n    return 'seats: ' + parseSeats(text);\n  } catch (e) {\n    return (e as Error).message;\n  }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-3-a",
+    "bai": "typescript-5-3-discriminated-union",
+    "tieuDe": "Describe a booking state with a switch|||Mô tả một trạng thái lượt đặt bằng switch",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>BookingState</code> is a discriminated union on <code>step</code>. <code>describe</code> reads <code>state.record.id</code> without narrowing — TS2339, because a <code>draft</code> has no record. Write a <code>switch (state.step)</code> that returns a line for each case.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p><code>BookingState</code> là một discriminated union trên <code>step</code>. <code>describe</code> đọc <code>state.record.id</code> mà chưa thu hẹp — TS2339, vì một <code>draft</code> không có record. Viết một <code>switch (state.step)</code> trả một dòng cho mỗi case.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'cancelled'; record: BookingRecord; reason: string };\n\nexport function describe(state: BookingState): string {\n  return 'Booking #' + state.record.id;\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { describe } from '../src/state.ts';\nimport type { BookingRecord } from '../src/state.ts';\ndeclare const rec: BookingRecord;\ndescribe({ step: 'draft', record: rec }); // expect TS2353\n",
+      "test/state.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/state.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('draft', () => assert.equal(describe({ step: 'draft' }), 'Draft'));\ntest('pending', () => assert.equal(describe({ step: 'pending', record: rec }), 'Pending #7'));\ntest('cancelled', () => assert.equal(describe({ step: 'cancelled', record: rec, reason: 'exam' }), 'Cancelled #7: exam'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/state.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/state.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'cancelled'; record: BookingRecord; reason: string };\n\nexport function describe(state: BookingState): string {\n  switch (state.step) {\n    case 'draft': return 'Draft';\n    case 'pending': return 'Pending #' + state.record.id;\n    case 'cancelled': return 'Cancelled #' + state.record.id + ': ' + state.reason;\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "optional record everywhere — a draft can carry one, narrowing is lost",
+        "tep": {
+          "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState = { step: string; record?: BookingRecord; reason?: string };\n\nexport function describe(state: BookingState): string {\n  if (state.step === 'draft') return 'Draft';\n  if (state.step === 'pending') return 'Pending #' + state.record?.id;\n  return 'Cancelled #' + state.record?.id + ': ' + state.reason;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-3-b",
+    "bai": "typescript-5-3-discriminated-union",
+    "tieuDe": "A type predicate that narrows|||Một type predicate thu hẹp được",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>isActive</code> returns a plain <code>boolean</code>, so the caller cannot read <code>s.record</code> after it (TS18048 / TS2339). Give it a type predicate return (<code>s is ActiveState</code>) so the narrowing works at the call site.</p><p><strong>Done when:</strong> tsc is clean on src and <code>kiem/dung.ts</code>, and the test passes.</p>|||<p><code>isActive</code> trả về <code>boolean</code> thường, nên người gọi không đọc được <code>s.record</code> sau nó (TS18048 / TS2339). Cho nó một kiểu trả về type predicate (<code>s is ActiveState</code>) để phép thu hẹp chạy tại chỗ gọi.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và <code>kiem/dung.ts</code>, test qua.</p>",
+    "khoiDau": {
+      "src/active.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function isActive(s: BookingState): boolean {\n  return s.step === 'pending' || s.step === 'confirmed';\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { isActive } from '../src/active.ts';\nimport type { BookingState } from '../src/active.ts';\n\nexport function idOf(s: BookingState): number | null {\n  if (isActive(s)) return s.record.id; // the predicate must narrow s here\n  return null;\n}\n",
+      "test/active.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { idOf } from '../kiem/dung.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('active', () => assert.equal(idOf({ step: 'pending', record: rec }), 7));\ntest('not active', () => assert.equal(idOf({ step: 'draft' }), null));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/active.test.ts"
+      ],
+      "chay": [
+        "node --test test/active.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/active.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function isActive(s: BookingState): s is ActiveState {\n  return s.step === 'pending' || s.step === 'confirmed';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "a lying predicate — narrows but on the wrong condition",
+        "tep": {
+          "src/active.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function isActive(s: BookingState): s is ActiveState {\n  return s.step === 'draft';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-3-c",
+    "bai": "typescript-5-3-discriminated-union",
+    "tieuDe": "recordOf with the in operator|||recordOf với toán tử in",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>Return the record when a state has one. <code>recordOf</code> reads <code>state.record</code> blind — TS2339, because <code>draft</code> and <code>invalid</code> have none. Narrow with <code>'record' in state</code>.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p>Trả về bản ghi khi một trạng thái có nó. <code>recordOf</code> đọc <code>state.record</code> mù — TS2339, vì <code>draft</code> và <code>invalid</code> không có. Thu hẹp bằng <code>'record' in state</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/record.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'invalid'; code: string }\n  | { step: 'confirmed'; record: BookingRecord };\n\nexport function recordOf(state: BookingState): BookingRecord | null {\n  return state.record;\n}\n"
+    },
+    "coDinh": {
+      "test/record.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { recordOf } from '../src/record.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('has record', () => assert.deepEqual(recordOf({ step: 'confirmed', record: rec }), rec));\ntest('draft', () => assert.equal(recordOf({ step: 'draft' }), null));\ntest('invalid', () => assert.equal(recordOf({ step: 'invalid', code: 'X' }), null));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/record.test.ts"
+      ],
+      "chay": [
+        "node --test test/record.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/record.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'invalid'; code: string }\n  | { step: 'confirmed'; record: BookingRecord };\n\nexport function recordOf(state: BookingState): BookingRecord | null {\n  if ('record' in state) return state.record;\n  return null;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "narrow by step but miss one case",
+        "tep": {
+          "src/record.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'invalid'; code: string }\n  | { step: 'confirmed'; record: BookingRecord };\n\nexport function recordOf(state: BookingState): BookingRecord | null {\n  if (state.step === 'draft') return null;\n  return (state as { record: BookingRecord }).record;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-4-a",
+    "bai": "typescript-5-4-exhaustiveness",
+    "tieuDe": "Handle every status (a catch-all hid one)|||Xử lý mọi trạng thái (default bắt-hết giấu một cái)",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>colour</code> handles three statuses and falls back to \"grey\" — so <code>CONFIRMED</code> shows grey and the test fails. Handle every case (an <code>assertNever</code> default makes a future status a compile error — see the solution).</p><p><strong>Done when:</strong> the test (all four statuses) passes.</p>|||<p><code>colour</code> xử lý ba trạng thái và rơi về \"grey\" — nên <code>CONFIRMED</code> hiện grey và test trượt. Xử lý mọi case (một default <code>assertNever</code> làm một trạng thái tương lai thành lỗi biên dịch — xem lời giải).</p><p><strong>Đạt khi:</strong> test (cả bốn trạng thái) qua.</p>",
+    "khoiDau": {
+      "src/colour.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport function colour(s: Status): string {\n  switch (s) {\n    case 'PENDING': return 'amber';\n    case 'CANCELLED': return 'grey';\n    case 'EXPIRED': return 'slate';\n    default: return 'grey';\n  }\n}\n"
+    },
+    "coDinh": {
+      "test/colour.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { colour } from '../src/colour.ts';\n\ntest('pending', () => assert.equal(colour('PENDING'), 'amber'));\ntest('confirmed', () => assert.equal(colour('CONFIRMED'), 'green'));\ntest('cancelled', () => assert.equal(colour('CANCELLED'), 'grey'));\ntest('expired', () => assert.equal(colour('EXPIRED'), 'slate'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/colour.test.ts"
+      ],
+      "chay": [
+        "node --test test/colour.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/colour.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nfunction assertNever(x: never): never {\n  throw new Error('Unhandled status: ' + String(x));\n}\n\nexport function colour(s: Status): string {\n  switch (s) {\n    case 'PENDING': return 'amber';\n    case 'CONFIRMED': return 'green';\n    case 'CANCELLED': return 'grey';\n    case 'EXPIRED': return 'slate';\n    default: return assertNever(s);\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still returns grey for CONFIRMED (catch-all)",
+        "tep": {
+          "src/colour.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport function colour(s: Status): string {\n  switch (s) {\n    case 'PENDING': return 'amber';\n    case 'CANCELLED': return 'grey';\n    case 'EXPIRED': return 'slate';\n    default: return 'grey';\n  }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-4-b",
+    "bai": "typescript-5-4-exhaustiveness",
+    "tieuDe": "Close the label table with Record|||Đóng bảng nhãn bằng Record",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>LABEL</code> is an open <code>{ [k: string]: string }</code> missing the <code>EXPIRED</code> entry — so <code>LABEL.EXPIRED</code> is <code>undefined</code> and the test fails. Type it <code>Record&lt;Status, string&gt;</code> and add every entry, so a missing status becomes a compile error.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p><code>LABEL</code> là một <code>{ [k: string]: string }</code> mở thiếu mục <code>EXPIRED</code> — nên <code>LABEL.EXPIRED</code> là <code>undefined</code> và test trượt. Gõ kiểu <code>Record&lt;Status, string&gt;</code> và thêm mọi mục, để một trạng thái thiếu thành lỗi biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/label.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport const LABEL: { [k: string]: string } = {\n  PENDING: 'Pending',\n  CONFIRMED: 'Confirmed',\n  CANCELLED: 'Cancelled',\n};\n\nexport function labelOf(s: Status): string {\n  return LABEL[s];\n}\n"
+    },
+    "coDinh": {
+      "test/label.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labelOf } from '../src/label.ts';\n\ntest('pending', () => assert.equal(labelOf('PENDING'), 'Pending'));\ntest('expired', () => assert.equal(labelOf('EXPIRED'), 'Expired'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/label.test.ts"
+      ],
+      "chay": [
+        "node --test test/label.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/label.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\n// A closed table: a missing status is a compile error (TS2741).\nexport const LABEL: Record<Status, string> = {\n  PENDING: 'Pending',\n  CONFIRMED: 'Confirmed',\n  CANCELLED: 'Cancelled',\n  EXPIRED: 'Expired',\n};\n\nexport function labelOf(s: Status): string {\n  return LABEL[s];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "closed the type but forgot the EXPIRED entry (TS2741)",
+        "tep": {
+          "src/label.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport const LABEL: Record<Status, string> = {\n  PENDING: 'Pending',\n  CONFIRMED: 'Confirmed',\n  CANCELLED: 'Cancelled',\n};\n\nexport function labelOf(s: Status): string {\n  return LABEL[s];\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-5-4-c",
+    "bai": "typescript-5-4-exhaustiveness",
+    "tieuDe": "An assertion function that narrows|||Một assertion function thu hẹp được",
+    "doKho": "HARD",
+    "phut": 12,
+    "moTa": "<p>Write <code>assertActive</code> as an assertion function (<code>asserts s is ActiveState</code>) that throws for a non-active state. After the call, <code>s.record</code> must be readable with no block. The starter returns a boolean, so <code>idOf</code> does not compile.</p><p><strong>Done when:</strong> tsc is clean on src and <code>kiem/dung.ts</code>, and the test passes.</p>|||<p>Viết <code>assertActive</code> như một assertion function (<code>asserts s is ActiveState</code>) ném khi trạng thái không active. Sau khi gọi, <code>s.record</code> phải đọc được mà không cần khối. Bản khởi đầu trả boolean, nên <code>idOf</code> không biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và <code>kiem/dung.ts</code>, test qua.</p>",
+    "khoiDau": {
+      "src/assert.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function assertActive(s: BookingState): boolean {\n  return s.step === 'pending' || s.step === 'confirmed';\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { assertActive } from '../src/assert.ts';\nimport type { BookingState } from '../src/assert.ts';\n\nexport function idOf(s: BookingState): number {\n  assertActive(s); // after this, s is ActiveState\n  return s.record.id;\n}\n",
+      "test/assert.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { idOf } from '../kiem/dung.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('active', () => assert.equal(idOf({ step: 'confirmed', record: rec }), 7));\ntest('rejects a draft with the right error', () => assert.throws(() => idOf({ step: 'draft' }), /not active/));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/assert.test.ts"
+      ],
+      "chay": [
+        "node --test test/assert.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/assert.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\n// asserts s is ActiveState: if it returns, s is narrowed from there on.\nexport function assertActive(s: BookingState): asserts s is ActiveState {\n  if (s.step !== 'pending' && s.step !== 'confirmed') throw new Error('not active: ' + s.step);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "assertion function that never throws — the narrowing is a lie",
+        "tep": {
+          "src/assert.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function assertActive(s: BookingState): asserts s is ActiveState {\n  // forgot to throw\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-5",
+    "bai": "typescript-5-6-lab-may-trang-thai",
+    "tieuDe": "Lab 5 — the booking state machine|||Lab 5 — máy trạng thái lượt đặt",
+    "doKho": "HARD",
+    "phut": 30,
+    "moTa": "<p>The lab in miniature. Rewrite the loose <code>BookingState</code> as a discriminated union with an exhaustive <code>describe</code> (<code>assertNever</code>), a type predicate <code>isActive</code>, an immutable <code>cancel</code>, and a closed <code>STEP_LABEL</code>. The correct uses in <code>kiem/dung.ts</code> must compile, the wrong uses in <code>kiem/sai.ts</code> must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>|||<p>Lab thu nhỏ. Viết lại <code>BookingState</code> lỏng thành một discriminated union với <code>describe</code> đầy đủ (<code>assertNever</code>), một type predicate <code>isActive</code>, một <code>cancel</code> bất biến, và một <code>STEP_LABEL</code> đóng. Các cách dùng đúng trong <code>kiem/dung.ts</code> phải biên dịch, cách dùng sai trong <code>kiem/sai.ts</code> phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\n// A teammate's loose version — it compiles, but refuses nothing.\nexport type BookingState = { step: string; record?: BookingRecord; reason?: string };\nexport type Step = string;\nexport type ActiveState = BookingState;\n\nexport function describe(state: BookingState): string {\n  switch (state.step) {\n    case 'draft': return 'Draft';\n    case 'pending': return 'Pending #' + state.record?.id;\n    case 'confirmed': return 'Confirmed #' + state.record?.id;\n    case 'cancelled': return 'Cancelled #' + state.record?.id + ': ' + state.reason;\n    default: return 'Unknown';\n  }\n}\n\nexport function isActive(state: BookingState): boolean {\n  return state.step === 'pending' || state.step === 'confirmed';\n}\n\nexport const STEP_LABEL: { [k: string]: string } = {\n  draft: 'Draft', pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled',\n};\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { describe, isActive, STEP_LABEL } from '../src/state.ts';\nimport type { BookingState, ActiveState } from '../src/state.ts';\n\ndeclare const rec: { id: number; seats: number };\nconst states: BookingState[] = [\n  { step: 'draft' },\n  { step: 'pending', record: rec },\n  { step: 'confirmed', record: rec },\n  { step: 'cancelled', record: rec, reason: 'x' },\n];\nfor (const s of states) { void describe(s); void STEP_LABEL[s.step]; }\n\ndeclare const some: BookingState;\nif (isActive(some)) { const a: ActiveState = some; void a.record.id; }\n",
+      "kiem/sai.ts": "import { describe } from '../src/state.ts';\nimport type { BookingState } from '../src/state.ts';\n\ndeclare const rec: { id: number; seats: number };\ndeclare const s: BookingState;\ndescribe({ step: 'pending' }); // expect TS2345\nif (s.step === 'draft') { const id = s.record.id; void id; } // expect TS2339\nif (s.step === 'xpired') { void 0; } // expect TS2367\n",
+      "test/state.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe, isActive } from '../src/state.ts';\nimport type { BookingState } from '../src/state.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('describe', () => {\n  assert.equal(describe({ step: 'draft' }), 'Draft');\n  assert.equal(describe({ step: 'cancelled', record: rec, reason: 'exam' }), 'Cancelled #7: exam');\n});\ntest('isActive', () => {\n  assert.equal(isActive({ step: 'confirmed', record: rec }), true);\n  assert.equal(isActive({ step: 'draft' }), false);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/state.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/state.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'invalid'; code: string }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord }\n  | { step: 'cancelled'; record: BookingRecord; reason: string };\nexport type Step = BookingState['step'];\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nfunction assertNever(x: never): never {\n  throw new Error('Unhandled booking state: ' + JSON.stringify(x));\n}\n\nexport function describe(state: BookingState): string {\n  switch (state.step) {\n    case 'draft': return 'Draft';\n    case 'invalid': return 'Invalid: ' + state.code;\n    case 'pending': return 'Pending #' + state.record.id;\n    case 'confirmed': return 'Confirmed #' + state.record.id;\n    case 'cancelled': return 'Cancelled #' + state.record.id + ': ' + state.reason;\n    default: return assertNever(state);\n  }\n}\n\nexport function isActive(state: BookingState): state is ActiveState {\n  return state.step === 'pending' || state.step === 'confirmed';\n}\n\nexport const STEP_LABEL: Record<Step, string> = {\n  draft: 'Draft', invalid: 'Invalid', pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled',\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the loose starter kept — wrong uses slip through",
+        "tep": {
+          "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState = { step: string; record?: BookingRecord; reason?: string };\nexport type Step = string;\nexport type ActiveState = BookingState;\n\nexport function describe(state: BookingState): string {\n  switch (state.step) {\n    case 'draft': return 'Draft';\n    case 'pending': return 'Pending #' + state.record?.id;\n    case 'confirmed': return 'Confirmed #' + state.record?.id;\n    case 'cancelled': return 'Cancelled #' + state.record?.id + ': ' + state.reason;\n    default: return 'Unknown';\n  }\n}\nexport function isActive(state: BookingState): boolean {\n  return state.step === 'pending' || state.step === 'confirmed';\n}\nexport const STEP_LABEL: { [k: string]: string } = { draft: 'Draft', pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled' };\n"
+        }
+      },
+      {
+        "nhan": "union but isActive returns boolean — kiem/dung.ts loses narrowing",
+        "tep": {
+          "src/state.ts": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'invalid'; code: string }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord }\n  | { step: 'cancelled'; record: BookingRecord; reason: string };\nexport type Step = BookingState['step'];\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function describe(state: BookingState): string {\n  switch (state.step) {\n    case 'draft': return 'Draft';\n    case 'invalid': return 'Invalid: ' + state.code;\n    case 'pending': return 'Pending #' + state.record.id;\n    case 'confirmed': return 'Confirmed #' + state.record.id;\n    case 'cancelled': return 'Cancelled #' + state.record.id + ': ' + state.reason;\n  }\n}\nexport function isActive(state: BookingState): boolean {\n  return state.step === 'pending' || state.step === 'confirmed';\n}\nexport const STEP_LABEL: Record<Step, string> = { draft: 'Draft', invalid: 'Invalid', pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled' };\n"
+        }
+      }
+    ]
   }
 ]

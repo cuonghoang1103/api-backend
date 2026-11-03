@@ -286,10 +286,18 @@ typescript: 'typescript-practice',
   4-2 a–c, 4-3 a–c, 4-4 a–c, ts-cl-lab-4; 29 sai mẫu) — kiem-de-ts 78/78; track `typescript-practice` thêm 10 module (Ch3 + Ch4 ⇒ 26 module / 78 đề),
   `codelab-xuat-de` sạch, `codelab-ts-doi-chieu` 1813/1813 kiểm khớp tsc 7.0.2, Chromium web + app 78/78; 4 cặp liên kết chéo (react rx-1-2-props,
   prisma-orm pr-1-2, prisma-orm pr-8-2, api-design 3.4); video YT cho Lab 4. Làm MỘT phiên, KHÔNG fork (luật mới: tối đa 3 tác tử chạy cùng lúc).
-- **⏸ TẠM DỪNG sau Chương 4 (01/11/2026, chủ kênh đổi ưu tiên). Việc tiếp theo: Chương 5** (Union, literal & thu hẹp — §9: `SlotResult`, máy trạng thái
-  Booking là union có nhãn + `never`, Lab 5 máy chấm thêm trạng thái mới ⇒ phải đỏ). Chú ý khi soạn: 2.3 đã dạy switch vét cạn với `never` (LAB_CLOSED),
-  2.4 đã dạy guard `isLab` — Ch5 đi sâu hơn (typeof/in/instanceof/equality, control-flow, type predicate, assertion function, union có nhãn,
-  `assertNever`, bẫy default bắt-hết), dựng `BookingState` trên `BookingRecord` của Ch4. Ảnh chụp `_labflow-ts` cuối Ch4: 43 test, lab1–4 tham khảo 10/10.
+- 03/11/2026 — **Chương 5 trọn**: 4 bài (slug giữ; nguồn bài + giảng ~233k/6 ≈ 39k/bài) + Lab 5 (MỚI `typescript-5-6-lab-may-trang-thai`) + quiz 10 câu;
+  5 deck / 49 slide đẩy `TS/v1` (ts-05-1..4 mỗi deck 10, ts-lab-5 9; 0 lỗi kiem-slide); 14 đề Code Lab `ts` mới (ts-cl-5-1 a–d, 5-2 a–c, 5-3 a–c, 5-4 a–c,
+  ts-cl-lab-5; 20 sai mẫu) — kiem-de-ts **92/92** (tsc 7.0.2), codelab-xuat-de 92 sạch, codelab-ts-doi-chieu **166/166** (TS 6.0.3 ↔ 7.0.2 khớp trên 14 đề mới);
+  track `typescript-practice` thêm 5 module (⇒ 31 module / 92 đề). LabFlow TS thêm `src/rules/state.ts` + `state.test.ts` (8 test ⇒ `npm test` = **51**),
+  `lab5/` (starter `step: string`, `kiem/{sai,dung}`, test, `yeu`=union+default bắt-hết, `vua`=assertNever+bảng mở), `scripts/cham-lab-5.mjs` (`npm run lab5`;
+  A2·B1·C1·D2·E 8×0,25·**F2 thêm trạng thái mới ⇒ describe + STEP_LABEL phải đỏ**). Số đo Lab 5: khởi đầu **4/10** · `yeu` **8/10** (F 0/2, default bắt-hết) ·
+  `vua` **9/10** (F 1/2, bảng mở) · tham khảo **10/10** (thêm `expired`: TS2345 ở assertNever + TS2741 ở Record đóng). 2 cặp liên kết chéo hai chiều
+  (postgresql `postgresql-4-2-select-where`, api-design `api-2-1-problem-details`). Soạn MỘT phiên, KHÔNG fork. Ảnh chụp `_labflow-ts` cuối Ch5:
+  51 test, lab1–5 tham khảo 10/10. **BookingState** (discriminated union trên `BookingRecord`) = lời giải Lab 5 ở `src/rules/state.ts`.
+- **⏸ TẠM DỪNG sau Chương 5 (03/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 6** (Generics — §9: `Result<T, E>`, repository;
+  Lab 6 `Repo<T extends { id }>` + `groupBy`). Làm y Ch5: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
+  đề Code Lab `ts` + nguon + `_track.json` + xuat-de + doi-chieu, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`.
   Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.

@@ -164,6 +164,36 @@
       "name": "4.6 Lab 4 — LabFlow’s data model",
       "level": "ADVANCED",
       "description": "1 đề: Lab 4 — LabFlow’s data model"
+    },
+    {
+      "slug": "typescript-5-1-union-narrowing",
+      "name": "5.1 — Union types & narrowing",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Badge a string | number id · The truthiness 0 trap · Narrow a string | null note · Label a string / number / boolean"
+    },
+    {
+      "slug": "typescript-5-2-literal-union",
+      "name": "5.2 — Literal unions & narrowing by value",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Narrow a tagged SlotResult · A switch over a literal union · instanceof in a catch"
+    },
+    {
+      "slug": "typescript-5-3-discriminated-union",
+      "name": "5.3 — Discriminated unions & type predicates",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Describe a booking state with a switch · A type predicate that narrows · recordOf with the in operator"
+    },
+    {
+      "slug": "typescript-5-4-exhaustiveness",
+      "name": "5.4 — Exhaustiveness checking with never",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Handle every status (a catch-all hid one) · Close the label table with Record · An assertion function that narrows"
+    },
+    {
+      "slug": "typescript-5-6-lab-may-trang-thai",
+      "name": "5.6 Lab 5 — The booking state machine",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 5 — the booking state machine (discriminated union + never)"
     }
   ]
 }

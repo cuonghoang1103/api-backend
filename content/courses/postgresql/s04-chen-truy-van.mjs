@@ -296,6 +296,11 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
   <span class="lc-body"><span class="lc-title">null on the TypeScript side — TS 2.1: Primitives &amp; strict null checks</span><span class="lc-sub">Same: NULL means “no value” and every use must handle it explicitly. Different: in TypeScript a nullable column is typed string | null, and tsc refuses every use that does not check first — the same schedule file had 0 errors with strict off and 4 with it on, 3 of them crashes.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Narrowing a string | null — TS 5.1: Union types &amp; narrowing</span><span class="lc-sub">Same: a value that may be absent must be handled on purpose. Different: 2.1 is the type; 5.1 is the mechanism — a guard (if (note === null)) that tsc reads to shrink the type, and the truthiness trap where if (x) also drops a real 0 and '' alongside null.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -390,6 +395,11 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-1-primitive" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">null ở phía TypeScript — TS 2.1: Kiểu primitive &amp; strict null checks</span><span class="lc-sub">Giống: NULL nghĩa là “không có giá trị” và mọi chỗ dùng phải xử lý nó tường minh. Khác: trong TypeScript cột cho phép NULL có kiểu string | null, và tsc từ chối mọi chỗ dùng chưa kiểm trước — cùng một tệp lịch phòng 0 lỗi khi tắt strict, 4 lỗi khi bật, 3 trong số đó là lỗi sập.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Thu hẹp một string | null — TS 5.1: Kiểu union &amp; thu hẹp kiểu</span><span class="lc-sub">Giống: một giá trị có thể vắng phải được xử lý có chủ ý. Khác: 2.1 là cái kiểu; 5.1 là cơ chế — một guard (if (note === null)) mà tsc đọc để làm nhỏ kiểu, và bẫy tính đúng/sai nơi if (x) bỏ luôn một 0 và '' thật cùng với null.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

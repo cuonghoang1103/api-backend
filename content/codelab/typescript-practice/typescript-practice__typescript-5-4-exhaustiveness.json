@@ -1,0 +1,391 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-5-4-exhaustiveness",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-5-4-exhaustiveness"
+  },
+  "exercises": [
+    {
+      "title": "Handle every status (a catch-all hid one)",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-5-4-exhaustiveness"
+      ],
+      "problemHtml": "<p><code>colour</code> handles three statuses and falls back to \"grey\" — so <code>CONFIRMED</code> shows grey and the test fails. Handle every case (an <code>assertNever</code> default makes a future status a compile error — see the solution).</p><p><strong>Done when:</strong> the test (all four statuses) passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/colour.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/colour.test.ts</code>.</li>\n  <li><code>node --test test/colour.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>colour</code> xử lý ba trạng thái và rơi về \"grey\" — nên <code>CONFIRMED</code> hiện grey và test trượt. Xử lý mọi case (một default <code>assertNever</code> làm một trạng thái tương lai thành lỗi biên dịch — xem lời giải).</p><p><strong>Đạt khi:</strong> test (cả bốn trạng thái) qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/colour.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/colour.test.ts</code>.</li>\n  <li><code>node --test test/colour.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/colour.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/colour.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/colour.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/colour.ts",
+          "language": "typescript",
+          "code": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport function colour(s: Status): string {\n  switch (s) {\n    case 'PENDING': return 'amber';\n    case 'CANCELLED': return 'grey';\n    case 'EXPIRED': return 'slate';\n    default: return 'grey';\n  }\n}\n"
+        },
+        {
+          "name": "test/colour.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { colour } from '../src/colour.ts';\n\ntest('pending', () => assert.equal(colour('PENDING'), 'amber'));\ntest('confirmed', () => assert.equal(colour('CONFIRMED'), 'green'));\ntest('cancelled', () => assert.equal(colour('CANCELLED'), 'grey'));\ntest('expired', () => assert.equal(colour('EXPIRED'), 'slate'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/colour.ts",
+          "language": "typescript",
+          "code": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nfunction assertNever(x: never): never {\n  throw new Error('Unhandled status: ' + String(x));\n}\n\nexport function colour(s: Status): string {\n  switch (s) {\n    case 'PENDING': return 'amber';\n    case 'CONFIRMED': return 'green';\n    case 'CANCELLED': return 'grey';\n    case 'EXPIRED': return 'slate';\n    default: return assertNever(s);\n  }\n}\n"
+        },
+        {
+          "name": "test/colour.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { colour } from '../src/colour.ts';\n\ntest('pending', () => assert.equal(colour('PENDING'), 'amber'));\ntest('confirmed', () => assert.equal(colour('CONFIRMED'), 'green'));\ntest('cancelled', () => assert.equal(colour('CANCELLED'), 'grey'));\ntest('expired', () => assert.equal(colour('EXPIRED'), 'slate'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — still returns grey for CONFIRMED (catch-all) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — still returns grey for CONFIRMED (catch-all) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/colour.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { colour } from '../src/colour.ts';\n\ntest('pending', () => assert.equal(colour('PENDING'), 'amber'));\ntest('confirmed', () => assert.equal(colour('CONFIRMED'), 'green'));\ntest('cancelled', () => assert.equal(colour('CANCELLED'), 'grey'));\ntest('expired', () => assert.equal(colour('EXPIRED'), 'slate'));\n"
+        },
+        "tepHoc": [
+          "src/colour.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/colour.test.ts"
+            ],
+            "moTa": "tsc (strict): src/colour.ts + test/colour.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/colour.test.ts",
+            "moTa": "node --test test/colour.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "still returns grey for CONFIRMED (catch-all) — caught by: node --test test/colour.test.ts exits 0|||still returns grey for CONFIRMED (catch-all) — máy chấm bắt ở: node --test test/colour.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Close the label table with Record",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-5-4-exhaustiveness"
+      ],
+      "problemHtml": "<p><code>LABEL</code> is an open <code>{ [k: string]: string }</code> missing the <code>EXPIRED</code> entry — so <code>LABEL.EXPIRED</code> is <code>undefined</code> and the test fails. Type it <code>Record&lt;Status, string&gt;</code> and add every entry, so a missing status becomes a compile error.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/label.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/label.test.ts</code>.</li>\n  <li><code>node --test test/label.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>LABEL</code> là một <code>{ [k: string]: string }</code> mở thiếu mục <code>EXPIRED</code> — nên <code>LABEL.EXPIRED</code> là <code>undefined</code> và test trượt. Gõ kiểu <code>Record&lt;Status, string&gt;</code> và thêm mọi mục, để một trạng thái thiếu thành lỗi biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/label.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/label.test.ts</code>.</li>\n  <li><code>node --test test/label.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/label.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/label.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/label.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/label.ts",
+          "language": "typescript",
+          "code": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\nexport const LABEL: { [k: string]: string } = {\n  PENDING: 'Pending',\n  CONFIRMED: 'Confirmed',\n  CANCELLED: 'Cancelled',\n};\n\nexport function labelOf(s: Status): string {\n  return LABEL[s];\n}\n"
+        },
+        {
+          "name": "test/label.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labelOf } from '../src/label.ts';\n\ntest('pending', () => assert.equal(labelOf('PENDING'), 'Pending'));\ntest('expired', () => assert.equal(labelOf('EXPIRED'), 'Expired'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/label.ts",
+          "language": "typescript",
+          "code": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'EXPIRED';\n\n// A closed table: a missing status is a compile error (TS2741).\nexport const LABEL: Record<Status, string> = {\n  PENDING: 'Pending',\n  CONFIRMED: 'Confirmed',\n  CANCELLED: 'Cancelled',\n  EXPIRED: 'Expired',\n};\n\nexport function labelOf(s: Status): string {\n  return LABEL[s];\n}\n"
+        },
+        {
+          "name": "test/label.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labelOf } from '../src/label.ts';\n\ntest('pending', () => assert.equal(labelOf('PENDING'), 'Pending'));\ntest('expired', () => assert.equal(labelOf('EXPIRED'), 'Expired'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — closed the type but forgot the EXPIRED entry (TS2741) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — closed the type but forgot the EXPIRED entry (TS2741) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/label.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labelOf } from '../src/label.ts';\n\ntest('pending', () => assert.equal(labelOf('PENDING'), 'Pending'));\ntest('expired', () => assert.equal(labelOf('EXPIRED'), 'Expired'));\n"
+        },
+        "tepHoc": [
+          "src/label.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/label.test.ts"
+            ],
+            "moTa": "tsc (strict): src/label.ts + test/label.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/label.test.ts",
+            "moTa": "node --test test/label.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "closed the type but forgot the EXPIRED entry (TS2741) — caught by: tsc (strict): src/label.ts + test/label.test.ts compile with 0 errors; node --test test/label.test.ts exits 0|||closed the type but forgot the EXPIRED entry (TS2741) — máy chấm bắt ở: tsc (strict): src/label.ts + test/label.test.ts compile with 0 errors; node --test test/label.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "An assertion function that narrows",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-5-4-exhaustiveness"
+      ],
+      "problemHtml": "<p>Write <code>assertActive</code> as an assertion function (<code>asserts s is ActiveState</code>) that throws for a non-active state. After the call, <code>s.record</code> must be readable with no block. The starter returns a boolean, so <code>idOf</code> does not compile.</p><p><strong>Done when:</strong> tsc is clean on src and <code>kiem/dung.ts</code>, and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/assert.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/assert.test.ts</code>.</li>\n  <li><code>node --test test/assert.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>assertActive</code> như một assertion function (<code>asserts s is ActiveState</code>) ném khi trạng thái không active. Sau khi gọi, <code>s.record</code> phải đọc được mà không cần khối. Bản khởi đầu trả boolean, nên <code>idOf</code> không biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và <code>kiem/dung.ts</code>, test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/assert.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/assert.test.ts</code>.</li>\n  <li><code>node --test test/assert.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/assert.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/assert.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/assert.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/assert.ts",
+          "language": "typescript",
+          "code": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\nexport function assertActive(s: BookingState): boolean {\n  return s.step === 'pending' || s.step === 'confirmed';\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { assertActive } from '../src/assert.ts';\nimport type { BookingState } from '../src/assert.ts';\n\nexport function idOf(s: BookingState): number {\n  assertActive(s); // after this, s is ActiveState\n  return s.record.id;\n}\n"
+        },
+        {
+          "name": "test/assert.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { idOf } from '../kiem/dung.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('active', () => assert.equal(idOf({ step: 'confirmed', record: rec }), 7));\ntest('rejects a draft with the right error', () => assert.throws(() => idOf({ step: 'draft' }), /not active/));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/assert.ts",
+          "language": "typescript",
+          "code": "export type BookingRecord = { id: number; seats: number };\n\nexport type BookingState =\n  | { step: 'draft' }\n  | { step: 'pending'; record: BookingRecord }\n  | { step: 'confirmed'; record: BookingRecord };\nexport type ActiveState = { step: 'pending'; record: BookingRecord } | { step: 'confirmed'; record: BookingRecord };\n\n// asserts s is ActiveState: if it returns, s is narrowed from there on.\nexport function assertActive(s: BookingState): asserts s is ActiveState {\n  if (s.step !== 'pending' && s.step !== 'confirmed') throw new Error('not active: ' + s.step);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { assertActive } from '../src/assert.ts';\nimport type { BookingState } from '../src/assert.ts';\n\nexport function idOf(s: BookingState): number {\n  assertActive(s); // after this, s is ActiveState\n  return s.record.id;\n}\n"
+        },
+        {
+          "name": "test/assert.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { idOf } from '../kiem/dung.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('active', () => assert.equal(idOf({ step: 'confirmed', record: rec }), 7));\ntest('rejects a draft with the right error', () => assert.throws(() => idOf({ step: 'draft' }), /not active/));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — assertion function that never throws — the narrowing is a lie — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — assertion function that never throws — the narrowing is a lie — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { assertActive } from '../src/assert.ts';\nimport type { BookingState } from '../src/assert.ts';\n\nexport function idOf(s: BookingState): number {\n  assertActive(s); // after this, s is ActiveState\n  return s.record.id;\n}\n",
+          "test/assert.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { idOf } from '../kiem/dung.ts';\n\nconst rec = { id: 7, seats: 30 };\ntest('active', () => assert.equal(idOf({ step: 'confirmed', record: rec }), 7));\ntest('rejects a draft with the right error', () => assert.throws(() => idOf({ step: 'draft' }), /not active/));\n"
+        },
+        "tepHoc": [
+          "src/assert.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/assert.test.ts"
+            ],
+            "moTa": "tsc (strict): src/assert.ts + kiem/dung.ts, test/assert.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/assert.test.ts",
+            "moTa": "node --test test/assert.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "assertion function that never throws — the narrowing is a lie — caught by: node --test test/assert.test.ts exits 0|||assertion function that never throws — the narrowing is a lie — máy chấm bắt ở: node --test test/assert.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

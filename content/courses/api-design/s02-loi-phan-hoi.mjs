@@ -446,6 +446,11 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.2: Middleware</span><span class="lc-sub">If you took SDN302 on Academy, the error-handling middleware with four parameters is the same piece we changed here. Same: one handler after all routes catches what the routes throw. Different: SDN302 sends a home-made JSON error; here the handler produces the standard RFC 9457 format. This lesson adds: the problem+json media type, type/title/detail/instance, field errors with JSON Pointers, and the 413 that a hand-made handler turns into a 500. Not taken SDN302? This lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The same success-or-failure result, in types — TS 5.2: Literal unions &amp; narrowing by value</span><span class="lc-sub">Same: a response is one of a closed set of shapes, and a client tells them apart by a tag (the HTTP status / <code>type</code> here). Different: in TypeScript the result is a discriminated union (<code>{ ok: true } | { ok: false }</code>) that tsc narrows at compile time — read the minutes blind and it is TS2339 — and the error caught in a <code>catch</code> is <code>unknown</code> until you narrow it with <code>instanceof</code>.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -869,6 +874,11 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp phần này ở SDN302 — bài 2.2: Middleware</span><span class="lc-sub">Nếu đã học SDN302 trên Academy, middleware xử lý lỗi bốn tham số chính là mảnh ta vừa sửa ở đây. Giống: một bộ xử lý đặt sau mọi route hứng những gì route ném ra. Khác: SDN302 gửi một lỗi JSON tự chế; ở đây bộ xử lý sinh ra định dạng chuẩn RFC 9457. Bài này thêm: media type problem+json, type/title/detail/instance, lỗi từng trường kèm JSON Pointer, và lỗi 413 mà một bộ xử lý tự chế biến thành 500. Chưa học SDN302? Bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng một kết quả thành-công-hoặc-thất-bại, bằng kiểu — TS 5.2: Union literal &amp; thu hẹp theo giá trị</span><span class="lc-sub">Giống: một phản hồi là một trong một tập dáng đóng, và client phân biệt chúng bằng một nhãn (ở đây là HTTP status / <code>type</code>). Khác: trong TypeScript kết quả là một discriminated union (<code>{ ok: true } | { ok: false }</code>) mà tsc thu hẹp lúc biên dịch — đọc minutes mù là TS2339 — và lỗi bắt trong <code>catch</code> là <code>unknown</code> cho tới khi bạn thu hẹp bằng <code>instanceof</code>.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

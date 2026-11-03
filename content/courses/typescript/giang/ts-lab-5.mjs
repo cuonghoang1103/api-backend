@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 5 Máy trạng thái lượt đặt (deck ts-lab-5, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-lab-5', 'Lab 5 — The booking state machine', 'Lab 5 — Máy trạng thái lượt đặt', [
+  [1, 'Lab 5 — The booking state machine',
+    `<p>A booking has a lifecycle — drafting, invalid, pending, confirmed, cancelled. A teammate modelled it as one wide object; it compiles and scores 4/10. You rewrite it as a discriminated union with an exhaustive describe, a type predicate, and a closed label table, until the grader says 10/10.</p>`,
+    `<p>Một lượt đặt có vòng đời — nháp, không hợp lệ, chờ, đã xác nhận, bị huỷ. Một đồng đội mô hình hoá nó thành một object rộng; nó biên dịch và được 4/10. Bạn viết lại thành một discriminated union với describe đầy đủ, một type predicate, và một bảng nhãn đóng, tới khi máy chấm báo 10/10.</p>`],
+  [2, 'The task',
+    `<p>Build BookingState on Chapter 4’s BookingRecord. The grader runs tsc and Node for ten points — compile, correct uses, honesty, behaviour, the eight wrong uses, and part F. The last two points are the point of the chapter: the grader adds a new state and your code must refuse to compile.</p>`,
+    `<p>Dựng BookingState trên BookingRecord của Chương 4. Máy chấm chạy tsc và Node cho mười điểm — biên dịch, cách dùng đúng, trung thực, hành vi, tám cách dùng sai, và phần F. Hai điểm cuối là ý của chương: máy chấm thêm một trạng thái mới và code bạn phải từ chối biên dịch.</p>`],
+  [3, 'Zero errors — and why that proves nothing',
+    `<p>The starter compiles under strict with no errors, yet step: string accepts any text and record/code/reason are all optional, so illegal states — a draft with a record, a cancelled with no reason — are legal. A loose union refuses nothing; valid is not the same as precise.</p>`,
+    `<p>Bản khởi đầu biên dịch dưới strict không lỗi, vậy mà step: string nhận chữ gì cũng được và record/code/reason đều optional, nên các trạng thái bất hợp lệ — một draft có record, một cancelled không reason — là hợp lệ. Một union lỏng chẳng từ chối gì; hợp lệ không phải chính xác.</p>`],
+  [4, 'The grader, and part F',
+    `<p>Parts A to E are the familiar checks: compile, correct uses, honesty, behaviour, the wrong uses. Part F is new — it inserts a sixth state at the // +F marker and recompiles. Your describe (via assertNever) and your STEP_LABEL (a closed Record) must both go red. The starter scores 4/10.</p>`,
+    `<p>Phần A đến E là các phép kiểm quen thuộc: biên dịch, cách dùng đúng, trung thực, hành vi, cách dùng sai. Phần F là mới — nó chèn một trạng thái thứ sáu ở mốc // +F rồi dịch lại. describe (qua assertNever) và STEP_LABEL (một Record đóng) của bạn phải cùng hoá đỏ. Bản khởi đầu được 4/10.</p>`],
+  [5, 'The eight wrong uses',
+    `<p>Each wrong use compiles against the loose starter; your union must make tsc refuse it with the right code: missing data is TS2345, a draft with a record TS2353, reading a record off a draft TS2339, a typo’d step TS2367, wrong shapes TS2322, a misspelling TS2820.</p>`,
+    `<p>Mỗi cách dùng sai biên dịch được với bản khởi đầu lỏng; union của bạn phải làm tsc từ chối với đúng mã: thiếu dữ liệu là TS2345, một draft có record TS2353, đọc record khỏi một draft TS2339, một step gõ sai TS2367, dáng sai TS2322, một lỗi gõ TS2820.</p>`],
+  [6, 'Attempt A: a catch-all default (8/10)',
+    `<p>A real union, so parts A to E are all green — but describe ends in default: return 'Unknown' and the label table is open. When the grader adds a state, nothing breaks, so F is 0/2. It passes the 7 bar, and still ships the new state silently. A passing grade is not the goal of this lab.</p>`,
+    `<p>Một union thật, nên phần A đến E đều xanh — nhưng describe kết thúc bằng default: return 'Unknown' và bảng nhãn mở. Khi máy chấm thêm một trạng thái, không gì vỡ, nên F là 0/2. Nó qua mốc 7, mà vẫn ship trạng thái mới âm thầm. Điểm đạt không phải mục tiêu của lab này.</p>`],
+  [7, 'Attempt B: assertNever, open table (9/10)',
+    `<p>describe uses assertNever, so adding a state turns it red — F1 passes. But STEP_LABEL is still an open table, so the new step has no entry and nothing complains — F2 fails. Close the table with Record<Step, string> and both guards fire. 9/10 becomes 10/10.</p>`,
+    `<p>describe dùng assertNever, nên thêm một trạng thái làm nó đỏ — F1 đạt. Nhưng STEP_LABEL vẫn là bảng mở, nên step mới không có mục và không gì phàn nàn — F2 trượt. Đóng bảng bằng Record<Step, string> thì cả hai chốt kích hoạt. 9/10 thành 10/10.</p>`],
+  [8, 'The reference: 10/10',
+    `<p>The discriminated union, an exhaustive describe, a type predicate, an immutable cancel, and STEP_LABEL as a closed Record. When the grader adds expired, two lines go red: TS2345 at assertNever and TS2741 at the Record. Two guards, two red lines, both pointing at the code to update.</p>`,
+    `<p>Discriminated union, một describe đầy đủ, một type predicate, một cancel bất biến, và STEP_LABEL là một Record đóng. Khi máy chấm thêm expired, hai dòng hoá đỏ: TS2345 ở assertNever và TS2741 ở Record. Hai chốt, hai dòng đỏ, cả hai chỉ đúng code cần cập nhật.</p>`],
+  [9, 'Before you call it done',
+    `<p>npm run lab5 prints 10/10; no any, as or !; the // +F marker stays; you can say which line refuses each S1–S8 and which two part F turns red. The model compiled before and after — what changed is how much it refuses. Next chapter: generics, Result<T, E> and a typed repository.</p>`,
+    `<p>npm run lab5 in 10/10; không any, as hay !; mốc // +F vẫn còn; bạn nói được dòng nào từ chối từng S1–S8 và phần F làm đỏ hai dòng nào. Mô hình biên dịch cả trước lẫn sau — thứ thay đổi là nó từ chối bao nhiêu. Chương sau: generics, Result<T, E> và một repository có kiểu.</p>`],
+]);

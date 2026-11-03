@@ -444,12 +444,22 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <span class="lc-body"><span class="lc-title">Web Foundations 6.5 — REST, params and query strings</span><span class="lc-sub">Path or query, URLSearchParams, values that arrive as strings, and the IDOR bug</span></span>
   <span class="lc-cta">Open lesson</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-11-1-express-handlers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Type these handlers — TS 11.1: Typing Express handlers</span><span class="lc-sub">Same: a route maps a method and path to a handler of (req, res), reading params and query. Different: in TypeScript <code>Handler&lt;P, Q, B, T&gt;</code> types those values, so <code>req.params.id</code> is a checked string and reading a param the route did not declare is a compile error, not a run-time undefined.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-5-rest-params-query" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 6.5 — REST, tham số và query string</span><span class="lc-sub">Đường dẫn hay query, URLSearchParams, giá trị đến dạng chuỗi, và lỗi IDOR</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-11-1-express-handlers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gõ kiểu các handler này — TS 11.1: Gõ kiểu handler Express</span><span class="lc-sub">Giống: một route ánh xạ một method và path tới một handler của (req, res), đọc params và query. Khác: trong TypeScript <code>Handler&lt;P, Q, B, T&gt;</code> gõ kiểu các giá trị đó, nên <code>req.params.id</code> là một string được kiểm và đọc một param route không khai là một lỗi biên dịch, không phải một undefined lúc chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

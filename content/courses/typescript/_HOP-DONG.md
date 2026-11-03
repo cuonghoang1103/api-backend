@@ -352,10 +352,19 @@ typescript: 'typescript-practice',
   Số đo Lab 10: stub any **6** · any-param+optional **8** · optional max **9.5** · tham khảo **10**. `demo10/` (26 demo gồm sidecar .js/.d.ts, declare module, declare global ProcessEnv, declaration merging, node:path, local package types field).
   LabFlow TS: `npm test` giữ **60**. **2 cặp liên kết chéo hai chiều** (prisma `pr-1-2-generate-viet-gi` ↔ 10.2 .d.ts Prisma sinh; `pr-8-1-kieu-nen-import` ↔ 10.4 luật chung lấy kiểu từ package).
   Ảnh chụp `_labflow-ts` cuối Ch10 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab10 6/8/9.5/10): Soạn MỘT phiên, KHÔNG fork.
-- **⏸ (chạy LIÊN TỤC từ 04/11 — làm tiếp Chương 11 rồi 12, chỉ dừng nếu kiểm ĐỎ không tự sửa được).** Chương 11 (§9 — Backend Node/Express: API LabFlow có kiểu; Lab 11 handler + lỗi có kiểu, test API).
-  Chương 12 (React: form đặt phòng + client API dùng chung kiểu; Lab 12 component + hook có kiểu). ⚠ Ch11/Ch12 KHÔNG cài @types/express/@types/react vào `_labflow-ts` (vỡ máy chấm trình duyệt + phình lockfile)
-  — dùng mô hình kiểu tự-chứa (self-contained) của bề mặt Express/React, đo thật bằng tsc + Node với @types/node. Làm y Ch5–10: MỘT phiên KHÔNG fork, `git rev-parse HEAD` lại ngay trước commit-tree.
-  Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
+- 04/11/2026 — **Chương 11 trọn** (thay placeholder cũ một tệp): 4 bài (slug giữ: 11.1 express-handlers, 11.2 typed-responses, 11.3 api-envelope-errors,
+  11.4 services-and-config; nguồn bài + giảng ~110k/6) + Lab 11 (MỚI `typescript-11-6-lab-handler-co-kieu`) + quiz 10 câu (slug giữ `typescript-11-5-quiz`); tệp chương `s11-typing-node-express.mjs` soạn lại.
+  **KHÔNG cài @types/express** — mô hình kiểu TỰ-CHỨA của bề mặt Express (`Req/Res/Handler<P,Q,B,T>`, `ApiResult<T>`), đúng dáng @types/express, đo thật tsc + Node với @types/node (mọi demo chạy được).
+  5 deck / 32 slide đẩy `TS/v1` (ts-11-1..4 mỗi cái 6, ts-lab-11 8; 0 lỗi kiem-slide). **9 đề Code Lab `ts`** (ts-cl-11-1 a–b, 11-2 a–b, 11-3 a–b, 11-4 a–b, ts-cl-lab-11; 10 sai mẫu)
+  — kiem-de-ts **159/159** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **749/749** (mô hình tự-chứa chạy ngon trong trình duyệt); track +5 module (⇒ 61 module / 159 đề).
+  Lab 11 (máy chấm `cham-lab-11.mjs`, chạy handler với request/response GIẢ): viết handler POST /bookings — body CreateBooking, response ApiResult<Booking>, kiểm seats≤0 ⇒ 400 có kiểu / 201.
+  A biên dịch · B cách dùng đúng · C no any/as/! · D 201/400 đúng · E 8 cách dùng sai. Số đo: any stub **4.5** · Booking any **8** · purpose optional **9.5** · tham khảo **10**.
+  `demo11/` (16 demo gồm handler có kiểu, res.json, envelope narrowing, readonly config, service T|undefined). LabFlow TS: `npm test` giữ **60**.
+  **2 cặp liên kết chéo hai chiều** (nodejs `nodejs-5-2-dinh-tuyen` ↔ 11.1 Handler<P,Q,B,T>; api-design `api-2-3-envelope` ↔ 11.3 ApiResult discriminated union).
+  Ảnh chụp `_labflow-ts` cuối Ch11 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab11 4.5/8/9.5/10): Soạn MỘT phiên, KHÔNG fork.
+- **⏸ (chạy LIÊN TỤC — làm tiếp Chương 12 rồi báo chủ kênh gom deploy).** Chương 12 (§9 — React: form đặt phòng + client API dùng chung kiểu; Lab 12 component + hook có kiểu).
+  ⚠ KHÔNG cài @types/react vào `_labflow-ts` — dùng mô hình kiểu tự-chứa của bề mặt React (props, một "hook" useState-như, event), đo thật bằng tsc + Node với @types/node (như Ch11 đã làm với Express).
+  Làm y Ch5–11: MỘT phiên KHÔNG fork, `git rev-parse HEAD` lại ngay trước commit-tree. Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

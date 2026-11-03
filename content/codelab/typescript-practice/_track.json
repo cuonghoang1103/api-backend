@@ -344,6 +344,36 @@
       "name": "10.6 Lab 10 — Write a .d.ts for a JS package",
       "level": "ADVANCED",
       "description": "1 đề: Lab 10 — declare a whole package (declare module labflow-slug)"
+    },
+    {
+      "slug": "typescript-11-1-express-handlers",
+      "name": "11.1 — Typing Express handlers",
+      "level": "ADVANCED",
+      "description": "2 đề: Read a typed param · Read a typed body"
+    },
+    {
+      "slug": "typescript-11-2-typed-responses",
+      "name": "11.2 — Typed responses",
+      "level": "ADVANCED",
+      "description": "2 đề: Send the right response type · Send a complete response"
+    },
+    {
+      "slug": "typescript-11-3-api-envelope-errors",
+      "name": "11.3 — The API result envelope",
+      "level": "ADVANCED",
+      "description": "2 đề: Narrow on ok before reading data · Build a valid error envelope"
+    },
+    {
+      "slug": "typescript-11-4-services-and-config",
+      "name": "11.4 — Services & config",
+      "level": "ADVANCED",
+      "description": "2 đề: A read-only config · An honest service return type"
+    },
+    {
+      "slug": "typescript-11-6-lab-handler-co-kieu",
+      "name": "11.6 Lab 11 — A typed handler with an error envelope",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 11 — a typed POST /bookings handler (CreateBooking body + ApiResult envelope)"
     }
   ]
 }

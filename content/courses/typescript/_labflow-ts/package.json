@@ -17,7 +17,8 @@
     "lab7": "node scripts/cham-lab-7.mjs",
     "lab8": "node scripts/cham-lab-8.mjs",
     "lab9": "node scripts/cham-lab-9.mjs",
-    "lab10": "node scripts/cham-lab-10.mjs"
+    "lab10": "node scripts/cham-lab-10.mjs",
+    "lab11": "node scripts/cham-lab-11.mjs"
   },
   "engines": {
     "node": ">=22.18"

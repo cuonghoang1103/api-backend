@@ -6812,5 +6812,422 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-11-1-a",
+    "bai": "typescript-11-1-express-handlers",
+    "tieuDe": "Read a typed param|||Đọc một param có kiểu",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>The handler is typed <code>Handler&lt;{ id: string }&gt;</code>, but it reads <code>req.params.code</code> — a param the route does not declare (TS2339). Read the declared <code>id</code> instead.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Handler kiểu <code>Handler&lt;{ id: string }&gt;</code>, nhưng nó đọc <code>req.params.code</code> — một param route không khai (TS2339). Đọc <code>id</code> đã khai thay vào đó.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\n// Wrong: the route declares id, but this reads code.\nexport const getLab: Handler<{ id: string }, {}, unknown, { id: string }> = (req, res) => {\n  res.status(200).json({ id: req.params.code });\n};\n"
+    },
+    "coDinh": {
+      "src/http.ts": "export type Req<P = {}, Q = {}, B = unknown> = { params: P; query: Q; body: B };\nexport type Res<T> = { status(code: number): Res<T>; json(body: T): void };\nexport type Handler<P = {}, Q = {}, B = unknown, T = unknown> = (req: Req<P, Q, B>, res: Res<T>) => void;\n",
+      "src/run.ts": "import type { Req, Res } from './http.ts';\nexport function fakeRes<T>(sink: { body?: T; code?: number }): Res<T> { return { status(code) { sink.code = code; return this; }, json(body) { sink.body = body; } }; }\nexport function fakeReq<P, Q, B>(parts: { params?: P; query?: Q; body?: B }): Req<P, Q, B> { return { params: (parts.params ?? {}) as P, query: (parts.query ?? {}) as Q, body: parts.body as B }; }\n",
+      "kiem/dung.ts": "import { getLab } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\nconst sink: { body?: { id: string } } = {};\ngetLab(fakeReq({ params: { id: 'BE-201' } }), fakeRes(sink));\nexport { sink };\n",
+      "test/handler.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getLab } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\ntest('getLab', () => { const s: { body?: { id: string } } = {}; getLab(fakeReq({ params: { id: 'BE-201' } }), fakeRes(s)); assert.equal(s.body?.id, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/handler.ts",
+        "src/http.ts",
+        "kiem/dung.ts",
+        "test/handler.test.ts"
+      ],
+      "chay": [
+        "node --test test/handler.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\nexport const getLab: Handler<{ id: string }, {}, unknown, { id: string }> = (req, res) => {\n  res.status(200).json({ id: req.params.id });\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads req.params.code (TS2339)",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\nexport const getLab: Handler<{ id: string }, {}, unknown, { id: string }> = (req, res) => { res.status(200).json({ id: req.params.code }); };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-1-b",
+    "bai": "typescript-11-1-express-handlers",
+    "tieuDe": "Read a typed body|||Đọc một body có kiểu",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The handler’s body type is <code>{ seats: number }</code>, but it reads <code>req.body.count</code> — a field the body does not have (TS2339). Read <code>req.body.seats</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Kiểu body của handler là <code>{ seats: number }</code>, nhưng nó đọc <code>req.body.count</code> — một trường body không có (TS2339). Đọc <code>req.body.seats</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Body = { seats: number };\n// Wrong: the body has seats, not count.\nexport const setSeats: Handler<{}, {}, Body, { seats: number }> = (req, res) => {\n  res.status(200).json({ seats: req.body.count });\n};\n"
+    },
+    "coDinh": {
+      "src/http.ts": "export type Req<P = {}, Q = {}, B = unknown> = { params: P; query: Q; body: B };\nexport type Res<T> = { status(code: number): Res<T>; json(body: T): void };\nexport type Handler<P = {}, Q = {}, B = unknown, T = unknown> = (req: Req<P, Q, B>, res: Res<T>) => void;\n",
+      "src/run.ts": "import type { Req, Res } from './http.ts';\nexport function fakeRes<T>(sink: { body?: T; code?: number }): Res<T> { return { status(code) { sink.code = code; return this; }, json(body) { sink.body = body; } }; }\nexport function fakeReq<P, Q, B>(parts: { params?: P; query?: Q; body?: B }): Req<P, Q, B> { return { params: (parts.params ?? {}) as P, query: (parts.query ?? {}) as Q, body: parts.body as B }; }\n",
+      "kiem/dung.ts": "import { setSeats } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\nconst sink: { body?: { seats: number } } = {};\nsetSeats(fakeReq({ body: { seats: 40 } }), fakeRes(sink));\nexport { sink };\n",
+      "test/handler.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { setSeats } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\ntest('setSeats', () => { const s: { body?: { seats: number } } = {}; setSeats(fakeReq({ body: { seats: 40 } }), fakeRes(s)); assert.equal(s.body?.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/handler.ts",
+        "src/http.ts",
+        "kiem/dung.ts",
+        "test/handler.test.ts"
+      ],
+      "chay": [
+        "node --test test/handler.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Body = { seats: number };\nexport const setSeats: Handler<{}, {}, Body, { seats: number }> = (req, res) => {\n  res.status(200).json({ seats: req.body.seats });\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads req.body.count (TS2339)",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\ntype Body = { seats: number };\nexport const setSeats: Handler<{}, {}, Body, { seats: number }> = (req, res) => { res.status(200).json({ seats: req.body.count }); };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-2-a",
+    "bai": "typescript-11-2-typed-responses",
+    "tieuDe": "Send the right response type|||Gửi đúng kiểu response",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The response type is <code>Booking</code> (with <code>seats: number</code>), but the handler sends <code>seats</code> as a string (TS2322). Send the right type.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Kiểu response là <code>Booking</code> (<code>seats: number</code>), nhưng handler gửi <code>seats</code> là một string (TS2322). Gửi đúng kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Booking = { id: string; lab: string; seats: number };\nexport const getBooking: Handler<{ id: string }, {}, unknown, Booking> = (req, res) => {\n  // seats must be a number.\n  res.status(200).json({ id: req.params.id, lab: 'BE-201', seats: 'forty' });\n};\n"
+    },
+    "coDinh": {
+      "src/http.ts": "export type Req<P = {}, Q = {}, B = unknown> = { params: P; query: Q; body: B };\nexport type Res<T> = { status(code: number): Res<T>; json(body: T): void };\nexport type Handler<P = {}, Q = {}, B = unknown, T = unknown> = (req: Req<P, Q, B>, res: Res<T>) => void;\n",
+      "src/run.ts": "import type { Req, Res } from './http.ts';\nexport function fakeRes<T>(sink: { body?: T; code?: number }): Res<T> { return { status(code) { sink.code = code; return this; }, json(body) { sink.body = body; } }; }\nexport function fakeReq<P, Q, B>(parts: { params?: P; query?: Q; body?: B }): Req<P, Q, B> { return { params: (parts.params ?? {}) as P, query: (parts.query ?? {}) as Q, body: parts.body as B }; }\n",
+      "kiem/dung.ts": "import { getBooking } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\nconst sink: { body?: { id: string; lab: string; seats: number } } = {};\ngetBooking(fakeReq({ params: { id: 'bk_1' } }), fakeRes(sink));\nexport { sink };\n",
+      "test/handler.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getBooking } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\ntest('getBooking', () => { const s: { body?: { seats: number } } = {}; getBooking(fakeReq({ params: { id: 'bk_1' } }), fakeRes(s)); assert.equal(s.body?.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/handler.ts",
+        "src/http.ts",
+        "kiem/dung.ts",
+        "test/handler.test.ts"
+      ],
+      "chay": [
+        "node --test test/handler.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Booking = { id: string; lab: string; seats: number };\nexport const getBooking: Handler<{ id: string }, {}, unknown, Booking> = (req, res) => {\n  res.status(200).json({ id: req.params.id, lab: 'BE-201', seats: 40 });\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "sends seats as a string (TS2322)",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\ntype Booking = { id: string; lab: string; seats: number };\nexport const getBooking: Handler<{ id: string }, {}, unknown, Booking> = (req, res) => { res.status(200).json({ id: req.params.id, lab: 'BE-201', seats: 'forty' }); };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-2-b",
+    "bai": "typescript-11-2-typed-responses",
+    "tieuDe": "Send a complete response|||Gửi một response đầy đủ",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>The response type is <code>Lab</code> (code and seats), but the handler sends only <code>{ code }</code> — a missing field (TS2741). Add the <code>seats</code> field.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Kiểu response là <code>Lab</code> (code và seats), nhưng handler gửi chỉ <code>{ code }</code> — một trường thiếu (TS2741). Thêm trường <code>seats</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Lab = { code: string; seats: number };\nexport const getLab: Handler<{ id: string }, {}, unknown, Lab> = (req, res) => {\n  // The response is missing seats.\n  res.status(200).json({ code: 'BE-201' });\n};\n"
+    },
+    "coDinh": {
+      "src/http.ts": "export type Req<P = {}, Q = {}, B = unknown> = { params: P; query: Q; body: B };\nexport type Res<T> = { status(code: number): Res<T>; json(body: T): void };\nexport type Handler<P = {}, Q = {}, B = unknown, T = unknown> = (req: Req<P, Q, B>, res: Res<T>) => void;\n",
+      "src/run.ts": "import type { Req, Res } from './http.ts';\nexport function fakeRes<T>(sink: { body?: T; code?: number }): Res<T> { return { status(code) { sink.code = code; return this; }, json(body) { sink.body = body; } }; }\nexport function fakeReq<P, Q, B>(parts: { params?: P; query?: Q; body?: B }): Req<P, Q, B> { return { params: (parts.params ?? {}) as P, query: (parts.query ?? {}) as Q, body: parts.body as B }; }\n",
+      "kiem/dung.ts": "import { getLab } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\nconst sink: { body?: { code: string; seats: number } } = {};\ngetLab(fakeReq({ params: { id: 'x' } }), fakeRes(sink));\nexport { sink };\n",
+      "test/handler.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getLab } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\ntest('getLab', () => { const s: { body?: { code: string; seats: number } } = {}; getLab(fakeReq({ params: { id: 'x' } }), fakeRes(s)); assert.equal(s.body?.seats, 40); assert.equal(s.body?.code, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/handler.ts",
+        "src/http.ts",
+        "kiem/dung.ts",
+        "test/handler.test.ts"
+      ],
+      "chay": [
+        "node --test test/handler.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\ntype Lab = { code: string; seats: number };\nexport const getLab: Handler<{ id: string }, {}, unknown, Lab> = (req, res) => {\n  res.status(200).json({ code: 'BE-201', seats: 40 });\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "sends { code } without seats (TS2741)",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\ntype Lab = { code: string; seats: number };\nexport const getLab: Handler<{ id: string }, {}, unknown, Lab> = (req, res) => { res.status(200).json({ code: 'BE-201' }); };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-3-a",
+    "bai": "typescript-11-3-api-envelope-errors",
+    "tieuDe": "Narrow on ok before reading data|||Thu hẹp theo ok trước khi đọc data",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>A function reads <code>r.data.code</code> on an <code>ApiResult</code> without checking <code>r.ok</code> (TS2339). Return <code>r.ok ? r.data.code : r.error.message</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Một hàm đọc <code>r.data.code</code> trên một <code>ApiResult</code> mà không kiểm <code>r.ok</code> (TS2339). Trả <code>r.ok ? r.data.code : r.error.message</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/read.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function labName(r: ApiResult<Lab>): string {\n  // Reading data without narrowing on ok.\n  return r.data.code;\n}\n"
+    },
+    "coDinh": {
+      "src/api.ts": "export type ApiOk<T> = { ok: true; data: T };\nexport type ApiErr = { ok: false; error: { code: string; message: string } };\nexport type ApiResult<T> = ApiOk<T> | ApiErr;\n",
+      "kiem/dung.ts": "import { labName } from '../src/read.ts';\nconst s: string = labName({ ok: true, data: { code: 'BE-201' } });\nexport { s };\n",
+      "test/read.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labName } from '../src/read.ts';\ntest('labName', () => { assert.equal(labName({ ok: true, data: { code: 'BE-201' } }), 'BE-201'); assert.equal(labName({ ok: false, error: { code: 'X', message: 'bad' } }), 'bad'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/read.ts",
+        "src/api.ts",
+        "kiem/dung.ts",
+        "test/read.test.ts"
+      ],
+      "chay": [
+        "node --test test/read.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/read.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function labName(r: ApiResult<Lab>): string {\n  return r.ok ? r.data.code : r.error.message;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads r.data.code without narrowing (TS2339)",
+        "tep": {
+          "src/read.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function labName(r: ApiResult<Lab>): string { return r.data.code; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-3-b",
+    "bai": "typescript-11-3-api-envelope-errors",
+    "tieuDe": "Build a valid error envelope|||Dựng một envelope lỗi hợp lệ",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>notFound</code> must return an <code>ApiResult</code>, but it returns an error as a string (TS2322). Return a proper error envelope: <code>{ ok: false, error: { code, message } }</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>notFound</code> phải trả một <code>ApiResult</code>, nhưng nó trả error là một string (TS2322). Trả một envelope lỗi đúng: <code>{ ok: false, error: { code, message } }</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/err.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function notFound(): ApiResult<Lab> {\n  // Wrong: error must be an object with code and message.\n  return { ok: false, error: 'not found' };\n}\n"
+    },
+    "coDinh": {
+      "src/api.ts": "export type ApiOk<T> = { ok: true; data: T };\nexport type ApiErr = { ok: false; error: { code: string; message: string } };\nexport type ApiResult<T> = ApiOk<T> | ApiErr;\n",
+      "kiem/dung.ts": "import { notFound } from '../src/err.ts';\nconst r = notFound();\nconst msg: string = r.ok ? 'ok' : r.error.message;\nexport { msg };\n",
+      "test/err.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { notFound } from '../src/err.ts';\ntest('notFound', () => { const r = notFound(); assert.equal(r.ok, false); if (!r.ok) assert.equal(r.error.code, 'NOT_FOUND'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/err.ts",
+        "src/api.ts",
+        "kiem/dung.ts",
+        "test/err.test.ts"
+      ],
+      "chay": [
+        "node --test test/err.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/err.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function notFound(): ApiResult<Lab> {\n  return { ok: false, error: { code: 'NOT_FOUND', message: 'not found' } };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "error is a string, not an object (TS2322)",
+        "tep": {
+          "src/err.ts": "import type { ApiResult } from './api.ts';\ntype Lab = { code: string };\nexport function notFound(): ApiResult<Lab> { return { ok: false, error: 'not found' }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-4-a",
+    "bai": "typescript-11-4-services-and-config",
+    "tieuDe": "A read-only config|||Một config chỉ-đọc",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>Config</code> is a plain type, so a module can reassign a field. Make its fields <code>readonly</code> so a reassignment is refused.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the reassignment in kiem/sai.ts is TS2540.</p>|||<p><code>Config</code> là một kiểu thường, nên một module gán lại được một trường. Làm các trường của nó <code>readonly</code> để một phép gán lại bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và phép gán lại trong kiem/sai.ts là TS2540.</p>",
+    "khoiDau": {
+      "src/config.ts": "// Wrong: the fields are writable.\nexport type Config = { port: number; dbUrl: string };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Config } from '../src/config.ts';\nconst cfg: Config = { port: 5432, dbUrl: 'postgres://x' };\nconst p: number = cfg.port; // reading is fine\nexport { p };\n",
+      "kiem/sai.ts": "import type { Config } from '../src/config.ts';\nconst cfg: Config = { port: 5432, dbUrl: 'postgres://x' };\ncfg.port = 3000; // expect TS2540\nexport { cfg };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/config.ts": "// Read-only fields: built once, trusted everywhere.\nexport type Config = { readonly port: number; readonly dbUrl: string };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "fields are writable — the reassignment is accepted",
+        "tep": {
+          "src/config.ts": "export type Config = { port: number; dbUrl: string };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-11-4-b",
+    "bai": "typescript-11-4-services-and-config",
+    "tieuDe": "An honest service return type|||Một kiểu trả về service trung thực",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>bookingById</code> returns <code>store.find(...)</code>, which may be <code>undefined</code>, but its return type promises a <code>Booking</code> (TS2322). Make the return type <code>Booking | undefined</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>bookingById</code> trả <code>store.find(...)</code>, có thể <code>undefined</code>, nhưng kiểu trả về hứa một <code>Booking</code> (TS2322). Làm kiểu trả về <code>Booking | undefined</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/service.ts": "type Booking = { id: string; seats: number };\nconst store: Booking[] = [{ id: 'bk_1', seats: 40 }];\n// The lookup may miss, but the return type promises a Booking.\nexport function bookingById(id: string): Booking {\n  return store.find((b) => b.id === id);\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { bookingById } from '../src/service.ts';\nconst seats: number = bookingById('bk_1')?.seats ?? 0;\nexport { seats };\n",
+      "test/service.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { bookingById } from '../src/service.ts';\ntest('bookingById', () => { assert.equal(bookingById('bk_1')?.seats, 40); assert.equal(bookingById('nope'), undefined); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/service.ts",
+        "kiem/dung.ts",
+        "test/service.test.ts"
+      ],
+      "chay": [
+        "node --test test/service.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/service.ts": "type Booking = { id: string; seats: number };\nconst store: Booking[] = [{ id: 'bk_1', seats: 40 }];\nexport function bookingById(id: string): Booking | undefined {\n  return store.find((b) => b.id === id);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "return type is Booking, but find may return undefined (TS2322)",
+        "tep": {
+          "src/service.ts": "type Booking = { id: string; seats: number };\nconst store: Booking[] = [{ id: 'bk_1', seats: 40 }];\nexport function bookingById(id: string): Booking { return store.find((b) => b.id === id); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-11",
+    "bai": "typescript-11-6-lab-handler-co-kieu",
+    "tieuDe": "Lab 11 — a typed create handler|||Lab 11 — một handler tạo có kiểu",
+    "doKho": "HARD",
+    "phut": 25,
+    "moTa": "<p>The lab in miniature. Type the <code>CreateBooking</code> body and the <code>Booking</code>, type the handler <code>Handler&lt;{}, {}, CreateBooking, ApiResult&lt;Booking&gt;&gt;</code>, and validate: <code>seats ≤ 0</code> sends a 400 error, otherwise a 201 with the booking. The correct uses must compile, the wrong uses must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>|||<p>Lab thu nhỏ. Gõ kiểu body <code>CreateBooking</code> và <code>Booking</code>, gõ handler <code>Handler&lt;{}, {}, CreateBooking, ApiResult&lt;Booking&gt;&gt;</code>, và kiểm: <code>seats ≤ 0</code> gửi một lỗi 400, không thì một 201 với booking. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\nimport type { ApiResult } from './api.ts';\n\n// A teammate stubbed the types with any and skipped validation.\nexport type CreateBooking = any;\nexport type Booking = any;\n\nexport const createBooking: Handler<{}, {}, CreateBooking, ApiResult<Booking>> = (req, res) => {\n  res.status(201).json({ ok: true, data: req.body });\n};\n"
+    },
+    "coDinh": {
+      "src/http.ts": "export type Req<P = {}, Q = {}, B = unknown> = { params: P; query: Q; body: B };\nexport type Res<T> = { status(code: number): Res<T>; json(body: T): void };\nexport type Handler<P = {}, Q = {}, B = unknown, T = unknown> = (req: Req<P, Q, B>, res: Res<T>) => void;\n",
+      "src/api.ts": "export type ApiOk<T> = { ok: true; data: T };\nexport type ApiErr = { ok: false; error: { code: string; message: string } };\nexport type ApiResult<T> = ApiOk<T> | ApiErr;\n",
+      "src/run.ts": "import type { Req, Res } from './http.ts';\nexport function fakeRes<T>(sink: { body?: T; code?: number }): Res<T> { return { status(code) { sink.code = code; return this; }, json(body) { sink.body = body; } }; }\nexport function fakeReq<P, Q, B>(parts: { params?: P; query?: Q; body?: B }): Req<P, Q, B> { return { params: (parts.params ?? {}) as P, query: (parts.query ?? {}) as Q, body: parts.body as B }; }\n",
+      "kiem/dung.ts": "import type { CreateBooking, Booking } from '../src/handler.ts';\nconst c: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab' };\nconst b: Booking = { id: 'bk_1', lab: 'BE-201', seats: 40, purpose: 'Lab', status: 'PENDING' };\nexport { c, b };\n",
+      "kiem/sai.ts": "import type { CreateBooking, Booking } from '../src/handler.ts';\nimport type { ApiResult } from '../src/api.ts';\nexport const s1: CreateBooking = { lab: 'x', seats: 40 }; // expect TS2741\nexport const s2: CreateBooking = { lab: 'x', seats: 'many', purpose: 'y' }; // expect TS2322\nexport const s3: Booking = { id: 'bk', lab: 'x', seats: 40, purpose: 'y', status: 'DONE' }; // expect TS2322\nexport function s4(r: ApiResult<Booking>) { return r.data; } // expect TS2339\n",
+      "test/handler.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking } from '../src/handler.ts';\nimport { fakeReq, fakeRes } from '../src/run.ts';\ntest('valid -> 201', () => { const s: { body?: any; code?: number } = {}; createBooking(fakeReq({ body: { lab: 'BE-201', seats: 40, purpose: 'Lab' } }), fakeRes(s)); assert.equal(s.code, 201); assert.equal(s.body.ok, true); assert.equal(s.body.data.lab, 'BE-201'); });\ntest('seats 0 -> 400', () => { const s: { body?: any; code?: number } = {}; createBooking(fakeReq({ body: { lab: 'BE-201', seats: 0, purpose: 'Lab' } }), fakeRes(s)); assert.equal(s.code, 400); assert.equal(s.body.ok, false); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/handler.ts",
+        "src/http.ts",
+        "src/api.ts",
+        "kiem/dung.ts",
+        "test/handler.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/handler.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/handler.ts": "import type { Handler } from './http.ts';\nimport type { ApiResult } from './api.ts';\n\nexport type CreateBooking = { lab: string; seats: number; purpose: string };\nexport type Booking = { id: string; lab: string; seats: number; purpose: string; status: 'PENDING' };\n\nexport const createBooking: Handler<{}, {}, CreateBooking, ApiResult<Booking>> = (req, res) => {\n  const { lab, seats, purpose } = req.body;\n  if (seats <= 0) {\n    res.status(400).json({ ok: false, error: { code: 'INVALID_SEATS', message: 'seats must be positive' } });\n    return;\n  }\n  res.status(201).json({ ok: true, data: { id: 'bk_1', lab, seats, purpose, status: 'PENDING' } });\n};\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any stub kept — wrong uses slip and validation is skipped",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\nimport type { ApiResult } from './api.ts';\nexport type CreateBooking = any;\nexport type Booking = any;\nexport const createBooking: Handler<{}, {}, CreateBooking, ApiResult<Booking>> = (req, res) => { res.status(201).json({ ok: true, data: req.body }); };\n"
+        }
+      },
+      {
+        "nhan": "models typed but no validation — the seats <= 0 test fails",
+        "tep": {
+          "src/handler.ts": "import type { Handler } from './http.ts';\nimport type { ApiResult } from './api.ts';\nexport type CreateBooking = { lab: string; seats: number; purpose: string };\nexport type Booking = { id: string; lab: string; seats: number; purpose: string; status: 'PENDING' };\nexport const createBooking: Handler<{}, {}, CreateBooking, ApiResult<Booking>> = (req, res) => { const { lab, seats, purpose } = req.body; res.status(201).json({ ok: true, data: { id: 'bk_1', lab, seats, purpose, status: 'PENDING' } }); };\n"
+        }
+      }
+    ]
   }
 ]

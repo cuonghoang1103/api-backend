@@ -2472,6 +2472,11 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
   <span class="lc-body"><span class="lc-title">The same envelope, as a generic type — TypeScript 6.3: Generic interfaces, classes &amp; defaults</span><span class="lc-sub">Same: model “a value or an error” once and reuse it for every resource — the success/failure envelope is a <code>Result&lt;T, E&gt;</code>. Different: here it is the JSON shape sent over the wire with an HTTP status; there it is a generic TypeScript type alias with a default error (<code>E = string</code>) that the compiler narrows on <code>ok</code>, built end-to-end in Lab 6.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-11-3-api-envelope-errors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The envelope in a typed handler — TS 11.3: The API result envelope</span><span class="lc-sub">Same: every response is a success with data or a failure with a typed error, one shape the client reads. Different: here it is the JSON over the wire; there <code>ApiResult&lt;T&gt;</code> is a discriminated union the compiler narrows on <code>ok</code>, so a handler cannot send an incomplete envelope and a client cannot read <code>data</code> without handling the error.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2806,6 +2811,11 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Cùng cái vỏ đó, dưới dạng một kiểu generic — TypeScript 6.3: Interface, class generic &amp; kiểu mặc định</span><span class="lc-sub">Giống: mô hình “một giá trị hoặc một lỗi” một lần và dùng lại cho mọi tài nguyên — vỏ thành-công/thất-bại là một <code>Result&lt;T, E&gt;</code>. Khác: ở đây là dáng JSON gửi qua mạng kèm HTTP status; ở đó là một type alias generic của TypeScript với lỗi mặc định (<code>E = string</code>) mà trình biên dịch thu hẹp trên <code>ok</code>, dựng trọn ở Lab 6.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-11-3-api-envelope-errors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Vỏ đó trong một handler có kiểu — TS 11.3: Envelope kết quả API</span><span class="lc-sub">Giống: mọi response là một thành công có data hoặc một thất bại có lỗi có kiểu, một dáng client đọc. Khác: ở đây là JSON qua mạng; ở đó <code>ApiResult&lt;T&gt;</code> là một discriminated union trình biên dịch thu hẹp trên <code>ok</code>, nên một handler không gửi được một envelope thiếu và một client không đọc được <code>data</code> mà chưa xử lý lỗi.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

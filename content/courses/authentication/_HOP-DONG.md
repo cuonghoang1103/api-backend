@@ -392,4 +392,19 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   bạn cùng vai deny, trưởng khoa SE ALLOW (ReBAC), admin cùng tenant ALLOW (RBAC), admin FPT-HN deny (tenant trước); cổng HTTP: owner 200,
   cùng-tenant-thiếu-quyền 403, sinh viên HN 404 = id không tồn tại 404; máy chấm Lab 9: tham-khảo 10/10, yếu (vai trước, thiếu tenant+ReBAC)
   6,5/10, khởi đầu 1,5/10. Chuẩn: OWASP Top 10 A01 (Broken Access Control), NIST RBAC + ABAC (SP 800-162), Google Zanzibar (ReBAC).
-- **TẠM DỪNG sau Ch9 ngày 04/11 (đang chạy liên tục Ch8→Ch10 theo yêu cầu chủ kênh); tiếp theo là Ch10** (tấn công theo tần suất trên LabFlow ID: nhồi mật khẩu, relay phishing, cướp phiên, MFA fatigue, pre-hijacking, race — lỗ 6) — tiếp theo.
+- **04/11/2026 — Ch10 trọn:** 5 bài + Lab 10 (`auth-10-7-lab-chong-nhoi`, máy chấm `scripts/cham-lab-10.mjs` 6 phép 10 điểm đạt 7, hàm thuần —
+  không CSDL) + quiz 10 câu (A3 B2 C3 D2, slug `auth-10-6-quiz`); depth-audit đạt (content-check 88 bài 0 lỗi); 6 deck 48 slide AUTH/v1
+  (đã đẩy, 0 lỗi kiem-slide); Code Lab +6 module/18 đề (track 240 đề, 0 lỗi nội dung + 0 cảnh báo đáp-án-dài, máy chấm trình duyệt 979/979);
+  liên kết chéo (auth 2.4 ↔ 10.1, auth 7.4 ↔ 10.2, auth 3.2 ↔ 10.3, auth 7.1 ↔ 10.4, auth 6.3 ↔ 10.5); video YouTube 10.1–10.5 đã có,
+  Lab 10 dùng tạm id 10.1 credit rỗng (ĐỪNG bịa id). `_labflow-id` = v0.10 (tấn công): `src/defense/stuffing.js` `decide(signal)` ⇒
+  allow/challenge/block — chặn IP đang dội (`ipFails≥100`) + IP phun (`ipAccounts≥50`, sống qua solved challenge) + thách đố mật khẩu đã lộ
+  và tài khoản/IP đáng ngờ, **KHÔNG BAO GIỜ khoá tài khoản đơn lẻ** (khoá = cú DoS của kẻ tấn công); `demo10/` 5 kịch bản chạy thật
+  (stuffing-run, relay AiTM, session-channels, mfa-fatigue, pre-hijack-race); `test/defense.test.js` ⇒ npm test **49 pass**.
+  **Số đo thật (macOS arm64, Node 22.23.3, không CSDL, không mạng):** phát lại 10k spray + người thật gõ sai 6 lần ⇒ khoá-tài-khoản để
+  attacker lọt 1 + khoá 2 người thật; `decide()` ⇒ **0 attacker lọt, 0 người thật bị khoá** (128 challenge, 9854 hard-block). Relay: password
+  + TOTP bị trộm phiên, passkey (gắn-origin) bị từ chối. Ma trận cắp phiên: cookie __Host- HttpOnly Secure gục trước 0/4 kênh. Ghép số:
+  bấm-duyệt vào được, number-match chỉ vào ~1/100. Pre-hijack: gắn-theo-email giữ attacker; check-then-act dùng token 2 lần, atomic = 1.
+  Máy chấm Lab 10: tham-khảo 10/10, yếu (khoá tài khoản sau 5 lần) 3/10, khởi đầu 1/10. Chuẩn: OWASP Credential Stuffing + OAT-008, OWASP MFA
+  + Session Management, NIST SP 800-63B, USENIX Security 2022 (pre-hijacking).
+- **TẠM DỪNG sau Ch10 ngày 04/11 — ĐÃ XONG đợt Ch8→Ch9→Ch10 liên tục theo yêu cầu chủ kênh (báo chủ kênh).** Tiếp theo (khi được yêu cầu) là
+  Ch11 (vận hành: bí mật tới tiến trình, xoay khoá 2 bản sống, rate limit Redis, audit log, 6 tín hiệu + runbook — v0.11).

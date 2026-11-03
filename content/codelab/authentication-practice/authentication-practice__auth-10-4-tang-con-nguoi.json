@@ -1,0 +1,393 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-10-4-tang-con-nguoi",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-10-4-tang-con-nguoi"
+  },
+  "exercises": [
+    {
+      "title": "10.4-1 — Going around the login",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>When the crypto is fine, the attacker goes through the people: MFA fatigue, the help desk, and the phone carrier.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi mật mã kín, kẻ tấn công đi qua con người: mệt mỏi MFA, bàn hỗ trợ, và nhà mạng.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The number matching value is hidden from the victim.|||Giá trị ghép số bị giấu khỏi nạn nhân.",
+        "Recovery must be as strong as the login.|||Khôi phục phải mạnh ngang trang đăng nhập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.4-1 — Going around the login\n\nAnswer in the answer panel (no code needed).\n\n1. What stops MFA fatigue (push bombing)?Cái gì chặn mệt mỏi MFA (push bombing)?\n2. A help desk resets MFA when the caller \"knows the last four digits of the card\". Why is that weak?Một bàn hỗ trợ đặt lại MFA khi người gọi \"biết bốn số cuối của thẻ\". Vì sao yếu?\n3. Why is SMS the weak second factor?Vì sao SMS là yếu tố thứ hai yếu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.4-1 — Going around the login — answer key\n\n1. What stops MFA fatigue (push bombing)?Cái gì chặn mệt mỏi MFA (push bombing)?\n   Answer: c) Number matching — the victim must type a number shown only on the attacker's login screen, which they never see\n   The number is on the attacker's screen, which the victim never sees, so a tap is not enough (10.4).VI: Số nằm trên màn hình kẻ tấn công, cái nạn nhân không thấy, nên một cái bấm không đủ (10.4).\n\n2. A help desk resets MFA when the caller \"knows the last four digits of the card\". Why is that weak?Một bàn hỗ trợ đặt lại MFA khi người gọi \"biết bốn số cuối của thẻ\". Vì sao yếu?\n   Answer: a) The last four digits are not a secret — they are on receipts and statements, so an attacker can gather them\n   Recovery must verify out of band, not with knowledge an attacker can collect; a weak recovery is the real authentication (10.4).VI: Khôi phục phải xác minh ngoài băng, không bằng kiến thức kẻ tấn công thu thập được; một khôi phục yếu là xác thực thật (10.4).\n\n3. Why is SMS the weak second factor?Vì sao SMS là yếu tố thứ hai yếu?\n   Answer: a) It is SIM-swappable at the carrier, relayable by phishing, and interceptable on the network\n   A SIM swap, a relay, or SS7 all defeat SMS; prefer TOTP/passkeys and treat SMS as a fallback (10.4).VI: Một SIM swap, một relay, hay SS7 đều đánh bại SMS; ưu tiên TOTP/passkey và coi SMS là dự phòng (10.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Number matching — the victim must type a number shown only on the attacker's login screen, which they never see</p><p>The number is on the attacker's screen, which the victim never sees, so a tap is not enough (10.4).</p><p><i>VI: Số nằm trên màn hình kẻ tấn công, cái nạn nhân không thấy, nên một cái bấm không đủ (10.4).</i></p></li><li><p><b>a)</b> The last four digits are not a secret — they are on receipts and statements, so an attacker can gather them</p><p>Recovery must verify out of band, not with knowledge an attacker can collect; a weak recovery is the real authentication (10.4).</p><p><i>VI: Khôi phục phải xác minh ngoài băng, không bằng kiến thức kẻ tấn công thu thập được; một khôi phục yếu là xác thực thật (10.4).</i></p></li><li><p><b>a)</b> It is SIM-swappable at the carrier, relayable by phishing, and interceptable on the network</p><p>A SIM swap, a relay, or SS7 all defeat SMS; prefer TOTP/passkeys and treat SMS as a fallback (10.4).</p><p><i>VI: Một SIM swap, một relay, hay SS7 đều đánh bại SMS; ưu tiên TOTP/passkey và coi SMS là dự phòng (10.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What stops MFA fatigue (push bombing)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái gì chặn mệt mỏi MFA (push bombing)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Switching the second factor over to SMS codes, which are delivered straight to the victim's phone number"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Sending the approval prompts even faster and more frequently so the victim deals with them all at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Number matching — the victim must type a number shown only on the attacker's login screen, which they never see"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Allowing an unlimited number of prompts so that the victim eventually stops noticing or caring about them"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The number is on the attacker's screen, which the victim never sees, so a tap is not enough (10.4).</p><p><i>VI: Số nằm trên màn hình kẻ tấn công, cái nạn nhân không thấy, nên một cái bấm không đủ (10.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A help desk resets MFA when the caller \"knows the last four digits of the card\". Why is that weak?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bàn hỗ trợ đặt lại MFA khi người gọi \"biết bốn số cuối của thẻ\". Vì sao yếu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The last four digits are not a secret — they are on receipts and statements, so an attacker can gather them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The digits are too short to be typed correctly over the phone"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The help desk cannot verify a card number at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Cards change their last four digits every month"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Recovery must verify out of band, not with knowledge an attacker can collect; a weak recovery is the real authentication (10.4).</p><p><i>VI: Khôi phục phải xác minh ngoài băng, không bằng kiến thức kẻ tấn công thu thập được; một khôi phục yếu là xác thực thật (10.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is SMS the weak second factor?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao SMS là yếu tố thứ hai yếu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is SIM-swappable at the carrier, relayable by phishing, and interceptable on the network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SMS text messages are technically unable to carry a standard six-digit one-time authentication code"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SMS delivery is always so slow that the one-time code has already expired by the time it finally arrives"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Phones silence incoming SMS messages by default, so the user never notices the authentication code"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A SIM swap, a relay, or SS7 all defeat SMS; prefer TOTP/passkeys and treat SMS as a fallback (10.4).</p><p><i>VI: Một SIM swap, một relay, hay SS7 đều đánh bại SMS; ưu tiên TOTP/passkey và coi SMS là dự phòng (10.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking more prompts (rate limiting alone) stops fatigue.|||Tưởng thêm lời nhắc (chỉ giới hạn tần suất) chặn mệt mỏi."
+        },
+        {
+          "loi": "Trusting SMS as a strong factor.|||Tin SMS như một yếu tố mạnh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MFA fatigue",
+          "vi": "mệt mỏi MFA"
+        },
+        {
+          "en": "SIM swap",
+          "vi": "SIM swap"
+        }
+      ]
+    },
+    {
+      "title": "10.4-2 — Write pushApproved(mode, tapped, typedNumber, shownNumber)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Decide whether a push login is approved. In <code>'tap'</code> mode, any <code>tapped === true</code> approves (the fatigue weakness). In <code>'number-match'</code> mode, approval needs BOTH <code>tapped === true</code> AND <code>typedNumber === shownNumber</code> (the number is on the login screen; a tap alone is not enough). Any other mode ⇒ <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định một đăng nhập push có được duyệt không. Ở chế độ <code>'tap'</code>, bất kỳ <code>tapped === true</code> nào cũng duyệt (điểm yếu mệt mỏi). Ở chế độ <code>'number-match'</code>, duyệt cần CẢ <code>tapped === true</code> VÀ <code>typedNumber === shownNumber</code> (số nằm trên màn hình đăng nhập; chỉ một cái bấm là không đủ). Chế độ khác ⇒ <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pushApproved(\"tap\", true, 0, 42)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "number-match needs both conditions, not just the tap.|||number-match cần cả hai điều kiện, không chỉ cái bấm.",
+        "An unknown mode should deny.|||Một chế độ lạ nên từ chối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if the push login is approved */\nfunction pushApproved(mode, tapped, typedNumber, shownNumber) {\n  // Write your solution here\n  return tapped === true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pushApproved(mode, tapped, typedNumber, shownNumber) {\n  // 'tap': any tap approves (the fatigue weakness). 'number-match': a tap is not enough — the typed number must\n  // equal the number shown on the login screen, which the victim can only see if it is really their own login.\n  if (mode === 'tap') return tapped === true;\n  if (mode === 'number-match') return tapped === true && typedNumber === shownNumber;\n  return false;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Number matching defeats fatigue: the attacker cannot supply a number the victim never saw, so a tap is not enough (10.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Ghép số đánh bại mệt mỏi: kẻ tấn công không cung cấp được một số nạn nhân không thấy, nên một cái bấm không đủ (10.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "tap mode, tapped ⇒ true",
+              "vi": "chế độ tap, bấm ⇒ true"
+            },
+            "goi": "pushApproved(\"tap\", true, 0, 42)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "number matches ⇒ true",
+              "vi": "số khớp ⇒ true"
+            },
+            "goi": "pushApproved(\"number-match\", true, 42, 42)",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "tapped but wrong number ⇒ false",
+              "vi": "bấm nhưng sai số ⇒ false"
+            },
+            "goi": "pushApproved(\"number-match\", true, 7, 42)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "right number but not tapped ⇒ false",
+              "vi": "đúng số nhưng không bấm ⇒ false"
+            },
+            "goi": "pushApproved(\"number-match\", false, 42, 42)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown mode ⇒ false",
+              "vi": "chế độ lạ ⇒ false"
+            },
+            "goi": "pushApproved(\"unknown\", true, 42, 42)",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Approving number-match on the tap alone.|||Duyệt number-match chỉ theo cái bấm."
+        },
+        {
+          "loi": "Approving an unknown mode.|||Duyệt một chế độ lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "number matching",
+          "vi": "ghép số"
+        }
+      ]
+    },
+    {
+      "title": "10.4-3 — Human channel → defence",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each human-layer attack to its defence.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi cú tấn công tầng con người với phòng thủ của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One defence removes the factor the attacker can port.|||Một phòng thủ gỡ bỏ yếu tố kẻ tấn công chuyển được.",
+        "The help desk defence is about the channel of verification.|||Phòng thủ bàn hỗ trợ về kênh xác minh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.4-3 — Human channel → defence\n\nAnswer in the answer panel (no code needed).\n\n1. Attack → defenceTấn công → phòng thủ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.4-3 — Human channel → defence — answer key\n\n1. Attack → defenceTấn công → phòng thủ\n   - r1.q: number matching\n   - r2.q: out-of-band reset verification\n   - r3.q: avoid SMS; prefer TOTP/passkeys\n   Number matching for fatigue, out-of-band verification for the help desk, no-SMS for SIM swap (10.4).VI: Ghép số cho mệt mỏi, xác minh ngoài băng cho bàn hỗ trợ, không-SMS cho SIM swap (10.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Number matching for fatigue, out-of-band verification for the help desk, no-SMS for SIM swap (10.4).</p><p><i>VI: Ghép số cho mệt mỏi, xác minh ngoài băng cho bàn hỗ trợ, không-SMS cho SIM swap (10.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Attack → defence</p><p style=\"opacity:.75;font-size:.92em\"><i>Tấn công → phòng thủ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Attack"
+              },
+              {
+                "ma": "q",
+                "ten": "Defence",
+                "luaChon": [
+                  "number matching",
+                  "out-of-band reset verification",
+                  "avoid SMS; prefer TOTP/passkeys"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "MFA fatigue"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "help-desk social engineering"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "SIM swap"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "number matching",
+              "r2.q": "out-of-band reset verification",
+              "r3.q": "avoid SMS; prefer TOTP/passkeys"
+            },
+            "giaiThich": "<p>Number matching for fatigue, out-of-band verification for the help desk, no-SMS for SIM swap (10.4).</p><p><i>VI: Ghép số cho mệt mỏi, xác minh ngoài băng cho bàn hỗ trợ, không-SMS cho SIM swap (10.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Defending fatigue with more prompts.|||Phòng mệt mỏi bằng thêm lời nhắc."
+        },
+        {
+          "loi": "Keeping SMS to defend SIM swap.|||Giữ SMS để phòng SIM swap."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "out-of-band",
+          "vi": "ngoài băng"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-10-1-nhoi-tin-vat",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-10-1-nhoi-tin-vat"
+  },
+  "exercises": [
+    {
+      "title": "10.1-1 — The highest-volume attack",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Credential stuffing replays leaked email/password pairs against your login, betting on reuse. Account lockout is the wrong fix.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhồi tín vật phát lại các cặp email/mật khẩu rò vào trang đăng nhập của bạn, cược vào dùng lại. Khoá tài khoản là cách sửa sai.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Defend the attack's shape, not the individual account.|||Phòng thủ dáng của cú tấn công, không phải tài khoản đơn lẻ.",
+        "A challenge is not a block.|||Một thách đố không phải một khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.1-1 — The highest-volume attack\n\nAnswer in the answer panel (no code needed).\n\n1. Why is \"lock the account after 5 failed logins\" the wrong defence against stuffing?Vì sao \"khoá tài khoản sau 5 lần đăng nhập sai\" là phòng thủ sai trước nhồi?\n2. What is the right shape to defend, since stuffing is wide?Dáng nào đúng để phòng thủ, vì nhồi thì rộng?\n3. Why does a solved CAPTCHA clear a suspicious account but not a flooding IP?Vì sao một CAPTCHA đã giải xoá một tài khoản đáng ngờ nhưng không xoá một IP đang dội?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.1-1 — The highest-volume attack — answer key\n\n1. Why is \"lock the account after 5 failed logins\" the wrong defence against stuffing?Vì sao \"khoá tài khoản sau 5 lần đăng nhập sai\" là phòng thủ sai trước nhồi?\n   Answer: d) The attacker can now lock every real user on purpose — a denial-of-service you built yourself\n   Lockout turns against real users: fail an account five times and it is locked, no password needed (10.1).VI: Khoá quay ngược vào người thật: làm sai một tài khoản năm lần là nó bị khoá, không cần mật khẩu (10.1).\n\n2. What is the right shape to defend, since stuffing is wide?Dáng nào đúng để phòng thủ, vì nhồi thì rộng?\n   Answer: d) The IP and the spread (one IP touching many accounts), while leaving the single account alone\n   Stuffing is a few IPs touching thousands of accounts; defend that shape so the real owner is never locked out (10.1).VI: Nhồi là vài IP chạm hàng nghìn tài khoản; phòng thủ dáng đó để chủ thật không bao giờ bị khoá (10.1).\n\n3. Why does a solved CAPTCHA clear a suspicious account but not a flooding IP?Vì sao một CAPTCHA đã giải xoá một tài khoản đáng ngờ nhưng không xoá một IP đang dội?\n   Answer: d) A real user solves a CAPTCHA to prove human, but a solver farm passes CAPTCHAs too, so a true flood must stay blocked\n   Challenges clear soft signals; the hard IP block (ipFails ≥ 100) survives a solved challenge because solver farms exist (10.1).VI: Thách đố xoá tín hiệu mềm; khoá IP cứng (ipFails ≥ 100) sống qua một thách đố đã giải vì có trại giải (10.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The attacker can now lock every real user on purpose — a denial-of-service you built yourself</p><p>Lockout turns against real users: fail an account five times and it is locked, no password needed (10.1).</p><p><i>VI: Khoá quay ngược vào người thật: làm sai một tài khoản năm lần là nó bị khoá, không cần mật khẩu (10.1).</i></p></li><li><p><b>d)</b> The IP and the spread (one IP touching many accounts), while leaving the single account alone</p><p>Stuffing is a few IPs touching thousands of accounts; defend that shape so the real owner is never locked out (10.1).</p><p><i>VI: Nhồi là vài IP chạm hàng nghìn tài khoản; phòng thủ dáng đó để chủ thật không bao giờ bị khoá (10.1).</i></p></li><li><p><b>d)</b> A real user solves a CAPTCHA to prove human, but a solver farm passes CAPTCHAs too, so a true flood must stay blocked</p><p>Challenges clear soft signals; the hard IP block (ipFails ≥ 100) survives a solved challenge because solver farms exist (10.1).</p><p><i>VI: Thách đố xoá tín hiệu mềm; khoá IP cứng (ipFails ≥ 100) sống qua một thách đố đã giải vì có trại giải (10.1).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is \"lock the account after 5 failed logins\" the wrong defence against stuffing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"khoá tài khoản sau 5 lần đăng nhập sai\" là phòng thủ sai trước nhồi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It checks the failure count too slowly to keep up with the attack"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Account lockout is the officially recommended defence against stuffing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Five failures is too generous; the real limit should be three"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The attacker can now lock every real user on purpose — a denial-of-service you built yourself"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Lockout turns against real users: fail an account five times and it is locked, no password needed (10.1).</p><p><i>VI: Khoá quay ngược vào người thật: làm sai một tài khoản năm lần là nó bị khoá, không cần mật khẩu (10.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What is the right shape to defend, since stuffing is wide?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dáng nào đúng để phòng thủ, vì nhồi thì rộng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The exact password strings seen most often in the attack"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The time of day, blocking all logins outside business hours"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The user-agent header, blocking any non-browser client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The IP and the spread (one IP touching many accounts), while leaving the single account alone"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Stuffing is a few IPs touching thousands of accounts; defend that shape so the real owner is never locked out (10.1).</p><p><i>VI: Nhồi là vài IP chạm hàng nghìn tài khoản; phòng thủ dáng đó để chủ thật không bao giờ bị khoá (10.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does a solved CAPTCHA clear a suspicious account but not a flooding IP?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một CAPTCHA đã giải xoá một tài khoản đáng ngờ nhưng không xoá một IP đang dội?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The IP is already banned by the firewall before the CAPTCHA loads"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A CAPTCHA takes longer to solve than the flood threshold allows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Flooding IPs cannot display a CAPTCHA at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A real user solves a CAPTCHA to prove human, but a solver farm passes CAPTCHAs too, so a true flood must stay blocked"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Challenges clear soft signals; the hard IP block (ipFails ≥ 100) survives a solved challenge because solver farms exist (10.1).</p><p><i>VI: Thách đố xoá tín hiệu mềm; khoá IP cứng (ipFails ≥ 100) sống qua một thách đố đã giải vì có trại giải (10.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking account lockout is a safe defence.|||Tưởng khoá tài khoản là một phòng thủ an toàn."
+        },
+        {
+          "loi": "Thinking a solved CAPTCHA clears a true flood.|||Tưởng một CAPTCHA đã giải xoá một đợt dội thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "credential stuffing",
+          "vi": "nhồi tín vật"
+        },
+        {
+          "en": "account lockout DoS",
+          "vi": "DoS khoá tài khoản"
+        }
+      ]
+    },
+    {
+      "title": "10.1-2 — Write decide(signal): allow / challenge / block",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the defence decision from <code>signal = { accountFails, ipFails, ipAccounts, breached, solvedChallenge }</code>. In order: a flooding IP (<code>ipFails ≥ 100</code>) or a spraying IP (<code>ipAccounts ≥ 50</code>) ⇒ <code>'block'</code> (even with a solved challenge); a breached password with no solved challenge ⇒ <code>'challenge'</code>; a suspicious IP (<code>ipFails ≥ 20</code>) or many account fails (<code>≥ 10</code>) with no solved challenge ⇒ <code>'challenge'</code>; otherwise <code>'allow'</code>. NEVER block on <code>accountFails</code> alone.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả quyết định phòng thủ từ <code>signal = { accountFails, ipFails, ipAccounts, breached, solvedChallenge }</code>. Theo thứ tự: một IP dội (<code>ipFails ≥ 100</code>) hay phun (<code>ipAccounts ≥ 50</code>) ⇒ <code>'block'</code> (kể cả với thách đố đã giải); mật khẩu đã lộ không solved ⇒ <code>'challenge'</code>; IP đáng ngờ (<code>ipFails ≥ 20</code>) hay nhiều lần sai tài khoản (<code>≥ 10</code>) không solved ⇒ <code>'challenge'</code>; còn lại <code>'allow'</code>. KHÔNG BAO GIỜ block chỉ theo <code>accountFails</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "decide({\"accountFails\":0,\"ipFails\":0,\"ipAccounts\":0,\"breached\":false,\"solvedChallenge\":false})",
+          "output": "\"allow\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check the two hard IP blocks first — they ignore solvedChallenge.|||Kiểm hai khoá IP cứng trước — chúng bỏ qua solvedChallenge.",
+        "The account signal is only ever a challenge, never a block.|||Tín hiệu tài khoản chỉ bao giờ là challenge, không bao giờ block."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** signal ⇒ 'allow' | 'challenge' | 'block' */\nfunction decide(signal) {\n  // Write your solution here\n  return 'allow';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction decide(signal) {\n  const s = signal || {};\n  if (s.ipFails >= 100) return 'block';                 // flooding IP — survives a solved challenge\n  if (s.ipAccounts >= 50) return 'block';               // spraying IP\n  if (s.breached && !s.solvedChallenge) return 'challenge';\n  if (!s.solvedChallenge && (s.ipFails >= 20 || s.accountFails >= 10)) return 'challenge';  // never block the account\n  return 'allow';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>decide() defends the IP and the spread and challenges the human; the account is never hard-blocked on its own fail count (10.1).</p>",
+      "solutionExplanationHtmlVi": "<p>decide() phòng thủ IP và độ lan và thách đố con người; tài khoản không bao giờ bị khoá cứng theo số lần sai của chính nó (10.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "clean ⇒ allow",
+              "vi": "sạch ⇒ allow"
+            },
+            "goi": "decide({\"accountFails\":0,\"ipFails\":0,\"ipAccounts\":0,\"breached\":false,\"solvedChallenge\":false})",
+            "mongDoi": "allow"
+          },
+          {
+            "moTa": {
+              "en": "flood ⇒ block (even solved)",
+              "vi": "dội ⇒ block (kể cả solved)"
+            },
+            "goi": "decide({\"accountFails\":0,\"ipFails\":100,\"ipAccounts\":0,\"breached\":false,\"solvedChallenge\":true})",
+            "mongDoi": "block",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "spray ⇒ block",
+              "vi": "phun ⇒ block"
+            },
+            "goi": "decide({\"accountFails\":0,\"ipFails\":0,\"ipAccounts\":50,\"breached\":false,\"solvedChallenge\":false})",
+            "mongDoi": "block",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "breached ⇒ challenge",
+              "vi": "đã lộ ⇒ challenge"
+            },
+            "goi": "decide({\"accountFails\":0,\"ipFails\":0,\"ipAccounts\":0,\"breached\":true,\"solvedChallenge\":false})",
+            "mongDoi": "challenge",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "mistyping account ⇒ challenge, NOT block",
+              "vi": "tài khoản gõ sai ⇒ challenge, KHÔNG block"
+            },
+            "goi": "decide({\"accountFails\":50,\"ipFails\":0,\"ipAccounts\":0,\"breached\":false,\"solvedChallenge\":false})",
+            "mongDoi": "challenge",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blocking on accountFails (locking a real user = the DoS).|||Block theo accountFails (khoá một người thật = cú DoS)."
+        },
+        {
+          "loi": "Letting a solved challenge clear the hard IP flood.|||Để một thách đố đã giải xoá đợt dội IP cứng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "challenge",
+          "vi": "thách đố"
+        }
+      ]
+    },
+    {
+      "title": "10.1-3 — Order the anti-stuffing defences",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the defences from the one that does the most to the last-resort layer.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các phòng thủ từ cái làm nhiều nhất tới lớp cuối cùng.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The best defences remove the password entirely.|||Phòng thủ tốt nhất gỡ bỏ mật khẩu hoàn toàn.",
+        "Rate limiting is the last layer, not the first.|||Giới hạn tần suất là lớp cuối, không phải lớp đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.1-3 — Order the anti-stuffing defences\n\nAnswer in the answer panel (no code needed).\n\n1. Most → last resortNhiều nhất → cuối cùng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.1-3 — Order the anti-stuffing defences — answer key\n\n1. Most → last resortNhiều nhất → cuối cùng\n   Answer: m2) Block breached passwords at sign-up (the leaked password never works here)  →  m1) Offer passkeys (there is no password to stuff)  →  m3) Rate-limit and challenge by IP and spread (for accounts that still reuse a password)\n   Prevention first (no usable password), then rate limiting as the last layer for the rest (10.1, 2.4, 7.4).VI: Phòng ngừa trước (không có mật khẩu dùng được), rồi giới hạn tần suất như lớp cuối cho phần còn lại (10.1, 2.4, 7.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prevention first (no usable password), then rate limiting as the last layer for the rest (10.1, 2.4, 7.4).</p><p><i>VI: Phòng ngừa trước (không có mật khẩu dùng được), rồi giới hạn tần suất như lớp cuối cho phần còn lại (10.1, 2.4, 7.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Most → last resort</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhiều nhất → cuối cùng</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Offer passkeys (there is no password to stuff)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Block breached passwords at sign-up (the leaked password never works here)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Rate-limit and challenge by IP and spread (for accounts that still reuse a password)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Prevention first (no usable password), then rate limiting as the last layer for the rest (10.1, 2.4, 7.4).</p><p><i>VI: Phòng ngừa trước (không có mật khẩu dùng được), rồi giới hạn tần suất như lớp cuối cho phần còn lại (10.1, 2.4, 7.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting rate limiting first.|||Đặt giới hạn tần suất đầu tiên."
+        },
+        {
+          "loi": "Thinking stuffing has no earlier defence.|||Tưởng nhồi không có phòng thủ sớm hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "defence in depth",
+          "vi": "phòng thủ nhiều lớp"
+        }
+      ]
+    }
+  ]
+}

@@ -110,6 +110,7 @@ export default {
     'auth-10-3-cap-phien': { yt: 'G-d1cZosd9M', credit: 'Huntress — How Adversary-in-the-Middle (AitM) Attacks Steal Session Tokens & Bypass MFA' },            // How Adversary-in-the-Middle (AitM) Attacks Steal Session Tokens & Bypass MFA
     'auth-10-4-tang-con-nguoi': { yt: 'tnTtx2qJkOc', credit: 'Keytos Security — What is MFA Fatigue Attack' },       // What is MFA Fatigue Attack
     'auth-10-5-chiem-truoc-va-dua': { yt: 'pOBRbC7rbMU', credit: 'SC Media - A CRA Resource — Browser Security Explained: How Attackers Steal Sessions, Bypass MFA & Phish Users' },   // Browser Security Explained: How Attackers Steal Sessions, Bypass MFA & Phish Users
+    'auth-10-7-lab-chong-nhoi': { yt: 'DFANIs0CugI', credit: '' },  // 04/11/2026: Lab 10 (viết decide() — chống nhồi mật khẩu không khoá người thật) — dùng tạm video credential stuffing của 10.1; CHẠY verify-youtube-videos --fix-credits
 
     /* ── Chương 11 — Vận hành ── */
     'auth-11-1-bi-mat': { yt: 'DIVQdzgWEiY', credit: 'dotenvx — 10x your .env security with encryption to .env.vault files' },              // 10x your .env security with encryption to .env.vault files

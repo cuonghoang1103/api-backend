@@ -1,0 +1,392 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-10-3-cap-phien",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-10-3-cap-phien"
+  },
+  "exercises": [
+    {
+      "title": "10.3-1 — A stolen session is you",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A stolen session cookie IS the user — no password, no second factor. Four channels steal it; where you keep the token decides which can reach it.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một cookie phiên bị trộm CHÍNH LÀ người dùng — không mật khẩu, không yếu tố thứ hai. Bốn kênh trộm nó; nơi bạn giữ token quyết định kênh nào với tới.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "HttpOnly is a cookie flag; it does nothing for localStorage.|||HttpOnly là một cờ cookie; nó không làm gì cho localStorage.",
+        "A URL is logged, cached and sent in Referer.|||Một URL bị log, cache và gửi trong Referer."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.3-1 — A stolen session is you\n\nAnswer in the answer panel (no code needed).\n\n1. What does the HttpOnly cookie flag protect against?Cờ cookie HttpOnly bảo vệ trước cái gì?\n2. Why is localStorage the worst place for a session token?Vì sao localStorage là chỗ tệ nhất cho một token phiên?\n3. A token is placed in the URL. Which theft channel does that open?Một token được đặt trong URL. Điều đó mở kênh trộm nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.3-1 — A stolen session is you — answer key\n\n1. What does the HttpOnly cookie flag protect against?Cờ cookie HttpOnly bảo vệ trước cái gì?\n   Answer: d) XSS reading the cookie — JavaScript cannot see an HttpOnly cookie, so injected script cannot exfiltrate it\n   HttpOnly hides the cookie from JavaScript, closing the XSS theft channel (10.3).VI: HttpOnly giấu cookie khỏi JavaScript, đóng kênh trộm XSS (10.3).\n\n2. Why is localStorage the worst place for a session token?Vì sao localStorage là chỗ tệ nhất cho một token phiên?\n   Answer: c) It is JavaScript-readable by design, so a single XSS anywhere on the origin exfiltrates it, and it persists on disk\n   localStorage is always JS-readable; one XSS reads it, and HttpOnly cannot help it (10.3).VI: localStorage luôn đọc-được-bằng-JS; một XSS đọc nó, và HttpOnly không giúp được (10.3).\n\n3. A token is placed in the URL. Which theft channel does that open?Một token được đặt trong URL. Điều đó mở kênh trộm nào?\n   Answer: c) Logs and the Referer header — the token leaks to server logs, browser history and the Referer\n   A URL token leaks to logs, history and Referer (Chapter 1); keep tokens in cookies, never URLs (10.3).VI: Một token URL rò vào log, lịch sử và Referer (Chương 1); giữ token trong cookie, không bao giờ URL (10.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> XSS reading the cookie — JavaScript cannot see an HttpOnly cookie, so injected script cannot exfiltrate it</p><p>HttpOnly hides the cookie from JavaScript, closing the XSS theft channel (10.3).</p><p><i>VI: HttpOnly giấu cookie khỏi JavaScript, đóng kênh trộm XSS (10.3).</i></p></li><li><p><b>c)</b> It is JavaScript-readable by design, so a single XSS anywhere on the origin exfiltrates it, and it persists on disk</p><p>localStorage is always JS-readable; one XSS reads it, and HttpOnly cannot help it (10.3).</p><p><i>VI: localStorage luôn đọc-được-bằng-JS; một XSS đọc nó, và HttpOnly không giúp được (10.3).</i></p></li><li><p><b>c)</b> Logs and the Referer header — the token leaks to server logs, browser history and the Referer</p><p>A URL token leaks to logs, history and Referer (Chapter 1); keep tokens in cookies, never URLs (10.3).</p><p><i>VI: Một token URL rò vào log, lịch sử và Referer (Chương 1); giữ token trong cookie, không bao giờ URL (10.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does the HttpOnly cookie flag protect against?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cờ cookie HttpOnly bảo vệ trước cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server being able to read the cookie value on every single request the browser makes to it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The cookie being accidentally transmitted over plain HTTP instead of an encrypted HTTPS connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The cookie growing too large for the browser to store and send it back on subsequent requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "XSS reading the cookie — JavaScript cannot see an HttpOnly cookie, so injected script cannot exfiltrate it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>HttpOnly hides the cookie from JavaScript, closing the XSS theft channel (10.3).</p><p><i>VI: HttpOnly giấu cookie khỏi JavaScript, đóng kênh trộm XSS (10.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is localStorage the worst place for a session token?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao localStorage là chỗ tệ nhất cho một token phiên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It has such a small storage size limit that it silently truncates any reasonably long session token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is wiped every time the browser tab is closed, which would log the user out far too aggressively"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is JavaScript-readable by design, so a single XSS anywhere on the origin exfiltrates it, and it persists on disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is automatically shared across every single website the user visits, leaking the token everywhere"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>localStorage is always JS-readable; one XSS reads it, and HttpOnly cannot help it (10.3).</p><p><i>VI: localStorage luôn đọc-được-bằng-JS; một XSS đọc nó, và HttpOnly không giúp được (10.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A token is placed in the URL. Which theft channel does that open?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một token được đặt trong URL. Điều đó mở kênh trộm nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None at all, because URLs are fully protected from leaking by the browser's same-origin security policy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the device channel, through a copy of the token left behind in the browser's on-disk page cache"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Logs and the Referer header — the token leaks to server logs, browser history and the Referer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the network sniffing channel, and only in the case where the connection is not protected by TLS"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A URL token leaks to logs, history and Referer (Chapter 1); keep tokens in cookies, never URLs (10.3).</p><p><i>VI: Một token URL rò vào log, lịch sử và Referer (Chương 1); giữ token trong cookie, không bao giờ URL (10.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking localStorage is safe with HttpOnly.|||Tưởng localStorage an toàn với HttpOnly."
+        },
+        {
+          "loi": "Putting a token in a URL.|||Đặt một token trong một URL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HttpOnly",
+          "vi": "HttpOnly"
+        },
+        {
+          "en": "session theft",
+          "vi": "cắp phiên"
+        }
+      ]
+    },
+    {
+      "title": "10.3-2 — Write stolenByXss(store): can injected JS read the token?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if an XSS (injected JavaScript) can read a session token kept in <code>store</code>: <code>'localStorage'</code>, a JS-readable <code>'cookie-js'</code>, and a <code>'url'</code> token are all readable (⇒ <code>true</code>); a <code>'cookie-httponly'</code> is invisible to JavaScript (⇒ <code>false</code>). An unknown store ⇒ <code>true</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu một XSS (JavaScript tiêm vào) đọc được một token phiên giữ trong <code>store</code>: <code>'localStorage'</code>, một <code>'cookie-js'</code> đọc-được-bằng-JS, và một token <code>'url'</code> đều đọc được (⇒ <code>true</code>); một <code>'cookie-httponly'</code> vô hình với JavaScript (⇒ <code>false</code>). Một store lạ ⇒ <code>true</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "stolenByXss(\"cookie-httponly\")",
+          "output": "false",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Only the HttpOnly cookie is invisible to JavaScript.|||Chỉ cookie HttpOnly vô hình với JavaScript.",
+        "localStorage and a JS-readable cookie are both reachable.|||localStorage và một cookie đọc-được-bằng-JS đều với tới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if injected JavaScript (XSS) can read a token kept in store */\nfunction stolenByXss(store) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction stolenByXss(store) {\n  // XSS = injected JavaScript. It reads whatever JS can reach: localStorage, and any cookie NOT marked HttpOnly.\n  if (store === 'localStorage') return true;\n  if (store === 'cookie-js') return true;         // a JS-readable cookie (no HttpOnly)\n  if (store === 'url') return true;               // token in the page URL is readable by script\n  if (store === 'cookie-httponly') return false;  // HttpOnly: invisible to JavaScript\n  return true;                                    // unknown store: assume reachable\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>XSS reads whatever JavaScript can reach; only the HttpOnly cookie is hidden from it (10.3).</p>",
+      "solutionExplanationHtmlVi": "<p>XSS đọc bất cứ gì JavaScript với tới; chỉ cookie HttpOnly bị giấu khỏi nó (10.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "HttpOnly cookie ⇒ false",
+              "vi": "cookie HttpOnly ⇒ false"
+            },
+            "goi": "stolenByXss(\"cookie-httponly\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "localStorage ⇒ true",
+              "vi": "localStorage ⇒ true"
+            },
+            "goi": "stolenByXss(\"localStorage\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "JS-readable cookie ⇒ true",
+              "vi": "cookie đọc-được-JS ⇒ true"
+            },
+            "goi": "stolenByXss(\"cookie-js\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "token in URL ⇒ true",
+              "vi": "token trong URL ⇒ true"
+            },
+            "goi": "stolenByXss(\"url\")",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning false for localStorage.|||Trả false cho localStorage."
+        },
+        {
+          "loi": "Returning true for an HttpOnly cookie.|||Trả true cho một cookie HttpOnly."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "XSS",
+          "vi": "XSS"
+        }
+      ]
+    },
+    {
+      "title": "10.3-3 — Channel → what closes it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each session-theft channel to the control that closes it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi kênh cắp phiên với control đóng nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One channel cannot be fully prevented, only shrunk.|||Một kênh không ngăn hết được, chỉ thu nhỏ.",
+        "The URL channel is about where the token travels.|||Kênh URL về nơi token đi qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.3-3 — Channel → what closes it\n\nAnswer in the answer panel (no code needed).\n\n1. Channel → closed byKênh → đóng bởi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.3-3 — Channel → what closes it — answer key\n\n1. Channel → closed byKênh → đóng bởi\n   - r1.q: HttpOnly\n   - r2.q: Secure + HTTPS\n   - r3.q: short TTL + device binding\n   - r4.q: cookies not URLs; redact logs\n   HttpOnly for XSS, Secure for the network, short TTL/binding for the device, cookies-not-URLs for logs (10.3).VI: HttpOnly cho XSS, Secure cho mạng, TTL ngắn/gắn cho thiết bị, cookie-không-URL cho log (10.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>HttpOnly for XSS, Secure for the network, short TTL/binding for the device, cookies-not-URLs for logs (10.3).</p><p><i>VI: HttpOnly cho XSS, Secure cho mạng, TTL ngắn/gắn cho thiết bị, cookie-không-URL cho log (10.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Channel → closed by</p><p style=\"opacity:.75;font-size:.92em\"><i>Kênh → đóng bởi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Channel"
+              },
+              {
+                "ma": "q",
+                "ten": "Closed by",
+                "luaChon": [
+                  "HttpOnly",
+                  "Secure + HTTPS",
+                  "short TTL + device binding",
+                  "cookies not URLs; redact logs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "XSS"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "network sniff"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "malware / shared machine"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "logs / URLs"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "HttpOnly",
+              "r2.q": "Secure + HTTPS",
+              "r3.q": "short TTL + device binding",
+              "r4.q": "cookies not URLs; redact logs"
+            },
+            "giaiThich": "<p>HttpOnly for XSS, Secure for the network, short TTL/binding for the device, cookies-not-URLs for logs (10.3).</p><p><i>VI: HttpOnly cho XSS, Secure cho mạng, TTL ngắn/gắn cho thiết bị, cookie-không-URL cho log (10.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking HttpOnly closes the network channel.|||Tưởng HttpOnly đóng kênh mạng."
+        },
+        {
+          "loi": "Thinking Secure stops XSS.|||Tưởng Secure chặn XSS."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Secure",
+          "vi": "Secure"
+        }
+      ]
+    }
+  ]
+}

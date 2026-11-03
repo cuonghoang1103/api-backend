@@ -1,0 +1,363 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-10-5-chiem-truoc-va-dua",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-10-5-chiem-truoc-va-dua"
+  },
+  "exercises": [
+    {
+      "title": "10.5-1 — Two lifecycle attacks",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Pre-hijacking and TOCTOU races hide in the account lifecycle, invisible to a normal test.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chiếm-trước và đua TOCTOU nấp trong vòng đời tài khoản, vô hình với một phép kiểm bình thường.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "An unverified account has proven nothing.|||Một tài khoản chưa xác minh chưa chứng minh gì.",
+        "The race is the gap between check and write.|||Cuộc đua là khoảng trống giữa kiểm và ghi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.5-1 — Two lifecycle attacks\n\nAnswer in the answer panel (no code needed).\n\n1. How does account pre-hijacking work?Chiếm-trước tài khoản chạy ra sao?\n2. What is the fix for pre-hijacking?Cách sửa chiếm-trước là gì?\n3. Why does \"if (token.used) return; token.used = true;\" fail under concurrency?Vì sao \"if (token.used) return; token.used = true;\" hỏng dưới đồng thời?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.5-1 — Two lifecycle attacks — answer key\n\n1. How does account pre-hijacking work?Chiếm-trước tài khoản chạy ra sao?\n   Answer: a) The attacker creates an account with the victim's email first; a later federated login merges into it, leaving the attacker access\n   A naive server attaches the victim's Google login to the attacker's pre-existing unverified account (10.5).VI: Một máy chủ ngây thơ gắn đăng nhập Google của nạn nhân vào tài khoản chưa xác minh sẵn có của kẻ tấn công (10.5).\n\n2. What is the fix for pre-hijacking?Cách sửa chiếm-trước là gì?\n   Answer: d) Never merge a federated login into an unverified pre-existing account; link on the provider's stable sub, verify first\n   An unverified email proves nothing; discard the stale record and link on the sub, not the claimable email (10.5, 8.5).VI: Một email chưa xác minh chẳng chứng minh gì; bỏ bản ghi cũ và nối theo sub, không theo email giành được (10.5, 8.5).\n\n3. Why does \"if (token.used) return; token.used = true;\" fail under concurrency?Vì sao \"if (token.used) return; token.used = true;\" hỏng dưới đồng thời?\n   Answer: a) Two requests both pass the check before either writes — the token is used twice (TOCTOU)\n   Time-of-check to time-of-use: the gap between the check and the write lets both requests through (10.5).VI: Thời-điểm-kiểm tới thời-điểm-dùng: khoảng trống giữa kiểm và ghi để cả hai yêu cầu lọt (10.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The attacker creates an account with the victim's email first; a later federated login merges into it, leaving the attacker access</p><p>A naive server attaches the victim's Google login to the attacker's pre-existing unverified account (10.5).</p><p><i>VI: Một máy chủ ngây thơ gắn đăng nhập Google của nạn nhân vào tài khoản chưa xác minh sẵn có của kẻ tấn công (10.5).</i></p></li><li><p><b>d)</b> Never merge a federated login into an unverified pre-existing account; link on the provider's stable sub, verify first</p><p>An unverified email proves nothing; discard the stale record and link on the sub, not the claimable email (10.5, 8.5).</p><p><i>VI: Một email chưa xác minh chẳng chứng minh gì; bỏ bản ghi cũ và nối theo sub, không theo email giành được (10.5, 8.5).</i></p></li><li><p><b>a)</b> Two requests both pass the check before either writes — the token is used twice (TOCTOU)</p><p>Time-of-check to time-of-use: the gap between the check and the write lets both requests through (10.5).</p><p><i>VI: Thời-điểm-kiểm tới thời-điểm-dùng: khoảng trống giữa kiểm và ghi để cả hai yêu cầu lọt (10.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How does account pre-hijacking work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chiếm-trước tài khoản chạy ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The attacker creates an account with the victim's email first; a later federated login merges into it, leaving the attacker access"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The attacker floods the sign-up endpoint until the victim's own account creation gets rate-limited and blocked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The attacker reserves the victim's preferred username ahead of time so the victim can never sign up at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The attacker repeatedly guesses the victim's future password before the victim has even chosen and set it"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A naive server attaches the victim's Google login to the attacker's pre-existing unverified account (10.5).</p><p><i>VI: Một máy chủ ngây thơ gắn đăng nhập Google của nạn nhân vào tài khoản chưa xác minh sẵn có của kẻ tấn công (10.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What is the fix for pre-hijacking?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách sửa chiếm-trước là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Require a significantly longer and more complex password from every user at the moment of sign-up"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Block all federated \"Sign in with\" logins entirely and force everyone to use a local password instead"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Send two separate verification emails instead of one so the victim is more likely to notice and act"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never merge a federated login into an unverified pre-existing account; link on the provider's stable sub, verify first"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>An unverified email proves nothing; discard the stale record and link on the sub, not the claimable email (10.5, 8.5).</p><p><i>VI: Một email chưa xác minh chẳng chứng minh gì; bỏ bản ghi cũ và nối theo sub, không theo email giành được (10.5, 8.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does \"if (token.used) return; token.used = true;\" fail under concurrency?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"if (token.used) return; token.used = true;\" hỏng dưới đồng thời?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Two requests both pass the check before either writes — the token is used twice (TOCTOU)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JavaScript is fundamentally unable to set a boolean value atomically without an external locking library"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The assignment statement is simply too slow to complete within the available request-handling time window"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The token's used flag must be stored as a number rather than a boolean for the comparison to work at all"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Time-of-check to time-of-use: the gap between the check and the write lets both requests through (10.5).</p><p><i>VI: Thời-điểm-kiểm tới thời-điểm-dùng: khoảng trống giữa kiểm và ghi để cả hai yêu cầu lọt (10.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Merging a federated login into an unverified account.|||Gộp một đăng nhập liên kết vào một tài khoản chưa xác minh."
+        },
+        {
+          "loi": "Fixing a race with a check then a separate write.|||Sửa một cuộc đua bằng một phép kiểm rồi một lần ghi riêng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pre-hijacking",
+          "vi": "chiếm trước"
+        },
+        {
+          "en": "TOCTOU",
+          "vi": "TOCTOU"
+        }
+      ]
+    },
+    {
+      "title": "10.5-2 — Write consumeOnce(token, now): the atomic one-time consume",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Consume a one-time token atomically. <code>token</code> is an object with <code>usedAt</code> (a timestamp, or <code>null</code>/<code>undefined</code> if unused). If the token is missing or already used (<code>usedAt != null</code>) ⇒ <code>false</code>. Otherwise set <code>token.usedAt = now</code> in the SAME step and return <code>true</code> (this caller won). This models <code>UPDATE ... WHERE used_at IS NULL RETURNING</code>, so two concurrent calls cannot both win.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tiêu một token một-lần một cách nguyên tử. <code>token</code> là một object với <code>usedAt</code> (một dấu thời gian, hoặc <code>null</code>/<code>undefined</code> nếu chưa dùng). Nếu token thiếu hoặc đã dùng (<code>usedAt != null</code>) ⇒ <code>false</code>. Không thì đặt <code>token.usedAt = now</code> trong CÙNG bước và trả <code>true</code> (người gọi này thắng). Cái này mô hình <code>UPDATE ... WHERE used_at IS NULL RETURNING</code>, nên hai lần gọi đồng thời không thể cùng thắng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "consumeOnce({\"usedAt\":null}, 1000)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check usedAt != null to reject an already-used token.|||Kiểm usedAt != null để từ chối một token đã dùng.",
+        "Set usedAt and return true together, in one step.|||Đặt usedAt và trả true cùng nhau, trong một bước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if THIS call consumed the token; false if missing or already used */\nfunction consumeOnce(token, now) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction consumeOnce(token, now) {\n  // Atomic consume: check AND mark used in one step, returning whether THIS caller won. Model of the SQL\n  // UPDATE ... SET used_at = now() WHERE used_at IS NULL RETURNING id — exactly one of two concurrent calls wins.\n  if (!token) return false;\n  if (token.usedAt != null) return false;   // already consumed\n  token.usedAt = now;                       // mark used in the same step we checked\n  return true;                              // this caller won\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The check and the write are one step, so a second caller sees usedAt already set and loses — exactly one wins (10.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Phép kiểm và lần ghi là một bước, nên người gọi thứ hai thấy usedAt đã đặt và thua — đúng một thắng (10.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "unused ⇒ true",
+              "vi": "chưa dùng ⇒ true"
+            },
+            "goi": "consumeOnce({\"usedAt\":null}, 1000)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "already used ⇒ false",
+              "vi": "đã dùng ⇒ false"
+            },
+            "goi": "consumeOnce({\"usedAt\":999}, 1000)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "missing token ⇒ false",
+              "vi": "token thiếu ⇒ false"
+            },
+            "goi": "consumeOnce(null, 1000)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "usedAt undefined ⇒ true",
+              "vi": "usedAt undefined ⇒ true"
+            },
+            "goi": "consumeOnce({}, 1000)",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning true when the token was already used.|||Trả true khi token đã được dùng."
+        },
+        {
+          "loi": "Crashing on a null/undefined token.|||Sập với một token null/undefined."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "atomic transition",
+          "vi": "chuyển nguyên tử"
+        }
+      ]
+    },
+    {
+      "title": "10.5-3 — Order the TOCTOU fix",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the correct safe handling of a one-time reset token under concurrency.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp cách xử lý an toàn đúng cho một token đặt lại một-lần dưới đồng thời.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The database does the check and write in one statement.|||Cơ sở dữ liệu làm kiểm và ghi trong một câu lệnh.",
+        "The returned row is the proof you won.|||Dòng trả về là bằng chứng bạn thắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.5-3 — Order the TOCTOU fix\n\nAnswer in the answer panel (no code needed).\n\n1. Correct flowLuồng đúng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.5-3 — Order the TOCTOU fix — answer key\n\n1. Correct flowLuồng đúng\n   Answer: m1) Run one atomic statement: UPDATE ... SET used_at = now() WHERE id = $1 AND used_at IS NULL RETURNING id  →  m3) If a row was returned, THIS request won — proceed with the reset  →  m2) If no row was returned, someone else already consumed it — reject\n   The atomic UPDATE checks and writes together; the returned row (or not) decides the single winner (10.5).VI: UPDATE nguyên tử kiểm và ghi cùng nhau; dòng trả về (hay không) quyết định người thắng duy nhất (10.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The atomic UPDATE checks and writes together; the returned row (or not) decides the single winner (10.5).</p><p><i>VI: UPDATE nguyên tử kiểm và ghi cùng nhau; dòng trả về (hay không) quyết định người thắng duy nhất (10.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Correct flow</p><p style=\"opacity:.75;font-size:.92em\"><i>Luồng đúng</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Run one atomic statement: UPDATE ... SET used_at = now() WHERE id = $1 AND used_at IS NULL RETURNING id"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "If no row was returned, someone else already consumed it — reject"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "If a row was returned, THIS request won — proceed with the reset"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>The atomic UPDATE checks and writes together; the returned row (or not) decides the single winner (10.5).</p><p><i>VI: UPDATE nguyên tử kiểm và ghi cùng nhau; dòng trả về (hay không) quyết định người thắng duy nhất (10.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking first, then writing in a separate step.|||Kiểm trước, rồi ghi trong một bước riêng."
+        },
+        {
+          "loi": "Proceeding even when no row was returned.|||Tiếp tục kể cả khi không dòng nào trả về."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RETURNING",
+          "vi": "RETURNING"
+        }
+      ]
+    }
+  ]
+}

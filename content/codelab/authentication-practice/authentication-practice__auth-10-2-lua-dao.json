@@ -1,0 +1,383 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-10-2-lua-dao",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-10-2-lua-dao"
+  },
+  "exercises": [
+    {
+      "title": "10.2-1 — The relay, not the fake page",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Modern phishing is an AiTM relay: it forwards your REAL login page and steals the resulting session, defeating OTP second factors.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lừa đảo hiện đại là một relay AiTM: nó chuyển tiếp trang đăng nhập THẬT của bạn và trộm cái phiên tạo ra, đánh bại yếu tố thứ hai OTP.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The relay proxies a real TLS connection.|||Relay proxy một kết nối TLS thật.",
+        "Origin binding is a cryptographic property, not a warning.|||Gắn origin là một tính chất mật mã, không phải một lời cảnh báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.2-1 — The relay, not the fake page\n\nAnswer in the answer panel (no code needed).\n\n1. Why do TLS and \"check the URL\" not stop an AiTM relay?Vì sao TLS và \"kiểm URL\" không chặn một relay AiTM?\n2. Why is a TOTP code relayed just like a password?Vì sao một mã TOTP bị relay y như một mật khẩu?\n3. Why does a passkey survive the relay?Vì sao một passkey sống qua relay?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.2-1 — The relay, not the fake page — answer key\n\n1. Why do TLS and \"check the URL\" not stop an AiTM relay?Vì sao TLS và \"kiểm URL\" không chặn một relay AiTM?\n   Answer: d) The victim has real TLS to the attacker's look-alike domain — the padlock is green and the URL is a convincing twin\n   The connection is secure — to the wrong party; the padlock proves TLS to whatever domain you are on (10.2).VI: Kết nối an toàn — tới sai bên; ổ khoá chứng minh TLS tới bất kỳ tên miền nào bạn đang ở (10.2).\n\n2. Why is a TOTP code relayed just like a password?Vì sao một mã TOTP bị relay y như một mật khẩu?\n   Answer: d) It is a replayable secret — the relay captures the value and replays it to the real server in real time\n   A TOTP code is just a value; the relay forwards it verbatim and keeps the session cookie it gets back (10.2).VI: Một mã TOTP chỉ là một giá trị; relay chuyển nó nguyên văn và giữ cái cookie phiên nó nhận về (10.2).\n\n3. Why does a passkey survive the relay?Vì sao một passkey sống qua relay?\n   Answer: b) The browser signs over the origin it is on (the phishing domain), and the real server checks expectedOrigin and rejects it\n   Origin binding: the assertion is signed for the phishing domain, so the real RP rejects it — that is phishing-resistant (10.2, 7.4).VI: Gắn origin: assertion ký cho tên miền lừa đảo, nên RP thật từ chối — đó là kháng lừa đảo (10.2, 7.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The victim has real TLS to the attacker's look-alike domain — the padlock is green and the URL is a convincing twin</p><p>The connection is secure — to the wrong party; the padlock proves TLS to whatever domain you are on (10.2).</p><p><i>VI: Kết nối an toàn — tới sai bên; ổ khoá chứng minh TLS tới bất kỳ tên miền nào bạn đang ở (10.2).</i></p></li><li><p><b>d)</b> It is a replayable secret — the relay captures the value and replays it to the real server in real time</p><p>A TOTP code is just a value; the relay forwards it verbatim and keeps the session cookie it gets back (10.2).</p><p><i>VI: Một mã TOTP chỉ là một giá trị; relay chuyển nó nguyên văn và giữ cái cookie phiên nó nhận về (10.2).</i></p></li><li><p><b>b)</b> The browser signs over the origin it is on (the phishing domain), and the real server checks expectedOrigin and rejects it</p><p>Origin binding: the assertion is signed for the phishing domain, so the real RP rejects it — that is phishing-resistant (10.2, 7.4).</p><p><i>VI: Gắn origin: assertion ký cho tên miền lừa đảo, nên RP thật từ chối — đó là kháng lừa đảo (10.2, 7.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why do TLS and \"check the URL\" not stop an AiTM relay?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao TLS và \"kiểm URL\" không chặn một relay AiTM?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Relays cannot forward HTTPS traffic, only HTTP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TLS is disabled on phishing sites, so the browser shows no padlock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The URL always contains the word \"phishing\" if you look closely"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The victim has real TLS to the attacker's look-alike domain — the padlock is green and the URL is a convincing twin"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The connection is secure — to the wrong party; the padlock proves TLS to whatever domain you are on (10.2).</p><p><i>VI: Kết nối an toàn — tới sai bên; ổ khoá chứng minh TLS tới bất kỳ tên miền nào bạn đang ở (10.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is a TOTP code relayed just like a password?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một mã TOTP bị relay y như một mật khẩu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is cryptographically bound to the device, so the relay would have to clone the entire device first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is encrypted end to end, so the relay would have to break the encryption before it could be reused"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is simply too long for the relay to finish forwarding it before the 30-second window expires"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is a replayable secret — the relay captures the value and replays it to the real server in real time"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A TOTP code is just a value; the relay forwards it verbatim and keeps the session cookie it gets back (10.2).</p><p><i>VI: Một mã TOTP chỉ là một giá trị; relay chuyển nó nguyên văn và giữ cái cookie phiên nó nhận về (10.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does a passkey survive the relay?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một passkey sống qua relay?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The passkey private key sits in a secure enclave on the device that the relay is physically unable to read"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The browser signs over the origin it is on (the phishing domain), and the real server checks expectedOrigin and rejects it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The passkey requires a fingerprint or face scan that the relay has no way to capture or reproduce remotely"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The passkey produces a code that rotates faster than the relay can possibly capture and forward it along"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Origin binding: the assertion is signed for the phishing domain, so the real RP rejects it — that is phishing-resistant (10.2, 7.4).</p><p><i>VI: Gắn origin: assertion ký cho tên miền lừa đảo, nên RP thật từ chối — đó là kháng lừa đảo (10.2, 7.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a green padlock proves you are on the real site.|||Tưởng một ổ khoá xanh chứng minh bạn ở site thật."
+        },
+        {
+          "loi": "Thinking any MFA is phishing-resistant.|||Tưởng bất kỳ MFA nào cũng kháng lừa đảo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "AiTM",
+          "vi": "Kẻ-đứng-giữa"
+        },
+        {
+          "en": "origin binding",
+          "vi": "gắn origin"
+        }
+      ]
+    },
+    {
+      "title": "10.2-2 — Write relayableFactor(factor): can an AiTM relay reuse it?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if the factor is a replayable secret an AiTM relay can capture and reuse: <code>'password'</code>, <code>'totp'</code> and <code>'sms'</code> are all relayable (⇒ <code>true</code>); a <code>'passkey'</code> is origin-bound and NOT relayable (⇒ <code>false</code>). An unknown factor ⇒ <code>true</code> (assume the worst).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu yếu tố là một bí mật phát lại được mà một relay AiTM bắt và dùng lại được: <code>'password'</code>, <code>'totp'</code> và <code>'sms'</code> đều relay được (⇒ <code>true</code>); một <code>'passkey'</code> gắn-origin và KHÔNG relay được (⇒ <code>false</code>). Một yếu tố lạ ⇒ <code>true</code> (giả định xấu nhất).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "relayableFactor(\"password\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Only the origin-bound factor returns false.|||Chỉ yếu tố gắn-origin trả false.",
+        "An OTP code is a value, so it is replayable.|||Một mã OTP là một giá trị, nên phát lại được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if an AiTM relay can capture and reuse this factor */\nfunction relayableFactor(factor) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction relayableFactor(factor) {\n  // A replayable secret can be relayed; an origin-bound credential cannot.\n  if (factor === 'password') return true;\n  if (factor === 'totp') return true;\n  if (factor === 'sms') return true;\n  if (factor === 'passkey') return false;    // origin-bound (WebAuthn)\n  return true;                               // unknown: assume replayable (fail safe toward caution)\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Replayable secrets (password, OTP, SMS) are relayed; only an origin-bound passkey resists the AiTM relay (10.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Bí mật phát lại được (mật khẩu, OTP, SMS) bị relay; chỉ một passkey gắn-origin kháng relay AiTM (10.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "password ⇒ true",
+              "vi": "mật khẩu ⇒ true"
+            },
+            "goi": "relayableFactor(\"password\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "TOTP ⇒ true",
+              "vi": "TOTP ⇒ true"
+            },
+            "goi": "relayableFactor(\"totp\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "passkey ⇒ false",
+              "vi": "passkey ⇒ false"
+            },
+            "goi": "relayableFactor(\"passkey\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "SMS ⇒ true",
+              "vi": "SMS ⇒ true"
+            },
+            "goi": "relayableFactor(\"sms\")",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning false for TOTP (OTP is relayable).|||Trả false cho TOTP (OTP relay được)."
+        },
+        {
+          "loi": "Returning true for a passkey (it is origin-bound).|||Trả true cho một passkey (nó gắn-origin)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replayable secret",
+          "vi": "bí mật phát lại được"
+        }
+      ]
+    },
+    {
+      "title": "10.2-3 — Factor → relay outcome",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each factor presented through an AiTM relay to what the attacker gets.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi yếu tố đưa qua một relay AiTM với cái kẻ tấn công nhận được.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two of the three are replayable secrets.|||Hai trong ba là bí mật phát lại được.",
+        "Only one is bound to the origin.|||Chỉ một gắn với origin."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.2-3 — Factor → relay outcome\n\nAnswer in the answer panel (no code needed).\n\n1. Factor → outcomeYếu tố → kết cục\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10.2-3 — Factor → relay outcome — answer key\n\n1. Factor → outcomeYếu tố → kết cục\n   - r1.q: relayed — session stolen\n   - r2.q: relayed — session stolen\n   - r3.q: rejected — origin mismatch\n   Password and TOTP are replayable; the passkey assertion is signed for the phishing origin and rejected (10.2).VI: Mật khẩu và TOTP phát lại được; assertion passkey ký cho origin lừa đảo và bị từ chối (10.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Password and TOTP are replayable; the passkey assertion is signed for the phishing origin and rejected (10.2).</p><p><i>VI: Mật khẩu và TOTP phát lại được; assertion passkey ký cho origin lừa đảo và bị từ chối (10.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Factor → outcome</p><p style=\"opacity:.75;font-size:.92em\"><i>Yếu tố → kết cục</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Factor"
+              },
+              {
+                "ma": "q",
+                "ten": "Outcome",
+                "luaChon": [
+                  "relayed — session stolen",
+                  "rejected — origin mismatch"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "password"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "TOTP code"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "passkey"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "relayed — session stolen",
+              "r2.q": "relayed — session stolen",
+              "r3.q": "rejected — origin mismatch"
+            },
+            "giaiThich": "<p>Password and TOTP are replayable; the passkey assertion is signed for the phishing origin and rejected (10.2).</p><p><i>VI: Mật khẩu và TOTP phát lại được; assertion passkey ký cho origin lừa đảo và bị từ chối (10.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking TOTP stops the relay.|||Tưởng TOTP chặn relay."
+        },
+        {
+          "loi": "Thinking the passkey is relayed like the rest.|||Tưởng passkey bị relay như phần còn lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "phishing-resistant",
+          "vi": "kháng lừa đảo"
+        }
+      ]
+    }
+  ]
+}

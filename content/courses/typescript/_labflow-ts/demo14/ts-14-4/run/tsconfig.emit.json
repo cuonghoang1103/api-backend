@@ -1,0 +1,1 @@
+{"extends":"../../../tsconfig.json","compilerOptions":{"noEmit":false,"allowImportingTsExtensions":false,"outDir":"out","module":"nodenext","target":"es2024"},"include":["dec.ts"]}

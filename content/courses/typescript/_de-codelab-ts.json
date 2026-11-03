@@ -8035,5 +8035,392 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-14-1-a",
+    "bai": "typescript-14-1-classes-access",
+    "tieuDe": "Read a private field through a method|||Đọc một field private qua method",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>seats</code> is <code>private</code>, so reading it from outside the class is TS2341. Read it through the public method.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>seats</code> là <code>private</code>, nên đọc nó từ ngoài class là TS2341. Đọc nó qua method công khai.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/lab.ts": "export class Lab {\n  private seats = 40;\n  free(): number { return this.seats; }\n}\n// seats is private — read it through free().\nexport function count(lab: Lab): number { return lab.seats; }\n"
+    },
+    "coDinh": {
+      "test/lab.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Lab, count } from '../src/lab.ts';\ntest('count reads seats through the method', () => { assert.equal(count(new Lab()), 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/lab.ts",
+        "test/lab.test.ts"
+      ],
+      "chay": [
+        "node --test test/lab.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "export class Lab {\n  private seats = 40;\n  free(): number { return this.seats; }\n}\nexport function count(lab: Lab): number { return lab.free(); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads lab.seats (TS2341)",
+        "tep": {
+          "src/lab.ts": "export class Lab {\n  private seats = 40;\n  free(): number { return this.seats; }\n}\nexport function count(lab: Lab): number { return lab.seats; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-1-b",
+    "bai": "typescript-14-1-classes-access",
+    "tieuDe": "A readonly field is set once|||Một field readonly đặt một lần",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p><code>lab</code> is <code>readonly</code>, so reassigning it after the constructor is TS2540. Remove the reassignment — a readonly field is set once, in the constructor.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>lab</code> là <code>readonly</code>, nên gán lại nó sau constructor là TS2540. Bỏ phép gán lại — một field readonly đặt một lần, trong constructor.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/booking.ts": "export class Booking {\n  readonly lab: string;\n  constructor(lab: string) { this.lab = lab; }\n  rename(next: string): void {\n    // lab is readonly — it cannot be reassigned.\n    this.lab = next;\n  }\n}\n"
+    },
+    "coDinh": {
+      "test/booking.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Booking } from '../src/booking.ts';\ntest('lab is fixed at construction', () => { assert.equal(new Booking('BE-201').lab, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/booking.ts",
+        "test/booking.test.ts"
+      ],
+      "chay": [
+        "node --test test/booking.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/booking.ts": "export class Booking {\n  readonly lab: string;\n  constructor(lab: string) { this.lab = lab; }\n  renamed(next: string): Booking { return new Booking(next); }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reassigns the readonly field (TS2540)",
+        "tep": {
+          "src/booking.ts": "export class Booking {\n  readonly lab: string;\n  constructor(lab: string) { this.lab = lab; }\n  rename(next: string): void { this.lab = next; }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-2-a",
+    "bai": "typescript-14-2-abstract-implements",
+    "tieuDe": "Implement the abstract method|||Cài method abstract",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>A concrete <code>SeatStore extends Store</code> forgot the abstract <code>get</code> (TS2515). Implement it.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một <code>SeatStore extends Store</code> cụ thể quên <code>get</code> abstract (TS2515). Cài nó.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/store.ts": "export abstract class Store {\n  abstract get(id: number): number | undefined;\n  getOr(id: number, fallback: number): number { return this.get(id) ?? fallback; }\n}\n// A concrete subclass must implement get.\nexport class SeatStore extends Store {}\n"
+    },
+    "coDinh": {
+      "test/store.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { SeatStore } from '../src/store.ts';\ntest('getOr falls back when missing', () => { const s = new SeatStore(); assert.equal(s.getOr(1, 0), 40); assert.equal(s.getOr(9, 0), 0); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/store.ts",
+        "test/store.test.ts"
+      ],
+      "chay": [
+        "node --test test/store.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/store.ts": "export abstract class Store {\n  abstract get(id: number): number | undefined;\n  getOr(id: number, fallback: number): number { return this.get(id) ?? fallback; }\n}\nexport class SeatStore extends Store {\n  get(id: number): number | undefined { return id === 1 ? 40 : undefined; }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still missing get (TS2515)",
+        "tep": {
+          "src/store.ts": "export abstract class Store {\n  abstract get(id: number): number | undefined;\n  getOr(id: number, fallback: number): number { return this.get(id) ?? fallback; }\n}\nexport class SeatStore extends Store {}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-2-b",
+    "bai": "typescript-14-2-abstract-implements",
+    "tieuDe": "Satisfy the interface|||Thoả interface",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>A class says <code>implements Repo</code> but is missing <code>save</code> (TS2420). Add the missing method.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một class nói <code>implements Repo</code> nhưng thiếu <code>save</code> (TS2420). Thêm method thiếu.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/repo.ts": "export interface Repo {\n  find(id: number): string | undefined;\n  save(id: number, row: string): void;\n}\n// MemoryRepo claims to implement Repo but is missing save.\nexport class MemoryRepo implements Repo {\n  #rows = new Map<number, string>();\n  find(id: number): string | undefined { return this.#rows.get(id); }\n}\n"
+    },
+    "coDinh": {
+      "test/repo.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { MemoryRepo } from '../src/repo.ts';\ntest('save then find', () => { const r = new MemoryRepo(); r.save(1, 'BE-201'); assert.equal(r.find(1), 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/repo.ts",
+        "test/repo.test.ts"
+      ],
+      "chay": [
+        "node --test test/repo.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/repo.ts": "export interface Repo {\n  find(id: number): string | undefined;\n  save(id: number, row: string): void;\n}\nexport class MemoryRepo implements Repo {\n  #rows = new Map<number, string>();\n  find(id: number): string | undefined { return this.#rows.get(id); }\n  save(id: number, row: string): void { this.#rows.set(id, row); }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still missing save (TS2420)",
+        "tep": {
+          "src/repo.ts": "export interface Repo {\n  find(id: number): string | undefined;\n  save(id: number, row: string): void;\n}\nexport class MemoryRepo implements Repo {\n  #rows = new Map<number, string>();\n  find(id: number): string | undefined { return this.#rows.get(id); }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-3-a",
+    "bai": "typescript-14-3-hash-private-static",
+    "tieuDe": "Read #private through a getter|||Đọc #private qua một getter",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>#n</code> is a <code>#private</code> field, so reading <code>c.#n</code> from outside is TS18013. Read it through the getter.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>#n</code> là một field <code>#private</code>, nên đọc <code>c.#n</code> từ ngoài là TS18013. Đọc nó qua getter.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/counter.ts": "export class Counter {\n  #n = 0;\n  tick(): void { this.#n += 1; }\n  get value(): number { return this.#n; }\n}\n// #n is private to the class — read it through value.\nexport function read(c: Counter): number { return c.#n; }\n"
+    },
+    "coDinh": {
+      "test/counter.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Counter, read } from '../src/counter.ts';\ntest('read reflects ticks', () => { const c = new Counter(); c.tick(); c.tick(); assert.equal(read(c), 2); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/counter.ts",
+        "test/counter.test.ts"
+      ],
+      "chay": [
+        "node --test test/counter.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/counter.ts": "export class Counter {\n  #n = 0;\n  tick(): void { this.#n += 1; }\n  get value(): number { return this.#n; }\n}\nexport function read(c: Counter): number { return c.value; }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads c.#n (TS18013)",
+        "tep": {
+          "src/counter.ts": "export class Counter {\n  #n = 0;\n  tick(): void { this.#n += 1; }\n  get value(): number { return this.#n; }\n}\nexport function read(c: Counter): number { return c.#n; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-3-b",
+    "bai": "typescript-14-3-hash-private-static",
+    "tieuDe": "Expose state through a getter|||Phơi trạng thái qua một getter",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The <code>#count</code> is private, and the code reads <code>svc.#count</code> from outside (TS18013). Add a <code>get booked()</code> getter and read that instead.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>#count</code> là private, và code đọc <code>svc.#count</code> từ ngoài (TS18013). Thêm một getter <code>get booked()</code> và đọc nó thay vào đó.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/service.ts": "export class BookingService {\n  #count = 0;\n  book(): void { this.#count += 1; }\n}\n// Add a getter; reading #count from outside is refused.\nexport function booked(svc: BookingService): number { return svc.#count; }\n"
+    },
+    "coDinh": {
+      "test/service.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BookingService, booked } from '../src/service.ts';\ntest('booked counts bookings', () => { const s = new BookingService(); s.book(); s.book(); assert.equal(booked(s), 2); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/service.ts",
+        "test/service.test.ts"
+      ],
+      "chay": [
+        "node --test test/service.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/service.ts": "export class BookingService {\n  #count = 0;\n  book(): void { this.#count += 1; }\n  get booked(): number { return this.#count; }\n}\nexport function booked(svc: BookingService): number { return svc.booked; }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads svc.#count (TS18013)",
+        "tep": {
+          "src/service.ts": "export class BookingService {\n  #count = 0;\n  book(): void { this.#count += 1; }\n}\nexport function booked(svc: BookingService): number { return svc.#count; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-4-a",
+    "bai": "typescript-14-4-decorators",
+    "tieuDe": "Put the decorator on a method|||Đặt decorator lên một method",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>@logged</code> is a METHOD decorator, so applying it to a field is TS1240. Move it onto a method. (Decorators run through a build step, so this exercise is type-checked, not run.)</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and kiem/sai.ts still refuses the field use.</p>|||<p><code>@logged</code> là một METHOD decorator, nên áp nó lên một field là TS1240. Chuyển nó lên một method. (Decorator chạy qua một bước build, nên đề này được kiểm kiểu, không chạy.)</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và kiem/sai.ts vẫn từ chối dùng trên field.</p>",
+    "khoiDau": {
+      "src/use.ts": "import { logged } from './dec.ts';\nexport class Svc {\n  // A method decorator cannot go on a field.\n  @logged\n  name = 'x';\n}\n"
+    },
+    "coDinh": {
+      "src/dec.ts": "// A method decorator — its context is a ClassMethodDecoratorContext.\nexport function logged<T, A extends unknown[], R>(fn: (this: T, ...args: A) => R, ctx: ClassMethodDecoratorContext): (this: T, ...args: A) => R {\n  return function (this: T, ...args: A): R { console.log(String(ctx.name)); return fn.call(this, ...args); };\n}\n",
+      "kiem/dung.ts": "import { Svc } from '../src/use.ts';\nexport const s = new Svc();\n",
+      "kiem/sai.ts": "import { logged } from '../src/dec.ts';\nclass Bad {\n  @logged // expect TS1240\n  count = 0;\n}\nexport { Bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/use.ts",
+        "src/dec.ts",
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/use.ts": "import { logged } from './dec.ts';\nexport class Svc {\n  @logged\n  greet(): string { return 'hi'; }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "decorator still on a field (TS1240)",
+        "tep": {
+          "src/use.ts": "import { logged } from './dec.ts';\nexport class Svc {\n  @logged\n  name = 'x';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-14-1-c",
+    "bai": "typescript-14-1-classes-access",
+    "tieuDe": "protected is for subclasses|||protected dành cho lớp con",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p><code>rate</code> is <code>protected</code>, so it is reachable from a subclass but not from outside. Reading it from a free function is TS2445. Read it from the subclass method that is allowed to.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>rate</code> là <code>protected</code>, nên với tới được từ một lớp con nhưng không từ ngoài. Đọc nó từ một hàm tự do là TS2445. Đọc nó từ method lớp con được phép.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/price.ts": "export class Pricing {\n  protected rate = 10;\n}\nexport class LabPricing extends Pricing {\n  quote(hours: number): number { return hours * this.rate; }\n}\n// rate is protected — it cannot be read from outside the class hierarchy.\nexport function peek(p: Pricing): number { return p.rate; }\n"
+    },
+    "coDinh": {
+      "test/price.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabPricing, peek } from '../src/price.ts';\ntest('peek returns a subclass quote', () => { assert.equal(peek(new LabPricing()), 10); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/price.ts",
+        "test/price.test.ts"
+      ],
+      "chay": [
+        "node --test test/price.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/price.ts": "export class Pricing {\n  protected rate = 10;\n}\nexport class LabPricing extends Pricing {\n  quote(hours: number): number { return hours * this.rate; }\n}\nexport function peek(p: LabPricing): number { return p.quote(1); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads p.rate from outside (TS2445)",
+        "tep": {
+          "src/price.ts": "export class Pricing {\n  protected rate = 10;\n}\nexport class LabPricing extends Pricing {\n  quote(hours: number): number { return hours * this.rate; }\n}\nexport function peek(p: Pricing): number { return p.rate; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-14",
+    "bai": "typescript-14-6-lab-service-repo",
+    "tieuDe": "Lab 14 — a service over an abstract repo|||Lab 14 — service trên một repo abstract",
+    "doKho": "HARD",
+    "phut": 20,
+    "moTa": "<p>The lab in miniature. Type <code>Booking</code>, make <code>BookingRepo</code> abstract, and write <code>BookingService</code> with a <code>#repo</code>. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test green.</p>|||<p>Lab thu nhỏ. Gõ kiểu <code>Booking</code>, làm <code>BookingRepo</code> abstract, và viết <code>BookingService</code> với một <code>#repo</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/service.ts": "// A teammate stubbed it all with any.\nexport type Booking = any;\nexport class BookingRepo {\n  find(id: any): any { return undefined; }\n  save(b: any): void {}\n}\nexport class BookingService {\n  repo: any;\n  constructor(repo: any) { this.repo = repo; }\n  book(id: any, lab: any): any { const b = { id, lab }; this.repo.save(b); return b; }\n  find(id: any): any { return this.repo.find(id); }\n}\n"
+    },
+    "coDinh": {
+      "src/memory.ts": "import { BookingRepo, type Booking } from './service.ts';\nexport class MemoryRepo extends BookingRepo {\n  #rows = new Map<number, Booking>();\n  find(id: number): Booking | undefined { return this.#rows.get(id); }\n  save(b: Booking): void { this.#rows.set(b.id, b); }\n}\n",
+      "kiem/dung.ts": "import type { Booking } from '../src/service.ts';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nconst b: Booking = { id: 1, lab: 'BE-201' };\nconst svc = new BookingService(new MemoryRepo());\nexport const made: Booking = svc.book(2, 'CS-101');\nexport { b };\n",
+      "kiem/sai.ts": "import type { Booking } from '../src/service.ts';\nimport { BookingService, BookingRepo } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nexport const s1 = new BookingRepo(); // expect TS2511\nexport const s2: Booking = { id: 1 }; // expect TS2741\nexport const s3: Booking = { id: '1', lab: 'x' }; // expect TS2322\nexport const s4 = new BookingService(new MemoryRepo()).#repo; // expect TS18013\n",
+      "test/service.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\ntest('books through the repo and finds it back', () => { const svc = new BookingService(new MemoryRepo()); const b = svc.book(1, 'BE-201'); assert.equal(b.lab, 'BE-201'); assert.equal(svc.find(1)?.lab, 'BE-201'); assert.equal(svc.find(9), undefined); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/service.ts",
+        "src/memory.ts",
+        "kiem/dung.ts",
+        "test/service.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/service.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/service.ts": "export type Booking = { id: number; lab: string };\nexport abstract class BookingRepo {\n  abstract find(id: number): Booking | undefined;\n  abstract save(b: Booking): void;\n}\nexport class BookingService {\n  #repo: BookingRepo;\n  constructor(repo: BookingRepo) { this.#repo = repo; }\n  book(id: number, lab: string): Booking { const b: Booking = { id, lab }; this.#repo.save(b); return b; }\n  find(id: number): Booking | undefined { return this.#repo.find(id); }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any stub kept — wrong uses slip",
+        "tep": {
+          "src/service.ts": "export type Booking = any;\nexport class BookingRepo { find(id: any): any {} save(b: any): void {} }\nexport class BookingService { repo: any; constructor(repo: any) { this.repo = repo; } book(id: any, lab: any): any { const b = { id, lab }; this.repo.save(b); return b; } find(id: any): any { return this.repo.find(id); } }\n"
+        }
+      },
+      {
+        "nhan": "repo is TS-private not #private — S4 expects TS18013 but gets TS2341",
+        "tep": {
+          "src/service.ts": "export type Booking = { id: number; lab: string };\nexport abstract class BookingRepo { abstract find(id: number): Booking | undefined; abstract save(b: Booking): void; }\nexport class BookingService { private repo: BookingRepo; constructor(repo: BookingRepo) { this.repo = repo; } book(id: number, lab: string): Booking { const b: Booking = { id, lab }; this.repo.save(b); return b; } find(id: number): Booking | undefined { return this.repo.find(id); } }\n"
+        }
+      }
+    ]
   }
 ]

@@ -382,7 +382,15 @@ typescript: 'typescript-practice',
   `demo13/` (demo mô hình Zod/Prisma tự-chứa: parse/infer TS2339, badinput ném, safeParse TS2339, drift TS2741, Prisma create TS2353, findUnique TS18047). LabFlow TS: `npm test` giữ **60**.
   **2 cặp liên kết chéo hai chiều** (api-design `api-2-2-validation` ↔ 13.1 Zod validate ở biên; prisma-orm `pr-2-1-model-va-kieu` ↔ 13.4 kiểu sinh dùng ở biên).
   Soạn MỘT phiên, KHÔNG fork; `git rev-parse HEAD` lại ngay trước commit-tree.
-- **⏸ Tiếp theo: Chương 14–16** (chờ chủ kênh soát + gom deploy). Làm y Ch5–13: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
+- 04/11/2026 — **Chương 14 trọn** (thay placeholder cũ một tệp): 4 bài (slug giữ: 14.1 classes-access, 14.2 abstract-implements, 14.3 hash-private-static, 14.4 decorators)
+  + Lab 14 (MỚI `typescript-14-6-lab-service-repo`) + quiz 10 câu (slug giữ `typescript-14-5-quiz`); tệp chương `s14-classes-decorators.mjs` soạn lại.
+  **Class NATIVE, không gói ngoài.** Decorator chuẩn **TC39** (không `experimentalDecorators`): Node type-stripping KHÔNG chạy decorator ⇒ bài 14.4 chạy qua **bước build** (`tsc` emit → `node`), đo thật. Mã lỗi đo: private TS2341 · readonly TS2540 · abstract TS2511 · implements TS2420 · thành viên abstract thiếu TS2654/TS2515 · #private TS18013 · decorator sai đích TS1240.
+  5 deck / **33 slide** đẩy `TS/v1` (ts-14-1..4 mỗi cái 6, ts-lab-14 **9**; 0 lỗi kiem-slide). **9 đề Code Lab `ts`** (14-1 a/b/c, 14-2 a/b, 14-3 a/b, 14-4 a [decorator type-check: sach+phaiLoi], ts-cl-lab-14)
+  — kiem-de-ts **186/186** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **10/10 đề ch14 xanh** (decorator TC39 khớp 6↔7, KHÔNG cần MA_THEM_TS6); track +5 module (⇒ **76 module / 186 đề**).
+  Lab 14 (máy chấm `cham-lab-14.mjs`, chạy service THẬT + memory repo): `BookingService` giữ một `#repo` abstract `BookingRepo`, book + find. A biên dịch · B cách dùng đúng · C no any/as/! · D service book + find · E 8 cách dùng sai.
+  Số đo: any stub **5.5** · Booking any **7.5** · private không # **9.5** · tham khảo **10**. `demo14/` (demo class native; 14.4/run dùng `tsconfig.emit.json` — KHÔNG commit thư mục `out/`). LabFlow TS: `npm test` giữ **60**.
+  **1 cặp liên kết chéo hai chiều** (web-foundations `wf-11-3-prototype-class` ↔ 14.1 class & modifier — bên WF đã có sẵn chiều ngược; 14.2 nối nội khoá 6.3). Soạn MỘT phiên, KHÔNG fork; re-read HEAD trước commit-tree.
+- **⏸ Tiếp theo: Chương 15–16** (chờ chủ kênh soát Ch13–15 + gom deploy). Làm y Ch5–14: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

@@ -1,0 +1,213 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-14-6-lab-service-repo",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-14-6-lab-service-repo"
+  },
+  "exercises": [
+    {
+      "title": "Lab 14 — a service over an abstract repo",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-14-6-lab-service-repo"
+      ],
+      "problemHtml": "<p>The lab in miniature. Type <code>Booking</code>, make <code>BookingRepo</code> abstract, and write <code>BookingService</code> with a <code>#repo</code>. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/service.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/service.ts</code>, <code>src/memory.ts</code>, <code>kiem/dung.ts</code>, <code>test/service.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2511, TS2741, TS2322, TS18013); its other lines still compile.</li>\n  <li><code>node --test test/service.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab thu nhỏ. Gõ kiểu <code>Booking</code>, làm <code>BookingRepo</code> abstract, và viết <code>BookingService</code> với một <code>#repo</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/service.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/service.ts</code>, <code>src/memory.ts</code>, <code>kiem/dung.ts</code>, <code>test/service.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2511, TS2741, TS2322, TS18013); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/service.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/service.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/service.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: export const s1 = new BookingRepo();|||kiem/sai.ts, dòng 4: export const s1 = new BookingRepo();",
+          "output": "error TS2511",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/service.ts",
+          "language": "typescript",
+          "code": "// A teammate stubbed it all with any.\nexport type Booking = any;\nexport class BookingRepo {\n  find(id: any): any { return undefined; }\n  save(b: any): void {}\n}\nexport class BookingService {\n  repo: any;\n  constructor(repo: any) { this.repo = repo; }\n  book(id: any, lab: any): any { const b = { id, lab }; this.repo.save(b); return b; }\n  find(id: any): any { return this.repo.find(id); }\n}\n"
+        },
+        {
+          "name": "src/memory.ts",
+          "language": "typescript",
+          "code": "import { BookingRepo, type Booking } from './service.ts';\nexport class MemoryRepo extends BookingRepo {\n  #rows = new Map<number, Booking>();\n  find(id: number): Booking | undefined { return this.#rows.get(id); }\n  save(b: Booking): void { this.#rows.set(b.id, b); }\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { Booking } from '../src/service.ts';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nconst b: Booking = { id: 1, lab: 'BE-201' };\nconst svc = new BookingService(new MemoryRepo());\nexport const made: Booking = svc.book(2, 'CS-101');\nexport { b };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Booking } from '../src/service.ts';\nimport { BookingService, BookingRepo } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nexport const s1 = new BookingRepo(); // expect TS2511\nexport const s2: Booking = { id: 1 }; // expect TS2741\nexport const s3: Booking = { id: '1', lab: 'x' }; // expect TS2322\nexport const s4 = new BookingService(new MemoryRepo()).#repo; // expect TS18013\n"
+        },
+        {
+          "name": "test/service.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\ntest('books through the repo and finds it back', () => { const svc = new BookingService(new MemoryRepo()); const b = svc.book(1, 'BE-201'); assert.equal(b.lab, 'BE-201'); assert.equal(svc.find(1)?.lab, 'BE-201'); assert.equal(svc.find(9), undefined); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/service.ts",
+          "language": "typescript",
+          "code": "export type Booking = { id: number; lab: string };\nexport abstract class BookingRepo {\n  abstract find(id: number): Booking | undefined;\n  abstract save(b: Booking): void;\n}\nexport class BookingService {\n  #repo: BookingRepo;\n  constructor(repo: BookingRepo) { this.#repo = repo; }\n  book(id: number, lab: string): Booking { const b: Booking = { id, lab }; this.#repo.save(b); return b; }\n  find(id: number): Booking | undefined { return this.#repo.find(id); }\n}\n"
+        },
+        {
+          "name": "src/memory.ts",
+          "language": "typescript",
+          "code": "import { BookingRepo, type Booking } from './service.ts';\nexport class MemoryRepo extends BookingRepo {\n  #rows = new Map<number, Booking>();\n  find(id: number): Booking | undefined { return this.#rows.get(id); }\n  save(b: Booking): void { this.#rows.set(b.id, b); }\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { Booking } from '../src/service.ts';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nconst b: Booking = { id: 1, lab: 'BE-201' };\nconst svc = new BookingService(new MemoryRepo());\nexport const made: Booking = svc.book(2, 'CS-101');\nexport { b };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Booking } from '../src/service.ts';\nimport { BookingService, BookingRepo } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nexport const s1 = new BookingRepo(); // expect TS2511\nexport const s2: Booking = { id: 1 }; // expect TS2741\nexport const s3: Booking = { id: '1', lab: 'x' }; // expect TS2322\nexport const s4 = new BookingService(new MemoryRepo()).#repo; // expect TS18013\n"
+        },
+        {
+          "name": "test/service.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\ntest('books through the repo and finds it back', () => { const svc = new BookingService(new MemoryRepo()); const b = svc.book(1, 'BE-201'); assert.equal(b.lab, 'BE-201'); assert.equal(svc.find(1)?.lab, 'BE-201'); assert.equal(svc.find(9), undefined); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — the any stub kept — wrong uses slip; repo is TS-private not #private — S4 expects TS18013 but gets TS2341 — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — the any stub kept — wrong uses slip; repo is TS-private not #private — S4 expects TS18013 but gets TS2341 — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/memory.ts": "import { BookingRepo, type Booking } from './service.ts';\nexport class MemoryRepo extends BookingRepo {\n  #rows = new Map<number, Booking>();\n  find(id: number): Booking | undefined { return this.#rows.get(id); }\n  save(b: Booking): void { this.#rows.set(b.id, b); }\n}\n",
+          "kiem/dung.ts": "import type { Booking } from '../src/service.ts';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nconst b: Booking = { id: 1, lab: 'BE-201' };\nconst svc = new BookingService(new MemoryRepo());\nexport const made: Booking = svc.book(2, 'CS-101');\nexport { b };\n",
+          "kiem/sai.ts": "import type { Booking } from '../src/service.ts';\nimport { BookingService, BookingRepo } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\nexport const s1 = new BookingRepo(); // expect TS2511\nexport const s2: Booking = { id: 1 }; // expect TS2741\nexport const s3: Booking = { id: '1', lab: 'x' }; // expect TS2322\nexport const s4 = new BookingService(new MemoryRepo()).#repo; // expect TS18013\n",
+          "test/service.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BookingService } from '../src/service.ts';\nimport { MemoryRepo } from '../src/memory.ts';\ntest('books through the repo and finds it back', () => { const svc = new BookingService(new MemoryRepo()); const b = svc.book(1, 'BE-201'); assert.equal(b.lab, 'BE-201'); assert.equal(svc.find(1)?.lab, 'BE-201'); assert.equal(svc.find(9), undefined); });\n"
+        },
+        "tepHoc": [
+          "src/service.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/service.ts",
+              "src/memory.ts",
+              "kiem/dung.ts",
+              "test/service.test.ts"
+            ],
+            "moTa": "tsc (strict): src/service.ts + src/service.ts, src/memory.ts, kiem/dung.ts, test/service.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2511"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2511 — export const s1 = new BookingRepo(); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2741 — export const s2: Booking = { id: 1 }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 6,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:6 is refused with TS2322 — export const s3: Booking = { id: '1', lab: 'x' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 7,
+            "ma": [
+              "TS18013"
+            ],
+            "moTa": "kiem/sai.ts:7 is refused with TS18013 — export const s4 = new BookingService(new MemoryRepo()).#repo; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/service.test.ts",
+            "moTa": "node --test test/service.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+(?!const\\b)",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (as casts (as const is fine), any, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "the any stub kept — wrong uses slip — caught by: kiem/sai.ts:4 is refused with TS2511 — export const s1 = new BookingRepo();; kiem/sai.ts:5 is refused with TS2741 — export const s2: Booking = { id: 1 }; (+3)|||the any stub kept — wrong uses slip — máy chấm bắt ở: kiem/sai.ts:4 is refused with TS2511 — export const s1 = new BookingRepo();; kiem/sai.ts:5 is refused with TS2741 — export const s2: Booking = { id: 1 }; (+3)"
+        },
+        {
+          "loi": "repo is TS-private not #private — S4 expects TS18013 but gets TS2341 — caught by: kiem/sai.ts:7 is refused with TS18013 — export const s4 = new BookingService(new MemoryRepo()).#repo;|||repo is TS-private not #private — S4 expects TS18013 but gets TS2341 — máy chấm bắt ở: kiem/sai.ts:7 is refused with TS18013 — export const s4 = new BookingService(new MemoryRepo()).#repo;"
+        }
+      ]
+    }
+  ]
+}

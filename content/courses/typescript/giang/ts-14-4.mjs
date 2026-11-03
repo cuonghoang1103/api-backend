@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 14.4 Decorators (deck ts-14-4, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-14-4', 'Decorators', 'Decorator', [
+  [1, 'Decorators',
+    `<p>A decorator is a function that wraps a class member — a method, a field, the class itself — to add behaviour without changing its body. TypeScript uses the TC39 standard decorators (no <code>experimentalDecorators</code> flag), and each kind has a typed context, so a decorator applied to the wrong target is a compile error.</p>`,
+    `<p>Một decorator là một hàm bọc một thành viên class — một method, một field, chính class — để thêm hành vi mà không đổi thân nó. TypeScript dùng decorator chuẩn TC39 (không cờ <code>experimentalDecorators</code>), và mỗi loại có một context có kiểu, nên một decorator áp sai đích là một lỗi biên dịch.</p>`],
+  [2, 'A method decorator wraps the method',
+    `<p>A method decorator takes the original function and a <code>ClassMethodDecoratorContext</code>, and returns a replacement. A <code>@logged</code> decorator wraps <code>book()</code> to print the method name before calling through. Decorators need a build step (not Node’s type-stripping): compile to JavaScript, then run — the output shows the wrapper and the original both ran.</p>`,
+    `<p>Một method decorator nhận hàm gốc và một <code>ClassMethodDecoratorContext</code>, và trả một bản thay. Một decorator <code>@logged</code> bọc <code>book()</code> để in tên method trước khi gọi qua. Decorator cần một bước build (không phải type-stripping của Node): biên dịch sang JavaScript, rồi chạy — output cho thấy cả wrapper và bản gốc đều chạy.</p>`],
+  [3, 'The context types the target',
+    `<p>Each decorator kind has its own context type — <code>ClassMethodDecoratorContext</code>, <code>ClassFieldDecoratorContext</code>, <code>ClassDecoratorContext</code> — carrying the member’s <code>name</code>, <code>kind</code>, and helpers like <code>addInitializer</code>. The signature is what makes a decorator type-safe: it only fits where its context fits.</p>`,
+    `<p>Mỗi loại decorator có kiểu context riêng — <code>ClassMethodDecoratorContext</code>, <code>ClassFieldDecoratorContext</code>, <code>ClassDecoratorContext</code> — mang <code>name</code>, <code>kind</code> của thành viên, và helper như <code>addInitializer</code>. Chữ ký là thứ làm một decorator an toàn kiểu: nó chỉ vừa ở nơi context của nó vừa.</p>`],
+  [4, 'The wrong target is a compile error',
+    `<p>Put a method decorator on a field and it is TS1240 (plus a signature mismatch) — the field decorator context is a different type than the method one, so the function does not fit. The type system keeps a decorator where it belongs: a logging wrapper for methods cannot silently land on a field where it would be meaningless.</p>`,
+    `<p>Đặt một method decorator lên một field và nó là TS1240 (cộng một lệch chữ ký) — context decorator field là một kiểu khác với của method, nên hàm không vừa. Hệ kiểu giữ một decorator ở đúng chỗ: một wrapper ghi log cho method không âm thầm rơi vào một field nơi nó vô nghĩa.</p>`],
+  [5, 'At a glance',
+    `<p>A decorator is a typed function that wraps a class member; TypeScript uses TC39 standard decorators. Each kind has a context type (<code>ClassMethodDecoratorContext</code>…), so applying one to the wrong target is TS1240. Decorators run through a build step, not type-stripping — compile, then run.</p>`,
+    `<p>Một decorator là một hàm có kiểu bọc một thành viên class; TypeScript dùng decorator chuẩn TC39. Mỗi loại có một kiểu context (<code>ClassMethodDecoratorContext</code>…), nên áp một cái vào sai đích là TS1240. Decorator chạy qua một bước build, không phải type-stripping — biên dịch, rồi chạy.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: a <code>@logged</code> method decorator is put on a field — TS1240; move it onto a method and it compiles. That closes Chapter 14: classes, access, abstract, <code>#private</code>, and decorators — the object-oriented half of TypeScript. Next: Lab 14, a service over an abstract repo.</p>`,
+    `<p>Luyện tập: một method decorator <code>@logged</code> đặt lên một field — TS1240; chuyển nó lên một method và nó biên dịch. Điều đó khép lại Chương 14: class, truy cập, abstract, <code>#private</code>, và decorator — nửa hướng-đối-tượng của TypeScript. Tiếp: Lab 14, một service trên một repo abstract.</p>`],
+]);

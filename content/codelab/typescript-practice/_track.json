@@ -434,6 +434,36 @@
       "name": "13.6 Lab 13 — A schema as the single source of truth",
       "level": "ADVANCED",
       "description": "1 đề: Lab 13 — validate at the boundary (Zod schema + safeParse)"
+    },
+    {
+      "slug": "typescript-14-1-classes-access",
+      "name": "14.1 — Classes & access modifiers",
+      "level": "ADVANCED",
+      "description": "3 đề: Read a private field through a method · A readonly field is set once · protected is for subclasses"
+    },
+    {
+      "slug": "typescript-14-2-abstract-implements",
+      "name": "14.2 — Inheritance, abstract & implements",
+      "level": "ADVANCED",
+      "description": "2 đề: Implement the abstract method · Satisfy the interface"
+    },
+    {
+      "slug": "typescript-14-3-hash-private-static",
+      "name": "14.3 — Native #private, getters & static",
+      "level": "ADVANCED",
+      "description": "2 đề: Read #private through a getter · Expose state through a getter"
+    },
+    {
+      "slug": "typescript-14-4-decorators",
+      "name": "14.4 — Decorators",
+      "level": "ADVANCED",
+      "description": "1 đề: Put the decorator on a method"
+    },
+    {
+      "slug": "typescript-14-6-lab-service-repo",
+      "name": "14.6 Lab 14 — A service over an abstract repo",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 14 — a service over an abstract repo (abstract + #private)"
     }
   ]
 }

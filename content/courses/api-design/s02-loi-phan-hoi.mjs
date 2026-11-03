@@ -1503,6 +1503,11 @@ Keep-Alive: timeout=5
   <span class="lc-body"><span class="lc-title">Also in the TypeScript course — 1.2: what a type checker proves, and what it cannot</span><span class="lc-sub">Same: never trust the request body. Different: here a Zod schema checks the body at the door at runtime; that lesson shows, with real output, why the TypeScript type alone cannot — a body with "seats": "31" compiles and still crashes — and writes the first hand-made guard that Zod later replaces.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">A type is not a check — TypeScript 6.4: Generics in practice</span><span class="lc-sub">Same: putting a type on incoming data proves nothing — <code>parseJson&lt;User[]&gt;(body)</code> is as unchecked as trusting the body because it is typed. Different: there a Zod schema validates at runtime and returns a 400; the TypeScript lesson names the anti-pattern — a return-only generic is a cast in disguise — and the honest fix, return <code>unknown</code> and narrow with a guard.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2117,6 +2122,11 @@ Keep-Alive: timeout=5
   <span class="lc-body"><span class="lc-title">Cũng có ở khoá TypeScript — 1.2: trình kiểm tra kiểu chứng minh được gì, và không được gì</span><span class="lc-sub">Giống: không bao giờ tin body của request. Khác: ở đây schema Zod kiểm body ngay cửa lúc chạy; bài đó cho thấy bằng output thật vì sao chỉ có kiểu TypeScript thì không đủ — body có "seats": "31" vẫn biên dịch rồi vẫn sập — và viết guard tự tay đầu tiên mà sau này Zod thay thế.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Một cái kiểu không phải một phép kiểm — TypeScript 6.4: Generics thực chiến</span><span class="lc-sub">Giống: dán một cái kiểu lên dữ liệu đến không chứng minh gì — <code>parseJson&lt;User[]&gt;(body)</code> không được kiểm y như tin body vì nó có kiểu. Khác: ở đó một schema Zod kiểm lệ lúc chạy và trả 400; bài TypeScript gọi tên phản-khuôn-mẫu — một generic chỉ-trả-về là một phép ép kiểu trá hình — và cách sửa trung thực, trả <code>unknown</code> rồi narrow bằng một guard.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },
@@ -2457,6 +2467,11 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
   <li>Never answer 200 for a failure, envelope or not: caches, retries and monitoring read the status line.</li>
   <li>Indent JSON for humans in development, send it compact in production.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The same envelope, as a generic type — TypeScript 6.3: Generic interfaces, classes &amp; defaults</span><span class="lc-sub">Same: model “a value or an error” once and reuse it for every resource — the success/failure envelope is a <code>Result&lt;T, E&gt;</code>. Different: here it is the JSON shape sent over the wire with an HTTP status; there it is a generic TypeScript type alias with a default error (<code>E = string</code>) that the compiler narrows on <code>ok</code>, built end-to-end in Lab 6.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2788,6 +2803,11 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
   <li>Không bao giờ trả 200 cho thất bại, có envelope hay không: cache, cơ chế thử lại và giám sát đọc dòng trạng thái.</li>
   <li>Thụt lề JSON cho người đọc khi phát triển, gửi gọn khi chạy production.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng cái vỏ đó, dưới dạng một kiểu generic — TypeScript 6.3: Interface, class generic &amp; kiểu mặc định</span><span class="lc-sub">Giống: mô hình “một giá trị hoặc một lỗi” một lần và dùng lại cho mọi tài nguyên — vỏ thành-công/thất-bại là một <code>Result&lt;T, E&gt;</code>. Khác: ở đây là dáng JSON gửi qua mạng kèm HTTP status; ở đó là một type alias generic của TypeScript với lỗi mặc định (<code>E = string</code>) mà trình biên dịch thu hẹp trên <code>ok</code>, dựng trọn ở Lab 6.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

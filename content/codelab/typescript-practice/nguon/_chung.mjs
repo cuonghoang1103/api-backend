@@ -35,6 +35,9 @@ export const TSCONFIG = { ...TSCONFIG_GOC.compilerOptions, types: ['node'] };
  */
 export const MA_THEM_TS6 = {
   'ts-cl-1-2-d': { 'kiem/sai.ts:6': ['TS2345'] },
+  // new Repo<{ name }>() violates T extends { id: number }: tsc 7.0.2 reports TS2741 (property id missing),
+  // TypeScript 6.0.3 reports TS2344 (does not satisfy the constraint) — accept both (measured 03/11/2026).
+  'ts-cl-lab-6': { 'kiem/sai.ts:5': ['TS2344'] },
 };
 
 /** regex cấm ⇒ chữ người đọc được (bỏ \\b, \\s, ký tự thoát) — chỉ để hiện, máy chấm dùng regex gốc. */

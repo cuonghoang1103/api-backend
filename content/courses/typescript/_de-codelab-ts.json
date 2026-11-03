@@ -4297,5 +4297,626 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-6-1-a",
+    "bai": "typescript-6-1-why-generics",
+    "tieuDe": "Make firstOf generic|||Làm firstOf generic",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>firstOf</code> returns <code>any</code>, so a typo on the result is not caught and a wrong method crashes at runtime. Add a type parameter <code>&lt;T&gt;</code> so it keeps the element type.</p><p><strong>Done when:</strong> the typo in kiem/sai.ts is TS2339, and the test passes.</p>|||<p><code>firstOf</code> trả <code>any</code>, nên lỗi gõ trên kết quả không bị bắt và một method sai sập lúc chạy. Thêm một tham số kiểu <code>&lt;T&gt;</code> để nó giữ kiểu phần tử.</p><p><strong>Đạt khi:</strong> lỗi gõ trong kiem/sai.ts là TS2339, và test qua.</p>",
+    "khoiDau": {
+      "src/first.ts": "export function firstOf(arr: any[]): any {\n  return arr[0];\n}\n"
+    },
+    "coDinh": {
+      "src/user.ts": "export type User = { id: number; name: string };\n",
+      "kiem/sai.ts": "import { firstOf } from '../src/first.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst u = firstOf(users);\nconsole.log(u?.naem); // expect TS2339\n",
+      "test/first.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { firstOf } from '../src/first.ts';\n\ntest('first of numbers', () => assert.equal(firstOf([3, 4]), 3));\ntest('first of empty', () => assert.equal(firstOf([]), undefined));\n"
+    },
+    "kiem": {
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/first.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/first.ts": "export function firstOf<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still any — the typo is not caught",
+        "tep": {
+          "src/first.ts": "export function firstOf(arr: any[]): any {\n  return arr[0];\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-1-b",
+    "bai": "typescript-6-1-why-generics",
+    "tieuDe": "A pair that remembers both types|||Một pair nhớ cả hai kiểu",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>pair</code> returns <code>[any, any]</code>, so the tuple loses both types. Write <code>pair&lt;A, B&gt;(a: A, b: B): [A, B]</code> so <code>pair('BE-201', 40)</code> is <code>[string, number]</code>.</p><p><strong>Done when:</strong> tsc is clean on src and kiem/dung.ts, and the test passes.</p>|||<p><code>pair</code> trả <code>[any, any]</code>, nên tuple mất cả hai kiểu. Viết <code>pair&lt;A, B&gt;(a: A, b: B): [A, B]</code> để <code>pair('BE-201', 40)</code> là <code>[string, number]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/pair.ts": "export function pair(a: any, b: any): [any, any] {\n  return [a, b];\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { pair } from '../src/pair.ts';\nconst p = pair('BE-201', 40);\nconst code: string = p[0];   // must be a string\nconst seats: number = p[1];  // must be a number\nexport { code, seats };\n",
+      "test/pair.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { pair } from '../src/pair.ts';\n\ntest('pair', () => assert.deepEqual(pair('BE-201', 40), ['BE-201', 40]));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/pair.test.ts"
+      ],
+      "chay": [
+        "node --test test/pair.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/pair.ts": "export function pair<A, B>(a: A, b: B): [A, B] {\n  return [a, b];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still [any, any] — kiem/dung.ts loses the exact types",
+        "tep": {
+          "src/pair.ts": "export function pair(a: any, b: any): [any, any] {\n  return [a, b];\n}\n"
+        }
+      },
+      {
+        "nhan": "one type parameter for both — forces a and b to share a type",
+        "tep": {
+          "src/pair.ts": "export function pair<T>(a: T, b: T): [T, T] {\n  return [a, b];\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-1-c",
+    "bai": "typescript-6-1-why-generics",
+    "tieuDe": "A generic wrap|||Một wrap generic",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p><code>wrap</code> should box a value while keeping its type: <code>wrap(10)</code> is <code>{ value: number }</code>. It is typed <code>any</code>, so a wrong read is not caught. Make it <code>wrap&lt;T&gt;(value: T): { value: T }</code>.</p><p><strong>Done when:</strong> tsc is clean on src and kiem/dung.ts, and the test passes.</p>|||<p><code>wrap</code> nên bọc một giá trị mà giữ kiểu: <code>wrap(10)</code> là <code>{ value: number }</code>. Nó có kiểu <code>any</code>, nên một phép đọc sai không bị bắt. Làm nó <code>wrap&lt;T&gt;(value: T): { value: T }</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src và kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/wrap.ts": "export function wrap(value: any): { value: any } {\n  return { value };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { wrap } from '../src/wrap.ts';\nconst n: number = wrap(10).value;      // must be a number\nconst s: string = wrap('BE-201').value; // must be a string\nexport { n, s };\n",
+      "test/wrap.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { wrap } from '../src/wrap.ts';\n\ntest('wrap', () => assert.deepEqual(wrap(10), { value: 10 }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/wrap.test.ts"
+      ],
+      "chay": [
+        "node --test test/wrap.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/wrap.ts": "export function wrap<T>(value: T): { value: T } {\n  return { value };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still any inside the box",
+        "tep": {
+          "src/wrap.ts": "export function wrap<T>(value: T): { value: any } {\n  return { value };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-1-d",
+    "bai": "typescript-6-1-why-generics",
+    "tieuDe": "Read the error: where any lost the type|||Đọc lỗi: nơi any làm mất kiểu",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>mapNames</code> maps users to names but is typed with <code>any[]</code>, so a typo on the mapped value is not caught — and the function returns the wrong thing. Make it keep the <code>User</code> type and return <code>string[]</code>.</p><p><strong>Done when:</strong> tsc is clean and the test passes.</p>|||<p><code>mapNames</code> ánh xạ user thành tên nhưng có kiểu <code>any[]</code>, nên lỗi gõ trên giá trị không bị bắt — và hàm trả về sai thứ. Làm nó giữ kiểu <code>User</code> và trả <code>string[]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/names.ts": "export type User = { id: number; name: string };\n\nexport function mapNames(users: any[]): string[] {\n  return users.map((u) => u.naem);\n}\n"
+    },
+    "coDinh": {
+      "test/names.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { mapNames } from '../src/names.ts';\n\ntest('maps names', () => assert.deepEqual(mapNames([{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }]), ['An', 'Binh']));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/names.test.ts"
+      ],
+      "chay": [
+        "node --test test/names.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/names.ts": "export type User = { id: number; name: string };\n\nexport function mapNames(users: User[]): string[] {\n  return users.map((u) => u.name);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "any[] kept — the typo u.naem is not caught, returns undefined",
+        "tep": {
+          "src/names.ts": "export type User = { id: number; name: string };\n\nexport function mapNames(users: any[]): string[] {\n  return users.map((u) => u.naem);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-2-a",
+    "bai": "typescript-6-2-constraints-keyof",
+    "tieuDe": "Constrain byId so it can use the id|||Ràng buộc byId để nó dùng được id",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>byId</code> reads <code>item.id</code> but <code>T</code> is unconstrained, so it does not compile. Add <code>&lt;T extends { id: number }&gt;</code>. The correct calls (Repo of users, of labs-with-id) must still keep their type; a type without an id must be refused.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, kiem/sai.ts refused, test passes.</p>|||<p><code>byId</code> đọc <code>item.id</code> nhưng <code>T</code> không ràng buộc, nên không biên dịch. Thêm <code>&lt;T extends { id: number }&gt;</code>. Các lời gọi đúng (user, lab-có-id) vẫn phải giữ kiểu; một kiểu không có id phải bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, kiem/sai.ts bị từ chối, test qua.</p>",
+    "khoiDau": {
+      "src/byid.ts": "export function byId<T>(items: readonly T[], id: number): T | undefined {\n  return items.find((item) => item.id === id);\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { byId } from '../src/byid.ts';\ntype User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\nconst found: User | undefined = byId(users, 1); // keeps the User type\nexport { found };\n",
+      "kiem/sai.ts": "import { byId } from '../src/byid.ts';\nconst labs = [{ code: 'BE-201', name: 'Backend Lab 1' }]; // no id\nconst x = byId(labs, 1); // expect TS2345\nexport { x };\n",
+      "test/byid.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { byId } from '../src/byid.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('found', () => assert.equal(byId(users, 2)?.name, 'Binh'));\ntest('missing', () => assert.equal(byId(users, 9), undefined));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/byid.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/byid.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/byid.ts": "export function byId<T extends { id: number }>(items: readonly T[], id: number): T | undefined {\n  return items.find((item) => item.id === id);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "constraint { id: string } — rejects numeric-id users for the wrong reason",
+        "tep": {
+          "src/byid.ts": "export function byId<T extends { id: string }>(items: readonly T[], id: number): T | undefined {\n  return items.find((item) => item.id === id);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-2-b",
+    "bai": "typescript-6-2-constraints-keyof",
+    "tieuDe": "getProp with keyof and indexed access|||getProp với keyof và truy cập theo chỉ mục",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>getProp</code> is typed <code>any</code>, so a misspelled key is not caught and the return type is lost. Write <code>getProp&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, the typo in kiem/sai.ts is TS2345, test passes.</p>|||<p><code>getProp</code> có kiểu <code>any</code>, nên một khoá gõ sai không bị bắt và kiểu trả về mất. Viết <code>getProp&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, lỗi gõ trong kiem/sai.ts là TS2345, test qua.</p>",
+    "khoiDau": {
+      "src/get.ts": "export function getProp(obj: any, key: string): any {\n  return obj[key];\n}\n"
+    },
+    "coDinh": {
+      "src/user.ts": "export type User = { id: number; name: string; role: 'STUDENT' | 'LECTURER' };\n",
+      "kiem/dung.ts": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst id: number = getProp(an, 'id');   // T[K] is number\nconst role: 'STUDENT' | 'LECTURER' = getProp(an, 'role'); // T[K] is the role union\nexport { id, role };\n",
+      "kiem/sai.ts": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst x = getProp(an, 'ghost'); // expect TS2345\nexport { x };\n",
+      "test/get.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getProp } from '../src/get.ts';\n\ntest('getProp', () => assert.equal(getProp({ id: 1, name: 'An' }, 'name'), 'An'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/get.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/get.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/get.ts": "export function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "key: string — a typo is accepted",
+        "tep": {
+          "src/get.ts": "export function getProp<T>(obj: T, key: string): unknown {\n  return (obj as Record<string, unknown>)[key];\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-2-c",
+    "bai": "typescript-6-2-constraints-keyof",
+    "tieuDe": "pluck keeps the property type|||pluck giữ kiểu thuộc tính",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>pluck</code> should return an array of the chosen property’s type: <code>pluck(users, 'id')</code> is <code>number[]</code>. It is typed <code>any[]</code>, so a wrong key slips and the result type is lost. Write <code>pluck&lt;T, K extends keyof T&gt;(items: readonly T[], key: K): T[K][]</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, kiem/sai.ts refused, test passes.</p>|||<p><code>pluck</code> nên trả một mảng kiểu của thuộc tính được chọn: <code>pluck(users, 'id')</code> là <code>number[]</code>. Nó có kiểu <code>any[]</code>, nên một khoá sai lọt và kiểu kết quả mất. Viết <code>pluck&lt;T, K extends keyof T&gt;(items: readonly T[], key: K): T[K][]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, kiem/sai.ts bị từ chối, test qua.</p>",
+    "khoiDau": {
+      "src/pluck.ts": "export function pluck(items: any[], key: string): any[] {\n  return items.map((item) => item[key]);\n}\n"
+    },
+    "coDinh": {
+      "src/user.ts": "export type User = { id: number; name: string };\n",
+      "kiem/dung.ts": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst ids: number[] = pluck(users, 'id');\nconst names: string[] = pluck(users, 'name');\nexport { ids, names };\n",
+      "kiem/sai.ts": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst g = pluck(users, 'ghost'); // expect TS2345\nexport { g };\n",
+      "test/pluck.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { pluck } from '../src/pluck.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('pluck id', () => assert.deepEqual(pluck(users, 'id'), [1, 2]));\ntest('pluck name', () => assert.deepEqual(pluck(users, 'name'), ['An', 'Binh']));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/pluck.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/pluck.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/pluck.ts": "export function pluck<T, K extends keyof T>(items: readonly T[], key: K): T[K][] {\n  return items.map((item) => item[key]);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "key: string, returns unknown[] — a typo slips and the type is lost",
+        "tep": {
+          "src/pluck.ts": "export function pluck<T>(items: readonly T[], key: string): unknown[] {\n  return items.map((item) => (item as Record<string, unknown>)[key]);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-3-a",
+    "bai": "typescript-6-3-generic-types-classes",
+    "tieuDe": "A generic Result with a default error|||Một Result generic có lỗi mặc định",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>Write <code>Result&lt;T, E = string&gt;</code> and <code>ok</code>/<code>err</code> so operations can succeed with a value or fail with an error, keeping both types. <code>parseSeats</code> returns <code>Result&lt;number&gt;</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>|||<p>Viết <code>Result&lt;T, E = string&gt;</code> và <code>ok</code>/<code>err</code> để thao tác thành công với một giá trị hoặc hỏng với một lỗi, giữ cả hai kiểu. <code>parseSeats</code> trả <code>Result&lt;number&gt;</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/result.ts": "// A non-generic Result that loses the value type.\nexport type Result = { ok: boolean; value?: any; error?: string };\nexport function ok(value: any): Result { return { ok: true, value }; }\nexport function err(error: string): Result { return { ok: false, error }; }\n\nexport function parseSeats(text: string): Result {\n  const n = Number(text);\n  return Number.isInteger(n) && n > 0 ? ok(n) : err('bad seats: ' + text);\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { parseSeats } from '../src/result.ts';\nconst r = parseSeats('30');\nconst seats: number = r.ok ? r.value : 0; // r.value must be a number when ok\nexport { seats };\n",
+      "test/result.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseSeats } from '../src/result.ts';\n\ntest('ok', () => { const r = parseSeats('30'); assert.equal(r.ok && r.value, 30); });\ntest('err', () => { const r = parseSeats('x'); assert.equal(r.ok, false); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/result.test.ts"
+      ],
+      "chay": [
+        "node --test test/result.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/result.ts": "export type Result<T, E = string> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nexport function ok<T>(value: T): Result<T, never> { return { ok: true, value }; }\nexport function err<E>(error: E): Result<never, E> { return { ok: false, error }; }\n\nexport function parseSeats(text: string): Result<number> {\n  const n = Number(text);\n  return Number.isInteger(n) && n > 0 ? ok(n) : err('bad seats: ' + text);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still non-generic with value?: any — kiem/dung.ts loses the number type",
+        "tep": {
+          "src/result.ts": "export type Result = { ok: boolean; value?: any; error?: string };\nexport function ok(value: any): Result { return { ok: true, value }; }\nexport function err(error: string): Result { return { ok: false, error }; }\nexport function parseSeats(text: string): Result {\n  const n = Number(text);\n  return Number.isInteger(n) && n > 0 ? ok(n) : err('bad seats: ' + text);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-3-b",
+    "bai": "typescript-6-3-generic-types-classes",
+    "tieuDe": "A generic stack class|||Một class stack generic",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>Stack</code> is hard-coded to <code>string</code>. Make it <code>class Stack&lt;T&gt;</code> so <code>new Stack&lt;number&gt;()</code> works and keeps the element type.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>|||<p><code>Stack</code> gắn cứng <code>string</code>. Làm nó <code>class Stack&lt;T&gt;</code> để <code>new Stack&lt;number&gt;()</code> chạy và giữ kiểu phần tử.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/stack.ts": "export class Stack {\n  private items: string[] = [];\n  push(item: string): void { this.items.push(item); }\n  pop(): string | undefined { return this.items.pop(); }\n  get size(): number { return this.items.length; }\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { Stack } from '../src/stack.ts';\nconst nums = new Stack<number>();\nnums.push(42);\nconst top: number | undefined = nums.pop();\nexport { top };\n",
+      "test/stack.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Stack } from '../src/stack.ts';\n\ntest('stack', () => {\n  const s = new Stack<number>();\n  s.push(1); s.push(2);\n  assert.equal(s.size, 2);\n  assert.equal(s.pop(), 2);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/stack.test.ts"
+      ],
+      "chay": [
+        "node --test test/stack.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/stack.ts": "export class Stack<T> {\n  private items: T[] = [];\n  push(item: T): void { this.items.push(item); }\n  pop(): T | undefined { return this.items.pop(); }\n  get size(): number { return this.items.length; }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "items: any[] instead of T[] — the element type is lost",
+        "tep": {
+          "src/stack.ts": "export class Stack<T> {\n  private items: any[] = [];\n  push(item: T): void { this.items.push(item); }\n  pop(): T | undefined { return this.items.pop(); }\n  get size(): number { return this.items.length; }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-3-c",
+    "bai": "typescript-6-3-generic-types-classes",
+    "tieuDe": "A generic interface and its class|||Một interface generic và class của nó",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>A <code>Box&lt;T&gt;</code> should hold a value and map it to a new type. Fill in the generic interface and the class that implements it so <code>new BoxValue(10).map(x =&gt; 'n' + x)</code> is a <code>Box&lt;string&gt;</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>|||<p>Một <code>Box&lt;T&gt;</code> nên giữ một giá trị và map nó sang kiểu mới. Điền interface generic và class thực hiện nó để <code>new BoxValue(10).map(x =&gt; 'n' + x)</code> là một <code>Box&lt;string&gt;</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/box.ts": "export interface Box {\n  readonly value: any;\n  map(f: (value: any) => any): Box;\n}\n\nexport class BoxValue implements Box {\n  readonly value: any;\n  constructor(value: any) { this.value = value; }\n  map(f: (value: any) => any): Box { return new BoxValue(f(this.value)); }\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { BoxValue } from '../src/box.ts';\nconst n = new BoxValue(10);\nconst text = n.map((x) => 'n' + x);\nconst s: string = text.value;  // the mapped value is a string\nexport { s };\n",
+      "test/box.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { BoxValue } from '../src/box.ts';\n\ntest('map', () => assert.equal(new BoxValue(10).map((x) => 'n' + x).value, 'n10'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/box.test.ts"
+      ],
+      "chay": [
+        "node --test test/box.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/box.ts": "export interface Box<T> {\n  readonly value: T;\n  map<U>(f: (value: T) => U): Box<U>;\n}\n\nexport class BoxValue<T> implements Box<T> {\n  readonly value: T;\n  constructor(value: T) { this.value = value; }\n  map<U>(f: (value: T) => U): Box<U> { return new BoxValue(f(this.value)); }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "map returns Box<T> not Box<U> — the mapped type is wrong",
+        "tep": {
+          "src/box.ts": "export interface Box<T> {\n  readonly value: T;\n  map(f: (value: T) => T): Box<T>;\n}\n\nexport class BoxValue<T> implements Box<T> {\n  readonly value: T;\n  constructor(value: T) { this.value = value; }\n  map(f: (value: T) => T): Box<T> { return new BoxValue(f(this.value)); }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-4-a",
+    "bai": "typescript-6-4-generics-in-practice",
+    "tieuDe": "Remove a return-only generic|||Bỏ một generic chỉ-trả-về",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>loadUsers&lt;T&gt;(text): T</code> returns a type nobody checked — the caller just asserts it. Remove the misleading generic: return <code>User[]</code> and verify the data with a real guard (5.3), so only valid users come back.</p><p><strong>Done when:</strong> the bad record is filtered out and the test passes; no misleading type parameter.</p>|||<p><code>loadUsers&lt;T&gt;(text): T</code> trả một kiểu không ai kiểm — người gọi chỉ khẳng định. Bỏ generic gây hiểu lầm: trả <code>User[]</code> và kiểm dữ liệu bằng một guard thật (5.3), để chỉ user hợp lệ trở lại.</p><p><strong>Đạt khi:</strong> bản ghi xấu bị lọc và test qua; không có tham số kiểu gây hiểu lầm.</p>",
+    "khoiDau": {
+      "src/load.ts": "export type User = { id: number; name: string };\n\nexport function loadUsers<T>(text: string): T {\n  return JSON.parse(text);\n}\n"
+    },
+    "coDinh": {
+      "test/load.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { loadUsers } from '../src/load.ts';\n\ntest('keeps valid users only', () => {\n  const users = loadUsers('[{\"id\":1,\"name\":\"An\"},{\"id\":\"x\",\"name\":\"Bad\"}]');\n  assert.deepEqual(users, [{ id: 1, name: 'An' }]);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/load.test.ts"
+      ],
+      "chay": [
+        "node --test test/load.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+User\\b",
+        "\\bas\\s+(?:unknown|number|string|any)\\b",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/load.ts": "export type User = { id: number; name: string };\n\nfunction isUser(x: unknown): x is User {\n  return typeof x === 'object' && x !== null\n    && typeof (x as { id?: unknown }).id === 'number'\n    && typeof (x as { name?: unknown }).name === 'string';\n}\n\nexport function loadUsers(text: string): User[] {\n  const data: unknown = JSON.parse(text);\n  return Array.isArray(data) ? data.filter(isUser) : [];\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still a return-only generic — the bad record is kept",
+        "tep": {
+          "src/load.ts": "export type User = { id: number; name: string };\n\nexport function loadUsers<T>(text: string): T {\n  return JSON.parse(text);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-4-b",
+    "bai": "typescript-6-4-generics-in-practice",
+    "tieuDe": "groupBy, inferred|||groupBy, được suy kiểu",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>Write <code>groupBy&lt;T, K&gt;(items, keyFn): Map&lt;K, T[]&gt;</code>. At the call site, no type arguments should be needed — tsc infers both. The starter is typed <code>any</code>, so the groups lose their types.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>|||<p>Viết <code>groupBy&lt;T, K&gt;(items, keyFn): Map&lt;K, T[]&gt;</code>. Ở lời gọi, không cần đối số kiểu — tsc suy cả hai. Bản khởi đầu có kiểu <code>any</code>, nên các nhóm mất kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/group.ts": "export function groupBy(items: any[], keyFn: (item: any) => any): Map<any, any[]> {\n  const groups = new Map<any, any[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { groupBy } from '../src/group.ts';\ntype User = { id: number; role: 'STUDENT' | 'LECTURER' };\ndeclare const users: User[];\nconst byRole = groupBy(users, (u) => u.role);     // Map<role, User[]> — no type args\nconst ids: number[] = (byRole.get('STUDENT') ?? []).map((u) => u.id);\nexport { ids };\n",
+      "test/group.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { groupBy } from '../src/group.ts';\n\nconst users = [{ id: 1, role: 'A' }, { id: 2, role: 'B' }, { id: 3, role: 'A' }];\ntest('groupBy', () => {\n  const g = groupBy(users, (u) => u.role);\n  assert.deepEqual(g.get('A')?.map((u) => u.id), [1, 3]);\n  assert.equal(g.get('C'), undefined);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/group.test.ts"
+      ],
+      "chay": [
+        "node --test test/group.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/group.ts": "export function groupBy<T, K>(items: readonly T[], keyFn: (item: T) => K): Map<K, T[]> {\n  const groups = new Map<K, T[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still any — kiem/dung.ts loses the group types",
+        "tep": {
+          "src/group.ts": "export function groupBy(items: any[], keyFn: (item: any) => any): Map<any, any[]> {\n  const groups = new Map<any, any[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-6-4-c",
+    "bai": "typescript-6-4-generics-in-practice",
+    "tieuDe": "Drop a needless type parameter|||Bỏ một tham số kiểu thừa",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p><code>countBy&lt;T&gt;(items: T[], pred)</code> uses <code>T</code> only once — a needless type parameter. The real bug: <code>pred</code> is typed <code>(x: any) =&gt; boolean</code>, so a typo in the predicate is not caught. Rewrite it so the predicate is checked against the element type.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>|||<p><code>countBy&lt;T&gt;(items: T[], pred)</code> dùng <code>T</code> chỉ một lần — một tham số kiểu thừa. Bug thật: <code>pred</code> có kiểu <code>(x: any) =&gt; boolean</code>, nên một lỗi gõ trong predicate không bị bắt. Viết lại để predicate được kiểm với kiểu phần tử.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>",
+    "khoiDau": {
+      "src/count.ts": "export type User = { id: number; role: string };\n\nexport function countBy<T>(items: T[], pred: (x: any) => boolean): number {\n  return items.filter(pred).length;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { countBy } from '../src/count.ts';\nimport type { User } from '../src/count.ts';\ndeclare const users: User[];\nconst n: number = countBy(users, (u) => u.role === 'STUDENT'); // u is a User, role is checked\nexport { n };\n",
+      "test/count.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { countBy } from '../src/count.ts';\n\nconst users = [{ id: 1, role: 'STUDENT' }, { id: 2, role: 'LECTURER' }, { id: 3, role: 'STUDENT' }];\ntest('countBy', () => assert.equal(countBy(users, (u) => u.role === 'STUDENT'), 2));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/count.test.ts"
+      ],
+      "chay": [
+        "node --test test/count.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/count.ts": "export type User = { id: number; role: string };\n\nexport function countBy<T>(items: readonly T[], pred: (item: T) => boolean): number {\n  return items.filter(pred).length;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "predicate still (x: any) — a typo in u.role is not caught",
+        "tep": {
+          "src/count.ts": "export type User = { id: number; role: string };\n\nexport function countBy<T>(items: T[], pred: (x: any) => boolean): number {\n  return items.filter(pred).length;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-6",
+    "bai": "typescript-6-6-lab-repository-generic",
+    "tieuDe": "Lab 6 — a generic repository|||Lab 6 — repository generic",
+    "doKho": "HARD",
+    "phut": 30,
+    "moTa": "<p>The lab in miniature. Rewrite the <code>any</code> repo as generics: <code>Result&lt;T, E = string&gt;</code>, <code>Repo&lt;T extends { id: number }&gt;</code> whose <code>add</code>/<code>get</code> return a <code>Result</code>, <code>pluck&lt;T, K extends keyof T&gt;</code>, and <code>groupBy&lt;T, K&gt;</code>. The correct uses in kiem/dung.ts must compile, the wrong uses in kiem/sai.ts must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>|||<p>Lab thu nhỏ. Viết lại repo <code>any</code> bằng generics: <code>Result&lt;T, E = string&gt;</code>, <code>Repo&lt;T extends { id: number }&gt;</code> mà <code>add</code>/<code>get</code> trả một <code>Result</code>, <code>pluck&lt;T, K extends keyof T&gt;</code>, và <code>groupBy&lt;T, K&gt;</code>. Các cách dùng đúng trong kiem/dung.ts phải biên dịch, cách dùng sai trong kiem/sai.ts phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/repo.ts": "// A teammate's any version — it compiles, but refuses nothing.\nexport type Result = { ok: boolean; value?: any; error?: string };\nexport function ok(value: any): Result { return { ok: true, value }; }\nexport function err(error: string): Result { return { ok: false, error }; }\n\nexport class Repo {\n  private items = new Map<number, any>();\n  add(item: any): Result { return this.items.has(item.id) ? err('dup') : (this.items.set(item.id, item), ok(item)); }\n  get(id: number): Result { const f = this.items.get(id); return f === undefined ? err('not found') : ok(f); }\n  get size(): number { return this.items.size; }\n}\n\nexport function pluck(items: any[], key: string): any[] { return items.map((i) => i[key]); }\nexport function groupBy(items: any[], keyFn: (i: any) => any): Map<any, any[]> {\n  const g = new Map<any, any[]>();\n  for (const i of items) { const k = keyFn(i); const l = g.get(k); if (l === undefined) g.set(k, [i]); else l.push(i); }\n  return g;\n}\n"
+    },
+    "coDinh": {
+      "src/user.ts": "export type User = { id: number; name: string; role: 'STUDENT' | 'LECTURER' };\n",
+      "kiem/dung.ts": "import { Repo, pluck, groupBy } from '../src/repo.ts';\nimport type { Result } from '../src/repo.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst users = new Repo<User>();\nconst added: Result<User> = users.add(an);\nconst got = users.get(1);\nconst name: string = got.ok ? got.value.name : '';   // got.value is a User\nconst ids: number[] = pluck([an], 'id');\nconst byRole = groupBy([an], (u) => u.role);\nconst studentIds: number[] = (byRole.get('STUDENT') ?? []).map((u) => u.id);\nexport { added, name, ids, studentIds };\n",
+      "kiem/sai.ts": "import { Repo, pluck } from '../src/repo.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: Repo<User>;\ndeclare const list: User[];\nconst r2 = new Repo<{ name: string }>(); // expect TS2741\nconst g = pluck(list, 'ghost'); // expect TS2345\nconst v = users.get(1).value; // expect TS2339\nexport { r2, g, v };\n",
+      "test/repo.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Repo, pluck, groupBy } from '../src/repo.ts';\n\nconst an = { id: 1, name: 'An', role: 'STUDENT' };\nconst binh = { id: 2, name: 'Binh', role: 'LECTURER' };\ntest('repo', () => {\n  const r = new Repo<typeof an>();\n  assert.equal(r.add(an).ok, true);\n  assert.equal(r.add(an).ok, false);\n  const got = r.get(1);\n  assert.equal(got.ok && got.value.name, 'An');\n  assert.equal(r.get(9).ok, false);\n});\ntest('pluck/groupBy', () => {\n  assert.deepEqual(pluck([an, binh], 'id'), [1, 2]);\n  const g = groupBy([an, binh], (u) => u.role);\n  assert.deepEqual(g.get('STUDENT')?.map((u) => u.id), [1]);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/repo.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/repo.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/repo.ts": "export type Result<T, E = string> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\nexport function ok<T>(value: T): Result<T, never> { return { ok: true, value }; }\nexport function err<E>(error: E): Result<never, E> { return { ok: false, error }; }\n\nexport class Repo<T extends { id: number }> {\n  private items = new Map<number, T>();\n  add(item: T): Result<T> {\n    if (this.items.has(item.id)) return err('duplicate id ' + item.id);\n    this.items.set(item.id, item);\n    return ok(item);\n  }\n  get(id: number): Result<T> {\n    const found = this.items.get(id);\n    return found === undefined ? err('not found: ' + id) : ok(found);\n  }\n  get size(): number { return this.items.size; }\n}\n\nexport function pluck<T, K extends keyof T>(items: readonly T[], key: K): T[K][] {\n  return items.map((item) => item[key]);\n}\nexport function groupBy<T, K>(items: readonly T[], keyFn: (item: T) => K): Map<K, T[]> {\n  const groups = new Map<K, T[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any starter kept — wrong uses slip through",
+        "tep": {
+          "src/repo.ts": "export type Result = { ok: boolean; value?: any; error?: string };\nexport function ok(value: any): Result { return { ok: true, value }; }\nexport function err(error: string): Result { return { ok: false, error }; }\nexport class Repo {\n  private items = new Map<number, any>();\n  add(item: any): Result { return this.items.has(item.id) ? err('dup') : (this.items.set(item.id, item), ok(item)); }\n  get(id: number): Result { const f = this.items.get(id); return f === undefined ? err('not found') : ok(f); }\n  get size(): number { return this.items.size; }\n}\nexport function pluck(items: any[], key: string): any[] { return items.map((i) => i[key]); }\nexport function groupBy(items: any[], keyFn: (i: any) => any): Map<any, any[]> {\n  const g = new Map<any, any[]>();\n  for (const i of items) { const k = keyFn(i); const l = g.get(k); if (l === undefined) g.set(k, [i]); else l.push(i); }\n  return g;\n}\n"
+        }
+      },
+      {
+        "nhan": "Repo without the constraint — add cannot use item.id (needs a cast) and wrong uses slip",
+        "tep": {
+          "src/repo.ts": "export type Result<T, E = string> = { ok: true; value: T } | { ok: false; error: E };\nexport function ok<T>(value: T): Result<T, never> { return { ok: true, value }; }\nexport function err<E>(error: E): Result<never, E> { return { ok: false, error }; }\nexport class Repo<T> {\n  private items = new Map<number, T>();\n  add(item: T): Result<T> { const id = (item as { id: number }).id; if (this.items.has(id)) return err('dup'); this.items.set(id, item); return ok(item); }\n  get(id: number): Result<T> { const f = this.items.get(id); return f === undefined ? err('nf') : ok(f); }\n  get size(): number { return this.items.size; }\n}\nexport function pluck<T>(items: readonly T[], key: string): unknown[] { return items.map((i) => (i as Record<string, unknown>)[key]); }\nexport function groupBy<T, K>(items: readonly T[], keyFn: (i: T) => K): Map<K, T[]> {\n  const g = new Map<K, T[]>();\n  for (const i of items) { const k = keyFn(i); const l = g.get(k); if (l === undefined) g.set(k, [i]); else l.push(i); }\n  return g;\n}\n"
+        }
+      }
+    ]
   }
 ]

@@ -1,0 +1,521 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-6-2-constraints-keyof",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-6-2-constraints-keyof"
+  },
+  "exercises": [
+    {
+      "title": "Constrain byId so it can use the id",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-2-constraints-keyof"
+      ],
+      "problemHtml": "<p><code>byId</code> reads <code>item.id</code> but <code>T</code> is unconstrained, so it does not compile. Add <code>&lt;T extends { id: number }&gt;</code>. The correct calls (Repo of users, of labs-with-id) must still keep their type; a type without an id must be refused.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, kiem/sai.ts refused, test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/byid.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/byid.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345); its other lines still compile.</li>\n  <li><code>node --test test/byid.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>byId</code> đọc <code>item.id</code> nhưng <code>T</code> không ràng buộc, nên không biên dịch. Thêm <code>&lt;T extends { id: number }&gt;</code>. Các lời gọi đúng (user, lab-có-id) vẫn phải giữ kiểu; một kiểu không có id phải bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, kiem/sai.ts bị từ chối, test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/byid.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/byid.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/byid.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/byid.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/byid.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: const x = byId(labs, 1);|||kiem/sai.ts, dòng 3: const x = byId(labs, 1);",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/byid.ts",
+          "language": "typescript",
+          "code": "export function byId<T>(items: readonly T[], id: number): T | undefined {\n  return items.find((item) => item.id === id);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { byId } from '../src/byid.ts';\ntype User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\nconst found: User | undefined = byId(users, 1); // keeps the User type\nexport { found };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { byId } from '../src/byid.ts';\nconst labs = [{ code: 'BE-201', name: 'Backend Lab 1' }]; // no id\nconst x = byId(labs, 1); // expect TS2345\nexport { x };\n"
+        },
+        {
+          "name": "test/byid.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { byId } from '../src/byid.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('found', () => assert.equal(byId(users, 2)?.name, 'Binh'));\ntest('missing', () => assert.equal(byId(users, 9), undefined));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/byid.ts",
+          "language": "typescript",
+          "code": "export function byId<T extends { id: number }>(items: readonly T[], id: number): T | undefined {\n  return items.find((item) => item.id === id);\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { byId } from '../src/byid.ts';\ntype User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\nconst found: User | undefined = byId(users, 1); // keeps the User type\nexport { found };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { byId } from '../src/byid.ts';\nconst labs = [{ code: 'BE-201', name: 'Backend Lab 1' }]; // no id\nconst x = byId(labs, 1); // expect TS2345\nexport { x };\n"
+        },
+        {
+          "name": "test/byid.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { byId } from '../src/byid.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('found', () => assert.equal(byId(users, 2)?.name, 'Binh'));\ntest('missing', () => assert.equal(byId(users, 9), undefined));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — constraint { id: string } — rejects numeric-id users for the wrong reason — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — constraint { id: string } — rejects numeric-id users for the wrong reason — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { byId } from '../src/byid.ts';\ntype User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\nconst found: User | undefined = byId(users, 1); // keeps the User type\nexport { found };\n",
+          "kiem/sai.ts": "import { byId } from '../src/byid.ts';\nconst labs = [{ code: 'BE-201', name: 'Backend Lab 1' }]; // no id\nconst x = byId(labs, 1); // expect TS2345\nexport { x };\n",
+          "test/byid.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { byId } from '../src/byid.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('found', () => assert.equal(byId(users, 2)?.name, 'Binh'));\ntest('missing', () => assert.equal(byId(users, 9), undefined));\n"
+        },
+        "tepHoc": [
+          "src/byid.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/byid.test.ts"
+            ],
+            "moTa": "tsc (strict): src/byid.ts + kiem/dung.ts, test/byid.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2345 — const x = byId(labs, 1); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/byid.test.ts",
+            "moTa": "node --test test/byid.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+(?!const\\b)",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (as casts (as const is fine), any, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "constraint { id: string } — rejects numeric-id users for the wrong reason — caught by: tsc (strict): src/byid.ts + kiem/dung.ts, test/byid.test.ts compile with 0 errors|||constraint { id: string } — rejects numeric-id users for the wrong reason — máy chấm bắt ở: tsc (strict): src/byid.ts + kiem/dung.ts, test/byid.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "getProp with keyof and indexed access",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-2-constraints-keyof"
+      ],
+      "problemHtml": "<p><code>getProp</code> is typed <code>any</code>, so a misspelled key is not caught and the return type is lost. Write <code>getProp&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, the typo in kiem/sai.ts is TS2345, test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/get.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/get.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345); its other lines still compile.</li>\n  <li><code>node --test test/get.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>getProp</code> có kiểu <code>any</code>, nên một khoá gõ sai không bị bắt và kiểu trả về mất. Viết <code>getProp&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, lỗi gõ trong kiem/sai.ts là TS2345, test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/get.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/get.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/get.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/get.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/get.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: const x = getProp(an, 'ghost');|||kiem/sai.ts, dòng 4: const x = getProp(an, 'ghost');",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/get.ts",
+          "language": "typescript",
+          "code": "export function getProp(obj: any, key: string): any {\n  return obj[key];\n}\n"
+        },
+        {
+          "name": "src/user.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string; role: 'STUDENT' | 'LECTURER' };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst id: number = getProp(an, 'id');   // T[K] is number\nconst role: 'STUDENT' | 'LECTURER' = getProp(an, 'role'); // T[K] is the role union\nexport { id, role };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst x = getProp(an, 'ghost'); // expect TS2345\nexport { x };\n"
+        },
+        {
+          "name": "test/get.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getProp } from '../src/get.ts';\n\ntest('getProp', () => assert.equal(getProp({ id: 1, name: 'An' }, 'name'), 'An'));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/get.ts",
+          "language": "typescript",
+          "code": "export function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n"
+        },
+        {
+          "name": "src/user.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string; role: 'STUDENT' | 'LECTURER' };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst id: number = getProp(an, 'id');   // T[K] is number\nconst role: 'STUDENT' | 'LECTURER' = getProp(an, 'role'); // T[K] is the role union\nexport { id, role };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst x = getProp(an, 'ghost'); // expect TS2345\nexport { x };\n"
+        },
+        {
+          "name": "test/get.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getProp } from '../src/get.ts';\n\ntest('getProp', () => assert.equal(getProp({ id: 1, name: 'An' }, 'name'), 'An'));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — key: string — a typo is accepted — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — key: string — a typo is accepted — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/user.ts": "export type User = { id: number; name: string; role: 'STUDENT' | 'LECTURER' };\n",
+          "kiem/dung.ts": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst id: number = getProp(an, 'id');   // T[K] is number\nconst role: 'STUDENT' | 'LECTURER' = getProp(an, 'role'); // T[K] is the role union\nexport { id, role };\n",
+          "kiem/sai.ts": "import { getProp } from '../src/get.ts';\nimport type { User } from '../src/user.ts';\ndeclare const an: User;\nconst x = getProp(an, 'ghost'); // expect TS2345\nexport { x };\n",
+          "test/get.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { getProp } from '../src/get.ts';\n\ntest('getProp', () => assert.equal(getProp({ id: 1, name: 'An' }, 'name'), 'An'));\n"
+        },
+        "tepHoc": [
+          "src/get.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/get.test.ts"
+            ],
+            "moTa": "tsc (strict): src/get.ts + kiem/dung.ts, test/get.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2345 — const x = getProp(an, 'ghost'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/get.test.ts",
+            "moTa": "node --test test/get.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+(?!const\\b)",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (as casts (as const is fine), any, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "key: string — a typo is accepted — caught by: tsc (strict): src/get.ts + kiem/dung.ts, test/get.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — const x = getProp(an, 'ghost'); (+1)|||key: string — a typo is accepted — máy chấm bắt ở: tsc (strict): src/get.ts + kiem/dung.ts, test/get.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — const x = getProp(an, 'ghost'); (+1)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "pluck keeps the property type",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-2-constraints-keyof"
+      ],
+      "problemHtml": "<p><code>pluck</code> should return an array of the chosen property’s type: <code>pluck(users, 'id')</code> is <code>number[]</code>. It is typed <code>any[]</code>, so a wrong key slips and the result type is lost. Write <code>pluck&lt;T, K extends keyof T&gt;(items: readonly T[], key: K): T[K][]</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, kiem/sai.ts refused, test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/pluck.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/pluck.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345); its other lines still compile.</li>\n  <li><code>node --test test/pluck.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>pluck</code> nên trả một mảng kiểu của thuộc tính được chọn: <code>pluck(users, 'id')</code> là <code>number[]</code>. Nó có kiểu <code>any[]</code>, nên một khoá sai lọt và kiểu kết quả mất. Viết <code>pluck&lt;T, K extends keyof T&gt;(items: readonly T[], key: K): T[K][]</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, kiem/sai.ts bị từ chối, test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/pluck.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/pluck.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/pluck.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/pluck.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/pluck.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 4: const g = pluck(users, 'ghost');|||kiem/sai.ts, dòng 4: const g = pluck(users, 'ghost');",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/pluck.ts",
+          "language": "typescript",
+          "code": "export function pluck(items: any[], key: string): any[] {\n  return items.map((item) => item[key]);\n}\n"
+        },
+        {
+          "name": "src/user.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst ids: number[] = pluck(users, 'id');\nconst names: string[] = pluck(users, 'name');\nexport { ids, names };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst g = pluck(users, 'ghost'); // expect TS2345\nexport { g };\n"
+        },
+        {
+          "name": "test/pluck.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { pluck } from '../src/pluck.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('pluck id', () => assert.deepEqual(pluck(users, 'id'), [1, 2]));\ntest('pluck name', () => assert.deepEqual(pluck(users, 'name'), ['An', 'Binh']));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/pluck.ts",
+          "language": "typescript",
+          "code": "export function pluck<T, K extends keyof T>(items: readonly T[], key: K): T[K][] {\n  return items.map((item) => item[key]);\n}\n"
+        },
+        {
+          "name": "src/user.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string };\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst ids: number[] = pluck(users, 'id');\nconst names: string[] = pluck(users, 'name');\nexport { ids, names };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst g = pluck(users, 'ghost'); // expect TS2345\nexport { g };\n"
+        },
+        {
+          "name": "test/pluck.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { pluck } from '../src/pluck.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('pluck id', () => assert.deepEqual(pluck(users, 'id'), [1, 2]));\ntest('pluck name', () => assert.deepEqual(pluck(users, 'name'), ['An', 'Binh']));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — key: string, returns unknown[] — a typo slips and the type is lost — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — key: string, returns unknown[] — a typo slips and the type is lost — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/user.ts": "export type User = { id: number; name: string };\n",
+          "kiem/dung.ts": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst ids: number[] = pluck(users, 'id');\nconst names: string[] = pluck(users, 'name');\nexport { ids, names };\n",
+          "kiem/sai.ts": "import { pluck } from '../src/pluck.ts';\nimport type { User } from '../src/user.ts';\ndeclare const users: User[];\nconst g = pluck(users, 'ghost'); // expect TS2345\nexport { g };\n",
+          "test/pluck.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { pluck } from '../src/pluck.ts';\n\nconst users = [{ id: 1, name: 'An' }, { id: 2, name: 'Binh' }];\ntest('pluck id', () => assert.deepEqual(pluck(users, 'id'), [1, 2]));\ntest('pluck name', () => assert.deepEqual(pluck(users, 'name'), ['An', 'Binh']));\n"
+        },
+        "tepHoc": [
+          "src/pluck.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/pluck.test.ts"
+            ],
+            "moTa": "tsc (strict): src/pluck.ts + kiem/dung.ts, test/pluck.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2345 — const g = pluck(users, 'ghost'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/pluck.test.ts",
+            "moTa": "node --test test/pluck.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+(?!const\\b)",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (as casts (as const is fine), any, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "key: string, returns unknown[] — a typo slips and the type is lost — caught by: tsc (strict): src/pluck.ts + kiem/dung.ts, test/pluck.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — const g = pluck(users, 'ghost'); (+1)|||key: string, returns unknown[] — a typo slips and the type is lost — máy chấm bắt ở: tsc (strict): src/pluck.ts + kiem/dung.ts, test/pluck.test.ts compile with 0 errors; kiem/sai.ts:4 is refused with TS2345 — const g = pluck(users, 'ghost'); (+1)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

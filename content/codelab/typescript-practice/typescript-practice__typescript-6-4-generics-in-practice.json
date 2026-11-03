@@ -1,0 +1,405 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-6-4-generics-in-practice",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-6-4-generics-in-practice"
+  },
+  "exercises": [
+    {
+      "title": "Remove a return-only generic",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-4-generics-in-practice"
+      ],
+      "problemHtml": "<p><code>loadUsers&lt;T&gt;(text): T</code> returns a type nobody checked — the caller just asserts it. Remove the misleading generic: return <code>User[]</code> and verify the data with a real guard (5.3), so only valid users come back.</p><p><strong>Done when:</strong> the bad record is filtered out and the test passes; no misleading type parameter.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/load.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>test/load.test.ts</code>.</li>\n  <li><code>node --test test/load.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+User\\b</code>, <code>\\bas\\s+(?:unknown|number|string|any)\\b</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>loadUsers&lt;T&gt;(text): T</code> trả một kiểu không ai kiểm — người gọi chỉ khẳng định. Bỏ generic gây hiểu lầm: trả <code>User[]</code> và kiểm dữ liệu bằng một guard thật (5.3), để chỉ user hợp lệ trở lại.</p><p><strong>Đạt khi:</strong> bản ghi xấu bị lọc và test qua; không có tham số kiểu gây hiểu lầm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/load.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>test/load.test.ts</code>.</li>\n  <li><code>node --test test/load.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+User\\b</code>, <code>\\bas\\s+(?:unknown|number|string|any)\\b</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/load.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/load.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/load.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: /\\bas\\s+User\\b/ · /\\bas\\s+(?:unknown|number|string|any)\\b/ · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: /\\bas\\s+User\\b/ · /\\bas\\s+(?:unknown|number|string|any)\\b/ · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/load.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string };\n\nexport function loadUsers<T>(text: string): T {\n  return JSON.parse(text);\n}\n"
+        },
+        {
+          "name": "test/load.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { loadUsers } from '../src/load.ts';\n\ntest('keeps valid users only', () => {\n  const users = loadUsers('[{\"id\":1,\"name\":\"An\"},{\"id\":\"x\",\"name\":\"Bad\"}]');\n  assert.deepEqual(users, [{ id: 1, name: 'An' }]);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/load.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; name: string };\n\nfunction isUser(x: unknown): x is User {\n  return typeof x === 'object' && x !== null\n    && typeof (x as { id?: unknown }).id === 'number'\n    && typeof (x as { name?: unknown }).name === 'string';\n}\n\nexport function loadUsers(text: string): User[] {\n  const data: unknown = JSON.parse(text);\n  return Array.isArray(data) ? data.filter(isUser) : [];\n}\n"
+        },
+        {
+          "name": "test/load.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { loadUsers } from '../src/load.ts';\n\ntest('keeps valid users only', () => {\n  const users = loadUsers('[{\"id\":1,\"name\":\"An\"},{\"id\":\"x\",\"name\":\"Bad\"}]');\n  assert.deepEqual(users, [{ id: 1, name: 'An' }]);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — still a return-only generic — the bad record is kept — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — still a return-only generic — the bad record is kept — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "test/load.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { loadUsers } from '../src/load.ts';\n\ntest('keeps valid users only', () => {\n  const users = loadUsers('[{\"id\":1,\"name\":\"An\"},{\"id\":\"x\",\"name\":\"Bad\"}]');\n  assert.deepEqual(users, [{ id: 1, name: 'An' }]);\n});\n"
+        },
+        "tepHoc": [
+          "src/load.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "test/load.test.ts"
+            ],
+            "moTa": "tsc (strict): src/load.ts + test/load.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/load.test.ts",
+            "moTa": "node --test test/load.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+User\\b",
+              "\\bas\\s+(?:unknown|number|string|any)\\b",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (/\\bas\\s+User\\b/, /\\bas\\s+(?:unknown|number|string|any)\\b/, any, @ts-ignore, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "still a return-only generic — the bad record is kept — caught by: node --test test/load.test.ts exits 0|||still a return-only generic — the bad record is kept — máy chấm bắt ở: node --test test/load.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "groupBy, inferred",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-4-generics-in-practice"
+      ],
+      "problemHtml": "<p>Write <code>groupBy&lt;T, K&gt;(items, keyFn): Map&lt;K, T[]&gt;</code>. At the call site, no type arguments should be needed — tsc infers both. The starter is typed <code>any</code>, so the groups lose their types.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/group.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/group.test.ts</code>.</li>\n  <li><code>node --test test/group.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>groupBy&lt;T, K&gt;(items, keyFn): Map&lt;K, T[]&gt;</code>. Ở lời gọi, không cần đối số kiểu — tsc suy cả hai. Bản khởi đầu có kiểu <code>any</code>, nên các nhóm mất kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/group.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/group.test.ts</code>.</li>\n  <li><code>node --test test/group.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/group.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/group.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/group.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/group.ts",
+          "language": "typescript",
+          "code": "export function groupBy(items: any[], keyFn: (item: any) => any): Map<any, any[]> {\n  const groups = new Map<any, any[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { groupBy } from '../src/group.ts';\ntype User = { id: number; role: 'STUDENT' | 'LECTURER' };\ndeclare const users: User[];\nconst byRole = groupBy(users, (u) => u.role);     // Map<role, User[]> — no type args\nconst ids: number[] = (byRole.get('STUDENT') ?? []).map((u) => u.id);\nexport { ids };\n"
+        },
+        {
+          "name": "test/group.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { groupBy } from '../src/group.ts';\n\nconst users = [{ id: 1, role: 'A' }, { id: 2, role: 'B' }, { id: 3, role: 'A' }];\ntest('groupBy', () => {\n  const g = groupBy(users, (u) => u.role);\n  assert.deepEqual(g.get('A')?.map((u) => u.id), [1, 3]);\n  assert.equal(g.get('C'), undefined);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/group.ts",
+          "language": "typescript",
+          "code": "export function groupBy<T, K>(items: readonly T[], keyFn: (item: T) => K): Map<K, T[]> {\n  const groups = new Map<K, T[]>();\n  for (const item of items) {\n    const key = keyFn(item);\n    const list = groups.get(key);\n    if (list === undefined) groups.set(key, [item]); else list.push(item);\n  }\n  return groups;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { groupBy } from '../src/group.ts';\ntype User = { id: number; role: 'STUDENT' | 'LECTURER' };\ndeclare const users: User[];\nconst byRole = groupBy(users, (u) => u.role);     // Map<role, User[]> — no type args\nconst ids: number[] = (byRole.get('STUDENT') ?? []).map((u) => u.id);\nexport { ids };\n"
+        },
+        {
+          "name": "test/group.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { groupBy } from '../src/group.ts';\n\nconst users = [{ id: 1, role: 'A' }, { id: 2, role: 'B' }, { id: 3, role: 'A' }];\ntest('groupBy', () => {\n  const g = groupBy(users, (u) => u.role);\n  assert.deepEqual(g.get('A')?.map((u) => u.id), [1, 3]);\n  assert.equal(g.get('C'), undefined);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — still any — kiem/dung.ts loses the group types — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — still any — kiem/dung.ts loses the group types — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { groupBy } from '../src/group.ts';\ntype User = { id: number; role: 'STUDENT' | 'LECTURER' };\ndeclare const users: User[];\nconst byRole = groupBy(users, (u) => u.role);     // Map<role, User[]> — no type args\nconst ids: number[] = (byRole.get('STUDENT') ?? []).map((u) => u.id);\nexport { ids };\n",
+          "test/group.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { groupBy } from '../src/group.ts';\n\nconst users = [{ id: 1, role: 'A' }, { id: 2, role: 'B' }, { id: 3, role: 'A' }];\ntest('groupBy', () => {\n  const g = groupBy(users, (u) => u.role);\n  assert.deepEqual(g.get('A')?.map((u) => u.id), [1, 3]);\n  assert.equal(g.get('C'), undefined);\n});\n"
+        },
+        "tepHoc": [
+          "src/group.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/group.test.ts"
+            ],
+            "moTa": "tsc (strict): src/group.ts + kiem/dung.ts, test/group.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/group.test.ts",
+            "moTa": "node --test test/group.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "still any — kiem/dung.ts loses the group types — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||still any — kiem/dung.ts loses the group types — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Drop a needless type parameter",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-6-4-generics-in-practice"
+      ],
+      "problemHtml": "<p><code>countBy&lt;T&gt;(items: T[], pred)</code> uses <code>T</code> only once — a needless type parameter. The real bug: <code>pred</code> is typed <code>(x: any) =&gt; boolean</code>, so a typo in the predicate is not caught. Rewrite it so the predicate is checked against the element type.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/count.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/count.test.ts</code>.</li>\n  <li><code>node --test test/count.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>countBy&lt;T&gt;(items: T[], pred)</code> dùng <code>T</code> chỉ một lần — một tham số kiểu thừa. Bug thật: <code>pred</code> có kiểu <code>(x: any) =&gt; boolean</code>, nên một lỗi gõ trong predicate không bị bắt. Viết lại để predicate được kiểm với kiểu phần tử.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/count.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/count.test.ts</code>.</li>\n  <li><code>node --test test/count.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/count.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/count.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/count.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/count.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; role: string };\n\nexport function countBy<T>(items: T[], pred: (x: any) => boolean): number {\n  return items.filter(pred).length;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { countBy } from '../src/count.ts';\nimport type { User } from '../src/count.ts';\ndeclare const users: User[];\nconst n: number = countBy(users, (u) => u.role === 'STUDENT'); // u is a User, role is checked\nexport { n };\n"
+        },
+        {
+          "name": "test/count.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { countBy } from '../src/count.ts';\n\nconst users = [{ id: 1, role: 'STUDENT' }, { id: 2, role: 'LECTURER' }, { id: 3, role: 'STUDENT' }];\ntest('countBy', () => assert.equal(countBy(users, (u) => u.role === 'STUDENT'), 2));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/count.ts",
+          "language": "typescript",
+          "code": "export type User = { id: number; role: string };\n\nexport function countBy<T>(items: readonly T[], pred: (item: T) => boolean): number {\n  return items.filter(pred).length;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { countBy } from '../src/count.ts';\nimport type { User } from '../src/count.ts';\ndeclare const users: User[];\nconst n: number = countBy(users, (u) => u.role === 'STUDENT'); // u is a User, role is checked\nexport { n };\n"
+        },
+        {
+          "name": "test/count.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { countBy } from '../src/count.ts';\n\nconst users = [{ id: 1, role: 'STUDENT' }, { id: 2, role: 'LECTURER' }, { id: 3, role: 'STUDENT' }];\ntest('countBy', () => assert.equal(countBy(users, (u) => u.role === 'STUDENT'), 2));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — predicate still (x: any) — a typo in u.role is not caught — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — predicate still (x: any) — a typo in u.role is not caught — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { countBy } from '../src/count.ts';\nimport type { User } from '../src/count.ts';\ndeclare const users: User[];\nconst n: number = countBy(users, (u) => u.role === 'STUDENT'); // u is a User, role is checked\nexport { n };\n",
+          "test/count.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { countBy } from '../src/count.ts';\n\nconst users = [{ id: 1, role: 'STUDENT' }, { id: 2, role: 'LECTURER' }, { id: 3, role: 'STUDENT' }];\ntest('countBy', () => assert.equal(countBy(users, (u) => u.role === 'STUDENT'), 2));\n"
+        },
+        "tepHoc": [
+          "src/count.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/count.test.ts"
+            ],
+            "moTa": "tsc (strict): src/count.ts + kiem/dung.ts, test/count.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/count.test.ts",
+            "moTa": "node --test test/count.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "predicate still (x: any) — a typo in u.role is not caught — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||predicate still (x: any) — a typo in u.role is not caught — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

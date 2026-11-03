@@ -194,6 +194,36 @@
       "name": "5.6 Lab 5 — The booking state machine",
       "level": "ADVANCED",
       "description": "1 đề: Lab 5 — the booking state machine (discriminated union + never)"
+    },
+    {
+      "slug": "typescript-6-1-why-generics",
+      "name": "6.1 — Why generics: keep the type",
+      "level": "INTERMEDIATE",
+      "description": "4 đề: Make firstOf generic · A pair that remembers both types · A generic wrap · Keep the User type in mapNames"
+    },
+    {
+      "slug": "typescript-6-2-constraints-keyof",
+      "name": "6.2 — Constraints, keyof & indexed access",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Constrain byId so it can use the id · getProp with keyof · pluck keeps the property type"
+    },
+    {
+      "slug": "typescript-6-3-generic-types-classes",
+      "name": "6.3 — Generic interfaces, classes & defaults",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: A generic Result with a default error · A generic stack class · A generic interface and its class"
+    },
+    {
+      "slug": "typescript-6-4-generics-in-practice",
+      "name": "6.4 — Generics in practice: inference & pitfalls",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Remove a return-only generic · groupBy, inferred · Drop a needless type parameter"
+    },
+    {
+      "slug": "typescript-6-6-lab-repository-generic",
+      "name": "6.6 Lab 6 — A generic repository",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 6 — a generic repository (Result, Repo, pluck, groupBy)"
     }
   ]
 }

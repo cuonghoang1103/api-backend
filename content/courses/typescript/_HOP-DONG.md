@@ -295,10 +295,21 @@ typescript: 'typescript-practice',
   `vua` **9/10** (F 1/2, bảng mở) · tham khảo **10/10** (thêm `expired`: TS2345 ở assertNever + TS2741 ở Record đóng). 2 cặp liên kết chéo hai chiều
   (postgresql `postgresql-4-2-select-where`, api-design `api-2-1-problem-details`). Soạn MỘT phiên, KHÔNG fork. Ảnh chụp `_labflow-ts` cuối Ch5:
   51 test, lab1–5 tham khảo 10/10. **BookingState** (discriminated union trên `BookingRecord`) = lời giải Lab 5 ở `src/rules/state.ts`.
-- **⏸ TẠM DỪNG sau Chương 5 (03/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 6** (Generics — §9: `Result<T, E>`, repository;
-  Lab 6 `Repo<T extends { id }>` + `groupBy`). Làm y Ch5: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
-  đề Code Lab `ts` + nguon + `_track.json` + xuat-de + doi-chieu, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`.
-  Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
+- 03/11/2026 — **Chương 6 trọn**: 4 bài (slug giữ; nguồn bài + giảng ~196k/6 ≈ 33k/bài) + Lab 6 (MỚI `typescript-6-6-lab-repository-generic`) + quiz 10 câu;
+  5 deck / 43 slide đẩy `TS/v1` (ts-06-1 9, ts-06-2 8, ts-06-3 9, ts-06-4 8, ts-lab-6 9; 0 lỗi kiem-slide); 14 đề Code Lab `ts` mới (ts-cl-6-1 a–d, 6-2 a–c,
+  6-3 a–c, 6-4 a–c, ts-cl-lab-6; 16 sai mẫu) — kiem-de-ts **106/106** (tsc 7.0.2), codelab-xuat-de 106 sạch, codelab-ts-doi-chieu **169/169**
+  (một lệch 6↔7 đã vá: `new Repo<{ name }>()` TS 7.0.2 ⇒ TS2741, TS 6.0.3 ⇒ TS2344 ⇒ thêm `MA_THEM_TS6['ts-cl-lab-6']` trong `_chung.mjs`);
+  track `typescript-practice` thêm 5 module (⇒ 36 module / 106 đề). LabFlow TS thêm `src/rules/repo.ts` + `repo.test.ts` (5 test ⇒ `npm test` = **56**) =
+  lời giải Lab 6 (`Result<T, E = string>` + ok/err/mapResult/unwrapOr, `Repo<T extends { id: number }>` add/get/remove trả Result, `pluck<T, K extends keyof T>`, `groupBy<T, K>`),
+  `lab6/` (starter `any`, `kiem/{sai,dung}`, test, `yeu`=không ràng buộc+cast+get trả T|undefined, `vua`=ràng buộc nhưng pluck key:string), `scripts/cham-lab-6.mjs`
+  (`npm run lab6`; A2·B1·C1·D2·E 8×0,5). Số đo Lab 6: khởi đầu **4.5/10** (`any` không generic ⇒ `new Repo<User>()` TS2558) · `yeu` **6.5/10** · `vua` **7/10** · tham khảo **10/10**.
+  **3 cặp liên kết chéo hai chiều** (react `rx-2-1-use-state` ↔ 6.1 useState là generic; api-design `api-2-3-envelope` ↔ 6.3 Result<T,E>; `api-2-2-validation` ↔ 6.4 generic chỉ-trả-về = phép ép kiểu).
+  ⚠ Bẫy đã gặp: parameter property `constructor(readonly x)` ⇒ **TS1294** dưới `erasableSyntaxOnly` (dạy ở 6.3 như một điểm). Soạn MỘT phiên, KHÔNG fork.
+  Ảnh chụp `_labflow-ts` cuối Ch6: 56 test, lab1–6 tham khảo 10/10.
+- **⏸ TẠM DỪNG sau Chương 6 (03/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 7** (Kiểu nâng cao — §9: tên sự kiện `booking:${Action}`,
+  DTO ánh xạ; Lab 7 hệ sự kiện có kiểu — mapped/conditional/template literal types). Làm y Ch5/Ch6: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`,
+  deck→kiem-slide→render→R2 `TS/v1`, đề Code Lab `ts` + nguon + `_track.json` + xuat-de + doi-chieu, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`,
+  `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main). Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

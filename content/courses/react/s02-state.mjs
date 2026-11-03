@@ -614,6 +614,11 @@ ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useS
   <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 5.2: State: class vs function components</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: useState and why a functional update avoids the "+2" trap. Different: Academy sets it beside the old class version; Courses explains it with the "state is a snapshot" model. In this lesson we add: what "render" really means, state as a snapshot, batching many sets into one render, the rules of hooks. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN FER202 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">useState is a generic — TypeScript 6.1: Why generics</span><span class="lc-sub">Same: a type parameter keeps the type — useState(0) gives a number setter, useState&lt;User | null&gt;(null) keeps the shape, just as firstOf&lt;T&gt; returns the element type. Different: here you write the generic function and tsc infers T; the TypeScript chapter also adds constraints, keyof, generic classes, and the inference traps behind a hook like useState.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -778,6 +783,11 @@ ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useS
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 5.2: State: class và function component</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: useState và vì sao cập nhật theo hàm tránh được bẫy "+2". Khác: Academy đặt cạnh bản class cũ; Courses giải thích bằng mô hình "state là ảnh chụp". Ở bài này mình học thêm: "render" thật sự là gì, state là ảnh chụp, batching nhiều lần set một lần render, luật của hook. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">useState là một generic — TypeScript 6.1: Vì sao cần generics</span><span class="lc-sub">Giống: một tham số kiểu giữ lại kiểu — useState(0) cho một setter number, useState&lt;User | null&gt;(null) giữ dáng, y như firstOf&lt;T&gt; trả kiểu phần tử. Khác: ở đây bạn viết hàm generic và tsc suy T; chương TypeScript còn thêm ràng buộc, keyof, class generic, và các bẫy suy kiểu đằng sau một hook như useState.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

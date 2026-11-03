@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.1 Vì sao cần generics: giữ lại kiểu (deck ts-06-1, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-06-1', 'Why generics: keep the type', 'Vì sao cần generics: giữ lại kiểu', [
+  [1, 'Why generics: keep the type',
+    `<p>You keep writing the same helper — the first item of an array, a repository, a result — and each should work for any type while keeping it. The sloppy way is any, which compiles and throws the type away. A generic links input to output, so firstOf(users) gives a User, not an any.</p>`,
+    `<p>Bạn cứ viết đi viết lại cùng một hàm — phần tử đầu của mảng, một repository, một kết quả — và mỗi cái nên chạy cho mọi kiểu mà vẫn giữ kiểu. Cách cẩu thả là any, biên dịch và vứt kiểu đi. Một generic nối đầu vào với đầu ra, nên firstOf(users) cho một User, không phải any.</p>`],
+  [2, 'What you will take away from this chapter',
+    `<p>By the end you write generic functions, interfaces and classes, constrain a type parameter, use keyof and indexed access, and avoid the traps — then pass Lab 6, a generic repository where any scores 4.5. Today: why a type parameter beats any, and how inference fills it in.</p>`,
+    `<p>Cuối chương bạn viết hàm, interface và class generic, ràng buộc một tham số kiểu, dùng keyof và truy cập theo chỉ mục, và tránh bẫy — rồi qua Lab 6, một repository generic nơi any được 4.5. Hôm nay: vì sao một tham số kiểu hơn any, và suy kiểu điền nó thế nào.</p>`],
+  [3, 'The sloppy way: any throws the type away',
+    `<p>firstOf returns any, so the typo u.emial is accepted (prints undefined) and u.name.toFixed — a number method on a string — is accepted too, then crashes. tsc reports 0 errors. any made the function reusable by making it useless: it works for every type by checking none.</p>`,
+    `<p>firstOf trả any, nên lỗi gõ u.emial được nhận (in undefined) và u.name.toFixed — method của số trên một chuỗi — cũng được nhận, rồi sập. tsc báo 0 lỗi. any làm hàm dùng lại được bằng cách làm nó vô dụng: chạy cho mọi kiểu bằng cách không kiểm cái nào.</p>`],
+  [4, 'The right way: a type parameter',
+    `<p>A type parameter T is a placeholder for a type, chosen per call. Put it in the parameter and the return, and the output is linked to the input: firstOf(users) is User | undefined. The exact type is kept, so the typo emial is TS2551, with a "Did you mean email?" suggestion.</p>`,
+    `<p>Một tham số kiểu T là chỗ giữ cho một kiểu, chọn theo lần gọi. Đặt nó vào tham số và kiểu trả về, thế là đầu ra gắn với đầu vào: firstOf(users) là User | undefined. Kiểu chính xác được giữ, nên lỗi gõ emial là TS2551, kèm gợi ý "Did you mean email?".</p>`],
+  [5, 'You rarely write <T>: inference',
+    `<p>tsc fills in T from the argument: identity(42) infers number, identity(\'BE-201\') infers string. You write the type argument explicitly only when there is nothing to infer from. This is why most generic calls look like ordinary calls — the generics are invisible.</p>`,
+    `<p>tsc điền T từ đối số: identity(42) suy number, identity(\'BE-201\') suy string. Bạn chỉ viết đối số kiểu tường minh khi không có gì để suy. Đó là vì sao phần lớn lời gọi generic trông như lời gọi thường — generic vô hình.</p>`],
+  [6, 'When there is nothing to infer',
+    `<p>An empty array literal has no element to infer T from, so T becomes never and the result is undefined; reading .length off it is TS2532. Give the type argument explicitly — firstOf<string>([]) — when the call cannot supply it.</p>`,
+    `<p>Một mảng rỗng không có phần tử để suy T, nên T thành never và kết quả là undefined; đọc .length của nó là TS2532. Hãy ghi đối số kiểu tường minh — firstOf<string>([]) — khi lời gọi không cung cấp được.</p>`],
+  [7, 'Two type parameters',
+    `<p>A function takes as many type parameters as it needs, each independent. pair(\'BE-201\', 40) infers A = string and B = number, so the tuple is [string, number] and destructuring keeps both. This is exactly how Map<K, V> and Promise<T> are declared.</p>`,
+    `<p>Một hàm nhận bao nhiêu tham số kiểu tuỳ nhu cầu, mỗi cái độc lập. pair(\'BE-201\', 40) suy A = string và B = number, nên tuple là [string, number] và destructuring giữ cả hai. Đây chính là cách Map<K, V> và Promise<T> được khai báo.</p>`],
+  [8, 'Which form, when',
+    `<p>any loses the type — avoid it. unknown is honest but must be narrowed every time. A type parameter in the parameter and return keeps the type and is the default. identity<T> for pass-through, pair<A, B> to combine different types. Next lesson constrains T so you can look inside it.</p>`,
+    `<p>any mất kiểu — tránh. unknown trung thực nhưng phải narrow mỗi lần. Một tham số kiểu ở tham số và kiểu trả về giữ kiểu và là mặc định. identity<T> cho truyền thẳng, pair<A, B> để ghép kiểu khác nhau. Bài sau ràng buộc T để bạn nhìn được vào bên trong nó.</p>`],
+  [9, 'Practice &amp; what is next',
+    `<p>Practice: lastOf is typed any, so a typo on its result slips — make it generic and the typo becomes TS2551. Remember: any drops the type, a generic keeps it, and tsc usually infers <T>. Next, 6.2: constrain T with extends, and read a property’s type with keyof and T[K].</p>`,
+    `<p>Luyện tập: lastOf có kiểu any, nên lỗi gõ trên kết quả lọt — làm nó generic và lỗi gõ thành TS2551. Nhớ: any vứt kiểu, generic giữ kiểu, và tsc thường suy <T>. Tiếp, 6.2: ràng buộc T bằng extends, và đọc kiểu của một thuộc tính bằng keyof và T[K].</p>`],
+]);

@@ -58,3 +58,4 @@ sạch lúc chèn.
 - SDN302 `sdn302-8-1-nestjs-hono` (NestJS = TypeScript trên Express): để dành cho Chương 11 (Express có kiểu) / Chương 14 (decorator).
 - Khoá `react` (Courses): Chương 12 đã cặp 4 bài (12.1↔rx-1-2, 12.2↔rx-2-1, 12.3↔rx-2-2, 12.4↔rx-5-1). Còn lại để dành cho Chương 13+.
 - Khoá `prisma-orm` (Courses): đã cặp ở Ch8–10; phần còn để dành cho các chương sau.
+- Chương 16 (Kiến trúc & type-driven) cố ý dùng liên kết **nội khoá** (16.1→5.4 exhaustiveness, 16.2→6.4 generics-in-practice, 16.3→10.3 augmentation, 16.4→16.6 dự án cuối khoá): đây là chương tổng hợp, mỗi bài trỏ về đúng chỗ trong khoá nơi thói quen đó xuất hiện lần đầu — không có bài ngoài khoá khớp rõ hơn, nên không thêm cặp cross-course nào.

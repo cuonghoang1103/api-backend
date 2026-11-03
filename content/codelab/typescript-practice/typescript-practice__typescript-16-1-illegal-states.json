@@ -1,0 +1,284 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-16-1-illegal-states",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-16-1-illegal-states"
+  },
+  "exercises": [
+    {
+      "title": "Pass a string through the brand",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-16-1-illegal-states"
+      ],
+      "problemHtml": "<p>A plain <code>string</code> is not a <code>LabCode</code> — <code>buildingCode</code> only takes a validated one, so calling it with a raw string is TS2345. Run the string through <code>toLabCode</code> first.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/app.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/app.ts</code>, <code>src/labcode.ts</code>, <code>test/app.test.ts</code>.</li>\n  <li><code>node --test test/app.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>, <code>\\bas\\b</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một <code>string</code> thường không phải <code>LabCode</code> — <code>buildingCode</code> chỉ nhận một mã đã kiểm, nên gọi nó với chuỗi thô là TS2345. Cho chuỗi đi qua <code>toLabCode</code> trước.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/app.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/app.ts</code>, <code>src/labcode.ts</code>, <code>test/app.test.ts</code>.</li>\n  <li><code>node --test test/app.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>, <code>\\bas\\b</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/app.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/app.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/app.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ · every \"as\" cast — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ · every \"as\" cast — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import { buildingCode } from './labcode.ts';\n// A plain string is not a LabCode. Pass it through toLabCode first.\nexport function buildingOf(raw: string): string {\n  return buildingCode(raw);\n}\n"
+        },
+        {
+          "name": "src/labcode.ts",
+          "language": "typescript",
+          "code": "export type LabCode = string & { readonly __brand: 'LabCode' };\nconst PATTERN = /^[A-Z]{2}-\\d{3}$/;\nexport function toLabCode(raw: string): LabCode {\n  if (!PATTERN.test(raw)) throw new Error('not a lab code: ' + raw);\n  return raw as LabCode;\n}\nexport function buildingCode(code: LabCode): string {\n  return code.slice(0, 2);\n}\n"
+        },
+        {
+          "name": "test/app.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { buildingOf } from '../src/app.ts';\ntest('building of BE-201 is BE', () => { assert.equal(buildingOf('BE-201'), 'BE'); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import { buildingCode, toLabCode } from './labcode.ts';\nexport function buildingOf(raw: string): string {\n  return buildingCode(toLabCode(raw));\n}\n"
+        },
+        {
+          "name": "src/labcode.ts",
+          "language": "typescript",
+          "code": "export type LabCode = string & { readonly __brand: 'LabCode' };\nconst PATTERN = /^[A-Z]{2}-\\d{3}$/;\nexport function toLabCode(raw: string): LabCode {\n  if (!PATTERN.test(raw)) throw new Error('not a lab code: ' + raw);\n  return raw as LabCode;\n}\nexport function buildingCode(code: LabCode): string {\n  return code.slice(0, 2);\n}\n"
+        },
+        {
+          "name": "test/app.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { buildingOf } from '../src/app.ts';\ntest('building of BE-201 is BE', () => { assert.equal(buildingOf('BE-201'), 'BE'); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — a cast skips the validator — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — a cast skips the validator — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/labcode.ts": "export type LabCode = string & { readonly __brand: 'LabCode' };\nconst PATTERN = /^[A-Z]{2}-\\d{3}$/;\nexport function toLabCode(raw: string): LabCode {\n  if (!PATTERN.test(raw)) throw new Error('not a lab code: ' + raw);\n  return raw as LabCode;\n}\nexport function buildingCode(code: LabCode): string {\n  return code.slice(0, 2);\n}\n",
+          "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { buildingOf } from '../src/app.ts';\ntest('building of BE-201 is BE', () => { assert.equal(buildingOf('BE-201'), 'BE'); });\n"
+        },
+        "tepHoc": [
+          "src/app.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/app.ts",
+              "src/labcode.ts",
+              "test/app.test.ts"
+            ],
+            "moTa": "tsc (strict): src/app.ts + src/app.ts, src/labcode.ts, test/app.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/app.test.ts",
+            "moTa": "node --test test/app.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+              "\\bas\\b"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "a cast skips the validator — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||a cast skips the validator — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Narrow a discriminated union",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-16-1-illegal-states"
+      ],
+      "problemHtml": "<p>A <code>Slot</code> is free OR booked — only the booked branch has a <code>by</code>. Reading <code>slot.by</code> without narrowing is TS2339. Narrow on <code>slot.kind</code> first.</p><p><strong>Done when:</strong> tsc clean and both tests pass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/app.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/app.ts</code>, <code>src/slot.ts</code>, <code>test/slot.test.ts</code>.</li>\n  <li><code>node --test test/slot.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>, <code>\\bas\\b</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một <code>Slot</code> là free HOẶC booked — chỉ nhánh booked có <code>by</code>. Đọc <code>slot.by</code> mà chưa thu hẹp là TS2339. Thu hẹp theo <code>slot.kind</code> trước.</p><p><strong>Đạt khi:</strong> tsc sạch và cả hai test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/app.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/app.ts</code>, <code>src/slot.ts</code>, <code>test/slot.test.ts</code>.</li>\n  <li><code>node --test test/slot.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>, <code>\\bas\\b</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/app.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/app.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/slot.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ · every \"as\" cast — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ · every \"as\" cast — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import type { Slot } from './slot.ts';\n// A free slot has no `by`. Narrow on `kind` before reading it.\nexport function whoHas(slot: Slot): string {\n  return slot.by;\n}\n"
+        },
+        {
+          "name": "src/slot.ts",
+          "language": "typescript",
+          "code": "export type Slot =\n  | { kind: 'free' }\n  | { kind: 'booked'; by: string };\nexport const free: Slot = { kind: 'free' };\nexport const booked: Slot = { kind: 'booked', by: 'cuong' };\n"
+        },
+        {
+          "name": "test/slot.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { whoHas } from '../src/app.ts';\nimport { free, booked } from '../src/slot.ts';\ntest('free slot has nobody', () => { assert.equal(whoHas(free), 'nobody'); });\ntest('booked slot names the booker', () => { assert.equal(whoHas(booked), 'cuong'); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import type { Slot } from './slot.ts';\nexport function whoHas(slot: Slot): string {\n  return slot.kind === 'booked' ? slot.by : 'nobody';\n}\n"
+        },
+        {
+          "name": "src/slot.ts",
+          "language": "typescript",
+          "code": "export type Slot =\n  | { kind: 'free' }\n  | { kind: 'booked'; by: string };\nexport const free: Slot = { kind: 'free' };\nexport const booked: Slot = { kind: 'booked', by: 'cuong' };\n"
+        },
+        {
+          "name": "test/slot.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { whoHas } from '../src/app.ts';\nimport { free, booked } from '../src/slot.ts';\ntest('free slot has nobody', () => { assert.equal(whoHas(free), 'nobody'); });\ntest('booked slot names the booker', () => { assert.equal(whoHas(booked), 'cuong'); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — casts to the booked shape — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — casts to the booked shape — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/slot.ts": "export type Slot =\n  | { kind: 'free' }\n  | { kind: 'booked'; by: string };\nexport const free: Slot = { kind: 'free' };\nexport const booked: Slot = { kind: 'booked', by: 'cuong' };\n",
+          "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { whoHas } from '../src/app.ts';\nimport { free, booked } from '../src/slot.ts';\ntest('free slot has nobody', () => { assert.equal(whoHas(free), 'nobody'); });\ntest('booked slot names the booker', () => { assert.equal(whoHas(booked), 'cuong'); });\n"
+        },
+        "tepHoc": [
+          "src/app.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/app.ts",
+              "src/slot.ts",
+              "test/slot.test.ts"
+            ],
+            "moTa": "tsc (strict): src/app.ts + src/app.ts, src/slot.ts, test/slot.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/slot.test.ts",
+            "moTa": "node --test test/slot.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+              "\\bas\\b"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "casts to the booked shape — caught by: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)|||casts to the booked shape — máy chấm bắt ở: no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

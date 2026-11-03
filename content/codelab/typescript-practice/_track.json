@@ -482,6 +482,30 @@
       "name": "15.6 Lab 15 — A transpile-ready boundary module",
       "level": "ADVANCED",
       "description": "1 đề: Lab 15 — a transpile-ready boundary module (import type / export type)"
+    },
+    {
+      "slug": "typescript-16-1-illegal-states",
+      "name": "16.1 — Make illegal states unrepresentable",
+      "level": "ADVANCED",
+      "description": "2 đề: Pass a string through the brand · Narrow a discriminated union"
+    },
+    {
+      "slug": "typescript-16-2-any-unknown-never",
+      "name": "16.2 — any, unknown & never",
+      "level": "ADVANCED",
+      "description": "2 đề: Narrow unknown before using it · Make the switch exhaustive with never"
+    },
+    {
+      "slug": "typescript-16-3-organizing-types",
+      "name": "16.3 — Organizing types",
+      "level": "ADVANCED",
+      "description": "2 đề: One type, one definition · Merge interfaces without a conflict"
+    },
+    {
+      "slug": "typescript-16-4-whole-picture",
+      "name": "16.4 — The whole picture",
+      "level": "ADVANCED",
+      "description": "2 đề: Narrow a Result before reading data · Respect readonly — return a new value"
     }
   ]
 }

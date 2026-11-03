@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 16.4 The whole picture & where to go next (deck ts-16-4, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-16-4', 'The whole picture & where to go next', 'Bức tranh toàn cảnh & đi tiếp', [
+  [1, 'The whole picture & where to go next',
+    `<p>Sixteen chapters, one idea: let the compiler hold the invariants so you do not have to. Every habit you learned is a way of moving a class of bugs from run time to compile time — and they compose. One small slice of LabFlow shows them all working together.</p>`,
+    `<p>Mười sáu chương, một ý tưởng: để trình biên dịch giữ các bất biến để bạn không phải giữ. Mọi thói quen bạn học là một cách chuyển một lớp bug từ lúc chạy sang lúc biên dịch — và chúng ghép được. Một lát nhỏ của LabFlow cho thấy tất cả làm việc cùng nhau.</p>`],
+  [2, 'Every habit, in one slice',
+    `<p>A branded <code>LabCode</code> (16.1) that only the validator produces; a <code>readonly</code> <code>Booking</code> (8) that cannot drift; a <code>Result&lt;T&gt;</code> (5, 6) discriminated union so a failure cannot be read as a success. <code>create</code> returns the <code>Result</code>, the caller narrows on <code>ok</code>, and nothing reaches <code>data</code> without first handling <code>error</code> — the whole course in one function.</p>`,
+    `<p>Một <code>LabCode</code> có nhãn (16.1) chỉ validator sinh ra; một <code>Booking</code> <code>readonly</code> (8) không trôi được; một discriminated union <code>Result&lt;T&gt;</code> (5, 6) để một thất bại không đọc được như một thành công. <code>create</code> trả <code>Result</code>, người gọi thu hẹp theo <code>ok</code>, và không gì với tới <code>data</code> mà chưa xử lý <code>error</code> — cả khoá trong một hàm.</p>`],
+  [3, 'The discriminant still does the work',
+    `<p>Read <code>r.data</code> on a <code>Result</code> without narrowing on <code>ok</code> and it is TS2339 — the error branch has no <code>data</code>. This is the same pattern from Chapter 5, Chapter 11’s API envelope, and Chapter 13’s <code>safeParse</code>: one tag, narrowed, that makes “this might have failed” part of the type.</p>`,
+    `<p>Đọc <code>r.data</code> trên một <code>Result</code> mà không thu hẹp theo <code>ok</code> và nó là TS2339 — nhánh error không có <code>data</code>. Đây là cùng mẫu từ Chương 5, envelope API Chương 11, và <code>safeParse</code> Chương 13: một nhãn, được thu hẹp, làm “cái này có thể đã thất bại” thành một phần của kiểu.</p>`],
+  [4, 'Where the boundaries are',
+    `<p>Types are erased at run time, so the invariants only hold if every boundary validates: Zod at the request (13), Prisma at the database (13), branded constructors at the edges (16.1). Inside those boundaries you can trust the types completely; across them you validate. That is the architecture — a trusted core behind validated edges.</p>`,
+    `<p>Kiểu bị xoá lúc chạy, nên các bất biến chỉ giữ nếu mọi biên validate: Zod ở request (13), Prisma ở CSDL (13), constructor có nhãn ở rìa (16.1). Bên trong các biên đó bạn tin kiểu hoàn toàn; qua chúng bạn validate. Đó là kiến trúc — một lõi đáng tin sau các rìa đã validate.</p>`],
+  [5, 'Where to go next',
+    `<p>You have the type system. Next: a validation library in depth (Zod’s refinements, transforms, unions), a typed API end to end (tRPC or an OpenAPI generator), and the ecosystem’s harder corners — <code>satisfies</code>, template-literal routing, const type parameters. The capstone project ties it all into one portfolio piece.</p>`,
+    `<p>Bạn đã có hệ kiểu. Tiếp: một thư viện validate chuyên sâu (refinement, transform, union của Zod), một API có kiểu từ đầu đến cuối (tRPC hay một bộ sinh OpenAPI), và các góc khó của hệ sinh thái — <code>satisfies</code>, routing template-literal, const type parameter. Dự án cuối khoá cột tất cả thành một mảnh hồ sơ.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: a generic <code>dataOr</code> reads <code>r.data</code> without narrowing — TS2339; return <code>r.ok ? r.data : fallback</code> and it runs. Next, the Final Project: assemble LabFlow TS full-stack and score it out of 100 — your capstone and your portfolio piece.</p>`,
+    `<p>Luyện tập: một <code>dataOr</code> generic đọc <code>r.data</code> mà không thu hẹp — TS2339; trả <code>r.ok ? r.data : fallback</code> và nó chạy. Tiếp, Dự án cuối khoá: lắp LabFlow TS full-stack và chấm nó trên thang 100 — capstone và mảnh hồ sơ của bạn.</p>`],
+]);

@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 16.1 Make illegal states unrepresentable (deck ts-16-1, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-16-1', 'Make illegal states unrepresentable', 'Làm trạng thái sai không biểu diễn được', [
+  [1, 'Make illegal states unrepresentable',
+    `<p>The best bug is one the type system will not let you write. Type-driven design shapes your types so a wrong value cannot exist in the first place — a lab code that was never validated, a slot that is both free and booked, a result with data on its error branch. If the illegal state cannot be constructed, you never have to check for it.</p>`,
+    `<p>Lỗi tốt nhất là lỗi hệ kiểu không cho bạn viết. Tư duy type-driven nắn các kiểu để một giá trị sai ngay từ đầu không tồn tại được — một mã lab chưa từng được validate, một slot vừa trống vừa đã đặt, một kết quả có data ở nhánh error của nó. Nếu trạng thái sai không dựng được, bạn không bao giờ phải kiểm nó.</p>`],
+  [2, 'A branded type: not just any string',
+    `<p>A LabFlow lab code is a string — but not <em>every</em> string is a valid lab code. A branded type (<code>string & { __brand }</code>) is a string the compiler tracks apart, so a function that takes a <code>LabCode</code> only accepts one that came from the validator. The validator is the single door in.</p>`,
+    `<p>Một mã lab LabFlow là một string — nhưng không phải <em>mọi</em> string là một mã lab hợp lệ. Một branded type (<code>string & { __brand }</code>) là một string trình biên dịch theo dõi riêng, nên một hàm nhận một <code>LabCode</code> chỉ nhận một cái đến từ validator. Validator là cánh cửa duy nhất vào.</p>`],
+  [3, 'A plain string is refused',
+    `<p>Pass a raw <code>'BE-201'</code> to a function expecting a <code>LabCode</code> and it is TS2345 — a plain string is not a branded one, because it never went through the validator. The brand turns “remember to validate this” from a convention you can forget into a rule the compiler enforces at every call.</p>`,
+    `<p>Truyền một <code>'BE-201'</code> thô cho một hàm chờ một <code>LabCode</code> và nó là TS2345 — một string thường không phải một cái có nhãn, vì nó chưa từng qua validator. Nhãn biến “nhớ validate cái này” từ một quy ước bạn có thể quên thành một luật trình biên dịch ép ở mọi lời gọi.</p>`],
+  [4, 'A discriminated union: one state at a time',
+    `<p>A slot is free <em>or</em> booked-by-someone — never both, never neither. A discriminated union (<code>{ kind: 'free' } | { kind: 'booked'; by }</code>) encodes that: there is no way to build a slot that is free and also has a <code>by</code>. Reading <code>by</code> without narrowing is TS2339 — the free case has no such field.</p>`,
+    `<p>Một slot trống <em>hoặc</em> đã-đặt-bởi-ai — không bao giờ cả hai, không bao giờ cả không. Một discriminated union (<code>{ kind: 'free' } | { kind: 'booked'; by }</code>) mã hoá điều đó: không có cách nào dựng một slot vừa trống vừa có <code>by</code>. Đọc <code>by</code> mà không thu hẹp là TS2339 — trường hợp trống không có trường đó.</p>`],
+  [5, 'At a glance',
+    `<p>Shape types so a wrong value cannot exist: a <b>branded type</b> for a validated string (a plain one is TS2345), a <b>discriminated union</b> so only one state is representable (a wrong field is TS2339). Every chapter has been building toward this — unions (5), generics (6), DTOs (8), Zod at the boundary (13) — all ways to make illegal states unrepresentable.</p>`,
+    `<p>Nắn các kiểu để một giá trị sai không tồn tại được: một <b>branded type</b> cho một string đã validate (một cái thường là TS2345), một <b>discriminated union</b> để chỉ một trạng thái biểu diễn được (một trường sai là TS2339). Mọi chương đã hướng tới điều này — union (5), generic (6), DTO (8), Zod ở biên (13) — đều là cách làm trạng thái sai không biểu diễn được.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: a function is called with a plain <code>'CS-101'</code> where a <code>LabCode</code> is expected — TS2345; pass it through the validator and it runs. Next, 16.2: the three special types — <code>any</code> (unsafe), <code>unknown</code> (safe), <code>never</code> (impossible) — and when each belongs.</p>`,
+    `<p>Luyện tập: một hàm được gọi với một <code>'CS-101'</code> thường nơi chờ một <code>LabCode</code> — TS2345; truyền nó qua validator và nó chạy. Tiếp, 16.2: ba kiểu đặc biệt — <code>any</code> (không an toàn), <code>unknown</code> (an toàn), <code>never</code> (bất khả) — và khi nào mỗi cái thuộc về.</p>`],
+]);

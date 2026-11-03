@@ -8736,5 +8736,351 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-16-1-a",
+    "bai": "typescript-16-1-illegal-states",
+    "tieuDe": "Pass a string through the brand|||Cho chuỗi đi qua lớp brand",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p>A plain <code>string</code> is not a <code>LabCode</code> — <code>buildingCode</code> only takes a validated one, so calling it with a raw string is TS2345. Run the string through <code>toLabCode</code> first.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một <code>string</code> thường không phải <code>LabCode</code> — <code>buildingCode</code> chỉ nhận một mã đã kiểm, nên gọi nó với chuỗi thô là TS2345. Cho chuỗi đi qua <code>toLabCode</code> trước.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "coDinh": {
+      "src/labcode.ts": "export type LabCode = string & { readonly __brand: 'LabCode' };\nconst PATTERN = /^[A-Z]{2}-\\d{3}$/;\nexport function toLabCode(raw: string): LabCode {\n  if (!PATTERN.test(raw)) throw new Error('not a lab code: ' + raw);\n  return raw as LabCode;\n}\nexport function buildingCode(code: LabCode): string {\n  return code.slice(0, 2);\n}\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { buildingOf } from '../src/app.ts';\ntest('building of BE-201 is BE', () => { assert.equal(buildingOf('BE-201'), 'BE'); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import { buildingCode } from './labcode.ts';\n// A plain string is not a LabCode. Pass it through toLabCode first.\nexport function buildingOf(raw: string): string {\n  return buildingCode(raw);\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/labcode.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import { buildingCode, toLabCode } from './labcode.ts';\nexport function buildingOf(raw: string): string {\n  return buildingCode(toLabCode(raw));\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "a cast skips the validator",
+        "tep": {
+          "src/app.ts": "import { buildingCode } from './labcode.ts';\nexport function buildingOf(raw: string): string {\n  return buildingCode(raw as never);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-1-b",
+    "bai": "typescript-16-1-illegal-states",
+    "tieuDe": "Narrow a discriminated union|||Thu hẹp một union phân biệt",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>A <code>Slot</code> is free OR booked — only the booked branch has a <code>by</code>. Reading <code>slot.by</code> without narrowing is TS2339. Narrow on <code>slot.kind</code> first.</p><p><strong>Done when:</strong> tsc clean and both tests pass.</p>|||<p>Một <code>Slot</code> là free HOẶC booked — chỉ nhánh booked có <code>by</code>. Đọc <code>slot.by</code> mà chưa thu hẹp là TS2339. Thu hẹp theo <code>slot.kind</code> trước.</p><p><strong>Đạt khi:</strong> tsc sạch và cả hai test qua.</p>",
+    "coDinh": {
+      "src/slot.ts": "export type Slot =\n  | { kind: 'free' }\n  | { kind: 'booked'; by: string };\nexport const free: Slot = { kind: 'free' };\nexport const booked: Slot = { kind: 'booked', by: 'cuong' };\n",
+      "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { whoHas } from '../src/app.ts';\nimport { free, booked } from '../src/slot.ts';\ntest('free slot has nobody', () => { assert.equal(whoHas(free), 'nobody'); });\ntest('booked slot names the booker', () => { assert.equal(whoHas(booked), 'cuong'); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import type { Slot } from './slot.ts';\n// A free slot has no `by`. Narrow on `kind` before reading it.\nexport function whoHas(slot: Slot): string {\n  return slot.by;\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/slot.ts",
+        "test/slot.test.ts"
+      ],
+      "chay": [
+        "node --test test/slot.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Slot } from './slot.ts';\nexport function whoHas(slot: Slot): string {\n  return slot.kind === 'booked' ? slot.by : 'nobody';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "casts to the booked shape",
+        "tep": {
+          "src/app.ts": "import type { Slot } from './slot.ts';\nexport function whoHas(slot: Slot): string {\n  return (slot as { by: string }).by ?? 'nobody';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-2-a",
+    "bai": "typescript-16-2-any-unknown-never",
+    "tieuDe": "Narrow unknown before using it|||Thu hẹp unknown trước khi dùng",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>parseJson</code> returns <code>unknown</code>, the honest top type — indexing <code>raw[0]</code> straight away is TS18046. Prove it is a string with <code>typeof</code> first.</p><p><strong>Done when:</strong> tsc clean and both tests pass.</p>|||<p><code>parseJson</code> trả <code>unknown</code>, top type trung thực — lấy <code>raw[0]</code> ngay là TS18046. Chứng minh nó là chuỗi bằng <code>typeof</code> trước.</p><p><strong>Đạt khi:</strong> tsc sạch và cả hai test qua.</p>",
+    "coDinh": {
+      "src/parse.ts": "export function parseJson(text: string): unknown {\n  return JSON.parse(text) as unknown;\n}\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { firstChar } from '../src/app.ts';\ntest('first char of a JSON string', () => { assert.equal(firstChar('\"hello\"'), 'h'); });\ntest('non-string JSON gives empty', () => { assert.equal(firstChar('42'), ''); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import { parseJson } from './parse.ts';\n// parseJson returns unknown. Prove it is a string before indexing it.\nexport function firstChar(text: string): string {\n  const raw = parseJson(text);\n  return raw[0];\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/parse.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import { parseJson } from './parse.ts';\nexport function firstChar(text: string): string {\n  const raw = parseJson(text);\n  return typeof raw === 'string' ? raw[0] ?? '' : '';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "casts unknown to string instead of narrowing",
+        "tep": {
+          "src/app.ts": "import { parseJson } from './parse.ts';\nexport function firstChar(text: string): string {\n  const raw = parseJson(text);\n  return (raw as string)[0] ?? '';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-2-b",
+    "bai": "typescript-16-2-any-unknown-never",
+    "tieuDe": "Make the switch exhaustive with never|||Làm switch phủ đủ bằng never",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>'booked'</code> is not handled, so the value reaching <code>assertNever</code> is not <code>never</code> — TS2345. Add the missing <code>case</code> so every event is handled.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p><code>'booked'</code> chưa được xử lý, nên giá trị tới <code>assertNever</code> không phải <code>never</code> — TS2345. Thêm <code>case</code> còn thiếu để mọi sự kiện đều được xử lý.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "coDinh": {
+      "src/event.ts": "export type LabEvent =\n  | { kind: 'opened' }\n  | { kind: 'closed' }\n  | { kind: 'booked' };\nexport function assertNever(x: never): never {\n  throw new Error('unhandled event: ' + JSON.stringify(x));\n}\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label } from '../src/app.ts';\ntest('labels each event', () => {\n  assert.equal(label({ kind: 'opened' }), 'open');\n  assert.equal(label({ kind: 'closed' }), 'shut');\n  assert.equal(label({ kind: 'booked' }), 'taken');\n});\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import { assertNever, type LabEvent } from './event.ts';\n// 'booked' is not handled, so the value reaching assertNever is not `never`.\nexport function label(e: LabEvent): string {\n  switch (e.kind) {\n    case 'opened': return 'open';\n    case 'closed': return 'shut';\n    default: return assertNever(e);\n  }\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/event.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import { assertNever, type LabEvent } from './event.ts';\nexport function label(e: LabEvent): string {\n  switch (e.kind) {\n    case 'opened': return 'open';\n    case 'closed': return 'shut';\n    case 'booked': return 'taken';\n    default: return assertNever(e);\n  }\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "forces the value to never with a cast",
+        "tep": {
+          "src/app.ts": "import { assertNever, type LabEvent } from './event.ts';\nexport function label(e: LabEvent): string {\n  switch (e.kind) {\n    case 'opened': return 'open';\n    case 'closed': return 'shut';\n    default: return assertNever(e as never);\n  }\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-3-a",
+    "bai": "typescript-16-3-organizing-types",
+    "tieuDe": "One type, one definition|||Một type, một định nghĩa",
+    "doKho": "EASY",
+    "phut": 5,
+    "moTa": "<p>A <code>type</code> alias is a single definition — declaring <code>Lab</code> twice is TS2300. Merge the two shapes into one <code>type</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một <code>type</code> alias là một định nghĩa duy nhất — khai <code>Lab</code> hai lần là TS2300. Gộp hai shape thành một <code>type</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "coDinh": {
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/app.ts';\ntest('describe a lab', () => { assert.equal(describe({ code: 'BE-201', seats: 30 }), 'BE-201 (30 seats)'); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "// A single type is one definition. These two collide — merge them into one.\ntype Lab = { code: string };\ntype Lab = { seats: number };\nexport function describe(lab: Lab): string {\n  return lab.code + ' (' + lab.seats + ' seats)';\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "type Lab = { code: string; seats: number };\nexport function describe(lab: Lab): string {\n  return lab.code + ' (' + lab.seats + ' seats)';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "suppresses the duplicate with @ts-ignore",
+        "tep": {
+          "src/app.ts": "type Lab = { code: string };\n// @ts-ignore\ntype Lab = { seats: number };\nexport function describe(lab: Lab): string {\n  return lab.code + ' (' + lab.seats + ' seats)';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-3-b",
+    "bai": "typescript-16-3-organizing-types",
+    "tieuDe": "Merge interfaces without a conflict|||Gộp interface không xung đột",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>Two <code>interface Lab</code> declarations merge — but here <code>code</code> is declared as both <code>string</code> and <code>number</code>, which is TS2717. Keep the merge, but let each declaration add a <em>different</em> member.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Hai khai báo <code>interface Lab</code> được gộp — nhưng ở đây <code>code</code> vừa là <code>string</code> vừa là <code>number</code>, đó là TS2717. Giữ việc gộp, nhưng để mỗi khai báo thêm một thành viên <em>khác nhau</em>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "coDinh": {
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labId } from '../src/app.ts';\ntest('lab id is the code as a string', () => { assert.equal(labId({ code: 'BE-201', seats: 30 }), 'BE-201'); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "// These two interfaces merge — but `code` is declared with two different types.\ninterface Lab { code: string; }\ninterface Lab { code: number; }\nexport function labId(lab: Lab): string {\n  return String(lab.code);\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "interface Lab { code: string; }\ninterface Lab { seats: number; }\nexport function labId(lab: Lab): string {\n  return lab.code;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "makes code `any` to dodge the conflict",
+        "tep": {
+          "src/app.ts": "interface Lab { code: any; }\ninterface Lab { code: number; }\nexport function labId(lab: Lab): string {\n  return String(lab.code);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-4-a",
+    "bai": "typescript-16-4-whole-picture",
+    "tieuDe": "Narrow a Result before reading data|||Thu hẹp Result trước khi đọc data",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>data</code> lives only on the <code>ok</code> branch of <code>Result&lt;T&gt;</code> — reading <code>r.data</code> without narrowing is TS2339. Return <code>r.ok ? r.data : fallback</code>.</p><p><strong>Done when:</strong> tsc clean and both tests pass.</p>|||<p><code>data</code> chỉ nằm ở nhánh <code>ok</code> của <code>Result&lt;T&gt;</code> — đọc <code>r.data</code> mà chưa thu hẹp là TS2339. Trả <code>r.ok ? r.data : fallback</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và cả hai test qua.</p>",
+    "coDinh": {
+      "src/result.ts": "export type Result<T> =\n  | { ok: true; data: T }\n  | { ok: false; error: string };\nexport function ok<T>(data: T): Result<T> { return { ok: true, data }; }\nexport function err<T>(error: string): Result<T> { return { ok: false, error }; }\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { dataOr } from '../src/app.ts';\nimport { ok, err } from '../src/result.ts';\ntest('reads data on success', () => { assert.equal(dataOr(ok(7), 0), 7); });\ntest('falls back on error', () => { assert.equal(dataOr(err<number>('nope'), 0), 0); });\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import type { Result } from './result.ts';\n// `data` exists only on the ok branch. Narrow on `r.ok` first.\nexport function dataOr<T>(r: Result<T>, fallback: T): T {\n  return r.data;\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/result.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Result } from './result.ts';\nexport function dataOr<T>(r: Result<T>, fallback: T): T {\n  return r.ok ? r.data : fallback;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "casts to the ok branch",
+        "tep": {
+          "src/app.ts": "import type { Result } from './result.ts';\nexport function dataOr<T>(r: Result<T>, fallback: T): T {\n  return (r as { data: T }).data ?? fallback;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-16-4-b",
+    "bai": "typescript-16-4-whole-picture",
+    "tieuDe": "Respect readonly — return a new value|||Tôn trọng readonly — trả giá trị mới",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>Every field of <code>Booking</code> is <code>readonly</code>, so assigning <code>b.minutes</code> is TS2540. Return a new <code>Booking</code> with the spread instead of mutating the old one.</p><p><strong>Done when:</strong> tsc clean and the test passes (the original is unchanged).</p>|||<p>Mọi trường của <code>Booking</code> đều <code>readonly</code>, nên gán <code>b.minutes</code> là TS2540. Trả một <code>Booking</code> mới bằng spread thay vì sửa cái cũ.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua (bản gốc không đổi).</p>",
+    "coDinh": {
+      "src/booking.ts": "export type Booking = { readonly id: number; readonly lab: string; readonly minutes: number };\nexport const sample: Booking = { id: 1, lab: 'BE-201', minutes: 60 };\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { extend } from '../src/app.ts';\nimport { sample } from '../src/booking.ts';\ntest('extend returns a new booking with more minutes', () => {\n  const longer = extend(sample, 30);\n  assert.equal(longer.minutes, 90);\n  assert.equal(sample.minutes, 60);\n});\n"
+    },
+    "khoiDau": {
+      "src/app.ts": "import type { Booking } from './booking.ts';\n// `minutes` is readonly. Return a new Booking instead of mutating it.\nexport function extend(b: Booking, add: number): Booking {\n  b.minutes = b.minutes + add;\n  return b;\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/booking.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Booking } from './booking.ts';\nexport function extend(b: Booking, add: number): Booking {\n  return { ...b, minutes: b.minutes + add };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "casts away readonly to mutate",
+        "tep": {
+          "src/app.ts": "import type { Booking } from './booking.ts';\nexport function extend(b: Booking, add: number): Booking {\n  (b as { minutes: number }).minutes = b.minutes + add;\n  return b;\n}\n"
+        }
+      }
+    ]
   }
 ]

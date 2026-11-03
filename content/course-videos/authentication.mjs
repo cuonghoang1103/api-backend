@@ -77,6 +77,7 @@ export default {
     'auth-6-3-dat-lai-mat-khau': { yt: 'jtBg55vN2l0', credit: 'JB WEBDEVELOPER — EP 10 Building Forgot Password, Verify Token, and Reset Password Endpoints - Node.js API Development' },  // EP 10 Building Forgot Password, Verify Token, and Reset Password Endpoints
     'auth-6-4-do-tai-khoan': { yt: 'YXjORp170Lg', credit: 'Code With Yousaf — Forgot Password and Reset Password in MERN Stack | MERN Stack Authentication Tutorial' },      // Forgot Password and Reset Password in MERN Stack | MERN Stack Authentication Tutorial
     'auth-6-5-doi-email-va-xoa': { yt: 'kfw61IxDgW8', credit: 'Awais Mirza — Forget Password and Reset Password in Node and Express' },  // Forget Password and Reset Password in Node and Express
+    'auth-6-7-lab-vong-doi': { yt: '72h76ufOXeE', credit: '' },  // 04/11/2026: Lab 6 (dựng lớp vòng đời: xác minh + đặt lại mật khẩu + gửi email) — dùng tạm video tổng quan lifecycle của 6.1 tới khi có bản ghi riêng; CHẠY verify-youtube-videos --fix-credits để điền credit + có thể đổi id riêng cho Lab
 
     /* ── Chương 7 — Yếu tố thứ hai, và passkey ── */
     'auth-7-1-yeu-to-thu-hai': { yt: 'whSBD8YbVlc', credit: 'Cooptonian — Authentik - Implementing 2FA/MFA (TOTP & Duo Push)' },          // Authentik - Implementing 2FA/MFA (TOTP & Duo Push)

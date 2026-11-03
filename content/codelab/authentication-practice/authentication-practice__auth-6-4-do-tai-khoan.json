@@ -1,0 +1,476 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-6-4-do-tai-khoan",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-6-4-do-tai-khoan"
+  },
+  "exercises": [
+    {
+      "title": "6.4-1 — Enumeration by timing: read the measurement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.6 (real measurement):<pre>1a) /forgot-password-naive — same WORDING, but it AWAITS the token insert + email send (the teaching foil):\n   real account : median 1.98 ms\n   fake account : median 1.07 ms\n   LEAK         : the real account is 0.92 ms slower — an attacker enumerates by TIMING, not wording\n\n1b) /forgot-password — same response AND the insert + mail are NOT awaited (the fix):\n   real account : median 1.13 ms\n   fake account : median 1.07 ms\n   difference   : 0.06 ms — within noise; the slow work is off the response path\n\n2) /sign-up — the password is hashed in BOTH branches (taken and free), so argon2 dominates both:\n   email taken  : median 194.6 ms\n   email free   : median 199.1 ms\n   ratio        : 1.02x  (argon2 ~86 ms in both — the leak is closed by doing the same work)</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (đo thật):<pre>1a) /forgot-password-naive — same WORDING, but it AWAITS the token insert + email send (the teaching foil):\n   real account : median 1.98 ms\n   fake account : median 1.07 ms\n   LEAK         : the real account is 0.92 ms slower — an attacker enumerates by TIMING, not wording\n\n1b) /forgot-password — same response AND the insert + mail are NOT awaited (the fix):\n   real account : median 1.13 ms\n   fake account : median 1.07 ms\n   difference   : 0.06 ms — within noise; the slow work is off the response path\n\n2) /sign-up — the password is hashed in BOTH branches (taken and free), so argon2 dominates both:\n   email taken  : median 194.6 ms\n   email free   : median 199.1 ms\n   ratio        : 1.02x  (argon2 ~86 ms in both — the leak is closed by doing the same work)</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A uniform message does not mean a uniform clock.|||Một thông điệp đồng nhất không nghĩa là một đồng hồ đồng nhất.",
+        "Same work ⇒ same time.|||Cùng công việc ⇒ cùng thời gian."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-1 — Enumeration by timing: read the measurement\n\nAnswer in the answer panel (no code needed).\n\n1. The naive /forgot-password has an identical message, yet a real account replies ~0.9 ms slower. Why?Bản /forgot-password ngây thơ có thông điệp y hệt, vậy mà một tài khoản thật trả lời chậm hơn ~0,9 ms. Vì sao?\n2. The fixed /forgot-password brings the difference into the noise. How?Bản /forgot-password đã vá đưa chênh lệch vào nhiễu. Bằng cách nào?\n3. /sign-up shows a taken vs free ratio of ~1x. Why, when only one branch creates a row?/sign-up cho tỉ lệ đã-dùng đối trống ~1x. Vì sao, khi chỉ một nhánh tạo một dòng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-1 — Enumeration by timing: read the measurement — answer key\n\n1. The naive /forgot-password has an identical message, yet a real account replies ~0.9 ms slower. Why?Bản /forgot-password ngây thơ có thông điệp y hệt, vậy mà một tài khoản thật trả lời chậm hơn ~0,9 ms. Vì sao?\n   Answer: c) It AWAITS the token insert + email for a real account — work a fake one skips\n   Account-specific work awaited before replying leaks timing even with a uniform message — a timing oracle (6.4).VI: Việc riêng-tài-khoản được await trước khi trả lời rò thời gian kể cả với một thông điệp đồng nhất — một nhà tiên tri thời gian (6.4).\n\n2. The fixed /forgot-password brings the difference into the noise. How?Bản /forgot-password đã vá đưa chênh lệch vào nhiễu. Bằng cách nào?\n   Answer: d) It fires the insert + email off the response path (not awaited)\n   Moving the insert + send off the response path leaves both branches doing only the lookup, so the time matches (6.4).VI: Chuyển chèn + gửi ra ngoài đường phản hồi để cả hai nhánh chỉ làm phép tra, nên thời gian khớp (6.4).\n\n3. /sign-up shows a taken vs free ratio of ~1x. Why, when only one branch creates a row?/sign-up cho tỉ lệ đã-dùng đối trống ~1x. Vì sao, khi chỉ một nhánh tạo một dòng?\n   Answer: a) argon2 runs in BOTH branches, so it dominates both\n   Hashing in both branches makes argon2 (~190 ms) the cost of both, so creating a row is a rounding error — the constant-work fix (6.1, 6.4).VI: Băm ở cả hai nhánh khiến argon2 (~190 ms) là chi phí của cả hai, nên tạo một dòng là sai số làm tròn — cách vá công việc hằng định (6.1, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> It AWAITS the token insert + email for a real account — work a fake one skips</p><p>Account-specific work awaited before replying leaks timing even with a uniform message — a timing oracle (6.4).</p><p><i>VI: Việc riêng-tài-khoản được await trước khi trả lời rò thời gian kể cả với một thông điệp đồng nhất — một nhà tiên tri thời gian (6.4).</i></p></li><li><p><b>d)</b> It fires the insert + email off the response path (not awaited)</p><p>Moving the insert + send off the response path leaves both branches doing only the lookup, so the time matches (6.4).</p><p><i>VI: Chuyển chèn + gửi ra ngoài đường phản hồi để cả hai nhánh chỉ làm phép tra, nên thời gian khớp (6.4).</i></p></li><li><p><b>a)</b> argon2 runs in BOTH branches, so it dominates both</p><p>Hashing in both branches makes argon2 (~190 ms) the cost of both, so creating a row is a rounding error — the constant-work fix (6.1, 6.4).</p><p><i>VI: Băm ở cả hai nhánh khiến argon2 (~190 ms) là chi phí của cả hai, nên tạo một dòng là sai số làm tròn — cách vá công việc hằng định (6.1, 6.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The naive /forgot-password has an identical message, yet a real account replies ~0.9 ms slower. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản /forgot-password ngây thơ có thông điệp y hệt, vậy mà một tài khoản thật trả lời chậm hơn ~0,9 ms. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The email provider rate-limits the real address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Random network jitter, nothing more"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It AWAITS the token insert + email for a real account — work a fake one skips"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The real account is on a slower disk"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Account-specific work awaited before replying leaks timing even with a uniform message — a timing oracle (6.4).</p><p><i>VI: Việc riêng-tài-khoản được await trước khi trả lời rò thời gian kể cả với một thông điệp đồng nhất — một nhà tiên tri thời gian (6.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The fixed /forgot-password brings the difference into the noise. How?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản /forgot-password đã vá đưa chênh lệch vào nhiễu. Bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It adds a random sleep to every request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It stops sending the email entirely"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It caches the response for both addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It fires the insert + email off the response path (not awaited)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Moving the insert + send off the response path leaves both branches doing only the lookup, so the time matches (6.4).</p><p><i>VI: Chuyển chèn + gửi ra ngoài đường phản hồi để cả hai nhánh chỉ làm phép tra, nên thời gian khớp (6.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>/sign-up shows a taken vs free ratio of ~1x. Why, when only one branch creates a row?</p><p style=\"opacity:.75;font-size:.92em\"><i>/sign-up cho tỉ lệ đã-dùng đối trống ~1x. Vì sao, khi chỉ một nhánh tạo một dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "argon2 runs in BOTH branches, so it dominates both"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The free email is rejected before any hashing runs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Node caches the response for a repeated sign-up email"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database insert is the single slowest step here"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Hashing in both branches makes argon2 (~190 ms) the cost of both, so creating a row is a rounding error — the constant-work fix (6.1, 6.4).</p><p><i>VI: Băm ở cả hai nhánh khiến argon2 (~190 ms) là chi phí của cả hai, nên tạo một dòng là sai số làm tròn — cách vá công việc hằng định (6.1, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a fixed message closes enumeration.|||Tưởng một thông điệp cố định đóng dò tài khoản."
+        },
+        {
+          "loi": "Thinking 0.9 ms is unexploitable.|||Tưởng 0,9 ms không khai thác được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "timing oracle",
+          "vi": "nhà tiên tri thời gian"
+        },
+        {
+          "en": "off the response path",
+          "vi": "ngoài đường phản hồi"
+        }
+      ]
+    },
+    {
+      "title": "6.4-2 — Write leaks(realMs, fakeMs): is the timing a leak?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Given the median reply time for a real account and a fake one, return <code>true</code> if the gap is a readable timing leak. Treat a difference of <b>0.3 ms or more</b> as readable (an attacker averages the jitter out over many requests); below that, treat it as noise.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho thời gian trả lời trung vị của một tài khoản thật và một cái giả, trả <code>true</code> nếu khoảng cách là một cú rò thời gian đọc được. Coi một chênh lệch <b>0,3 ms trở lên</b> là đọc được (kẻ tấn công lấy trung bình bỏ nhiễu qua nhiều request); dưới đó, coi là nhiễu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "leaks(2, 1.1)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use the absolute difference.|||Dùng chênh lệch tuyệt đối.",
+        "Consistency, not magnitude, makes it readable.|||Tính nhất quán, không phải độ lớn, khiến nó đọc được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if the timing gap is a readable leak (≥ 0.3 ms) */\nfunction leaks(realMs, fakeMs) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction leaks(realMs, fakeMs) {\n  // A consistent, measurable gap is a leak. We treat ≥ 0.3 ms as readable over many requests.\n  return Math.abs(realMs - fakeMs) >= 0.3;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The naive endpoint leaks ~0.9 ms (≥ 0.3), the fix ~0.01 ms (noise). A small but consistent gap is exploitable by averaging (6.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Tuyến ngây thơ rò ~0,9 ms (≥ 0,3), bản vá ~0,01 ms (nhiễu). Một khoảng cách nhỏ nhưng nhất quán khai thác được bằng lấy trung bình (6.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Naive: ~0.9 ms gap",
+              "vi": "Ngây thơ: khoảng ~0,9 ms"
+            },
+            "goi": "leaks(2, 1.1)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Fixed: within noise",
+              "vi": "Đã vá: trong nhiễu"
+            },
+            "goi": "leaks(0.95, 0.94)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Sign-up: both argon2",
+              "vi": "Đăng ký: cả hai argon2"
+            },
+            "goi": "leaks(189.3, 194.6)",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only flagging large gaps (e.g. ≥ 50 ms).|||Chỉ báo khoảng cách lớn (vd ≥ 50 ms)."
+        },
+        {
+          "loi": "Forgetting Math.abs for either ordering.|||Quên Math.abs cho cả hai chiều."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "median over N requests",
+          "vi": "trung vị qua N request"
+        }
+      ]
+    },
+    {
+      "title": "6.4-3 — Order the channels you must silence",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Enumeration leaks through four channels. Order them as you would audit: from the one everyone checks to the one everyone forgets.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dò tài khoản rò qua bốn kênh. Xếp chúng như khi bạn soát: từ cái ai cũng kiểm tới cái ai cũng quên.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The clock is last because it is the one wording cannot fix.|||Cái đồng hồ cuối vì nó là cái câu chữ không sửa được.",
+        "Message and status are the two everyone checks first.|||Thông điệp và mã trạng thái là hai cái ai cũng kiểm trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-3 — Order the channels you must silence\n\nAnswer in the answer panel (no code needed).\n\n1. Most-checked → most-forgottenHay-kiểm → hay-quên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-3 — Order the channels you must silence — answer key\n\n1. Most-checked → most-forgottenHay-kiểm → hay-quên\n   Answer: m2) The message (\"no such user\" vs \"check your inbox\")  →  m1) The status code (404 vs 401)  →  m4) Side effects (a real account gets an email)  →  m3) The time (a real account does work a fake one skips)\n   Teams fix the message, then the status; side effects are subtler; the clock is the one almost nobody measures (6.4).VI: Các đội sửa thông điệp, rồi mã trạng thái; tác dụng phụ tinh vi hơn; cái đồng hồ là cái gần như không ai đo (6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Teams fix the message, then the status; side effects are subtler; the clock is the one almost nobody measures (6.4).</p><p><i>VI: Các đội sửa thông điệp, rồi mã trạng thái; tác dụng phụ tinh vi hơn; cái đồng hồ là cái gần như không ai đo (6.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Most-checked → most-forgotten</p><p style=\"opacity:.75;font-size:.92em\"><i>Hay-kiểm → hay-quên</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The status code (404 vs 401)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The message (\"no such user\" vs \"check your inbox\")"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The time (a real account does work a fake one skips)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Side effects (a real account gets an email)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Teams fix the message, then the status; side effects are subtler; the clock is the one almost nobody measures (6.4).</p><p><i>VI: Các đội sửa thông điệp, rồi mã trạng thái; tác dụng phụ tinh vi hơn; cái đồng hồ là cái gần như không ai đo (6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting timing first.|||Đặt thời gian đầu tiên."
+        },
+        {
+          "loi": "Thinking side effects are checked before the message.|||Tưởng tác dụng phụ được kiểm trước thông điệp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side-channel",
+          "vi": "kênh bên"
+        }
+      ]
+    },
+    {
+      "title": "6.4-4 — Channel → how to close it",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each enumeration channel with how you close it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi kênh dò tài khoản với cách bạn đóng nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two channels are \"make them identical\"; the clock has two fixes.|||Hai kênh là \"làm y hệt\"; cái đồng hồ có hai cách vá.",
+        "A side effect is an email only a real account sees.|||Một tác dụng phụ là một email chỉ tài khoản thật thấy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-4 — Channel → how to close it\n\nAnswer in the answer panel (no code needed).\n\n1. Channel → fixKênh → cách vá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.4-4 — Channel → how to close it — answer key\n\n1. Channel → fixKênh → cách vá\n   - r1.q: one generic response\n   - r2.q: same status for both\n   - r3.q: same work, or off the response path\n   - r4.q: send nothing a non-account sees\n   Message and status: make them uniform. Time: same work or move it off the path. Side effects: never send a \"no account\" mail (6.4).VI: Thông điệp và mã: làm đồng nhất. Thời gian: cùng công việc hoặc chuyển ra ngoài đường. Tác dụng phụ: không bao giờ gửi thư \"không có tài khoản\" (6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Message and status: make them uniform. Time: same work or move it off the path. Side effects: never send a \"no account\" mail (6.4).</p><p><i>VI: Thông điệp và mã: làm đồng nhất. Thời gian: cùng công việc hoặc chuyển ra ngoài đường. Tác dụng phụ: không bao giờ gửi thư \"không có tài khoản\" (6.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Channel → fix</p><p style=\"opacity:.75;font-size:.92em\"><i>Kênh → cách vá</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Channel"
+              },
+              {
+                "ma": "q",
+                "ten": "Close it by",
+                "luaChon": [
+                  "one generic response",
+                  "same status for both",
+                  "same work, or off the response path",
+                  "send nothing a non-account sees"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "the message"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "the status code"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "the time"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "side effects"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "one generic response",
+              "r2.q": "same status for both",
+              "r3.q": "same work, or off the response path",
+              "r4.q": "send nothing a non-account sees"
+            },
+            "giaiThich": "<p>Message and status: make them uniform. Time: same work or move it off the path. Side effects: never send a \"no account\" mail (6.4).</p><p><i>VI: Thông điệp và mã: làm đồng nhất. Thời gian: cùng công việc hoặc chuyển ra ngoài đường. Tác dụng phụ: không bao giờ gửi thư \"không có tài khoản\" (6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a generic message also fixes timing.|||Tưởng một thông điệp chung cũng vá thời gian."
+        },
+        {
+          "loi": "Sending a \"no account\" email to a stranger.|||Gửi một thư \"không có tài khoản\" cho người lạ."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

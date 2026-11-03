@@ -4,10 +4,11 @@
 //   hole 4 — sessions end: idle 30 min, absolute 12 h, sign-out, sign-out-everywhere (lesson 3.1);
 //   hole 5 — the session travels in a __Host- cookie JavaScript cannot read, never in a JSON body (3.2); CSRF checked (3.4).
 // Chapter 4: LabFlow ID issues short-lived JWT access tokens (EdDSA, kid, 7 claims) and a public JWKS (lesson 4.x).
-// New in Chapter 5: a long-lived REFRESH token, in a family, in a __Host- cookie. /refresh rotates it and mints a fresh
-//   access token; a reused (already-rotated) refresh token means theft and revokes the whole family (lesson 5.2); a
-//   devices page lists and revokes families (5.4); a password change revokes every family (5.3).
-// Still open: the sign-up half of hole 2 (Chapter 6) and hole 6, unlimited guessing (Chapter 10). Never deploy this file.
+// Chapter 5: a long-lived REFRESH token, in a family, in a __Host- cookie; rotation + reuse detection + a devices page.
+// New in Chapter 6 (closes the sign-up half of hole 2): the account lifecycle. A new account is UNVERIFIED until it proves
+//   its email (one-time token, 30 min); password reset uses a one-time token (15 min) and revokes every session + family;
+//   /forgot-password and /sign-up never reveal whether an email exists (same response, same work — lesson 6.4); changing
+//   the email un-verifies it; deleting the account revokes everything. Still open: hole 6, unlimited guessing (Chapter 10).
 import express from 'express';
 import { users } from './users.js';
 import { hashPassword, verifyPassword, checkNewPassword, loadBlocklist, pwnedCount, signIn } from './passwords/index.js';
@@ -15,12 +16,15 @@ import { sessionLayer, pgStore } from './sessions/index.js';
 import { accessTokens, eddsa, newEd25519, ACCESS_TTL_SEC } from './jwt/index.js';
 import { publicJwks } from './jwt/jwks.js';
 import { refreshLayer, pgStore as refreshStore } from './refresh/index.js';
+import { lifecycle, pgStore as lifecycleStore } from './lifecycle/index.js';
+import { sendEmail } from './email/index.js';
 import { tokenDigest } from './crypto/index.js';
 import { log, requestLog } from './log.js';
 
 const BLOCKLIST = loadBlocklist();
 const sessions = sessionLayer({ store: pgStore, touchEveryMs: Number(process.env.TOUCH_EVERY_MS ?? 60e3) });
 const refresh = refreshLayer({ store: refreshStore, graceMs: Number(process.env.REFRESH_GRACE_MS ?? 10e3) });
+const life = lifecycle({ store: lifecycleStore });
 
 const ACTIVE_KID = process.env.JWT_KID ?? 'ed-2026-11';
 const keyring = { [ACTIVE_KID]: eddsa(newEd25519()) };
@@ -46,6 +50,8 @@ app.use(sessions.csrf);   // POST/PUT/PATCH/DELETE must come from our own origin
 const needSession = (req, res, next) => (req.session ? next() : res.status(401).json({ error: 'Not signed in' }));
 const accessFor = (u) => tokens.issue(u.id, { role: u.role });
 
+// lesson 6.1, 6.4: register. On a duplicate email we do NOT say "taken" — we hash anyway (same timing) and send a
+// "you already have an account" email instead, so sign-up cannot be used to enumerate accounts. The account is unverified.
 app.post('/sign-up', async (req, res) => {
   const { email, password, name } = req.body ?? {};
   const problems = checkNewPassword(password, { email, blocklist: BLOCKLIST });
@@ -55,8 +61,60 @@ app.post('/sign-up', async (req, res) => {
     if (seen === null) log.warn('pwned-passwords check unavailable; accepted without it');
   }
   if (problems.length) return res.status(422).json({ error: 'WEAK_PASSWORD', problems });
-  const user = await users.create({ email, name, passwordHash: await hashPassword(password) });
-  res.status(201).json({ id: user.id });
+  const normEmail = String(email ?? '').trim().toLowerCase();
+  const passwordHash = await hashPassword(password);   // hash in BOTH branches, so timing never reveals whether the email is taken
+  const existing = await users.findByEmail(normEmail);
+  if (existing) {
+    sendEmail({ to: normEmail, subject: 'You already have a LabFlow account',
+      text: 'Someone tried to register with this address. If it was you, sign in or reset your password — there is nothing else to do.' });
+  } else {
+    const user = await users.create({ email: normEmail, name: name ?? '', passwordHash });
+    const { token } = await life.issueToken(user.id, 'verify_email');
+    sendEmail({ to: normEmail, subject: 'Verify your LabFlow email',
+      text: `Welcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=${token}` });
+  }
+  res.status(202).json({ ok: true, message: 'Check your email to finish signing up.' });   // same response either way
+});
+
+// lesson 6.2: email verification. GET is SAFE — it only shows a confirm page, because scanners and prefetchers GET
+// links and must not burn the one-time token. POST consumes it.
+app.get('/verify-email', (req, res) => {
+  const token = String(req.query.token ?? '');
+  res.type('html').send(`<!doctype html><title>Confirm your email</title>
+    <form method="POST" action="/verify-email"><input type="hidden" name="token" value="${token.replace(/[^A-Za-z0-9_-]/g, '')}">
+    <button>Confirm my email</button></form>`);   // GET consumes nothing; only this click (a POST) does
+});
+app.post('/verify-email', async (req, res) => {
+  const r = await life.consumeToken('verify_email', req.body?.token);
+  if (r.error) return res.status(400).json({ error: r.error });
+  await users.markEmailVerified(r.userId);
+  res.json({ ok: true, verified: true });
+});
+
+// lesson 6.3, 6.4: ask for a password reset. Same response AND same timing (the insert + email are not awaited).
+app.post('/forgot-password', async (req, res) => {
+  await life.requestPasswordReset(users, req.body?.email, { send: sendEmail });
+  res.json({ ok: true, message: 'If an account exists for that address, a reset link is on its way.' });
+});
+// lesson 6.4 TEACHING FOIL (never ship): the same endpoint, but it AWAITS the token insert + email send — so a real
+// account is measurably slower than a fake one, and the identical wording above no longer hides which emails exist.
+app.post('/forgot-password-naive', async (req, res) => {
+  await life.requestPasswordReset(users, req.body?.email, { send: sendEmail, sync: true });
+  res.json({ ok: true, message: 'If an account exists for that address, a reset link is on its way.' });
+});
+
+// lesson 6.3: consume a reset token, set the new password, and end every session and refresh family (5.3).
+app.post('/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body ?? {};
+  const r = await life.consumeToken('reset_password', token);
+  if (r.error) return res.status(400).json({ error: r.error });
+  const u = await users.findById(r.userId);
+  const problems = checkNewPassword(newPassword, { email: u.email, blocklist: BLOCKLIST });
+  if (problems.length) return res.status(422).json({ error: 'WEAK_PASSWORD', problems });
+  await users.updateHash(u.id, await hashPassword(newPassword));
+  await sessions.endAll(u.id);
+  await refresh.revokeAll(u.id);
+  res.json({ ok: true, message: 'Password reset. Sign in with your new password.' });
 });
 
 app.post('/sign-in', async (req, res) => {
@@ -112,11 +170,27 @@ app.get('/.well-known/jwks.json', async (req, res) => {
   res.json(await publicJwks(keyring));
 });
 
+// lesson 6.5: change the email. The new address starts UN-verified (users.updateEmail clears it) and must be proven.
 app.post('/me/email', needSession, async (req, res) => {
   const email = String(req.body?.email ?? '').trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+$/.test(email)) return res.status(422).json({ error: 'BAD_EMAIL' });
   await users.updateEmail(req.session.userId, email);
-  res.json({ ok: true, email });
+  const { token } = await life.issueToken(req.session.userId, 'verify_email');
+  sendEmail({ to: email, subject: 'Verify your new LabFlow email',
+    text: `Confirm your new address within 30 minutes: https://id.labflow.example/verify?token=${token}` });
+  res.json({ ok: true, email, verificationSent: true });
+});
+
+// lesson 6.5: end the account. Re-authenticate, mark it deleted, and revoke every session and refresh family.
+app.post('/me/delete', needSession, async (req, res) => {
+  const u = await users.findById(req.session.userId);
+  if (!(await verifyPassword(u.passwordHash, String(req.body?.password ?? ''))).ok) return res.status(403).json({ error: 'REAUTH_FAILED' });
+  await users.setStatus(u.id, 'deleted');
+  await sessions.endAll(u.id);
+  await refresh.revokeAll(u.id);
+  await sessions.end(req, res);
+  clearRefreshCookie(res);
+  res.json({ ok: true, deleted: true });
 });
 
 // lesson 3.3 + 5.3: change the password, end every session AND revoke every refresh family, start fresh.
@@ -152,4 +226,4 @@ app.post('/sign-out-everywhere', needSession, async (req, res) => {
 app.use((err, req, res, next) => res.status(err.status ?? 500).json({ error: err.type ?? 'INTERNAL' }));
 
 const port = Number(process.env.PORT ?? 4800);
-app.listen(port, () => log.info(`LabFlow ID v0.5 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));
+app.listen(port, () => log.info(`LabFlow ID v0.6 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));

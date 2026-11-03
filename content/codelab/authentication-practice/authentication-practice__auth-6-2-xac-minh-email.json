@@ -1,0 +1,480 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-6-2-xac-minh-email",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-6-2-xac-minh-email"
+  },
+  "exercises": [
+    {
+      "title": "6.2-1 — The scanner that clicks first",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ # a mail scanner PREFETCHES the link (GET) — it is safe and consumes nothing:\n&lt;!doctype html&gt;&lt;title&gt;Confirm your email&lt;/title&gt;    &lt;form method=\"POST\" action=\"/verify-email\"&gt;&lt;input type=\"hidden\" name=\"token\" value=\"lfid_verify_…\"&gt;    &lt;button&gt;Confirm my email&lt;/button&gt;&lt;/form&gt;\n\n$ # the real user clicks (POST) — now the token is consumed:\n{\"ok\":true,\"verified\":true}\n\n$ # sign up again with an email that already exists — same 202, no \"taken\" leak:\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n$ # and the mailbox shows a \"you already have an account\" note instead of a verify link:\nSubject: You already have a LabFlow account</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ # a mail scanner PREFETCHES the link (GET) — it is safe and consumes nothing:\n&lt;!doctype html&gt;&lt;title&gt;Confirm your email&lt;/title&gt;    &lt;form method=\"POST\" action=\"/verify-email\"&gt;&lt;input type=\"hidden\" name=\"token\" value=\"lfid_verify_…\"&gt;    &lt;button&gt;Confirm my email&lt;/button&gt;&lt;/form&gt;\n\n$ # the real user clicks (POST) — now the token is consumed:\n{\"ok\":true,\"verified\":true}\n\n$ # sign up again with an email that already exists — same 202, no \"taken\" leak:\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n$ # and the mailbox shows a \"you already have an account\" note instead of a verify link:\nSubject: You already have a LabFlow account</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who clicks the link first, the human or a machine?|||Ai bấm link trước, con người hay một cái máy?",
+        "One consume, then dead.|||Một lần tiêu, rồi chết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.2-1 — The scanner that clicks first\n\nAnswer in the answer panel (no code needed).\n\n1. The GET /verify-email returns a form and the token is still unused. Why?GET /verify-email trả một form và token vẫn chưa dùng. Vì sao?\n2. The second POST of the same token returns USED. What property is that?POST thứ hai của cùng token trả USED. Đó là tính chất gì?\n3. Why store the SHA-256 digest of the token, not the token itself?Vì sao lưu digest SHA-256 của token, không lưu chính token?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.2-1 — The scanner that clicks first — answer key\n\n1. The GET /verify-email returns a form and the token is still unused. Why?GET /verify-email trả một form và token vẫn chưa dùng. Vì sao?\n   Answer: b) GET is safe — it only shows a confirm page; only the POST consumes\n   A mail gateway GETs every link; a GET that consumes would burn the one-time token before the human clicks. GET shows, POST consumes (6.2).VI: Một cổng thư GET mọi link; một GET tiêu sẽ đốt token một lần trước khi con người bấm. GET hiện, POST tiêu (6.2).\n\n2. The second POST of the same token returns USED. What property is that?POST thứ hai của cùng token trả USED. Đó là tính chất gì?\n   Answer: d) Single-use — a one-time token dies on first consume\n   consumeToken marks the row used on first consume, so a replay returns USED — the single-use property (6.2).VI: consumeToken đánh dấu dòng đã dùng ở lần tiêu đầu, nên một lần phát lại trả USED — tính dùng-một-lần (6.2).\n\n3. Why store the SHA-256 digest of the token, not the token itself?Vì sao lưu digest SHA-256 của token, không lưu chính token?\n   Answer: c) The row is a credential — a DB dump must not be a list of working links\n   Like a session id (1.3), the row is a credential; storing the digest means a leaked table is hashes, not working links. SHA-256 because the input is already high-entropy (6.2).VI: Như một session id (1.3), dòng này là tín vật; lưu digest nghĩa là một bảng bị lộ là các băm, không phải link chạy được. SHA-256 vì đầu vào đã entropy cao (6.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> GET is safe — it only shows a confirm page; only the POST consumes</p><p>A mail gateway GETs every link; a GET that consumes would burn the one-time token before the human clicks. GET shows, POST consumes (6.2).</p><p><i>VI: Một cổng thư GET mọi link; một GET tiêu sẽ đốt token một lần trước khi con người bấm. GET hiện, POST tiêu (6.2).</i></p></li><li><p><b>d)</b> Single-use — a one-time token dies on first consume</p><p>consumeToken marks the row used on first consume, so a replay returns USED — the single-use property (6.2).</p><p><i>VI: consumeToken đánh dấu dòng đã dùng ở lần tiêu đầu, nên một lần phát lại trả USED — tính dùng-một-lần (6.2).</i></p></li><li><p><b>c)</b> The row is a credential — a DB dump must not be a list of working links</p><p>Like a session id (1.3), the row is a credential; storing the digest means a leaked table is hashes, not working links. SHA-256 because the input is already high-entropy (6.2).</p><p><i>VI: Như một session id (1.3), dòng này là tín vật; lưu digest nghĩa là một bảng bị lộ là các băm, không phải link chạy được. SHA-256 vì đầu vào đã entropy cao (6.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The GET /verify-email returns a form and the token is still unused. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /verify-email trả một form và token vẫn chưa dùng. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "GET consumed it but the server restored it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "GET is safe — it only shows a confirm page; only the POST consumes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The token was already expired"
+              },
+              {
+                "ma": "d",
+                "noiDung": "GET verified it silently without saying so"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A mail gateway GETs every link; a GET that consumes would burn the one-time token before the human clicks. GET shows, POST consumes (6.2).</p><p><i>VI: Một cổng thư GET mọi link; một GET tiêu sẽ đốt token một lần trước khi con người bấm. GET hiện, POST tiêu (6.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The second POST of the same token returns USED. What property is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>POST thứ hai của cùng token trả USED. Đó là tính chất gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Purpose binding rejected the second one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rate limiting on the verify endpoint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The token expired between the two POSTs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Single-use — a one-time token dies on first consume"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>consumeToken marks the row used on first consume, so a replay returns USED — the single-use property (6.2).</p><p><i>VI: consumeToken đánh dấu dòng đã dùng ở lần tiêu đầu, nên một lần phát lại trả USED — tính dùng-một-lần (6.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why store the SHA-256 digest of the token, not the token itself?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao lưu digest SHA-256 của token, không lưu chính token?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SHA-256 is faster to index than the raw token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To fit the token in a fixed-width column"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The row is a credential — a DB dump must not be a list of working links"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the token is too long to store"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Like a session id (1.3), the row is a credential; storing the digest means a leaked table is hashes, not working links. SHA-256 because the input is already high-entropy (6.2).</p><p><i>VI: Như một session id (1.3), dòng này là tín vật; lưu digest nghĩa là một bảng bị lộ là các băm, không phải link chạy được. SHA-256 vì đầu vào đã entropy cao (6.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a GET link is fine to consume.|||Tưởng một đường dẫn GET tiêu được là ổn."
+        },
+        {
+          "loi": "Thinking Argon2 is needed for a random token.|||Tưởng cần Argon2 cho một token ngẫu nhiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one-time token",
+          "vi": "token một lần"
+        },
+        {
+          "en": "safe method",
+          "vi": "phương thức an toàn"
+        }
+      ]
+    },
+    {
+      "title": "6.2-2 — Write verifyConsumes(method): which request burns the token",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if an HTTP method should consume the one-time verification token, else <code>false</code>. Only <code>'POST'</code> consumes; <code>'GET'</code> (and <code>'HEAD'</code>, which a scanner also sends) must be safe and change nothing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu một phương thức HTTP nên tiêu token xác minh một lần, còn không thì <code>false</code>. Chỉ <code>'POST'</code> tiêu; <code>'GET'</code> (và <code>'HEAD'</code>, cái máy quét cũng gửi) phải an toàn và không đổi gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyConsumes(\"POST\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Safe methods (GET, HEAD) must not change state.|||Phương thức an toàn (GET, HEAD) không được đổi trạng thái.",
+        "Only one method here consumes: POST.|||Chỉ một phương thức ở đây tiêu: POST."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only for the method that should consume the token */\nfunction verifyConsumes(method) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyConsumes(method) {\n  // Only the human's POST consumes; a scanner's GET is safe.\n  return method === 'POST';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A mail security gateway GETs (and HEADs) every link; only a human POST must consume the token (6.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Một cổng bảo mật thư GET (và HEAD) mọi link; chỉ một POST của con người mới tiêu token (6.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The human clicks",
+              "vi": "Con người bấm"
+            },
+            "goi": "verifyConsumes(\"POST\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "A scanner prefetch",
+              "vi": "Một máy quét prefetch"
+            },
+            "goi": "verifyConsumes(\"GET\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A HEAD probe",
+              "vi": "Một cú dò HEAD"
+            },
+            "goi": "verifyConsumes(\"HEAD\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting GET consume the token.|||Cho GET tiêu token."
+        },
+        {
+          "loi": "Forgetting HEAD is also safe.|||Quên HEAD cũng an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "link prefetch",
+          "vi": "tải trước đường dẫn"
+        }
+      ]
+    },
+    {
+      "title": "6.2-3 — Write tokenState(rec, now): the consume guard",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Given a token row <code>rec</code> (or <code>null</code>) and the current time <code>now</code>, return its state <b>in this order</b>: no row ⇒ <code>'INVALID'</code>; <code>rec.usedAt</code> set ⇒ <code>'USED'</code>; <code>now &gt;= rec.expiresAt</code> ⇒ <code>'EXPIRED'</code>; otherwise <code>'OK'</code>. (Purpose is checked before this, so assume it matches.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho một dòng token <code>rec</code> (hoặc <code>null</code>) và thời gian hiện tại <code>now</code>, trả về trạng thái của nó <b>theo thứ tự này</b>: không có dòng ⇒ <code>'INVALID'</code>; <code>rec.usedAt</code> có ⇒ <code>'USED'</code>; <code>now &gt;= rec.expiresAt</code> ⇒ <code>'EXPIRED'</code>; còn lại <code>'OK'</code>. (Mục đích đã kiểm trước, nên coi như khớp.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tokenState({\"usedAt\":null,\"expiresAt\":100}, 50)",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check used before expired.|||Kiểm đã-dùng trước hết-hạn.",
+        "A missing row is INVALID, never a crash.|||Một dòng thiếu là INVALID, không bao giờ sập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'INVALID' | 'USED' | 'EXPIRED' | 'OK' */\nfunction tokenState(rec, now) {\n  // Write your solution here\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tokenState(rec, now) {\n  if (!rec) return 'INVALID';\n  if (rec.usedAt) return 'USED';\n  if (now >= rec.expiresAt) return 'EXPIRED';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order matters: a used token is USED even if also expired, and a missing one is INVALID — never a crash (6.2, 6.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự quan trọng: một token đã dùng là USED kể cả khi cũng hết hạn, và một cái thiếu là INVALID — không bao giờ sập (6.2, 6.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Fresh token",
+              "vi": "Token mới"
+            },
+            "goi": "tokenState({\"usedAt\":null,\"expiresAt\":100}, 50)",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "No such token",
+              "vi": "Không có token"
+            },
+            "goi": "tokenState(null, 50)",
+            "mongDoi": "INVALID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Already used",
+              "vi": "Đã dùng"
+            },
+            "goi": "tokenState({\"usedAt\":40,\"expiresAt\":100}, 50)",
+            "mongDoi": "USED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Expired",
+              "vi": "Hết hạn"
+            },
+            "goi": "tokenState({\"usedAt\":null,\"expiresAt\":40}, 50)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Used AND expired ⇒ USED",
+              "vi": "Đã dùng VÀ hết hạn ⇒ USED"
+            },
+            "goi": "tokenState({\"usedAt\":30,\"expiresAt\":40}, 50)",
+            "mongDoi": "USED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking expiry before used.|||Kiểm hết hạn trước đã-dùng."
+        },
+        {
+          "loi": "Throwing on a null row.|||Ném lỗi trên một dòng null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single-use",
+          "vi": "dùng một lần"
+        }
+      ]
+    },
+    {
+      "title": "6.2-4 — GET vs POST on the verify route",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each request with what the verify route does.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi request với cái tuyến xác minh làm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Safe method ⇒ no side effect.|||Phương thức an toàn ⇒ không tác dụng phụ.",
+        "Only the POST changes state.|||Chỉ POST đổi trạng thái."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.2-4 — GET vs POST on the verify route\n\nAnswer in the answer panel (no code needed).\n\n1. Request → effectRequest → tác dụng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.2-4 — GET vs POST on the verify route — answer key\n\n1. Request → effectRequest → tác dụng\n   - r1.q: shows a confirm page, consumes nothing\n   - r2.q: consumes the token, marks verified\n   The GET is safe (a scanner hits it); only the human POST consumes the one-time token (6.2).VI: GET an toàn (một máy quét gõ nó); chỉ POST của con người mới tiêu token một lần (6.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The GET is safe (a scanner hits it); only the human POST consumes the one-time token (6.2).</p><p><i>VI: GET an toàn (một máy quét gõ nó); chỉ POST của con người mới tiêu token một lần (6.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → effect</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → tác dụng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "q",
+                "ten": "Effect",
+                "luaChon": [
+                  "shows a confirm page, consumes nothing",
+                  "consumes the token, marks verified"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "scanner GET /verify-email?token=…"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "human POST /verify-email"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "shows a confirm page, consumes nothing",
+              "r2.q": "consumes the token, marks verified"
+            },
+            "giaiThich": "<p>The GET is safe (a scanner hits it); only the human POST consumes the one-time token (6.2).</p><p><i>VI: GET an toàn (một máy quét gõ nó); chỉ POST của con người mới tiêu token một lần (6.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting the GET verify.|||Cho GET xác minh."
+        },
+        {
+          "loi": "Thinking the scanner’s GET is harmful.|||Tưởng cú GET của máy quét là có hại."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

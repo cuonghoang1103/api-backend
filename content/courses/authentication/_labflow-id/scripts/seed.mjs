@@ -9,8 +9,11 @@ const USERS = [
   ['usr_3', 'lan@labflow.example', 'Co Lan', 'LAB_MANAGER', 'lan-lab-2026'],
 ];
 for (const [id, email, name, role, password] of USERS) {
-  await pool.query(`INSERT INTO users (id, email, name, role, password_hash) VALUES ($1, $2, $3, $4, $5)
-    ON CONFLICT (id) DO UPDATE SET password_hash = EXCLUDED.password_hash`, [id, email, name, role, await hashPassword(password)]);
+  // Chapter 6: these are established accounts, so their email is already verified (email_verified_at set).
+  await pool.query(`INSERT INTO users (id, email, name, role, password_hash, email_verified_at)
+    VALUES ($1, $2, $3, $4, $5, now())
+    ON CONFLICT (id) DO UPDATE SET password_hash = EXCLUDED.password_hash, email_verified_at = now(), status = 'active'`,
+    [id, email, name, role, await hashPassword(password)]);
   console.log('seeded', id, email, role);
 }
 await pool.query(`SELECT setval('user_seq', 3)`);

@@ -218,6 +218,42 @@
       "name": "Lab 5 — The refresh layer",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 5·1 — rotateState(rec, now): classify a presented token · Lab 5·2 — rotateAction(rec, now, graceMs): the whole decision · Lab 5·3 — groupDevices(rows, now): the devices page"
+    },
+    {
+      "slug": "auth-6-1-dang-ky",
+      "name": "6.1 Registration",
+      "level": "BEGINNER",
+      "description": "Luyện: 6.1-1 — Registration: read the real run · 6.1-2 — Write signupResponse(emailTaken): one response either way · 6.1-3 — Order the sign-up steps · 6.1-4 — Naive sign-up → what it leaks"
+    },
+    {
+      "slug": "auth-6-2-xac-minh-email",
+      "name": "6.2 Email verification",
+      "level": "BEGINNER",
+      "description": "Luyện: 6.2-1 — The scanner that clicks first · 6.2-2 — Write verifyConsumes(method): which request burns the token · 6.2-3 — Write tokenState(rec, now): the consume guard · 6.2-4 — GET vs POST on the verify route"
+    },
+    {
+      "slug": "auth-6-3-dat-lai-mat-khau",
+      "name": "6.3 Password reset",
+      "level": "BEGINNER",
+      "description": "Luyện: 6.3-1 — Password reset: read the real run · 6.3-3 — Write endsAllSessions(action): which actions revoke everything · 6.3-4 — Order the reset flow · 6.3-5 — Skip a step → the attack"
+    },
+    {
+      "slug": "auth-6-4-do-tai-khoan",
+      "name": "6.4 Account enumeration",
+      "level": "BEGINNER",
+      "description": "Luyện: 6.4-1 — Enumeration by timing: read the measurement · 6.4-2 — Write leaks(realMs, fakeMs): is the timing a leak? · 6.4-3 — Order the channels you must silence · 6.4-4 — Channel → how to close it"
+    },
+    {
+      "slug": "auth-6-5-doi-email-va-xoa",
+      "name": "6.5 Change email & delete",
+      "level": "BEGINNER",
+      "description": "Luyện: 6.5-1 — Change & delete: read the real run · 6.5-2 — Write requiresReauth(action): which actions re-verify the password · 6.5-3 — Order the account-close flow · 6.5-4 — Action → what it must also do"
+    },
+    {
+      "slug": "auth-6-7-lab-vong-doi",
+      "name": "Lab 6 Account lifecycle",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 6-1 — Write consumeToken(rec, purpose, now) · Lab 6-2 — Write shouldSendReset(user): the anti-enumeration gate · Lab 6-3 — Read the reference grade"
     }
   ]
 }

@@ -1,0 +1,482 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-6-1-dang-ky",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-6-1-dang-ky"
+  },
+  "exercises": [
+    {
+      "title": "6.1-1 — Registration: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mXmC2qxW…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mXmC2qxW…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The inbox, not the response, carries the difference.|||Hộp thư, không phải phản hồi, mang sự khác biệt.",
+        "Same work ⇒ same timing.|||Cùng công việc ⇒ cùng thời gian."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-1 — Registration: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. Right after sign-up, what is the account’s verification state?Ngay sau đăng ký, trạng thái xác minh của tài khoản là gì?\n2. Sign up again with an email that already exists. What response?Đăng ký lại với một email đã tồn tại. Phản hồi gì?\n3. Why hash the password even when the email is already taken?Vì sao băm mật khẩu kể cả khi email đã được dùng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-1 — Registration: read the real run — answer key\n\n1. Right after sign-up, what is the account’s verification state?Ngay sau đăng ký, trạng thái xác minh của tài khoản là gì?\n   Answer: b) Unverified — email_verified_at is null until the link is clicked\n   A typed email is a claim; the account starts unverified and the inbox proves it (6.1, 6.2).VI: Một email gõ vào là một lời khai; tài khoản bắt đầu chưa xác minh và hộp thư chứng minh nó (6.1, 6.2).\n\n2. Sign up again with an email that already exists. What response?Đăng ký lại với một email đã tồn tại. Phản hồi gì?\n   Answer: a) The same 202, and a \"you already have an account\" email — no \"taken\" error\n   A 409 \"taken\" is an enumeration oracle; LabFlow ID returns the same 202 and emails the real owner (6.1).VI: Một 409 \"đã dùng\" là một nhà tiên tri dò tài khoản; LabFlow ID trả cùng một 202 và gửi thư cho chủ thật (6.1).\n\n3. Why hash the password even when the email is already taken?Vì sao băm mật khẩu kể cả khi email đã được dùng?\n   Answer: a) So the response time is the same whether or not the email exists\n   Hashing only on the new-email branch answers a taken email in ~1 ms and a free one in ~80 ms — a timing oracle. Hash in both branches (6.1, 6.4).VI: Băm chỉ ở nhánh email-mới trả lời một email đã-dùng trong ~1 ms và một cái trống trong ~80 ms — một nhà tiên tri thời gian. Băm ở cả hai nhánh (6.1, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Unverified — email_verified_at is null until the link is clicked</p><p>A typed email is a claim; the account starts unverified and the inbox proves it (6.1, 6.2).</p><p><i>VI: Một email gõ vào là một lời khai; tài khoản bắt đầu chưa xác minh và hộp thư chứng minh nó (6.1, 6.2).</i></p></li><li><p><b>a)</b> The same 202, and a \"you already have an account\" email — no \"taken\" error</p><p>A 409 \"taken\" is an enumeration oracle; LabFlow ID returns the same 202 and emails the real owner (6.1).</p><p><i>VI: Một 409 \"đã dùng\" là một nhà tiên tri dò tài khoản; LabFlow ID trả cùng một 202 và gửi thư cho chủ thật (6.1).</i></p></li><li><p><b>a)</b> So the response time is the same whether or not the email exists</p><p>Hashing only on the new-email branch answers a taken email in ~1 ms and a free one in ~80 ms — a timing oracle. Hash in both branches (6.1, 6.4).</p><p><i>VI: Băm chỉ ở nhánh email-mới trả lời một email đã-dùng trong ~1 ms và một cái trống trong ~80 ms — một nhà tiên tri thời gian. Băm ở cả hai nhánh (6.1, 6.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Right after sign-up, what is the account’s verification state?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngay sau đăng ký, trạng thái xác minh của tài khoản là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Verified — signing up proves the address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Unverified — email_verified_at is null until the link is clicked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pending for 30 days, then auto-verified"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Verified for login but not for reset"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A typed email is a claim; the account starts unverified and the inbox proves it (6.1, 6.2).</p><p><i>VI: Một email gõ vào là một lời khai; tài khoản bắt đầu chưa xác minh và hộp thư chứng minh nó (6.1, 6.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Sign up again with an email that already exists. What response?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đăng ký lại với một email đã tồn tại. Phản hồi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The same 202, and a \"you already have an account\" email — no \"taken\" error"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A 500, because the unique index is violated"
+              },
+              {
+                "ma": "c",
+                "noiDung": "409 \"email already taken\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 200 that logs the user in"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A 409 \"taken\" is an enumeration oracle; LabFlow ID returns the same 202 and emails the real owner (6.1).</p><p><i>VI: Một 409 \"đã dùng\" là một nhà tiên tri dò tài khoản; LabFlow ID trả cùng một 202 và gửi thư cho chủ thật (6.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why hash the password even when the email is already taken?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao băm mật khẩu kể cả khi email đã được dùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So the response time is the same whether or not the email exists"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because argon2 is required by the database"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because the duplicate account needs its hash updated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To rate-limit the sign-up endpoint"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Hashing only on the new-email branch answers a taken email in ~1 ms and a free one in ~80 ms — a timing oracle. Hash in both branches (6.1, 6.4).</p><p><i>VI: Băm chỉ ở nhánh email-mới trả lời một email đã-dùng trong ~1 ms và một cái trống trong ~80 ms — một nhà tiên tri thời gian. Băm ở cả hai nhánh (6.1, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a duplicate email returns 409.|||Tưởng một email trùng trả 409."
+        },
+        {
+          "loi": "Thinking a new account is verified.|||Tưởng một tài khoản mới đã xác minh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "account enumeration",
+          "vi": "dò tài khoản"
+        },
+        {
+          "en": "unverified account",
+          "vi": "tài khoản chưa xác minh"
+        }
+      ]
+    },
+    {
+      "title": "6.1-2 — Write signupResponse(emailTaken): one response either way",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the HTTP response a sign-up sends. It must be <b>identical</b> whether or not the email is taken, so the form cannot be used to enumerate accounts: always <code>{ status: 202, message: 'Check your email to finish signing up.' }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về phản hồi HTTP mà một lần đăng ký gửi. Nó phải <b>y hệt</b> dù email có bị dùng hay không, để form không dùng để dò tài khoản được: luôn <code>{ status: 202, message: 'Check your email to finish signing up.' }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "signupResponse(false)",
+          "output": "{\"status\":202,\"message\":\"Check your email to finish signing up.\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Ignore the argument — the point is that it does not change the response.|||Lờ tham số — điểm mấu chốt là nó không đổi phản hồi.",
+        "The status is 202 (Accepted): \"check your email\".|||Mã là 202 (Accepted): \"kiểm email của bạn\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { status, message } — the SAME for taken and free emails */\nfunction signupResponse(emailTaken) {\n  // Write your solution here\n  return { status: 200, message: '' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction signupResponse(emailTaken) {\n  // Enumeration-safe: the SAME response either way.\n  return { status: 202, message: 'Check your email to finish signing up.' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A response that differs by account existence is an oracle; one fixed 202 closes the wording channel (6.1, 6.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Một phản hồi khác nhau theo sự tồn tại của tài khoản là một nhà tiên tri; một 202 cố định đóng kênh câu chữ (6.1, 6.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A free email",
+              "vi": "Một email trống"
+            },
+            "goi": "signupResponse(false)",
+            "mongDoi": {
+              "status": 202,
+              "message": "Check your email to finish signing up."
+            }
+          },
+          {
+            "moTa": {
+              "en": "A taken email — same response",
+              "vi": "Một email đã dùng — cùng phản hồi"
+            },
+            "goi": "signupResponse(true)",
+            "mongDoi": {
+              "status": 202,
+              "message": "Check your email to finish signing up."
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown either way — still 202",
+              "vi": "Không rõ — vẫn 202"
+            },
+            "goi": "signupResponse()",
+            "mongDoi": {
+              "status": 202,
+              "message": "Check your email to finish signing up."
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning 409 when the email is taken.|||Trả 409 khi email bị dùng."
+        },
+        {
+          "loi": "Changing the message for a duplicate.|||Đổi thông điệp cho một trùng lặp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fixed response",
+          "vi": "phản hồi cố định"
+        }
+      ]
+    },
+    {
+      "title": "6.1-3 — Order the sign-up steps",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the steps of an enumeration-safe sign-up, from first to last.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước của một lần đăng ký chống dò tài khoản, từ đầu tới cuối.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The hash comes before the lookup.|||Băm tới trước phép tra.",
+        "The response is the last step and is always the same.|||Phản hồi là bước cuối và luôn như nhau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-3 — Order the sign-up steps\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-3 — Order the sign-up steps — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m2) Check the password policy (length, breach list)  →  m5) Hash the password with argon2 — before the branch  →  m1) Look the email up  →  m3) Taken ⇒ email \"you already have an account\"; new ⇒ create + email a verify link  →  m4) Return the same 202 either way\n   Hash before branching so timing matches; then look up, send the branch-specific email, and return one fixed 202 (6.1).VI: Băm trước khi rẽ nhánh để thời gian khớp; rồi tra, gửi email theo nhánh, và trả một 202 cố định (6.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hash before branching so timing matches; then look up, send the branch-specific email, and return one fixed 202 (6.1).</p><p><i>VI: Băm trước khi rẽ nhánh để thời gian khớp; rồi tra, gửi email theo nhánh, và trả một 202 cố định (6.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Look the email up"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Check the password policy (length, breach list)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Taken ⇒ email \"you already have an account\"; new ⇒ create + email a verify link"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Return the same 202 either way"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Hash the password with argon2 — before the branch"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m5",
+              "m1",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Hash before branching so timing matches; then look up, send the branch-specific email, and return one fixed 202 (6.1).</p><p><i>VI: Băm trước khi rẽ nhánh để thời gian khớp; rồi tra, gửi email theo nhánh, và trả một 202 cố định (6.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hashing only after finding a new email.|||Chỉ băm sau khi thấy một email mới."
+        },
+        {
+          "loi": "Returning different responses per branch.|||Trả phản hồi khác nhau theo nhánh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "constant work",
+          "vi": "công việc hằng định"
+        }
+      ]
+    },
+    {
+      "title": "6.1-4 — Naive sign-up → what it leaks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each naive sign-up choice with what it leaks to an attacker.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi lựa chọn đăng ký ngây thơ với cái nó làm rò cho kẻ tấn công.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two of these leak existence; one trusts too early.|||Hai cái rò sự tồn tại; một cái tin quá sớm.",
+        "A timing gap is a leak even with the same words.|||Một khoảng cách thời gian là một cú rò kể cả với cùng câu chữ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-4 — Naive sign-up → what it leaks\n\nAnswer in the answer panel (no code needed).\n\n1. Choice → leakLựa chọn → rò\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.1-4 — Naive sign-up → what it leaks — answer key\n\n1. Choice → leakLựa chọn → rò\n   - r1.q: which emails have an account\n   - r2.q: timing: taken vs free\n   - r3.q: an unproven address is trusted\n   A \"taken\" message and a timing difference both reveal who is registered; an immediately-usable account trusts an unproven address (6.1).VI: Một thông điệp \"đã dùng\" và một chênh lệch thời gian đều lộ ai đã đăng ký; một tài khoản dùng được ngay tin một địa chỉ chưa chứng minh (6.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A \"taken\" message and a timing difference both reveal who is registered; an immediately-usable account trusts an unproven address (6.1).</p><p><i>VI: Một thông điệp \"đã dùng\" và một chênh lệch thời gian đều lộ ai đã đăng ký; một tài khoản dùng được ngay tin một địa chỉ chưa chứng minh (6.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choice → leak</p><p style=\"opacity:.75;font-size:.92em\"><i>Lựa chọn → rò</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Naive choice"
+              },
+              {
+                "ma": "q",
+                "ten": "Leaks",
+                "luaChon": [
+                  "which emails have an account",
+                  "timing: taken vs free",
+                  "an unproven address is trusted"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "409 \"email already taken\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "hash only when the email is new"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "account usable immediately"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "which emails have an account",
+              "r2.q": "timing: taken vs free",
+              "r3.q": "an unproven address is trusted"
+            },
+            "giaiThich": "<p>A \"taken\" message and a timing difference both reveal who is registered; an immediately-usable account trusts an unproven address (6.1).</p><p><i>VI: Một thông điệp \"đã dùng\" và một chênh lệch thời gian đều lộ ai đã đăng ký; một tài khoản dùng được ngay tin một địa chỉ chưa chứng minh (6.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a 409 is harmless.|||Tưởng một 409 là vô hại."
+        },
+        {
+          "loi": "Thinking a uniform message also hides timing.|||Tưởng một thông điệp đồng nhất cũng giấu thời gian."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 6 Lớp vòng đời tài khoản của LabFlow ID (deck auth-lab-6, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-6', "LabFlow ID's account-lifecycle layer", 'Lớp vòng đời tài khoản của LabFlow ID', [
+  [1, "Lab 6 — LabFlow ID's account-lifecycle layer",
+    `<p>You write the layer behind email verification and password reset: issue a one-time token, consume it once, and request a reset without revealing whether the email exists. A grader drives every path.</p>`,
+    `<p>Bạn viết cái lớp đứng sau xác minh email và đặt lại mật khẩu: phát một token một lần, tiêu nó một lần, và yêu cầu reset mà không lộ email có tồn tại hay không. Một máy chấm điều khiển mọi đường.</p>`],
+  [2, 'The shape',
+    `<p>lifecycle(config) returns issueToken, consumeToken, requestPasswordReset. config = { store, now, verifyTtlMs, resetTtlMs }. The grader passes an in-memory store and a fake clock — no database.</p>`,
+    `<p>lifecycle(config) trả issueToken, consumeToken, requestPasswordReset. config = { store, now, verifyTtlMs, resetTtlMs }. Máy chấm đưa một kho trong bộ nhớ và một đồng hồ giả — không cơ sở dữ liệu.</p>`],
+  [3, 'issueToken',
+    `<p>Make a random token (newToken), store ONLY its tokenDigest with a purpose and an expiry (30 min verify, 15 min reset), return { token }. The plaintext is emailed; the digest is stored (1.3).</p>`,
+    `<p>Tạo một token ngẫu nhiên (newToken), lưu CHỈ tokenDigest của nó với một mục đích và một hạn (30 phút xác minh, 15 phút reset), trả { token }. Bản gốc gửi trong thư; digest được lưu (1.3).</p>`],
+  [4, 'consumeToken',
+    `<p>Look up by digest; reject wrong purpose (INVALID), already used (USED), expired (EXPIRED); else mark used and return { userId }. Single-use, purpose-bound, time-limited.</p>`,
+    `<p>Tra theo digest; từ chối sai mục đích (INVALID), đã dùng (USED), hết hạn (EXPIRED); còn lại đánh dấu đã dùng và trả { userId }. Dùng một lần, ràng mục đích, có hạn.</p>`],
+  [5, 'requestPasswordReset — the hard one',
+    `<p>Find the active account; if it exists, issue a reset token and email the link; if not, do NOTHING — never send a "no account" email. Always return { ok: true }. That silence is the anti-enumeration rule (6.4).</p>`,
+    `<p>Tìm tài khoản đang hoạt động; nếu có, phát một token reset và gửi link; nếu không, KHÔNG làm gì — không bao giờ gửi thư "không có tài khoản". Luôn trả { ok: true }. Cái im lặng đó là luật chống dò tài khoản (6.4).</p>`],
+  [6, 'How it is graded',
+    `<p>6 checks, 10 points, pass = 7: round trip, single-use, purpose-bound, expiry, reset mails only a real account, and a deleted account gets nothing / a bad token never crashes.</p>`,
+    `<p>6 phép, 10 điểm, đạt 7: vòng khứ hồi, dùng một lần, ràng mục đích, hết hạn, reset chỉ gửi thư cho một tài khoản thật, và một tài khoản đã xoá nhận không gì / một token hỏng không bao giờ sập.</p>`],
+  [7, 'A first attempt that "works"',
+    `<p>It issues and consumes and even emails a reset link — but never marks a token used, ignores purpose, and emails "no account found" to a stranger. 3/10, and each miss is an attack.</p>`,
+    `<p>Nó phát và tiêu và thậm chí gửi một link reset — nhưng không bao giờ đánh dấu token đã dùng, lờ mục đích, và gửi "không tìm thấy tài khoản" cho một người lạ. 3/10, và mỗi lần trượt là một cú tấn công.</p>`],
+  [8, 'The reference',
+    `<p>The real src/lifecycle/layer.js, shown line by line in lessons 6.2–6.4, scores 10/10, and the project's 39 tests stay green.</p>`,
+    `<p>Cái src/lifecycle/layer.js thật, hiện từng dòng ở bài 6.2–6.4, đạt 10/10, và 39 test của dự án vẫn xanh.</p>`],
+  [9, 'Done when',
+    `<p>Your layer scores ≥ 7/10 twice in a row, and you can name the attack behind every failed check — the "no account" email, the replayed token, the reset link that works twice.</p>`,
+    `<p>Lớp của bạn đạt ≥ 7/10 hai lần liên tiếp, và bạn gọi được tên cú tấn công sau mỗi phép chấm trượt — thư "không có tài khoản", token phát lại, đường dẫn reset chạy hai lần.</p>`],
+]);

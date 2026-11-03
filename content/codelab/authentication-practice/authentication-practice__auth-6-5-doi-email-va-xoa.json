@@ -1,0 +1,485 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-6-5-doi-email-va-xoa",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-6-5-doi-email-va-xoa"
+  },
+  "exercises": [
+    {
+      "title": "6.5-1 — Change & delete: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ curl -s -X POST localhost:4800/me/email  (change to lan.new@labflow.example)\n{\"ok\":true,\"email\":\"lan.new@labflow.example\",\"verificationSent\":true}\n$ # the new address is UN-verified and gets its own verification email:\nSubject: Verify your new LabFlow email\n\n$ curl -s -X POST localhost:4800/me/delete  (re-auth with the password)\n{\"ok\":true,\"deleted\":true}\n$ # the account is gone — sign-in now fails like any unknown email:\n{\"error\":\"Email or password is incorrect\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ curl -s -X POST localhost:4800/me/email  (change to lan.new@labflow.example)\n{\"ok\":true,\"email\":\"lan.new@labflow.example\",\"verificationSent\":true}\n$ # the new address is UN-verified and gets its own verification email:\nSubject: Verify your new LabFlow email\n\n$ curl -s -X POST localhost:4800/me/delete  (re-auth with the password)\n{\"ok\":true,\"deleted\":true}\n$ # the account is gone — sign-in now fails like any unknown email:\n{\"error\":\"Email or password is incorrect\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A new email is a new claim.|||Một email mới là một lời khai mới.",
+        "The row is kept, just flagged.|||Dòng được giữ, chỉ bị đánh cờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-1 — Change & delete: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. After the email change, what is the new address’s state?Sau khi đổi email, trạng thái địa chỉ mới là gì?\n2. Deleting the account requires the password even in a live session. Why?Xoá tài khoản đòi mật khẩu kể cả trong một phiên sống. Vì sao?\n3. After deletion, signing in with that email fails like an unknown address. Why?Sau khi xoá, đăng nhập bằng email đó hỏng như một địa chỉ lạ. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-1 — Change & delete: read the real run — answer key\n\n1. After the email change, what is the new address’s state?Sau khi đổi email, trạng thái địa chỉ mới là gì?\n   Answer: d) Unverified — it clears the flag and sends a verify link\n   A changed email is a new claim; it must be proven again, and reset is gated on verification so a not-yet-owned address cannot receive one (6.5).VI: Một email đã đổi là một lời khai mới; nó phải được chứng minh lại, và reset bị chặn sau xác minh nên một địa chỉ chưa-sở-hữu không nhận được nó (6.5).\n\n2. Deleting the account requires the password even in a live session. Why?Xoá tài khoản đòi mật khẩu kể cả trong một phiên sống. Vì sao?\n   Answer: b) A live session is not proof the human is still there\n   Re-authentication stops a borrowed, unlocked device from erasing an account (6.5).VI: Xác thực lại chặn một thiết bị mượn, chưa khoá xoá một tài khoản (6.5).\n\n3. After deletion, signing in with that email fails like an unknown address. Why?Sau khi xoá, đăng nhập bằng email đó hỏng như một địa chỉ lạ. Vì sao?\n   Answer: c) Soft-delete: status=deleted, and findByEmail filters status=active\n   setStatus(id,\"deleted\") plus findByEmail filtering active makes the account vanish from every flow while keeping the row for integrity (6.5).VI: setStatus(id,\"deleted\") cộng findByEmail lọc active làm tài khoản biến khỏi mọi luồng trong khi giữ dòng cho toàn vẹn (6.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Unverified — it clears the flag and sends a verify link</p><p>A changed email is a new claim; it must be proven again, and reset is gated on verification so a not-yet-owned address cannot receive one (6.5).</p><p><i>VI: Một email đã đổi là một lời khai mới; nó phải được chứng minh lại, và reset bị chặn sau xác minh nên một địa chỉ chưa-sở-hữu không nhận được nó (6.5).</i></p></li><li><p><b>b)</b> A live session is not proof the human is still there</p><p>Re-authentication stops a borrowed, unlocked device from erasing an account (6.5).</p><p><i>VI: Xác thực lại chặn một thiết bị mượn, chưa khoá xoá một tài khoản (6.5).</i></p></li><li><p><b>c)</b> Soft-delete: status=deleted, and findByEmail filters status=active</p><p>setStatus(id,\"deleted\") plus findByEmail filtering active makes the account vanish from every flow while keeping the row for integrity (6.5).</p><p><i>VI: setStatus(id,\"deleted\") cộng findByEmail lọc active làm tài khoản biến khỏi mọi luồng trong khi giữ dòng cho toàn vẹn (6.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>After the email change, what is the new address’s state?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi đổi email, trạng thái địa chỉ mới là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Verified, because the user was already logged in just now"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Verified for login but still not usable for a reset"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deleted until the old address confirms the change first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Unverified — it clears the flag and sends a verify link"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A changed email is a new claim; it must be proven again, and reset is gated on verification so a not-yet-owned address cannot receive one (6.5).</p><p><i>VI: Một email đã đổi là một lời khai mới; nó phải được chứng minh lại, và reset bị chặn sau xác minh nên một địa chỉ chưa-sở-hữu không nhận được nó (6.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Deleting the account requires the password even in a live session. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Xoá tài khoản đòi mật khẩu kể cả trong một phiên sống. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the login session has already expired by then"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A live session is not proof the human is still there"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To rate-limit how often an account can be deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database requires the password to run the DELETE"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Re-authentication stops a borrowed, unlocked device from erasing an account (6.5).</p><p><i>VI: Xác thực lại chặn một thiết bị mượn, chưa khoá xoá một tài khoản (6.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After deletion, signing in with that email fails like an unknown address. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi xoá, đăng nhập bằng email đó hỏng như một địa chỉ lạ. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The password hash was cleared"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The email was renamed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Soft-delete: status=deleted, and findByEmail filters status=active"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The row was hard-deleted, so nothing matches"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>setStatus(id,\"deleted\") plus findByEmail filtering active makes the account vanish from every flow while keeping the row for integrity (6.5).</p><p><i>VI: setStatus(id,\"deleted\") cộng findByEmail lọc active làm tài khoản biến khỏi mọi luồng trong khi giữ dòng cho toàn vẹn (6.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a changed email stays verified.|||Tưởng một email đã đổi vẫn xác minh."
+        },
+        {
+          "loi": "Thinking delete is a hard DELETE.|||Tưởng xoá là một DELETE cứng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "re-authentication",
+          "vi": "xác thực lại"
+        },
+        {
+          "en": "soft delete",
+          "vi": "xoá mềm"
+        }
+      ]
+    },
+    {
+      "title": "6.5-2 — Write requiresReauth(action): which actions re-verify the password",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if an action must re-authenticate with the password even inside a live session, else <code>false</code>. Sensitive actions — <code>'delete-account'</code>, <code>'change-password'</code>, <code>'change-email'</code> — require it (a borrowed, unlocked laptop must not do them). Ordinary ones like <code>'view-profile'</code> or <code>'list-devices'</code> do not.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu một hành động phải xác thực lại bằng mật khẩu kể cả trong một phiên sống, còn không thì <code>false</code>. Hành động nhạy cảm — <code>'delete-account'</code>, <code>'change-password'</code>, <code>'change-email'</code> — đòi nó (một laptop mượn, chưa khoá không được làm chúng). Cái thường như <code>'view-profile'</code> hay <code>'list-devices'</code> thì không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "requiresReauth(\"delete-account\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A live session is not proof the human is present.|||Một phiên sống không phải bằng chứng con người có mặt.",
+        "Deleting and changing credentials are sensitive; viewing is not.|||Xoá và đổi thông tin xác thực là nhạy cảm; xem thì không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if the action must re-verify the password */\nfunction requiresReauth(action) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction requiresReauth(action) {\n  // Sensitive actions re-verify the password even inside a live session.\n  return action === 'delete-account' || action === 'change-password' || action === 'change-email';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Re-authentication stops a borrowed, unlocked device from erasing an account or changing credentials (6.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Xác thực lại chặn một thiết bị mượn, chưa khoá xoá một tài khoản hay đổi thông tin xác thực (6.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Delete the account",
+              "vi": "Xoá tài khoản"
+            },
+            "goi": "requiresReauth(\"delete-account\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Change the email",
+              "vi": "Đổi email"
+            },
+            "goi": "requiresReauth(\"change-email\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "View profile ⇒ no re-auth",
+              "vi": "Xem hồ sơ ⇒ không xác thực lại"
+            },
+            "goi": "requiresReauth(\"view-profile\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "List devices ⇒ no re-auth",
+              "vi": "Liệt kê thiết bị ⇒ không xác thực lại"
+            },
+            "goi": "requiresReauth(\"list-devices\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Re-authing on a read-only view.|||Xác thực lại trên một lần xem chỉ-đọc."
+        },
+        {
+          "loi": "Skipping re-auth on delete.|||Bỏ xác thực lại khi xoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "re-authentication",
+          "vi": "xác thực lại"
+        }
+      ]
+    },
+    {
+      "title": "6.5-3 — Order the account-close flow",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the steps of deleting an account from a live session.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước xoá một tài khoản từ một phiên sống.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prove the human first.|||Chứng minh con người trước.",
+        "Revocation before the \"vanishes\" effect.|||Thu hồi trước hiệu ứng \"biến mất\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-3 — Order the account-close flow\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-3 — Order the account-close flow — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m4) Re-authenticate: verify the password, even in a live session  →  m1) Soft-delete: set status = deleted  →  m3) End every session and revoke every refresh family  →  m2) A later sign-in with that email fails like an unknown address\n   Re-auth first; flag the row deleted; revoke everything; the address then behaves as unknown because findByEmail filters active (6.5).VI: Xác thực lại trước; đánh cờ dòng đã xoá; thu hồi tất cả; địa chỉ sau đó hành xử như lạ vì findByEmail lọc active (6.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Re-auth first; flag the row deleted; revoke everything; the address then behaves as unknown because findByEmail filters active (6.5).</p><p><i>VI: Xác thực lại trước; đánh cờ dòng đã xoá; thu hồi tất cả; địa chỉ sau đó hành xử như lạ vì findByEmail lọc active (6.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Soft-delete: set status = deleted"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "A later sign-in with that email fails like an unknown address"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "End every session and revoke every refresh family"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Re-authenticate: verify the password, even in a live session"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Re-auth first; flag the row deleted; revoke everything; the address then behaves as unknown because findByEmail filters active (6.5).</p><p><i>VI: Xác thực lại trước; đánh cờ dòng đã xoá; thu hồi tất cả; địa chỉ sau đó hành xử như lạ vì findByEmail lọc active (6.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting before re-authenticating.|||Xoá trước khi xác thực lại."
+        },
+        {
+          "loi": "Hard-deleting instead of soft-deleting.|||Xoá cứng thay vì xoá mềm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "retention window",
+          "vi": "cửa sổ lưu giữ"
+        }
+      ]
+    },
+    {
+      "title": "6.5-4 — Action → what it must also do",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each lifecycle action with the extra it must perform.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi hành động vòng đời với cái nó còn phải làm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One row is about the email; three are about delete.|||Một dòng về email; ba về xoá.",
+        "A changed email is unverified again (6.1).|||Một email đã đổi lại chưa xác minh (6.1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-4 — Action → what it must also do\n\nAnswer in the answer panel (no code needed).\n\n1. Action → must alsoHành động → còn phải\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.5-4 — Action → what it must also do — answer key\n\n1. Action → must alsoHành động → còn phải\n   - r1.q: un-verify the new address + send a verify link\n   - r2.q: re-authenticate with the password\n   - r3.q: soft-delete, keep the row for integrity\n   - r4.q: revoke every session + refresh family\n   A changed email is a new claim; deletion re-auths, soft-deletes and revokes everything so no token outlives the account (6.5).VI: Một email đã đổi là một lời khai mới; xoá xác thực lại, xoá-mềm và thu hồi tất cả để không token nào sống lâu hơn tài khoản (6.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A changed email is a new claim; deletion re-auths, soft-deletes and revokes everything so no token outlives the account (6.5).</p><p><i>VI: Một email đã đổi là một lời khai mới; xoá xác thực lại, xoá-mềm và thu hồi tất cả để không token nào sống lâu hơn tài khoản (6.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Action → must also</p><p style=\"opacity:.75;font-size:.92em\"><i>Hành động → còn phải</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Action"
+              },
+              {
+                "ma": "q",
+                "ten": "Must also",
+                "luaChon": [
+                  "un-verify the new address + send a verify link",
+                  "re-authenticate with the password",
+                  "soft-delete, keep the row for integrity",
+                  "revoke every session + refresh family"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "change email"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "delete: prove it is you"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "delete: remove the account"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "delete: no ghost sessions"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "un-verify the new address + send a verify link",
+              "r2.q": "re-authenticate with the password",
+              "r3.q": "soft-delete, keep the row for integrity",
+              "r4.q": "revoke every session + refresh family"
+            },
+            "giaiThich": "<p>A changed email is a new claim; deletion re-auths, soft-deletes and revokes everything so no token outlives the account (6.5).</p><p><i>VI: Một email đã đổi là một lời khai mới; xoá xác thực lại, xoá-mềm và thu hồi tất cả để không token nào sống lâu hơn tài khoản (6.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking delete is a single DELETE statement.|||Tưởng xoá là một câu DELETE."
+        },
+        {
+          "loi": "Thinking a changed email stays verified.|||Tưởng một email đã đổi vẫn xác minh."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

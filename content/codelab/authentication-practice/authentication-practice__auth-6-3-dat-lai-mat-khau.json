@@ -1,0 +1,490 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-6-3-dat-lai-mat-khau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-6-3-dat-lai-mat-khau"
+  },
+  "exercises": [
+    {
+      "title": "6.3-1 — Password reset: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ # An is signed in (session + refresh cookie):\n  /me → an@student.labflow.example\n\n$ curl -s -X POST localhost:4800/forgot-password  (email: an@student.labflow.example)\n{\"ok\":true,\"message\":\"If an account exists for that address, a reset link is on its way.\"}\n$ # the reset email (one-time link, 15 minutes):\nSomeone asked to reset your password. If it was you, use this one-time link within 15 minutes: https://id.labflow.example/reset?token=lfid_reset_EyzIkPHD…  — if not, ignore this email.\n\n$ curl -s -X POST localhost:4800/reset-password  (token + a new password)\n{\"ok\":true,\"message\":\"Password reset. Sign in with your new password.\"}\n\n$ # An’s old refresh cookie is now dead — every session and family was revoked:\n{\"error\":\"REVOKED\"}\n$ # the reset link cannot be used a second time:\n{\"error\":\"USED\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ # An is signed in (session + refresh cookie):\n  /me → an@student.labflow.example\n\n$ curl -s -X POST localhost:4800/forgot-password  (email: an@student.labflow.example)\n{\"ok\":true,\"message\":\"If an account exists for that address, a reset link is on its way.\"}\n$ # the reset email (one-time link, 15 minutes):\nSomeone asked to reset your password. If it was you, use this one-time link within 15 minutes: https://id.labflow.example/reset?token=lfid_reset_EyzIkPHD…  — if not, ignore this email.\n\n$ curl -s -X POST localhost:4800/reset-password  (token + a new password)\n{\"ok\":true,\"message\":\"Password reset. Sign in with your new password.\"}\n\n$ # An’s old refresh cookie is now dead — every session and family was revoked:\n{\"error\":\"REVOKED\"}\n$ # the reset link cannot be used a second time:\n{\"error\":\"USED\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Recovery must lock out whoever was already in.|||Khôi phục phải khoá ra ngoài kẻ đã ở trong.",
+        "One link, one use.|||Một đường dẫn, một lần dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-1 — Password reset: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. After the reset, An’s old refresh cookie returns REVOKED. Why?Sau khi reset, cookie refresh cũ của An trả REVOKED. Vì sao?\n2. The reset link used a second time returns USED. What does that prevent?Đường dẫn reset dùng lần hai trả USED. Nó chặn gì?\n3. /forgot-password answers the same for a real and a missing account. Why?/forgot-password trả lời như nhau cho tài khoản thật và thiếu. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-1 — Password reset: read the real run — answer key\n\n1. After the reset, An’s old refresh cookie returns REVOKED. Why?Sau khi reset, cookie refresh cũ của An trả REVOKED. Vì sao?\n   Answer: a) Reset calls revokeAll, ending every session and refresh family\n   A reset that only changes the hash leaves an attacker’s session alive; revokeAll ends every family so recovery locks them out (6.3).VI: Một lần reset chỉ đổi hash để phiên của kẻ tấn công còn sống; revokeAll kết thúc mọi họ để khôi phục khoá hắn ra ngoài (6.3).\n\n2. The reset link used a second time returns USED. What does that prevent?Đường dẫn reset dùng lần hai trả USED. Nó chặn gì?\n   Answer: b) A replay of an intercepted link after the user already used it\n   The reset token is single-use, so an intercepted link cannot be replayed once the real user has spent it (6.3).VI: Token reset dùng một lần, nên một đường dẫn bị chặn bắt không phát lại được một khi người dùng thật đã tiêu nó (6.3).\n\n3. /forgot-password answers the same for a real and a missing account. Why?/forgot-password trả lời như nhau cho tài khoản thật và thiếu. Vì sao?\n   Answer: c) So the response does not reveal whether the address is registered\n   A reply that differs by account existence is an enumeration oracle; one fixed response closes it (6.3, 6.4).VI: Một câu trả lời khác nhau theo sự tồn tại của tài khoản là một nhà tiên tri dò tài khoản; một phản hồi cố định đóng nó (6.3, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Reset calls revokeAll, ending every session and refresh family</p><p>A reset that only changes the hash leaves an attacker’s session alive; revokeAll ends every family so recovery locks them out (6.3).</p><p><i>VI: Một lần reset chỉ đổi hash để phiên của kẻ tấn công còn sống; revokeAll kết thúc mọi họ để khôi phục khoá hắn ra ngoài (6.3).</i></p></li><li><p><b>b)</b> A replay of an intercepted link after the user already used it</p><p>The reset token is single-use, so an intercepted link cannot be replayed once the real user has spent it (6.3).</p><p><i>VI: Token reset dùng một lần, nên một đường dẫn bị chặn bắt không phát lại được một khi người dùng thật đã tiêu nó (6.3).</i></p></li><li><p><b>c)</b> So the response does not reveal whether the address is registered</p><p>A reply that differs by account existence is an enumeration oracle; one fixed response closes it (6.3, 6.4).</p><p><i>VI: Một câu trả lời khác nhau theo sự tồn tại của tài khoản là một nhà tiên tri dò tài khoản; một phản hồi cố định đóng nó (6.3, 6.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>After the reset, An’s old refresh cookie returns REVOKED. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi reset, cookie refresh cũ của An trả REVOKED. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reset calls revokeAll, ending every session and refresh family"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the device that reset the password is revoked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The cookie simply expired on its own"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The access token was revoked, not the refresh token"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A reset that only changes the hash leaves an attacker’s session alive; revokeAll ends every family so recovery locks them out (6.3).</p><p><i>VI: Một lần reset chỉ đổi hash để phiên của kẻ tấn công còn sống; revokeAll kết thúc mọi họ để khôi phục khoá hắn ra ngoài (6.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The reset link used a second time returns USED. What does that prevent?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường dẫn reset dùng lần hai trả USED. Nó chặn gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A brute-force of the token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A replay of an intercepted link after the user already used it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A scanner from prefetching it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The user resetting twice by accident"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The reset token is single-use, so an intercepted link cannot be replayed once the real user has spent it (6.3).</p><p><i>VI: Token reset dùng một lần, nên một đường dẫn bị chặn bắt không phát lại được một khi người dùng thật đã tiêu nó (6.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>/forgot-password answers the same for a real and a missing account. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>/forgot-password trả lời như nhau cho tài khoản thật và thiếu. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because it is friendlier wording"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the server cannot tell them apart"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So the response does not reveal whether the address is registered"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make the email arrive faster"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A reply that differs by account existence is an enumeration oracle; one fixed response closes it (6.3, 6.4).</p><p><i>VI: Một câu trả lời khác nhau theo sự tồn tại của tài khoản là một nhà tiên tri dò tài khoản; một phản hồi cố định đóng nó (6.3, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking reset only changes the hash.|||Tưởng reset chỉ đổi hash."
+        },
+        {
+          "loi": "Thinking the reset link is reusable.|||Tưởng đường dẫn reset dùng lại được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "session invalidation",
+          "vi": "vô hiệu phiên"
+        },
+        {
+          "en": "recovery takeover",
+          "vi": "chiếm qua khôi phục"
+        }
+      ]
+    },
+    {
+      "title": "6.3-3 — Write endsAllSessions(action): which actions revoke everything",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if an action must end every session and refresh family, else <code>false</code>. A <b>credential change</b> — <code>'password-reset'</code> or <code>'password-change'</code> — must revoke everything (a leaked password cannot leave old sessions alive). Ordinary actions like <code>'profile-edit'</code> or <code>'login'</code> must not.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu một hành động phải kết thúc mọi phiên và họ refresh, còn không thì <code>false</code>. Một <b>lần đổi thông tin xác thực</b> — <code>'password-reset'</code> hay <code>'password-change'</code> — phải thu hồi tất cả (một mật khẩu bị lộ không được để các phiên cũ sống). Hành động thường như <code>'profile-edit'</code> hay <code>'login'</code> thì không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "endsAllSessions(\"password-reset\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reset and change are credential changes.|||Reset và đổi là đổi thông tin xác thực.",
+        "Editing a profile is not a credential change.|||Sửa hồ sơ không phải đổi thông tin xác thực."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if the action must end every session + refresh family */\nfunction endsAllSessions(action) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction endsAllSessions(action) {\n  // A credential change must end every session; ordinary actions must not.\n  return action === 'password-reset' || action === 'password-change';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ending every session on a credential change is the whole point of reset; without it an attacker who was signed in stays in (6.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Kết thúc mọi phiên khi đổi thông tin xác thực là điểm mấu chốt của reset; không có nó một kẻ tấn công đang đăng nhập vẫn ở trong (6.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Password reset",
+              "vi": "Đặt lại mật khẩu"
+            },
+            "goi": "endsAllSessions(\"password-reset\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Password change",
+              "vi": "Đổi mật khẩu"
+            },
+            "goi": "endsAllSessions(\"password-change\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Ordinary edit ⇒ no revoke",
+              "vi": "Sửa thường ⇒ không thu hồi"
+            },
+            "goi": "endsAllSessions(\"profile-edit\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A login ⇒ no revoke",
+              "vi": "Một lần đăng nhập ⇒ không thu hồi"
+            },
+            "goi": "endsAllSessions(\"login\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Revoking on an ordinary profile edit.|||Thu hồi trên một lần sửa hồ sơ thường."
+        },
+        {
+          "loi": "Not revoking on a password reset.|||Không thu hồi trên một lần reset mật khẩu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "credential change",
+          "vi": "đổi thông tin xác thực"
+        }
+      ]
+    },
+    {
+      "title": "6.3-4 — Order the reset flow",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order a safe password reset from the user asking to the attacker being locked out.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp một lần đặt lại mật khẩu an toàn từ lúc người dùng xin tới lúc kẻ tấn công bị khoá ra.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Consuming the token comes before changing the hash.|||Tiêu token tới trước đổi hash.",
+        "Revocation is the last real step.|||Thu hồi là bước thật cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-4 — Order the reset flow\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-4 — Order the reset flow — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m3) /forgot-password: same response, email a one-time link to a real account  →  m5) User clicks the link; /reset-password consumes the single-use token  →  m4) Re-check the new password, then update the hash  →  m2) End every session and revoke every refresh family  →  m1) The old refresh cookie now returns REVOKED\n   Request (one response) → consume the link once → re-hash → revoke everything → the old session is dead (6.3).VI: Yêu cầu (một phản hồi) → tiêu link một lần → băm lại → thu hồi tất cả → phiên cũ chết (6.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Request (one response) → consume the link once → re-hash → revoke everything → the old session is dead (6.3).</p><p><i>VI: Yêu cầu (một phản hồi) → tiêu link một lần → băm lại → thu hồi tất cả → phiên cũ chết (6.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The old refresh cookie now returns REVOKED"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "End every session and revoke every refresh family"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "/forgot-password: same response, email a one-time link to a real account"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Re-check the new password, then update the hash"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "User clicks the link; /reset-password consumes the single-use token"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m5",
+              "m4",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>Request (one response) → consume the link once → re-hash → revoke everything → the old session is dead (6.3).</p><p><i>VI: Yêu cầu (một phản hồi) → tiêu link một lần → băm lại → thu hồi tất cả → phiên cũ chết (6.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Changing the hash before consuming the token.|||Đổi hash trước khi tiêu token."
+        },
+        {
+          "loi": "Forgetting the revoke step.|||Quên bước thu hồi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single-use",
+          "vi": "dùng một lần"
+        }
+      ]
+    },
+    {
+      "title": "6.3-5 — Skip a step → the attack",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each skipped reset step with the attack it allows.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi bước reset bị bỏ với cú tấn công nó cho phép.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The revoke step is the one everyone forgets.|||Bước thu hồi là cái ai cũng quên.",
+        "A short expiry kills a stale link; single-use kills a replay.|||Một hạn ngắn giết một link cũ; dùng một lần giết một lần phát lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-5 — Skip a step → the attack\n\nAnswer in the answer panel (no code needed).\n\n1. Skipped → attackBỏ → tấn công\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 6.3-5 — Skip a step → the attack — answer key\n\n1. Skipped → attackBỏ → tấn công\n   - r1.q: an intercepted link replays\n   - r2.q: a link in an archive resets months later\n   - r3.q: the attacker’s session survives recovery\n   - r4.q: the form enumerates users\n   Each omitted control opens a concrete hole: replay, stale link, surviving session, or enumeration (6.3, 6.4).VI: Mỗi lớp bỏ sót mở một lỗ cụ thể: phát lại, link cũ, phiên sống sót, hay dò tài khoản (6.3, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each omitted control opens a concrete hole: replay, stale link, surviving session, or enumeration (6.3, 6.4).</p><p><i>VI: Mỗi lớp bỏ sót mở một lỗ cụ thể: phát lại, link cũ, phiên sống sót, hay dò tài khoản (6.3, 6.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Skipped → attack</p><p style=\"opacity:.75;font-size:.92em\"><i>Bỏ → tấn công</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Skipped step"
+              },
+              {
+                "ma": "q",
+                "ten": "Attack",
+                "luaChon": [
+                  "an intercepted link replays",
+                  "a link in an archive resets months later",
+                  "the attacker’s session survives recovery",
+                  "the form enumerates users"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "single-use token"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "short (15 min) expiry"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "revoke sessions + families"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "one fixed /forgot response"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "an intercepted link replays",
+              "r2.q": "a link in an archive resets months later",
+              "r3.q": "the attacker’s session survives recovery",
+              "r4.q": "the form enumerates users"
+            },
+            "giaiThich": "<p>Each omitted control opens a concrete hole: replay, stale link, surviving session, or enumeration (6.3, 6.4).</p><p><i>VI: Mỗi lớp bỏ sót mở một lỗ cụ thể: phát lại, link cũ, phiên sống sót, hay dò tài khoản (6.3, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a changed hash is enough.|||Tưởng đổi hash là đủ."
+        },
+        {
+          "loi": "Confusing the replay fix with the enumeration fix.|||Lẫn cách vá phát lại với cách vá dò tài khoản."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

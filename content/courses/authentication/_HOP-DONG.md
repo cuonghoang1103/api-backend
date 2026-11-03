@@ -248,7 +248,7 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 | Ch3 | 3.1 bảng phiên · 3.2 từng thuộc tính cookie (Chromium thật) · 3.3 tái sinh phiên (session fixation) · 3.4 CSRF ba lớp · 3.5 phiên sống ở đâu (PG/Redis/ký) · Lab 3 · Quiz | nodejs 8.4 (ma trận SameSite Chromium 149 — đo lại trên 156, nói rõ), PRJ301 cookie-session, SDN302 5.1 |
 | Ch4 | 4.1 giải mã tay · 4.2 alg (none, HS/RS confusion) · 4.3 bảy claim · 4.4 khoá/kid/JWKS/xoay · 4.5 cất token ở đâu · Lab 4 · Quiz | api-design 6.1 (HS256 tự dựng), nodejs 8.2 (jsonwebtoken 9.0.3) |
 | Ch5 | 5.1 hai token · 5.2 xoay vòng + tái dùng · 5.3 năm sự kiện kết thúc phiên · 5.4 danh sách thiết bị · 5.5 cuộc đua refresh · Lab 5 · Quiz | nodejs 8.2 |
-| Ch6 | 6.1 đăng ký · 6.2 xác minh email (máy quét bấm link) · 6.3 đặt lại mật khẩu · 6.4 dò tài khoản (thời gian) · 6.5 đổi email/xoá · Lab 6 · Quiz | — |
+| Ch6 | 6.1 đăng ký · 6.2 xác minh email (máy quét bấm link) · 6.3 đặt lại mật khẩu · 6.4 dò tài khoản (thời gian) · 6.5 đổi email/xoá · Lab 6 · Quiz | api-design 0.1 (GET an toàn) ↔ 6.2, api-design 6.2 (rò 404/403) ↔ 6.1 & 6.4, api-design 5.3 (rate limit) ↔ 6.3, api-design 5.1 (idempotency/DELETE) ↔ 6.5 |
 | Ch7 | 7.1 yếu tố thứ hai · 7.2 TOTP 30 dòng · 7.3 đăng ký + khôi phục · 7.4 passkey · 7.5 triển khai passkey · Lab 7 · Quiz | dùng `randomInt` của bài 1.2 cho mã |
 | Ch8 | 8.1–8.5 OAuth 2.1/OIDC (LabFlow ID là provider, LabFlow API là client) · Lab 8 · Quiz | api-design 6.1 (OAuth tổng quan) |
 | Ch9 | 9.1–9.5 phân quyền · Lab 9 · Quiz | api-design 6.2, nodejs 8.3, testing 5.2 |
@@ -339,4 +339,17 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   CẢ HỌ (r2 sống cũng REVOKED); năm sự kiện ⇒ 4 REVOKED + 1 EXPIRED; danh sách thiết bị GROUP BY family (thu hồi giới hạn theo chủ, {"revoked":0}
   khi đoán); cuộc đua: grace 10 s ⇒ hai tab CÙNG token, grace 0 ⇒ REUSE_DETECTED (cảnh báo giả); ~150k lần xoay/s. Chuẩn: RFC 9700 (BCP 240)
   §2.2.2/§4.14 + OWASP. Môi trường soạn: `auth2-pg` (postgres:17, 4832) cho `POST /refresh`/`/me/devices`; demo thuần lớp không cần CSDL.
-- **TẠM DỪNG sau Ch5 ngày 03/11 (theo yêu cầu chủ kênh); tiếp theo là Ch6** (vòng đời tài khoản: đăng ký, xác minh email, đặt lại mật khẩu, dò tài khoản, §11) — chưa bắt đầu.
+- **04/11/2026 — Ch6 trọn:** 5 bài + Lab 6 (`auth-6-7-lab-vong-doi`, máy chấm `scripts/cham-lab-6.mjs` 6 phép, kho trong bộ nhớ +
+  đồng hồ giả — không CSDL) + quiz 10 câu (A3 B2 C2 D3, slug `auth-6-6-quiz`); bài ~209k ký tự cả chương (depth-audit đạt mọi sàn);
+  6 deck 58 slide AUTH/v1 (đã đẩy, tiêu đề giang↔lesson khớp, 0 lỗi kiem-lap-day + kiem-tran); Code Lab +6 module/22 đề (track 41 module/158 đề,
+  lời giải sạch, máy chấm trình duyệt: mọi lời giải đạt + mọi starter trượt); liên kết chéo một chiều "đọc thêm" (api-design 0.1 ↔ 6.2,
+  api-design 6.2 ↔ 6.1 & 6.4, api-design 5.3 ↔ 6.3, api-design 5.1 ↔ 6.5); video YouTube 6.1–6.5 đã có (Lab 6 video: nếu thiếu thì bổ sung mốc);
+  `_labflow-id` = v0.6 (`src/lifecycle/` token một lần issue/consume theo mục đích + requestPasswordReset chống dò, `src/email/` hộp thư giả,
+  `sql/004_lifecycle.sql` cột `email_verified_at`+`status`+bảng `one_time_tokens`, `POST /sign-up`+`/verify-email`+`/forgot-password`(`-naive`)+
+  `/reset-password`+`/me/email`+`/me/delete`, `demo6/`, `test/lifecycle.test.js` ⇒ npm test 39 pass). Số đo chính (macOS arm64, Node 22.23.3,
+  PostgreSQL 17.11): verify token lưu digest 30 phút, reset 15 phút, dùng một lần + ràng mục đích; đăng ký băm CẢ HAI nhánh ⇒ /sign-up đã-dùng
+  vs trống ~1,0–1,06× (không rò); **"lỗ 2" đo được:** `/forgot-password-naive` (AWAIT chèn+gửi) tài khoản thật chậm hơn ~0,9 ms NHẤT QUÁN qua
+  200 request, bản đúng (không await) ~0,01–0,06 ms chìm trong nhiễu; reset ⇒ cookie refresh cũ REVOKED + link reset lần hai USED; xoá ⇒ xác thực
+  lại REAUTH_FAILED nếu sai, status=deleted + thu hồi tất cả ⇒ đăng nhập lại hỏng như email lạ. Chuẩn: OWASP (Authentication, Forgot Password,
+  WSTG dò tài khoản) + GDPR Điều 17. Môi trường soạn: `auth2-pg` (postgres:17, 4832) + hộp thư giả ghi tệp theo `LFID_MAIL_DIR`; demo thuần lớp không cần CSDL.
+- **TẠM DỪNG sau Ch6 ngày 04/11 (theo yêu cầu chủ kênh — soạn trọn khoá, dừng báo soát MỖI chương); tiếp theo là Ch7** (đa yếu tố & passkey: TOTP RFC 6238, WebAuthn, §11) — chưa bắt đầu.

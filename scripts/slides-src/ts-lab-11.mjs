@@ -24,6 +24,14 @@ export const slides = lamDeck({ chuong: 'Chapter 11 — Typing a Node/Express ba
   { t: 'The reference: 10/10', body: ts(pick(CODE.ref, 0, 12), { sm: true, hl: [4, 5, 7] }) +
     tc(L(OUT['l6-ref']).filter((l) => /Score:/.test(l)).join('\n'), { title: 'npm run lab11 — the reference', fs: 15 }) +
     box('Every layer in one function', `Exact ${c('CreateBooking')} and ${c('Booking')}, a typed ${c('Handler')} over ${c('ApiResult')}, and a validation branch that sends a typed 400 or a typed 201.`, 'xanh') },
+  { t: 'How the grader scores you', to: true, body: cards([
+      ['A · compiles (2)', 'handler.ts compiles under the course tsconfig (strict).'],
+      ['B · correct uses (1)', 'kiem/phai-dung.ts: a CreateBooking and a Booking.'],
+      ['C · honesty (1)', 'no any, no as (as const is fine), no ! and no @ts-.'],
+      ['D · behaviour (2)', 'node --test: a valid body → 201 ok, seats ≤ 0 → 400 INVALID_SEATS.'],
+      ['E · wrong uses (4)', 'the eight wrong uses, each refused with its exact code (8 × 0.5).'],
+      ['pass mark', '7 of 10 — the any stub scores 4.5, the reference 10.'],
+    ], 3) },
   { t: 'Before you call it done', body: cards([
       [c('npm run lab11'), 'Prints Score: 10/10 — the grader runs tsc and Node.'],
       ['No any / as / !', 'CreateBooking and Booking are typed exactly.'],

@@ -870,12 +870,22 @@ ESM  : top-level await chạy được</div>
   <span class="lc-body"><span class="lc-title">Web Foundations 5.5 — ES modules in the browser</span><span class="lc-sub">Exports, run-once state and the real errors: missing .js, file:// blocked</span></span>
   <span class="lc-cta">Open lesson</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-4-target-lib-module" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The same rules, as a tsconfig flag — TS 9.4: target, lib, module &amp; noEmit</span><span class="lc-sub">Same: how an import becomes a file, and why a relative import needs its extension. Different: in TypeScript <code>module: nodenext</code> is the flag that makes tsc follow Node’s ESM rules — a bare import is TS2835, and <code>allowImportingTsExtensions</code> lets you write the <code>.ts</code>.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 5.5 — ES module trong trình duyệt</span><span class="lc-sub">Export, trạng thái chạy một lần và lỗi thật: thiếu .js, file:// bị chặn</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-4-target-lib-module" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng luật đó, dưới dạng một cờ tsconfig — TS 9.4: target, lib, module &amp; noEmit</span><span class="lc-sub">Giống: một import thành một tệp ra sao, và vì sao một import tương đối cần phần mở rộng. Khác: trong TypeScript <code>module: nodenext</code> là cờ làm tsc theo luật ESM của Node — một import trần là TS2835, và <code>allowImportingTsExtensions</code> cho bạn viết <code>.ts</code>.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

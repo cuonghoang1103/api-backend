@@ -6030,5 +6030,524 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-9-1-a",
+    "bai": "typescript-9-1-tsc-and-tsconfig",
+    "tieuDe": "Import the source of truth|||Import nguồn sự thật",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>seed.ts</code> declares its own hand-copied <code>ContentType</code> union — self-consistent, so a renamed value never surfaces. Import the type from <code>content.ts</code> instead, so a dead value is a compile error.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the old value in kiem/sai.ts is TS2322.</p>|||<p><code>seed.ts</code> khai union <code>ContentType</code> chép tay của riêng nó — tự nhất quán, nên một giá trị đổi tên không bao giờ lộ. Import kiểu từ <code>content.ts</code>, để một giá trị chết là một lỗi biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và giá trị cũ trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/seed.ts": "// A hand-copied union — it drifts the moment content.ts changes.\nexport type ContentType = 'VLOG' | 'BLOG' | 'CODE';\nexport const rows: { type: ContentType }[] = [{ type: 'VLOG' }];\n"
+    },
+    "coDinh": {
+      "src/content.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n",
+      "kiem/dung.ts": "import type { ContentType } from '../src/seed.ts';\nconst t: ContentType = 'CODE_REVIEW'; // the current value\nexport { t };\n",
+      "kiem/sai.ts": "import type { ContentType } from '../src/seed.ts';\nconst dead: ContentType = 'CODE'; // expect TS2322\nexport { dead };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/seed.ts": "// Import the type — a renamed value is now a compile error, not a run-time break.\nimport type { ContentType } from './content.ts';\nexport const rows: { type: ContentType }[] = [{ type: 'CODE_REVIEW' }];\nexport type { ContentType };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still a hand-copied union with the old value",
+        "tep": {
+          "src/seed.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE';\nexport const rows: { type: ContentType }[] = [{ type: 'VLOG' }];\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-1-b",
+    "bai": "typescript-9-1-tsc-and-tsconfig",
+    "tieuDe": "A derived type that tracks the enum|||Một kiểu suy ra bám theo enum",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>LABELS</code> is typed as a plain object, so a missing content type is never caught. Type it as <code>Record&lt;ContentType, string&gt;</code> (imported from <code>content.ts</code>) so every type must have a label.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the literal missing <code>CODE_REVIEW</code> in kiem/sai.ts is TS2741.</p>|||<p><code>LABELS</code> có kiểu là một object thường, nên thiếu một content type không bao giờ bị bắt. Gán kiểu <code>Record&lt;ContentType, string&gt;</code> (import từ <code>content.ts</code>) để mọi type phải có nhãn.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và literal thiếu <code>CODE_REVIEW</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/labels.ts": "import type { ContentType } from './content.ts';\n\n// Wrong: a plain object — a missing content type is never caught.\nexport type Labels = { [k: string]: string };\n"
+    },
+    "coDinh": {
+      "src/content.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n",
+      "kiem/dung.ts": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\nexport { l };\n",
+      "kiem/sai.ts": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' }; // expect TS2741\nexport { l };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/labels.ts": "import type { ContentType } from './content.ts';\n\n// Record over the imported union — a label is required for every content type.\nexport type Labels = Record<ContentType, string>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "plain object — a missing content type is accepted",
+        "tep": {
+          "src/labels.ts": "import type { ContentType } from './content.ts';\nexport type Labels = { [k: string]: string };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-1-c",
+    "bai": "typescript-9-1-tsc-and-tsconfig",
+    "tieuDe": "Types are erased — prove it|||Kiểu bị xoá — chứng minh",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>Node runs a <code>.ts</code> file by stripping the types. Write <code>area</code> so it type-checks and still prints the right number at run time — the types never run, so the behaviour must be correct on its own.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test prints 12.</p>|||<p>Node chạy một tệp <code>.ts</code> bằng cách bỏ kiểu. Viết <code>area</code> để nó kiểu-kiểm và vẫn in đúng số lúc chạy — kiểu không bao giờ chạy, nên hành vi phải tự đúng.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test in 12.</p>",
+    "khoiDau": {
+      "src/area.ts": "export type Rect = { w: number; h: number };\n\n// Wrong: the body does not actually compute the area.\nexport function area(r: Rect): number {\n  return r.w;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { area } from '../src/area.ts';\nconst a: number = area({ w: 4, h: 3 });\nexport { a };\n",
+      "test/area.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { area } from '../src/area.ts';\ntest('area multiplies', () => assert.equal(area({ w: 4, h: 3 }), 12));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/area.test.ts"
+      ],
+      "chay": [
+        "node --test test/area.test.ts"
+      ],
+      "ra": "",
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/area.ts": "export type Rect = { w: number; h: number };\n\n// The types are stripped at run time, so the behaviour must be right on its own.\nexport function area(r: Rect): number {\n  return r.w * r.h;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "returns r.w, not r.w * r.h — compiles but the test fails",
+        "tep": {
+          "src/area.ts": "export type Rect = { w: number; h: number };\nexport function area(r: Rect): number { return r.w; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-2-a",
+    "bai": "typescript-9-2-strict-mode",
+    "tieuDe": "noImplicitAny: type the parameter|||noImplicitAny: gán kiểu tham số",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>Under strict, <code>parse</code>’s parameter has no type (TS7006). Give it a type so the compiler can check the <code>.trim()</code> and the function compiles.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Dưới strict, tham số của <code>parse</code> không có kiểu (TS7006). Cho nó một kiểu để trình biên dịch kiểm được <code>.trim()</code> và hàm biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/parse.ts": "// Under strict, a parameter with no type is TS7006.\nexport function parse(raw) {\n  return raw.trim().toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { parse } from '../src/parse.ts';\nconst s: string = parse('  be-201  ');\nexport { s };\n",
+      "test/parse.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parse } from '../src/parse.ts';\ntest('parse', () => assert.equal(parse('  be  '), 'BE'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/parse.test.ts"
+      ],
+      "chay": [
+        "node --test test/parse.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/parse.ts": "export function parse(raw: string): string {\n  return raw.trim().toUpperCase();\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the parameter is still untyped (TS7006)",
+        "tep": {
+          "src/parse.ts": "export function parse(raw) { return raw.trim().toUpperCase(); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-2-b",
+    "bai": "typescript-9-2-strict-mode",
+    "tieuDe": "strictNullChecks: handle the undefined|||strictNullChecks: xử lý undefined",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>find</code> may return <code>undefined</code>, so reading <code>.name</code> is TS18048. Guard the result before you read it, so <code>nameOf</code> returns a <code>string</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>find</code> có thể trả <code>undefined</code>, nên đọc <code>.name</code> là TS18048. Chặn kết quả trước khi đọc, để <code>nameOf</code> trả một <code>string</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/find.ts": "type User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\n\n// find may return undefined — reading .name is refused.\nexport function nameOf(id: number): string {\n  const u = users.find((x) => x.id === id);\n  return u.name;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { nameOf } from '../src/find.ts';\nconst n: string = nameOf(1);\nexport { n };\n",
+      "test/find.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { nameOf } from '../src/find.ts';\ntest('nameOf', () => { assert.equal(nameOf(1), 'An'); assert.equal(nameOf(99), 'unknown'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/find.test.ts"
+      ],
+      "chay": [
+        "node --test test/find.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/find.ts": "type User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\n\n// Guard the possibly-undefined result before reading .name.\nexport function nameOf(id: number): string {\n  const u = users.find((x) => x.id === id);\n  return u?.name ?? 'unknown';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads u.name without a guard (TS18048)",
+        "tep": {
+          "src/find.ts": "type User = { id: number; name: string };\nconst users: User[] = [{ id: 1, name: 'An' }];\nexport function nameOf(id: number): string { const u = users.find((x) => x.id === id); return u.name; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-2-c",
+    "bai": "typescript-9-2-strict-mode",
+    "tieuDe": "strictNullChecks: a config default|||strictNullChecks: một mặc định config",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>port</code> may be <code>undefined</code> (the key is optional), so passing it where a <code>number</code> is required is refused. Give it a default so <code>resolvePort</code> always returns a <code>number</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>port</code> có thể <code>undefined</code> (khoá là optional), nên đưa nó vào chỗ cần một <code>number</code> bị từ chối. Cho nó một mặc định để <code>resolvePort</code> luôn trả một <code>number</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/config.ts": "type Config = { host: string; port?: number };\n\n// config.port may be undefined, so returning it as a number is refused.\nexport function resolvePort(config: Config): number {\n  return config.port;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { resolvePort } from '../src/config.ts';\nconst p: number = resolvePort({ host: 'localhost' });\nexport { p };\n",
+      "test/config.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { resolvePort } from '../src/config.ts';\ntest('resolvePort', () => { assert.equal(resolvePort({ host: 'x' }), 5432); assert.equal(resolvePort({ host: 'x', port: 3000 }), 3000); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/config.test.ts"
+      ],
+      "chay": [
+        "node --test test/config.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/config.ts": "type Config = { host: string; port?: number };\n\n// Default the optional value so the result is always a number.\nexport function resolvePort(config: Config): number {\n  return config.port ?? 5432;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "returns config.port (number | undefined) as a number",
+        "tep": {
+          "src/config.ts": "type Config = { host: string; port?: number };\nexport function resolvePort(config: Config): number { return config.port; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-3-a",
+    "bai": "typescript-9-3-extra-safety-flags",
+    "tieuDe": "Guard an array access|||Chặn một truy cập mảng",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>Under <code>noUncheckedIndexedAccess</code>, <code>labs[0]</code> is <code>string | undefined</code>, so reading <code>.toUpperCase()</code> is TS18048. Guard it so <code>firstCode</code> returns a <code>string</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Dưới <code>noUncheckedIndexedAccess</code>, <code>labs[0]</code> là <code>string | undefined</code>, nên đọc <code>.toUpperCase()</code> là TS18048. Chặn nó để <code>firstCode</code> trả một <code>string</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/first.ts": "// labs[0] might be undefined (the array could be empty).\nexport function firstCode(labs: string[]): string {\n  return labs[0].toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { firstCode } from '../src/first.ts';\nconst c: string = firstCode(['be-201']);\nexport { c };\n",
+      "test/first.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { firstCode } from '../src/first.ts';\ntest('firstCode', () => { assert.equal(firstCode(['be-201']), 'BE-201'); assert.equal(firstCode([]), 'NONE'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/first.test.ts"
+      ],
+      "chay": [
+        "node --test test/first.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/first.ts": "export function firstCode(labs: string[]): string {\n  const first = labs[0];\n  return (first ?? 'none').toUpperCase();\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads labs[0].toUpperCase() without a guard (TS18048)",
+        "tep": {
+          "src/first.ts": "export function firstCode(labs: string[]): string { return labs[0].toUpperCase(); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-3-b",
+    "bai": "typescript-9-3-extra-safety-flags",
+    "tieuDe": "Guard a record lookup|||Chặn một lần tra record",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Under <code>noUncheckedIndexedAccess</code>, a <code>Record&lt;string, number&gt;</code> lookup is <code>number | undefined</code>, so returning it as a <code>number</code> is TS18048. Guard it with a default.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Dưới <code>noUncheckedIndexedAccess</code>, một lần tra <code>Record&lt;string, number&gt;</code> là <code>number | undefined</code>, nên trả nó như một <code>number</code> là TS18048. Chặn bằng một mặc định.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/seats.ts": "export function seatsFor(map: Record<string, number>, lab: string): number {\n  return map[lab];\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { seatsFor } from '../src/seats.ts';\nconst n: number = seatsFor({ 'BE-201': 40 }, 'BE-201');\nexport { n };\n",
+      "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsFor } from '../src/seats.ts';\ntest('seatsFor', () => { assert.equal(seatsFor({ 'BE-201': 40 }, 'BE-201'), 40); assert.equal(seatsFor({}, 'X'), 0); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/seats.test.ts"
+      ],
+      "chay": [
+        "node --test test/seats.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "export function seatsFor(map: Record<string, number>, lab: string): number {\n  return map[lab] ?? 0;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "returns map[lab] unguarded (number | undefined)",
+        "tep": {
+          "src/seats.ts": "export function seatsFor(map: Record<string, number>, lab: string): number { return map[lab]; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-3-c",
+    "bai": "typescript-9-3-extra-safety-flags",
+    "tieuDe": "Guard inside a loop|||Chặn trong một vòng lặp",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p>Indexing <code>rows[i]</code> inside a loop is <code>string | undefined</code> under <code>noUncheckedIndexedAccess</code>, so reading <code>.length</code> is refused. Guard each row (or iterate the values) so <code>totalLength</code> compiles.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Truy cập <code>rows[i]</code> trong một vòng lặp là <code>string | undefined</code> dưới <code>noUncheckedIndexedAccess</code>, nên đọc <code>.length</code> bị từ chối. Chặn mỗi hàng (hoặc duyệt giá trị) để <code>totalLength</code> biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/total.ts": "export function totalLength(rows: string[]): number {\n  let sum = 0;\n  for (let i = 0; i < rows.length; i++) {\n    sum += rows[i].length;\n  }\n  return sum;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { totalLength } from '../src/total.ts';\nconst n: number = totalLength(['ab', 'cde']);\nexport { n };\n",
+      "test/total.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { totalLength } from '../src/total.ts';\ntest('totalLength', () => { assert.equal(totalLength(['ab', 'cde']), 5); assert.equal(totalLength([]), 0); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/total.test.ts"
+      ],
+      "chay": [
+        "node --test test/total.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/total.ts": "export function totalLength(rows: string[]): number {\n  let sum = 0;\n  for (const row of rows) {\n    sum += row.length;\n  }\n  return sum;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads rows[i].length without a guard (TS18048)",
+        "tep": {
+          "src/total.ts": "export function totalLength(rows: string[]): number { let sum = 0; for (let i = 0; i < rows.length; i++) { sum += rows[i].length; } return sum; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-4-a",
+    "bai": "typescript-9-4-target-lib-module",
+    "tieuDe": "A relative import needs its extension|||Một import tương đối cần phần mở rộng",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>Under <code>nodenext</code>, a relative import must carry its file extension — <code>import from './helper'</code> is TS2835. Add the <code>.ts</code> extension so <code>app.ts</code> compiles.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Dưới <code>nodenext</code>, một import tương đối phải mang phần mở rộng — <code>import from './helper'</code> là TS2835. Thêm phần mở rộng <code>.ts</code> để <code>app.ts</code> biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "// Under nodenext, a bare relative import is refused.\nimport { helper } from './helper';\nexport function run(): number {\n  return helper();\n}\n"
+    },
+    "coDinh": {
+      "src/helper.ts": "export function helper(): number {\n  return 42;\n}\n",
+      "kiem/dung.ts": "import { run } from '../src/app.ts';\nconst r: number = run();\nexport { r };\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { run } from '../src/app.ts';\ntest('run', () => assert.equal(run(), 42));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "// The course adds allowImportingTsExtensions, so you write the .ts extension.\nimport { helper } from './helper.ts';\nexport function run(): number {\n  return helper();\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the import is still missing its extension (TS2835)",
+        "tep": {
+          "src/app.ts": "import { helper } from './helper';\nexport function run(): number { return helper(); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-9-4-b",
+    "bai": "typescript-9-4-target-lib-module",
+    "tieuDe": "Import a type with import type|||Import một kiểu bằng import type",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Under <code>verbatimModuleSyntax</code>, a type that you import as a value is TS1484 — it must be <code>import type</code>. Fix the import of <code>Lab</code> so <code>describe.ts</code> compiles.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Dưới <code>verbatimModuleSyntax</code>, một kiểu bạn import như một giá trị là TS1484 — nó phải là <code>import type</code>. Sửa import <code>Lab</code> để <code>describe.ts</code> biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/describe.ts": "// Lab is a type, so importing it as a value is refused under verbatimModuleSyntax.\nimport { Lab } from './model.ts';\nexport function describe(lab: Lab): string {\n  return lab.code + ' (' + lab.seats + ')';\n}\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Lab = { code: string; seats: number };\n",
+      "kiem/dung.ts": "import { describe } from '../src/describe.ts';\nconst s: string = describe({ code: 'BE-201', seats: 40 });\nexport { s };\n",
+      "test/describe.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe } from '../src/describe.ts';\ntest('describe', () => assert.equal(describe({ code: 'BE-201', seats: 40 }), 'BE-201 (40)'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/describe.test.ts"
+      ],
+      "chay": [
+        "node --test test/describe.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/describe.ts": "import type { Lab } from './model.ts';\nexport function describe(lab: Lab): string {\n  return lab.code + ' (' + lab.seats + ')';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "imports the type as a value (TS1484)",
+        "tep": {
+          "src/describe.ts": "import { Lab } from './model.ts';\nexport function describe(lab: Lab): string { return lab.code + ' (' + lab.seats + ')'; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-9",
+    "bai": "typescript-9-6-lab-siet-strict",
+    "tieuDe": "Lab 9 — strict-safe the loose module|||Lab 9 — làm module lỏng an toàn với strict",
+    "doKho": "HARD",
+    "phut": 25,
+    "moTa": "<p>The lab in miniature. The loose module has an untyped parameter, an unguarded array access, and a hand-copied enum union. Rewrite it strict-safe: type the parameter, guard the access, and import <code>ContentType</code> from <code>content.ts</code> so the drifted value is refused. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test passes.</p>|||<p>Lab thu nhỏ. Module lỏng có một tham số không kiểu, một truy cập mảng không chặn, và một union enum chép tay. Viết lại an toàn với strict: gán kiểu tham số, chặn truy cập, và import <code>ContentType</code> từ <code>content.ts</code> để giá trị đã trôi bị từ chối. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test qua.</p>",
+    "khoiDau": {
+      "src/rules.ts": "// Loose: an untyped parameter, an unguarded access, and a hand-copied enum union.\nexport type ContentType = 'VLOG' | 'BLOG' | 'CODE';\n\nexport function label(type): string {\n  const map: Record<string, string> = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\n  return map[type];\n}\nexport function firstTag(tags: string[]): string {\n  return tags[0].toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "src/content.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n",
+      "kiem/dung.ts": "import { label, firstTag } from '../src/rules.ts';\nimport type { ContentType } from '../src/rules.ts';\nconst a: string = label('VLOG');\nconst b: string = firstTag(['be']);\nconst t: ContentType = 'CODE_REVIEW';\nexport { a, b, t };\n",
+      "kiem/sai.ts": "import { label } from '../src/rules.ts';\nimport type { ContentType } from '../src/rules.ts';\nexport const s1: ContentType = 'CODE'; // expect TS2322\nexport const s2 = label('PODCAST'); // expect TS2345\nexport function s3(xs: number[]) { const a = xs[0]; return a.toFixed(2); } // expect TS18048\n",
+      "test/rules.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label, firstTag } from '../src/rules.ts';\ntest('label', () => { assert.equal(label('VLOG'), 'Vlog'); assert.equal(label('CODE_REVIEW'), 'Review'); });\ntest('firstTag', () => { assert.equal(firstTag(['be']), 'BE'); assert.equal(firstTag([]), ''); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/rules.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/rules.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/rules.ts": "import type { ContentType } from './content.ts';\n\nconst MAP: Record<ContentType, string> = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\nexport function label(type: ContentType): string {\n  return MAP[type];\n}\nexport function firstTag(tags: string[]): string {\n  const first = tags[0];\n  return (first ?? '').toUpperCase();\n}\nexport type { ContentType };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the loose starter kept — wrong uses slip through",
+        "tep": {
+          "src/rules.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE';\nexport function label(type): string { const map: Record<string, string> = { VLOG: 'Vlog' }; return map[type] ?? ''; }\nexport function firstTag(tags: string[]): string { return (tags[0] ?? '').toUpperCase(); }\n"
+        }
+      },
+      {
+        "nhan": "typed and guarded but ContentType still hand-copied with the old value",
+        "tep": {
+          "src/rules.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE';\nconst MAP: Record<ContentType, string> = { VLOG: 'Vlog', BLOG: 'Blog', CODE: 'Review' };\nexport function label(type: ContentType): string { return MAP[type]; }\nexport function firstTag(tags: string[]): string { const first = tags[0]; return (first ?? '').toUpperCase(); }\n"
+        }
+      }
+    ]
   }
 ]

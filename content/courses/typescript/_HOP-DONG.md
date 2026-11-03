@@ -329,10 +329,22 @@ typescript: 'typescript-practice',
   Số đo Lab 8: khởi đầu **5/10** · `yeu` **8/10** · `vua` **9.5/10** · tham khảo **10/10** (lệch đã bắt: payload/patch gõ sai ⇒ TS2561 "Did you mean", không TS2353).
   **3 cặp liên kết chéo hai chiều** (prisma-orm `pr-4-2-select-include` ↔ 8.2 Pick/Omit = select/omit; `api-2-4-i18n` ↔ 8.3 Record = bảng dịch; nodejs `nodejs-1-4-bat-dong-bo` ↔ 8.4 Awaited).
   Ảnh chụp `_labflow-ts` cuối Ch8 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab8 5/8/9.5/10): 60 test, lab1–8 tham khảo. Soạn MỘT phiên, KHÔNG fork.
-- **⏸ TẠM DỪNG sau Chương 8 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 9** (§9 — tsconfig & trình biên dịch: CI `tsc --noEmit`, tái hiện sự cố seed 08/08;
-  Lab 9 siết một dự án lỏng lên strict + cổng CI). Làm y Ch5–8: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
-  đề Code Lab `ts` + nguon + `_track.json` + xuat-de + máy chấm trình duyệt, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`,
-  `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main). Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
+- 04/11/2026 — **Chương 9 trọn** (thay placeholder cũ 534 dòng một tệp): 4 bài (slug giữ: 9.1 tsc-and-tsconfig, 9.2 strict-mode, 9.3 extra-safety-flags,
+  9.4 target-lib-module; nguồn bài + giảng ~130k/6) + Lab 9 (MỚI `typescript-9-6-lab-siet-strict`) + quiz 10 câu (slug giữ `typescript-9-5-quiz`); tệp chương `s09-tsconfig-compiler.mjs` soạn lại.
+  5 deck / 34 slide đẩy `TS/v1` (ts-09-1 7, ts-09-2 6, ts-09-3 6, ts-09-4 6, ts-lab-9 9; 0 lỗi kiem-slide). 12 đề Code Lab `ts` mới (ts-cl-9-1 a–c, 9-2 a–c,
+  9-3 a–c, 9-4 a–b, ts-cl-lab-9; 13 sai mẫu) — kiem-de-ts **144/144** (tsc 7.0.2), codelab-xuat-de 12 sạch, máy chấm trình duyệt TS 6.0.3 **689/689** (không lệch 6↔7 mới);
+  track `typescript-practice` thêm 5 module (⇒ 51 module / 144 đề). **Tái hiện sự cố seed 08/08** ở 9.1 (demo scope: tsc -p include src ⇒ 0 lỗi dù seed/ có giá trị chết 'CODE';
+  include seed ⇒ TS2322). **Lab 9 là lab đầu CẤU HÌNH trình biên dịch** (không viết kiểu): máy chấm `cham-lab-9.mjs` chạy `tsc --noEmit` dưới tsconfig CỦA HỌC VIÊN
+  (A gate pass · B strict+noUncheckedIndexedAccess · C no cheat + seed import ContentType · D test · E 8 vi phạm lỏng). Số đo Lab 9: lỏng **4.5** · strict thiếu
+  noUncheckedIndexedAccess **8** · tight nhưng seed chép tay **9** · tham khảo **10**. `demo9/` (26 demo đo thật), `lab9/` (content.ts given + {src,yeu,vua,giai}/{tsconfig,rules,seed}.ts + kiem + test).
+  LabFlow TS: `npm test` giữ **60** (lab9 có test riêng ngoài src/rules). **3 cặp liên kết chéo hai chiều** (prisma `pr-8-3-su-co-enum` ↔ 9.1 sự cố enum/include;
+  testing `tst-1-1-cau-truc` ↔ 9.2 compiler vs test; nodejs `nodejs-1-5-module` ↔ 9.4 nodenext/ESM).
+  ⚠ Đo được: noImplicitReturns/noUnusedLocals KHÔNG trong tsconfig khoá (chỉ noUncheckedIndexedAccess) ⇒ Code Lab 9.3 chỉ test được noUncheckedIndexedAccess; lab tsconfig sâu 4 tầng cần `../../../../`.
+  Ảnh chụp `_labflow-ts` cuối Ch9 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab9 4.5/8/9/10): Soạn MỘT phiên, KHÔNG fork.
+- **⏸ TẠM DỪNG sau Chương 9 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 10** (§9 — declaration files & modules: `.d.ts`, kiểu đi giữa package). Làm y Ch5–9:
+  MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`, đề Code Lab `ts` + nguon + `_track.json` + xuat-de + máy chấm trình duyệt,
+  liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`, `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main).
+  Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

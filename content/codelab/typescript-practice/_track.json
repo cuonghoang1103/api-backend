@@ -284,6 +284,36 @@
       "name": "8.6 Lab 8 — Utility types & the API DTO layer",
       "level": "ADVANCED",
       "description": "1 đề: Lab 8 — the utility-type DTO layer (MyPartial/MyPick/MyOmit)"
+    },
+    {
+      "slug": "typescript-9-1-tsc-and-tsconfig",
+      "name": "9.1 — What tsc does & tsconfig basics",
+      "level": "ADVANCED",
+      "description": "3 đề: Import the source of truth · A derived type that tracks the enum · Types are erased — prove it"
+    },
+    {
+      "slug": "typescript-9-2-strict-mode",
+      "name": "9.2 — strict mode",
+      "level": "ADVANCED",
+      "description": "3 đề: noImplicitAny (type the parameter) · strictNullChecks (handle undefined) · a config default"
+    },
+    {
+      "slug": "typescript-9-3-extra-safety-flags",
+      "name": "9.3 — Beyond strict: extra safety flags",
+      "level": "ADVANCED",
+      "description": "3 đề: Guard an array access · Guard a record lookup · Guard inside a loop (noUncheckedIndexedAccess)"
+    },
+    {
+      "slug": "typescript-9-4-target-lib-module",
+      "name": "9.4 — target, lib, module & noEmit",
+      "level": "ADVANCED",
+      "description": "2 đề: A relative import needs its extension (nodenext) · Import a type with import type (verbatimModuleSyntax)"
+    },
+    {
+      "slug": "typescript-9-6-lab-siet-strict",
+      "name": "9.6 Lab 9 — Tighten a loose project to strict",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 9 — strict-safe the loose module (noImplicitAny + strictNullChecks + noUncheckedIndexedAccess + the import)"
     }
   ]
 }

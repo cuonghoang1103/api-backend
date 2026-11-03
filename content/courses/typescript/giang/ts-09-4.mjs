@@ -1,0 +1,26 @@
+/** Giảng theo slide — bài 9.4 target, lib, module & noEmit (deck ts-09-4, 7 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-09-4', 'target, lib, module &amp; noEmit', 'target, lib, module &amp; noEmit', [
+  [1, 'target, lib, module &amp; noEmit',
+    `<p>The last group of flags describes the world your code runs in. target and lib say which JavaScript you are writing for; module says how imports resolve; and noEmit says tsc should check without producing a single file. Together they are why the same code is fine in one project and an error in another.</p>`,
+    `<p>Nhóm cờ cuối tả thế giới code bạn chạy trong đó. target và lib nói bạn viết cho JavaScript nào; module nói import phân giải ra sao; và noEmit nói tsc nên kiểm mà không sinh một tệp nào. Gộp lại, chúng là vì sao cùng một đoạn code ổn ở dự án này mà lỗi ở dự án khác.</p>`],
+  [2, 'lib: which APIs exist',
+    `<p>findLast is a real array method, but it was added in ES2023. With lib set to es2022, the compiler does not know it: TS2550, and a hint to change lib to es2023 or later. The course lib (es2024) knows it, so the same call runs and prints. lib is the list of built-in APIs the compiler believes exist — too old a lib and a real method looks like a typo.</p>`,
+    `<p>findLast là một method mảng thật, nhưng nó được thêm ở ES2023. Với lib đặt es2022, trình biên dịch không biết nó: TS2550, kèm gợi ý đổi lib sang es2023 trở lên. lib của khoá (es2024) biết nó, nên cùng lời gọi chạy và in. lib là danh sách API dựng sẵn trình biên dịch tin là tồn tại — lib quá cũ thì một method thật trông như lỗi gõ.</p>`],
+  [3, 'target vs lib: syntax vs APIs',
+    `<p>target is the JavaScript syntax tsc assumes and (when it emits) compiles down to; lib is the set of APIs it assumes exist. They usually move together, but they answer different questions: target is "can I write this syntax?", lib is "does this method exist?". In this course Node 22 runs the .ts directly, so target matters less — but lib still decides which methods you may call.</p>`,
+    `<p>target là cú pháp JavaScript tsc giả định và (khi sinh) biên dịch xuống; lib là tập API nó giả định tồn tại. Chúng thường đi cùng nhau, nhưng trả lời câu hỏi khác nhau: target là "tôi viết được cú pháp này không?", lib là "method này có tồn tại không?". Trong khoá này Node 22 chạy .ts thẳng, nên target ít quan trọng hơn — nhưng lib vẫn quyết định bạn gọi được method nào.</p>`],
+  [4, 'module: how imports resolve',
+    `<p>Under nodenext, a relative import must carry its file extension: import from './helper' is TS2835, with a hint to write './helper.js'. The course adds allowImportingTsExtensions so you write './helper.ts' instead. module and moduleResolution decide how an import string becomes a file — get them wrong and every import breaks at once.</p>`,
+    `<p>Dưới nodenext, một import tương đối phải mang phần mở rộng: import từ './helper' là TS2835, kèm gợi ý viết './helper.js'. Khoá thêm allowImportingTsExtensions nên bạn viết './helper.ts'. module và moduleResolution quyết định một chuỗi import thành một tệp ra sao — sai chúng thì mọi import gãy cùng lúc.</p>`],
+  [5, 'noEmit: check without producing files',
+    `<p>noEmit tells tsc to type-check and stop — produce no .js. It runs clean and writes nothing, which is exactly what you want in CI: a pure gate that says yes or no without cluttering the tree. In this course Node runs the .ts, so tsc never needs to emit; noEmit makes that explicit and makes tsc a checker, not a build step.</p>`,
+    `<p>noEmit bảo tsc kiểu-kiểm rồi dừng — không sinh .js. Nó chạy sạch và không ghi gì, đúng thứ bạn muốn trong CI: một cổng thuần nói có hoặc không mà không làm bừa cây tệp. Trong khoá này Node chạy .ts, nên tsc không cần sinh; noEmit làm điều đó tường minh và biến tsc thành một bộ kiểm, không phải một bước build.</p>`],
+  [6, 'The four, and the questions they answer',
+    `<p>target: which syntax? lib: which APIs? module: how do imports resolve? noEmit: check only, or build? They are the environment half of a tsconfig — strict is "how carefully do I check", these are "what am I checking against". A config is just these answers written down, and reading one is reading a project’s assumptions.</p>`,
+    `<p>target: cú pháp nào? lib: API nào? module: import phân giải ra sao? noEmit: chỉ kiểm, hay build? Chúng là nửa môi trường của một tsconfig — strict là "tôi kiểm cẩn thận đến đâu", những cái này là "tôi kiểm dựa trên cái gì". Một config chỉ là các câu trả lời này viết ra, và đọc một cái là đọc giả định của một dự án.</p>`],
+  [7, 'Practice &amp; Lab 9',
+    `<p>Practice: a call to findLast under an old lib is TS2550 — move to the course lib and it runs. Next is Lab 9: take a loose project (strict off, a seed that drifted) and tighten it — turn on strict and the extra flags, fix what appears, close the seed gap, and make tsc --noEmit pass as a CI gate. The loose starter scores 4.5, the tightened reference 10.</p>`,
+    `<p>Luyện tập: một lời gọi findLast dưới một lib cũ là TS2550 — chuyển sang lib của khoá và nó chạy. Tiếp là Lab 9: lấy một dự án lỏng (strict tắt, một seed đã trôi) và siết nó — bật strict và các cờ thêm, sửa những gì hiện ra, đóng lỗ hổng seed, và làm tsc --noEmit qua như một cổng CI. Bản lỏng khởi đầu được 4.5, bản siết tham khảo 10.</p>`],
+]);

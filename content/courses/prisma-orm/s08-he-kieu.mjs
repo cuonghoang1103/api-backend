@@ -785,6 +785,11 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
   <span class="lc-body"><span class="lc-title">Same discipline in plain TypeScript — TS 2.4: Literal types &amp; as const</span><span class="lc-sub">Same: a hand-copied list of allowed values drifts, only a derived one is safe. Different: no Prisma needed — write the list once with as const, derive the union with (typeof LABS)[number], and check query strings at runtime with a guard.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Why the enum break reached production — TS 9.1: What tsc does &amp; tsconfig basics</span><span class="lc-sub">Same: a renamed enum value that a hand-copied list did not follow, so it broke at run time. Different: in the TypeScript course the same incident is also an <code>include</code> gap — the seed file was outside the project, so tsc never checked it, and a clean build proved nothing. The fix: import the real type <em>and</em> a second typecheck config in CI.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -922,6 +927,11 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Cùng kỷ luật bằng TypeScript thuần — TS 2.4: Kiểu literal &amp; as const</span><span class="lc-sub">Giống: danh sách giá trị hợp lệ chép tay sẽ lệch, chỉ danh sách suy ra mới an toàn. Khác: không cần Prisma — viết danh sách một lần với as const, suy union bằng (typeof LABS)[number], và kiểm query string lúc chạy bằng guard.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Vì sao cú vỡ enum lên tới production — TS 9.1: tsc làm gì &amp; tsconfig căn bản</span><span class="lc-sub">Giống: một giá trị enum đổi tên mà một danh sách chép tay không theo kịp, nên nó vỡ lúc chạy. Khác: ở khoá TypeScript cùng sự cố đó còn là một lỗ hổng <code>include</code> — tệp seed nằm ngoài dự án, nên tsc không hề kiểm, và một build sạch chẳng chứng minh gì. Cách sửa: import kiểu thật <em>và</em> một config typecheck thứ hai trong CI.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

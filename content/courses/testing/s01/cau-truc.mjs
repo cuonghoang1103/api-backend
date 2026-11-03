@@ -168,6 +168,7 @@ ${ra(OUT['11-tach'])}
 </ul>
 ${lienKet({ bai: 'swt301-lab2-vi-du-login', title: 'Also in SWT301 — L2.13: a full worked example, AuthService.login', sub: 'Same: one test per case, Arrange builds the condition, Act calls exactly one function, Assert compares with the expected result. Different: SWT301 writes it in JUnit with mocks and maps each test to a UTCID column of Report 5.1; here it is Vitest on pure LabFlow Lite rules.', cta: 'OPEN SWT301 LESSON →' })}
 ${lienKet({ khoa: 'typescript', bai: 'typescript-1-1-ba-con-bug', title: 'Next in the TypeScript course — 1.1: three bugs JavaScript ships to production', sub: 'Same: these exact checkSlot, needsApproval and createBooking rules. Different: here a test catches a wrong result while the code runs; there the compiler refuses a typo, a wrong argument or a lower-case role before anything runs — and you see which bugs only a test can catch.', cta: 'OPEN TYPESCRIPT LESSON →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-9-2-strict-mode', title: 'The switch that turns on the compile-time catch — TS 9.2: strict mode', sub: 'Same: you want a bug caught before it reaches a user. Different: a test catches a bug by running a case; strict is the tsconfig flag that lets the compiler refuse a whole class of bugs before the code runs — an untyped value (TS7006), a possibly-undefined read (TS18048). The compiler for shape, tests for behaviour.', cta: 'OPEN TYPESCRIPT LESSON →' })}
 </div>
 
 <div class="ml-vi">
@@ -277,6 +278,7 @@ ${ra(OUT['11-tach'])}
 </ul>
 ${lienKet({ bai: 'swt301-lab2-vi-du-login', title: 'Đã gặp ở SWT301 — L2.13: ví dụ trọn vòng AuthService.login', sub: 'Giống: mỗi test một case, Arrange dựng Condition, Act gọi đúng một hàm, Assert so với kết quả mong đợi. Khác: SWT301 viết bằng JUnit có mock và gắn mỗi test với một cột UTCID của Report 5.1; ở đây là Vitest trên luật thuần của LabFlow Lite.', cta: 'MỞ BÀI SWT301 →' })}
 ${lienKet({ khoa: 'typescript', bai: 'typescript-1-1-ba-con-bug', title: 'Học tiếp ở khoá TypeScript — 1.1: ba con bug JavaScript đẩy thẳng lên production', sub: 'Giống: đúng các luật checkSlot, needsApproval, createBooking này. Khác: ở đây test bắt kết quả sai khi code chạy; bên đó trình biên dịch từ chối lỗi gõ tên, sai đối số hay role viết thường trước khi chạy — và bạn thấy loại bug nào chỉ test mới bắt được.', cta: 'MỞ BÀI TYPESCRIPT →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-9-2-strict-mode', title: 'Công tắc bật phép bắt lúc biên dịch — TS 9.2: chế độ strict', sub: 'Giống: bạn muốn một bug bị bắt trước khi tới người dùng. Khác: một test bắt một bug bằng cách chạy một trường hợp; strict là cờ tsconfig cho trình biên dịch từ chối cả một lớp bug trước khi code chạy — một giá trị không kiểu (TS7006), một lần đọc có-thể-undefined (TS18048). Trình biên dịch lo dáng, test lo hành vi.', cta: 'MỞ BÀI TYPESCRIPT →' })}
 </div>
 
 <div class="ml-en">

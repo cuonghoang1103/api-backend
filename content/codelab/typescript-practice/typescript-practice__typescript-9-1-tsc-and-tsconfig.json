@@ -1,0 +1,454 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-9-1-tsc-and-tsconfig",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-9-1-tsc-and-tsconfig"
+  },
+  "exercises": [
+    {
+      "title": "Import the source of truth",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-9-1-tsc-and-tsconfig"
+      ],
+      "problemHtml": "<p><code>seed.ts</code> declares its own hand-copied <code>ContentType</code> union — self-consistent, so a renamed value never surfaces. Import the type from <code>content.ts</code> instead, so a dead value is a compile error.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the old value in kiem/sai.ts is TS2322.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/seed.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2322); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>seed.ts</code> khai union <code>ContentType</code> chép tay của riêng nó — tự nhất quán, nên một giá trị đổi tên không bao giờ lộ. Import kiểu từ <code>content.ts</code>, để một giá trị chết là một lỗi biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và giá trị cũ trong kiem/sai.ts là TS2322.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/seed.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2322); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/seed.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/seed.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: const dead: ContentType = 'CODE';|||kiem/sai.ts, dòng 2: const dead: ContentType = 'CODE';",
+          "output": "error TS2322",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/seed.ts",
+          "language": "typescript",
+          "code": "// A hand-copied union — it drifts the moment content.ts changes.\nexport type ContentType = 'VLOG' | 'BLOG' | 'CODE';\nexport const rows: { type: ContentType }[] = [{ type: 'VLOG' }];\n"
+        },
+        {
+          "name": "src/content.ts",
+          "language": "typescript",
+          "code": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from '../src/seed.ts';\nconst t: ContentType = 'CODE_REVIEW'; // the current value\nexport { t };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from '../src/seed.ts';\nconst dead: ContentType = 'CODE'; // expect TS2322\nexport { dead };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/seed.ts",
+          "language": "typescript",
+          "code": "// Import the type — a renamed value is now a compile error, not a run-time break.\nimport type { ContentType } from './content.ts';\nexport const rows: { type: ContentType }[] = [{ type: 'CODE_REVIEW' }];\nexport type { ContentType };\n"
+        },
+        {
+          "name": "src/content.ts",
+          "language": "typescript",
+          "code": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from '../src/seed.ts';\nconst t: ContentType = 'CODE_REVIEW'; // the current value\nexport { t };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from '../src/seed.ts';\nconst dead: ContentType = 'CODE'; // expect TS2322\nexport { dead };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — still a hand-copied union with the old value — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — still a hand-copied union with the old value — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/content.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n",
+          "kiem/dung.ts": "import type { ContentType } from '../src/seed.ts';\nconst t: ContentType = 'CODE_REVIEW'; // the current value\nexport { t };\n",
+          "kiem/sai.ts": "import type { ContentType } from '../src/seed.ts';\nconst dead: ContentType = 'CODE'; // expect TS2322\nexport { dead };\n"
+        },
+        "tepHoc": [
+          "src/seed.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/seed.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2322 — const dead: ContentType = 'CODE'; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "still a hand-copied union with the old value — caught by: tsc (strict): src/seed.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2322 — const dead: ContentType = 'CODE';|||still a hand-copied union with the old value — máy chấm bắt ở: tsc (strict): src/seed.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2322 — const dead: ContentType = 'CODE';"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "A derived type that tracks the enum",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-9-1-tsc-and-tsconfig"
+      ],
+      "problemHtml": "<p><code>LABELS</code> is typed as a plain object, so a missing content type is never caught. Type it as <code>Record&lt;ContentType, string&gt;</code> (imported from <code>content.ts</code>) so every type must have a label.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the literal missing <code>CODE_REVIEW</code> in kiem/sai.ts is TS2741.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/labels.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2741); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>LABELS</code> có kiểu là một object thường, nên thiếu một content type không bao giờ bị bắt. Gán kiểu <code>Record&lt;ContentType, string&gt;</code> (import từ <code>content.ts</code>) để mọi type phải có nhãn.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và literal thiếu <code>CODE_REVIEW</code> trong kiem/sai.ts là TS2741.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/labels.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2741); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/labels.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/labels.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: const l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' };|||kiem/sai.ts, dòng 2: const l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' };",
+          "output": "error TS2741",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/labels.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from './content.ts';\n\n// Wrong: a plain object — a missing content type is never caught.\nexport type Labels = { [k: string]: string };\n"
+        },
+        {
+          "name": "src/content.ts",
+          "language": "typescript",
+          "code": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\nexport { l };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' }; // expect TS2741\nexport { l };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/labels.ts",
+          "language": "typescript",
+          "code": "import type { ContentType } from './content.ts';\n\n// Record over the imported union — a label is required for every content type.\nexport type Labels = Record<ContentType, string>;\n"
+        },
+        {
+          "name": "src/content.ts",
+          "language": "typescript",
+          "code": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\nexport { l };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' }; // expect TS2741\nexport { l };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — plain object — a missing content type is accepted — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — plain object — a missing content type is accepted — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/content.ts": "export type ContentType = 'VLOG' | 'BLOG' | 'CODE_REVIEW';\n",
+          "kiem/dung.ts": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog', CODE_REVIEW: 'Review' };\nexport { l };\n",
+          "kiem/sai.ts": "import type { Labels } from '../src/labels.ts';\nconst l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' }; // expect TS2741\nexport { l };\n"
+        },
+        "tepHoc": [
+          "src/labels.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/labels.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2741 — const l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "plain object — a missing content type is accepted — caught by: kiem/sai.ts:2 is refused with TS2741 — const l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' };|||plain object — a missing content type is accepted — máy chấm bắt ở: kiem/sai.ts:2 is refused with TS2741 — const l: Labels = { VLOG: 'Vlog', BLOG: 'Blog' };"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Types are erased — prove it",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-9-1-tsc-and-tsconfig"
+      ],
+      "problemHtml": "<p>Node runs a <code>.ts</code> file by stripping the types. Write <code>area</code> so it type-checks and still prints the right number at run time — the types never run, so the behaviour must be correct on its own.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test prints 12.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/area.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/area.test.ts</code>.</li>\n  <li><code>node --test test/area.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Node chạy một tệp <code>.ts</code> bằng cách bỏ kiểu. Viết <code>area</code> để nó kiểu-kiểm và vẫn in đúng số lúc chạy — kiểu không bao giờ chạy, nên hành vi phải tự đúng.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test in 12.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/area.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/area.test.ts</code>.</li>\n  <li><code>node --test test/area.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/area.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/area.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/area.test.ts",
+          "output": "",
+          "explanation": "The program must still print exactly this once the types are fixed — types are erased when Node runs the file, so they cannot change the output, only refuse wrong code.|||Chương trình vẫn phải in đúng như vậy sau khi sửa kiểu — kiểu bị xoá khi Node chạy tệp nên không đổi được output, chỉ từ chối code sai."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/area.ts",
+          "language": "typescript",
+          "code": "export type Rect = { w: number; h: number };\n\n// Wrong: the body does not actually compute the area.\nexport function area(r: Rect): number {\n  return r.w;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { area } from '../src/area.ts';\nconst a: number = area({ w: 4, h: 3 });\nexport { a };\n"
+        },
+        {
+          "name": "test/area.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { area } from '../src/area.ts';\ntest('area multiplies', () => assert.equal(area({ w: 4, h: 3 }), 12));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/area.ts",
+          "language": "typescript",
+          "code": "export type Rect = { w: number; h: number };\n\n// The types are stripped at run time, so the behaviour must be right on its own.\nexport function area(r: Rect): number {\n  return r.w * r.h;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { area } from '../src/area.ts';\nconst a: number = area({ w: 4, h: 3 });\nexport { a };\n"
+        },
+        {
+          "name": "test/area.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { area } from '../src/area.ts';\ntest('area multiplies', () => assert.equal(area({ w: 4, h: 3 }), 12));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — returns r.w, not r.w * r.h — compiles but the test fails — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — returns r.w, not r.w * r.h — compiles but the test fails — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { area } from '../src/area.ts';\nconst a: number = area({ w: 4, h: 3 });\nexport { a };\n",
+          "test/area.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { area } from '../src/area.ts';\ntest('area multiplies', () => assert.equal(area({ w: 4, h: 3 }), 12));\n"
+        },
+        "tepHoc": [
+          "src/area.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/area.test.ts"
+            ],
+            "moTa": "tsc (strict): src/area.ts + kiem/dung.ts, test/area.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/area.test.ts",
+            "ra": "",
+            "moTa": "node --test test/area.test.ts exits 0 and prints \"\" · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "returns r.w, not r.w * r.h — compiles but the test fails — caught by: node --test test/area.test.ts exits 0 and prints \"\"|||returns r.w, not r.w * r.h — compiles but the test fails — máy chấm bắt ở: node --test test/area.test.ts exits 0 and prints \"\""
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

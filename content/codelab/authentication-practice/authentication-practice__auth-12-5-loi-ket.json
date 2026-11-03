@@ -1,0 +1,390 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-12-5-loi-ket",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-12-5-loi-ket"
+  },
+  "exercises": [
+    {
+      "title": "12.5-1 — Build vs adopt, and what changed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For most systems, do not hand-roll auth; understand it to choose and debug one. Passkeys and automated attacks changed; the primitives did not.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với phần lớn hệ thống, đừng tự cuộn xác thực; hiểu nó để chọn và debug một cái. Passkey và tấn công tự động đổi; các nguyên thuỷ không.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Understand it to choose, not to ship your own crypto.|||Hiểu nó để chọn, không phải ship mật mã của mình.",
+        "Authorization is never an afterthought.|||Phân quyền không bao giờ là một thứ nghĩ sau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5-1 — Build vs adopt, and what changed\n\nAnswer in the answer panel (no code needed).\n\n1. A new product needs login next sprint. What is the best default recommendation?Một sản phẩm mới cần đăng nhập sprint tới. Khuyến nghị mặc định tốt nhất?\n2. When assembling auth, where does authorization belong in the order?Khi lắp xác thực, phân quyền thuộc về đâu trong thứ tự?\n3. What is the single biggest real change in authentication recently?Thay đổi thật lớn nhất về xác thực gần đây là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5-1 — Build vs adopt, and what changed — answer key\n\n1. A new product needs login next sprint. What is the best default recommendation?Một sản phẩm mới cần đăng nhập sprint tới. Khuyến nghị mặc định tốt nhất?\n   Answer: a) Adopt a vetted library/provider; the understanding lets you choose, configure and debug it correctly\n   Understand auth to adopt and operate a vetted one well — hand-rolled crypto is where breaches live (12.5).VI: Hiểu xác thực để dùng và vận hành một cái đã kiểm tốt — mật mã tự-cuộn là nơi các vụ thủng sống (12.5).\n\n2. When assembling auth, where does authorization belong in the order?Khi lắp xác thực, phân quyền thuộc về đâu trong thứ tự?\n   Answer: b) Last, after all the features are built and working\n   Retrofitting deny-by-default onto a system that fell open is a rewrite; build the gate from day one (12.5, 9).VI: Trang bị lại từ-chối-mặc-định cho một hệ đã rơi-về-mở là một lần viết lại; dựng cổng từ ngày đầu (12.5, 9).\n\n3. What is the single biggest real change in authentication recently?Thay đổi thật lớn nhất về xác thực gần đây là gì?\n   Answer: d) Passkeys — phishing-resistant credentials that remove the password and defeat the AiTM relay at once\n   Passkeys remove the password and the relay together — the biggest improvement in a decade (12.5, 7/10).VI: Passkey gỡ mật khẩu và relay cùng nhau — cải thiện lớn nhất một thập kỷ (12.5, 7/10).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Adopt a vetted library/provider; the understanding lets you choose, configure and debug it correctly</p><p>Understand auth to adopt and operate a vetted one well — hand-rolled crypto is where breaches live (12.5).</p><p><i>VI: Hiểu xác thực để dùng và vận hành một cái đã kiểm tốt — mật mã tự-cuộn là nơi các vụ thủng sống (12.5).</i></p></li><li><p><b>b)</b> Last, after all the features are built and working</p><p>Retrofitting deny-by-default onto a system that fell open is a rewrite; build the gate from day one (12.5, 9).</p><p><i>VI: Trang bị lại từ-chối-mặc-định cho một hệ đã rơi-về-mở là một lần viết lại; dựng cổng từ ngày đầu (12.5, 9).</i></p></li><li><p><b>d)</b> Passkeys — phishing-resistant credentials that remove the password and defeat the AiTM relay at once</p><p>Passkeys remove the password and the relay together — the biggest improvement in a decade (12.5, 7/10).</p><p><i>VI: Passkey gỡ mật khẩu và relay cùng nhau — cải thiện lớn nhất một thập kỷ (12.5, 7/10).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A new product needs login next sprint. What is the best default recommendation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một sản phẩm mới cần đăng nhập sprint tới. Khuyến nghị mặc định tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Adopt a vetted library/provider; the understanding lets you choose, configure and debug it correctly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Copy another team's auth code without review to save time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Store passwords in plaintext for easier debugging early on"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hand-roll your own auth to control every detail yourself"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Understand auth to adopt and operate a vetted one well — hand-rolled crypto is where breaches live (12.5).</p><p><i>VI: Hiểu xác thực để dùng và vận hành một cái đã kiểm tốt — mật mã tự-cuộn là nơi các vụ thủng sống (12.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>When assembling auth, where does authorization belong in the order?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi lắp xác thực, phân quyền thuộc về đâu trong thứ tự?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "From day one — the one gate before the features, never bolted on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Last, after all the features are built and working"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only when a customer asks for roles explicitly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only in the frontend, to hide the buttons"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Retrofitting deny-by-default onto a system that fell open is a rewrite; build the gate from day one (12.5, 9).</p><p><i>VI: Trang bị lại từ-chối-mặc-định cho một hệ đã rơi-về-mở là một lần viết lại; dựng cổng từ ngày đầu (12.5, 9).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What is the single biggest real change in authentication recently?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi thật lớn nhất về xác thực gần đây là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Much shorter session timeouts, now typically measured in seconds rather than minutes or hours"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Longer minimum password lengths now required by most corporate password policies and standards"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Faster password-hashing algorithms that save a meaningful amount of CPU time per login request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Passkeys — phishing-resistant credentials that remove the password and defeat the AiTM relay at once"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Passkeys remove the password and the relay together — the biggest improvement in a decade (12.5, 7/10).</p><p><i>VI: Passkey gỡ mật khẩu và relay cùng nhau — cải thiện lớn nhất một thập kỷ (12.5, 7/10).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hand-rolling crypto for production.|||Tự cuộn mật mã cho production."
+        },
+        {
+          "loi": "Adding authorization last.|||Thêm phân quyền sau cùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "build vs adopt",
+          "vi": "dựng vs dùng"
+        },
+        {
+          "en": "phishing resistance",
+          "vi": "kháng lừa đảo"
+        }
+      ]
+    },
+    {
+      "title": "12.5-2 — Write changedByAuth(topic): changed or constant?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>'changed'</code> if an aspect of authentication genuinely shifted recently (<code>passkeys</code>, <code>automated-attacks</code>, <code>origin-binding</code>, <code>breached-password-blocking</code>), <code>'constant'</code> if it held since Chapter 1 (<code>slow-salted-hashing</code>, <code>deny-by-default</code>, <code>never-trust-input</code>, <code>secrets-out-of-repo</code>, <code>one-message-per-account</code>, <code>measure-not-guess</code>), and <code>'unknown'</code> otherwise.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>'changed'</code> nếu một khía cạnh của xác thực thật sự dịch chuyển gần đây (<code>passkeys</code>, <code>automated-attacks</code>, <code>origin-binding</code>, <code>breached-password-blocking</code>), <code>'constant'</code> nếu nó giữ từ Chương 1 (<code>slow-salted-hashing</code>, <code>deny-by-default</code>, <code>never-trust-input</code>, <code>secrets-out-of-repo</code>, <code>one-message-per-account</code>, <code>measure-not-guess</code>), và <code>'unknown'</code> còn lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "changedByAuth(\"passkeys\")",
+          "output": "\"changed\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two sets — changed and constant; default unknown.|||Hai tập — changed và constant; mặc định unknown.",
+        "Passkeys changed; slow salted hashing is constant.|||Passkey đổi; băm chậm có muối là hằng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const CHANGED = new Set(['passkeys', 'automated-attacks', 'origin-binding', 'breached-password-blocking']);\nconst CONSTANT = new Set(['slow-salted-hashing', 'deny-by-default', 'never-trust-input', 'secrets-out-of-repo', 'one-message-per-account', 'measure-not-guess']);\n/** ⇒ 'changed' | 'constant' | 'unknown' */\nfunction changedByAuth(topic) {\n  // Write your solution here\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const CHANGED = new Set(['passkeys', 'automated-attacks', 'origin-binding', 'breached-password-blocking']);\nconst CONSTANT = new Set(['slow-salted-hashing', 'deny-by-default', 'never-trust-input', 'secrets-out-of-repo', 'one-message-per-account', 'measure-not-guess']);\n// Reference solution\nfunction changedByAuth(topic) {\n  // Did this aspect of authentication genuinely change, or has it held constant since Chapter 1?\n  if (CHANGED.has(topic)) return 'changed';\n  if (CONSTANT.has(topic)) return 'constant';\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Passkeys and automated attacks changed; the Chapter 1 primitives are constant — knowing which is which is the closing lesson (12.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Passkey và tấn công tự động đổi; các nguyên thuỷ Chương 1 là hằng — biết cái nào là cái nào là bài kết (12.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "passkeys ⇒ changed",
+              "vi": "passkey ⇒ changed"
+            },
+            "goi": "changedByAuth(\"passkeys\")",
+            "mongDoi": "changed"
+          },
+          {
+            "moTa": {
+              "en": "hashing ⇒ constant",
+              "vi": "băm ⇒ constant"
+            },
+            "goi": "changedByAuth(\"slow-salted-hashing\")",
+            "mongDoi": "constant",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "deny-by-default ⇒ constant",
+              "vi": "từ-chối-mặc-định ⇒ constant"
+            },
+            "goi": "changedByAuth(\"deny-by-default\")",
+            "mongDoi": "constant",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown ⇒ unknown",
+              "vi": "lạ ⇒ unknown"
+            },
+            "goi": "changedByAuth(\"quantum-logins\")",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Marking slow-salted-hashing as changed.|||Đánh dấu slow-salted-hashing là changed."
+        },
+        {
+          "loi": "Returning undefined for an unknown topic.|||Trả undefined cho một chủ đề lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "the constants",
+          "vi": "các hằng số"
+        }
+      ]
+    },
+    {
+      "title": "12.5-3 — Changed or constant",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each aspect to whether it changed recently or held constant since Chapter 1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi khía cạnh với việc nó đổi gần đây hay giữ hằng từ Chương 1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The tools and attackers changed; the primitives did not.|||Công cụ và kẻ tấn công đổi; các nguyên thuỷ không.",
+        "Hashing and deny-by-default are foundations.|||Băm và từ-chối-mặc-định là nền tảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5-3 — Changed or constant\n\nAnswer in the answer panel (no code needed).\n\n1. Aspect → statusKhía cạnh → trạng thái\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.5-3 — Changed or constant — answer key\n\n1. Aspect → statusKhía cạnh → trạng thái\n   - r1.q: changed\n   - r2.q: changed\n   - r3.q: constant\n   - r4.q: constant\n   Passkeys and automated attacks changed; slow salted hashing and deny-by-default are constant (12.5).VI: Passkey và tấn công tự động đổi; băm chậm có muối và từ-chối-mặc-định là hằng (12.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Passkeys and automated attacks changed; slow salted hashing and deny-by-default are constant (12.5).</p><p><i>VI: Passkey và tấn công tự động đổi; băm chậm có muối và từ-chối-mặc-định là hằng (12.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Aspect → status</p><p style=\"opacity:.75;font-size:.92em\"><i>Khía cạnh → trạng thái</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Aspect"
+              },
+              {
+                "ma": "q",
+                "ten": "Status",
+                "luaChon": [
+                  "changed",
+                  "constant"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "phishing-resistant passkeys"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "automated attacks at scale"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "slow salted password hashing"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "deny by default"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "changed",
+              "r2.q": "changed",
+              "r3.q": "constant",
+              "r4.q": "constant"
+            },
+            "giaiThich": "<p>Passkeys and automated attacks changed; slow salted hashing and deny-by-default are constant (12.5).</p><p><i>VI: Passkey và tấn công tự động đổi; băm chậm có muối và từ-chối-mặc-định là hằng (12.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking hashing is a recent change.|||Tưởng băm là một thay đổi gần đây."
+        },
+        {
+          "loi": "Thinking passkeys are an old constant.|||Tưởng passkey là một hằng cũ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "passkeys",
+          "vi": "passkey"
+        }
+      ]
+    }
+  ]
+}

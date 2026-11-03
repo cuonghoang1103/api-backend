@@ -1,0 +1,372 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-12-1-nam-phut-dau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-12-1-nam-phut-dau"
+  },
+  "exercises": [
+    {
+      "title": "12.1-1 — Measure before you guess",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>\"Users cannot log in.\" Curl the login route and read the HTTP status — it narrows the problem to a layer before you read code.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Người dùng không đăng nhập được.\" Curl tuyến đăng nhập và đọc mã HTTP — nó thu hẹp vấn đề về một tầng trước khi bạn đọc mã.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The status narrows the problem to a layer.|||Mã trạng thái thu hẹp vấn đề về một tầng.",
+        "Change one thing at a time.|||Đổi một thứ một lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1-1 — Measure before you guess\n\nAnswer in the answer panel (no code needed).\n\n1. A login route returns 404, but the handler is clearly in the source. Most likely cause?Một tuyến đăng nhập trả 404, nhưng handler rõ ràng có trong nguồn. Nguyên nhân khả dĩ nhất?\n2. You get a 403 on the login flow. What should you NOT waste time on?Bạn nhận một 403 trên luồng đăng nhập. Bạn KHÔNG nên phí thời gian vào cái gì?\n3. The login route returns 200 but users say they are \"not logged in\". Where is the problem?Tuyến đăng nhập trả 200 nhưng người dùng nói họ \"không đăng nhập\". Vấn đề ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1-1 — Measure before you guess — answer key\n\n1. A login route returns 404, but the handler is clearly in the source. Most likely cause?Một tuyến đăng nhập trả 404, nhưng handler rõ ràng có trong nguồn. Nguyên nhân khả dĩ nhất?\n   Answer: d) A stale or partial build — the running image lacks the route; redeploy a clean build, do not edit code\n   404 on a route that exists in source is almost always a stale/partial build, not a code bug (12.1).VI: 404 trên một tuyến có trong nguồn gần như luôn là một build cũ/một phần, không phải lỗi mã (12.1).\n\n2. You get a 403 on the login flow. What should you NOT waste time on?Bạn nhận một 403 trên luồng đăng nhập. Bạn KHÔNG nên phí thời gian vào cái gì?\n   Answer: a) The password and the hashing — 403 is authorization (known but forbidden), not authentication\n   403 means the user is known but forbidden — look at authorization (role/tenant), not the password (12.1, 9).VI: 403 nghĩa là người dùng được biết nhưng bị cấm — nhìn phân quyền (vai/tenant), không phải mật khẩu (12.1, 9).\n\n3. The login route returns 200 but users say they are \"not logged in\". Where is the problem?Tuyến đăng nhập trả 200 nhưng người dùng nói họ \"không đăng nhập\". Vấn đề ở đâu?\n   Answer: b) After login — the session cookie (flags, SameSite), a redirect, or the client not sending credentials\n   A 200 means login works; the problem is after it — the cookie or the client (12.1, 3).VI: Một 200 nghĩa là đăng nhập chạy; vấn đề ở sau nó — cookie hay client (12.1, 3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A stale or partial build — the running image lacks the route; redeploy a clean build, do not edit code</p><p>404 on a route that exists in source is almost always a stale/partial build, not a code bug (12.1).</p><p><i>VI: 404 trên một tuyến có trong nguồn gần như luôn là một build cũ/một phần, không phải lỗi mã (12.1).</i></p></li><li><p><b>a)</b> The password and the hashing — 403 is authorization (known but forbidden), not authentication</p><p>403 means the user is known but forbidden — look at authorization (role/tenant), not the password (12.1, 9).</p><p><i>VI: 403 nghĩa là người dùng được biết nhưng bị cấm — nhìn phân quyền (vai/tenant), không phải mật khẩu (12.1, 9).</i></p></li><li><p><b>b)</b> After login — the session cookie (flags, SameSite), a redirect, or the client not sending credentials</p><p>A 200 means login works; the problem is after it — the cookie or the client (12.1, 3).</p><p><i>VI: Một 200 nghĩa là đăng nhập chạy; vấn đề ở sau nó — cookie hay client (12.1, 3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A login route returns 404, but the handler is clearly in the source. Most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tuyến đăng nhập trả 404, nhưng handler rõ ràng có trong nguồn. Nguyên nhân khả dĩ nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The user is authenticated but forbidden from the route"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The access token in the request has expired"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The password hashing is misconfigured and rejects everyone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A stale or partial build — the running image lacks the route; redeploy a clean build, do not edit code"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>404 on a route that exists in source is almost always a stale/partial build, not a code bug (12.1).</p><p><i>VI: 404 trên một tuyến có trong nguồn gần như luôn là một build cũ/một phần, không phải lỗi mã (12.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>You get a 403 on the login flow. What should you NOT waste time on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn nhận một 403 trên luồng đăng nhập. Bạn KHÔNG nên phí thời gian vào cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The password and the hashing — 403 is authorization (known but forbidden), not authentication"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The TLS certificate and its expiry date"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The load balancer configuration and its health checks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database connection pool size and timeouts"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>403 means the user is known but forbidden — look at authorization (role/tenant), not the password (12.1, 9).</p><p><i>VI: 403 nghĩa là người dùng được biết nhưng bị cấm — nhìn phân quyền (vai/tenant), không phải mật khẩu (12.1, 9).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The login route returns 200 but users say they are \"not logged in\". Where is the problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tuyến đăng nhập trả 200 nhưng người dùng nói họ \"không đăng nhập\". Vấn đề ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the password hashing function being too slow to complete"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After login — the session cookie (flags, SameSite), a redirect, or the client not sending credentials"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In the signing key being missing from the keyring"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the database being completely down and unreachable"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A 200 means login works; the problem is after it — the cookie or the client (12.1, 3).</p><p><i>VI: Một 200 nghĩa là đăng nhập chạy; vấn đề ở sau nó — cookie hay client (12.1, 3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the code before measuring the status.|||Đọc mã trước khi đo mã trạng thái."
+        },
+        {
+          "loi": "Debugging the password on a 403.|||Debug mật khẩu trên một 403."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "status-first diagnosis",
+          "vi": "chẩn đoán mã-trạng-thái-trước"
+        },
+        {
+          "en": "stale build",
+          "vi": "build cũ"
+        }
+      ]
+    },
+    {
+      "title": "12.1-2 — Write diagnose(status): status ⇒ broken layer",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Map a login-endpoint HTTP status to the layer to investigate: <code>404 ⇒ 'stale-build'</code>, <code>500 ⇒ 'dependency'</code>, <code>403 ⇒ 'authorization'</code>, <code>401 ⇒ 'pipe-intact'</code>, <code>200 ⇒ 'past-login'</code>. Anything else ⇒ <code>'unexpected'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ánh xạ một mã HTTP của endpoint đăng nhập tới tầng cần điều tra: <code>404 ⇒ 'stale-build'</code>, <code>500 ⇒ 'dependency'</code>, <code>403 ⇒ 'authorization'</code>, <code>401 ⇒ 'pipe-intact'</code>, <code>200 ⇒ 'past-login'</code>. Còn lại ⇒ <code>'unexpected'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "diagnose(404)",
+          "output": "\"stale-build\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A lookup or a switch over the five known statuses.|||Một tra bảng hoặc switch trên năm mã biết.",
+        "404 is a build problem, not a code bug.|||404 là một vấn đề build, không phải lỗi mã."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ the layer to investigate for a given login-endpoint status */\nfunction diagnose(status) {\n  // Write your solution here\n  return 'unexpected';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction diagnose(status) {\n  // Map a login-endpoint HTTP status to the broken layer, so you know which chapter to open.\n  if (status === 404) return 'stale-build';      // route not mounted — redeploy, do not edit code\n  if (status === 500) return 'dependency';       // a secret/DB/Redis is down — read the log + startup banner\n  if (status === 403) return 'authorization';    // known but forbidden (Ch9) — not the password\n  if (status === 401) return 'pipe-intact';      // mounted, asking for credentials — try a real login\n  if (status === 200) return 'past-login';       // login works — the problem is the cookie/redirect/client\n  return 'unexpected';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The status names the broken layer in seconds, before you read any code (12.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Mã trạng thái gọi tên tầng hỏng trong vài giây, trước khi bạn đọc mã (12.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "404 ⇒ stale-build",
+              "vi": "404 ⇒ build cũ"
+            },
+            "goi": "diagnose(404)",
+            "mongDoi": "stale-build"
+          },
+          {
+            "moTa": {
+              "en": "500 ⇒ dependency",
+              "vi": "500 ⇒ phụ thuộc"
+            },
+            "goi": "diagnose(500)",
+            "mongDoi": "dependency",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "403 ⇒ authorization",
+              "vi": "403 ⇒ phân quyền"
+            },
+            "goi": "diagnose(403)",
+            "mongDoi": "authorization",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "401 ⇒ pipe-intact",
+              "vi": "401 ⇒ ống nguyên vẹn"
+            },
+            "goi": "diagnose(401)",
+            "mongDoi": "pipe-intact",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "other ⇒ unexpected",
+              "vi": "khác ⇒ unexpected"
+            },
+            "goi": "diagnose(418)",
+            "mongDoi": "unexpected",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning \"authorization\" for 401 instead of 403.|||Trả \"authorization\" cho 401 thay vì 403."
+        },
+        {
+          "loi": "Not handling an unexpected status.|||Không xử lý một mã lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "404 = stale build",
+          "vi": "404 = build cũ"
+        }
+      ]
+    },
+    {
+      "title": "12.1-3 — Order the diagnosis",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the first steps of diagnosing \"users cannot log in\".</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước đầu chẩn đoán \"người dùng không đăng nhập được\".</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Measure before you read code.|||Đo trước khi đọc mã.",
+        "The status chooses where to look.|||Mã trạng thái chọn chỗ nhìn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1-3 — Order the diagnosis\n\nAnswer in the answer panel (no code needed).\n\n1. First → nextĐầu → tiếp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.1-3 — Order the diagnosis — answer key\n\n1. First → nextĐầu → tiếp\n   Answer: m1) Curl the login route unauthenticated and read the HTTP status  →  m3) Map the status to a layer (404 stale, 500 dependency, 403 authz, 401 pipe, 200 past-login)  →  m2) Open that layer's chapter and change one thing at a time\n   Measure the status, map it to a layer, then investigate that layer one change at a time (12.1).VI: Đo mã, ánh xạ nó tới một tầng, rồi điều tra tầng đó một thay đổi một lần (12.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Measure the status, map it to a layer, then investigate that layer one change at a time (12.1).</p><p><i>VI: Đo mã, ánh xạ nó tới một tầng, rồi điều tra tầng đó một thay đổi một lần (12.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → next</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → tiếp</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Curl the login route unauthenticated and read the HTTP status"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Open that layer's chapter and change one thing at a time"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Map the status to a layer (404 stale, 500 dependency, 403 authz, 401 pipe, 200 past-login)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Measure the status, map it to a layer, then investigate that layer one change at a time (12.1).</p><p><i>VI: Đo mã, ánh xạ nó tới một tầng, rồi điều tra tầng đó một thay đổi một lần (12.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening the code before measuring.|||Mở mã trước khi đo."
+        },
+        {
+          "loi": "Changing three things at once.|||Đổi ba thứ cùng lúc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one change at a time",
+          "vi": "một thay đổi một lần"
+        }
+      ]
+    }
+  ]
+}

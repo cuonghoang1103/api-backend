@@ -126,5 +126,6 @@ export default {
     'auth-12-3-hop-do-nghe': { yt: '3KaBzxLIgCo', credit: 'Train To Code — Ultimate Guide To CORS' },    // Ultimate Guide To CORS
     'auth-12-4-soat-kho-ma': { yt: 'AJudDioDqew', credit: 'cdruc — Debugging Laravel Sanctum 401 response' },    // Debugging Laravel Sanctum 401 response
     'auth-12-5-loi-ket': { yt: 'PEJXK_ku89s', credit: 'Good Morning Developers — Web Token vs. Cookie Authentication: Explained In 10 Minutes' },        // Web Token vs. Cookie Authentication: Explained In 10 Minutes
+    'auth-12-7-lab-du-an-cuoi-khoa': { yt: '-Wi4klZ01tQ', credit: '' },  // 04/11/2026: Dự án cuối khoá (LabFlow ID v1.0 dưới ~12 tấn công) — dùng tạm video chẩn đoán của 12.1 tới khi có bản ghi riêng; CHẠY verify-youtube-videos --fix-credits
   },
 };

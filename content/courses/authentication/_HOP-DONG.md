@@ -419,5 +419,19 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   độc lập, reset cửa sổ sau; audit raw có token+mật khẩu+cookie ⇒ safeAudit 0 chuỗi bí mật; sáu tín hiệu ⇒ reuse/5xx page, nước-mới/đã-lộ
   investigate, sai-burst/admin auto. Máy chấm Lab 11: tham-khảo 10/10, yếu (log mọi thứ + page mọi thứ) 2/10, khởi đầu 2/10. Chuẩn: OWASP
   Secrets Management/Logging/DoS, NIST SP 800-57, Twelve-Factor.
-- **TẠM DỪNG sau Ch11 ngày 04/11 (đang chạy Ch11→Ch12 theo yêu cầu chủ kênh — xong Ch12 báo để khoá khoá trọn).** Tiếp theo là Ch12
-  (chẩn đoán + soát mã người khác + **dự án cuối khoá** mục 12 + thi cuối khoá 20 câu — v1.0).
+- **04/11/2026 — Ch12 trọn (CHƯƠNG CUỐI):** 5 bài chẩn đoán + **DỰ ÁN CUỐI KHOÁ** (`auth-12-7-lab-du-an-cuoi-khoa`, máy chấm
+  `scripts/cham-cuoi-khoa.mjs` 12 kịch bản tấn công thật, 100 điểm đạt 70 — không CSDL) + **thi cuối khoá 20 câu** (A5 B5 C5 D5, slug
+  `auth-12-6-kiem-cuoi-khoa`, 30 phút); depth-audit đạt (content-check **90 bài** 0 lỗi); 6 deck 48 slide AUTH/v1 (đã đẩy, 0 lỗi kiem-slide);
+  Code Lab +6 module/18 đề (track **276 đề**, 0 lỗi nội dung + 0 cảnh báo đáp-án-dài, máy chấm trình duyệt **1092/1092**); liên kết chéo
+  (auth 0.2 ↔ 12.1, auth 5.1 ↔ 12.2, auth 4.1 ↔ 12.3, auth 9.5 ↔ 12.4, auth 7.4 ↔ 12.5); video YouTube 12.1–12.5 đã có, dự án cuối dùng tạm
+  id 12.1 credit rỗng (ĐỪNG bịa id). `_labflow-id` = **v1.0** (khoá trọn): `demo12/` (diagnose mã-trạng-thái, shapes tám dáng, toolbox giải
+  JWT/cookie bằng tay); DỰ ÁN CUỐI `scripts/cham-cuoi-khoa.mjs` chấm `sub-cuoi/` (tham-khảo nối mọi module đã cứng của cả khoá: needsRehash/
+  normalizeEmail/verifyIdToken/can/decide/safeAudit + posture). **Số đo thật (macOS arm64, Node 22.23.3, không CSDL, không mạng):** diagnose
+  404→stale-build/500→dependency/403→authz/401→pipe-intact/200→past-login; toolbox giải JWT thấy EXPIRED 50s; máy chấm cuối khoá:
+  **tham-khảo 100/100, yếu 25/100 (đúng cơ bản argon2id/cookie/refresh, bỏ 9 hardening), khởi đầu 0/100**. 12 kịch bản: dump CSDL(Ch2),
+  enumeration+homograph(Ch6), đoán phiên(Ch1/3), alg:none(Ch4), tái dùng refresh(Ch5), cookie(Ch3), giả ID token(Ch8), relay TOTP(Ch7/10),
+  IDOR khác tenant(Ch9), nhồi 10k(Ch10), rò nhật ký(Ch11). Chuẩn: OWASP ASVS/Authentication/Session/A01, NIST SP 800-63B, MDN HTTP status.
+- **✅ KHOÁ AUTHENTICATION SOẠN TRỌN 04/11/2026 — Mục 0 + Chương 1–12, LabFlow ID v0→v1.0.** Đợt Ch8→Ch9→Ch10→Ch11→Ch12 chạy liên tục theo
+  yêu cầu chủ kênh; mỗi chương commit index riêng, KHÔNG push/deploy. Còn lại (khi chủ kênh muốn): quiz chương làm sau nếu cần, rà video YouTube
+  (`verify-youtube-videos --fix-credits` cho các Lab dùng id tạm), đăng ký track Code Lab vào `src/services/codeLab.practice.ts` (phiên điều phối),
+  và deploy (gom lượt). Báo chủ kênh để khoá khoá trọn.

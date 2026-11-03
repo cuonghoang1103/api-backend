@@ -1,0 +1,380 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-12-3-hop-do-nghe",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-12-3-hop-do-nghe"
+  },
+  "exercises": [
+    {
+      "title": "12.3-1 — Answer it yourself",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A JWT is base64url JSON you can decode in two lines; the expiry answers most \"why 401?\" questions.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một JWT là JSON base64url bạn giải trong hai dòng; hạn trả lời phần lớn câu hỏi \"vì sao 401?\".</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Decode to diagnose, verify to authorize.|||Giải để chẩn đoán, xác minh để phân quyền.",
+        "The expiry is the most common 401 cause.|||Hạn là nguyên nhân 401 phổ biến nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.3-1 — Answer it yourself\n\nAnswer in the answer panel (no code needed).\n\n1. You decode a token and its sub is \"admin\". Can you treat the request as an admin?Bạn giải một token và sub của nó là \"admin\". Bạn coi request là admin được không?\n2. Verification fails with \"unknown kid\". Which two documents do you compare?Xác minh hỏng với \"kid lạ\". Bạn so hai tài liệu nào?\n3. How do you check whether a login leaks which accounts exist?Bạn kiểm một đăng nhập có rò tài khoản nào tồn tại ra sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.3-1 — Answer it yourself — answer key\n\n1. You decode a token and its sub is \"admin\". Can you treat the request as an admin?Bạn giải một token và sub của nó là \"admin\". Bạn coi request là admin được không?\n   Answer: c) No — a decoded token is unverified; anyone can forge one. Only the verified signature authorizes\n   Decoding only reads; authorize on the verified signature, decode only to diagnose (12.3, 4.1).VI: Giải mã chỉ đọc; phân quyền trên chữ ký đã xác minh, giải chỉ để chẩn đoán (12.3, 4.1).\n\n2. Verification fails with \"unknown kid\". Which two documents do you compare?Xác minh hỏng với \"kid lạ\". Bạn so hai tài liệu nào?\n   Answer: c) The token's header (its kid) and the provider's /.well-known/jwks.json\n   A kid not present in JWKS is a botched rotation; compare the token kid against JWKS (12.3, 11.2).VI: Một kid không có trong JWKS là một lần xoay hỏng; so kid token với JWKS (12.3, 11.2).\n\n3. How do you check whether a login leaks which accounts exist?Bạn kiểm một đăng nhập có rò tài khoản nào tồn tại ra sao?\n   Answer: c) Time a real vs a fake account — a consistent timing difference is an enumeration leak\n   Timing a real vs fake login reveals an enumeration leak (12.3, 6.4).VI: Đo đăng nhập thật so với giả lộ một rò enumeration (12.3, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> No — a decoded token is unverified; anyone can forge one. Only the verified signature authorizes</p><p>Decoding only reads; authorize on the verified signature, decode only to diagnose (12.3, 4.1).</p><p><i>VI: Giải mã chỉ đọc; phân quyền trên chữ ký đã xác minh, giải chỉ để chẩn đoán (12.3, 4.1).</i></p></li><li><p><b>c)</b> The token's header (its kid) and the provider's /.well-known/jwks.json</p><p>A kid not present in JWKS is a botched rotation; compare the token kid against JWKS (12.3, 11.2).</p><p><i>VI: Một kid không có trong JWKS là một lần xoay hỏng; so kid token với JWKS (12.3, 11.2).</i></p></li><li><p><b>c)</b> Time a real vs a fake account — a consistent timing difference is an enumeration leak</p><p>Timing a real vs fake login reveals an enumeration leak (12.3, 6.4).</p><p><i>VI: Đo đăng nhập thật so với giả lộ một rò enumeration (12.3, 6.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You decode a token and its sub is \"admin\". Can you treat the request as an admin?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn giải một token và sub của nó là \"admin\". Bạn coi request là admin được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, because successfully decoding the token already proves that it is genuine and trustworthy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, because the sub field is always set only by the real authorization server and nobody else"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — a decoded token is unverified; anyone can forge one. Only the verified signature authorizes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if the token is also unexpired, in which case the decoded sub can be fully trusted"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Decoding only reads; authorize on the verified signature, decode only to diagnose (12.3, 4.1).</p><p><i>VI: Giải mã chỉ đọc; phân quyền trên chữ ký đã xác minh, giải chỉ để chẩn đoán (12.3, 4.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Verification fails with \"unknown kid\". Which two documents do you compare?</p><p style=\"opacity:.75;font-size:.92em\"><i>Xác minh hỏng với \"kid lạ\". Bạn so hai tài liệu nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The session cookie and the CORS policy, checking that the two are configured consistently"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The access token and the refresh token, comparing the kid claim that appears in each of them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The token's header (its kid) and the provider's /.well-known/jwks.json"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The HTTP request body and the HTTP response body, looking for a mismatch between the two"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A kid not present in JWKS is a botched rotation; compare the token kid against JWKS (12.3, 11.2).</p><p><i>VI: Một kid không có trong JWKS là một lần xoay hỏng; so kid token với JWKS (12.3, 11.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How do you check whether a login leaks which accounts exist?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn kiểm một đăng nhập có rò tài khoản nào tồn tại ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Count the number of characters in the error message for a real versus a fake account login"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Read the stored password hash directly from the database and compare it to the submitted value"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Time a real vs a fake account — a consistent timing difference is an enumeration leak"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Check the TLS certificate chain of the login endpoint for any misconfiguration or weak ciphers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Timing a real vs fake login reveals an enumeration leak (12.3, 6.4).</p><p><i>VI: Đo đăng nhập thật so với giả lộ một rò enumeration (12.3, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting a decoded token's claims.|||Tin claim của một token đã giải."
+        },
+        {
+          "loi": "Asking the backend instead of decoding.|||Hỏi backend thay vì giải mã."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decode vs verify",
+          "vi": "giải vs xác minh"
+        }
+      ]
+    },
+    {
+      "title": "12.3-2 — Write tokenState(payload, nowSec): read the expiry",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>From a decoded JWT <code>payload</code> and the current time <code>nowSec</code> (seconds), return the token's state: a missing payload ⇒ <code>'malformed'</code>; <code>exp</code> present and <code>nowSec >= exp</code> ⇒ <code>'expired'</code>; <code>nbf</code> present and <code>nowSec < nbf</code> ⇒ <code>'not-yet-valid'</code>; otherwise ⇒ <code>'valid'</code>. This is for diagnosis only — it does NOT verify the signature.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ một <code>payload</code> JWT đã giải và thời gian hiện tại <code>nowSec</code> (giây), trả trạng thái token: payload thiếu ⇒ <code>'malformed'</code>; <code>exp</code> có và <code>nowSec >= exp</code> ⇒ <code>'expired'</code>; <code>nbf</code> có và <code>nowSec < nbf</code> ⇒ <code>'not-yet-valid'</code>; còn lại ⇒ <code>'valid'</code>. Đây chỉ để chẩn đoán — nó KHÔNG xác minh chữ ký.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tokenState({\"exp\":1700000900}, 1700000950)",
+          "output": "\"expired\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check exp against now, then nbf.|||Kiểm exp với now, rồi nbf.",
+        "A missing payload is malformed, not valid.|||Một payload thiếu là malformed, không phải valid."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'malformed' | 'expired' | 'not-yet-valid' | 'valid' (diagnosis only) */\nfunction tokenState(payload, nowSec) {\n  // Write your solution here\n  return 'valid';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tokenState(payload, nowSec) {\n  // Read a decoded JWT payload and say its state relative to now (seconds). This is for DIAGNOSIS only.\n  if (!payload) return 'malformed';\n  if (payload.exp != null && nowSec >= payload.exp) return 'expired';     // the #1 cause of a 401\n  if (payload.nbf != null && nowSec < payload.nbf) return 'not-yet-valid';\n  return 'valid';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The expiry answers most \"why 401?\" questions by hand — but it is diagnosis, not authorization (12.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Hạn trả lời phần lớn câu hỏi \"vì sao 401?\" bằng tay — nhưng là chẩn đoán, không phải phân quyền (12.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "past exp ⇒ expired",
+              "vi": "qua exp ⇒ expired"
+            },
+            "goi": "tokenState({\"exp\":1700000900}, 1700000950)",
+            "mongDoi": "expired"
+          },
+          {
+            "moTa": {
+              "en": "before exp ⇒ valid",
+              "vi": "trước exp ⇒ valid"
+            },
+            "goi": "tokenState({\"exp\":1700000900}, 1700000800)",
+            "mongDoi": "valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "before nbf ⇒ not-yet-valid",
+              "vi": "trước nbf ⇒ not-yet-valid"
+            },
+            "goi": "tokenState({\"nbf\":1700001000}, 1700000900)",
+            "mongDoi": "not-yet-valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "no payload ⇒ malformed",
+              "vi": "không payload ⇒ malformed"
+            },
+            "goi": "tokenState(null, 1700000900)",
+            "mongDoi": "malformed",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling an expired token valid.|||Gọi một token hết hạn là valid."
+        },
+        {
+          "loi": "Treating this as verification (it is not).|||Coi cái này là xác minh (nó không)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exp/nbf",
+          "vi": "exp/nbf"
+        }
+      ]
+    },
+    {
+      "title": "12.3-3 — Tool → question it answers",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each toolbox technique to the question it answers.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi kỹ thuật hộp đồ nghề với câu hỏi nó trả lời.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The expiry is the most common 401 cause.|||Hạn là nguyên nhân 401 phổ biến nhất.",
+        "Timing reveals enumeration.|||Thời gian lộ enumeration."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.3-3 — Tool → question it answers\n\nAnswer in the answer panel (no code needed).\n\n1. Tool → questionCông cụ → câu hỏi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 12.3-3 — Tool → question it answers — answer key\n\n1. Tool → questionCông cụ → câu hỏi\n   - r1.q: why is it 401?\n   - r2.q: does it leak which accounts exist?\n   - r3.q: is the session cookie hardened?\n   The expiry answers the 401; timing answers enumeration; the flags answer cookie hardening (12.3).VI: Hạn trả lời 401; thời gian trả lời enumeration; các cờ trả lời cookie cứng (12.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The expiry answers the 401; timing answers enumeration; the flags answer cookie hardening (12.3).</p><p><i>VI: Hạn trả lời 401; thời gian trả lời enumeration; các cờ trả lời cookie cứng (12.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Tool → question</p><p style=\"opacity:.75;font-size:.92em\"><i>Công cụ → câu hỏi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Tool"
+              },
+              {
+                "ma": "q",
+                "ten": "Answers",
+                "luaChon": [
+                  "why is it 401?",
+                  "does it leak which accounts exist?",
+                  "is the session cookie hardened?"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "decode the JWT, read exp"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "time real vs fake login"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "read Set-Cookie flags"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "why is it 401?",
+              "r2.q": "does it leak which accounts exist?",
+              "r3.q": "is the session cookie hardened?"
+            },
+            "giaiThich": "<p>The expiry answers the 401; timing answers enumeration; the flags answer cookie hardening (12.3).</p><p><i>VI: Hạn trả lời 401; thời gian trả lời enumeration; các cờ trả lời cookie cứng (12.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Matching the cookie flags to the 401 question.|||Ghép các cờ cookie với câu hỏi 401."
+        },
+        {
+          "loi": "Matching timing to cookie hardening.|||Ghép thời gian với cookie cứng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Set-Cookie",
+          "vi": "Set-Cookie"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-12-7-lab-du-an-cuoi-khoa",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-12-7-lab-du-an-cuoi-khoa"
+  },
+  "exercises": [
+    {
+      "title": "Final-1 — The whole course, graded by attack",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The capstone is LabFlow ID v1.0 graded by ~12 real attack scenarios, one per chapter, for 100 points (pass 70). A weak build scores low; the reference scores 100.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự án cuối là LabFlow ID v1.0 chấm bởi ~12 kịch bản tấn công thật, mỗi cái một chương, cho 100 điểm (đạt 70). Một build yếu đạt thấp; bản tham khảo đạt 100.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The basics are necessary but not sufficient.|||Cơ bản là cần nhưng chưa đủ.",
+        "Each failed scenario names a chapter.|||Mỗi kịch bản trượt gọi tên một chương."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Final-1 — The whole course, graded by attack\n\nAnswer in the answer panel (no code needed).\n\n1. The weak build scores 25/100 — it got argon2id, cookie flags and refresh reuse right. Why is it still unsafe?Build yếu đạt 25/100 — nó làm đúng argon2id, cờ cookie và tái dùng refresh. Vì sao vẫn không an toàn?\n2. The alg:none scenario fails on a submission. Which chapter does that point to?Kịch bản alg:none trượt trên một bản nộp. Điều đó chỉ vào chương nào?\n3. What does passing the capstone demonstrate that a happy-path demo does not?Qua dự án cuối chứng minh gì mà một demo đường-đẹp không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Final-1 — The whole course, graded by attack — answer key\n\n1. The weak build scores 25/100 — it got argon2id, cookie flags and refresh reuse right. Why is it still unsafe?Build yếu đạt 25/100 — nó làm đúng argon2id, cờ cookie và tái dùng refresh. Vì sao vẫn không an toàn?\n   Answer: b) It missed the hardening — it allows any authorization, never blocks a spray, logs secrets, enumerates emails, accepts alg:none\n   \"Runs\" is not \"secure\"; the basics are necessary but not sufficient — each ✗ is a chapter it skipped (Final, 9/10/11).VI: \"Chạy\" không phải \"an toàn\"; cơ bản là cần nhưng chưa đủ — mỗi ✗ là một chương nó bỏ qua (Final, 9/10/11).\n\n2. The alg:none scenario fails on a submission. Which chapter does that point to?Kịch bản alg:none trượt trên một bản nộp. Điều đó chỉ vào chương nào?\n   Answer: a) Chapter 4 — JWT algorithm handling; accepting alg:none lets anyone forge any token\n   alg:none is a token-forgery bypass from the JWT chapter (Final, 4.2).VI: alg:none là một cú bypass giả-token từ chương JWT (Final, 4.2).\n\n3. What does passing the capstone demonstrate that a happy-path demo does not?Qua dự án cuối chứng minh gì mà một demo đường-đẹp không?\n   Answer: a) That the system resists a dozen real attacks — you can build it, break it, and fix it, and explain each defence by its attack\n   The capstone grades against attacks, not the happy path — the whole course, run as an adversary would (Final, 12.5).VI: Dự án cuối chấm với tấn công, không phải đường-đẹp — cả khoá, chạy như một kẻ thù (Final, 12.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It missed the hardening — it allows any authorization, never blocks a spray, logs secrets, enumerates emails, accepts alg:none</p><p>\"Runs\" is not \"secure\"; the basics are necessary but not sufficient — each ✗ is a chapter it skipped (Final, 9/10/11).</p><p><i>VI: \"Chạy\" không phải \"an toàn\"; cơ bản là cần nhưng chưa đủ — mỗi ✗ là một chương nó bỏ qua (Final, 9/10/11).</i></p></li><li><p><b>a)</b> Chapter 4 — JWT algorithm handling; accepting alg:none lets anyone forge any token</p><p>alg:none is a token-forgery bypass from the JWT chapter (Final, 4.2).</p><p><i>VI: alg:none là một cú bypass giả-token từ chương JWT (Final, 4.2).</i></p></li><li><p><b>a)</b> That the system resists a dozen real attacks — you can build it, break it, and fix it, and explain each defence by its attack</p><p>The capstone grades against attacks, not the happy path — the whole course, run as an adversary would (Final, 12.5).</p><p><i>VI: Dự án cuối chấm với tấn công, không phải đường-đẹp — cả khoá, chạy như một kẻ thù (Final, 12.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The weak build scores 25/100 — it got argon2id, cookie flags and refresh reuse right. Why is it still unsafe?</p><p style=\"opacity:.75;font-size:.92em\"><i>Build yếu đạt 25/100 — nó làm đúng argon2id, cờ cookie và tái dùng refresh. Vì sao vẫn không an toàn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It consumes too much memory while running all twelve attack scenarios at once and is killed midway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It missed the hardening — it allows any authorization, never blocks a spray, logs secrets, enumerates emails, accepts alg:none"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is simply too slow to respond to each of the twelve attack scenarios within the grader time limit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It actually passes every scenario correctly, but the grader rounds the final score down to 25 by mistake"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"Runs\" is not \"secure\"; the basics are necessary but not sufficient — each ✗ is a chapter it skipped (Final, 9/10/11).</p><p><i>VI: \"Chạy\" không phải \"an toàn\"; cơ bản là cần nhưng chưa đủ — mỗi ✗ là một chương nó bỏ qua (Final, 9/10/11).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The alg:none scenario fails on a submission. Which chapter does that point to?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kịch bản alg:none trượt trên một bản nộp. Điều đó chỉ vào chương nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Chapter 4 — JWT algorithm handling; accepting alg:none lets anyone forge any token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Chapter 11 — rate limiting the login endpoint and sharing the counter across instances"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Chapter 2 — the choice of password-hashing function and its tuned cost parameters"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Chapter 6 — the account lifecycle, including verification and password reset flows"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>alg:none is a token-forgery bypass from the JWT chapter (Final, 4.2).</p><p><i>VI: alg:none là một cú bypass giả-token từ chương JWT (Final, 4.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does passing the capstone demonstrate that a happy-path demo does not?</p><p style=\"opacity:.75;font-size:.92em\"><i>Qua dự án cuối chứng minh gì mà một demo đường-đẹp không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That the system resists a dozen real attacks — you can build it, break it, and fix it, and explain each defence by its attack"
+              },
+              {
+                "ma": "b",
+                "noiDung": "That the code compiles and runs without any syntax errors across all of the wired-together modules"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That the user interface looks polished and professional enough to ship to real paying customers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That the login endpoint responds quickly and stays fast even under a fairly normal production load"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The capstone grades against attacks, not the happy path — the whole course, run as an adversary would (Final, 12.5).</p><p><i>VI: Dự án cuối chấm với tấn công, không phải đường-đẹp — cả khoá, chạy như một kẻ thù (Final, 12.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a happy-path demo proves security.|||Tưởng một demo đường-đẹp chứng minh bảo mật."
+        },
+        {
+          "loi": "Thinking 25/100 passes (pass is 70).|||Tưởng 25/100 đạt (đạt là 70)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "capstone",
+          "vi": "dự án cuối"
+        },
+        {
+          "en": "STAR story",
+          "vi": "câu chuyện STAR"
+        }
+      ]
+    },
+    {
+      "title": "Final-2 — Write defendsAgainst(scenario): attack ⇒ chapter",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Map each capstone attack scenario to the chapter whose defence stops it: <code>db_dump ⇒ 'Ch2'</code>, <code>email_enumeration ⇒ 'Ch6'</code>, <code>homograph_email ⇒ 'Ch6'</code>, <code>session_guessing ⇒ 'Ch1/3'</code>, <code>alg_none ⇒ 'Ch4'</code>, <code>refresh_reuse ⇒ 'Ch5'</code>, <code>cookie_posture ⇒ 'Ch3'</code>, <code>forged_id_token ⇒ 'Ch8'</code>, <code>totp_relay ⇒ 'Ch7/10'</code>, <code>idor_cross_tenant ⇒ 'Ch9'</code>, <code>stuffing_10k ⇒ 'Ch10'</code>, <code>audit_log_leak ⇒ 'Ch11'</code>. Unknown ⇒ <code>'unknown'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ánh xạ mỗi kịch bản tấn công của dự án cuối tới chương có phòng thủ chặn nó: <code>db_dump ⇒ 'Ch2'</code>, <code>email_enumeration ⇒ 'Ch6'</code>, <code>homograph_email ⇒ 'Ch6'</code>, <code>session_guessing ⇒ 'Ch1/3'</code>, <code>alg_none ⇒ 'Ch4'</code>, <code>refresh_reuse ⇒ 'Ch5'</code>, <code>cookie_posture ⇒ 'Ch3'</code>, <code>forged_id_token ⇒ 'Ch8'</code>, <code>totp_relay ⇒ 'Ch7/10'</code>, <code>idor_cross_tenant ⇒ 'Ch9'</code>, <code>stuffing_10k ⇒ 'Ch10'</code>, <code>audit_log_leak ⇒ 'Ch11'</code>. Lạ ⇒ <code>'unknown'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "defendsAgainst(\"alg_none\")",
+          "output": "\"Ch4\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A lookup table maps the twelve scenarios.|||Một bảng tra ánh xạ mười hai kịch bản.",
+        "Each scenario is a chapter, run as an attack.|||Mỗi kịch bản là một chương, chạy như một cú tấn công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const DEFENDS = { db_dump: 'Ch2', email_enumeration: 'Ch6', homograph_email: 'Ch6', session_guessing: 'Ch1/3', alg_none: 'Ch4', refresh_reuse: 'Ch5', cookie_posture: 'Ch3', forged_id_token: 'Ch8', totp_relay: 'Ch7/10', idor_cross_tenant: 'Ch9', stuffing_10k: 'Ch10', audit_log_leak: 'Ch11' };\n/** ⇒ the chapter whose defence stops this attack scenario */\nfunction defendsAgainst(scenario) {\n  // Write your solution here\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const DEFENDS = { db_dump: 'Ch2', email_enumeration: 'Ch6', homograph_email: 'Ch6', session_guessing: 'Ch1/3', alg_none: 'Ch4', refresh_reuse: 'Ch5', cookie_posture: 'Ch3', forged_id_token: 'Ch8', totp_relay: 'Ch7/10', idor_cross_tenant: 'Ch9', stuffing_10k: 'Ch10', audit_log_leak: 'Ch11' };\n// Reference solution\nfunction defendsAgainst(scenario) {\n  // Map a capstone attack scenario to the chapter whose defence stops it. An unknown scenario ⇒ 'unknown'.\n  return DEFENDS[scenario] || 'unknown';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every capstone scenario is a lesson run as an attack; naming its chapter is the whole-course map (Final, 12.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi kịch bản dự án cuối là một bài chạy như một cú tấn công; gọi tên chương của nó là bản đồ cả khoá (Final, 12.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "alg:none ⇒ Ch4",
+              "vi": "alg:none ⇒ Ch4"
+            },
+            "goi": "defendsAgainst(\"alg_none\")",
+            "mongDoi": "Ch4"
+          },
+          {
+            "moTa": {
+              "en": "IDOR ⇒ Ch9",
+              "vi": "IDOR ⇒ Ch9"
+            },
+            "goi": "defendsAgainst(\"idor_cross_tenant\")",
+            "mongDoi": "Ch9",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "stuffing ⇒ Ch10",
+              "vi": "nhồi ⇒ Ch10"
+            },
+            "goi": "defendsAgainst(\"stuffing_10k\")",
+            "mongDoi": "Ch10",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown ⇒ unknown",
+              "vi": "lạ ⇒ unknown"
+            },
+            "goi": "defendsAgainst(\"mystery_attack\")",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mapping idor_cross_tenant to the wrong chapter.|||Ánh xạ idor_cross_tenant tới sai chương."
+        },
+        {
+          "loi": "Returning undefined for an unknown scenario.|||Trả undefined cho một kịch bản lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "attack ⇒ chapter",
+          "vi": "tấn công ⇒ chương"
+        }
+      ]
+    },
+    {
+      "title": "Final-3 — Grade each submission",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the three capstone submissions from the lowest grade to the highest.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp ba bản nộp dự án cuối từ điểm thấp nhất tới cao nhất.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The basics alone are well under the 70 pass line.|||Chỉ cơ bản thôi dưới xa mức đạt 70.",
+        "Only the reference resists every attack.|||Chỉ bản tham khảo kháng mọi cú tấn công."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Final-3 — Grade each submission\n\nAnswer in the answer panel (no code needed).\n\n1. Lowest → highestThấp → cao\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Final-3 — Grade each submission — answer key\n\n1. Lowest → highestThấp → cao\n   Answer: m1) The empty starter (every decision a stub) — 0/100  →  m3) The \"yeu\" build (basics right, hardening missed) — 25/100  →  m2) The reference (every decision wired to the hardened module) — 100/100\n   The starter resists nothing; the yeu build gets the basics; the reference resists all twelve attacks (Final).VI: Bản khởi đầu không kháng gì; build yếu được cơ bản; bản tham khảo kháng cả mười hai cú tấn công (Final).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The starter resists nothing; the yeu build gets the basics; the reference resists all twelve attacks (Final).</p><p><i>VI: Bản khởi đầu không kháng gì; build yếu được cơ bản; bản tham khảo kháng cả mười hai cú tấn công (Final).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Lowest → highest</p><p style=\"opacity:.75;font-size:.92em\"><i>Thấp → cao</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The empty starter (every decision a stub) — 0/100"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The reference (every decision wired to the hardened module) — 100/100"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The \"yeu\" build (basics right, hardening missed) — 25/100"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>The starter resists nothing; the yeu build gets the basics; the reference resists all twelve attacks (Final).</p><p><i>VI: Bản khởi đầu không kháng gì; build yếu được cơ bản; bản tham khảo kháng cả mười hai cú tấn công (Final).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the yeu build passes at 25.|||Tưởng build yếu đạt ở 25."
+        },
+        {
+          "loi": "Thinking the starter resists some attacks.|||Tưởng bản khởi đầu kháng vài cú tấn công."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pass = 70/100",
+          "vi": "đạt = 70/100"
+        }
+      ]
+    }
+  ]
+}

@@ -37,12 +37,12 @@ export const OWNER_TODO: Record<'education' | 'experience' | 'currently' | 'stor
     vi: 'Kỹ thuật phần mềm, Đại học FPT, đang học kỳ 5 (Fall 2026). Chuyên ngành hẹp Node.js và Spring Boot; mình đang hướng tới AI Engineer, rồi MLOps.',
   },
   experience: {
-    en: 'No employer yet, so my experience is what I have built and still run: CT Work (web, desktop, iOS), the CuongMini AI tools and this platform. I also mentor three junior students through their PRJ301 project.',
-    vi: 'Mình chưa đi làm ở công ty nào, nên kinh nghiệm là những gì mình tự làm và vẫn đang vận hành: CT Work (web, desktop, iOS), bộ công cụ AI CuongMini và chính nền tảng này. Mình cũng kèm ba bạn khoá dưới làm đồ án PRJ301.',
+    en: 'My experience comes from building and running real products end to end: CT Work (web, desktop, iOS), the CuongMini AI tools and this platform. Every production incident and bug teaches me something hands-on instead of theory. I also mentor three junior students through their PRJ301 project.',
+    vi: 'Kinh nghiệm của mình đến từ việc tự làm và vận hành sản phẩm thật từ đầu đến cuối: CT Work (web, máy tính, iOS), bộ công cụ AI CuongMini và chính nền tảng này. Mỗi sự cố, mỗi lỗi khi vận hành đều cho mình thêm một bài học thực tế thay vì lý thuyết suông. Mình cũng kèm ba bạn khoá dưới làm đồ án PRJ301.',
   },
   currently: {
-    en: 'Studying semester 5, writing courses and recording video lessons for this site, and looking after CT Work, which has just come out on the App Store (November 2026).',
-    vi: 'Đang học kỳ 5, soạn khoá học và quay video bài giảng cho trang, và chăm CT Work vừa lên App Store (tháng 11/2026).',
+    en: 'Studying semester 5 (Fall 2026), writing courses and recording video lessons for this site, and looking after CT Work, now on the App Store. I practise every day in Code Lab and on the real projects here.',
+    vi: 'Đang học kỳ 5 (Fall 2026), soạn khoá học và quay video bài giảng cho trang, và chăm CT Work vừa lên App Store. Mỗi ngày mình luyện thêm ở Code Lab và các dự án thật trên trang.',
   },
   story: {
     en: 'This is my personal website. It began as a place to keep and organise my study materials and notes, and I turn them into courses and practice, for myself and for other students. It is also my workshop: where I build real products end to end and ship them, on the web, the desktop, iOS and as AI tools.',
@@ -89,7 +89,7 @@ const C = {
 
     workTitle: 'What I’ve built',
     workLead:
-      'I have not worked for a company yet, so this is my experience: products I designed, built, shipped and still run myself. Every link below goes to the real thing.',
+      'This is my hands-on experience: products I designed, built, shipped and still run myself. Every link below goes to the real thing.',
     platforms: 'Runs on',
     status: 'Status',
     openWeb: 'Open on the web',
@@ -171,7 +171,7 @@ const C = {
 
     workTitle: 'Sản phẩm mình làm',
     workLead:
-      'Mình chưa đi làm ở công ty nào, nên đây là kinh nghiệm của mình: những sản phẩm mình tự thiết kế, viết, phát hành và vẫn đang tự vận hành. Mọi liên kết dưới đây dẫn tới sản phẩm thật.',
+      'Đây là kinh nghiệm thực tế của mình: những sản phẩm mình tự thiết kế, viết, phát hành và vẫn đang tự vận hành. Mọi liên kết dưới đây dẫn tới sản phẩm thật.',
     platforms: 'Chạy trên',
     status: 'Trạng thái',
     openWeb: 'Mở trên web',

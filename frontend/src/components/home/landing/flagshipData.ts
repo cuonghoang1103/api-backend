@@ -13,6 +13,8 @@
  * Đổi số thì đo lại bằng đúng lệnh đó, đừng ước.
  */
 
+import { CTWORK_APP_STORE } from '@/lib/appLinks';
+
 export interface FlagshipGroup { icon: string; title: string; items: string[] }
 export interface FlagshipStat { value: string; label: string }
 export interface FlagshipStrength { title: string; body: string }
@@ -37,6 +39,8 @@ export interface Flagship {
   stats: FlagshipStat[];
   media: FlagshipMedia;
   actions: FlagshipAction[];
+  /** App Store page — renders Apple's official badge next to the actions. */
+  appStore?: string;
   groups: FlagshipGroup[];
   strengths: FlagshipStrength[];
 }
@@ -57,7 +61,7 @@ export function getFlagships(vi: boolean): Flagship[] {
       stats: [
         { value: '68', label: vi ? 'màn hình' : 'screens' },
         { value: '123', label: vi ? 'lệnh cho AI agent (MCP)' : 'agent commands (MCP)' },
-        { value: '3', label: vi ? 'nơi dùng: web · app · app riêng' : 'places: web · app · standalone' },
+        { value: '4', label: vi ? 'nơi dùng: web · app · app riêng · iPhone/iPad' : 'places: web · app · standalone · iPhone/iPad' },
       ],
       media: {
         /* Video dựng từ thao tác THẬT (Remotion, ~/Documents/video-san-pham), người dùng ghép nhạc (13/10/2026).
@@ -69,6 +73,7 @@ export function getFlagships(vi: boolean): Flagship[] {
           ? [{ t: 5.5, label: 'Việc của tôi' }, { t: 10.2, label: 'Sprint & board' }, { t: 20.9, label: 'SRS & sơ đồ' }, { t: 29.9, label: 'Kiểm thử' }, { t: 34.8, label: 'Hỏi AI' }, { t: 42.5, label: 'App desktop' }, { t: 49.1, label: 'Agent & MCP' }]
           : [{ t: 5.5, label: 'My work' }, { t: 10.2, label: 'Sprint & board' }, { t: 20.9, label: 'SRS & diagrams' }, { t: 29.9, label: 'Testing' }, { t: 34.8, label: 'Ask AI' }, { t: 42.5, label: 'Desktop app' }, { t: 49.1, label: 'Agents & MCP' }],
       },
+      appStore: CTWORK_APP_STORE,
       actions: [
         { href: '/work', label: vi ? 'Mở CT Work' : 'Open CT Work', primary: true },
         { href: '/download/ct-work', label: vi ? 'Tải app CT Work' : 'Get the CT Work app' },

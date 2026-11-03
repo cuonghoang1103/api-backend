@@ -17,6 +17,7 @@
  * người xem không bật "giảm chuyển động". Ra khỏi màn hình là dừng — trang chủ
  * không được đốt CPU cho thứ không ai nhìn.
  */
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
@@ -172,6 +173,11 @@ function FlagshipChapter({ p, vi, reverse }: { p: Flagship; vi: boolean; reverse
               </Link>
             ))}
           </div>
+          {p.appStore && (
+            <div className="flag-store">
+              <AppStoreBadge href={p.appStore} lang={vi ? 'vi' : 'en'} appName={p.name} height={44} />
+            </div>
+          )}
         </div>
       </div>
 

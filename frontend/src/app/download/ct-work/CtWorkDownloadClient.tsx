@@ -17,6 +17,8 @@ import { ArrowRight, Bell, Cloud, Laptop, RefreshCw, ShieldCheck, Zap } from 'lu
 import { useTranslation } from '@/hooks/useTranslation';
 import { CopyBlock, detectPlatform, type Platform, type ReleaseAsset, type ReleaseInfo } from '../DownloadClient';
 import { CTW_COURSE_HREF, episodeVideo } from '@/components/work/help/videos';
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
+import { CTWORK_APP_STORE } from '@/lib/appLinks';
 
 /* Tập 12 của loạt "Hướng dẫn CT Work" (app máy tính + điện thoại + phím tắt). Link dán ở
    components/work/help/videos.ts — còn rỗng thì cả khối ẩn. */
@@ -153,6 +155,27 @@ export default function CtWorkDownloadClient({ banPhatHanh }: { banPhatHanh: Rel
         </p>
         {version && <p className="mt-2 text-sm text-[var(--text-secondary)]">{vi ? 'Phiên bản' : 'Version'} {version}</p>}
       </header>
+
+      {/* iPhone & iPad — CT Work is on the App Store (11/2026). Apple's badge, unmodified. */}
+      <section
+        aria-labelledby="ctw-ios"
+        className="mx-auto mt-8 flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 text-center sm:flex-row sm:p-6 sm:text-left"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--text-secondary)]">
+            {vi ? 'Mới · iPhone & iPad' : 'New · iPhone & iPad'}
+          </p>
+          <h2 id="ctw-ios" className="mt-1 text-lg font-semibold">
+            {vi ? 'CT Work đã có trên App Store' : 'CT Work is on the App Store'}
+          </h2>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+            {vi
+              ? 'App native cho iPhone và iPad, miễn phí, iOS 17 trở lên: My Work, board, bảng tin nhóm, chat, cuộc họp và CuongMini — cùng tài khoản.'
+              : 'A native app for iPhone and iPad, free, iOS 17 or later: My Work, boards, team feed, chat, meetings and CuongMini — same account.'}
+          </p>
+        </div>
+        <AppStoreBadge href={CTWORK_APP_STORE} lang={vi ? 'vi' : 'en'} appName="CT Work" height={48} />
+      </section>
 
       <section className="mt-10">
         {chuaCoBan ? (

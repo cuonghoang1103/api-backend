@@ -2346,22 +2346,26 @@ export const HELP_ARTICLES: HelpArticle[] = [
     category: 'reference',
     title: { en: 'Desktop & mobile', vi: 'App desktop & điện thoại' },
     summary: {
-      en: 'Use CT Work in the CuongThai desktop app or on your phone’s browser.',
-      vi: 'Dùng CT Work trong app desktop CuongThai hoặc trên trình duyệt điện thoại.',
+      en: 'CT Work on the desktop (its own app or the CuongThai app) and on iPhone & iPad (App Store).',
+      vi: 'CT Work trên máy tính (app riêng hoặc app CuongThai) và trên iPhone, iPad (App Store).',
     },
-    keywords: ['desktop', 'app', 'mac', 'windows', 'mobile', 'phone', 'iphone', 'ipad', 'android', 'ung dung', 'dien thoai'],
-    pages: [page('global', '/download', 'Download the desktop app', 'Tải app desktop')],
+    keywords: ['desktop', 'app', 'mac', 'windows', 'mobile', 'phone', 'iphone', 'ipad', 'android', 'app store', 'ios', 'ung dung', 'dien thoai'],
+    pages: [
+      page('global', '/download/ct-work', 'Get the CT Work apps (desktop, iPhone & iPad)', 'Tải app CT Work (máy tính, iPhone & iPad)'),
+      page('global', '/download', 'Download the CuongThai desktop app', 'Tải app desktop CuongThai'),
+    ],
     blocks: [
       h('Desktop app', 'App desktop'),
       list(
-        ['Download the CuongThai desktop app (macOS, Windows, Linux) from **/download** and sign in with your usual account.', 'Tải app desktop CuongThai (macOS, Windows, Linux) ở **/download** và đăng nhập bằng tài khoản thường dùng.'],
+        ['**CT Work has its own desktop app** (macOS, Windows, Linux) — it opens straight to your boards and installs side by side with the CuongThai app. Get it from **/download/ct-work**.', '**CT Work có app desktop riêng** (macOS, Windows, Linux) — mở là vào thẳng board, cài song song với app CuongThai. Tải ở **/download/ct-work**.'],
+        ['Or download the CuongThai desktop app (macOS, Windows, Linux) from **/download** and sign in with your usual account.', 'Hoặc tải app desktop CuongThai (macOS, Windows, Linux) ở **/download** và đăng nhập bằng tài khoản thường dùng.'],
         ['Open **CT Work** in the app’s sidebar. It is the same CT Work — every page, the AI assistant and this guide — plus system notifications.', 'Mở **CT Work** ở sidebar của app. Đó chính là CT Work — đủ mọi trang, trợ lý AI và hướng dẫn này — thêm thông báo hệ thống.'],
         ['Inside CT Work, [[⌘]] [[K]] opens CT Work’s own command palette; the app’s palette is still available from the title-bar button.', 'Trong CT Work, [[⌘]] [[K]] mở bảng lệnh riêng của CT Work; bảng lệnh của app vẫn mở được bằng nút trên thanh tiêu đề.'],
       ),
       h('Phone', 'Điện thoại'),
       list(
         ['Open cuongthai.com/work in your phone’s browser. The menu button at the top left opens the sidebar; panels such as this guide open full screen.', 'Mở cuongthai.com/work trên trình duyệt điện thoại. Nút menu góc trên bên trái mở sidebar; các ngăn như hướng dẫn này mở toàn màn hình.'],
-        ['The iPhone/iPad app has a native **CT Work** tab: My Work, board with drag & drop, issue details, status/assignee changes, comments, and push notifications that open the right issue. It is in TestFlight (beta) now.', 'App iPhone/iPad có tab **CT Work** viết riêng: My Work, board kéo thả, chi tiết thẻ, đổi trạng thái/người làm, bình luận, và thông báo đẩy mở thẳng đúng thẻ. Hiện đang thử nghiệm qua TestFlight.'],
+        ['**CT Work for iPhone and iPad is on the App Store** (free, iOS 17 or later): search “CT Work” in the App Store or use the badge on **/download/ct-work**. It is native: My Work, the board with touch-and-hold drag, issues, the team feed, chat and direct messages, meetings, and CuongMini — same account, live sync.', '**CT Work cho iPhone và iPad đã có trên App Store** (miễn phí, iOS 17 trở lên): tìm “CT Work” trong App Store hoặc bấm huy hiệu ở **/download/ct-work**. App viết native: My Work, board chạm-giữ để kéo, thẻ việc, bảng tin nhóm, chat và tin nhắn riêng, cuộc họp, và CuongMini — cùng tài khoản, đồng bộ tức thì.'],
       ),
     ],
     related: ['notifications', 'shortcuts'],

@@ -17,7 +17,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: 'Tải CT Work cho máy tính — macOS, Windows, Linux',
   description:
-    'App desktop riêng của CT Work: board, sprint, backlog, đồ án, lớp học và AI agent — chỉ CT Work, đồng bộ tức thì với web và app CuongThai.',
+    'App desktop riêng của CT Work: board, sprint, backlog, đồ án, lớp học và AI agent — chỉ CT Work, đồng bộ tức thì với web và app CuongThai. CT Work cho iPhone và iPad có trên App Store.',
   openGraph: {
     title: 'CT Work cho máy tính',
     description: 'Quản lý dự án, đồ án và lớp học kiểu Jira — app riêng cho macOS, Windows và Linux.',

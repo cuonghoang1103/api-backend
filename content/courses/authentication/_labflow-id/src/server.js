@@ -18,6 +18,7 @@ import { publicJwks } from './jwt/jwks.js';
 import { refreshLayer, pgStore as refreshStore } from './refresh/index.js';
 import { lifecycle, pgStore as lifecycleStore } from './lifecycle/index.js';
 import { sendEmail } from './email/index.js';
+import { normalizeEmail } from './email/normalize.js';
 import { tokenDigest } from './crypto/index.js';
 import { log, requestLog } from './log.js';
 
@@ -50,8 +51,9 @@ app.use(sessions.csrf);   // POST/PUT/PATCH/DELETE must come from our own origin
 const needSession = (req, res, next) => (req.session ? next() : res.status(401).json({ error: 'Not signed in' }));
 const accessFor = (u) => tokens.issue(u.id, { role: u.role });
 
-// lesson 6.1, 6.4: register. On a duplicate email we do NOT say "taken" — we hash anyway (same timing) and send a
-// "you already have an account" email instead, so sign-up cannot be used to enumerate accounts. The account is unverified.
+// lesson 6.1, 6.4: register. The email is normalised once (NFKC + lowercase) and the UNIQUE index — NOT a check-then-
+// insert — decides uniqueness: we just INSERT and catch the duplicate (PG 23505). On a duplicate we do NOT say "taken";
+// we hash anyway (same timing) and email "you already have an account", so sign-up cannot enumerate accounts.
 app.post('/sign-up', async (req, res) => {
   const { email, password, name } = req.body ?? {};
   const problems = checkNewPassword(password, { email, blocklist: BLOCKLIST });
@@ -61,17 +63,22 @@ app.post('/sign-up', async (req, res) => {
     if (seen === null) log.warn('pwned-passwords check unavailable; accepted without it');
   }
   if (problems.length) return res.status(422).json({ error: 'WEAK_PASSWORD', problems });
-  const normEmail = String(email ?? '').trim().toLowerCase();
-  const passwordHash = await hashPassword(password);   // hash in BOTH branches, so timing never reveals whether the email is taken
-  const existing = await users.findByEmail(normEmail);
-  if (existing) {
-    sendEmail({ to: normEmail, subject: 'You already have a LabFlow account',
-      text: 'Someone tried to register with this address. If it was you, sign in or reset your password — there is nothing else to do.' });
-  } else {
-    const user = await users.create({ email: normEmail, name: name ?? '', passwordHash });
+  const normEmail = normalizeEmail(email);
+  if (!normEmail) return res.status(422).json({ error: 'BAD_EMAIL' });
+  const passwordHash = await hashPassword(password);   // hash in BOTH outcomes, so timing never reveals whether the email is taken
+  let user = null;
+  try {
+    user = await users.create({ email: normEmail, name: name ?? '', passwordHash });  // let the UNIQUE index be the check
+  } catch (e) {
+    if (e?.code !== '23505') throw e;                  // 23505 = unique_violation: the address already exists (the race-safe path)
+  }
+  if (user) {
     const { token } = await life.issueToken(user.id, 'verify_email');
     sendEmail({ to: normEmail, subject: 'Verify your LabFlow email',
       text: `Welcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=${token}` });
+  } else {
+    sendEmail({ to: normEmail, subject: 'You already have a LabFlow account',
+      text: 'Someone tried to register with this address. If it was you, sign in or reset your password — there is nothing else to do.' });
   }
   res.status(202).json({ ok: true, message: 'Check your email to finish signing up.' });   // same response either way
 });
@@ -172,8 +179,8 @@ app.get('/.well-known/jwks.json', async (req, res) => {
 
 // lesson 6.5: change the email. The new address starts UN-verified (users.updateEmail clears it) and must be proven.
 app.post('/me/email', needSession, async (req, res) => {
-  const email = String(req.body?.email ?? '').trim().toLowerCase();
-  if (!/^[^@\s]+@[^@\s]+$/.test(email)) return res.status(422).json({ error: 'BAD_EMAIL' });
+  const email = normalizeEmail(req.body?.email);
+  if (!email) return res.status(422).json({ error: 'BAD_EMAIL' });
   await users.updateEmail(req.session.userId, email);
   const { token } = await life.issueToken(req.session.userId, 'verify_email');
   sendEmail({ to: email, subject: 'Verify your new LabFlow email',

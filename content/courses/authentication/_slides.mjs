@@ -15,7 +15,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/AUTH';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'auth-01-1': 'v2' }. */
-const VER = {};
+const VER = { 'auth-06-1': 'v2' };   // 04/11/2026: thêm slide chuẩn hoá email + đua check-then-insert ⇒ dựng lại, đẩy v2 (v1 giữ bytes cũ)
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

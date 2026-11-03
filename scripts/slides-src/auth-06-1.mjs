@@ -8,17 +8,25 @@ import { OUT, CODE } from '../../content/courses/authentication/s06/_ma.mjs';
 export const deck = { key: 'auth-06-1', code: 'AUTH 6.1', title: 'Registration, and the identifier you cannot take back', sub: 'An account starts unverified; sign-up must not reveal who is registered' };
 const clip = (s, n = 58) => s.split('\n').map((l) => (l.length > n ? l.slice(0, n) + '…' : l)).join('\n');
 const body = (k) => clip(OUT[k].split('\n').slice(1).join('\n'));
-const SIGNUP = `// hash in BOTH branches ⇒ timing never reveals a hit
-const hash = await hashPassword(password)
-const existing = await users.findByEmail(normEmail)
-if (existing) {
-  sendEmail({ to, subject: 'You already have an account' })
-} else {
-  const u = await users.create({ email, passwordHash: hash })
-  const { token } = await life.issueToken(u.id, 'verify_email')
-  sendEmail({ to, subject: 'Verify your email', text: link })
+const SIGNUP = `const hash = await hashPassword(password) // BOTH outcomes
+const email = normalizeEmail(raw)         // trim+NFKC+lower
+let user = null
+try {                                     // no check-then-insert:
+  user = await users.create({ email, passwordHash: hash })
+} catch (e) {                             // the UNIQUE index decides
+  if (e.code !== '23505') throw e         // 23505 = already exists
 }
+if (user) sendVerifyLink(user)            // new row ⇒ verify email
+else      sendAlreadyHaveAccount(email)   // duplicate ⇒ a notice
 res.status(202).json({ message: 'Check your email.' })`;
+const NORM = `export function normalizeEmail(raw) {
+  const t = String(raw).trim()
+  const at = t.lastIndexOf('@')           // local part may hold @
+  if (at <= 0 || /\\s/.test(t)) return null
+  const domain = t.slice(at + 1).toLowerCase()
+  return (t.slice(0, at) + '@' + domain)
+           .normalize('NFKC').toLowerCase()
+}`;
 
 export const slides = lamDeck({ chuong: 'Chapter 6 — The account lifecycle', bai: '6.1' }, [
   { cover: true, t: 'Registration, and the identifier<br>you cannot take back', sub: 'Chapter 6 · Lesson 6.1 — an unverified account, and a sign-up that leaks nothing' },
@@ -45,6 +53,10 @@ export const slides = lamDeck({ chuong: 'Chapter 6 — The account lifecycle', b
       box('Why hash in both branches', 'argon2 (~190 ms) becomes the cost of both, so a taken and a free email answer in the same time.', 'xanh') },
   { t: 'Same response, a different email', body: sh(body('61-register'), { title: 'bash demo6/register.sh', sm: true }) +
       box('Either way: 202', 'New email ⇒ create unverified + email a verify link. Duplicate ⇒ email "you already have an account". The caller sees one 202.', 'lam') },
+  { t: 'Normalise the address, and the race at the door', body: js(NORM, { sm: true }) +
+      two(box('NFKC folds duplicates, NOT confusables', 'Full-width ＣＵＯＮＧ@… → cuong@…; but Cyrillic а (U+0430) ≠ Latin a — "аdmin@" and "admin@" stay two rows. Flag mixed-script separately.', 'lam'),
+          box('Check-then-insert is a race', 'SELECT-then-INSERT lets two concurrent sign-ups both create a row. Just INSERT and catch 23505 — the UNIQUE index is the only arbiter.', 'do2')) +
+      box('Measured', clip(body('67-signup-race').split('\n').filter((l) => l.includes('request') || l.includes('Subject')).join('\n')), 'xanh') },
   { t: 'When it goes wrong', giua: true, body: `<table class="t"><tr><th>Naive sign-up</th><th>What it leaks</th><th>LabFlow ID</th></tr>
     <tr><td>409 "email already taken"</td><td>which emails have an account</td><td>same 202, emails the owner</td></tr>
     <tr><td>hash only when the email is new</td><td>timing: taken ≈ 1 ms, free ≈ 80 ms</td><td>hashes in both branches</td></tr>

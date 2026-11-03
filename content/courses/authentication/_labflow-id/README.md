@@ -9,7 +9,7 @@ Chương 5 thêm `src/refresh/` (layer rotation + reuse detection + grace window
 `refresh_tokens` theo họ, lưu digest), `POST /refresh` + `GET /me/devices` + `/me/devices/revoke` trong `src/server.js`, `demo5/`,
 `lab5/` + `scripts/cham-lab-5.mjs` (Lab 5, 8 phép), `test/refresh.test.js`.
 Chương 6 thêm `src/lifecycle/` (token một lần: issue/consume theo mục đích + requestPasswordReset chống dò tài khoản, pg-store, memory-store),
-`src/email/` (hộp thư giả), `sql/004_lifecycle.sql` (cột `email_verified_at` + `status` trên `users`, bảng `one_time_tokens`),
+`src/email/` (hộp thư giả + `normalize.js`: NFKC + cờ trộn hệ chữ), `sql/004_lifecycle.sql` (cột `email_verified_at` + `status` trên `users`, bảng `one_time_tokens`),
 `POST /sign-up` (chống dò, băm cả hai nhánh) + `GET|POST /verify-email` + `/forgot-password`(`-naive`) + `/reset-password` + `/me/email` + `/me/delete`
 trong `src/server.js`, `demo6/`, `lab6/` + `scripts/cham-lab-6.mjs` (Lab 6, 6 phép), `test/lifecycle.test.js`.
 

@@ -9,6 +9,8 @@ import { CODE, OUT } from './_ma.mjs';
 
 const SV = CODE.server06.split('\n');
 const SIGNUP = SV.slice(SV.findIndex((l) => l.includes('lesson 6.1, 6.4: register')), SV.findIndex((l) => l.includes('lesson 6.2: email verification'))).join('\n').trim();
+const NV = CODE.normalize.split('\n');
+const NORMALIZE = NV.slice(NV.findIndex((l) => l.includes('export function normalizeEmail')), NV.findIndex((l) => l.includes('const SCRIPTS'))).join('\n').trim();
 
 const NGUON_EN = [
   nguon('🦉', 'OWASP — Authentication Cheat Sheet (registration, account enumeration)', 'Registration and forgot-password responses must not reveal whether an account exists; return a consistent message (read 03/11/2026).', 'https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html'),
@@ -74,7 +76,17 @@ ${ma('sql', CODE.sql004.split('\n').slice(1, 5).join('\n'))}
 <p>The naive form answers a duplicate email with <code>409 "email already taken"</code>. That is an <strong>enumeration oracle</strong>: an attacker pastes a list of addresses and the form sorts them into “has an account” and “does not”. Worse, even if you fix the <em>wording</em>, a form that only hashes the password when the email is new answers a taken email in a millisecond and a free one in eighty — the <strong>timing</strong> leaks the same fact (lesson 6.4 measures it). LabFlow ID closes both: it does the same work and gives the same answer either way.</p>
 ${ma('javascript', SIGNUP)}
 ${ra(OUT['61-register'])}
-<p>The response is always <code>202 "Check your email to finish signing up."</code>. Behind it: the password is hashed <strong>before</strong> the branch, so argon2 is the cost whether the email is taken or not; then either a new unverified account is created and a verify link emailed, or — for a duplicate — a “you already have an account” note is emailed instead. The honest owner of that inbox gets a useful message; a stranger probing the form learns nothing.</p>
+<p>The response is always <code>202 "Check your email to finish signing up."</code>. Behind it: the password is hashed <strong>before</strong> anything else, so argon2 is the cost whether the email is taken or not; then LabFlow ID simply <em>inserts</em> and lets the <code>UNIQUE</code> index decide — a new row means a verify link is emailed, a duplicate-key error (caught, never surfaced) means a “you already have an account” note is emailed instead. The honest owner of that inbox gets a useful message; a stranger probing the form learns nothing.</p>
+
+<h3>Normalising the address, and the race at the door</h3>
+<p>Two details decide whether “the same email” really means the same account. First, <strong>normalisation</strong>: the address is trimmed, Unicode-folded with <strong>NFKC</strong>, and lower-cased into one stored form that the <code>UNIQUE</code> index and every lookup use. NFKC collapses the harmless duplicates — a full-width <code>ＣＵＯＮＧ@…</code> becomes <code>cuong@…</code> — so a user who types their address a little differently still lands on one row.</p>
+${ma('javascript', NORMALIZE)}
+${ra(OUT['66-normalize'])}
+<p>But NFKC does <strong>not</strong> fold a <em>confusable</em>: the Cyrillic <code>а</code> (U+0430) renders exactly like the Latin <code>a</code> (U+0061) yet normalises to a different string, so <code>аdmin@…</code> and <code>admin@…</code> are two different rows that look identical to a human reading a support ticket. Normalisation cannot catch that; a separate <strong>mixed-script</strong> flag can (for domains you control, restrict the local part to ASCII, or flag any address mixing scripts for review). Second, uniqueness itself: a <code>SELECT</code>-then-<code>INSERT</code> is a <strong>race</strong> — two requests for the same email can both read “no such account” and both insert. LabFlow ID does not check first; it inserts and catches the duplicate-key error, so the database’s <code>UNIQUE</code> constraint is the one and only arbiter.</p>
+${ra(OUT['67-signup-race'])}
+<div class="callout warn">
+<p><strong>Check-then-insert cannot be made safe by checking harder.</strong> Between your <code>SELECT</code> and your <code>INSERT</code> there is always a window where another request can slip in; under load it <em>will</em>. The fix is not a bigger lock in application code — it is a <code>UNIQUE</code> index plus catching the violation (PostgreSQL <code>23505</code>). Here two concurrent sign-ups for one address both return <code>202</code>, and the mailbox proves exactly one account was created: one verify link, one “you already have an account”.</p>
+</div>
 
 <h3>When it goes wrong</h3>
 ${BANG_EN}
@@ -108,7 +120,9 @@ ${BANG_EN}
   <div class="kv"><span class="k">account enumeration</span><span class="v">Learning which emails have an account, from a message or a timing difference.</span></div>
   <div class="kv"><span class="k">enumeration oracle</span><span class="v">Any response (“taken”, “no such user”, or a faster reply) that answers “does this account exist?”.</span></div>
   <div class="kv"><span class="k">constant work</span><span class="v">Doing the same expensive step (argon2) in every branch so timing does not leak.</span></div>
-  <div class="kv"><span class="k">identifier</span><span class="v">The email that names the account; the handle for every recovery and notification.</span></div>
+  <div class="kv"><span class="k">email normalisation</span><span class="v">Trim + NFKC + lowercase into one stored form used by the UNIQUE index and every lookup.</span></div>
+  <div class="kv"><span class="k">confusable / homograph</span><span class="v">Letters from different scripts that look identical (Cyrillic а vs Latin a); NFKC does not fold them.</span></div>
+  <div class="kv"><span class="k">check-then-insert race</span><span class="v">SELECT-then-INSERT lets two concurrent requests both create a row; a UNIQUE index + catching 23505 is the fix.</span></div>
 </div>
 
 <h3>📌 Summary</h3>
@@ -117,7 +131,8 @@ ${BANG_EN}
 <li>A new account starts <strong>unverified</strong>: the email is a claim until proven (6.2).</li>
 <li>Never answer a duplicate email with “taken” — return the same success and email the real owner.</li>
 <li>Hash the password in <strong>both</strong> branches, so timing does not reveal which emails exist (6.4).</li>
-<li>Treat an unverified address as a claim: no sensitive mail, no reset, until it is proven.</li>
+<li>Normalise the email (trim + NFKC + lowercase) into one UNIQUE column; flag mixed-script confusables separately.</li>
+<li>Never check-then-insert: just INSERT and catch the <code>UNIQUE</code> violation — the constraint is the only race-safe arbiter.</li>
 </ul>
 ${NGUON_EN}
 ${lienKet({ khoa: 'api-design', bai: 'api-6-2-phan-quyen', title: 'Compare in API Design — lesson 6.2: authorization and the 404-vs-403 leak', sub: 'Same idea at a different layer: a response that distinguishes “exists but forbidden” from “does not exist” leaks which objects exist. There it is a resource id; here it is an email at sign-up. Each stands on its own.', cta: 'OPEN API DESIGN LESSON →' })}
@@ -153,6 +168,16 @@ ${ma('javascript', SIGNUP)}
 ${ra(OUT['61-register'])}
 <p>Phản hồi luôn là <code>202 "Check your email to finish signing up."</code>. Phía sau: mật khẩu được băm <strong>trước</strong> nhánh, nên argon2 là chi phí dù email đã-dùng hay chưa; rồi hoặc một tài khoản mới chưa xác minh được tạo và một link xác minh được gửi, hoặc — với một trùng lặp — một ghi chú "bạn đã có tài khoản" được gửi thay thế. Chủ thật của hộp thư đó nhận một thông điệp hữu ích; một người lạ dò form chẳng học được gì.</p>
 
+<h3>Chuẩn hoá địa chỉ, và cuộc đua ngay tại cửa</h3>
+<p>Hai chi tiết quyết định "cùng một email" có thật sự là cùng một tài khoản không. Thứ nhất, <strong>chuẩn hoá</strong>: địa chỉ được cắt khoảng trắng, gộp Unicode bằng <strong>NFKC</strong>, và hạ chữ thành một dạng lưu duy nhất mà chỉ mục <code>UNIQUE</code> và mọi phép tra dùng. NFKC gộp những bản trùng vô hại — một <code>ＣＵＯＮＧ@…</code> toàn-rộng thành <code>cuong@…</code> — nên một người gõ địa chỉ hơi khác vẫn rơi vào một dòng.</p>
+${ma('javascript', NORMALIZE)}
+${ra(OUT['66-normalize'])}
+<p>Nhưng NFKC <strong>không</strong> gộp một ký tự <em>nhìn giống</em>: chữ <code>а</code> Kirin (U+0430) hiển thị y hệt chữ <code>a</code> Latin (U+0061) nhưng chuẩn hoá ra một chuỗi khác, nên <code>аdmin@…</code> và <code>admin@…</code> là hai dòng khác nhau trông y hệt với một người đọc ticket hỗ trợ. Chuẩn hoá không bắt được điều đó; một cờ <strong>trộn hệ chữ</strong> thì có (với tên miền bạn tự quản, hạn phần local về ASCII, hoặc đánh dấu mọi địa chỉ trộn nhiều hệ chữ để soát). Thứ hai, chính cái duy-nhất: một <code>SELECT</code> rồi <code>INSERT</code> là một <strong>cuộc đua</strong> — hai request cùng một email có thể cùng đọc "chưa có tài khoản" rồi cùng chèn. LabFlow ID không kiểm trước; nó chèn và bắt lỗi trùng khoá, nên ràng buộc <code>UNIQUE</code> của cơ sở dữ liệu là trọng tài duy nhất.</p>
+${ra(OUT['67-signup-race'])}
+<div class="callout warn">
+<p><strong>Kiểm-rồi-chèn không thể làm cho an toàn bằng cách kiểm kỹ hơn.</strong> Giữa câu <code>SELECT</code> và câu <code>INSERT</code> của bạn luôn có một khe mà một request khác lách vào được; khi tải cao nó <em>sẽ</em> lách. Cách sửa không phải một cái khoá to hơn trong mã ứng dụng — mà là một chỉ mục <code>UNIQUE</code> cộng bắt lỗi vi phạm (PostgreSQL <code>23505</code>). Ở đây hai lần đăng ký song song cùng một địa chỉ đều trả <code>202</code>, và hộp thư chứng minh đúng một tài khoản được tạo: một link xác minh, một "bạn đã có tài khoản".</p>
+</div>
+
 <h3>Khi nó hỏng</h3>
 ${BANG_VI}
 
@@ -186,6 +211,9 @@ ${BANG_VI}
   <div class="kv"><span class="k">enumeration oracle (nhà tiên tri dò)</span><span class="v">Bất kỳ phản hồi nào ("đã dùng", "không có người dùng", hay một câu trả lời nhanh hơn) trả lời "tài khoản này có tồn tại không?".</span></div>
   <div class="kv"><span class="k">constant work (công việc hằng định)</span><span class="v">Làm cùng một bước tốn kém (argon2) ở mọi nhánh để thời gian không rò.</span></div>
   <div class="kv"><span class="k">identifier (định danh)</span><span class="v">Email đặt tên tài khoản; tay cầm cho mọi khôi phục và thông báo.</span></div>
+  <div class="kv"><span class="k">email normalisation (chuẩn hoá email)</span><span class="v">Cắt + NFKC + hạ chữ thành một dạng lưu duy nhất mà chỉ mục UNIQUE và mọi phép tra dùng.</span></div>
+  <div class="kv"><span class="k">confusable / homograph (ký tự nhìn giống)</span><span class="v">Chữ từ các hệ chữ khác nhau trông y hệt (а Kirin vs a Latin); NFKC không gộp chúng.</span></div>
+  <div class="kv"><span class="k">check-then-insert race (đua kiểm-rồi-chèn)</span><span class="v">SELECT-rồi-INSERT để hai request song song cùng tạo một dòng; cách sửa là chỉ mục UNIQUE + bắt lỗi 23505.</span></div>
 </div>
 
 <h3>📌 Tóm tắt</h3>
@@ -194,6 +222,8 @@ ${BANG_VI}
 <li>Một tài khoản mới bắt đầu <strong>chưa xác minh</strong>: email là một lời khai tới khi chứng minh (6.2).</li>
 <li>Không bao giờ trả lời một email trùng bằng "đã dùng" — trả cùng một thành công và gửi email cho chủ thật.</li>
 <li>Băm mật khẩu ở <strong>cả hai</strong> nhánh, để thời gian không lộ email nào tồn tại (6.4).</li>
+<li>Chuẩn hoá email (cắt + NFKC + hạ chữ) thành một cột UNIQUE; đánh dấu riêng các ký tự nhìn giống trộn hệ chữ.</li>
+<li>Đừng bao giờ kiểm-rồi-chèn: cứ INSERT và bắt lỗi vi phạm <code>UNIQUE</code> — ràng buộc là trọng tài an-toàn-với-đua duy nhất.</li>
 <li>Coi một địa chỉ chưa xác minh là một lời khai: không thư nhạy cảm, không reset, tới khi nó được chứng minh.</li>
 </ul>
 ${NGUON_VI}

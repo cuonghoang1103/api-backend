@@ -19,8 +19,8 @@
       "tags": [
         "authentication"
       ],
-      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mXmC2qxW…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
-      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mXmC2qxW…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "problemHtml": "<p>LabFlow ID v0.6 (real run):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mYklad0j…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.6 (chạy thật):<pre>$ curl -s -X POST localhost:4800/sign-up  (email: newbie@student.labflow.example)\n{\"ok\":true,\"message\":\"Check your email to finish signing up.\"}\n\n$ # the verification email that landed in the dev mailbox:\nTo: newbie@student.labflow.example\nSubject: Verify your LabFlow email\n\nWelcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mYklad0j…\n\n$ # the user clicks the link and confirms (POST consumes the one-time token):\n{\"ok\":true,\"verified\":true}\n$ # clicking the same link again — the token is single-use:\n{\"error\":\"USED\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
       "inputSpec": null,
       "outputSpec": null,
       "constraints": "",
@@ -477,6 +477,119 @@
         }
       ],
       "glossaryJson": []
+    },
+    {
+      "title": "6.1-5 — Write normalizeEmail(raw): one stored form for the UNIQUE index",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "account lifecycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the normalised form an email is stored and looked up by: trim; take the <b>last</b> <code>@</code> (the local part may contain others); lowercase the domain; then NFKC-normalise and lowercase the whole string. Return <code>null</code> for a syntactically impossible address (no <code>@</code>, nothing before/after it, or any whitespace). NFKC folds harmless duplicates (full-width <code>ＣＵＯＮＧ@…</code> → <code>cuong@…</code>) but will NOT fold a Cyrillic <code>а</code> into a Latin <code>a</code> — that is a confusable, a separate problem.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về dạng chuẩn hoá mà một email được lưu và tra theo: cắt khoảng trắng; lấy dấu <code>@</code> <b>cuối</b> (phần local có thể chứa dấu khác); hạ chữ tên miền; rồi NFKC-chuẩn-hoá và hạ chữ cả chuỗi. Trả <code>null</code> cho một địa chỉ bất khả về cú pháp (không <code>@</code>, không gì trước/sau nó, hay có khoảng trắng). NFKC gộp bản trùng vô hại (toàn-rộng <code>ＣＵＯＮＧ@…</code> → <code>cuong@…</code>) nhưng sẽ KHÔNG gộp một chữ <code>а</code> Kirin thành <code>a</code> Latin — đó là ký tự nhìn giống, một vấn đề riêng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "normalizeEmail(\"Nguyen.Van.A@Gmail.COM\")",
+          "output": "\"nguyen.van.a@gmail.com\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use lastIndexOf for the @, not indexOf.|||Dùng lastIndexOf cho @, không phải indexOf.",
+        "normalize(\"NFKC\") before lowercasing the whole string.|||normalize(\"NFKC\") trước khi hạ chữ cả chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ normalised email string, or null if impossible */\nfunction normalizeEmail(raw) {\n  // Write your solution here\n  return String(raw);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction normalizeEmail(raw) {\n  const t = String(raw ?? '').trim();\n  const at = t.lastIndexOf('@');          // last @ — the local part may contain others\n  if (at <= 0 || at === t.length - 1 || /\\s/.test(t)) return null;\n  const domain = t.slice(at + 1).toLowerCase();\n  return (t.slice(0, at) + '@' + domain).normalize('NFKC').toLowerCase();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One normalised column + a UNIQUE index is the whole uniqueness policy; NFKC folds duplicates but not confusables, which need a mixed-script flag (6.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Một cột chuẩn hoá + một chỉ mục UNIQUE là toàn bộ chính sách duy nhất; NFKC gộp bản trùng nhưng không gộp ký tự nhìn giống, vốn cần một cờ trộn hệ chữ (6.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Mixed case",
+              "vi": "Hoa thường lẫn"
+            },
+            "goi": "normalizeEmail(\"Nguyen.Van.A@Gmail.COM\")",
+            "mongDoi": "nguyen.van.a@gmail.com"
+          },
+          {
+            "moTa": {
+              "en": "Leading/trailing spaces",
+              "vi": "Khoảng trắng đầu/cuối"
+            },
+            "goi": "normalizeEmail(\"  cuong@cuongthai.com  \")",
+            "mongDoi": "cuong@cuongthai.com",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Full-width ⇒ NFKC folds",
+              "vi": "Toàn-rộng ⇒ NFKC gộp"
+            },
+            "goi": "normalizeEmail(\"ＣＵＯＮＧ@cuongthai.com\")",
+            "mongDoi": "cuong@cuongthai.com",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No @ ⇒ null",
+              "vi": "Không @ ⇒ null"
+            },
+            "goi": "normalizeEmail(\"no-at-sign\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the first @ instead of the last.|||Dùng @ đầu thay vì @ cuối."
+        },
+        {
+          "loi": "Forgetting to return null on a missing @.|||Quên trả null khi thiếu @."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "email normalisation",
+          "vi": "chuẩn hoá email"
+        },
+        {
+          "en": "confusable / homograph",
+          "vi": "ký tự nhìn giống"
+        }
+      ]
     }
   ]
 }

@@ -223,7 +223,7 @@
       "slug": "auth-6-1-dang-ky",
       "name": "6.1 Registration",
       "level": "BEGINNER",
-      "description": "Luyện: 6.1-1 — Registration: read the real run · 6.1-2 — Write signupResponse(emailTaken): one response either way · 6.1-3 — Order the sign-up steps · 6.1-4 — Naive sign-up → what it leaks"
+      "description": "Luyện: 6.1-1 — Registration: read the real run · 6.1-2 — Write signupResponse(emailTaken): one response either way · 6.1-3 — Order the sign-up steps · 6.1-4 — Naive sign-up → what it leaks · 6.1-5 — Write normalizeEmail(raw): one stored form for the UNIQUE index"
     },
     {
       "slug": "auth-6-2-xac-minh-email",

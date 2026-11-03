@@ -107,6 +107,27 @@ export const mailbox = {
   count: (to) => outbox.filter((m) => !to || m.to === to).length,
   clear: () => { outbox.length = 0; },
 };`,
+  normalize: `// src/email/normalize.js — one normalised form of an email for the UNIQUE index and every lookup (lesson 6.1).
+// Trim, take the LAST '@' (the local part may contain others), lowercase the domain, then NFKC + lowercase the whole.
+// Returns null for a syntactically impossible address. NFKC folds Unicode duplicates — but NOT confusable letters
+// from different scripts (the Cyrillic 'а' U+0430 renders like Latin 'a' U+0061 yet stays a different string), so a
+// separate mixed-script check flags those for review.
+export function normalizeEmail(raw) {
+  const t = String(raw ?? '').trim();
+  const at = t.lastIndexOf('@');
+  if (at <= 0 || at === t.length - 1 || /\\s/.test(t) || t.length > 254) return null;
+  const local = t.slice(0, at);
+  const domain = t.slice(at + 1).toLowerCase();
+  return (local + '@' + domain).normalize('NFKC').toLowerCase();
+}
+
+const SCRIPTS = [['latin', /[a-z]/i], ['cyrillic', /[Ѐ-ӿ]/], ['greek', /[Ͱ-Ͽ]/]];
+/** Does the local part mix letters from more than one script? ⇒ the scripts, else null (a homograph red flag). */
+export function mixesScripts(raw) {
+  const local = String(raw ?? '').split('@')[0] ?? '';
+  const hit = SCRIPTS.filter(([, re]) => re.test(local)).map(([n]) => n);
+  return hit.length > 1 ? hit : null;
+}`,
   server06: `// src/server.js — LabFlow ID v0.5 (end of Chapter 5). Fixed so far:
 //   hole 1 — argon2id in PostgreSQL, measured parameters, upgrade on login (Chapter 2);
 //   hole 3 — CSPRNG session ids, only their SHA-256 stored (Chapter 1);
@@ -127,6 +148,7 @@ import { publicJwks } from './jwt/jwks.js';
 import { refreshLayer, pgStore as refreshStore } from './refresh/index.js';
 import { lifecycle, pgStore as lifecycleStore } from './lifecycle/index.js';
 import { sendEmail } from './email/index.js';
+import { normalizeEmail } from './email/normalize.js';
 import { tokenDigest } from './crypto/index.js';
 import { log, requestLog } from './log.js';
 
@@ -159,8 +181,9 @@ app.use(sessions.csrf);   // POST/PUT/PATCH/DELETE must come from our own origin
 const needSession = (req, res, next) => (req.session ? next() : res.status(401).json({ error: 'Not signed in' }));
 const accessFor = (u) => tokens.issue(u.id, { role: u.role });
 
-// lesson 6.1, 6.4: register. On a duplicate email we do NOT say "taken" — we hash anyway (same timing) and send a
-// "you already have an account" email instead, so sign-up cannot be used to enumerate accounts. The account is unverified.
+// lesson 6.1, 6.4: register. The email is normalised once (NFKC + lowercase) and the UNIQUE index — NOT a check-then-
+// insert — decides uniqueness: we just INSERT and catch the duplicate (PG 23505). On a duplicate we do NOT say "taken";
+// we hash anyway (same timing) and email "you already have an account", so sign-up cannot enumerate accounts.
 app.post('/sign-up', async (req, res) => {
   const { email, password, name } = req.body ?? {};
   const problems = checkNewPassword(password, { email, blocklist: BLOCKLIST });
@@ -170,17 +193,22 @@ app.post('/sign-up', async (req, res) => {
     if (seen === null) log.warn('pwned-passwords check unavailable; accepted without it');
   }
   if (problems.length) return res.status(422).json({ error: 'WEAK_PASSWORD', problems });
-  const normEmail = String(email ?? '').trim().toLowerCase();
-  const passwordHash = await hashPassword(password);   // hash in BOTH branches, so timing never reveals whether the email is taken
-  const existing = await users.findByEmail(normEmail);
-  if (existing) {
-    sendEmail({ to: normEmail, subject: 'You already have a LabFlow account',
-      text: 'Someone tried to register with this address. If it was you, sign in or reset your password — there is nothing else to do.' });
-  } else {
-    const user = await users.create({ email: normEmail, name: name ?? '', passwordHash });
+  const normEmail = normalizeEmail(email);
+  if (!normEmail) return res.status(422).json({ error: 'BAD_EMAIL' });
+  const passwordHash = await hashPassword(password);   // hash in BOTH outcomes, so timing never reveals whether the email is taken
+  let user = null;
+  try {
+    user = await users.create({ email: normEmail, name: name ?? '', passwordHash });  // let the UNIQUE index be the check
+  } catch (e) {
+    if (e?.code !== '23505') throw e;                  // 23505 = unique_violation: the address already exists (the race-safe path)
+  }
+  if (user) {
     const { token } = await life.issueToken(user.id, 'verify_email');
     sendEmail({ to: normEmail, subject: 'Verify your LabFlow email',
       text: \`Welcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=\${token}\` });
+  } else {
+    sendEmail({ to: normEmail, subject: 'You already have a LabFlow account',
+      text: 'Someone tried to register with this address. If it was you, sign in or reset your password — there is nothing else to do.' });
   }
   res.status(202).json({ ok: true, message: 'Check your email to finish signing up.' });   // same response either way
 });
@@ -281,8 +309,8 @@ app.get('/.well-known/jwks.json', async (req, res) => {
 
 // lesson 6.5: change the email. The new address starts UN-verified (users.updateEmail clears it) and must be proven.
 app.post('/me/email', needSession, async (req, res) => {
-  const email = String(req.body?.email ?? '').trim().toLowerCase();
-  if (!/^[^@\\s]+@[^@\\s]+$/.test(email)) return res.status(422).json({ error: 'BAD_EMAIL' });
+  const email = normalizeEmail(req.body?.email);
+  if (!email) return res.status(422).json({ error: 'BAD_EMAIL' });
   await users.updateEmail(req.session.userId, email);
   const { token } = await life.issueToken(req.session.userId, 'verify_email');
   sendEmail({ to: email, subject: 'Verify your new LabFlow email',
@@ -509,7 +537,7 @@ $ # the verification email that landed in the dev mailbox:
 To: newbie@student.labflow.example
 Subject: Verify your LabFlow email
 
-Welcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mXmC2qxW…
+Welcome. Confirm this address within 30 minutes: https://id.labflow.example/verify?token=lfid_verify_mYklad0j…
 
 $ # the user clicks the link and confirms (POST consumes the one-time token):
 {"ok":true,"verified":true}
@@ -533,7 +561,7 @@ $ # An is signed in (session + refresh cookie):
 $ curl -s -X POST localhost:4800/forgot-password  (email: an@student.labflow.example)
 {"ok":true,"message":"If an account exists for that address, a reset link is on its way."}
 $ # the reset email (one-time link, 15 minutes):
-Someone asked to reset your password. If it was you, use this one-time link within 15 minutes: https://id.labflow.example/reset?token=lfid_reset_EyzIkPHD…  — if not, ignore this email.
+Someone asked to reset your password. If it was you, use this one-time link within 15 minutes: https://id.labflow.example/reset?token=lfid_reset_To0fnr0L…  — if not, ignore this email.
 
 $ curl -s -X POST localhost:4800/reset-password  (token + a new password)
 {"ok":true,"message":"Password reset. Sign in with your new password."}
@@ -544,19 +572,19 @@ $ # the reset link cannot be used a second time:
 {"error":"USED"}`,
   '64-enum': `$ node demo6/enum-timing.mjs
 1a) /forgot-password-naive — same WORDING, but it AWAITS the token insert + email send (the teaching foil):
-   real account : median 1.98 ms
-   fake account : median 1.07 ms
-   LEAK         : the real account is 0.92 ms slower — an attacker enumerates by TIMING, not wording
+   real account : median 2.05 ms
+   fake account : median 1.12 ms
+   LEAK         : the real account is 0.93 ms slower — an attacker enumerates by TIMING, not wording
 
 1b) /forgot-password — same response AND the insert + mail are NOT awaited (the fix):
-   real account : median 1.13 ms
-   fake account : median 1.07 ms
-   difference   : 0.06 ms — within noise; the slow work is off the response path
+   real account : median 1.21 ms
+   fake account : median 1.18 ms
+   difference   : 0.03 ms — within noise; the slow work is off the response path
 
 2) /sign-up — the password is hashed in BOTH branches (taken and free), so argon2 dominates both:
-   email taken  : median 194.6 ms
-   email free   : median 199.1 ms
-   ratio        : 1.02x  (argon2 ~86 ms in both — the leak is closed by doing the same work)`,
+   email taken  : median 477.2 ms
+   email free   : median 489.6 ms
+   ratio        : 1.03x  (argon2 ~86 ms in both — the leak is closed by doing the same work)`,
   '65-change-delete': `$ bash demo6/change-delete.sh
 $ curl -s -X POST localhost:4800/me/email  (change to lan.new@labflow.example)
 {"ok":true,"email":"lan.new@labflow.example","verificationSent":true}
@@ -567,6 +595,30 @@ $ curl -s -X POST localhost:4800/me/delete  (re-auth with the password)
 {"ok":true,"deleted":true}
 $ # the account is gone — sign-in now fails like any unknown email:
 {"error":"Email or password is incorrect"}`,
+  '66-normalize': `$ node demo6/email-normalize.mjs
+normalizeEmail — trim, NFKC, lowercase (store ONE normalised column, UNIQUE):
+  "Nguyen.Van.A@Gmail.COM"           -> "nguyen.van.a@gmail.com"
+  "  cuong@cuongthai.com  "          -> "cuong@cuongthai.com"
+  "cuong+github@cuongthai.com"       -> "cuong+github@cuongthai.com"
+  "ＣＵＯＮＧ@cuongthai.com"              -> "cuong@cuongthai.com"
+  "a@b@gmail.com"                    -> "a@b@gmail.com"
+  (ＣＵＯＮＧ is fullwidth U+FF23… — NFKC folds it to ASCII "cuong"; "a@b@gmail.com" keeps the last @)
+
+The confusable NFKC does NOT fold — two "identical"-looking addresses, two different rows:
+  latin    "admin@cuongthai.com"  -> admin@cuongthai.com
+  cyrillic "аdmin@cuongthai.com"  -> аdmin@cuongthai.com
+  same normalised string? false   first code points: U+61 vs U+430
+  mixesScripts(latin) = null   mixesScripts(cyrillic) = ["latin","cyrillic"]
+  ⇒ the UNIQUE index treats them as different; a mixed-script flag is a separate control (restrict to ASCII, or review).`,
+  '67-signup-race': `$ bash demo6/signup-race.sh
+$ # fire TWO concurrent POST /sign-up with the identical email:
+  request A -> {"ok":true,"message":"Check your email to finish signing up."}
+  request B -> {"ok":true,"message":"Check your email to finish signing up."}
+
+$ # the mailbox proves EXACTLY ONE account was created (one verify link + one "already have an account"):
+   1 Subject: Verify your LabFlow email
+   1 Subject: You already have a LabFlow account
+  ⇒ both callers got the same 202 (no enumeration), the DB has one row, and no row was duplicated.`,
   'lab-bat-dau': `$ node scripts/cham-lab-6.mjs lab6/starter
 Lab 6 — lab6/starter/index.js
 ✗ T1 issueToken + consumeToken: a token verifies the right user        0/1.5

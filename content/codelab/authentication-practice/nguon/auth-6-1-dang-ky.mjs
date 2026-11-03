@@ -82,4 +82,34 @@ const S4 = cs({
   kn: ['account enumeration'],
 });
 
-export default doiDau({ slug: 'auth-6-1-dang-ky', ten: '6.1 Registration', khoa: KHOA, baiHoc: 'auth-6-1-dang-ky', de: [S1, S2, S3, S4] });
+function normalizeEmail(raw) {
+  const t = String(raw ?? '').trim();
+  const at = t.lastIndexOf('@');          // last @ — the local part may contain others
+  if (at <= 0 || at === t.length - 1 || /\s/.test(t)) return null;
+  const domain = t.slice(at + 1).toLowerCase();
+  return (t.slice(0, at) + '@' + domain).normalize('NFKC').toLowerCase();
+}
+const S5 = jsBai({
+  ten: '6.1-5 — Write normalizeEmail(raw): one stored form for the UNIQUE index', kho: 'MEDIUM', phut: 12,
+  en: `<p>Return the normalised form an email is stored and looked up by: trim; take the <b>last</b> <code>@</code> (the local part may contain others); lowercase the domain; then NFKC-normalise and lowercase the whole string. Return <code>null</code> for a syntactically impossible address (no <code>@</code>, nothing before/after it, or any whitespace). NFKC folds harmless duplicates (full-width <code>ＣＵＯＮＧ@…</code> → <code>cuong@…</code>) but will NOT fold a Cyrillic <code>а</code> into a Latin <code>a</code> — that is a confusable, a separate problem.</p>`,
+  vi: `<p>Trả về dạng chuẩn hoá mà một email được lưu và tra theo: cắt khoảng trắng; lấy dấu <code>@</code> <b>cuối</b> (phần local có thể chứa dấu khác); hạ chữ tên miền; rồi NFKC-chuẩn-hoá và hạ chữ cả chuỗi. Trả <code>null</code> cho một địa chỉ bất khả về cú pháp (không <code>@</code>, không gì trước/sau nó, hay có khoảng trắng). NFKC gộp bản trùng vô hại (toàn-rộng <code>ＣＵＯＮＧ@…</code> → <code>cuong@…</code>) nhưng sẽ KHÔNG gộp một chữ <code>а</code> Kirin thành <code>a</code> Latin — đó là ký tự nhìn giống, một vấn đề riêng.</p>`,
+  goiY: [['Use lastIndexOf for the @, not indexOf.', 'Dùng lastIndexOf cho @, không phải indexOf.'], ['normalize("NFKC") before lowercasing the whole string.', 'normalize("NFKC") trước khi hạ chữ cả chuỗi.']],
+  loi: [['Using the first @ instead of the last.', 'Dùng @ đầu thay vì @ cuối.'], ['Forgetting to return null on a missing @.', 'Quên trả null khi thiếu @.']],
+  gt: ['One normalised column + a UNIQUE index is the whole uniqueness policy; NFKC folds duplicates but not confusables, which need a mixed-script flag (6.1).', 'Một cột chuẩn hoá + một chỉ mục UNIQUE là toàn bộ chính sách duy nhất; NFKC gộp bản trùng nhưng không gộp ký tự nhìn giống, vốn cần một cờ trộn hệ chữ (6.1).'],
+  kn: ['account lifecycle'], tns: [tn('email normalisation', 'chuẩn hoá email'), tn('confusable / homograph', 'ký tự nhìn giống')],
+  dau: `/** ⇒ normalised email string, or null if impossible */
+function normalizeEmail(raw) {
+  // Write your solution here
+  return String(raw);
+}
+`,
+  giai: '// Reference solution\n' + nguon(normalizeEmail),
+  cases: [
+    { goi: goi('normalizeEmail', 'Nguyen.Van.A@Gmail.COM'), moTa: ['Mixed case', 'Hoa thường lẫn'] },
+    { goi: goi('normalizeEmail', '  cuong@cuongthai.com  '), an: true, moTa: ['Leading/trailing spaces', 'Khoảng trắng đầu/cuối'] },
+    { goi: goi('normalizeEmail', 'ＣＵＯＮＧ@cuongthai.com'), an: true, moTa: ['Full-width ⇒ NFKC folds', 'Toàn-rộng ⇒ NFKC gộp'] },
+    { goi: goi('normalizeEmail', 'no-at-sign'), an: true, moTa: ['No @ ⇒ null', 'Không @ ⇒ null'] },
+  ],
+});
+
+export default doiDau({ slug: 'auth-6-1-dang-ky', ten: '6.1 Registration', khoa: KHOA, baiHoc: 'auth-6-1-dang-ky', de: [S1, S2, S3, S4, S5] });

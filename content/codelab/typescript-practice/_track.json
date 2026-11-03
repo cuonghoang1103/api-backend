@@ -254,6 +254,36 @@
       "name": "7.6 Lab 7 — A typed event system",
       "level": "ADVANCED",
       "description": "1 đề: Lab 7 — a typed event system (template literal + mapped + conditional)"
+    },
+    {
+      "slug": "typescript-8-1-partial-required-readonly",
+      "name": "8.1 — Partial, Required & Readonly",
+      "level": "ADVANCED",
+      "description": "3 đề: A PATCH body with Partial · A completed value with Required · A frozen config with Readonly"
+    },
+    {
+      "slug": "typescript-8-2-pick-omit",
+      "name": "8.2 — Pick & Omit",
+      "level": "ADVANCED",
+      "description": "3 đề: A create DTO with Omit · A public view with Omit · A summary with Pick"
+    },
+    {
+      "slug": "typescript-8-3-record",
+      "name": "8.3 — Record",
+      "level": "ADVANCED",
+      "description": "3 đề: A complete table with Record · Guard an open lookup · A label table that cannot forget a status"
+    },
+    {
+      "slug": "typescript-8-4-exclude-returntype-awaited",
+      "name": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+      "level": "ADVANCED",
+      "description": "3 đề: A narrower union with Exclude · Read a return type with ReturnType · Unwrap a Promise with Awaited"
+    },
+    {
+      "slug": "typescript-8-6-lab-utility-dto",
+      "name": "8.6 Lab 8 — Utility types & the API DTO layer",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 8 — the utility-type DTO layer (MyPartial/MyPick/MyOmit)"
     }
   ]
 }

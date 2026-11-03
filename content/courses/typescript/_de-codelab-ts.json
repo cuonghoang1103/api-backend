@@ -5472,5 +5472,563 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-8-1-a",
+    "bai": "typescript-8-1-partial-required-readonly",
+    "tieuDe": "A PATCH body with Partial|||Một PATCH body bằng Partial",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>applyPatch</code> types its <code>patch</code> as the full <code>Booking</code>, so the caller must resend every field. Change it to <code>Partial&lt;Booking&gt;</code> so any subset is accepted.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>applyPatch</code> gán <code>patch</code> là <code>Booking</code> đầy đủ, nên người gọi phải gửi lại mọi trường. Đổi thành <code>Partial&lt;Booking&gt;</code> để nhận tập con bất kỳ.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number; purpose: string };\n\n// Wrong: patch is the whole Booking, so the caller must send every field.\nexport function applyPatch(b: Booking, patch: Booking): Booking {\n  return { ...b, ...patch };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { applyPatch } from '../src/patch.ts';\ndeclare const b: { id: number; lab: string; seats: number; purpose: string };\nconst r = applyPatch(b, { seats: 30 }); // only one field\nexport { r };\n",
+      "test/patch.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { applyPatch } from '../src/patch.ts';\nconst b = { id: 1, lab: 'BE-201', seats: 40, purpose: 'Lab' };\ntest('applyPatch', () => assert.deepEqual(applyPatch(b, { seats: 30 }), { id: 1, lab: 'BE-201', seats: 30, purpose: 'Lab' }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/patch.test.ts"
+      ],
+      "chay": [
+        "node --test test/patch.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number; purpose: string };\n\n// Partial<Booking>: every field optional — a PATCH body.\nexport function applyPatch(b: Booking, patch: Partial<Booking>): Booking {\n  return { ...b, ...patch };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "patch still the full Booking — { seats } is refused",
+        "tep": {
+          "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number; purpose: string };\nexport function applyPatch(b: Booking, patch: Booking): Booking { return { ...b, ...patch }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-1-b",
+    "bai": "typescript-8-1-partial-required-readonly",
+    "tieuDe": "A completed value with Required|||Một giá trị đã đủ bằng Required",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>FullSettings</code> is just an alias of <code>Settings</code>, so the optional fields stay optional. Make it <code>Required&lt;Settings&gt;</code> so a value missing a field is refused.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the value missing <code>theme</code> in kiem/sai.ts is TS2741.</p>|||<p><code>FullSettings</code> chỉ là bí danh của <code>Settings</code>, nên các trường optional vẫn optional. Làm nó <code>Required&lt;Settings&gt;</code> để một giá trị thiếu trường bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị thiếu <code>theme</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/settings.ts": "export type Settings = { title: string; theme?: string; fontSize?: number };\n\n// Wrong: an alias — the optionals are still optional.\nexport type FullSettings = Settings;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { FullSettings } from '../src/settings.ts';\nconst done: FullSettings = { title: 'Hi', theme: 'dark', fontSize: 14 }; // all three\nexport { done };\n",
+      "kiem/sai.ts": "import type { FullSettings } from '../src/settings.ts';\nconst partial: FullSettings = { title: 'Hi' }; // expect TS2739\nexport { partial };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/settings.ts": "export type Settings = { title: string; theme?: string; fontSize?: number };\n\n// Required<Settings>: remove every ? — a complete value must have everything.\nexport type FullSettings = Required<Settings>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "an alias — theme/fontSize stay optional",
+        "tep": {
+          "src/settings.ts": "export type Settings = { title: string; theme?: string; fontSize?: number };\nexport type FullSettings = Settings;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-1-c",
+    "bai": "typescript-8-1-partial-required-readonly",
+    "tieuDe": "A frozen config with Readonly|||Một config đóng băng bằng Readonly",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>FrozenConfig</code> is a plain alias, so its fields can be reassigned. Make it <code>Readonly&lt;Config&gt;</code> so a reassignment is refused.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the reassignment in kiem/sai.ts is TS2540.</p>|||<p><code>FrozenConfig</code> là một bí danh thường, nên trường của nó gán lại được. Làm nó <code>Readonly&lt;Config&gt;</code> để một phép gán lại bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và phép gán lại trong kiem/sai.ts là TS2540.</p>",
+    "khoiDau": {
+      "src/config.ts": "export type Config = { host: string; port: number };\n\n// Wrong: a plain alias — the fields are still writable.\nexport type FrozenConfig = Config;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\nconst port: number = cfg.port; // reading is fine\nexport { port };\n",
+      "kiem/sai.ts": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\ncfg.port = 5433; // expect TS2540\nexport { cfg };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/config.ts": "export type Config = { host: string; port: number };\n\n// Readonly<Config>: every field read-only.\nexport type FrozenConfig = Readonly<Config>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "a plain alias — cfg.port is still writable",
+        "tep": {
+          "src/config.ts": "export type Config = { host: string; port: number };\nexport type FrozenConfig = Config;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-2-a",
+    "bai": "typescript-8-2-pick-omit",
+    "tieuDe": "A create DTO with Omit|||Một DTO tạo bằng Omit",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>CreateBooking</code> is the whole <code>Booking</code>, so a client could send the server-owned <code>id</code>. Make it <code>Omit&lt;Booking, 'id' | 'status' | 'createdAt'&gt;</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, the literal carrying <code>id</code> in kiem/sai.ts is TS2353, and the test passes.</p>|||<p><code>CreateBooking</code> là cả <code>Booking</code>, nên client có thể gửi <code>id</code> do server sở hữu. Làm nó <code>Omit&lt;Booking, 'id' | 'status' | 'createdAt'&gt;</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, literal mang <code>id</code> trong kiem/sai.ts là TS2353, và test qua.</p>",
+    "khoiDau": {
+      "src/create.ts": "export type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\n\n// Wrong: the client is asked for the whole Booking, including server fields.\nexport type CreateBooking = Booking;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { createBooking } from '../src/create.ts';\nconst b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); // no server fields\nexport { b };\n",
+      "kiem/sai.ts": "import type { CreateBooking } from '../src/create.ts';\nconst bad: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 99 }; // expect TS2353\nexport { bad };\n",
+      "test/create.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking } from '../src/create.ts';\ntest('createBooking', () => { const b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); assert.equal(b.id, 1); assert.equal(b.status, 'PENDING'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/create.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/create.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/create.ts": "export type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\n\n// Omit the server-owned fields — a create DTO that tracks Booking.\nexport type CreateBooking = Omit<Booking, 'id' | 'status' | 'createdAt'>;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "CreateBooking = Booking — a client can send id (kiem/dung still compiles, but sai is not refused)",
+        "tep": {
+          "src/create.ts": "export type Booking = { id: number; lab: string; seats: number; purpose: string; status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string };\nexport type CreateBooking = Booking;\nexport function createBooking(input: CreateBooking): Booking { return { ...input, id: 1, status: 'PENDING', createdAt: 'x' }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-2-b",
+    "bai": "typescript-8-2-pick-omit",
+    "tieuDe": "A public view with Omit|||Một bản công khai bằng Omit",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>PublicUser</code> is the whole <code>User</code>, so <code>toPublic</code> could leak the password hash. Make it <code>Omit&lt;User, 'passwordHash'&gt;</code> (and return only the safe fields).</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, reading <code>passwordHash</code> in kiem/sai.ts is TS2339, and the test passes.</p>|||<p><code>PublicUser</code> là cả <code>User</code>, nên <code>toPublic</code> có thể lộ password hash. Làm nó <code>Omit&lt;User, 'passwordHash'&gt;</code> (và chỉ trả các trường an toàn).</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, đọc <code>passwordHash</code> trong kiem/sai.ts là TS2339, và test qua.</p>",
+    "khoiDau": {
+      "src/public.ts": "export type User = { id: number; name: string; email: string; passwordHash: string };\n\n// Wrong: the public view still has the password hash.\nexport type PublicUser = User;\n\nexport function toPublic(u: User): PublicUser {\n  return u;\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { toPublic } from '../src/public.ts';\nconst p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'x' });\nconst name: string = p.name;\nexport { name };\n",
+      "kiem/sai.ts": "import type { PublicUser } from '../src/public.ts';\nfunction show(u: PublicUser) { return u.passwordHash; } // expect TS2339\nexport { show };\n",
+      "test/public.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toPublic } from '../src/public.ts';\ntest('toPublic drops the hash', () => { const p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'secret' }); assert.ok(!('passwordHash' in p)); assert.equal(p.name, 'An'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/public.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/public.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/public.ts": "export type User = { id: number; name: string; email: string; passwordHash: string };\n\n// Omit the secret — the field is gone from the type.\nexport type PublicUser = Omit<User, 'passwordHash'>;\n\nexport function toPublic(u: User): PublicUser {\n  return { id: u.id, name: u.name, email: u.email };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "PublicUser = User and toPublic returns u — the hash leaks (test fails, sai not refused)",
+        "tep": {
+          "src/public.ts": "export type User = { id: number; name: string; email: string; passwordHash: string };\nexport type PublicUser = User;\nexport function toPublic(u: User): PublicUser { return u; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-2-c",
+    "bai": "typescript-8-2-pick-omit",
+    "tieuDe": "A summary with Pick|||Một bản tóm tắt bằng Pick",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>NoteSummary</code> is hand-written and has drifted (it still carries <code>body</code>). Make it <code>Pick&lt;Note, 'id' | 'title'&gt;</code> so it keeps only the summary fields and tracks <code>Note</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and reading <code>body</code> in kiem/sai.ts is TS2339.</p>|||<p><code>NoteSummary</code> viết tay và đã trôi (còn mang <code>body</code>). Làm nó <code>Pick&lt;Note, 'id' | 'title'&gt;</code> để chỉ giữ các trường tóm tắt và bám theo <code>Note</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và đọc <code>body</code> trong kiem/sai.ts là TS2339.</p>",
+    "khoiDau": {
+      "src/summary.ts": "export type Note = { id: number; title: string; body: string; ownerId: number };\n\n// Hand-written and drifted: it carries body, which a summary should not.\nexport type NoteSummary = { id: number; title: string; body: string };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { NoteSummary } from '../src/summary.ts';\nconst s: NoteSummary = { id: 1, title: 'Hi' }; // exactly the summary fields\nconst t: string = s.title;\nexport { t };\n",
+      "kiem/sai.ts": "import type { NoteSummary } from '../src/summary.ts';\nfunction read(s: NoteSummary) { return s.body; } // expect TS2339\nexport { read };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/summary.ts": "export type Note = { id: number; title: string; body: string; ownerId: number };\n\n// Pick only the summary fields — derived from Note, so it tracks it.\nexport type NoteSummary = Pick<Note, 'id' | 'title'>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "hand-written, still carries body",
+        "tep": {
+          "src/summary.ts": "export type Note = { id: number; title: string; body: string; ownerId: number };\nexport type NoteSummary = { id: number; title: string; body: string };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-3-a",
+    "bai": "typescript-8-3-record",
+    "tieuDe": "A complete table with Record|||Một bảng đầy đủ bằng Record",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>SeatMap</code> is an open index signature, so a missing lab is never caught. Make it <code>Record&lt;LabCode, number&gt;</code> so every lab must have a value.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the literal missing <code>AL-301</code> in kiem/sai.ts is TS2741.</p>|||<p><code>SeatMap</code> là một index signature mở, nên thiếu một lab không bao giờ bị bắt. Làm nó <code>Record&lt;LabCode, number&gt;</code> để mọi lab phải có giá trị.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và literal thiếu <code>AL-301</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/seats.ts": "export type LabCode = 'BE-201' | 'BE-202' | 'AL-301';\n\n// Wrong: an open map — a missing lab is never caught.\nexport type SeatMap = { [k: string]: number };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { SeatMap } from '../src/seats.ts';\nconst seats: SeatMap = { 'BE-201': 40, 'BE-202': 24, 'AL-301': 30 }; // all three\nexport { seats };\n",
+      "kiem/sai.ts": "import type { SeatMap } from '../src/seats.ts';\nconst seats: SeatMap = { 'BE-201': 40, 'BE-202': 24 }; // expect TS2741\nexport { seats };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "export type LabCode = 'BE-201' | 'BE-202' | 'AL-301';\n\n// Record over the union — the table must have an entry for every lab.\nexport type SeatMap = Record<LabCode, number>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "open index signature — a missing lab is accepted",
+        "tep": {
+          "src/seats.ts": "export type LabCode = 'BE-201' | 'BE-202' | 'AL-301';\nexport type SeatMap = { [k: string]: number };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-3-b",
+    "bai": "typescript-8-3-record",
+    "tieuDe": "Guard an open lookup|||Chặn một lần tra mở",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Reading an open <code>Record&lt;string, number&gt;</code> gives <code>number | undefined</code> under <code>noUncheckedIndexedAccess</code>, so returning it directly is TS2322. Guard the lookup with <code>?? 0</code> so the function returns a <code>number</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Đọc một <code>Record&lt;string, number&gt;</code> mở cho <code>number | undefined</code> dưới <code>noUncheckedIndexedAccess</code>, nên trả nó trực tiếp là TS2322. Chặn lần tra bằng <code>?? 0</code> để hàm trả một <code>number</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/cache.ts": "export type Cache = Record<string, number>;\n\n// Wrong: a string-keyed lookup may be undefined, so returning it as a number is refused.\nexport function get(c: Cache, key: string): number {\n  return c[key];\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { get } from '../src/cache.ts';\nconst hits: number = get({ a: 1 }, 'a');\nexport { hits };\n",
+      "test/cache.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { get } from '../src/cache.ts';\ntest('get', () => { assert.equal(get({ a: 1 }, 'a'), 1); assert.equal(get({ a: 1 }, 'z'), 0); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/cache.ts",
+        "kiem/dung.ts",
+        "test/cache.test.ts"
+      ],
+      "chay": [
+        "node --test test/cache.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/cache.ts": "export type Cache = Record<string, number>;\n\n// Guard the lookup: a missing key falls back to 0, so the result is a number.\nexport function get(c: Cache, key: string): number {\n  return c[key] ?? 0;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "returns c[key] unguarded — number | undefined is not a number",
+        "tep": {
+          "src/cache.ts": "export type Cache = Record<string, number>;\nexport function get(c: Cache, key: string): number { return c[key]; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-3-c",
+    "bai": "typescript-8-3-record",
+    "tieuDe": "A label table that cannot forget a status|||Một bảng nhãn không quên được trạng thái",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>Labels</code> is an open map, so forgetting <code>CANCELLED</code> is never caught. Make it <code>Record&lt;Status, string&gt;</code> so a label is required for every status.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the literal missing <code>CANCELLED</code> in kiem/sai.ts is TS2741.</p>|||<p><code>Labels</code> là một map mở, nên quên <code>CANCELLED</code> không bao giờ bị bắt. Làm nó <code>Record&lt;Status, string&gt;</code> để mọi trạng thái phải có nhãn.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và literal thiếu <code>CANCELLED</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/labels.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\n// Wrong: an open map — forgetting a status is never caught.\nexport type Labels = { [k: string]: string };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Labels } from '../src/labels.ts';\nconst labels: Labels = { PENDING: 'Chờ', CONFIRMED: 'Đã nhận', CANCELLED: 'Đã huỷ' };\nexport { labels };\n",
+      "kiem/sai.ts": "import type { Labels } from '../src/labels.ts';\nconst labels: Labels = { PENDING: 'Chờ', CONFIRMED: 'Đã nhận' }; // expect TS2741\nexport { labels };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/labels.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\n// Record over the union — a label is required for every status.\nexport type Labels = Record<Status, string>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "open map — CANCELLED can be forgotten",
+        "tep": {
+          "src/labels.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\nexport type Labels = { [k: string]: string };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-4-a",
+    "bai": "typescript-8-4-exclude-returntype-awaited",
+    "tieuDe": "A narrower union with Exclude|||Một union hẹp hơn bằng Exclude",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>Active</code> is the whole <code>Status</code>, so a cancelled booking is wrongly still \"active\". Make it <code>Exclude&lt;Status, 'CANCELLED'&gt;</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and assigning <code>CANCELLED</code> in kiem/sai.ts is TS2322.</p>|||<p><code>Active</code> là cả <code>Status</code>, nên một booking đã huỷ vẫn bị coi là \"active\". Làm nó <code>Exclude&lt;Status, 'CANCELLED'&gt;</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và gán <code>CANCELLED</code> trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/active.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\n// Wrong: Active still includes CANCELLED.\nexport type Active = Status;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Active } from '../src/active.ts';\nconst a: Active = 'PENDING';\nconst b: Active = 'CONFIRMED';\nexport { a, b };\n",
+      "kiem/sai.ts": "import type { Active } from '../src/active.ts';\nconst gone: Active = 'CANCELLED'; // expect TS2322\nexport { gone };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/active.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\n\n// Exclude the cancelled state — a union derived from Status.\nexport type Active = Exclude<Status, 'CANCELLED'>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Active = Status — CANCELLED is still allowed",
+        "tep": {
+          "src/active.ts": "export type Status = 'PENDING' | 'CONFIRMED' | 'CANCELLED';\nexport type Active = Status;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-4-b",
+    "bai": "typescript-8-4-exclude-returntype-awaited",
+    "tieuDe": "Read a return type with ReturnType|||Đọc kiểu trả về bằng ReturnType",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>Checked</code> is hand-written and has drifted (it only has <code>ok</code>). Make it <code>ReturnType&lt;typeof checkSlot&gt;</code> so it tracks the function.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the value missing <code>minutes</code> in kiem/sai.ts is TS2741.</p>|||<p><code>Checked</code> viết tay và đã trôi (chỉ có <code>ok</code>). Làm nó <code>ReturnType&lt;typeof checkSlot&gt;</code> để nó bám theo hàm.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị thiếu <code>minutes</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/checked.ts": "export function checkSlot(start: string, end: string): { ok: boolean; minutes: number } {\n  return { ok: true, minutes: 120 };\n}\n\n// Hand-written and drifted: it is missing minutes.\nexport type Checked = { ok: boolean };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Checked } from '../src/checked.ts';\nconst r: Checked = { ok: true, minutes: 120 };\nconst m: number = r.minutes;\nexport { m };\n",
+      "kiem/sai.ts": "import type { Checked } from '../src/checked.ts';\nconst bad: Checked = { ok: true }; // expect TS2741\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/checked.ts": "export function checkSlot(start: string, end: string): { ok: boolean; minutes: number } {\n  return { ok: true, minutes: 120 };\n}\n\n// ReturnType reads the result type straight from the function.\nexport type Checked = ReturnType<typeof checkSlot>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "hand-written, missing minutes",
+        "tep": {
+          "src/checked.ts": "export function checkSlot(start: string, end: string): { ok: boolean; minutes: number } { return { ok: true, minutes: 120 }; }\nexport type Checked = { ok: boolean };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-8-4-c",
+    "bai": "typescript-8-4-exclude-returntype-awaited",
+    "tieuDe": "Unwrap a Promise with Awaited|||Mở một Promise bằng Awaited",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p><code>Loaded</code> is typed <code>any</code>, so a wrong-shaped value slips. Make it <code>Awaited&lt;ReturnType&lt;typeof fetchBooking&gt;&gt;</code> — the value after <code>await</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the value missing <code>lab</code> in kiem/sai.ts is TS2741.</p>|||<p><code>Loaded</code> có kiểu <code>any</code>, nên một giá trị sai dáng lọt. Làm nó <code>Awaited&lt;ReturnType&lt;typeof fetchBooking&gt;&gt;</code> — giá trị sau <code>await</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị thiếu <code>lab</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/loaded.ts": "export type Booking = { id: number; lab: string };\nexport async function fetchBooking(id: number): Promise<Booking> {\n  return { id, lab: 'BE-201' };\n}\n\n// Wrong: any erases the shape.\nexport type Loaded = any;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Loaded } from '../src/loaded.ts';\nconst b: Loaded = { id: 1, lab: 'BE-201' };\nconst lab: string = b.lab;\nexport { lab };\n",
+      "kiem/sai.ts": "import type { Loaded } from '../src/loaded.ts';\nconst bad: Loaded = { id: 1 }; // expect TS2741\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/loaded.ts": "export type Booking = { id: number; lab: string };\nexport async function fetchBooking(id: number): Promise<Booking> {\n  return { id, lab: 'BE-201' };\n}\n\n// Awaited unwraps the Promise — the value you have after await.\nexport type Loaded = Awaited<ReturnType<typeof fetchBooking>>;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "any — the wrong-shaped value is accepted",
+        "tep": {
+          "src/loaded.ts": "export type Booking = { id: number; lab: string };\nexport async function fetchBooking(id: number): Promise<Booking> { return { id, lab: 'BE-201' }; }\nexport type Loaded = any;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-8",
+    "bai": "typescript-8-6-lab-utility-dto",
+    "tieuDe": "Lab 8 — the utility-type DTO layer|||Lab 8 — tầng DTO bằng utility types",
+    "doKho": "HARD",
+    "phut": 30,
+    "moTa": "<p>The lab in miniature. Rebuild <code>MyPartial</code>, <code>MyPick</code> and <code>MyOmit</code> from scratch, then derive <code>CreateBooking</code>, <code>UpdateBooking</code> and <code>PublicUser</code>. The correct uses must compile, the wrong uses must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>|||<p>Lab thu nhỏ. Dựng lại <code>MyPartial</code>, <code>MyPick</code>, <code>MyOmit</code> từ số 0, rồi suy <code>CreateBooking</code>, <code>UpdateBooking</code>, <code>PublicUser</code>. Các cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/dto.ts": "// A teammate wrote the DTO layer with any — it compiles but refuses nothing.\nexport type MyPartial<T> = any;\nexport type MyPick<T, K> = any;\nexport type MyOmit<T, K> = any;\n\nexport type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\nexport type User = { id: number; name: string; email: string; passwordHash: string };\n\nexport type CreateBooking = any;\nexport type UpdateBooking = any;\nexport type PublicUser = any;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\nexport function toPublic(u: User): PublicUser {\n  return { id: u.id, name: u.name, email: u.email };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { CreateBooking, UpdateBooking, PublicUser } from '../src/dto.ts';\nconst c: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab' };\nconst u: UpdateBooking = { seats: 24 };\nconst p: PublicUser = { id: 1, name: 'An', email: 'a@x.vn' };\nexport { c, u, p };\n",
+      "kiem/sai.ts": "import type { CreateBooking, UpdateBooking, PublicUser, MyPick, User } from '../src/dto.ts';\nexport const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 }; // expect TS2353\nexport const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; // expect TS2741\nexport type S3 = MyPick<User, 'emial'>; // expect TS2344\nexport const s4: UpdateBooking = { createdAt: 'now' }; // expect TS2353\n",
+      "test/dto.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking, toPublic } from '../src/dto.ts';\ntest('createBooking fills server fields', () => { const b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); assert.equal(b.id, 1); assert.equal(b.status, 'PENDING'); });\ntest('toPublic drops the hash', () => { const p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'x' }); assert.ok(!('passwordHash' in p)); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/dto.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/dto.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/dto.ts": "// Rebuild the three utility types, then derive the DTOs.\nexport type MyPartial<T> = { [K in keyof T]?: T[K] };\nexport type MyPick<T, K extends keyof T> = { [P in K]: T[P] };\nexport type MyOmit<T, K extends keyof T> = MyPick<T, Exclude<keyof T, K>>;\n\nexport type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\nexport type User = { id: number; name: string; email: string; passwordHash: string };\n\nexport type CreateBooking = MyOmit<Booking, 'id' | 'status' | 'createdAt'>;\nexport type UpdateBooking = MyPartial<MyOmit<Booking, 'id' | 'createdAt'>>;\nexport type PublicUser = MyOmit<User, 'passwordHash'>;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\nexport function toPublic(u: User): PublicUser {\n  return { id: u.id, name: u.name, email: u.email };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any starter kept — wrong uses slip through",
+        "tep": {
+          "src/dto.ts": "export type MyPartial<T> = any;\nexport type MyPick<T, K> = any;\nexport type MyOmit<T, K> = any;\nexport type Booking = { id: number; lab: string; seats: number; purpose: string; status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string };\nexport type User = { id: number; name: string; email: string; passwordHash: string };\nexport type CreateBooking = any;\nexport type UpdateBooking = any;\nexport type PublicUser = any;\nexport function createBooking(input: CreateBooking): Booking { return { ...input, id: 1, status: 'PENDING', createdAt: 'x' }; }\nexport function toPublic(u: User): PublicUser { return { id: u.id, name: u.name, email: u.email }; }\n"
+        }
+      },
+      {
+        "nhan": "DTOs loosened to MyPartial<Booking> — a create may carry id and a patch may set createdAt",
+        "tep": {
+          "src/dto.ts": "export type MyPartial<T> = { [K in keyof T]?: T[K] };\nexport type MyPick<T, K extends keyof T> = { [P in K]: T[P] };\nexport type MyOmit<T, K extends keyof T> = MyPick<T, Exclude<keyof T, K>>;\nexport type Booking = { id: number; lab: string; seats: number; purpose: string; status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string };\nexport type User = { id: number; name: string; email: string; passwordHash: string };\nexport type CreateBooking = MyPartial<Booking>;\nexport type UpdateBooking = MyPartial<Booking>;\nexport type PublicUser = MyOmit<User, 'passwordHash'>;\nexport function createBooking(input: CreateBooking): Booking { return { ...input, id: 1, lab: input.lab ?? '', seats: input.seats ?? 0, purpose: input.purpose ?? '', status: 'PENDING', createdAt: 'x' }; }\nexport function toPublic(u: User): PublicUser { return { id: u.id, name: u.name, email: u.email }; }\n"
+        }
+      }
+    ]
   }
 ]

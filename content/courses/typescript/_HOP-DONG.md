@@ -318,8 +318,19 @@ typescript: 'typescript-practice',
   Số đo Lab 7: khởi đầu **5/10** · `yeu` **7.5/10** · `vua` **9.5/10** · tham khảo **10/10**.
   **3 cặp liên kết chéo hai chiều** (api-design `api-7-2-sinh-code` ↔ 7.1 suy kiểu không trôi; `api-1-2-phuong-thuc` ↔ 7.2 PATCH body = Partial; `api-2-4-i18n` ↔ 7.4 khoá câu chữ = template literal).
   Ảnh chụp `_labflow-ts` cuối Ch7 (verify sạch: npm ci + tsc 0 lỗi + 58 test + lab7 5/7.5/9.5/10): 58 test, lab1–6 + events 10/10. Soạn MỘT phiên, KHÔNG fork.
-- **⏸ TẠM DỪNG sau Chương 7 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 8** (§9 — Utility types: Partial, Required, Pick, Omit, Record, ReturnType…
-  đặt tên cho các mapped/conditional type của Ch7). Làm y Ch5/Ch6/Ch7: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
+- 04/11/2026 — **Chương 8 trọn** (thay placeholder cũ 507 dòng một tệp): 4 bài (slug giữ: 8.1 partial-required-readonly, 8.2 pick-omit, 8.3 record,
+  8.4 exclude-returntype-awaited; nguồn bài + giảng ~144k/6) + Lab 8 (MỚI `typescript-8-6-lab-utility-dto`) + quiz 10 câu (slug giữ `typescript-8-5-quiz`);
+  tệp chương `s08-utility-types.mjs` soạn lại. 5 deck / 39 slide đẩy `TS/v1` (ts-08-1 8, ts-08-2 8, ts-08-3 7, ts-08-4 7, ts-lab-8 9; 0 lỗi kiem-slide).
+  13 đề Code Lab `ts` mới (ts-cl-8-1 a–c, 8-2 a–c, 8-3 a–c, 8-4 a–c, ts-cl-lab-8; 14 sai mẫu) — kiem-de-ts **132/132** (tsc 7.0.2), codelab-xuat-de 13 sạch,
+  máy chấm trình duyệt TS 6.0.3 **647/647** (không lệch 6↔7 mới); track `typescript-practice` thêm 5 module (⇒ 46 module / 132 đề). LabFlow TS thêm
+  `src/rules/dto.ts` + `dto.test.ts` (2 test ⇒ `npm test` = **60**) = lời giải Lab 8 (`MyPartial`/`MyPick<K extends keyof T>`/`MyOmit = MyPick<T, Exclude<keyof T, K>>`,
+  rồi `CreateBooking`/`UpdateBooking`/`PublicUser` suy từ model), `demo8/` (26 demo đo thật cho 4 bài), `lab8/` (starter any, `kiem/{sai 4 dòng,dung}`, test,
+  `yeu`=DTO quá lỏng + MyPick không ràng buộc, `vua`=MyPick `K extends PropertyKey`), `scripts/cham-lab-8.mjs` (`npm run lab8`; A2·B1·C1·D2·E 8×0,5).
+  Số đo Lab 8: khởi đầu **5/10** · `yeu` **8/10** · `vua` **9.5/10** · tham khảo **10/10** (lệch đã bắt: payload/patch gõ sai ⇒ TS2561 "Did you mean", không TS2353).
+  **3 cặp liên kết chéo hai chiều** (prisma-orm `pr-4-2-select-include` ↔ 8.2 Pick/Omit = select/omit; `api-2-4-i18n` ↔ 8.3 Record = bảng dịch; nodejs `nodejs-1-4-bat-dong-bo` ↔ 8.4 Awaited).
+  Ảnh chụp `_labflow-ts` cuối Ch8 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab8 5/8/9.5/10): 60 test, lab1–8 tham khảo. Soạn MỘT phiên, KHÔNG fork.
+- **⏸ TẠM DỪNG sau Chương 8 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 9** (§9 — tsconfig & trình biên dịch: CI `tsc --noEmit`, tái hiện sự cố seed 08/08;
+  Lab 9 siết một dự án lỏng lên strict + cổng CI). Làm y Ch5–8: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
   đề Code Lab `ts` + nguon + `_track.json` + xuat-de + máy chấm trình duyệt, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`,
   `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main). Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`

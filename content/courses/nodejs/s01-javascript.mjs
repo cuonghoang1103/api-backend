@@ -698,12 +698,22 @@ Node.js v22.21.0
   <span class="lc-body"><span class="lc-title">Web Foundations 5.3 — async/await from zero</span><span class="lc-sub">Missing await, 600 ms versus 200 ms, and forEach that does not wait</span></span>
   <span class="lc-cta">Open lesson</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">What you have after await, in the type — TS 8.4: ReturnType & Awaited</span><span class="lc-sub">Same: an async function hands back a Promise, and you only have the value once you await it. Different: in TypeScript <code>Awaited&lt;ReturnType&lt;typeof fetchBooking&gt;&gt;</code> is the resolved type — <code>Booking</code>, not <code>Promise&lt;Booking&gt;</code> — read straight from the function, so a wrapper never re-declares a type that already exists.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 5.3 — async/await từ số 0</span><span class="lc-sub">Thiếu await, 600 ms so với 200 ms, và forEach không chờ</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Thứ bạn có sau await, trong kiểu — TS 8.4: ReturnType & Awaited</span><span class="lc-sub">Giống: một hàm async trả về một Promise, và bạn chỉ có giá trị khi đã await nó. Khác: trong TypeScript <code>Awaited&lt;ReturnType&lt;typeof fetchBooking&gt;&gt;</code> là kiểu đã resolve — <code>Booking</code>, không phải <code>Promise&lt;Booking&gt;</code> — đọc thẳng từ hàm, nên một wrapper không bao giờ khai lại một kiểu đã tồn tại.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

@@ -1,0 +1,431 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-8-1-partial-required-readonly",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-8-1-partial-required-readonly"
+  },
+  "exercises": [
+    {
+      "title": "A PATCH body with Partial",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-8-1-partial-required-readonly"
+      ],
+      "problemHtml": "<p><code>applyPatch</code> types its <code>patch</code> as the full <code>Booking</code>, so the caller must resend every field. Change it to <code>Partial&lt;Booking&gt;</code> so any subset is accepted.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/patch.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/patch.test.ts</code>.</li>\n  <li><code>node --test test/patch.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>applyPatch</code> gán <code>patch</code> là <code>Booking</code> đầy đủ, nên người gọi phải gửi lại mọi trường. Đổi thành <code>Partial&lt;Booking&gt;</code> để nhận tập con bất kỳ.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/patch.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/patch.test.ts</code>.</li>\n  <li><code>node --test test/patch.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/patch.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/patch.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/patch.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/patch.ts",
+          "language": "typescript",
+          "code": "export type Booking = { id: number; lab: string; seats: number; purpose: string };\n\n// Wrong: patch is the whole Booking, so the caller must send every field.\nexport function applyPatch(b: Booking, patch: Booking): Booking {\n  return { ...b, ...patch };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { applyPatch } from '../src/patch.ts';\ndeclare const b: { id: number; lab: string; seats: number; purpose: string };\nconst r = applyPatch(b, { seats: 30 }); // only one field\nexport { r };\n"
+        },
+        {
+          "name": "test/patch.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { applyPatch } from '../src/patch.ts';\nconst b = { id: 1, lab: 'BE-201', seats: 40, purpose: 'Lab' };\ntest('applyPatch', () => assert.deepEqual(applyPatch(b, { seats: 30 }), { id: 1, lab: 'BE-201', seats: 30, purpose: 'Lab' }));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/patch.ts",
+          "language": "typescript",
+          "code": "export type Booking = { id: number; lab: string; seats: number; purpose: string };\n\n// Partial<Booking>: every field optional — a PATCH body.\nexport function applyPatch(b: Booking, patch: Partial<Booking>): Booking {\n  return { ...b, ...patch };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { applyPatch } from '../src/patch.ts';\ndeclare const b: { id: number; lab: string; seats: number; purpose: string };\nconst r = applyPatch(b, { seats: 30 }); // only one field\nexport { r };\n"
+        },
+        {
+          "name": "test/patch.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { applyPatch } from '../src/patch.ts';\nconst b = { id: 1, lab: 'BE-201', seats: 40, purpose: 'Lab' };\ntest('applyPatch', () => assert.deepEqual(applyPatch(b, { seats: 30 }), { id: 1, lab: 'BE-201', seats: 30, purpose: 'Lab' }));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — patch still the full Booking — { seats } is refused — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — patch still the full Booking — { seats } is refused — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { applyPatch } from '../src/patch.ts';\ndeclare const b: { id: number; lab: string; seats: number; purpose: string };\nconst r = applyPatch(b, { seats: 30 }); // only one field\nexport { r };\n",
+          "test/patch.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { applyPatch } from '../src/patch.ts';\nconst b = { id: 1, lab: 'BE-201', seats: 40, purpose: 'Lab' };\ntest('applyPatch', () => assert.deepEqual(applyPatch(b, { seats: 30 }), { id: 1, lab: 'BE-201', seats: 30, purpose: 'Lab' }));\n"
+        },
+        "tepHoc": [
+          "src/patch.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/patch.test.ts"
+            ],
+            "moTa": "tsc (strict): src/patch.ts + kiem/dung.ts, test/patch.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/patch.test.ts",
+            "moTa": "node --test test/patch.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "patch still the full Booking — { seats } is refused — caught by: tsc (strict): src/patch.ts + kiem/dung.ts, test/patch.test.ts compile with 0 errors|||patch still the full Booking — { seats } is refused — máy chấm bắt ở: tsc (strict): src/patch.ts + kiem/dung.ts, test/patch.test.ts compile with 0 errors"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "A completed value with Required",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-8-1-partial-required-readonly"
+      ],
+      "problemHtml": "<p><code>FullSettings</code> is just an alias of <code>Settings</code>, so the optional fields stay optional. Make it <code>Required&lt;Settings&gt;</code> so a value missing a field is refused.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the value missing <code>theme</code> in kiem/sai.ts is TS2741.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/settings.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2739); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>FullSettings</code> chỉ là bí danh của <code>Settings</code>, nên các trường optional vẫn optional. Làm nó <code>Required&lt;Settings&gt;</code> để một giá trị thiếu trường bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị thiếu <code>theme</code> trong kiem/sai.ts là TS2741.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/settings.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2739); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/settings.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/settings.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: const partial: FullSettings = { title: 'Hi' };|||kiem/sai.ts, dòng 2: const partial: FullSettings = { title: 'Hi' };",
+          "output": "error TS2739",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/settings.ts",
+          "language": "typescript",
+          "code": "export type Settings = { title: string; theme?: string; fontSize?: number };\n\n// Wrong: an alias — the optionals are still optional.\nexport type FullSettings = Settings;\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { FullSettings } from '../src/settings.ts';\nconst done: FullSettings = { title: 'Hi', theme: 'dark', fontSize: 14 }; // all three\nexport { done };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { FullSettings } from '../src/settings.ts';\nconst partial: FullSettings = { title: 'Hi' }; // expect TS2739\nexport { partial };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/settings.ts",
+          "language": "typescript",
+          "code": "export type Settings = { title: string; theme?: string; fontSize?: number };\n\n// Required<Settings>: remove every ? — a complete value must have everything.\nexport type FullSettings = Required<Settings>;\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { FullSettings } from '../src/settings.ts';\nconst done: FullSettings = { title: 'Hi', theme: 'dark', fontSize: 14 }; // all three\nexport { done };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { FullSettings } from '../src/settings.ts';\nconst partial: FullSettings = { title: 'Hi' }; // expect TS2739\nexport { partial };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — an alias — theme/fontSize stay optional — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — an alias — theme/fontSize stay optional — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import type { FullSettings } from '../src/settings.ts';\nconst done: FullSettings = { title: 'Hi', theme: 'dark', fontSize: 14 }; // all three\nexport { done };\n",
+          "kiem/sai.ts": "import type { FullSettings } from '../src/settings.ts';\nconst partial: FullSettings = { title: 'Hi' }; // expect TS2739\nexport { partial };\n"
+        },
+        "tepHoc": [
+          "src/settings.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/settings.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2739"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2739 — const partial: FullSettings = { title: 'Hi' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "an alias — theme/fontSize stay optional — caught by: kiem/sai.ts:2 is refused with TS2739 — const partial: FullSettings = { title: 'Hi' };|||an alias — theme/fontSize stay optional — máy chấm bắt ở: kiem/sai.ts:2 is refused with TS2739 — const partial: FullSettings = { title: 'Hi' };"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "A frozen config with Readonly",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-8-1-partial-required-readonly"
+      ],
+      "problemHtml": "<p><code>FrozenConfig</code> is a plain alias, so its fields can be reassigned. Make it <code>Readonly&lt;Config&gt;</code> so a reassignment is refused.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the reassignment in kiem/sai.ts is TS2540.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/config.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2540); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>FrozenConfig</code> là một bí danh thường, nên trường của nó gán lại được. Làm nó <code>Readonly&lt;Config&gt;</code> để một phép gán lại bị từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và phép gán lại trong kiem/sai.ts là TS2540.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/config.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2540); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/config.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/config.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 3: cfg.port = 5433;|||kiem/sai.ts, dòng 3: cfg.port = 5433;",
+          "output": "error TS2540",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/config.ts",
+          "language": "typescript",
+          "code": "export type Config = { host: string; port: number };\n\n// Wrong: a plain alias — the fields are still writable.\nexport type FrozenConfig = Config;\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\nconst port: number = cfg.port; // reading is fine\nexport { port };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\ncfg.port = 5433; // expect TS2540\nexport { cfg };\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/config.ts",
+          "language": "typescript",
+          "code": "export type Config = { host: string; port: number };\n\n// Readonly<Config>: every field read-only.\nexport type FrozenConfig = Readonly<Config>;\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\nconst port: number = cfg.port; // reading is fine\nexport { port };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\ncfg.port = 5433; // expect TS2540\nexport { cfg };\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — a plain alias — cfg.port is still writable — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — a plain alias — cfg.port is still writable — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\nconst port: number = cfg.port; // reading is fine\nexport { port };\n",
+          "kiem/sai.ts": "import type { FrozenConfig } from '../src/config.ts';\nconst cfg: FrozenConfig = { host: 'localhost', port: 5432 };\ncfg.port = 5433; // expect TS2540\nexport { cfg };\n"
+        },
+        "tepHoc": [
+          "src/config.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): src/config.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2540"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2540 — cfg.port = 5433; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "a plain alias — cfg.port is still writable — caught by: kiem/sai.ts:3 is refused with TS2540 — cfg.port = 5433;|||a plain alias — cfg.port is still writable — máy chấm bắt ở: kiem/sai.ts:3 is refused with TS2540 — cfg.port = 5433;"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

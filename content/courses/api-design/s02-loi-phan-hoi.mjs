@@ -3293,6 +3293,11 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
   <span class="lc-body"><span class="lc-title">Message keys that cannot be mistyped — TS 7.4: Template literal types</span><span class="lc-sub">Same: a closed set of message keys, one value for each, so a missing or misspelled key is caught, not shipped. Different: TypeScript builds the key type from two unions in a template literal (<code>&#96;&#36;{Resource}:&#36;{Field}&#96;</code>) and a <code>Record</code> over it forces a value for every combination — a typo is refused at compile time as TS2820, with a suggestion.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-3-record" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The table behind the keys — TS 8.3: Record</span><span class="lc-sub">Same: a lookup with a value for every key, so a missing one is caught, not shipped. Different: where 7.4 builds the key type, <code>Record&lt;Status, string&gt;</code> builds the table — over a union it forces an entry for every member (a missing one is TS2741), the completeness a translation catalogue needs.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -3767,6 +3772,11 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-4-template-literal-types" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Khoá câu chữ không thể gõ sai — TS 7.4: Template literal types</span><span class="lc-sub">Giống: một tập khoá câu chữ đóng, mỗi khoá một giá trị, nên khoá thiếu hay gõ sai bị bắt chứ không lên sản phẩm. Khác: TypeScript dựng kiểu khoá từ hai union trong một template literal (<code>&#96;&#36;{Resource}:&#36;{Field}&#96;</code>) và một <code>Record</code> qua nó ép mọi tổ hợp phải có giá trị — một lỗi gõ bị từ chối lúc biên dịch là TS2820, kèm gợi ý.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-3-record" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cái bảng đằng sau các khoá — TS 8.3: Record</span><span class="lc-sub">Giống: một bảng tra với một giá trị cho mỗi khoá, nên khoá thiếu bị bắt chứ không lên sản phẩm. Khác: ở chỗ 7.4 dựng kiểu khoá, <code>Record&lt;Status, string&gt;</code> dựng cái bảng — trên một union nó ép một mục cho mọi thành viên (thiếu một cái là TS2741), tính đầy đủ mà một danh mục bản dịch cần.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

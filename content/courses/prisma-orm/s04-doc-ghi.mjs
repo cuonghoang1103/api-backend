@@ -532,6 +532,11 @@ function render(b: PostSummary) {
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/aggregation-grouping-summarizing#count-relations" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Counting relations</span><span class="lc-sub">prisma.io/docs · <code>_count</code> with and without filters, and where it can appear</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/type-safety/prisma-validator" target="_blank" rel="noopener"><span class="lc-ico">🧬</span><span class="lc-body"><span class="lc-title"><code>Prisma.validator</code> and <code>GetPayload</code></span><span class="lc-sub">prisma.io/docs · Naming a selection and deriving its type — expanded in Chapter 8</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Build the exact selection a given API response needs, with no extra column fetched</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-2-pick-omit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Shaping a result, in the type system — TS 8.2: Pick & Omit</span><span class="lc-sub">Same: you expose a subset of a model — a few fields, never the password hash. Different: here <code>select</code>/<code>omit</code> shape the query result at run time and Prisma derives the type; in TypeScript <code>Pick&lt;T, K&gt;</code> and <code>Omit&lt;T, K&gt;</code> shape the type itself — a create DTO minus server fields, a public view minus a secret — a compile-time boundary.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -713,6 +718,11 @@ function render(b: PostSummary) {
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/aggregation-grouping-summarizing#count-relations" target="_blank" rel="noopener"><span class="lc-ico">🔢</span><span class="lc-body"><span class="lc-title">Đếm quan hệ</span><span class="lc-sub">prisma.io/docs · <code>_count</code> có và không có bộ lọc, và nó xuất hiện được ở đâu</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/type-safety/prisma-validator" target="_blank" rel="noopener"><span class="lc-ico">🧬</span><span class="lc-body"><span class="lc-title"><code>Prisma.validator</code> và <code>GetPayload</code></span><span class="lc-sub">prisma.io/docs · Đặt tên cho một phép chọn và suy ra kiểu của nó — nói rộng ở Chương 8</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Dựng đúng phép chọn mà một phản hồi API cho trước cần, không thừa một cột nào</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-8-2-pick-omit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nắn hình một kết quả, trong hệ kiểu — TS 8.2: Pick & Omit</span><span class="lc-sub">Giống: bạn phơi ra một tập con của một model — vài trường, không bao giờ password hash. Khác: ở đây <code>select</code>/<code>omit</code> nắn kết quả truy vấn lúc chạy và Prisma suy kiểu; trong TypeScript <code>Pick&lt;T, K&gt;</code> và <code>Omit&lt;T, K&gt;</code> nắn chính cái kiểu — một DTO tạo trừ trường server, một bản công khai trừ một bí mật — một ranh giới lúc biên dịch.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

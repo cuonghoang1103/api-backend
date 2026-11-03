@@ -1,0 +1,200 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-8-6-lab-utility-dto",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-8-6-lab-utility-dto"
+  },
+  "exercises": [
+    {
+      "title": "Lab 8 — the utility-type DTO layer",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-8-6-lab-utility-dto"
+      ],
+      "problemHtml": "<p>The lab in miniature. Rebuild <code>MyPartial</code>, <code>MyPick</code> and <code>MyOmit</code> from scratch, then derive <code>CreateBooking</code>, <code>UpdateBooking</code> and <code>PublicUser</code>. The correct uses must compile, the wrong uses must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/dto.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>, <code>test/dto.test.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2353, TS2741, TS2344, TS2353); its other lines still compile.</li>\n  <li><code>node --test test/dto.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab thu nhỏ. Dựng lại <code>MyPartial</code>, <code>MyPick</code>, <code>MyOmit</code> từ số 0, rồi suy <code>CreateBooking</code>, <code>UpdateBooking</code>, <code>PublicUser</code>. Các cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/dto.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>, <code>test/dto.test.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2353, TS2741, TS2344, TS2353); các dòng khác vẫn biên dịch.</li>\n  <li><code>node --test test/dto.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bas\\s+(?!const\\b)</code>, <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/dto.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/dto.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };|||kiem/sai.ts, dòng 2: export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };",
+          "output": "error TS2353",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: as casts (as const is fine) · any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/dto.ts",
+          "language": "typescript",
+          "code": "// A teammate wrote the DTO layer with any — it compiles but refuses nothing.\nexport type MyPartial<T> = any;\nexport type MyPick<T, K> = any;\nexport type MyOmit<T, K> = any;\n\nexport type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\nexport type User = { id: number; name: string; email: string; passwordHash: string };\n\nexport type CreateBooking = any;\nexport type UpdateBooking = any;\nexport type PublicUser = any;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\nexport function toPublic(u: User): PublicUser {\n  return { id: u.id, name: u.name, email: u.email };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { CreateBooking, UpdateBooking, PublicUser } from '../src/dto.ts';\nconst c: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab' };\nconst u: UpdateBooking = { seats: 24 };\nconst p: PublicUser = { id: 1, name: 'An', email: 'a@x.vn' };\nexport { c, u, p };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { CreateBooking, UpdateBooking, PublicUser, MyPick, User } from '../src/dto.ts';\nexport const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 }; // expect TS2353\nexport const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; // expect TS2741\nexport type S3 = MyPick<User, 'emial'>; // expect TS2344\nexport const s4: UpdateBooking = { createdAt: 'now' }; // expect TS2353\n"
+        },
+        {
+          "name": "test/dto.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking, toPublic } from '../src/dto.ts';\ntest('createBooking fills server fields', () => { const b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); assert.equal(b.id, 1); assert.equal(b.status, 'PENDING'); });\ntest('toPublic drops the hash', () => { const p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'x' }); assert.ok(!('passwordHash' in p)); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/dto.ts",
+          "language": "typescript",
+          "code": "// Rebuild the three utility types, then derive the DTOs.\nexport type MyPartial<T> = { [K in keyof T]?: T[K] };\nexport type MyPick<T, K extends keyof T> = { [P in K]: T[P] };\nexport type MyOmit<T, K extends keyof T> = MyPick<T, Exclude<keyof T, K>>;\n\nexport type Booking = {\n  id: number; lab: string; seats: number; purpose: string;\n  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED'; createdAt: string;\n};\nexport type User = { id: number; name: string; email: string; passwordHash: string };\n\nexport type CreateBooking = MyOmit<Booking, 'id' | 'status' | 'createdAt'>;\nexport type UpdateBooking = MyPartial<MyOmit<Booking, 'id' | 'createdAt'>>;\nexport type PublicUser = MyOmit<User, 'passwordHash'>;\n\nexport function createBooking(input: CreateBooking): Booking {\n  return { ...input, id: 1, status: 'PENDING', createdAt: '2027-03-03T06:00:00Z' };\n}\nexport function toPublic(u: User): PublicUser {\n  return { id: u.id, name: u.name, email: u.email };\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import type { CreateBooking, UpdateBooking, PublicUser } from '../src/dto.ts';\nconst c: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab' };\nconst u: UpdateBooking = { seats: 24 };\nconst p: PublicUser = { id: 1, name: 'An', email: 'a@x.vn' };\nexport { c, u, p };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import type { CreateBooking, UpdateBooking, PublicUser, MyPick, User } from '../src/dto.ts';\nexport const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 }; // expect TS2353\nexport const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; // expect TS2741\nexport type S3 = MyPick<User, 'emial'>; // expect TS2344\nexport const s4: UpdateBooking = { createdAt: 'now' }; // expect TS2353\n"
+        },
+        {
+          "name": "test/dto.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking, toPublic } from '../src/dto.ts';\ntest('createBooking fills server fields', () => { const b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); assert.equal(b.id, 1); assert.equal(b.status, 'PENDING'); });\ntest('toPublic drops the hash', () => { const p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'x' }); assert.ok(!('passwordHash' in p)); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — the any starter kept — wrong uses slip through; DTOs loosened to MyPartial&lt;Booking&gt; — a create may carry id and a patch may set createdAt — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — the any starter kept — wrong uses slip through; DTOs loosened to MyPartial&lt;Booking&gt; — a create may carry id and a patch may set createdAt — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import type { CreateBooking, UpdateBooking, PublicUser } from '../src/dto.ts';\nconst c: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab' };\nconst u: UpdateBooking = { seats: 24 };\nconst p: PublicUser = { id: 1, name: 'An', email: 'a@x.vn' };\nexport { c, u, p };\n",
+          "kiem/sai.ts": "import type { CreateBooking, UpdateBooking, PublicUser, MyPick, User } from '../src/dto.ts';\nexport const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 }; // expect TS2353\nexport const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; // expect TS2741\nexport type S3 = MyPick<User, 'emial'>; // expect TS2344\nexport const s4: UpdateBooking = { createdAt: 'now' }; // expect TS2353\n",
+          "test/dto.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking, toPublic } from '../src/dto.ts';\ntest('createBooking fills server fields', () => { const b = createBooking({ lab: 'BE-201', seats: 40, purpose: 'Lab' }); assert.equal(b.id, 1); assert.equal(b.status, 'PENDING'); });\ntest('toPublic drops the hash', () => { const p = toPublic({ id: 1, name: 'An', email: 'a@x.vn', passwordHash: 'x' }); assert.ok(!('passwordHash' in p)); });\n"
+        },
+        "tepHoc": [
+          "src/dto.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts",
+              "test/dto.test.ts"
+            ],
+            "moTa": "tsc (strict): src/dto.ts + kiem/dung.ts, test/dto.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2353"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2353 — export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2741"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2741 — export const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2344"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2344 — export type S3 = MyPick<User, 'emial'>; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2353"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2353 — export const s4: UpdateBooking = { createdAt: 'now' }; · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/dto.test.ts",
+            "moTa": "node --test test/dto.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bas\\s+(?!const\\b)",
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (as casts (as const is fine), any, @ts-ignore, @ts-nocheck, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "the any starter kept — wrong uses slip through — caught by: kiem/sai.ts:2 is refused with TS2353 — export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };; kiem/sai.ts:3 is refused with TS2741 — export const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; (+3)|||the any starter kept — wrong uses slip through — máy chấm bắt ở: kiem/sai.ts:2 is refused with TS2353 — export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };; kiem/sai.ts:3 is refused with TS2741 — export const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; (+3)"
+        },
+        {
+          "loi": "DTOs loosened to MyPartial<Booking> — a create may carry id and a patch may set createdAt — caught by: kiem/sai.ts:2 is refused with TS2353 — export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };; kiem/sai.ts:3 is refused with TS2741 — export const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; (+1)|||DTOs loosened to MyPartial<Booking> — a create may carry id and a patch may set createdAt — máy chấm bắt ở: kiem/sai.ts:2 is refused with TS2353 — export const s1: CreateBooking = { lab: 'BE-201', seats: 40, purpose: 'Lab', id: 9 };; kiem/sai.ts:3 is refused with TS2741 — export const s2: CreateBooking = { lab: 'BE-201', purpose: 'Lab' }; (+1)"
+        }
+      ]
+    }
+  ]
+}

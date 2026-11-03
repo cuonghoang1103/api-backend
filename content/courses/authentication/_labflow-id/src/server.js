@@ -1,18 +1,31 @@
-// src/server.js — LabFlow ID v0.3 (end of Chapter 3). Fixed so far:
+// src/server.js — LabFlow ID v0.4 (end of Chapter 4). Fixed so far:
 //   hole 1 — argon2id in PostgreSQL, measured parameters, upgrade on login (Chapter 2);
 //   hole 3 — CSPRNG session ids, only their SHA-256 stored (Chapter 1);
 //   hole 4 — sessions end: idle 30 min, absolute 12 h, sign-out, sign-out-everywhere (lesson 3.1);
-//   hole 5 — the session travels in a __Host- cookie JavaScript cannot read, never in a JSON body (3.2); CSRF checked (3.4);
-//   sign-in and every privilege change start a NEW session (3.3).
+//   hole 5 — the session travels in a __Host- cookie JavaScript cannot read, never in a JSON body (3.2); CSRF checked (3.4).
+// New in Chapter 4: LabFlow ID now ISSUES its own short-lived JWT access tokens for LabFlow API — EdDSA (Ed25519),
+//   a kid in every header, the seven registered claims, and a public JWKS at /.well-known/jwks.json. The session
+//   proves who you are to LabFlow ID; the access token proves it to a DIFFERENT service, for 15 minutes (lesson 4.5).
 // Still open: the sign-up half of hole 2 (Chapter 6) and hole 6, unlimited guessing (Chapter 10). Never deploy this file.
 import express from 'express';
 import { users } from './users.js';
 import { hashPassword, verifyPassword, checkNewPassword, loadBlocklist, pwnedCount, signIn } from './passwords/index.js';
 import { sessionLayer, pgStore } from './sessions/index.js';
+import { accessTokens, eddsa, newEd25519, ACCESS_TTL_SEC } from './jwt/index.js';
+import { publicJwks } from './jwt/jwks.js';
 import { log, requestLog } from './log.js';
 
 const BLOCKLIST = loadBlocklist();
 const sessions = sessionLayer({ store: pgStore, touchEveryMs: Number(process.env.TOUCH_EVERY_MS ?? 60e3) });
+
+// The signing key. In production this is loaded from a secret and rotated (lesson 4.4); for a demo we mint one at
+// boot, so every restart publishes a new JWKS — which is exactly why a client must FETCH the JWKS, not hard-code a key.
+const ACTIVE_KID = process.env.JWT_KID ?? 'ed-2026-11';
+const keyring = { [ACTIVE_KID]: eddsa(newEd25519()) };
+const ISSUER = process.env.JWT_ISSUER ?? 'https://id.labflow.example';
+const AUDIENCE = process.env.JWT_AUDIENCE ?? 'labflow-api';
+const tokens = accessTokens({ keyring, activeKid: ACTIVE_KID, issuer: ISSUER, audience: AUDIENCE });
+
 const app = express();
 app.use(requestLog);
 app.use(express.json({ limit: '8kb' }));
@@ -49,6 +62,20 @@ app.get('/me', needSession, async (req, res) => {
   res.json({ id: u.id, email: u.email, name: u.name, role: u.role });
 });
 
+// lesson 4.1–4.5: mint an access token for ANOTHER service (LabFlow API). The session says who you are HERE; the
+// access token carries that fact, signed, to a service that trusts our JWKS. 15 minutes — the platform-wide number.
+app.post('/token', needSession, async (req, res) => {
+  const u = await users.findById(req.session.userId);
+  const access = tokens.issue(u.id, { role: u.role });
+  res.json({ access_token: access, token_type: 'Bearer', expires_in: ACCESS_TTL_SEC, scope: AUDIENCE });
+});
+
+// lesson 4.4: the public keys, by kid. A client (LabFlow API, Chapter 8) fetches this and caches it. Public only.
+app.get('/.well-known/jwks.json', async (req, res) => {
+  res.set('Cache-Control', 'public, max-age=3600');
+  res.json(await publicJwks(keyring));
+});
+
 // lesson 3.4: the classic CSRF target — change the email, then "forgot password" takes the account
 app.post('/me/email', needSession, async (req, res) => {
   const email = String(req.body?.email ?? '').trim().toLowerCase();
@@ -78,4 +105,4 @@ app.post('/sign-out-everywhere', needSession, async (req, res) => {
 app.use((err, req, res, next) => res.status(err.status ?? 500).json({ error: err.type ?? 'INTERNAL' }));
 
 const port = Number(process.env.PORT ?? 4800);
-app.listen(port, () => log.info(`LabFlow ID v0.3 on http://localhost:${port}`));
+app.listen(port, () => log.info(`LabFlow ID v0.4 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));

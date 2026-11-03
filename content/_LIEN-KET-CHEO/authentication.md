@@ -49,3 +49,19 @@ Có sẵn từ trước, giữ nguyên thẻ ở cả hai phía (sổ `nodejs-ch
 Có sẵn, giữ nguyên ở cả hai phía: `auth-3-2-thuoc-tinh-cookie` ↔ PRJ301 `prj301-cookie-session` và ↔ SDN302 `sdn302-5-1-passwords-sessions`
 (sổ `prj301-nodejs-auth-postgresql.md`), `auth-3-4-csrf` ↔ `nodejs-8-4-cookie-csrf-thu-hoi` (sổ `nodejs-ch8-auth-apidesign.md`).
 Lab 3 (`auth-3-7-lab-phien-cookie`) chưa có cặp. `nodejs/s12-redis.mjs` đang có thay đổi chưa commit của phiên khác ⇒ KHÔNG chèn thẻ cho 3.5 ở đó.
+
+## Chương 4 (03/11/2026) — 1 cặp hai chiều mới + các cặp có sẵn giữ nguyên
+
+| Authentication | Bài kia | Giống | Authentication thêm (đo thật, Node 22.23.3 + jose 6.1.0 + Chromium 156) |
+|---|---|---|---|
+| `auth-4-2-truong-alg` | `api-design/api-6-1-xac-thuc` | HS256 = HMAC-SHA256 với bí mật máy chủ, dựng tay, bearer token | lấy alg từ KHOÁ (không từ header): alg:none + nhầm lẫn HS/RS ⇒ ALG_MISMATCH; chuyển sang EdDSA + JWKS để dịch vụ khác xác minh không cần bí mật |
+
+Thẻ hai chiều: `auth-4-2` → `api-6-1-xac-thuc` (trong bài, `lienKet`), và thêm thẻ ngược `api-6-1-xac-thuc` → `auth-4-2` ở `content/courses/api-design/s06-bao-mat.mjs` (ml-en + ml-vi, sau thẻ auth-2-3).
+
+**Thẻ ngược CÓ SẴN trỏ tới Ch4 (slug giữ nguyên, vẫn đúng với bài mới — KHÔNG thêm lại):** `nodejs-8-2-jwt-access-refresh` → `auth-4-2-truong-alg`
+(sổ `nodejs/s08-auth.mjs` đã có từ bản cũ; nay là hai chiều với `auth-4-3` → `nodejs-8-2-jwt-access-refresh` phía auth).
+
+**Một chiều "đọc thêm" (bên kia đã có cặp Ch3 riêng, không chèn ngược):** `auth-4-4-khoa-va-jwks` → `api-design/api-8-3-mo-rong`
+(cùng bài toán trạng thái qua nhiều tiến trình; api-8-3 đã hai chiều với auth-3-5), `auth-4-5-cat-token-o-dau` → `nodejs/nodejs-8-4-cookie-csrf-thu-hoi`
+(đánh đổi XSS↔CSRF nhìn từ phía cookie; nodejs-8-4 đã hai chiều với auth-3-1), `auth-4-1-giai-ma-bang-tay` → `api-design/api-6-1-xac-thuc` (thêm một thẻ tới cùng api-6-1).
+Academy ứng viên chưa chèn: SDN302 5.2 (`sdn302-5-2-jwt-cors` đã trỏ auth-4-2 từ phía nodejs; phía auth để Ch5/Ch8), testing 5.2 ↔ Lab 4.

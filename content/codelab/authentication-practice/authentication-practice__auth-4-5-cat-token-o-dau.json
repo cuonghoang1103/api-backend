@@ -1,0 +1,494 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-5-cat-token-o-dau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-5-cat-token-o-dau"
+  },
+  "exercises": [
+    {
+      "title": "4.5-1 — Where a browser keeps a token: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "token storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.4 in Chromium 156 (real run):<pre>what the injected script could read on the page:\n  localStorage.lfid.access : eyJhbGciOiJFZERTQSIsInR5… ← STOLEN\n  document.cookie          : lfid_access_readable=eyJhbGciOiJF…\n    → contains lfid_access_readable?  true (plain cookie: STOLEN)\n    → contains lfid_access_httponly?  false (HttpOnly: invisible to JS)\n\nthe attacker collector on :4801 received: {\"localStorage\":\"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI…</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.4 trong Chromium 156 (chạy thật):<pre>what the injected script could read on the page:\n  localStorage.lfid.access : eyJhbGciOiJFZERTQSIsInR5… ← STOLEN\n  document.cookie          : lfid_access_readable=eyJhbGciOiJF…\n    → contains lfid_access_readable?  true (plain cookie: STOLEN)\n    → contains lfid_access_httponly?  false (HttpOnly: invisible to JS)\n\nthe attacker collector on :4801 received: {\"localStorage\":\"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI…</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "document.cookie never shows HttpOnly cookies.|||document.cookie không bao giờ hiện cookie HttpOnly.",
+        "Automatic sending is what enables CSRF.|||Việc tự gửi là thứ cho phép CSRF."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-1 — Where a browser keeps a token: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. The injected script read the localStorage token and the plain cookie, but not the HttpOnly cookie. Why?Script bị tiêm đọc được token localStorage và cookie thường, nhưng không đọc cookie HttpOnly. Vì sao?\n2. So should every token go in an HttpOnly cookie?Vậy có nên để mọi token trong một cookie HttpOnly?\n3. What is the common safe pattern for the access token?Mẫu an toàn phổ biến cho access token là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-1 — Where a browser keeps a token: read the real run — answer key\n\n1. The injected script read the localStorage token and the plain cookie, but not the HttpOnly cookie. Why?Script bị tiêm đọc được token localStorage và cookie thường, nhưng không đọc cookie HttpOnly. Vì sao?\n   Answer: c) HttpOnly cookies never appear in document.cookie\n   HttpOnly takes the cookie off the JavaScript table (3.2); localStorage and non-HttpOnly cookies are readable by any script on the page.VI: HttpOnly gạt cookie khỏi bàn của JavaScript (3.2); localStorage và cookie không HttpOnly thì mọi script trên trang đọc được.\n\n2. So should every token go in an HttpOnly cookie?Vậy có nên để mọi token trong một cookie HttpOnly?\n   Answer: b) It stops XSS theft but is auto-sent, so you still need CSRF defence\n   HttpOnly trades “a script reads the token” for “another site spends it” (CSRF, Chapter 3). No storage is free; you choose the attack to defend.VI: HttpOnly đánh đổi \"một script đọc token\" lấy \"một site khác tiêu nó\" (CSRF, Chương 3). Không chỗ cất nào miễn phí; bạn chọn cú tấn công để chống.\n\n3. What is the common safe pattern for the access token?Mẫu an toàn phổ biến cho access token là gì?\n   Answer: c) Keep it in memory and send it as an Authorization: Bearer header\n   A short access token in memory cannot be read by a later-injected script and expires fast; the refresh token goes in an HttpOnly cookie (Chapter 5). A token in a URL leaks via history, logs and Referer.VI: Một access token ngắn trong bộ nhớ không bị một script tiêm sau đọc và hết hạn nhanh; refresh token đi trong một cookie HttpOnly (Chương 5). Một token trong URL rò qua lịch sử, log và Referer.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> HttpOnly cookies never appear in document.cookie</p><p>HttpOnly takes the cookie off the JavaScript table (3.2); localStorage and non-HttpOnly cookies are readable by any script on the page.</p><p><i>VI: HttpOnly gạt cookie khỏi bàn của JavaScript (3.2); localStorage và cookie không HttpOnly thì mọi script trên trang đọc được.</i></p></li><li><p><b>b)</b> It stops XSS theft but is auto-sent, so you still need CSRF defence</p><p>HttpOnly trades “a script reads the token” for “another site spends it” (CSRF, Chapter 3). No storage is free; you choose the attack to defend.</p><p><i>VI: HttpOnly đánh đổi \"một script đọc token\" lấy \"một site khác tiêu nó\" (CSRF, Chương 3). Không chỗ cất nào miễn phí; bạn chọn cú tấn công để chống.</i></p></li><li><p><b>c)</b> Keep it in memory and send it as an Authorization: Bearer header</p><p>A short access token in memory cannot be read by a later-injected script and expires fast; the refresh token goes in an HttpOnly cookie (Chapter 5). A token in a URL leaks via history, logs and Referer.</p><p><i>VI: Một access token ngắn trong bộ nhớ không bị một script tiêm sau đọc và hết hạn nhanh; refresh token đi trong một cookie HttpOnly (Chương 5). Một token trong URL rò qua lịch sử, log và Referer.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The injected script read the localStorage token and the plain cookie, but not the HttpOnly cookie. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Script bị tiêm đọc được token localStorage và cookie thường, nhưng không đọc cookie HttpOnly. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "localStorage is simply faster for a script to read than cookies"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The HttpOnly cookie had already expired by the time the script ran"
+              },
+              {
+                "ma": "c",
+                "noiDung": "HttpOnly cookies never appear in document.cookie"
+              },
+              {
+                "ma": "d",
+                "noiDung": "HttpOnly cookies are stored on disk in an encrypted form"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>HttpOnly takes the cookie off the JavaScript table (3.2); localStorage and non-HttpOnly cookies are readable by any script on the page.</p><p><i>VI: HttpOnly gạt cookie khỏi bàn của JavaScript (3.2); localStorage và cookie không HttpOnly thì mọi script trên trang đọc được.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>So should every token go in an HttpOnly cookie?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vậy có nên để mọi token trong một cookie HttpOnly?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — an HttpOnly cookie is immune to both XSS and CSRF attacks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It stops XSS theft but is auto-sent, so you still need CSRF defence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — an HttpOnly cookie is not able to hold a JWT in the first place"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — an HttpOnly cookie is completely safe for storing any token"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>HttpOnly trades “a script reads the token” for “another site spends it” (CSRF, Chapter 3). No storage is free; you choose the attack to defend.</p><p><i>VI: HttpOnly đánh đổi \"một script đọc token\" lấy \"một site khác tiêu nó\" (CSRF, Chương 3). Không chỗ cất nào miễn phí; bạn chọn cú tấn công để chống.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What is the common safe pattern for the access token?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mẫu an toàn phổ biến cho access token là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Store it in a plain, readable cookie"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep it in localStorage for convenience"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Keep it in memory and send it as an Authorization: Bearer header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Put it in the URL as a query parameter"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A short access token in memory cannot be read by a later-injected script and expires fast; the refresh token goes in an HttpOnly cookie (Chapter 5). A token in a URL leaks via history, logs and Referer.</p><p><i>VI: Một access token ngắn trong bộ nhớ không bị một script tiêm sau đọc và hết hạn nhanh; refresh token đi trong một cookie HttpOnly (Chương 5). Một token trong URL rò qua lịch sử, log và Referer.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Just put the JWT in localStorage.”|||\"Cứ để JWT trong localStorage.\""
+        },
+        {
+          "loi": "Passing a token in the URL.|||Truyền token trong URL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HttpOnly cookie"
+        },
+        {
+          "en": "XSS"
+        }
+      ]
+    },
+    {
+      "title": "4.5-2 — Write storageRisk(place): the main risk of each place",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "token storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the main risk for where a browser keeps a token: <code>'localStorage'</code> ⇒ <code>'XSS'</code> (any script reads it); <code>'plain-cookie'</code> ⇒ <code>'XSS_AND_CSRF'</code> (readable AND sent automatically); <code>'httponly-cookie'</code> ⇒ <code>'CSRF'</code> (unreadable but sent automatically); <code>'memory'</code> ⇒ <code>'LOST_ON_REFRESH'</code>; anything else ⇒ <code>'UNKNOWN'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về rủi ro chính của nơi trình duyệt cất một token: <code>'localStorage'</code> ⇒ <code>'XSS'</code> (mọi script đọc được); <code>'plain-cookie'</code> ⇒ <code>'XSS_AND_CSRF'</code> (đọc được VÀ tự gửi); <code>'httponly-cookie'</code> ⇒ <code>'CSRF'</code> (không đọc được nhưng tự gửi); <code>'memory'</code> ⇒ <code>'LOST_ON_REFRESH'</code>; còn lại ⇒ <code>'UNKNOWN'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "storageRisk(\"localStorage\")",
+          "output": "\"XSS\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Readable by a script ⇒ XSS; sent automatically ⇒ CSRF.|||Script đọc được ⇒ XSS; tự gửi ⇒ CSRF.",
+        "A plain cookie has both problems.|||Một cookie thường có cả hai vấn đề."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'XSS' | 'XSS_AND_CSRF' | 'CSRF' | 'LOST_ON_REFRESH' | 'UNKNOWN' */\nfunction storageRisk(place) {\n  // Write your solution here\n  if (place === 'localStorage') return 'XSS';\n  return 'CSRF';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction storageRisk(place) {\n  if (place === 'localStorage') return 'XSS';\n  if (place === 'plain-cookie') return 'XSS_AND_CSRF';\n  if (place === 'httponly-cookie') return 'CSRF';\n  if (place === 'memory') return 'LOST_ON_REFRESH';\n  return 'UNKNOWN';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Readable-by-script is the XSS surface; sent-by-the-browser is the CSRF surface. localStorage has the first, an HttpOnly cookie the second, a plain cookie both, and memory neither but it forgets on refresh (4.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Đọc-được-bởi-script là bề mặt XSS; được-trình-duyệt-gửi là bề mặt CSRF. localStorage có cái đầu, cookie HttpOnly có cái sau, cookie thường có cả hai, và bộ nhớ không cái nào nhưng quên khi tải lại (4.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "localStorage",
+              "vi": "localStorage"
+            },
+            "goi": "storageRisk(\"localStorage\")",
+            "mongDoi": "XSS"
+          },
+          {
+            "moTa": {
+              "en": "plain cookie",
+              "vi": "cookie thường"
+            },
+            "goi": "storageRisk(\"plain-cookie\")",
+            "mongDoi": "XSS_AND_CSRF",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "HttpOnly cookie",
+              "vi": "cookie HttpOnly"
+            },
+            "goi": "storageRisk(\"httponly-cookie\")",
+            "mongDoi": "CSRF",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "in memory",
+              "vi": "trong bộ nhớ"
+            },
+            "goi": "storageRisk(\"memory\")",
+            "mongDoi": "LOST_ON_REFRESH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown place",
+              "vi": "nơi lạ"
+            },
+            "goi": "storageRisk(\"the-url\")",
+            "mongDoi": "UNKNOWN",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking an HttpOnly cookie has no risk.|||Tưởng một cookie HttpOnly không rủi ro."
+        },
+        {
+          "loi": "Forgetting that a plain cookie is readable AND auto-sent.|||Quên rằng một cookie thường vừa đọc được vừa tự gửi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "XSS"
+        },
+        {
+          "en": "CSRF"
+        }
+      ]
+    },
+    {
+      "title": "4.5-3 — Rank the places by exposure to an injected script",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "token storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order from MOST readable by an injected script to LEAST.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp từ ĐỌC ĐƯỢC NHẤT bởi một script bị tiêm tới ÍT NHẤT.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which survive a refresh AND are readable?|||Cái nào sống qua tải lại VÀ đọc được?",
+        "HttpOnly is the one a script can never see.|||HttpOnly là cái một script không bao giờ thấy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-3 — Rank the places by exposure to an injected script\n\nAnswer in the answer panel (no code needed).\n\n1. Most → least readable by a scriptĐọc được nhiều → ít nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-3 — Rank the places by exposure to an injected script — answer key\n\n1. Most → least readable by a scriptĐọc được nhiều → ít nhất\n   Answer: m2) localStorage (any script reads it, survives refresh)  →  m3) a plain cookie (readable in document.cookie)  →  m1) an in-memory variable (only the running page, not a later script)  →  m4) an HttpOnly cookie (never in document.cookie)\n   localStorage and a plain cookie are both fully readable; a memory variable is readable only within the same page load; an HttpOnly cookie is never readable by any script (4.5).VI: localStorage và một cookie thường đều đọc được hoàn toàn; một biến bộ nhớ chỉ đọc được trong cùng lần tải trang; một cookie HttpOnly không bao giờ đọc được bởi script nào (4.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>localStorage and a plain cookie are both fully readable; a memory variable is readable only within the same page load; an HttpOnly cookie is never readable by any script (4.5).</p><p><i>VI: localStorage và một cookie thường đều đọc được hoàn toàn; một biến bộ nhớ chỉ đọc được trong cùng lần tải trang; một cookie HttpOnly không bao giờ đọc được bởi script nào (4.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Most → least readable by a script</p><p style=\"opacity:.75;font-size:.92em\"><i>Đọc được nhiều → ít nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "an in-memory variable (only the running page, not a later script)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "localStorage (any script reads it, survives refresh)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "a plain cookie (readable in document.cookie)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "an HttpOnly cookie (never in document.cookie)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>localStorage and a plain cookie are both fully readable; a memory variable is readable only within the same page load; an HttpOnly cookie is never readable by any script (4.5).</p><p><i>VI: localStorage và một cookie thường đều đọc được hoàn toàn; một biến bộ nhớ chỉ đọc được trong cùng lần tải trang; một cookie HttpOnly không bao giờ đọc được bởi script nào (4.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ranking HttpOnly as readable.|||Xếp HttpOnly là đọc được."
+        },
+        {
+          "loi": "Thinking memory is as exposed as localStorage.|||Tưởng bộ nhớ phơi ra như localStorage."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "in-memory token",
+          "vi": "token trong bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "4.5-4 — Each place and its properties",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "token storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each storage place with its properties.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi nơi cất với các tính chất của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two columns: can a script read it, and is it auto-sent.|||Hai cột: script đọc được không, và có tự gửi không.",
+        "Memory forgets on refresh.|||Bộ nhớ quên khi tải lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-4 — Each place and its properties\n\nAnswer in the answer panel (no code needed).\n\n1. Place → propertiesNơi → tính chất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.5-4 — Each place and its properties — answer key\n\n1. Place → propertiesNơi → tính chất\n   - r1.q: readable by any script; survives refresh\n   - r2.q: readable by a script AND sent automatically\n   - r3.q: unreadable by a script, lost on refresh\n   - r4.q: unreadable by a script, but sent automatically\n   Readable-by-script is the XSS surface; sent-automatically is the CSRF surface. The safe pattern puts the short access token in memory and the refresh token in an HttpOnly cookie (4.5).VI: Đọc-được-bởi-script là bề mặt XSS; tự-gửi là bề mặt CSRF. Mẫu an toàn đặt access token ngắn trong bộ nhớ và refresh token trong một cookie HttpOnly (4.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Readable-by-script is the XSS surface; sent-automatically is the CSRF surface. The safe pattern puts the short access token in memory and the refresh token in an HttpOnly cookie (4.5).</p><p><i>VI: Đọc-được-bởi-script là bề mặt XSS; tự-gửi là bề mặt CSRF. Mẫu an toàn đặt access token ngắn trong bộ nhớ và refresh token trong một cookie HttpOnly (4.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Place → properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Nơi → tính chất</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Place"
+              },
+              {
+                "ma": "q",
+                "ten": "Properties",
+                "luaChon": [
+                  "readable by any script; survives refresh",
+                  "readable by a script AND sent automatically",
+                  "unreadable by a script, lost on refresh",
+                  "unreadable by a script, but sent automatically"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "localStorage"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "plain cookie"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "in-memory variable"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "HttpOnly cookie"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "readable by any script; survives refresh",
+              "r2.q": "readable by a script AND sent automatically",
+              "r3.q": "unreadable by a script, lost on refresh",
+              "r4.q": "unreadable by a script, but sent automatically"
+            },
+            "giaiThich": "<p>Readable-by-script is the XSS surface; sent-automatically is the CSRF surface. The safe pattern puts the short access token in memory and the refresh token in an HttpOnly cookie (4.5).</p><p><i>VI: Đọc-được-bởi-script là bề mặt XSS; tự-gửi là bề mặt CSRF. Mẫu an toàn đặt access token ngắn trong bộ nhớ và refresh token trong một cookie HttpOnly (4.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a plain cookie is only a CSRF risk.|||Tưởng một cookie thường chỉ là rủi ro CSRF."
+        },
+        {
+          "loi": "Thinking memory is sent automatically.|||Tưởng bộ nhớ tự gửi."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

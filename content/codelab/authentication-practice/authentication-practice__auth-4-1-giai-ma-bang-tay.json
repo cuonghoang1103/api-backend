@@ -1,0 +1,504 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-1-giai-ma-bang-tay",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-1-giai-ma-bang-tay"
+  },
+  "exercises": [
+    {
+      "title": "4.1-1 — Decode and tamper: read the real runs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.4 (real runs):<pre>three parts, separated by dots:\n  header    62 chars base64url\n  payload   231 chars base64url\n  signature 86 chars base64url\n\nanyone can base64url-decode the first two — no key needed:\n  header  = {\"alg\":\"EdDSA\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\n  payload = {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793717464,\"nbf\":1793717464,\"exp\":1793718364,\"jti\":\"m7-82UglD30voOFGUFkmIw\",\"role\":\"LAB_MANAGER\"}\n\nthe payload is NOT encrypted. A JWT hides nothing; it only proves it was not changed.\n  jose decodeJwt (no verify) sees the same sub: usr_3\n  jose decodeProtectedHeader alg/kid         : {\"alg\":\"EdDSA\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\n\nour own decodeJwt returns the signing input the signature actually covers:\n  signingInput = 294 bytes = 294 (header.payload)\n  signature is 64 raw bytes (Ed25519 is always 64)</pre><pre>An has a valid token, verified:\n  sub = usr_1 / role = STUDENT\n\nthe attacker rewrites role=LAB_MANAGER and keeps the old signature:\n  forged payload decodes to role = LAB_MANAGER (they can write anything here)\n  verify → BAD_SIGNATURE — the signature covers the payload, so editing it breaks it</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.4 (chạy thật):<pre>three parts, separated by dots:\n  header    62 chars base64url\n  payload   231 chars base64url\n  signature 86 chars base64url\n\nanyone can base64url-decode the first two — no key needed:\n  header  = {\"alg\":\"EdDSA\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\n  payload = {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793717464,\"nbf\":1793717464,\"exp\":1793718364,\"jti\":\"m7-82UglD30voOFGUFkmIw\",\"role\":\"LAB_MANAGER\"}\n\nthe payload is NOT encrypted. A JWT hides nothing; it only proves it was not changed.\n  jose decodeJwt (no verify) sees the same sub: usr_3\n  jose decodeProtectedHeader alg/kid         : {\"alg\":\"EdDSA\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\n\nour own decodeJwt returns the signing input the signature actually covers:\n  signingInput = 294 bytes = 294 (header.payload)\n  signature is 64 raw bytes (Ed25519 is always 64)</pre><pre>An has a valid token, verified:\n  sub = usr_1 / role = STUDENT\n\nthe attacker rewrites role=LAB_MANAGER and keeps the old signature:\n  forged payload decodes to role = LAB_MANAGER (they can write anything here)\n  verify → BAD_SIGNATURE — the signature covers the payload, so editing it breaks it</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Decoding is free; verifying needs a key.|||Giải mã thì miễn phí; xác minh cần một khoá.",
+        "The signature covers header.payload exactly.|||Chữ ký bảo vệ đúng header.payload."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.1-1 — Decode and tamper: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. The demo decoded the header and payload with no key. What does that prove about the token?Demo giải mã header và payload mà không cần khoá. Điều đó chứng minh gì về token?\n2. The attacker rewrote role to LAB_MANAGER but kept the old signature. What did the verifier return?Kẻ tấn công sửa role thành LAB_MANAGER nhưng giữ chữ ký cũ. Bộ xác minh trả về gì?\n3. The decoded signature was 64 raw bytes. Why exactly 64?Chữ ký giải mã ra 64 byte thô. Vì sao đúng 64?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.1-1 — Decode and tamper: read the real runs — answer key\n\n1. The demo decoded the header and payload with no key. What does that prove about the token?Demo giải mã header và payload mà không cần khoá. Điều đó chứng minh gì về token?\n   Answer: b) Nothing — base64url is encoding, not encryption; the payload is public\n   base64url just makes bytes URL-safe; anyone can decode the header and payload. Only verifying the signature proves anything.VI: base64url chỉ làm byte an toàn với URL; ai cũng giải mã được header và payload. Chỉ xác minh chữ ký mới chứng minh điều gì.\n\n2. The attacker rewrote role to LAB_MANAGER but kept the old signature. What did the verifier return?Kẻ tấn công sửa role thành LAB_MANAGER nhưng giữ chữ ký cũ. Bộ xác minh trả về gì?\n   Answer: d) BAD_SIGNATURE — the signature covers header.payload, so editing the payload breaks it\n   The signature is computed over the exact header.payload bytes; one changed character no longer matches. No private key means no new signature.VI: Chữ ký được tính trên đúng các byte header.payload; một ký tự đổi là không khớp nữa. Không có khoá riêng thì không có chữ ký mới.\n\n3. The decoded signature was 64 raw bytes. Why exactly 64?Chữ ký giải mã ra 64 byte thô. Vì sao đúng 64?\n   Answer: b) An Ed25519 signature is always 64 bytes\n   Ed25519 signatures are a fixed 64 bytes, regardless of the message. (SHA-256 is 32 bytes; base64url length varies with the input.)VI: Chữ ký Ed25519 cố định 64 byte, bất kể thông điệp. (SHA-256 là 32 byte; độ dài base64url thay đổi theo đầu vào.)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Nothing — base64url is encoding, not encryption; the payload is public</p><p>base64url just makes bytes URL-safe; anyone can decode the header and payload. Only verifying the signature proves anything.</p><p><i>VI: base64url chỉ làm byte an toàn với URL; ai cũng giải mã được header và payload. Chỉ xác minh chữ ký mới chứng minh điều gì.</i></p></li><li><p><b>d)</b> BAD_SIGNATURE — the signature covers header.payload, so editing the payload breaks it</p><p>The signature is computed over the exact header.payload bytes; one changed character no longer matches. No private key means no new signature.</p><p><i>VI: Chữ ký được tính trên đúng các byte header.payload; một ký tự đổi là không khớp nữa. Không có khoá riêng thì không có chữ ký mới.</i></p></li><li><p><b>b)</b> An Ed25519 signature is always 64 bytes</p><p>Ed25519 signatures are a fixed 64 bytes, regardless of the message. (SHA-256 is 32 bytes; base64url length varies with the input.)</p><p><i>VI: Chữ ký Ed25519 cố định 64 byte, bất kể thông điệp. (SHA-256 là 32 byte; độ dài base64url thay đổi theo đầu vào.)</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The demo decoded the header and payload with no key. What does that prove about the token?</p><p style=\"opacity:.75;font-size:.92em\"><i>Demo giải mã header và payload mà không cần khoá. Điều đó chứng minh gì về token?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That the token is encrypted and only the owner can read it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing — base64url is encoding, not encryption; the payload is public"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That the token has not been tampered with"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That the signature is valid, since the JSON parsed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>base64url just makes bytes URL-safe; anyone can decode the header and payload. Only verifying the signature proves anything.</p><p><i>VI: base64url chỉ làm byte an toàn với URL; ai cũng giải mã được header và payload. Chỉ xác minh chữ ký mới chứng minh điều gì.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The attacker rewrote role to LAB_MANAGER but kept the old signature. What did the verifier return?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kẻ tấn công sửa role thành LAB_MANAGER nhưng giữ chữ ký cũ. Bộ xác minh trả về gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "EXPIRED — tampered tokens are treated as expired"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ALG_MISMATCH — the algorithm changed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The claims, because the payload was re-encoded correctly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BAD_SIGNATURE — the signature covers header.payload, so editing the payload breaks it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The signature is computed over the exact header.payload bytes; one changed character no longer matches. No private key means no new signature.</p><p><i>VI: Chữ ký được tính trên đúng các byte header.payload; một ký tự đổi là không khớp nữa. Không có khoá riêng thì không có chữ ký mới.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The decoded signature was 64 raw bytes. Why exactly 64?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chữ ký giải mã ra 64 byte thô. Vì sao đúng 64?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The payload was padded to 64 bytes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An Ed25519 signature is always 64 bytes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "base64url always decodes to 64 bytes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SHA-256 produces 64 bytes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Ed25519 signatures are a fixed 64 bytes, regardless of the message. (SHA-256 is 32 bytes; base64url length varies with the input.)</p><p><i>VI: Chữ ký Ed25519 cố định 64 byte, bất kể thông điệp. (SHA-256 là 32 byte; độ dài base64url thay đổi theo đầu vào.)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“The payload says admin, so I am admin.”|||\"Payload ghi admin nên tôi là admin.\""
+        },
+        {
+          "loi": "“A JWT is encrypted.”|||\"JWT được mã hoá.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "base64url"
+        },
+        {
+          "en": "signing input",
+          "vi": "chuỗi được ký"
+        }
+      ]
+    },
+    {
+      "title": "4.1-2 — Write signingInput(token): the bytes the signature covers",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A JWT is <code>header.payload.signature</code>. The signature is computed over the <strong>signing input</strong>: everything before the last dot, i.e. <code>header.payload</code>. Return that substring. (If there is no dot, return the whole string.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một JWT là <code>header.payload.signature</code>. Chữ ký được tính trên <strong>signing input</strong>: mọi thứ trước dấu chấm cuối, tức <code>header.payload</code>. Trả về chuỗi con đó. (Nếu không có dấu chấm, trả về cả chuỗi.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "signingInput(\"aaa.bbb.ccc\")",
+          "output": "\"aaa.bbb\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Find the LAST dot, not the first.|||Tìm dấu chấm CUỐI, không phải dấu đầu.",
+        "Return the part before it.|||Trả về phần trước nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ the \"header.payload\" part of a JWT */\nfunction signingInput(token) {\n  // Write your solution here\n  return token.split('.')[0];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction signingInput(token) {\n  var i = token.lastIndexOf('.');\n  return i < 0 ? token : token.slice(0, i);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The signature protects exactly these bytes, so a verifier recomputes the signature over <code>header.payload</code> and compares. Changing either part changes the signing input and breaks the signature (4.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Chữ ký bảo vệ đúng các byte này, nên bộ xác minh tính lại chữ ký trên <code>header.payload</code> và so. Đổi phần nào cũng đổi signing input và vỡ chữ ký (4.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Normal token",
+              "vi": "Token thường"
+            },
+            "goi": "signingInput(\"aaa.bbb.ccc\")",
+            "mongDoi": "aaa.bbb"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "signingInput(\"eyJhbGci.eyJzdWIi.ZmFrZXNpZw\")",
+            "mongDoi": "eyJhbGci.eyJzdWIi",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No dot",
+              "vi": "Không có dấu chấm"
+            },
+            "goi": "signingInput(\"onlyonepart\")",
+            "mongDoi": "onlyonepart",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Empty signature",
+              "vi": "Chữ ký rỗng"
+            },
+            "goi": "signingInput(\"a.b.\")",
+            "mongDoi": "a.b",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting on the first dot — the header and payload both contain none, but be safe.|||Tách ở dấu chấm đầu — header và payload không chứa dấu chấm, nhưng cứ an toàn."
+        },
+        {
+          "loi": "Returning the signature instead.|||Trả về chữ ký thay vì phần đầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "signing input",
+          "vi": "chuỗi được ký"
+        }
+      ]
+    },
+    {
+      "title": "4.1-3 — Write looksLikeJwt(token): three base64url parts",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> only when <code>token</code> is a string of exactly three dot-separated parts, and the first two (header and payload) are non-empty and contain only base64url characters: <code>A–Z a–z 0–9 - _</code>. This is a cheap shape check before you spend any crypto. (The signature part may be empty — an <code>alg: none</code> forgery — so do not require it.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về <code>true</code> chỉ khi <code>token</code> là một chuỗi gồm đúng ba phần ngăn bởi dấu chấm, và hai phần đầu (header và payload) không rỗng và chỉ chứa ký tự base64url: <code>A–Z a–z 0–9 - _</code>. Đây là phép kiểm hình dạng rẻ trước khi tốn crypto. (Phần chữ ký có thể rỗng — một cú giả mạo <code>alg: none</code> — nên đừng bắt buộc nó.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "looksLikeJwt(\"eyJhbGci.eyJzdWIi.ZmFrZQ\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on \".\" and count the parts.|||Tách theo \".\" và đếm số phần.",
+        "A base64url part matches /^[A-Za-z0-9_-]+$/.|||Một phần base64url khớp /^[A-Za-z0-9_-]+$/."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if token is 3 dot-parts with base64url header + payload */\nfunction looksLikeJwt(token) {\n  // Write your solution here\n  return token.split('.').length === 3;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction looksLikeJwt(token) {\n  if (typeof token !== 'string') return false;\n  var parts = token.split('.');\n  if (parts.length !== 3) return false;\n  return parts.slice(0, 2).every(function (p) { return p.length > 0 && /^[A-Za-z0-9_-]+$/.test(p); });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A shape check is not verification, but it rejects garbage before you decode or verify — and still lets through the hostile shapes (empty signature) you must handle in 4.2.</p>",
+      "solutionExplanationHtmlVi": "<p>Một phép kiểm hình dạng không phải xác minh, nhưng nó loại rác trước khi bạn giải mã hay xác minh — và vẫn để lọt các hình dạng thù địch (chữ ký rỗng) mà bạn phải xử lý ở 4.2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid shape",
+              "vi": "Hình dạng hợp lệ"
+            },
+            "goi": "looksLikeJwt(\"eyJhbGci.eyJzdWIi.ZmFrZQ\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Empty signature (alg:none)",
+              "vi": "Chữ ký rỗng (alg:none)"
+            },
+            "goi": "looksLikeJwt(\"eyJhbGci.eyJzdWIi.\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Only two parts",
+              "vi": "Chỉ hai phần"
+            },
+            "goi": "looksLikeJwt(\"eyJhbGci.eyJzdWIi\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "base64, not base64url",
+              "vi": "base64, không phải base64url"
+            },
+            "goi": "looksLikeJwt(\"ey+/.eyJzdWIi.sig\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Empty header",
+              "vi": "Header rỗng"
+            },
+            "goi": "looksLikeJwt(\".eyJzdWIi.sig\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Not a string",
+              "vi": "Không phải chuỗi"
+            },
+            "goi": "looksLikeJwt(42)",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Allowing \"+\" or \"/\" — that is base64, not base64url.|||Cho phép \"+\" hay \"/\" — đó là base64, không phải base64url."
+        },
+        {
+          "loi": "Requiring a non-empty signature, so alg:none is \"not a JWT\".|||Bắt buộc chữ ký không rỗng, khiến alg:none \"không phải JWT\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "base64url"
+        }
+      ]
+    },
+    {
+      "title": "4.1-4 — The three parts of a JWT",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each part of a JWT with what it holds.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi phần của một JWT với thứ nó giữ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two parts are readable JSON, one is opaque bytes.|||Hai phần là JSON đọc được, một phần là byte không rõ.",
+        "The signature proves integrity, not secrecy.|||Chữ ký chứng minh toàn vẹn, không phải bí mật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.1-4 — The three parts of a JWT\n\nAnswer in the answer panel (no code needed).\n\n1. Part → contentPhần → nội dung\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.1-4 — The three parts of a JWT — answer key\n\n1. Part → contentPhần → nội dung\n   - r1.q: the algorithm and key id\n   - r2.q: the claims (who, for whom, until when)\n   - r3.q: proof nothing was changed\n   Header and payload are plain JSON anyone can read; only the signature carries trust, and only after it is verified against the header.payload bytes.VI: Header và payload là JSON thường ai cũng đọc; chỉ chữ ký mang sự tin cậy, và chỉ sau khi được xác minh với các byte header.payload.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Header and payload are plain JSON anyone can read; only the signature carries trust, and only after it is verified against the header.payload bytes.</p><p><i>VI: Header và payload là JSON thường ai cũng đọc; chỉ chữ ký mang sự tin cậy, và chỉ sau khi được xác minh với các byte header.payload.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Part → content</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần → nội dung</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Part"
+              },
+              {
+                "ma": "q",
+                "ten": "Holds",
+                "luaChon": [
+                  "the algorithm and key id",
+                  "the claims (who, for whom, until when)",
+                  "proof nothing was changed"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "header (base64url)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "payload (base64url)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "signature (base64url)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "the algorithm and key id",
+              "r2.q": "the claims (who, for whom, until when)",
+              "r3.q": "proof nothing was changed"
+            },
+            "giaiThich": "<p>Header and payload are plain JSON anyone can read; only the signature carries trust, and only after it is verified against the header.payload bytes.</p><p><i>VI: Header và payload là JSON thường ai cũng đọc; chỉ chữ ký mang sự tin cậy, và chỉ sau khi được xác minh với các byte header.payload.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the payload is secret.|||Tưởng payload là bí mật."
+        },
+        {
+          "loi": "Thinking the header is trusted.|||Tưởng header là đáng tin."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

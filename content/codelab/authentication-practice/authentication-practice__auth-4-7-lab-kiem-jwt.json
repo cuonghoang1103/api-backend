@@ -1,0 +1,382 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-7-lab-kiem-jwt",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-7-lab-kiem-jwt"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4·1 — chooseAlg(header, keyring): the algorithm from the key",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Part one of the verifier. Return the algorithm to use — from the key, not the token. <code>'NO_KID'</code> if no kid; <code>'UNKNOWN_KID'</code> if the kid is not in <code>keyring</code>; <code>'ALG_MISMATCH'</code> if <code>header.alg</code> differs from the key’s alg; otherwise the key’s alg. This defeats <code>alg: none</code> and HS/RS confusion at once.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần một của bộ xác minh. Trả về thuật toán để dùng — từ khoá, không từ token. <code>'NO_KID'</code> nếu không kid; <code>'UNKNOWN_KID'</code> nếu kid không trong <code>keyring</code>; <code>'ALG_MISMATCH'</code> nếu <code>header.alg</code> khác alg của khoá; còn lại trả alg của khoá. Việc này đánh bại <code>alg: none</code> và nhầm lẫn HS/RS cùng lúc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "chooseAlg({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+          "output": "\"EdDSA\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Return the key’s alg, never the header’s.|||Trả alg của khoá, không bao giờ của header.",
+        "Order: no kid, unknown kid, mismatch, ok.|||Thứ tự: không kid, kid lạ, lệch, ok."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'NO_KID' | 'UNKNOWN_KID' | 'ALG_MISMATCH' | the key's alg */\nfunction chooseAlg(header, keyring) {\n  // Write your solution here\n  return header.alg;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction chooseAlg(header, keyring) {\n  if (!header.kid) return 'NO_KID';\n  var key = keyring[header.kid];\n  if (!key) return 'UNKNOWN_KID';\n  if (header.alg !== key.alg) return 'ALG_MISMATCH';\n  return key.alg;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The algorithm must come from the key the server holds; a token can never choose how it is checked. none is no key’s alg; HS256 against an EdDSA kid is ALG_MISMATCH (Lab 4 T2, T3).</p>",
+      "solutionExplanationHtmlVi": "<p>Thuật toán phải đến từ khoá máy chủ giữ; một token không bao giờ chọn được cách nó bị kiểm. none không phải alg của khoá nào; HS256 chống một kid EdDSA là ALG_MISMATCH (Lab 4 T2, T3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid",
+              "vi": "Hợp lệ"
+            },
+            "goi": "chooseAlg({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+            "mongDoi": "EdDSA"
+          },
+          {
+            "moTa": {
+              "en": "alg:none",
+              "vi": "alg:none"
+            },
+            "goi": "chooseAlg({\"alg\":\"none\",\"kid\":\"ed-a\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+            "mongDoi": "ALG_MISMATCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Confusion",
+              "vi": "Nhầm lẫn"
+            },
+            "goi": "chooseAlg({\"alg\":\"HS256\",\"kid\":\"ed-a\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+            "mongDoi": "ALG_MISMATCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown kid",
+              "vi": "kid lạ"
+            },
+            "goi": "chooseAlg({\"alg\":\"EdDSA\",\"kid\":\"ed-x\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+            "mongDoi": "UNKNOWN_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No kid",
+              "vi": "Không kid"
+            },
+            "goi": "chooseAlg({\"alg\":\"EdDSA\"}, {\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}})",
+            "mongDoi": "NO_KID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Returning header.alg.|||Trả header.alg."
+        },
+        {
+          "loi": "Accepting an unknown kid.|||Chấp nhận một kid lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key/algorithm binding",
+          "vi": "gắn khoá với thuật toán"
+        }
+      ]
+    },
+    {
+      "title": "Lab 4·2 — verifyClaims(payload, cfg): the seven claims",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Part two. The signature is already verified. Return the first failing claim code or <code>'OK'</code>, in order: <code>BAD_ISS</code>, <code>BAD_AUD</code> (aud may be a string or array), <code>NO_SUB</code>, <code>EXPIRED</code> (<code>nowSec − skewSec ≥ exp</code>), <code>NOT_YET</code> (nbf optional), <code>NO_IAT</code>, <code>NO_JTI</code>, <code>REVOKED</code> (jti in <code>cfg.revoked</code>). <code>cfg.now</code> is ms; exp/nbf are seconds.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần hai. Chữ ký đã được xác minh. Trả mã claim trượt đầu tiên hoặc <code>'OK'</code>, theo thứ tự: <code>BAD_ISS</code>, <code>BAD_AUD</code> (aud có thể là chuỗi hoặc mảng), <code>NO_SUB</code>, <code>EXPIRED</code> (<code>nowSec − skewSec ≥ exp</code>), <code>NOT_YET</code> (nbf tuỳ chọn), <code>NO_IAT</code>, <code>NO_JTI</code>, <code>REVOKED</code> (jti trong <code>cfg.revoked</code>). <code>cfg.now</code> là ms; exp/nbf là giây.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise aud to an array.|||Chuẩn hoá aud thành mảng.",
+        "Return the FIRST failure.|||Trả lỗi ĐẦU TIÊN."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** signature already OK ⇒ first failing claim code, or 'OK' */\nfunction verifyClaims(payload, cfg) {\n  // Write your solution here\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyClaims(payload, cfg) {\n  var nowSec = Math.floor(cfg.now / 1000);\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  var aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (aud.indexOf(cfg.audience) < 0) return 'BAD_AUD';\n  if (typeof payload.sub !== 'string' || !payload.sub) return 'NO_SUB';\n  if (typeof payload.exp !== 'number' || nowSec - cfg.skewSec >= payload.exp) return 'EXPIRED';\n  if (typeof payload.nbf === 'number' && nowSec + cfg.skewSec < payload.nbf) return 'NOT_YET';\n  if (typeof payload.iat !== 'number') return 'NO_IAT';\n  if (!payload.jti) return 'NO_JTI';\n  if (cfg.revoked.indexOf(payload.jti) >= 0) return 'REVOKED';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each claim defends one attack; a valid signature on the wrong claims is still the wrong token. Order makes the error precise (Lab 4 T6–T9).</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi claim chống một cú tấn công; một chữ ký hợp lệ trên claim sai vẫn là token sai. Thứ tự làm lỗi chính xác (Lab 4 T6–T9).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid",
+              "vi": "Hợp lệ"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Wrong aud",
+              "vi": "Sai aud"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-chat\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "BAD_AUD",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "aud array incl. us",
+              "vi": "aud mảng gồm ta"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":[\"x\",\"labflow-api\"],\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Expired",
+              "vi": "Hết hạn"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793696200,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked",
+              "vi": "Thu hồi"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-dead\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No jti",
+              "vi": "Không jti"
+            },
+            "goi": "verifyClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "NO_JTI",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Checking aud only as a string.|||Kiểm aud chỉ như chuỗi."
+        },
+        {
+          "loi": "Forgetting jti / revoked.|||Quên jti / revoked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "registered claims",
+          "vi": "claim chuẩn"
+        }
+      ]
+    },
+    {
+      "title": "Lab 4·3 — verifyToken(header, payload, cfg): put it together",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The whole verifier, in order. Use your own <code>chooseAlg</code> and <code>verifyClaims</code> (both are provided above — paste them in, or re-implement). Return the algorithm failure (<code>NO_KID</code>/<code>UNKNOWN_KID</code>/<code>ALG_MISMATCH</code>) if there is one; else if <code>cfg.signatureValid</code> is false, <code>'BAD_SIGNATURE'</code>; else the result of <code>verifyClaims(payload, cfg)</code>. <code>cfg</code> has <code>keyring</code>, <code>signatureValid</code>, <code>issuer</code>, <code>audience</code>, <code>now</code>, <code>skewSec</code>, <code>revoked</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Algorithm first, then signature, then claims.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cả bộ xác minh, theo thứ tự. Dùng <code>chooseAlg</code> và <code>verifyClaims</code> của bạn (cả hai được cung cấp ở trên — dán vào, hoặc viết lại). Trả lỗi thuật toán (<code>NO_KID</code>/<code>UNKNOWN_KID</code>/<code>ALG_MISMATCH</code>) nếu có; nếu không, nếu <code>cfg.signatureValid</code> là false thì <code>'BAD_SIGNATURE'</code>; còn lại là kết quả của <code>verifyClaims(payload, cfg)</code>. <code>cfg</code> có <code>keyring</code>, <code>signatureValid</code>, <code>issuer</code>, <code>audience</code>, <code>now</code>, <code>skewSec</code>, <code>revoked</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Thuật toán trước, rồi chữ ký, rồi claim.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Algorithm → signature → claims, in that order.|||Thuật toán → chữ ký → claim, đúng thứ tự.",
+        "Only reach the claims after the signature is valid.|||Chỉ tới các claim sau khi chữ ký hợp lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function chooseAlg(header, keyring) {\n  if (!header.kid) return 'NO_KID';\n  var key = keyring[header.kid];\n  if (!key) return 'UNKNOWN_KID';\n  if (header.alg !== key.alg) return 'ALG_MISMATCH';\n  return key.alg;\n}\n\nfunction verifyClaims(payload, cfg) {\n  var nowSec = Math.floor(cfg.now / 1000);\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  var aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (aud.indexOf(cfg.audience) < 0) return 'BAD_AUD';\n  if (typeof payload.sub !== 'string' || !payload.sub) return 'NO_SUB';\n  if (typeof payload.exp !== 'number' || nowSec - cfg.skewSec >= payload.exp) return 'EXPIRED';\n  if (typeof payload.nbf === 'number' && nowSec + cfg.skewSec < payload.nbf) return 'NOT_YET';\n  if (typeof payload.iat !== 'number') return 'NO_IAT';\n  if (!payload.jti) return 'NO_JTI';\n  if (cfg.revoked.indexOf(payload.jti) >= 0) return 'REVOKED';\n  return 'OK';\n}\n\n/** ⇒ an algorithm code, 'BAD_SIGNATURE', a claim code, or 'OK' */\nfunction verifyToken(header, payload, cfg) {\n  // Write your solution here (use chooseAlg and verifyClaims above)\n  return verifyClaims(payload, cfg);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction chooseAlg(header, keyring) {\n  if (!header.kid) return 'NO_KID';\n  var key = keyring[header.kid];\n  if (!key) return 'UNKNOWN_KID';\n  if (header.alg !== key.alg) return 'ALG_MISMATCH';\n  return key.alg;\n}\n\nfunction verifyClaims(payload, cfg) {\n  var nowSec = Math.floor(cfg.now / 1000);\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  var aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (aud.indexOf(cfg.audience) < 0) return 'BAD_AUD';\n  if (typeof payload.sub !== 'string' || !payload.sub) return 'NO_SUB';\n  if (typeof payload.exp !== 'number' || nowSec - cfg.skewSec >= payload.exp) return 'EXPIRED';\n  if (typeof payload.nbf === 'number' && nowSec + cfg.skewSec < payload.nbf) return 'NOT_YET';\n  if (typeof payload.iat !== 'number') return 'NO_IAT';\n  if (!payload.jti) return 'NO_JTI';\n  if (cfg.revoked.indexOf(payload.jti) >= 0) return 'REVOKED';\n  return 'OK';\n}\n\nfunction verifyToken(header, payload, cfg) {\n  var alg = chooseAlg(header, cfg.keyring);\n  if (alg === 'NO_KID' || alg === 'UNKNOWN_KID' || alg === 'ALG_MISMATCH') return alg;\n  if (!cfg.signatureValid) return 'BAD_SIGNATURE';\n  return verifyClaims(payload, cfg);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is LabFlow ID’s verifier (src/jwt/verify.js): algorithm from the key, signature, then the seven claims. The order is the whole defence — a forged alg or a hostile claim never reaches the step it would exploit.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là bộ xác minh của LabFlow ID (src/jwt/verify.js): thuật toán từ khoá, chữ ký, rồi bảy claim. Thứ tự là toàn bộ phòng thủ — một alg giả hay một claim thù địch không bao giờ tới được bước nó khai thác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid token",
+              "vi": "Token hợp lệ"
+            },
+            "goi": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "alg:none",
+              "vi": "alg:none"
+            },
+            "goi": "verifyToken({\"alg\":\"none\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "ALG_MISMATCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown kid",
+              "vi": "kid lạ"
+            },
+            "goi": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-x\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "UNKNOWN_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Bad signature",
+              "vi": "Chữ ký sai"
+            },
+            "goi": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":false,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "BAD_SIGNATURE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Wrong aud",
+              "vi": "Sai aud"
+            },
+            "goi": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-chat\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "BAD_AUD",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked",
+              "vi": "Thu hồi"
+            },
+            "goi": "verifyToken({\"alg\":\"EdDSA\",\"kid\":\"ed-a\"}, {\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-dead\"}, {\"keyring\":{\"ed-a\":{\"alg\":\"EdDSA\"},\"ed-b\":{\"alg\":\"EdDSA\"}},\"signatureValid\":true,\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "REVOKED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Reading claims before checking the algorithm or signature.|||Đọc claim trước khi kiểm thuật toán hay chữ ký."
+        },
+        {
+          "loi": "Treating an algorithm failure as BAD_SIGNATURE.|||Coi một lỗi thuật toán là BAD_SIGNATURE."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verification order",
+          "vi": "thứ tự xác minh"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 4 Bộ xác minh JWT của LabFlow ID (deck auth-lab-4, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-4', 'LabFlow ID’s JWT verifier', 'Bộ xác minh JWT của LabFlow ID', [
+  [1, 'LabFlow ID’s JWT verifier',
+    `<p>You write the function that decides whether a token is trusted. A grader mints a battery of twenty-plus hostile tokens — none, confusion, strange kid, wrong claims — and asks your verifier to accept the one good token and reject every bad one.</p>`,
+    `<p>Bạn viết hàm quyết định một token có đáng tin không. Một máy chấm đúc cả một rổ hơn hai mươi token thù địch — none, nhầm lẫn, kid lạ, claim sai — và yêu cầu bộ xác minh của bạn chấp nhận một token tốt và từ chối mọi token xấu.</p>`],
+  [2, 'Your task — makeVerifier',
+    `<p>Export makeVerifier(config): given a keyring, an issuer and an audience, return a verify(token) that returns the payload or throws. The rule from 4.2: take the algorithm from the key you look up by kid, never from the header.</p>`,
+    `<p>Xuất makeVerifier(config): cho một keyring, một issuer và một audience, trả về một verify(token) trả payload hoặc ném lỗi. Luật của bài 4.2: lấy thuật toán từ khoá bạn tra theo kid, không bao giờ từ header.</p>`],
+  [3, 'The starter',
+    `<p>The starter throws “not implemented”. It scores zero, because a verifier that rejects everything also rejects the one valid token — the grader plants a valid control in every check to catch exactly that.</p>`,
+    `<p>Bản khởi đầu ném "not implemented". Nó được không điểm, vì một bộ xác minh từ chối tất cả cũng từ chối token hợp lệ duy nhất — máy chấm cài một token hợp lệ làm chứng trong mọi phép chấm để bắt đúng điều đó.</p>`],
+  [4, 'Nine checks, ten points, pass is seven',
+    `<p>T1 a valid token; T2 alg none; T3 HS/RS confusion; T4 unknown or path-like kid; T5 tampered or swapped signature; T6 exp with clock skew; T7 nbf; T8 wrong iss/aud/sub; T9 revoked or jti-less. Each names a lesson.</p>`,
+    `<p>T1 token hợp lệ; T2 alg none; T3 nhầm lẫn HS/RS; T4 kid lạ hay kiểu đường dẫn; T5 chữ ký bị sửa hay tráo; T6 exp với dung sai; T7 nbf; T8 iss/aud/sub sai; T9 đã thu hồi hay thiếu jti. Mỗi phép gọi tên một bài.</p>`],
+  [5, 'A first attempt that scores 3.5',
+    `<p>The naive attempt verifies the signature and stops. It accepts a valid token and rejects a tampered one, but trusts alg none, ignores the claims, and accepts an unknown kid — the mistakes of 4.2 and 4.3.</p>`,
+    `<p>Lần thử ngây thơ xác minh chữ ký rồi dừng. Nó chấp nhận một token hợp lệ và từ chối một cái bị sửa, nhưng tin alg none, bỏ qua các claim, và chấp nhận một kid lạ — các lỗi của bài 4.2 và 4.3.</p>`],
+  [6, 'Where it fails',
+    `<p>alg none accepted; an unknown kid accepted; an expired token accepted; a wrong issuer accepted; a revoked jti accepted. Five holes, each a lesson you already ran as a demo.</p>`,
+    `<p>alg none được chấp nhận; một kid lạ được chấp nhận; một token hết hạn được chấp nhận; một issuer sai được chấp nhận; một jti đã thu hồi được chấp nhận. Năm lỗ, mỗi cái là một bài bạn đã chạy demo.</p>`],
+  [7, 'The reference — src/jwt/verify.js',
+    `<p>The reference is LabFlow ID’s real verifier: algorithm from the key, signature, then the seven claims. It scores ten out of ten, and it is the code you read line by line in 4.2 and 4.3.</p>`,
+    `<p>Bản tham khảo là bộ xác minh thật của LabFlow ID: thuật toán từ khoá, chữ ký, rồi bảy claim. Nó được mười trên mười, và là mã bạn đọc từng dòng ở bài 4.2 và 4.3.</p>`],
+  [8, 'Hints, light to strong',
+    `<p>Each check names its lesson — rerun that demo. Look the kid up in the keyring; compare header alg to the key’s alg. Verify the signature before reading any claim. Check exp with skew, and the jti against the denylist.</p>`,
+    `<p>Mỗi phép chấm gọi tên bài của nó — chạy lại demo đó. Tra kid trong keyring; so alg trong header với alg của khoá. Xác minh chữ ký trước khi đọc claim nào. Kiểm exp với dung sai, và jti với denylist.</p>`],
+  [9, 'Checklist before you submit',
+    `<p>Score at least seven out of ten twice in a row; the signature is checked before any claim; the algorithm comes from the key, not the header; and you can explain the none and confusion checks in your own words.</p>`,
+    `<p>Đạt ít nhất bảy trên mười hai lần liên tiếp; chữ ký được kiểm trước claim nào; thuật toán đến từ khoá, không từ header; và bạn giải thích được phép chấm none và nhầm lẫn bằng lời của mình.</p>`],
+]);

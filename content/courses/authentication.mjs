@@ -10,7 +10,7 @@
  * quyền, các kiểu tấn công, vận hành và chẩn đoán.
  *
  * Đợt mẫu 01/11/2026: Mục 0 + Chương 1 soạn lại trọn theo authentication/_HOP-DONG.md (bài trong s00/, s01/, slide AUTH/v1,
- * dự án LabFlow ID, Lab 1 có máy chấm, Code Lab authentication-practice). Chương 2 soạn lại trọn cùng ngày (s02/, Lab 2, LabFlow ID v0.2 trên PostgreSQL 17). Chương 3 soạn lại trọn cùng ngày (s03/, Lab 3, v0.3 phiên cookie). Chương 4–12 vẫn là bản cũ, chờ soạn theo hợp đồng (tạm dừng sau Ch3).
+ * dự án LabFlow ID, Lab 1 có máy chấm, Code Lab authentication-practice). Chương 2 soạn lại trọn cùng ngày (s02/, Lab 2, LabFlow ID v0.2 trên PostgreSQL 17). Chương 3 soạn lại trọn cùng ngày (s03/, Lab 3, v0.3 phiên cookie). Chương 4 soạn lại trọn 03/11/2026 (s04/, Lab 4, v0.4 JWT: src/jwt + jose 6.1.0). Chương 5–12 vẫn là bản cũ, chờ soạn theo hợp đồng (tạm dừng sau Ch4).
  *
  * Kiểm trước khi seed:
  *   node scripts/course-content-check.mjs ./content/courses/authentication.mjs

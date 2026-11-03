@@ -1,0 +1,503 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-2-truong-alg",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-2-truong-alg"
+  },
+  "exercises": [
+    {
+      "title": "4.2-1 — alg: none and algorithm confusion: read the real runs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.4 (real runs):<pre>forged token header : {\"alg\":\"none\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\nforged token claims : sub = usr_3 role = LAB_MANAGER (no signature at all)\n\na verifier that trusts the header (demo4/_naive.mjs):\n  ACCEPTED → the attacker is usr_3 as LAB_MANAGER — account takeover\n\nLabFlow ID's verifier (src/jwt/verify.js) — the algorithm comes from the KEY, not the token:\n  rejected → ALG_MISMATCH (kid ed-2026-11 is an EdDSA key; \"none\" is not EdDSA)</pre><pre>the server publishes an Ed25519 public key (not secret). The attacker signs HS256 with that PEM:\n\na verifier that picks the algorithm from the token, keyed with the public key:\n  ACCEPTED → forged usr_3 as LAB_MANAGER — the public key became a shared secret\n\nLabFlow ID's verifier — kid ed-2026-11 is declared EdDSA, the header says HS256:\n  rejected → ALG_MISMATCH</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.4 (chạy thật):<pre>forged token header : {\"alg\":\"none\",\"typ\":\"JWT\",\"kid\":\"ed-2026-11\"}\nforged token claims : sub = usr_3 role = LAB_MANAGER (no signature at all)\n\na verifier that trusts the header (demo4/_naive.mjs):\n  ACCEPTED → the attacker is usr_3 as LAB_MANAGER — account takeover\n\nLabFlow ID's verifier (src/jwt/verify.js) — the algorithm comes from the KEY, not the token:\n  rejected → ALG_MISMATCH (kid ed-2026-11 is an EdDSA key; \"none\" is not EdDSA)</pre><pre>the server publishes an Ed25519 public key (not secret). The attacker signs HS256 with that PEM:\n\na verifier that picks the algorithm from the token, keyed with the public key:\n  ACCEPTED → forged usr_3 as LAB_MANAGER — the public key became a shared secret\n\nLabFlow ID's verifier — kid ed-2026-11 is declared EdDSA, the header says HS256:\n  rejected → ALG_MISMATCH</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who decides the algorithm — the token or the key?|||Ai quyết định thuật toán — token hay khoá?",
+        "A public key is not a secret.|||Một khoá công khai không phải bí mật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-1 — alg: none and algorithm confusion: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. The naive verifier accepted alg:none; LabFlow ID returned ALG_MISMATCH. Why?Bộ xác minh ngây thơ chấp nhận alg:none; LabFlow ID trả ALG_MISMATCH. Vì sao?\n2. In the confusion attack, what did the attacker use as the HMAC secret?Trong cú nhầm lẫn, kẻ tấn công dùng gì làm bí mật HMAC?\n3. One rule in LabFlow ID stops both forgeries. What is it?Một luật trong LabFlow ID chặn cả hai cú giả mạo. Đó là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-1 — alg: none and algorithm confusion: read the real runs — answer key\n\n1. The naive verifier accepted alg:none; LabFlow ID returned ALG_MISMATCH. Why?Bộ xác minh ngây thơ chấp nhận alg:none; LabFlow ID trả ALG_MISMATCH. Vì sao?\n   Answer: b) The algorithm comes from the key (an EdDSA kid), so \"none\" fails\n   The algorithm comes from the key, not the header, so a header claiming \"none\" against an EdDSA kid fails before any signature step.VI: Thuật toán đến từ khoá, không từ header, nên một header khai \"none\" chống lại một kid EdDSA trượt trước bước chữ ký nào.\n\n2. In the confusion attack, what did the attacker use as the HMAC secret?Trong cú nhầm lẫn, kẻ tấn công dùng gì làm bí mật HMAC?\n   Answer: c) Its public key, which the JWKS publishes and so is not a secret\n   The server verifies EdDSA with a public key; a naive verifier reuses it as the HMAC secret for an HS256 token, and the attacker knows that public key.VI: Máy chủ kiểm EdDSA bằng một khoá công khai; một bộ xác minh ngây thơ dùng lại nó làm bí mật HMAC cho một token HS256, và kẻ tấn công biết khoá công khai đó.\n\n3. One rule in LabFlow ID stops both forgeries. What is it?Một luật trong LabFlow ID chặn cả hai cú giả mạo. Đó là gì?\n   Answer: a) Choose the algorithm from the key (looked up by kid), never from the token header\n   Binding each key to exactly one algorithm and reading it from the key defeats both alg:none and HS/RS confusion (RFC 8725, OWASP).VI: Gắn mỗi khoá với đúng một thuật toán và đọc nó từ khoá đánh bại cả alg:none lẫn nhầm lẫn HS/RS (RFC 8725, OWASP).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The algorithm comes from the key (an EdDSA kid), so \"none\" fails</p><p>The algorithm comes from the key, not the header, so a header claiming \"none\" against an EdDSA kid fails before any signature step.</p><p><i>VI: Thuật toán đến từ khoá, không từ header, nên một header khai \"none\" chống lại một kid EdDSA trượt trước bước chữ ký nào.</i></p></li><li><p><b>c)</b> Its public key, which the JWKS publishes and so is not a secret</p><p>The server verifies EdDSA with a public key; a naive verifier reuses it as the HMAC secret for an HS256 token, and the attacker knows that public key.</p><p><i>VI: Máy chủ kiểm EdDSA bằng một khoá công khai; một bộ xác minh ngây thơ dùng lại nó làm bí mật HMAC cho một token HS256, và kẻ tấn công biết khoá công khai đó.</i></p></li><li><p><b>a)</b> Choose the algorithm from the key (looked up by kid), never from the token header</p><p>Binding each key to exactly one algorithm and reading it from the key defeats both alg:none and HS/RS confusion (RFC 8725, OWASP).</p><p><i>VI: Gắn mỗi khoá với đúng một thuật toán và đọc nó từ khoá đánh bại cả alg:none lẫn nhầm lẫn HS/RS (RFC 8725, OWASP).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The naive verifier accepted alg:none; LabFlow ID returned ALG_MISMATCH. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ xác minh ngây thơ chấp nhận alg:none; LabFlow ID trả ALG_MISMATCH. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The signature was present in the token but did not verify correctly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The algorithm comes from the key (an EdDSA kid), so \"none\" fails"
+              },
+              {
+                "ma": "c",
+                "noiDung": "LabFlow ID blocks the literal string \"none\" with a header filter before verifying"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The token had already expired before the verifier looked at it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The algorithm comes from the key, not the header, so a header claiming \"none\" against an EdDSA kid fails before any signature step.</p><p><i>VI: Thuật toán đến từ khoá, không từ header, nên một header khai \"none\" chống lại một kid EdDSA trượt trước bước chữ ký nào.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In the confusion attack, what did the attacker use as the HMAC secret?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong cú nhầm lẫn, kẻ tấn công dùng gì làm bí mật HMAC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A password they guessed by brute force over many attempts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The private signing key, which they managed to steal from the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Its public key, which the JWKS publishes and so is not a secret"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The kid string copied straight from the token header"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The server verifies EdDSA with a public key; a naive verifier reuses it as the HMAC secret for an HS256 token, and the attacker knows that public key.</p><p><i>VI: Máy chủ kiểm EdDSA bằng một khoá công khai; một bộ xác minh ngây thơ dùng lại nó làm bí mật HMAC cho một token HS256, và kẻ tấn công biết khoá công khai đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>One rule in LabFlow ID stops both forgeries. What is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một luật trong LabFlow ID chặn cả hai cú giả mạo. Đó là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Choose the algorithm from the key (looked up by kid), never from the token header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Reject every token that uses HMAC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only accept tokens younger than 60 seconds"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Always require a signature at least 64 bytes long"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Binding each key to exactly one algorithm and reading it from the key defeats both alg:none and HS/RS confusion (RFC 8725, OWASP).</p><p><i>VI: Gắn mỗi khoá với đúng một thuật toán và đọc nó từ khoá đánh bại cả alg:none lẫn nhầm lẫn HS/RS (RFC 8725, OWASP).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting header.alg.|||Tin header.alg."
+        },
+        {
+          "loi": "Using one key for both HMAC and public-key algorithms.|||Dùng một khoá cho cả HMAC lẫn thuật toán khoá công khai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "algorithm confusion",
+          "vi": "nhầm lẫn thuật toán"
+        },
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        }
+      ]
+    },
+    {
+      "title": "4.2-2 — Write algToUse(header, keyring): the one rule",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Decide the algorithm to verify with — from the <strong>key</strong>, never the token. Given <code>header</code> (<code>{ alg, kid }</code>) and <code>keyring</code> (<code>{ kid: { alg } }</code>): return <code>'NO_KID'</code> if the header has no kid; <code>'UNKNOWN_KID'</code> if the kid is not in the keyring; <code>'ALG_MISMATCH'</code> if the header’s alg differs from the key’s alg; otherwise return the key’s alg. This single function makes <code>alg: none</code> and HS/RS confusion impossible.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định thuật toán để xác minh — từ <strong>khoá</strong>, không từ token. Cho <code>header</code> (<code>{ alg, kid }</code>) và <code>keyring</code> (<code>{ kid: { alg } }</code>): trả <code>'NO_KID'</code> nếu header không có kid; <code>'UNKNOWN_KID'</code> nếu kid không trong keyring; <code>'ALG_MISMATCH'</code> nếu alg của header khác alg của khoá; còn lại trả alg của khoá. Hàm duy nhất này khiến <code>alg: none</code> và nhầm lẫn HS/RS bất khả thi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "algToUse({\"alg\":\"EdDSA\",\"kid\":\"ed-2026-11\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+          "output": "\"EdDSA\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Return the KEY’s alg, never the header’s.|||Trả alg của KHOÁ, không bao giờ của header.",
+        "Order: no kid, unknown kid, mismatch, then ok.|||Thứ tự: không kid, kid lạ, lệch, rồi ok."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'NO_KID' | 'UNKNOWN_KID' | 'ALG_MISMATCH' | the key's alg */\nfunction algToUse(header, keyring) {\n  // Write your solution here\n  return header.alg;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction algToUse(header, keyring) {\n  if (!header.kid) return 'NO_KID';\n  var key = keyring[header.kid];\n  if (!key) return 'UNKNOWN_KID';\n  if (header.alg !== key.alg) return 'ALG_MISMATCH';\n  return key.alg;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The algorithm must come from the key the server holds, so a token can never choose how it is checked. none is not any key’s alg; an HS256 header against an EdDSA kid is an ALG_MISMATCH (4.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Thuật toán phải đến từ khoá máy chủ giữ, nên một token không bao giờ chọn được cách nó bị kiểm. none không phải alg của khoá nào; một header HS256 chống lại một kid EdDSA là ALG_MISMATCH (4.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid EdDSA token",
+              "vi": "Token EdDSA hợp lệ"
+            },
+            "goi": "algToUse({\"alg\":\"EdDSA\",\"kid\":\"ed-2026-11\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "EdDSA"
+          },
+          {
+            "moTa": {
+              "en": "alg:none",
+              "vi": "alg:none"
+            },
+            "goi": "algToUse({\"alg\":\"none\",\"kid\":\"ed-2026-11\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "ALG_MISMATCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Confusion: HS256 on EdDSA kid",
+              "vi": "Nhầm lẫn: HS256 trên kid EdDSA"
+            },
+            "goi": "algToUse({\"alg\":\"HS256\",\"kid\":\"ed-2026-11\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "ALG_MISMATCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown kid",
+              "vi": "Kid lạ"
+            },
+            "goi": "algToUse({\"alg\":\"EdDSA\",\"kid\":\"ed-nope\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "UNKNOWN_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No kid",
+              "vi": "Không kid"
+            },
+            "goi": "algToUse({\"alg\":\"EdDSA\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "NO_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A real HS256 key",
+              "vi": "Một khoá HS256 thật"
+            },
+            "goi": "algToUse({\"alg\":\"HS256\",\"kid\":\"hs-legacy\"}, {\"ed-2026-11\":{\"alg\":\"EdDSA\"},\"hs-legacy\":{\"alg\":\"HS256\"}})",
+            "mongDoi": "HS256",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning header.alg — that is exactly the bug.|||Trả header.alg — đó chính là lỗi."
+        },
+        {
+          "loi": "Forgetting the UNKNOWN_KID case, so an attacker names any kid.|||Quên trường hợp UNKNOWN_KID, để kẻ tấn công nêu kid bất kỳ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key/algorithm binding",
+          "vi": "gắn khoá với thuật toán"
+        }
+      ]
+    },
+    {
+      "title": "4.2-3 — The order of the checks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Put the verifier’s steps in the order that defeats alg:none and confusion.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước của bộ xác minh theo thứ tự đánh bại alg:none và nhầm lẫn.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Decide the key and algorithm first.|||Quyết định khoá và thuật toán trước.",
+        "Never read a claim before the signature.|||Không bao giờ đọc một claim trước chữ ký."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-3 — The order of the checks\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-3 — The order of the checks — answer key\n\n1. First to lastTrước tới sau\n   Answer: m1) Look the kid up in the keyring (reject if missing or unknown)  →  m4) The header’s alg must equal the key’s alg (else ALG_MISMATCH)  →  m3) Verify the signature with that key  →  m2) Check the claims (iss, aud, exp, …)\n   Algorithm from the key before any signature maths, and the signature before any claim; so a forged alg or a hostile claim never reaches the step it would exploit.VI: Thuật toán từ khoá trước toán chữ ký, và chữ ký trước claim nào; nên một alg giả hay một claim thù địch không bao giờ tới được bước nó khai thác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Algorithm from the key before any signature maths, and the signature before any claim; so a forged alg or a hostile claim never reaches the step it would exploit.</p><p><i>VI: Thuật toán từ khoá trước toán chữ ký, và chữ ký trước claim nào; nên một alg giả hay một claim thù địch không bao giờ tới được bước nó khai thác.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Look the kid up in the keyring (reject if missing or unknown)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Check the claims (iss, aud, exp, …)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Verify the signature with that key"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The header’s alg must equal the key’s alg (else ALG_MISMATCH)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Algorithm from the key before any signature maths, and the signature before any claim; so a forged alg or a hostile claim never reaches the step it would exploit.</p><p><i>VI: Thuật toán từ khoá trước toán chữ ký, và chữ ký trước claim nào; nên một alg giả hay một claim thù địch không bao giờ tới được bước nó khai thác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Verifying the signature before pinning the algorithm.|||Xác minh chữ ký trước khi chốt thuật toán."
+        },
+        {
+          "loi": "Reading claims first.|||Đọc claim trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verification order",
+          "vi": "thứ tự xác minh"
+        }
+      ]
+    },
+    {
+      "title": "4.2-4 — Attack → LabFlow ID’s answer",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each forged token with the code LabFlow ID returns.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi token giả với mã LabFlow ID trả về.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The header tricks die at the algorithm check.|||Các mẹo header chết ở phép kiểm thuật toán.",
+        "A tampered payload still reaches the signature.|||Một payload bị sửa vẫn tới được chữ ký."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-4 — Attack → LabFlow ID’s answer\n\nAnswer in the answer panel (no code needed).\n\n1. Attack → codeTấn công → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.2-4 — Attack → LabFlow ID’s answer — answer key\n\n1. Attack → codeTấn công → mã\n   - r1.q: ALG_MISMATCH — the kid is an EdDSA key\n   - r2.q: ALG_MISMATCH — the kid is an EdDSA key, header says HS256\n   - r3.q: BAD_SIGNATURE\n   - r4.q: UNKNOWN_KID\n   The algorithm check (ALG_MISMATCH) catches both header tricks before any signature maths; a tampered payload reaches and fails the signature; an unknown kid never finds a key.VI: Phép kiểm thuật toán (ALG_MISMATCH) bắt cả hai mẹo header trước toán chữ ký; một payload bị sửa tới được và trượt chữ ký; một kid lạ không tìm thấy khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The algorithm check (ALG_MISMATCH) catches both header tricks before any signature maths; a tampered payload reaches and fails the signature; an unknown kid never finds a key.</p><p><i>VI: Phép kiểm thuật toán (ALG_MISMATCH) bắt cả hai mẹo header trước toán chữ ký; một payload bị sửa tới được và trượt chữ ký; một kid lạ không tìm thấy khoá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Attack → code</p><p style=\"opacity:.75;font-size:.92em\"><i>Tấn công → mã</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Forged token"
+              },
+              {
+                "ma": "q",
+                "ten": "LabFlow ID",
+                "luaChon": [
+                  "ALG_MISMATCH — the kid is an EdDSA key",
+                  "ALG_MISMATCH — the kid is an EdDSA key, header says HS256",
+                  "BAD_SIGNATURE",
+                  "UNKNOWN_KID"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "alg:none, empty signature"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "HS256 HMACed with the public key"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "valid alg/kid, one payload byte changed"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "kid that is not in the keyring"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "ALG_MISMATCH — the kid is an EdDSA key",
+              "r2.q": "ALG_MISMATCH — the kid is an EdDSA key, header says HS256",
+              "r3.q": "BAD_SIGNATURE",
+              "r4.q": "UNKNOWN_KID"
+            },
+            "giaiThich": "<p>The algorithm check (ALG_MISMATCH) catches both header tricks before any signature maths; a tampered payload reaches and fails the signature; an unknown kid never finds a key.</p><p><i>VI: Phép kiểm thuật toán (ALG_MISMATCH) bắt cả hai mẹo header trước toán chữ ký; một payload bị sửa tới được và trượt chữ ký; một kid lạ không tìm thấy khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking alg:none gives BAD_SIGNATURE.|||Tưởng alg:none cho BAD_SIGNATURE."
+        },
+        {
+          "loi": "Thinking an unknown kid is ALG_MISMATCH.|||Tưởng một kid lạ là ALG_MISMATCH."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

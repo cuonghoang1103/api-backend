@@ -258,6 +258,11 @@ Retry-After: 180</div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 2.3: the login flow, with every branch equal</span><span class="lc-sub">Same: passwords are hashed, never stored, and one login endpoint answers. Deeper: that lesson measures what the login route itself leaks — the same 401 body for both failures still differs 37–39× in time until a dummy hash closes it (1.0×) — and adds Unicode NFC, input limits (413 before parsing) and an honest look at peppers. It also tunes the hash by measurement (lesson 2.2), where scryptSync at Node’s defaults would not pass.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-2-truong-alg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 4.2: the token tells the server how to check it</span><span class="lc-sub">Same: HS256 is HMAC-SHA256 with the server’s secret, built by hand, as a bearer token. Deeper: that chapter dissects a JWT byte by byte, runs the alg:none and HS/RS confusion forgeries against a real verifier (both return ALG_MISMATCH), and moves to public-key (EdDSA) signing with a JWKS so other services verify without ever holding the secret.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -491,6 +496,11 @@ Retry-After: 180</div>
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-2-3-luong-dang-nhap" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 2.3: luồng đăng nhập, với mọi nhánh bằng nhau</span><span class="lc-sub">Giống: mật khẩu chỉ băm, không bao giờ lưu, và một endpoint đăng nhập trả lời. Sâu hơn: bài đó đo chính route đăng nhập rò gì — cùng một nội dung 401 cho cả hai kiểu thất bại mà thời gian vẫn chênh 37–39× cho tới khi băm giả bịt lại (1,0×) — rồi thêm chuẩn hoá Unicode NFC, giới hạn đầu vào (413 trước khi đọc) và cái nhìn thẳng thắn về pepper. Bài 2.2 còn chỉnh hàm băm bằng phép đo, chỗ mà scryptSync với mặc định của Node không qua được.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-2-truong-alg" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 4.2: cái token tự nói cho máy chủ cách kiểm nó</span><span class="lc-sub">Giống: HS256 là HMAC-SHA256 với bí mật của máy chủ, dựng bằng tay, làm một bearer token. Sâu hơn: chương đó mổ một JWT từng byte, chạy cú giả mạo alg:none và nhầm lẫn HS/RS trước một bộ xác minh thật (đều trả ALG_MISMATCH), rồi chuyển sang ký bằng khoá công khai (EdDSA) với một JWKS để dịch vụ khác xác minh mà không bao giờ phải giữ bí mật.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>

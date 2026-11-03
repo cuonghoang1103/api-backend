@@ -146,6 +146,42 @@
       "name": "Lab 3 — LabFlow ID’s session layer",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 3.1 — start(store, cookieHeader, userId, freshToken, now) · Lab 3.2 — load(store, cookieHeader, now, opt) · Lab 3.3 — end(store, cookieHeader): sign-out that really signs out"
+    },
+    {
+      "slug": "auth-4-1-giai-ma-bang-tay",
+      "name": "4.1 Decode one by hand",
+      "level": "BEGINNER",
+      "description": "Luyện: 4.1-1 — Decode and tamper: read the real runs · 4.1-2 — Write signingInput(token): the bytes the signature covers · 4.1-3 — Write looksLikeJwt(token): three base64url parts · 4.1-4 — The three parts of a JWT"
+    },
+    {
+      "slug": "auth-4-2-truong-alg",
+      "name": "4.2 The alg header",
+      "level": "BEGINNER",
+      "description": "Luyện: 4.2-1 — alg: none and algorithm confusion: read the real runs · 4.2-2 — Write algToUse(header, keyring): the one rule · 4.2-3 — The order of the checks · 4.2-4 — Attack → LabFlow ID’s answer"
+    },
+    {
+      "slug": "auth-4-3-cac-claim",
+      "name": "4.3 The claims",
+      "level": "BEGINNER",
+      "description": "Luyện: 4.3-1 — The seven claims: read the real runs · 4.3-2 — Write checkTime(payload, now, skewSec): exp and nbf with skew · 4.3-3 — Write checkClaims(payload, cfg): the seven, in order · 4.3-4 — Claim → the attack you skip"
+    },
+    {
+      "slug": "auth-4-4-khoa-va-jwks",
+      "name": "4.4 Keys and JWKS",
+      "level": "BEGINNER",
+      "description": "Luyện: 4.4-1 — JWKS, rotation and speed: read the real runs · 4.4-2 — Write findVerifyKey(header, jwks): resolve the kid · 4.4-3 — Write publicJwkOnly(jwk): never publish the private half · 4.4-4 — Rotate a key without downtime"
+    },
+    {
+      "slug": "auth-4-5-cat-token-o-dau",
+      "name": "4.5 Where to keep a token",
+      "level": "BEGINNER",
+      "description": "Luyện: 4.5-1 — Where a browser keeps a token: read the real run · 4.5-2 — Write storageRisk(place): the main risk of each place · 4.5-3 — Rank the places by exposure to an injected script · 4.5-4 — Each place and its properties"
+    },
+    {
+      "slug": "auth-4-7-lab-kiem-jwt",
+      "name": "Lab 4 — LabFlow ID’s JWT verifier",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 4·1 — chooseAlg(header, keyring): the algorithm from the key · Lab 4·2 — verifyClaims(payload, cfg): the seven claims · Lab 4·3 — verifyToken(header, payload, cfg): put it together"
     }
   ]
 }

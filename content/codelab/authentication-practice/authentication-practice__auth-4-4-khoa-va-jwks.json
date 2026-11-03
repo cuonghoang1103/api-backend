@@ -1,0 +1,506 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-4-khoa-va-jwks",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-4-khoa-va-jwks"
+  },
+  "exercises": [
+    {
+      "title": "4.4-1 — JWKS, rotation and speed: read the real runs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.4 (real runs):<pre>GET /.well-known/jwks.json  (public — safe to cache and share):\n  { kty: \"OKP\", crv: \"Ed25519\", kid: \"ed-2026-11\",\n    use: \"sig\", alg: \"EdDSA\", x: \"MCF3TNPOfjncRyEY1Vr6…\" }\n  no \"d\" field — the private half never leaves LabFlow ID.\n\nLabFlow API fetches that JWKS once, then verifies tokens by the kid in each header:\n  token kid = ed-2026-11 → matched a JWK → verified. sub = usr_3 role = LAB_MANAGER\n\na token whose kid is not in the JWKS is rejected before any crypto runs:\n  rejected: unknown kid — not in the JWKS</pre><pre>day 1: token signed with kid ed-2026-10 → usr_1 (accepted)\n\nday 2: publish both keys in the JWKS, still sign with the old one — clients pick up the new key\n  new tokens signed with kid ed-2026-11 → usr_1 (accepted)\n  old tokens (kid ed-2026-10) still    → usr_1 (accepted — no one is signed out)\n\nday 3: 15 min after the switch, remove the old key from the JWKS\n  an old token now → UNKNOWN_KID (its kid is gone)\n  new tokens → usr_1 (accepted)</pre><pre>ops/sec over 20000 iterations, 3 rounds (macOS arm64, Node 22.23.3):\nalg     sig bytes        sign/s (r1·r2·r3)                 verify/s (r1·r2·r3)\nHS256    32           784,798 · 804,461 · 829,589       794,797 · 820,946 · 831,641\nEdDSA    64           33,455 · 33,933 · 34,513          11,814 · 11,874 · 11,861\nES256    70           49,518 · 49,003 · 49,617          17,573 · 17,537 · 17,670\nRS256   256           1,765 · 1,762 · 1,762             60,901 · 59,115 · 60,687</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.4 (chạy thật):<pre>GET /.well-known/jwks.json  (public — safe to cache and share):\n  { kty: \"OKP\", crv: \"Ed25519\", kid: \"ed-2026-11\",\n    use: \"sig\", alg: \"EdDSA\", x: \"MCF3TNPOfjncRyEY1Vr6…\" }\n  no \"d\" field — the private half never leaves LabFlow ID.\n\nLabFlow API fetches that JWKS once, then verifies tokens by the kid in each header:\n  token kid = ed-2026-11 → matched a JWK → verified. sub = usr_3 role = LAB_MANAGER\n\na token whose kid is not in the JWKS is rejected before any crypto runs:\n  rejected: unknown kid — not in the JWKS</pre><pre>day 1: token signed with kid ed-2026-10 → usr_1 (accepted)\n\nday 2: publish both keys in the JWKS, still sign with the old one — clients pick up the new key\n  new tokens signed with kid ed-2026-11 → usr_1 (accepted)\n  old tokens (kid ed-2026-10) still    → usr_1 (accepted — no one is signed out)\n\nday 3: 15 min after the switch, remove the old key from the JWKS\n  an old token now → UNKNOWN_KID (its kid is gone)\n  new tokens → usr_1 (accepted)</pre><pre>ops/sec over 20000 iterations, 3 rounds (macOS arm64, Node 22.23.3):\nalg     sig bytes        sign/s (r1·r2·r3)                 verify/s (r1·r2·r3)\nHS256    32           784,798 · 804,461 · 829,589       794,797 · 820,946 · 831,641\nEdDSA    64           33,455 · 33,933 · 34,513          11,814 · 11,874 · 11,861\nES256    70           49,518 · 49,003 · 49,617          17,573 · 17,537 · 17,670\nRS256   256           1,765 · 1,762 · 1,762             60,901 · 59,115 · 60,687</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Public keys only — never ship \"d\".|||Chỉ khoá công khai — không bao giờ gửi \"d\".",
+        "A shared secret verifies AND signs.|||Một bí mật dùng chung vừa kiểm vừa ký."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.4-1 — JWKS, rotation and speed: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. The published JWKS has no \"d\" field. Why does that matter?JWKS công bố không có trường \"d\". Vì sao điều đó quan trọng?\n2. During rotation, day 2 publishes both keys. Why do old-key tokens still verify?Khi xoay vòng, ngày 2 công bố cả hai khoá. Vì sao token khoá cũ vẫn xác minh được?\n3. The perf table shows HS256 is the fastest. Why is it still a poor platform signing key?Bảng perf cho thấy HS256 nhanh nhất. Vì sao nó vẫn là khoá ký nền tảng kém?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.4-1 — JWKS, rotation and speed: read the real runs — answer key\n\n1. The published JWKS has no \"d\" field. Why does that matter?JWKS công bố không có trường \"d\". Vì sao điều đó quan trọng?\n   Answer: c) \"d\" is the private key; publishing only the public half means others can verify but not mint\n   For an OKP/Ed25519 JWK, \"d\" is the private scalar. A JWKS carries only public keys, so every service can verify and none can sign.VI: Với một JWK OKP/Ed25519, \"d\" là đại lượng riêng. Một JWKS chỉ mang khoá công khai, nên dịch vụ nào cũng xác minh được và không ai ký được.\n\n2. During rotation, day 2 publishes both keys. Why do old-key tokens still verify?Khi xoay vòng, ngày 2 công bố cả hai khoá. Vì sao token khoá cũ vẫn xác minh được?\n   Answer: b) Both keys are live in the JWKS, so the kid picks the right one\n   Zero-downtime rotation keeps two keys live; the kid in each header selects the key. The old key is dropped only after its tokens expire.VI: Xoay vòng không ngừng dịch vụ giữ hai khoá sống; kid trong mỗi header chọn khoá. Khoá cũ chỉ bị gỡ sau khi token của nó hết hạn.\n\n3. The perf table shows HS256 is the fastest. Why is it still a poor platform signing key?Bảng perf cho thấy HS256 nhanh nhất. Vì sao nó vẫn là khoá ký nền tảng kém?\n   Answer: d) It is a shared secret, so every verifier can also forge\n   Speed is not the point for a platform. HMAC uses one secret to sign and verify, so sharing it for verification also shares the power to mint. EdDSA keeps minting to the private key.VI: Tốc độ không phải điểm chính cho một nền tảng. HMAC dùng một bí mật để ký và kiểm, nên chia sẻ để kiểm cũng chia sẻ quyền đúc. EdDSA giữ việc đúc cho khoá riêng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> \"d\" is the private key; publishing only the public half means others can verify but not mint</p><p>For an OKP/Ed25519 JWK, \"d\" is the private scalar. A JWKS carries only public keys, so every service can verify and none can sign.</p><p><i>VI: Với một JWK OKP/Ed25519, \"d\" là đại lượng riêng. Một JWKS chỉ mang khoá công khai, nên dịch vụ nào cũng xác minh được và không ai ký được.</i></p></li><li><p><b>b)</b> Both keys are live in the JWKS, so the kid picks the right one</p><p>Zero-downtime rotation keeps two keys live; the kid in each header selects the key. The old key is dropped only after its tokens expire.</p><p><i>VI: Xoay vòng không ngừng dịch vụ giữ hai khoá sống; kid trong mỗi header chọn khoá. Khoá cũ chỉ bị gỡ sau khi token của nó hết hạn.</i></p></li><li><p><b>d)</b> It is a shared secret, so every verifier can also forge</p><p>Speed is not the point for a platform. HMAC uses one secret to sign and verify, so sharing it for verification also shares the power to mint. EdDSA keeps minting to the private key.</p><p><i>VI: Tốc độ không phải điểm chính cho một nền tảng. HMAC dùng một bí mật để ký và kiểm, nên chia sẻ để kiểm cũng chia sẻ quyền đúc. EdDSA giữ việc đúc cho khoá riêng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The published JWKS has no \"d\" field. Why does that matter?</p><p style=\"opacity:.75;font-size:.92em\"><i>JWKS công bố không có trường \"d\". Vì sao điều đó quan trọng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"d\" is the signature and is sent with the token instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"d\" is the key id and is optional"
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"d\" is the private key; publishing only the public half means others can verify but not mint"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Removing \"d\" makes the token smaller"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>For an OKP/Ed25519 JWK, \"d\" is the private scalar. A JWKS carries only public keys, so every service can verify and none can sign.</p><p><i>VI: Với một JWK OKP/Ed25519, \"d\" là đại lượng riêng. Một JWKS chỉ mang khoá công khai, nên dịch vụ nào cũng xác minh được và không ai ký được.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>During rotation, day 2 publishes both keys. Why do old-key tokens still verify?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi xoay vòng, ngày 2 công bố cả hai khoá. Vì sao token khoá cũ vẫn xác minh được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The old tokens were quietly re-signed with the new key on the fly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both keys are live in the JWKS, so the kid picks the right one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server kept a saved copy of every token it had ever issued"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Old tokens are exempt from verification during the rotation window"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Zero-downtime rotation keeps two keys live; the kid in each header selects the key. The old key is dropped only after its tokens expire.</p><p><i>VI: Xoay vòng không ngừng dịch vụ giữ hai khoá sống; kid trong mỗi header chọn khoá. Khoá cũ chỉ bị gỡ sau khi token của nó hết hạn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The perf table shows HS256 is the fastest. Why is it still a poor platform signing key?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng perf cho thấy HS256 nhanh nhất. Vì sao nó vẫn là khoá ký nền tảng kém?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is not able to carry the registered claims in its payload"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is much slower to verify a token than it is to sign one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The tokens it produces are simply too large to send around"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is a shared secret, so every verifier can also forge"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Speed is not the point for a platform. HMAC uses one secret to sign and verify, so sharing it for verification also shares the power to mint. EdDSA keeps minting to the private key.</p><p><i>VI: Tốc độ không phải điểm chính cho một nền tảng. HMAC dùng một bí mật để ký và kiểm, nên chia sẻ để kiểm cũng chia sẻ quyền đúc. EdDSA giữ việc đúc cho khoá riêng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hard-coding a key instead of fetching the JWKS.|||Hard-code một khoá thay vì tải JWKS."
+        },
+        {
+          "loi": "Choosing HS256 for a multi-service platform.|||Chọn HS256 cho một nền tảng nhiều dịch vụ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JWKS"
+        },
+        {
+          "en": "key rotation",
+          "vi": "xoay khoá"
+        }
+      ]
+    },
+    {
+      "title": "4.4-2 — Write findVerifyKey(header, jwks): resolve the kid",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A client resolves a token’s key by kid. Given <code>header</code> (<code>{ alg, kid }</code>) and a <code>jwks</code> (<code>{ keys: [ { kid, … } ] }</code>): return <code>'NO_KID'</code> if the header has no kid; the matching JWK object if a key with that kid is in the set; otherwise <code>'UNKNOWN_KID'</code>. Look the kid up in the set only — never anywhere else (4.4: kid path traversal).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một client tra khoá của token theo kid. Cho <code>header</code> (<code>{ alg, kid }</code>) và một <code>jwks</code> (<code>{ keys: [ { kid, … } ] }</code>): trả <code>'NO_KID'</code> nếu header không có kid; object JWK khớp nếu một khoá có kid đó trong tập; còn lại <code>'UNKNOWN_KID'</code>. Chỉ tra kid trong tập — không bao giờ ở đâu khác (4.4: kid path traversal).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findVerifyKey({\"alg\":\"EdDSA\",\"kid\":\"ed-2026-11\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+          "output": "{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Loop the keys and compare kid.|||Duyệt các khoá và so kid.",
+        "Return the whole JWK object on a match.|||Trả cả object JWK khi khớp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'NO_KID' | the matching JWK | 'UNKNOWN_KID' */\nfunction findVerifyKey(header, jwks) {\n  // Write your solution here\n  return jwks.keys[0];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction findVerifyKey(header, jwks) {\n  if (!header.kid) return 'NO_KID';\n  for (var i = 0; i < jwks.keys.length; i++) if (jwks.keys[i].kid === header.kid) return jwks.keys[i];\n  return 'UNKNOWN_KID';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The kid is attacker input, so it may only select a key from the fixed JWKS — never a file or a row. An unknown kid is rejected before any crypto (4.4).</p>",
+      "solutionExplanationHtmlVi": "<p>kid là dữ liệu của kẻ tấn công, nên nó chỉ được chọn một khoá từ JWKS cố định — không bao giờ một tệp hay một dòng. Một kid lạ bị từ chối trước crypto nào (4.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Matches the second key",
+              "vi": "Khớp khoá thứ hai"
+            },
+            "goi": "findVerifyKey({\"alg\":\"EdDSA\",\"kid\":\"ed-2026-11\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+            "mongDoi": {
+              "kty": "OKP",
+              "crv": "Ed25519",
+              "kid": "ed-2026-11",
+              "x": "BBB"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Matches the first (old) key",
+              "vi": "Khớp khoá cũ"
+            },
+            "goi": "findVerifyKey({\"alg\":\"EdDSA\",\"kid\":\"ed-2026-10\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+            "mongDoi": {
+              "kty": "OKP",
+              "crv": "Ed25519",
+              "kid": "ed-2026-10",
+              "x": "AAA"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown kid",
+              "vi": "kid lạ"
+            },
+            "goi": "findVerifyKey({\"alg\":\"EdDSA\",\"kid\":\"ed-nope\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+            "mongDoi": "UNKNOWN_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Path-like kid",
+              "vi": "kid kiểu đường dẫn"
+            },
+            "goi": "findVerifyKey({\"alg\":\"EdDSA\",\"kid\":\"../secrets/app.key\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+            "mongDoi": "UNKNOWN_KID",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No kid",
+              "vi": "Không kid"
+            },
+            "goi": "findVerifyKey({\"alg\":\"EdDSA\"}, {\"keys\":[{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-10\",\"x\":\"AAA\"},{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"kid\":\"ed-2026-11\",\"x\":\"BBB\"}]})",
+            "mongDoi": "NO_KID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning jwks.keys[0] regardless of kid.|||Trả jwks.keys[0] bất kể kid."
+        },
+        {
+          "loi": "Turning the kid into a path or index.|||Biến kid thành đường dẫn hay chỉ số."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "kid (key id)"
+        },
+        {
+          "en": "JWKS"
+        }
+      ]
+    },
+    {
+      "title": "4.4-3 — Write publicJwkOnly(jwk): never publish the private half",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Before adding a key to the public JWKS, strip its private material. For an OKP/Ed25519 JWK the private scalar is the <code>d</code> field. Return a <strong>new</strong> object with every field of <code>jwk</code> except <code>d</code>. Do not modify the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi thêm một khoá vào JWKS công khai, bỏ phần riêng của nó. Với một JWK OKP/Ed25519, đại lượng riêng là trường <code>d</code>. Trả một object <strong>mới</strong> với mọi trường của <code>jwk</code> trừ <code>d</code>. Đừng sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "publicJwkOnly({\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"x\":\"PUB\",\"d\":\"PRIVATE\",\"kid\":\"ed-1\"})",
+          "output": "{\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"x\":\"PUB\",\"kid\":\"ed-1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Copy every key except \"d\".|||Chép mọi khoá trừ \"d\".",
+        "Build a new object; do not delete from the input.|||Dựng object mới; đừng xoá từ đầu vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ a new JWK object without the private \"d\" field */\nfunction publicJwkOnly(jwk) {\n  // Write your solution here\n  return jwk;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction publicJwkOnly(jwk) {\n  var out = {};\n  for (var k in jwk) if (Object.prototype.hasOwnProperty.call(jwk, k) && k !== 'd') out[k] = jwk[k];\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Publishing \"d\" would hand everyone the signing key. A JWKS is public, so a verifier gets only what it needs to check — never to sign (4.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Công bố \"d\" là trao khoá ký cho mọi người. Một JWKS là công khai, nên bộ xác minh chỉ nhận thứ nó cần để kiểm — không bao giờ để ký (4.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Strips d",
+              "vi": "Bỏ d"
+            },
+            "goi": "publicJwkOnly({\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"x\":\"PUB\",\"d\":\"PRIVATE\",\"kid\":\"ed-1\"})",
+            "mongDoi": {
+              "kty": "OKP",
+              "crv": "Ed25519",
+              "x": "PUB",
+              "kid": "ed-1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "No d to begin with",
+              "vi": "Vốn không có d"
+            },
+            "goi": "publicJwkOnly({\"kty\":\"OKP\",\"crv\":\"Ed25519\",\"x\":\"PUB\",\"kid\":\"ed-1\",\"use\":\"sig\"})",
+            "mongDoi": {
+              "kty": "OKP",
+              "crv": "Ed25519",
+              "x": "PUB",
+              "kid": "ed-1",
+              "use": "sig"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A symmetric key (k is also private!)",
+              "vi": "Khoá đối xứng (k cũng riêng!)"
+            },
+            "goi": "publicJwkOnly({\"kty\":\"oct\",\"k\":\"SECRET\",\"kid\":\"hs-1\"})",
+            "mongDoi": {
+              "kty": "oct",
+              "k": "SECRET",
+              "kid": "hs-1"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting d from the input object (mutating it).|||Xoá d khỏi object đầu vào (sửa nó)."
+        },
+        {
+          "loi": "Only removing d when it is truthy, missing other private fields.|||Chỉ bỏ d khi nó truthy, bỏ sót các trường riêng khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JWK"
+        },
+        {
+          "en": "public-key signing",
+          "vi": "ký bằng khoá công khai"
+        }
+      ]
+    },
+    {
+      "title": "4.4-4 — Rotate a key without downtime",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Put the zero-downtime rotation steps in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước xoay vòng không ngừng dịch vụ theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Publish before switching.|||Công bố trước khi chuyển.",
+        "Drop the old key last, after its tokens expire.|||Gỡ khoá cũ cuối cùng, sau khi token của nó hết hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.4-4 — Rotate a key without downtime\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.4-4 — Rotate a key without downtime — answer key\n\n1. First to lastTrước tới sau\n   Answer: m1) Add the new key (new kid) to the JWKS, keep signing with the old key  →  m4) Let clients refresh their JWKS cache so they know the new key  →  m3) Switch signing to the new key; both keys still verify  →  m2) After one token lifetime, remove the old key from the JWKS\n   Publish before you switch so clients already hold the new key; keep both live so old tokens verify; drop the old key only after its tokens have all expired — no live token is ever refused.VI: Công bố trước khi chuyển để client đã có khoá mới; giữ cả hai sống để token cũ xác minh; chỉ gỡ khoá cũ sau khi token của nó hết hạn — không token sống nào bị khước từ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Publish before you switch so clients already hold the new key; keep both live so old tokens verify; drop the old key only after its tokens have all expired — no live token is ever refused.</p><p><i>VI: Công bố trước khi chuyển để client đã có khoá mới; giữ cả hai sống để token cũ xác minh; chỉ gỡ khoá cũ sau khi token của nó hết hạn — không token sống nào bị khước từ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Add the new key (new kid) to the JWKS, keep signing with the old key"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "After one token lifetime, remove the old key from the JWKS"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Switch signing to the new key; both keys still verify"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Let clients refresh their JWKS cache so they know the new key"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Publish before you switch so clients already hold the new key; keep both live so old tokens verify; drop the old key only after its tokens have all expired — no live token is ever refused.</p><p><i>VI: Công bố trước khi chuyển để client đã có khoá mới; giữ cả hai sống để token cũ xác minh; chỉ gỡ khoá cũ sau khi token của nó hết hạn — không token sống nào bị khước từ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Switching signing before clients see the new key.|||Chuyển việc ký trước khi client thấy khoá mới."
+        },
+        {
+          "loi": "Removing the old key immediately — old tokens break.|||Gỡ khoá cũ ngay — token cũ vỡ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "key rotation",
+          "vi": "xoay khoá"
+        }
+      ]
+    }
+  ]
+}

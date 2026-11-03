@@ -61,6 +61,7 @@ export default {
     'auth-4-3-cac-claim': { yt: 'xrj3zzaqODw', credit: 'Chai aur Code — What is JWT token and JWT vs Sessions' },         // What is JWT token and JWT vs Sessions
     'auth-4-4-khoa-va-jwks': { yt: '78FIFrOi4Os', credit: 'Intigriti — JWT Authentication Bypass via kid Header Path Traversal' },      // JWT Authentication Bypass via kid Header Path Traversal
     'auth-4-5-cat-token-o-dau': { yt: 'Qm64zinOVpc', credit: 'Code Maze — How to Use HttpOnly Cookie to Secure JSON Web Tokens (JWT) in ASP.NET Core Web API' },   // How to Use HttpOnly Cookie to Secure JSON Web Tokens (JWT) in ASP.NET Core Web API
+    'auth-4-7-lab-kiem-jwt': { yt: 's8axcKlhwwA', credit: 'FusionAuth — JWT Validation How-To: Signature, Claims, and Audience Checks' }, // 03/11/2026: JWT Validation How-To: Signature, Claims, and Audience Checks — Lab 4 (xây bộ xác minh)
 
     /* ── Chương 5 — Làm mới, xoay vòng và thu hồi ── */
     'auth-5-1-hai-token': { yt: 'HJ09m-xFvTk', credit: 'Deeecode — Why exactly are refresh tokens so important?' },            // Why exactly are refresh tokens so important?

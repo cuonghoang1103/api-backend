@@ -1,7 +1,11 @@
 # LabFlow ID — dự án xuyên khoá Authentication (cuongthai.com/courses/authentication)
 
 Dịch vụ danh tính của nền tảng LabFlow (cùng thế giới với LabFlow API của khoá API Design và LabFlow Lite của khoá Testing).
-Ảnh chụp này = **cuối Chương 3** (v0.3). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
+Ảnh chụp này = **cuối Chương 4** (v0.4). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
+
+Chương 4 thêm `src/jwt/` (base64url, keyring, sign, verify, index, jwks — EdDSA/HS256, 7 claim, JWKS + kid, xoay khoá; đối chiếu `jose` 6.1.0),
+`POST /token` + `GET /.well-known/jwks.json` trong `src/server.js`, `demo4/` (giải mã tay, alg:none, nhầm lẫn HS/RS, claim + skew, thu hồi,
+JWKS/rotate/kid-traversal/perf, lưu token trong trình duyệt), `lab4/` + `scripts/cham-lab-4.mjs` (Lab 4, 9 phép), `test/jwt.test.js` (10 test).
 
 ```bash
 npm ci                                   # Node 22.12+ (khoá đo trên 22.23.3)
@@ -11,6 +15,7 @@ npm test                                 # 15 test: src/crypto (6) + src/passwor
 node scripts/cham-lab-1.mjs src/crypto   # 10/10 · lab1/yeu 2/10 · lab1/starter 0/10
 node scripts/cham-lab-2.mjs src/passwords # 10/10 · lab2/yeu 3.5/10 · lab2/starter 0/10 (kho giả, không cần CSDL)
 node scripts/cham-lab-3.mjs src/sessions  # 10/10 · lab3/yeu 2/10 · lab3/starter 0/10 (cổng 4806/4807 + Chromium của Playwright)
+node scripts/cham-lab-4.mjs lab4/tham-khao # 10/10 · lab4/yeu 3.5/10 · lab4/starter 0/10 (không cần CSDL — gọi thẳng makeVerifier)
 
 # Từ Chương 2 máy chủ cần PostgreSQL 17:
 docker run -d --name labflow-id-pg -p 127.0.0.1:4832:5432 \

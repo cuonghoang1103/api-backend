@@ -156,7 +156,7 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Upload** (chủ ý chạm R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix AUTH/v1 --decks <deck,…>`
   ⇒ `images/academy/AUTH/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy.** Dựng lại deck đã đẩy ⇒ `AUTH/v2`
   + ghi `VER` trong `_slides.mjs`. Hiện (01/11): 11 deck Mục 0 + Ch1 ở v1 — 127 ảnh (00-8 11, 00-9 11, 00-1 12, 00-2 12, 00-3 13,
-  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9); Ch3 6 deck ở v1 — 66 ảnh (03-1 11, 03-2 12, 03-3 11, 03-4 12, 03-5 11, lab-3 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
+  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9); Ch3 6 deck ở v1 — 66 ảnh (03-1 11, 03-2 12, 03-3 11, 03-4 12, 03-5 11, lab-3 9); Ch4 6 deck ở v1 — 67 ảnh (04-1 11, 04-2 11, 04-3 12, 04-4 12, 04-5 12, lab-4 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
   output là phải render + đẩy lại (lên v2).
 - Không sửa `_render-slides.mjs`, `_pg-chung.mjs`, `_tst-chung.mjs`, `_api-chung.mjs`.
 
@@ -231,6 +231,9 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Chương 3 (01/11):** +6 module, 23 đề ⇒ track 23 module / 89 đề, lời giải 483/483, nội dung 0 lỗi. Đề viết hàm: `sessionState`, `countTouches`,
   `hostCookieProblem`, `cookiesSent` (SameSite như đo trong Chromium 156, kể cả cửa sổ 2 phút), `startSession`, `afterPasswordChange`, `csrfVerdict`,
   `checkCsrfToken`, `runTtl`, `endEverywhere`; lab: `start`/`load`/`end` trên kho digest (CSRF trong trình duyệt thật chỉ ở máy chấm dự án).
+- **Chương 4 (03/11/2026):** +6 module, 23 đề ⇒ track 29 module / 112 đề, lời giải 576/576, nội dung 0 lỗi, gitleaks sạch. Đề viết hàm thuần JS
+  (realm vm không Buffer/crypto): `signingInput`, `looksLikeJwt`, `algToUse` (thuật toán từ KHOÁ), `checkTime` (exp/nbf + skew), `checkClaims` (7 claim),
+  `findVerifyKey` (kid trong JWKS), `publicJwkOnly` (bỏ trường d), `storageRisk`; lab: `chooseAlg` · `verifyClaims` · `verifyToken` (ghép cả bộ, trừ phần crypto).
 
 ## 11. Kế hoạch toàn khoá (giữ slug; mỗi chương + Lab + quiz 10 câu)
 
@@ -313,4 +316,13 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   api-design 6.4 ↔ 3.4, api-design 8.3 ↔ 3.5); video YouTube 3.1–3.5 thay đúng chủ đề + Lab 3 (68/68 sống); `_labflow-id` = v0.3 (redis 6.3.0).
   Môi trường soạn thêm: container `auth2-redis` (redis:7, cổng 4833). Số đo chính: SameSite trên Chromium 156 giống nodejs 8.4/Chromium 149
   (Lax chặn POST chéo site; không khai ⇒ POST cấp cao nhất kèm cookie trong 2 phút đầu); `__Host-` hợp lệ trên http://localhost.
-- **TẠM DỪNG sau Ch3 ngày 01/11 (theo yêu cầu chủ kênh); tiếp theo là Ch4** (JWT từ bên trong, §11) — chưa bắt đầu.
+- **03/11/2026 — Ch4 trọn:** 5 bài + Lab 4 (`auth-4-7-lab-kiem-jwt`, máy chấm `scripts/cham-lab-4.mjs` 9 phép, đúc 20+ token thù địch gọi
+  `makeVerifier` người học — không CSDL) + quiz 10 câu (A2 B3 C2 D3); bài 34–39k ký tự (4.1 38,4k · 4.2 ~40k · 4.3 ~40k · 4.4 ~40k · 4.5 34,6k);
+  6 deck 67 slide AUTH/v1 (đã đẩy); Code Lab +6 module/23 đề (track 29 module/112 đề, lời giải 576/576, nội dung 0 lỗi, gitleaks sạch);
+  liên kết chéo +1 cặp hai chiều mới (api-design 6.1 ↔ 4.2; nodejs 8.2 ↔ Ch4 đã có sẵn, nay 4.3→nodejs-8-2) + 3 một chiều "đọc thêm";
+  video YouTube 4.1–4.5 đã có + Lab 4 mới (`auth-4-7-lab-kiem-jwt`, 69/69 sống); `_labflow-id` = v0.4 (jose 6.1.0, `src/jwt/`, `POST /token` +
+  JWKS, `demo4/`, `test/jwt.test.js` ⇒ npm test 25 pass). Số đo chính (macOS arm64, Node 22.23.3): token EdDSA 381 ký tự (sig 64 byte);
+  ký/kiểm per giây HS256 ~790k/~780k · EdDSA ~34k/~11,9k · ES256 ~48,5k/~17,6k · RS256 ~1,76k/~60k; alg:none + nhầm lẫn HS/RS ⇒ ALG_MISMATCH;
+  exp==now hết hạn ở skew 0, qua ở skew 60 khi trễ 30 s; JWKS OKP/Ed25519 không trường d; XSS đọc localStorage + cookie thường, không đọc HttpOnly.
+  Môi trường soạn: container `auth2-pg` (postgres:17, cổng 4832) cho `POST /token`; demo4 phần lớn không cần CSDL.
+- **TẠM DỪNG sau Ch4 ngày 03/11 (theo yêu cầu chủ kênh); tiếp theo là Ch5** (làm mới, xoay vòng, thu hồi, §11) — chưa bắt đầu.

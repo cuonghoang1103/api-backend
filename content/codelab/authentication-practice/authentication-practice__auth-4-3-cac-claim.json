@@ -1,0 +1,555 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-4-3-cac-claim",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-4-3-cac-claim"
+  },
+  "exercises": [
+    {
+      "title": "4.3-1 — The seven claims: read the real runs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.4 (real runs):<pre>a correct token first:\nall seven claims present                     → accepted\n\nnow remove one claim at a time — each omission is a real attack:\nno iss (token from another issuer)           → rejected BAD_ISS\nno sub (who is it even about?)               → rejected NO_SUB\nno aud (minted for labflow-chat, used here)  → rejected BAD_AUD\nno exp (a stolen token never dies)           → rejected EXPIRED\nno iat (cannot reason about age)             → rejected NO_IAT\nno jti (cannot revoke or detect replay)      → rejected NO_JTI\n\nand the ones that are present but wrong:\niss = https://evil.example                   → rejected BAD_ISS\naud = labflow-chat                           → rejected BAD_AUD\naud is an array incl. labflow-api            → accepted</pre><pre>token valid from 09:00:00, exp 09:15:00 (900 s). skewSec = 0 (strict):\n  at 09:14:59 (exp − 1 s) : accepted\n  at 09:15:00 (exp exactly): rejected EXPIRED   ← exp == now is already expired\n  at 09:15:01 (exp + 1 s) : rejected EXPIRED\n\nreal deployments allow a little clock skew. skewSec = 60:\n  at 09:15:30 (30 s late) : accepted   ← within the 60 s leeway\n  at 09:16:01 (61 s late) : rejected EXPIRED\n\nnbf (not before) 09:02:00, skewSec = 60:\n  at 09:00:30 (90 s early): rejected NOT_YET\n  at 09:01:05 (55 s early): accepted   ← inside the leeway</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.4 (chạy thật):<pre>a correct token first:\nall seven claims present                     → accepted\n\nnow remove one claim at a time — each omission is a real attack:\nno iss (token from another issuer)           → rejected BAD_ISS\nno sub (who is it even about?)               → rejected NO_SUB\nno aud (minted for labflow-chat, used here)  → rejected BAD_AUD\nno exp (a stolen token never dies)           → rejected EXPIRED\nno iat (cannot reason about age)             → rejected NO_IAT\nno jti (cannot revoke or detect replay)      → rejected NO_JTI\n\nand the ones that are present but wrong:\niss = https://evil.example                   → rejected BAD_ISS\naud = labflow-chat                           → rejected BAD_AUD\naud is an array incl. labflow-api            → accepted</pre><pre>token valid from 09:00:00, exp 09:15:00 (900 s). skewSec = 0 (strict):\n  at 09:14:59 (exp − 1 s) : accepted\n  at 09:15:00 (exp exactly): rejected EXPIRED   ← exp == now is already expired\n  at 09:15:01 (exp + 1 s) : rejected EXPIRED\n\nreal deployments allow a little clock skew. skewSec = 60:\n  at 09:15:30 (30 s late) : accepted   ← within the 60 s leeway\n  at 09:16:01 (61 s late) : rejected EXPIRED\n\nnbf (not before) 09:02:00, skewSec = 60:\n  at 09:00:30 (90 s early): rejected NOT_YET\n  at 09:01:05 (55 s early): accepted   ← inside the leeway</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "aud answers “who is this token for?”|||aud trả lời \"token này cho ai?\"",
+        "exp is a boundary, with a small skew.|||exp là một biên, với dung sai nhỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.3-1 — The seven claims: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. A token minted for aud \"labflow-chat\" was sent to labflow-api. Why was it rejected?Một token đúc cho aud \"labflow-chat\" được gửi tới labflow-api. Vì sao bị từ chối?\n2. With skewSec 0, a token whose exp equals now was rejected EXPIRED. Why?Với skewSec 0, một token có exp bằng now bị từ chối EXPIRED. Vì sao?\n3. After revoke, a second service with its own empty denylist still accepted the token. Why?Sau khi thu hồi, một dịch vụ thứ hai với denylist rỗng riêng vẫn chấp nhận token. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.3-1 — The seven claims: read the real runs — answer key\n\n1. A token minted for aud \"labflow-chat\" was sent to labflow-api. Why was it rejected?Một token đúc cho aud \"labflow-chat\" được gửi tới labflow-api. Vì sao bị từ chối?\n   Answer: b) BAD_AUD — a recipient not named in aud MUST reject the token\n   RFC 7519: if the recipient is not in aud, it MUST reject. Without the check, a leaked chat token becomes an API token.VI: RFC 7519: nếu người nhận không trong aud, PHẢI từ chối. Thiếu phép kiểm, một token chat bị lộ thành token API.\n\n2. With skewSec 0, a token whose exp equals now was rejected EXPIRED. Why?Với skewSec 0, một token có exp bằng now bị từ chối EXPIRED. Vì sao?\n   Answer: c) exp is a boundary: on or after it, the token is expired\n   exp is a boundary: valid strictly before it. The same idea as Chapter 3’s session timeouts. Clock skew only extends it by the leeway, here 0.VI: exp là một biên: hợp lệ hẳn trước nó. Cùng ý với các mốc hết hạn phiên của Chương 3. Dung sai chỉ nới thêm bằng mức cho phép, ở đây 0.\n\n3. After revoke, a second service with its own empty denylist still accepted the token. Why?Sau khi thu hồi, một dịch vụ thứ hai với denylist rỗng riêng vẫn chấp nhận token. Vì sao?\n   Answer: c) A jti denylist is per-verifier, so a service without it trusts the signature\n   A JWT cannot be un-issued; revocation works only where the denylist is shared, and only until exp — the trade-off a session (one DELETE) avoids.VI: Một JWT không huỷ phát được; thu hồi chỉ hiệu lực ở nơi denylist được chia sẻ, và chỉ tới exp — đánh đổi mà một phiên (một DELETE) né được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> BAD_AUD — a recipient not named in aud MUST reject the token</p><p>RFC 7519: if the recipient is not in aud, it MUST reject. Without the check, a leaked chat token becomes an API token.</p><p><i>VI: RFC 7519: nếu người nhận không trong aud, PHẢI từ chối. Thiếu phép kiểm, một token chat bị lộ thành token API.</i></p></li><li><p><b>c)</b> exp is a boundary: on or after it, the token is expired</p><p>exp is a boundary: valid strictly before it. The same idea as Chapter 3’s session timeouts. Clock skew only extends it by the leeway, here 0.</p><p><i>VI: exp là một biên: hợp lệ hẳn trước nó. Cùng ý với các mốc hết hạn phiên của Chương 3. Dung sai chỉ nới thêm bằng mức cho phép, ở đây 0.</i></p></li><li><p><b>c)</b> A jti denylist is per-verifier, so a service without it trusts the signature</p><p>A JWT cannot be un-issued; revocation works only where the denylist is shared, and only until exp — the trade-off a session (one DELETE) avoids.</p><p><i>VI: Một JWT không huỷ phát được; thu hồi chỉ hiệu lực ở nơi denylist được chia sẻ, và chỉ tới exp — đánh đổi mà một phiên (một DELETE) né được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A token minted for aud \"labflow-chat\" was sent to labflow-api. Why was it rejected?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một token đúc cho aud \"labflow-chat\" được gửi tới labflow-api. Vì sao bị từ chối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "EXPIRED — tokens for other services expire sooner"
+              },
+              {
+                "ma": "b",
+                "noiDung": "BAD_AUD — a recipient not named in aud MUST reject the token"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It was accepted; aud is only advisory"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BAD_ISS — the issuer was wrong"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>RFC 7519: if the recipient is not in aud, it MUST reject. Without the check, a leaked chat token becomes an API token.</p><p><i>VI: RFC 7519: nếu người nhận không trong aud, PHẢI từ chối. Thiếu phép kiểm, một token chat bị lộ thành token API.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With skewSec 0, a token whose exp equals now was rejected EXPIRED. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với skewSec 0, một token có exp bằng now bị từ chối EXPIRED. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The machine’s clock happened to be running a little fast"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A token’s exp must always be at least 60 seconds in the future"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exp is a boundary: on or after it, the token is expired"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The signature expired at the same moment as the token did"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>exp is a boundary: valid strictly before it. The same idea as Chapter 3’s session timeouts. Clock skew only extends it by the leeway, here 0.</p><p><i>VI: exp là một biên: hợp lệ hẳn trước nó. Cùng ý với các mốc hết hạn phiên của Chương 3. Dung sai chỉ nới thêm bằng mức cho phép, ở đây 0.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After revoke, a second service with its own empty denylist still accepted the token. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi thu hồi, một dịch vụ thứ hai với denylist rỗng riêng vẫn chấp nhận token. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The token was automatically re-issued right after being revoked"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The revoke call failed silently and never recorded the jti"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A jti denylist is per-verifier, so a service without it trusts the signature"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Revocation only ever works for refresh tokens, not access tokens"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A JWT cannot be un-issued; revocation works only where the denylist is shared, and only until exp — the trade-off a session (one DELETE) avoids.</p><p><i>VI: Một JWT không huỷ phát được; thu hồi chỉ hiệu lực ở nơi denylist được chia sẻ, và chỉ tới exp — đánh đổi mà một phiên (một DELETE) né được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a valid signature is enough.|||Tưởng một chữ ký hợp lệ là đủ."
+        },
+        {
+          "loi": "Thinking you can log a user out of a JWT instantly.|||Tưởng có thể đăng xuất một người khỏi JWT tức thì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "aud (audience)"
+        },
+        {
+          "en": "clock skew",
+          "vi": "lệch đồng hồ"
+        }
+      ]
+    },
+    {
+      "title": "4.3-2 — Write checkTime(payload, now, skewSec): exp and nbf with skew",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>now</code> is in <strong>milliseconds</strong>; <code>exp</code>/<code>nbf</code> are in <strong>seconds</strong>. Let <code>nowSec = Math.floor(now/1000)</code>. Return <code>'EXPIRED'</code> if <code>exp</code> is missing or <code>nowSec − skewSec ≥ exp</code> (on or after exp, allowing skew); <code>'NOT_YET'</code> if <code>nbf</code> is a number and <code>nowSec + skewSec &lt; nbf</code>; otherwise <code>'OK'</code>. Require <code>exp</code>; <code>nbf</code> is optional.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>now</code> tính bằng <strong>mili giây</strong>; <code>exp</code>/<code>nbf</code> tính bằng <strong>giây</strong>. Đặt <code>nowSec = Math.floor(now/1000)</code>. Trả <code>'EXPIRED'</code> nếu thiếu <code>exp</code> hoặc <code>nowSec − skewSec ≥ exp</code> (tại hoặc sau exp, cho dung sai); <code>'NOT_YET'</code> nếu <code>nbf</code> là số và <code>nowSec + skewSec &lt; nbf</code>; còn lại <code>'OK'</code>. Bắt buộc <code>exp</code>; <code>nbf</code> tuỳ chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkTime({\"exp\":1793697300,\"nbf\":1793696400}, 1793696500000, 60)",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Convert now to seconds first.|||Đổi now sang giây trước.",
+        "≥ at exp (on or after); < at nbf (before).|||≥ ở exp (tại hoặc sau); < ở nbf (trước)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** now is ms, exp/nbf are seconds ⇒ 'EXPIRED' | 'NOT_YET' | 'OK' */\nfunction checkTime(payload, now, skewSec) {\n  // Write your solution here\n  if (now >= payload.exp) return 'EXPIRED';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkTime(payload, now, skewSec) {\n  var nowSec = Math.floor(now / 1000);\n  if (typeof payload.exp !== 'number' || nowSec - skewSec >= payload.exp) return 'EXPIRED';\n  if (typeof payload.nbf === 'number' && nowSec + skewSec < payload.nbf) return 'NOT_YET';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>exp is a boundary and clocks disagree, so a small skew is allowed on each side (RFC 7519). A missing exp means a token that never dies, so it must be treated as expired (4.3).</p>",
+      "solutionExplanationHtmlVi": "<p>exp là một biên và đồng hồ lệch nhau, nên một dung sai nhỏ được cho ở mỗi phía (RFC 7519). Thiếu exp nghĩa là một token không chết, nên phải coi là hết hạn (4.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Fresh token",
+              "vi": "Token mới"
+            },
+            "goi": "checkTime({\"exp\":1793697300,\"nbf\":1793696400}, 1793696500000, 60)",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "exp == now, skew 0",
+              "vi": "exp == now, skew 0"
+            },
+            "goi": "checkTime({\"exp\":1793696400,\"nbf\":1793696400}, 1793696400000, 0)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "30 s past exp, skew 60",
+              "vi": "Quá exp 30 s, skew 60"
+            },
+            "goi": "checkTime({\"exp\":1793696400,\"nbf\":1793696400}, 1793696430000, 60)",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "61 s past exp, skew 60",
+              "vi": "Quá exp 61 s, skew 60"
+            },
+            "goi": "checkTime({\"exp\":1793696400,\"nbf\":1793696400}, 1793696461000, 60)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "nbf 90 s away, skew 60",
+              "vi": "nbf còn 90 s, skew 60"
+            },
+            "goi": "checkTime({\"exp\":1793697300,\"nbf\":1793696520}, 1793696430000, 60)",
+            "mongDoi": "NOT_YET",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No exp",
+              "vi": "Không exp"
+            },
+            "goi": "checkTime({\"nbf\":1793696400}, 1793696400000, 60)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing now (ms) with exp (s) directly.|||So now (ms) với exp (s) trực tiếp."
+        },
+        {
+          "loi": "Using > instead of ≥ at exp — exp == now would wrongly pass.|||Dùng > thay vì ≥ ở exp — exp == now sẽ qua sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exp / nbf"
+        },
+        {
+          "en": "clock skew",
+          "vi": "lệch đồng hồ"
+        }
+      ]
+    },
+    {
+      "title": "4.3-3 — Write checkClaims(payload, cfg): the seven, in order",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Assume the signature already verified. Check the seven claims and return the first failure code, or <code>'OK'</code>. In order: <code>iss</code> must equal <code>cfg.issuer</code> (<code>'BAD_ISS'</code>); <code>cfg.audience</code> must be in <code>aud</code> — which may be a string or an array (<code>'BAD_AUD'</code>); <code>sub</code> a non-empty string (<code>'NO_SUB'</code>); <code>exp</code> a number and not past by more than <code>cfg.skewSec</code> (<code>'EXPIRED'</code>); if present, <code>nbf</code> not in the future by more than skew (<code>'NOT_YET'</code>); <code>iat</code> a number (<code>'NO_IAT'</code>); <code>jti</code> present (<code>'NO_JTI'</code>) and not in <code>cfg.revoked</code> (<code>'REVOKED'</code>). <code>now</code> is ms; exp/nbf are seconds.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giả sử chữ ký đã xác minh. Kiểm bảy claim và trả mã trượt đầu tiên, hoặc <code>'OK'</code>. Theo thứ tự: <code>iss</code> phải bằng <code>cfg.issuer</code> (<code>'BAD_ISS'</code>); <code>cfg.audience</code> phải nằm trong <code>aud</code> — có thể là chuỗi hoặc mảng (<code>'BAD_AUD'</code>); <code>sub</code> là chuỗi khác rỗng (<code>'NO_SUB'</code>); <code>exp</code> là số và không quá hạn hơn <code>cfg.skewSec</code> (<code>'EXPIRED'</code>); nếu có, <code>nbf</code> không ở tương lai hơn dung sai (<code>'NOT_YET'</code>); <code>iat</code> là số (<code>'NO_IAT'</code>); <code>jti</code> có mặt (<code>'NO_JTI'</code>) và không trong <code>cfg.revoked</code> (<code>'REVOKED'</code>). <code>now</code> là ms; exp/nbf là giây.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise aud to an array, then indexOf.|||Chuẩn hoá aud thành mảng, rồi indexOf.",
+        "Return the FIRST failure; order matters.|||Trả lỗi ĐẦU TIÊN; thứ tự quan trọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** signature already OK ⇒ first failing claim code, or 'OK' */\nfunction checkClaims(payload, cfg) {\n  // Write your solution here\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkClaims(payload, cfg) {\n  var nowSec = Math.floor(cfg.now / 1000);\n  if (payload.iss !== cfg.issuer) return 'BAD_ISS';\n  var aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (aud.indexOf(cfg.audience) < 0) return 'BAD_AUD';\n  if (typeof payload.sub !== 'string' || !payload.sub) return 'NO_SUB';\n  if (typeof payload.exp !== 'number' || nowSec - cfg.skewSec >= payload.exp) return 'EXPIRED';\n  if (typeof payload.nbf === 'number' && nowSec + cfg.skewSec < payload.nbf) return 'NOT_YET';\n  if (typeof payload.iat !== 'number') return 'NO_IAT';\n  if (!payload.jti) return 'NO_JTI';\n  if (cfg.revoked.indexOf(payload.jti) >= 0) return 'REVOKED';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each claim defends a specific attack (4.3): iss/aud/sub say who; exp/nbf bound the window; iat gives age; jti enables revocation. A valid signature on the wrong claims is still the wrong token.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi claim chống một cú tấn công cụ thể (4.3): iss/aud/sub nói ai; exp/nbf chặn cửa sổ; iat cho tuổi; jti cho thu hồi. Một chữ ký hợp lệ trên các claim sai vẫn là token sai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "All seven present",
+              "vi": "Đủ bảy claim"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Wrong issuer",
+              "vi": "Sai issuer"
+            },
+            "goi": "checkClaims({\"iss\":\"https://evil.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "BAD_ISS",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Wrong audience",
+              "vi": "Sai audience"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-chat\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "BAD_AUD",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "aud array incl. us",
+              "vi": "aud mảng gồm ta"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":[\"labflow-chat\",\"labflow-api\"],\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Expired",
+              "vi": "Hết hạn"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793696200,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No jti",
+              "vi": "Không jti"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "NO_JTI",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked jti",
+              "vi": "jti đã thu hồi"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"usr_3\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-dead\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Empty subject",
+              "vi": "sub rỗng"
+            },
+            "goi": "checkClaims({\"iss\":\"https://id.labflow.example\",\"sub\":\"\",\"aud\":\"labflow-api\",\"iat\":1793696400,\"nbf\":1793696400,\"exp\":1793697300,\"jti\":\"jti-ok\"}, {\"issuer\":\"https://id.labflow.example\",\"audience\":\"labflow-api\",\"now\":1793696500000,\"skewSec\":60,\"revoked\":[\"jti-dead\"]})",
+            "mongDoi": "NO_SUB",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking aud only as a string, so an array aud always fails.|||Kiểm aud chỉ như chuỗi, khiến aud mảng luôn trượt."
+        },
+        {
+          "loi": "Forgetting jti, so revocation and replay checks do nothing.|||Quên jti, khiến thu hồi và chống phát lại vô dụng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "registered claims",
+          "vi": "claim chuẩn"
+        },
+        {
+          "en": "jti (JWT ID)"
+        }
+      ]
+    },
+    {
+      "title": "4.3-4 — Claim → the attack you skip",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "jwt"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each claim with the attack that skipping it allows.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi claim với cú tấn công mà bỏ nó cho phép.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "iss/aud are about who; exp about time; jti about revocation.|||iss/aud về ai; exp về thời gian; jti về thu hồi.",
+        "Which claim ties the token to one service?|||Claim nào buộc token vào một dịch vụ?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.3-4 — Claim → the attack you skip\n\nAnswer in the answer panel (no code needed).\n\n1. Claim → attackClaim → tấn công\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 4.3-4 — Claim → the attack you skip — answer key\n\n1. Claim → attackClaim → tấn công\n   - r1.q: a token from another issuer is accepted\n   - r2.q: a chat token is spent at the API\n   - r3.q: a stolen token never expires\n   - r4.q: nothing can be revoked or caught as a replay\n   Each registered claim defends one named attack; a verifier that checks only the signature leaves all four open (4.3).VI: Mỗi claim chuẩn chống một cú tấn công có tên; một bộ xác minh chỉ kiểm chữ ký để hở cả bốn (4.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each registered claim defends one named attack; a verifier that checks only the signature leaves all four open (4.3).</p><p><i>VI: Mỗi claim chuẩn chống một cú tấn công có tên; một bộ xác minh chỉ kiểm chữ ký để hở cả bốn (4.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Claim → attack</p><p style=\"opacity:.75;font-size:.92em\"><i>Claim → tấn công</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Skip this claim"
+              },
+              {
+                "ma": "q",
+                "ten": "And…",
+                "luaChon": [
+                  "a token from another issuer is accepted",
+                  "a chat token is spent at the API",
+                  "a stolen token never expires",
+                  "nothing can be revoked or caught as a replay"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "iss"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "aud"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "exp"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "jti"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "a token from another issuer is accepted",
+              "r2.q": "a chat token is spent at the API",
+              "r3.q": "a stolen token never expires",
+              "r4.q": "nothing can be revoked or caught as a replay"
+            },
+            "giaiThich": "<p>Each registered claim defends one named attack; a verifier that checks only the signature leaves all four open (4.3).</p><p><i>VI: Mỗi claim chuẩn chống một cú tấn công có tên; một bộ xác minh chỉ kiểm chữ ký để hở cả bốn (4.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking exp protects the audience.|||Tưởng exp bảo vệ audience."
+        },
+        {
+          "loi": "Thinking jti sets the lifetime.|||Tưởng jti đặt tuổi thọ."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

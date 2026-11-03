@@ -18,6 +18,7 @@ import { MENU_HUE, MENU_LABEL, MENU_ORDER, CONTACT, menuForPath, uiCopy, type Me
 import { ACCOUNT_LINKS, NAV_TREE, isActivePath, isVisible, visibleMenu, type NavItem, type Viewer } from './navTree';
 import { logoutEverywhere } from './navActions';
 import s from './nav.module.css';
+import { EXIT, FADE, SPRING_SHEET, stagger } from './navMotion';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -95,6 +96,14 @@ export default function MobileSheet(props: MobileSheetProps) {
   }, [open]);
 
   const name = user?.displayName || user?.name || user?.username || '';
+  // Each block of the sheet rises in after the sheet itself (iOS cascade).
+  const rise = (i: number) => (reduce
+    ? {}
+    : {
+        initial: { opacity: 0, y: 14 },
+        animate: { opacity: 1, y: 0 },
+        transition: { type: 'spring' as const, stiffness: 460, damping: 34, mass: 0.8, delay: stagger(i, 0.08, 0.035, 0.4) },
+      });
   const accountLinks = ACCOUNT_LINKS.filter((it) => isVisible(it, viewer));
 
   return (
@@ -105,8 +114,8 @@ export default function MobileSheet(props: MobileSheetProps) {
             className={s.sheetBackdrop}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, pointerEvents: 'none', transition: { duration: reduce ? 0 : 0.18 } }}
-            transition={{ duration: reduce ? 0 : 0.2 }}
+            exit={{ opacity: 0, pointerEvents: 'none', transition: reduce ? FADE : { ...EXIT, duration: 0.22 } }}
+            transition={reduce ? FADE : { duration: 0.26, ease: EASE }}
             onClick={onClose}
             aria-hidden
           />
@@ -116,10 +125,15 @@ export default function MobileSheet(props: MobileSheetProps) {
             role="dialog"
             aria-modal="true"
             aria-label={t.menuTitle}
-            initial={reduce ? { opacity: 0 } : { opacity: 0, x: 28 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={reduce ? { opacity: 0, pointerEvents: 'none' } : { opacity: 0, x: 28, pointerEvents: 'none', transition: { duration: 0.18, ease: EASE } }}
-            transition={{ duration: reduce ? 0 : 0.28, ease: EASE }}
+            // Grows out of the ☰ button (top-right) on a soft spring, like an
+            // iOS sheet presented from its source; shrinks back into it on close.
+            style={{ transformOrigin: 'calc(100% - 1.75rem) 2rem' }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.9, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={reduce
+              ? { opacity: 0, pointerEvents: 'none', transition: FADE }
+              : { opacity: 0, scale: 0.94, y: -8, pointerEvents: 'none', transition: { ...EXIT, duration: 0.2 } }}
+            transition={reduce ? FADE : { ...SPRING_SHEET, opacity: { duration: 0.2 } }}
           >
             <div className={s.sheetHead}>
               <Link href="/" className={s.brand} onClick={onClose} aria-label={t.home}>
@@ -134,35 +148,35 @@ export default function MobileSheet(props: MobileSheetProps) {
             </div>
 
             <div className={s.sheetScroll}>
-              <button type="button" className={s.sheetSearch} onClick={props.onOpenSearch}>
+              <motion.button type="button" className={s.sheetSearch} onClick={props.onOpenSearch} {...rise(0)}>
                 <Search aria-hidden />
                 <span>{t.palettePlaceholder}</span>
-              </button>
+              </motion.button>
 
               {viewer.isAuthenticated ? (
-                <div className={s.sheetAccount}>
+                <motion.div className={s.sheetAccount} {...rise(1)}>
                   <UserAvatar size={40} className="rounded-xl shrink-0" />
                   <div style={{ minWidth: 0 }}>
                     <div className={s.userName} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
                     {user?.email && <div className={s.userMail} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</div>}
                   </div>
-                </div>
+                </motion.div>
               ) : (
-                <div className={s.sheetAccount} style={{ display: 'block' }}>
+                <motion.div className={s.sheetAccount} style={{ display: 'block' }} {...rise(1)}>
                   <div className={s.userMail} style={{ fontSize: '0.875rem' }}>{t.signedOutHint}</div>
                   <div className={s.sheetAccountActions}>
                     <Link href="/login" className={s.chipBtn} onClick={onClose}>{t.login}</Link>
                     <Link href="/register" className={s.signupLink} onClick={onClose}>{t.signup}</Link>
                   </div>
-                </div>
+                </motion.div>
               )}
 
-              {MENU_ORDER.map((id) => {
+              {MENU_ORDER.map((id, gi) => {
                 const menu = visibleMenu(NAV_TREE.find((m) => m.id === id)!, viewer);
                 const isOpen = expanded === id;
                 const hue = MENU_HUE[id];
                 return (
-                  <div key={id} className={s.sheetGroup} style={{ ['--hue' as string]: hue }}>
+                  <motion.div key={id} className={s.sheetGroup} style={{ ['--hue' as string]: hue }} {...rise(2 + gi)}>
                     <button
                       type="button"
                       className={s.sheetGroupBtn}
@@ -183,7 +197,7 @@ export default function MobileSheet(props: MobileSheetProps) {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: reduce ? 0 : 0.26, ease: EASE }}
+                          transition={{ duration: reduce ? 0 : 0.32, ease: [0.32, 0.72, 0, 1] }}
                         >
                           <div className={s.sheetPanelInner}>
                             {menu.sections.map((sec) => (
@@ -200,12 +214,12 @@ export default function MobileSheet(props: MobileSheetProps) {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
                 );
               })}
 
               {viewer.isAuthenticated && (
-                <div className={s.sheetGroup} style={{ ['--hue' as string]: '#64748b' }}>
+                <motion.div className={s.sheetGroup} style={{ ['--hue' as string]: '#64748b' }} {...rise(2 + MENU_ORDER.length)}>
                   <button
                     type="button"
                     className={s.sheetGroupBtn}
@@ -245,7 +259,7 @@ export default function MobileSheet(props: MobileSheetProps) {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </motion.div>
               )}
             </div>
 

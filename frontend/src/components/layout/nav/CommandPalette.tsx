@@ -15,6 +15,7 @@ import { lockScroll, unlockScroll } from '@/lib/scrollLock';
 import { MENU_HUE, MENU_LABEL, MENU_ORDER, uiCopy, type MenuId } from './navLabels';
 import { ACCOUNT_LINKS, NAV_TREE, foldText, isVisible, type NavItem, type Viewer } from './navTree';
 import s from './nav.module.css';
+import { EASE_IOS, EXIT, FADE, SPRING_OPEN } from './navMotion';
 
 interface Entry { item: NavItem; group: MenuId | 'account'; hay: string; title: string }
 
@@ -109,8 +110,8 @@ export default function CommandPalette({ open, lang, viewer, onClose }: CommandP
             className={s.paletteBackdrop}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, pointerEvents: 'none' }}
-            transition={{ duration: reduce ? 0 : 0.16 }}
+            exit={{ opacity: 0, pointerEvents: 'none', transition: reduce ? FADE : EXIT }}
+            transition={reduce ? FADE : { duration: 0.22, ease: EASE_IOS }}
             onClick={onClose}
             aria-hidden
           />
@@ -119,10 +120,13 @@ export default function CommandPalette({ open, lang, viewer, onClose }: CommandP
             role="dialog"
             aria-modal="true"
             aria-label={t.paletteTitle}
-            initial={reduce ? { opacity: 0, x: '-50%' } : { opacity: 0, x: '-50%', y: -10, scale: 0.98 }}
+            style={{ transformOrigin: '50% 0%' }}
+            initial={reduce ? { opacity: 0, x: '-50%' } : { opacity: 0, x: '-50%', y: -14, scale: 0.94 }}
             animate={{ opacity: 1, x: '-50%', y: 0, scale: 1 }}
-            exit={{ opacity: 0, x: '-50%', y: reduce ? 0 : -6, scale: reduce ? 1 : 0.99, pointerEvents: 'none' }}
-            transition={{ duration: reduce ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+            exit={reduce
+              ? { opacity: 0, x: '-50%', pointerEvents: 'none', transition: FADE }
+              : { opacity: 0, x: '-50%', y: -8, scale: 0.96, pointerEvents: 'none', transition: EXIT }}
+            transition={reduce ? FADE : { ...SPRING_OPEN, opacity: { duration: 0.18 } }}
           >
             <Command shouldFilter={false} loop label={t.paletteTitle} style={{ display: 'flex', flexDirection: 'column', minHeight: 0, flex: 1 }}>
               <div className={s.paletteInputRow}>

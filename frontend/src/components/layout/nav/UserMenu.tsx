@@ -3,13 +3,14 @@
 /** Avatar dropdown (lazy chunk). Arrow keys move between rows; Esc is handled by SiteNav. */
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Crown, KeyRound, LogOut, Moon, Sun } from 'lucide-react';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { ACCOUNT_LINKS, isVisible, type Viewer } from './navTree';
 import { uiCopy } from './navLabels';
 import { logoutEverywhere } from './navActions';
 import s from './nav.module.css';
+import { EXIT, FADE, SPRING_OPEN } from './navMotion';
 
 export interface UserMenuProps {
   lang: 'en' | 'vi';
@@ -22,7 +23,13 @@ export interface UserMenuProps {
   onClose: () => void;
 }
 
-export default function UserMenu({ lang, user, viewer, isPro, theme, onToggleTheme, onChangePassword, onClose }: UserMenuProps) {
+/** Stays mounted after the first open so the close can animate (AnimatePresence lives here,
+ *  not in SiteNav, to keep framer-motion out of the always-loaded nav chunk). */
+export default function UserMenu({ open, ...props }: UserMenuProps & { open: boolean }) {
+  return <AnimatePresence>{open && <UserMenuBody key="user-menu" {...props} />}</AnimatePresence>;
+}
+
+function UserMenuBody({ lang, user, viewer, isPro, theme, onToggleTheme, onChangePassword, onClose }: UserMenuProps) {
   const reduce = useReducedMotion();
   const t = uiCopy(lang);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -48,9 +55,14 @@ export default function UserMenu({ lang, user, viewer, isPro, theme, onToggleThe
       role="menu"
       aria-label={t.account}
       className={s.userMenu}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.98 }}
+      // Grows out of the avatar button (top-right corner) on the shared spring.
+      style={{ transformOrigin: 'calc(100% - 1.25rem) 0px' }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: reduce ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+      exit={reduce
+        ? { opacity: 0, pointerEvents: 'none', transition: FADE }
+        : { opacity: 0, y: -6, scale: 0.94, pointerEvents: 'none', transition: EXIT }}
+      transition={reduce ? FADE : { ...SPRING_OPEN, opacity: { duration: 0.18 } }}
       onKeyDown={onKeyDown}
     >
       <div className={s.userHead}>

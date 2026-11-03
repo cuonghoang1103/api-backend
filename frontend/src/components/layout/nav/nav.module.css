@@ -343,6 +343,21 @@
 }
 
 /* ── Mega panel ──────────────────────────────────────────────────────────── */
+/* The page behind an open mega panel dims (opacity-only animation). It never
+   takes clicks — hover-out and outside-click keep working exactly as before.
+   Starts under the bar so the bar stays crisp.
+   ⚠️ NO backdrop-filter here (measured 03/11/2026): the hero/season canvases
+   animate behind it, so a blur must be recomputed every frame — opening a menu
+   dropped from ~106 fps to ~30 fps in headless Chromium (no scrim 106 · dim
+   only 90 · dim + blur(3px) 32). A plain dim keeps the open at 60 fps. */
+.megaScrim {
+  position: fixed;
+  inset: var(--app-nav-h, 4rem) 0 0 0;
+  z-index: 58;
+  pointer-events: none;
+  background: rgba(8, 6, 20, 0.18);
+}
+:global(html.theme-dark) .megaScrim { background: rgba(0, 0, 0, 0.35); }
 .panelWrap {
   position: fixed;
   top: calc(var(--app-nav-h, 4rem) + 6px);

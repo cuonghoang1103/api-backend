@@ -59,6 +59,9 @@ function warmPanels() {
   warmed = true;
   void import('./MegaPanel');
   void import('./CommandPalette');
+  // Phones/tablets open the sheet instead — warm it too, so its first open animates
+  // immediately instead of waiting for the chunk (03/11/2026).
+  if (typeof window !== 'undefined' && window.innerWidth < 1024) void import('./MobileSheet');
 }
 
 const OPEN_DELAY = 70;
@@ -154,6 +157,9 @@ export default function SiteNav() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  // Keep the (lazy) account menu mounted after its first open so it can animate out.
+  const [userMenuMounted, setUserMenuMounted] = useState(false);
+  useEffect(() => { if (userMenuOpen) setUserMenuMounted(true); }, [userMenuOpen]);
   const [bellOpen, setBellOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
@@ -221,10 +227,13 @@ export default function SiteNav() {
     };
   }, [closeMenu]);
 
-  // Warm the panel chunks once the page is idle.
+  // Warm the panel chunks once the page is idle. Below 1024px also MOUNT the
+  // (closed) sheet, so the first tap on ☰ animates at once instead of waiting
+  // ~0.5 s for next/dynamic to resolve and mount it (measured 03/11/2026).
   useEffect(() => {
     const w = window as any;
-    const id = w.requestIdleCallback ? w.requestIdleCallback(warmPanels, { timeout: 4000 }) : window.setTimeout(warmPanels, 2500);
+    const warm = () => { warmPanels(); if (window.innerWidth < 1024) setSheetMounted(true); };
+    const id = w.requestIdleCallback ? w.requestIdleCallback(warm, { timeout: 4000 }) : window.setTimeout(warm, 2500);
     return () => { if (w.cancelIdleCallback) w.cancelIdleCallback(id); else window.clearTimeout(id); };
   }, []);
 
@@ -439,8 +448,9 @@ export default function SiteNav() {
                     <UserAvatar size={28} className="rounded-lg" />
                     <ChevronDown size={14} aria-hidden />
                   </button>
-                  {userMenuOpen && (
+                  {(userMenuOpen || userMenuMounted) && (
                     <UserMenu
+                      open={userMenuOpen}
                       lang={lang}
                       user={displayUser}
                       viewer={viewer}

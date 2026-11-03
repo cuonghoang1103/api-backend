@@ -9,6 +9,11 @@
  * Exit is a fixed-length tween with `pointerEvents: 'none'` applied at once —
  * the old dock taught us a stalled exit leaves an invisible sheet that eats
  * clicks on the next page.
+ *
+ * Opening (03/11/2026): the panel grows out of the trigger — `transform-origin`
+ * sits under the button that opened it — on a soft spring, the page behind dims
+ * and blurs (fixed radius, opacity-only), and the rows cascade in. Reduced
+ * motion ⇒ plain fades. See `navMotion.ts`.
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -17,6 +22,7 @@ import { ArrowRight, ChevronRight, Mail, Phone } from 'lucide-react';
 import { MENU_HUE, MENU_LABEL, MENU_ORDER, CONTACT, uiCopy, type MenuId } from './navLabels';
 import { menuById, visibleMenu, isActivePath, type NavSection, type Viewer } from './navTree';
 import s from './nav.module.css';
+import { EXIT, FADE, SPRING_OPEN, stagger } from './navMotion';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const WIDTH: Record<2 | 3, number> = { 2: 760, 3: 1010 };
@@ -89,6 +95,8 @@ export default function MegaPanel(props: MegaPanelProps) {
   const rect = anchor?.getBoundingClientRect();
   const centre = rect ? rect.left + rect.width / 2 : vw / 2;
   const left = Math.round(Math.max(16, Math.min(centre - width / 2, vw - width - 16)));
+  // Grow from the trigger: the origin is the trigger's centre, in panel space.
+  const originX = Math.round(Math.max(0, Math.min(width, centre - left)));
 
   // ── Height follows the content (measured, then animated) ───────────────
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -145,10 +153,28 @@ export default function MegaPanel(props: MegaPanelProps) {
     items[n]?.focus();
   };
 
-  const t0 = reduce ? { duration: 0 } : { type: 'spring' as const, stiffness: 420, damping: 38, mass: 0.9 };
+  const t0 = reduce ? { duration: 0 } : SPRING_OPEN;
+  // Rows cascade only on the first open; switching menus slides the content instead.
+  const firstOpen = useRef(true);
+  useEffect(() => {
+    if (!open) { firstOpen.current = true; return; }
+    const id = window.setTimeout(() => { firstOpen.current = false; }, 450);
+    return () => window.clearTimeout(id);
+  }, [open]);
 
   return (
     <AnimatePresence>
+      {open && (
+        <motion.div
+          key="mega-scrim"
+          className={`${s.scope} ${s.megaScrim}`}
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: reduce ? FADE : EXIT }}
+          transition={reduce ? FADE : { duration: 0.24, ease: EASE }}
+        />
+      )}
       {open && (
         <div className={`${s.scope} ${s.panelWrap}`} key="mega">
           <motion.div
@@ -157,11 +183,13 @@ export default function MegaPanel(props: MegaPanelProps) {
             role="region"
             aria-label={MENU_LABEL[menuId][lang]}
             className={s.panel}
-            style={{ ['--hue' as string]: hue }}
-            initial={reduce ? { opacity: 0, x: left, width } : { opacity: 0, y: -8, scale: 0.985, x: left, width }}
+            style={{ ['--hue' as string]: hue, transformOrigin: `${originX}px 0px` }}
+            initial={reduce ? { opacity: 0, x: left, width } : { opacity: 0, y: -12, scale: 0.94, x: left, width }}
             animate={{ opacity: 1, y: 0, scale: 1, x: left, width, height }}
-            exit={{ opacity: 0, y: reduce ? 0 : -6, scale: reduce ? 1 : 0.99, pointerEvents: 'none', transition: { duration: reduce ? 0 : 0.16, ease: EASE } }}
-            transition={{ ...t0, opacity: { duration: reduce ? 0 : 0.18 } }}
+            exit={reduce
+              ? { opacity: 0, pointerEvents: 'none', transition: FADE }
+              : { opacity: 0, y: -8, scale: 0.96, pointerEvents: 'none', transition: EXIT }}
+            transition={{ ...t0, opacity: { duration: reduce ? 0.16 : 0.2 } }}
             onPointerEnter={props.onPointerEnter}
             onPointerLeave={(e) => { if (e.pointerType === 'mouse') props.onPointerLeave(); }}
             onKeyDown={onKeyDown}
@@ -191,11 +219,20 @@ export default function MegaPanel(props: MegaPanelProps) {
                     />
                     {(() => {
                       let n = 0;
+                      const cascade = !reduce && firstOpen.current;
                       return stackColumns(menu.sections, menu.columns).map((col, ci) => (
                         <div key={ci} className={s.col}>
                           {col.map((sec) => (
                             <section key={sec.id} className={s.section} aria-labelledby={`mega-${menuId}-${sec.id}`}>
-                              <h3 id={`mega-${menuId}-${sec.id}`} className={s.sectionHead}>{sec.heading[lang]}</h3>
+                              <motion.h3
+                                id={`mega-${menuId}-${sec.id}`}
+                                className={s.sectionHead}
+                                initial={cascade ? { opacity: 0 } : false}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2, delay: stagger(n, 0.04) }}
+                              >
+                                {sec.heading[lang]}
+                              </motion.h3>
                               <ul className={s.items}>
                                 {sec.items.map((it) => {
                                   const i = n++;
@@ -204,9 +241,11 @@ export default function MegaPanel(props: MegaPanelProps) {
                                   return (
                                     <motion.li
                                       key={it.href}
-                                      initial={reduce ? false : { opacity: 0, y: 6 }}
-                                      animate={{ opacity: 1, y: 0 }}
-                                      transition={{ duration: reduce ? 0 : 0.24, delay: reduce ? 0 : 0.03 + i * 0.022, ease: EASE }}
+                                      initial={cascade ? { opacity: 0, y: 10, scale: 0.98 } : reduce ? false : { opacity: 0 }}
+                                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                                      transition={cascade
+                                        ? { type: 'spring', stiffness: 520, damping: 34, mass: 0.7, delay: stagger(i), opacity: { duration: 0.22, delay: stagger(i) } }
+                                        : { duration: reduce ? 0 : 0.18, ease: EASE }}
                                     >
                                       <Link
                                         href={it.href}
@@ -235,7 +274,12 @@ export default function MegaPanel(props: MegaPanelProps) {
                     })()}
                   </div>
                 </div>
-                <div className={s.panelFoot}>
+                <motion.div
+                  className={s.panelFoot}
+                  initial={!reduce && firstOpen.current ? { opacity: 0 } : false}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: 0.16 }}
+                >
                   <span className={s.footText}>
                     {menu.footer.text[lang]}{' '}
                     <Link href={menu.footer.cta.href} prefetch={false} className={s.footCta} onClick={props.onNavigate}>
@@ -251,7 +295,7 @@ export default function MegaPanel(props: MegaPanelProps) {
                       {t.contactPage} <ChevronRight size={14} aria-hidden />
                     </Link>
                   </span>
-                </div>
+                </motion.div>
               </motion.div>
             </AnimatePresence>
           </motion.div>

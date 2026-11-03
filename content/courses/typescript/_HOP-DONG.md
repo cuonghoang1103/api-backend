@@ -341,9 +341,20 @@ typescript: 'typescript-practice',
   testing `tst-1-1-cau-truc` ↔ 9.2 compiler vs test; nodejs `nodejs-1-5-module` ↔ 9.4 nodenext/ESM).
   ⚠ Đo được: noImplicitReturns/noUnusedLocals KHÔNG trong tsconfig khoá (chỉ noUncheckedIndexedAccess) ⇒ Code Lab 9.3 chỉ test được noUncheckedIndexedAccess; lab tsconfig sâu 4 tầng cần `../../../../`.
   Ảnh chụp `_labflow-ts` cuối Ch9 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab9 4.5/8/9/10): Soạn MỘT phiên, KHÔNG fork.
-- **⏸ TẠM DỪNG sau Chương 9 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 10** (§9 — declaration files & modules: `.d.ts`, kiểu đi giữa package). Làm y Ch5–9:
-  MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`, đề Code Lab `ts` + nguon + `_track.json` + xuat-de + máy chấm trình duyệt,
-  liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`, `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main).
+- 04/11/2026 — **Chương 10 trọn** (thay placeholder cũ một tệp): 4 bài (slug giữ: 10.1 es-modules, 10.2 declaration-files, 10.3 augmentation,
+  10.4 types-from-packages; nguồn bài + giảng ~107k/6) + Lab 10 (MỚI `typescript-10-6-lab-viet-dts`) + quiz 10 câu (slug giữ `typescript-10-5-quiz`); tệp chương `s10-modules-declarations.mjs` soạn lại.
+  5 deck / 33 slide đẩy `TS/v1` (ts-10-1..4 mỗi cái 6, ts-lab-10 9; 0 lỗi kiem-slide). **6 đề Code Lab `ts`** (ts-cl-10-1 a–b, 10-2-a, 10-3-a, 10-4-a, ts-cl-lab-10;
+  7 sai mẫu) — kiem-de-ts **150/150** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **716/716**; track +5 module (⇒ 56 module / 150 đề).
+  **⚠ Giới hạn máy chấm trình duyệt đã đo:** sidecar `.d.ts` cho một `.js` thật ⇒ TS 6.0.3 "Debug Failure. Output generation failed" (đã BỎ đề sidecar); augmentation của một
+  ambient `declare module` KHÔNG gộp interface ổn định (đã BỎ); bare-import `declare module` chạy được khi `.d.ts` là tệp HỌC VIÊN, không chạy được khi là coDinh (ambient không
+  vào include của phép kiểm phaiLoi). ⇒ Code Lab Ch10 dùng: import type · declare module (tệp học viên) · gộp khai báo · module .ts quan hệ. KHÔNG dùng @types/node / node: / process.env ở Code Lab.
+  Lab 10 (máy chấm `cham-lab-10.mjs`, tsc + Node thật, hỗ trợ `.js` sidecar): viết `labflow-slug.d.ts` cho một module JS không kiểu 4 export; A đúng-dạng · B cách-dùng-đúng · C no any/@ts- · D .js thật qua test · E 8 lời gọi sai.
+  Số đo Lab 10: stub any **6** · any-param+optional **8** · optional max **9.5** · tham khảo **10**. `demo10/` (26 demo gồm sidecar .js/.d.ts, declare module, declare global ProcessEnv, declaration merging, node:path, local package types field).
+  LabFlow TS: `npm test` giữ **60**. **2 cặp liên kết chéo hai chiều** (prisma `pr-1-2-generate-viet-gi` ↔ 10.2 .d.ts Prisma sinh; `pr-8-1-kieu-nen-import` ↔ 10.4 luật chung lấy kiểu từ package).
+  Ảnh chụp `_labflow-ts` cuối Ch10 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab10 6/8/9.5/10): Soạn MỘT phiên, KHÔNG fork.
+- **⏸ (chạy LIÊN TỤC từ 04/11 — làm tiếp Chương 11 rồi 12, chỉ dừng nếu kiểm ĐỎ không tự sửa được).** Chương 11 (§9 — Backend Node/Express: API LabFlow có kiểu; Lab 11 handler + lỗi có kiểu, test API).
+  Chương 12 (React: form đặt phòng + client API dùng chung kiểu; Lab 12 component + hook có kiểu). ⚠ Ch11/Ch12 KHÔNG cài @types/express/@types/react vào `_labflow-ts` (vỡ máy chấm trình duyệt + phình lockfile)
+  — dùng mô hình kiểu tự-chứa (self-contained) của bề mặt Express/React, đo thật bằng tsc + Node với @types/node. Làm y Ch5–10: MỘT phiên KHÔNG fork, `git rev-parse HEAD` lại ngay trước commit-tree.
   Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.

@@ -167,6 +167,11 @@ async function writeAuditLog(db: DbClient, action: string) {
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">DbNull, JsonNull and null</span><span class="lc-sub">prisma.io/docs · The three-way distinction, which is the most-asked Prisma question there is</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">CuongThai course — TypeScript</span><span class="lc-sub">Pick, Omit, conditional types and narrowing — the language features every pattern here rests on</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Find and replace nine hand-written types with generated ones, then rename a column and watch what breaks</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The general rule behind generated types — TS 10.4: Getting types from packages</span><span class="lc-sub">Same: a tool ships declarations and you import the types it produced. Different: this is the rule every typed dependency follows — a package’s <code>types</code> field, an <code>@types</code> package, or a declaration you write — so Prisma’s generated client is one instance of a pattern you now recognise everywhere.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -316,6 +321,11 @@ async function writeAuditLog(db: DbClient, action: string) {
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/special-fields-and-types/working-with-json-fields#advanced-example-update-a-nested-json-key-value" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">DbNull, JsonNull và null</span><span class="lc-sub">prisma.io/docs · Phân biệt ba đường, và là câu hỏi được hỏi nhiều nhất về Prisma</span></span></a>
 <a class="link-card" href="/courses/typescript/learn${REF}"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — TypeScript</span><span class="lc-sub">Pick, Omit, kiểu điều kiện và thu hẹp kiểu — những tính năng ngôn ngữ mà mọi mẫu ở đây dựa lên</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Tìm và thay chín kiểu viết tay bằng kiểu được sinh, rồi đổi tên một cột và xem thứ gì vỡ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Luật chung đằng sau kiểu được sinh — TS 10.4: Lấy kiểu từ package</span><span class="lc-sub">Giống: một công cụ giao khai báo và bạn import kiểu nó tạo ra. Khác: đây là luật mọi dependency có kiểu đi theo — trường <code>types</code> của một package, một package <code>@types</code>, hay một khai báo bạn viết — nên client Prisma sinh ra chỉ là một ví dụ của một mẫu giờ bạn nhận ra ở mọi nơi.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

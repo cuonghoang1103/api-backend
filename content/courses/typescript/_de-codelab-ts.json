@@ -6549,5 +6549,268 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-10-1-a",
+    "bai": "typescript-10-1-es-modules",
+    "tieuDe": "Import a type with import type|||Import một kiểu bằng import type",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p><code>Money</code> is a type, imported as a value — under <code>verbatimModuleSyntax</code> that is TS1484. Change the import to <code>import type</code> so the whole import is erased at run time.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p><code>Money</code> là một kiểu, import như một giá trị — dưới <code>verbatimModuleSyntax</code> đó là TS1484. Đổi import thành <code>import type</code> để cả import bị xoá lúc chạy.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "// Money is a type, but it is imported as a value.\nimport { Money } from './money.ts';\nexport function total(items: Money[]): number {\n  return items.reduce((sum, m) => sum + m.amount, 0);\n}\n"
+    },
+    "coDinh": {
+      "src/money.ts": "export type Money = { amount: number; currency: string };\n",
+      "kiem/dung.ts": "import { total } from '../src/app.ts';\nconst n: number = total([{ amount: 10, currency: 'USD' }]);\nexport { n };\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { total } from '../src/app.ts';\ntest('total', () => assert.equal(total([{ amount: 10, currency: 'USD' }, { amount: 5, currency: 'USD' }]), 15));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Money } from './money.ts';\nexport function total(items: Money[]): number {\n  return items.reduce((sum, m) => sum + m.amount, 0);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "Money still imported as a value (TS1484)",
+        "tep": {
+          "src/app.ts": "import { Money } from './money.ts';\nexport function total(items: Money[]): number { return items.reduce((s, m) => s + m.amount, 0); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-10-1-b",
+    "bai": "typescript-10-1-es-modules",
+    "tieuDe": "Export a type and a value|||Export một kiểu và một giá trị",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The consumer needs both the <code>Lab</code> type and the <code>makeLab</code> function from this module, but the module exports neither. Add the right exports — a <code>type</code> export and a value export — so the consumer compiles.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the wrong value in kiem/sai.ts is TS2322.</p>|||<p>Bên dùng cần cả kiểu <code>Lab</code> và hàm <code>makeLab</code> từ module này, nhưng module không export cái nào. Thêm đúng export — một <code>type</code> export và một value export — để bên dùng biên dịch.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị sai trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/lab.ts": "// Nothing is exported yet — the consumer cannot import Lab or makeLab.\ntype Lab = { code: string; seats: number };\nfunction makeLab(code: string, seats: number): Lab {\n  return { code, seats };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { makeLab } from '../src/lab.ts';\nimport type { Lab } from '../src/lab.ts';\nconst be: Lab = makeLab('BE-201', 40);\nexport { be };\n",
+      "kiem/sai.ts": "import type { Lab } from '../src/lab.ts';\nconst bad: Lab = { code: 'BE-201', seats: 'forty' }; // expect TS2322\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "export type Lab = { code: string; seats: number };\nexport function makeLab(code: string, seats: number): Lab {\n  return { code, seats };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "nothing exported — the consumer cannot import anything",
+        "tep": {
+          "src/lab.ts": "type Lab = { code: string; seats: number };\nfunction makeLab(code: string, seats: number): Lab { return { code, seats }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-10-2-a",
+    "bai": "typescript-10-2-declaration-files",
+    "tieuDe": "Type a package with declare module|||Gõ kiểu một package bằng declare module",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p>An app imports <code>parseId</code> from a bare-name package <code>labflow-legacy</code> that has no types — a bare import with no declaration is TS2307. Write a <code>declare module</code> block in <code>types.d.ts</code> that declares <code>parseId(raw: string): number</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the wrong call in kiem/sai.ts is TS2345.</p>|||<p>Một app import <code>parseId</code> từ một package tên trần <code>labflow-legacy</code> không có kiểu — một import trần không khai báo là TS2307. Viết một khối <code>declare module</code> trong <code>types.d.ts</code> khai <code>parseId(raw: string): number</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và lời gọi sai trong kiem/sai.ts là TS2345.</p>",
+    "khoiDau": {
+      "types.d.ts": "// Declare the module so the bare import resolves and is typed.\n// declare module 'labflow-legacy' { ... }\n"
+    },
+    "coDinh": {
+      "src/app.ts": "import { parseId } from 'labflow-legacy';\nexport const id: number = parseId('bk_42');\n",
+      "kiem/dung.ts": "import { parseId } from 'labflow-legacy';\nconst n: number = parseId('bk_1');\nexport { n };\n",
+      "kiem/sai.ts": "import { parseId } from 'labflow-legacy';\nexport const bad = parseId(42); // expect TS2345\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "types.d.ts": "declare module 'labflow-legacy' {\n  export function parseId(raw: string): number;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "no declare module — the bare import is TS2307",
+        "tep": {
+          "types.d.ts": "// nothing declared\nexport {};\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-10-3-a",
+    "bai": "typescript-10-3-augmentation",
+    "tieuDe": "Merge a second interface declaration|||Gộp một khai báo interface thứ hai",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>A consumer needs a <code>Lab</code> with both <code>code</code> and <code>seats</code>, but the module declares only <code>code</code>. Add a second <code>interface Lab</code> declaration with <code>seats: number</code> — the two merge into one.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the value missing <code>seats</code> in kiem/sai.ts is TS2741.</p>|||<p>Một bên dùng cần một <code>Lab</code> có cả <code>code</code> và <code>seats</code>, nhưng module chỉ khai <code>code</code>. Thêm một khai báo <code>interface Lab</code> thứ hai với <code>seats: number</code> — hai cái gộp thành một.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị thiếu <code>seats</code> trong kiem/sai.ts là TS2741.</p>",
+    "khoiDau": {
+      "src/lab.ts": "export interface Lab {\n  code: string;\n}\n// Add a second declaration of Lab with a seats field (it merges with the one above).\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Lab } from '../src/lab.ts';\nconst be: Lab = { code: 'BE-201', seats: 40 };\nexport { be };\n",
+      "kiem/sai.ts": "import type { Lab } from '../src/lab.ts';\nconst bad: Lab = { code: 'BE-201' }; // expect TS2741\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/lab.ts": "export interface Lab {\n  code: string;\n}\nexport interface Lab {\n  seats: number;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "only one declaration — seats is missing",
+        "tep": {
+          "src/lab.ts": "export interface Lab { code: string; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-10-4-a",
+    "bai": "typescript-10-4-types-from-packages",
+    "tieuDe": "A wrong call into a typed module|||Một lời gọi sai vào một module có kiểu",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>The <code>ids</code> module ships types: <code>makeId(prefix: string): string</code> — like any typed dependency, a wrong call into it is caught. The call passes a number; fix it to a valid use of the typed API.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, the wrong call in kiem/sai.ts is TS2345, and the test passes.</p>|||<p>Module <code>ids</code> giao kiểu: <code>makeId(prefix: string): string</code> — như mọi dependency có kiểu, một lời gọi sai vào nó bị bắt. Lời gọi đưa một number; sửa thành một cách dùng hợp lệ của API có kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, lời gọi sai trong kiem/sai.ts là TS2345, và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "import { makeId } from './ids.ts';\n// Wrong: makeId takes a string prefix, not a number.\nexport function newBooking(): string {\n  return makeId(42);\n}\n"
+    },
+    "coDinh": {
+      "src/ids.ts": "let counter = 0;\nexport function makeId(prefix: string): string {\n  counter += 1;\n  return prefix + '_' + counter;\n}\n",
+      "kiem/dung.ts": "import { newBooking } from '../src/app.ts';\nconst id: string = newBooking();\nexport { id };\n",
+      "kiem/sai.ts": "import { makeId } from '../src/ids.ts';\nexport const bad = makeId(99); // expect TS2345\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { newBooking } from '../src/app.ts';\ntest('newBooking returns a string id', () => assert.equal(typeof newBooking(), 'string'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "kiem/dung.ts",
+        "test/app.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import { makeId } from './ids.ts';\nexport function newBooking(): string {\n  return makeId('bk');\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still passes a number to makeId (TS2345)",
+        "tep": {
+          "src/app.ts": "import { makeId } from './ids.ts';\nexport function newBooking(): string { return makeId(99); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-10",
+    "bai": "typescript-10-6-lab-viet-dts",
+    "tieuDe": "Lab 10 — declare a whole package|||Lab 10 — khai một package trọn",
+    "doKho": "HARD",
+    "phut": 25,
+    "moTa": "<p>The lab in miniature. The <code>labflow-slug</code> package has no types. Write a <code>declare module 'labflow-slug'</code> block that types all four exports: <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, <code>isSlug(value: string): boolean</code>. The correct uses must compile, the wrong uses must be refused. No <code>any</code>, no <code>@ts-</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and every <code>// expect</code> line of kiem/sai.ts is refused.</p>|||<p>Lab thu nhỏ. Package <code>labflow-slug</code> không có kiểu. Viết một khối <code>declare module 'labflow-slug'</code> gõ kiểu cả bốn export: <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, <code>isSlug(value: string): boolean</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối. Không <code>any</code>, không <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối.</p>",
+    "khoiDau": {
+      "types.d.ts": "// Type every export of labflow-slug.\ndeclare module 'labflow-slug' {\n  // SLUG_MAX, slugify, truncate, isSlug\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nconst s: string = slugify('Phong Lab');\nconst t: string = truncate('hello world', 5);\nconst ok: boolean = isSlug('be-201');\nconst max: number = SLUG_MAX;\nexport { s, t, ok, max };\n",
+      "kiem/sai.ts": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nexport const s1 = slugify(42); // expect TS2345\nexport const s2 = truncate('x'); // expect TS2554\nexport const s3: number = slugify('x'); // expect TS2322\nexport const s4 = SLUG_MAX.toUpperCase(); // expect TS2339\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "types.d.ts": "declare module 'labflow-slug' {\n  export const SLUG_MAX: number;\n  export function slugify(text: string): string;\n  export function truncate(text: string, max: number): string;\n  export function isSlug(value: string): boolean;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the module is declared but empty — the imports are never typed",
+        "tep": {
+          "types.d.ts": "declare module 'labflow-slug' {}\n"
+        }
+      },
+      {
+        "nhan": "SLUG_MAX typed string — S4 slips (toUpperCase is valid on a string)",
+        "tep": {
+          "types.d.ts": "declare module 'labflow-slug' {\n  export const SLUG_MAX: string;\n  export function slugify(text: string): string;\n  export function truncate(text: string, max: number): string;\n  export function isSlug(value: string): boolean;\n}\n"
+        }
+      }
+    ]
   }
 ]

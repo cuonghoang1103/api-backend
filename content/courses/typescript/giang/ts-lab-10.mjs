@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 10 Write a .d.ts for a JS package (deck ts-lab-10, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-lab-10', 'Lab 10 — Write a .d.ts for a JS package', 'Lab 10 — Viết một .d.ts cho một package JS', [
+  [1, 'Lab 10 — Write a .d.ts for a JS package',
+    `<p>A real untyped JavaScript module, labflow-slug.js, ships with four exports and no types. Your job is to write labflow-slug.d.ts — the declaration file that gives it types — until every wrong call against it is refused. The any stub a teammate left scores 6; a correct declaration scores 10, and the real .js never changes.</p>`,
+    `<p>Một module JavaScript không kiểu thật, labflow-slug.js, giao bốn export và không có kiểu. Việc của bạn là viết labflow-slug.d.ts — tệp khai báo cho nó kiểu — tới khi mọi lời gọi sai với nó bị từ chối. Bản stub any đồng đội để lại được 6; một khai báo đúng được 10, và .js thật không bao giờ đổi.</p>`],
+  [2, 'The task',
+    `<p>Declare the four exports: SLUG_MAX (a number), slugify(text: string): string, truncate(text: string, max: number): string, and isSlug(value: string): boolean. No any, no @ts-. The grader checks your declaration is well-formed, the correct uses type-check, the real .js passes its tests, and eight wrong calls are each refused.</p>`,
+    `<p>Khai bốn export: SLUG_MAX (một number), slugify(text: string): string, truncate(text: string, max: number): string, và isSlug(value: string): boolean. Không any, không @ts-. Máy chấm kiểm khai báo của bạn đúng dạng, các cách dùng đúng kiểu-kiểm được, .js thật qua test, và tám lời gọi sai mỗi cái bị từ chối.</p>`],
+  [3, 'An untyped import is unknown',
+    `<p>Before you write anything, importing labflow-slug.js has no types — under strict that is TS7016, and without the declaration every call into it would be any. This is the hole you are closing: a single untyped dependency turns off checking for everything that uses it.</p>`,
+    `<p>Trước khi bạn viết gì, import labflow-slug.js không có kiểu — dưới strict đó là TS7016, và không có khai báo mọi lời gọi vào nó là any. Đây là lỗ bạn đang bịt: một dependency không kiểu tắt phép kiểm cho mọi thứ dùng nó.</p>`],
+  [4, 'The any stub scores 6',
+    `<p>The teammate’s stub declares every export as any. It is well-formed and the tests pass, but it checks nothing — slugify(42), a missing argument, a number read as a string all slip through, and the any costs the honesty point. 6/10: a declaration that exists but does not do its job.</p>`,
+    `<p>Bản stub của đồng đội khai mọi export là any. Nó đúng dạng và test qua, nhưng nó không kiểm gì — slugify(42), một đối số thiếu, một number đọc như một string đều lọt, và any tốn điểm trung thực. 6/10: một khai báo tồn tại nhưng không làm việc của nó.</p>`],
+  [5, 'The eight wrong calls',
+    `<p>Each must be refused by a correct declaration: slugify given a number (TS2345), truncate missing its max (TS2554), a string return read as a number (TS2322), a boolean read as if it had .length (TS2339), SLUG_MAX read as a string (TS2339), a string where max wants a number (TS2345), an import of a name the module does not export (TS2305), and a string return read as a boolean (TS2322).</p>`,
+    `<p>Mỗi cái phải bị một khai báo đúng từ chối: slugify đưa một number (TS2345), truncate thiếu max (TS2554), một giá trị trả string đọc như number (TS2322), một boolean đọc như thể có .length (TS2339), SLUG_MAX đọc như một string (TS2339), một string ở chỗ max muốn một number (TS2345), một import tên module không export (TS2305), và một giá trị trả string đọc như một boolean (TS2322).</p>`],
+  [6, 'Attempt A: any on a parameter (8/10)',
+    `<p>You typed most exports but left slugify’s parameter any and made truncate’s max optional. The any costs the honesty point, and the two loosened signatures let slugify(42) and truncate with no max slip through (E is 6/8). A declaration is only as strict as its loosest signature.</p>`,
+    `<p>Bạn gõ hầu hết export nhưng để tham số của slugify là any và làm max của truncate optional. any tốn điểm trung thực, và hai chữ ký bị nới cho slugify(42) và truncate không max lọt (E là 6/8). Một khai báo chỉ chặt bằng chữ ký lỏng nhất của nó.</p>`],
+  [7, 'Attempt B: an optional parameter (9.5/10)',
+    `<p>Everything is typed honestly, but truncate’s max is declared optional — so calling truncate with one argument is accepted (S2 slips). The declaration must match the JavaScript: the real truncate needs its max, so the type must require it too. Make it non-optional and the last half-point comes back.</p>`,
+    `<p>Mọi thứ gõ trung thực, nhưng max của truncate khai optional — nên gọi truncate với một đối số được nhận (S2 lọt). Khai báo phải khớp JavaScript: truncate thật cần max, nên kiểu cũng phải đòi nó. Làm nó non-optional và nửa điểm cuối trở lại.</p>`],
+  [8, 'The reference: 10/10',
+    `<p>Four lines — one per export, each with the exact types the JavaScript actually has. The declaration file is pure type: no bodies, no any, nothing that runs. It describes labflow-slug.js precisely enough that every wrong call is a compile error and every right one compiles, while Node runs the original .js unchanged.</p>`,
+    `<p>Bốn dòng — mỗi export một dòng, mỗi dòng đúng kiểu mà JavaScript thật sự có. Tệp khai báo thuần kiểu: không thân hàm, không any, không gì chạy. Nó tả labflow-slug.js đủ chính xác để mọi lời gọi sai là một lỗi biên dịch và mọi lời gọi đúng biên dịch, còn Node chạy .js gốc nguyên.</p>`],
+  [9, 'Before you call it done',
+    `<p>npm run lab10 prints 10/10; no any or @ts- in the declaration; every export has its exact type. The any stub scored 6, the correct declaration 10 — types for a package that had none. Next chapter: typing a Node/Express backend, where these declarations meet a real framework.</p>`,
+    `<p>npm run lab10 in 10/10; không any hay @ts- trong khai báo; mỗi export đúng kiểu của nó. Bản stub any được 6, khai báo đúng 10 — kiểu cho một package vốn không có. Chương sau: gõ kiểu một backend Node/Express, nơi các khai báo này gặp một framework thật.</p>`],
+]);

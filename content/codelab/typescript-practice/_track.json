@@ -314,6 +314,36 @@
       "name": "9.6 Lab 9 — Tighten a loose project to strict",
       "level": "ADVANCED",
       "description": "1 đề: Lab 9 — strict-safe the loose module (noImplicitAny + strictNullChecks + noUncheckedIndexedAccess + the import)"
+    },
+    {
+      "slug": "typescript-10-1-es-modules",
+      "name": "10.1 — ES modules & the type boundary",
+      "level": "ADVANCED",
+      "description": "2 đề: Import a type with import type · Export a type and a value"
+    },
+    {
+      "slug": "typescript-10-2-declaration-files",
+      "name": "10.2 — Declaration files (.d.ts)",
+      "level": "ADVANCED",
+      "description": "1 đề: Type a package with declare module"
+    },
+    {
+      "slug": "typescript-10-3-augmentation",
+      "name": "10.3 — Global & module augmentation",
+      "level": "ADVANCED",
+      "description": "1 đề: Merge a second interface declaration"
+    },
+    {
+      "slug": "typescript-10-4-types-from-packages",
+      "name": "10.4 — Getting types from packages",
+      "level": "ADVANCED",
+      "description": "1 đề: A wrong call into a typed module"
+    },
+    {
+      "slug": "typescript-10-6-lab-viet-dts",
+      "name": "10.6 Lab 10 — Write a .d.ts for a JS package",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 10 — declare a whole package (declare module labflow-slug)"
     }
   ]
 }

@@ -1,0 +1,165 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-10-2-declaration-files",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-10-2-declaration-files"
+  },
+  "exercises": [
+    {
+      "title": "Type a package with declare module",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-10-2-declaration-files"
+      ],
+      "problemHtml": "<p>An app imports <code>parseId</code> from a bare-name package <code>labflow-legacy</code> that has no types — a bare import with no declaration is TS2307. Write a <code>declare module</code> block in <code>types.d.ts</code> that declares <code>parseId(raw: string): number</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the wrong call in kiem/sai.ts is TS2345.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>types.d.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/app.ts</code>, <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một app import <code>parseId</code> từ một package tên trần <code>labflow-legacy</code> không có kiểu — một import trần không khai báo là TS2307. Viết một khối <code>declare module</code> trong <code>types.d.ts</code> khai <code>parseId(raw: string): number</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và lời gọi sai trong kiem/sai.ts là TS2345.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>types.d.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/app.ts</code>, <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): types.d.ts (TypeScript, the course tsconfig).|||Tệp của bạn: types.d.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: export const bad = parseId(42);|||kiem/sai.ts, dòng 2: export const bad = parseId(42);",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "types.d.ts",
+          "language": "typescript",
+          "code": "// Declare the module so the bare import resolves and is typed.\n// declare module 'labflow-legacy' { ... }\n"
+        },
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nexport const id: number = parseId('bk_42');\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nconst n: number = parseId('bk_1');\nexport { n };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nexport const bad = parseId(42); // expect TS2345\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "types.d.ts",
+          "language": "typescript",
+          "code": "declare module 'labflow-legacy' {\n  export function parseId(raw: string): number;\n}\n"
+        },
+        {
+          "name": "src/app.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nexport const id: number = parseId('bk_42');\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nconst n: number = parseId('bk_1');\nexport { n };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { parseId } from 'labflow-legacy';\nexport const bad = parseId(42); // expect TS2345\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — no declare module — the bare import is TS2307 — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — no declare module — the bare import is TS2307 — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/app.ts": "import { parseId } from 'labflow-legacy';\nexport const id: number = parseId('bk_42');\n",
+          "kiem/dung.ts": "import { parseId } from 'labflow-legacy';\nconst n: number = parseId('bk_1');\nexport { n };\n",
+          "kiem/sai.ts": "import { parseId } from 'labflow-legacy';\nexport const bad = parseId(42); // expect TS2345\n"
+        },
+        "tepHoc": [
+          "types.d.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/app.ts",
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): types.d.ts + src/app.ts, kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2345 — export const bad = parseId(42); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "no declare module — the bare import is TS2307 — caught by: tsc (strict): types.d.ts + src/app.ts, kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2345 — export const bad = parseId(42); (+1)|||no declare module — the bare import is TS2307 — máy chấm bắt ở: tsc (strict): types.d.ts + src/app.ts, kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2345 — export const bad = parseId(42); (+1)"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

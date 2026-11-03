@@ -496,6 +496,11 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
   <span class="lc-body"><span class="lc-title">Hand-written shapes: interface or type? — TypeScript 4.2</span><span class="lc-sub">Same: a model is a named TypeScript type every query result is checked against. Different: Prisma generates computed type aliases like the User above; there you write the shapes yourself — interface for named shapes, type for unions — and meet the trap of two same-named interfaces merging silently (TS2741 at the creation line, Node still runs) versus TS2300 for type aliases.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-10-2-declaration-files" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The .d.ts that carries those types — TS 10.2: Declaration files</span><span class="lc-sub">Same: a declaration file is how a library hands you types for code you did not write — here the generated client. Different: in the TypeScript course you write a <code>.d.ts</code> by hand for a package that ships none (<code>declare module</code>, a sidecar <code>.d.ts</code>), so you understand the file Prisma generates for you.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -645,6 +650,11 @@ index.d.ts  index.js  libquery_engine-debian-openssl-3.0.x.count.node  package.j
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Dáng viết tay: interface hay type? — TypeScript 4.2</span><span class="lc-sub">Giống: model là một kiểu TypeScript có tên, mọi kết quả truy vấn được kiểm theo nó. Khác: Prisma sinh type alias tính toán như User ở trên; ở đó bạn tự viết dáng — interface cho dáng có tên, type cho union — và gặp cái bẫy hai interface trùng tên âm thầm gộp (TS2741 ở dòng tạo object, Node vẫn chạy) so với TS2300 của type alias.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-10-2-declaration-files" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cái .d.ts mang những kiểu đó — TS 10.2: Tệp khai báo</span><span class="lc-sub">Giống: một tệp khai báo là cách một thư viện trao bạn kiểu cho code bạn không viết — ở đây là client sinh ra. Khác: ở khoá TypeScript bạn tự viết một <code>.d.ts</code> cho một package không giao kiểu (<code>declare module</code>, một sidecar <code>.d.ts</code>), để hiểu cái tệp Prisma sinh cho bạn.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

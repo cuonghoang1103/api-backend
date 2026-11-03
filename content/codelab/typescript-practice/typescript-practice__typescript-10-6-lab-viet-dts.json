@@ -1,0 +1,180 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-10-6-lab-viet-dts",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-10-6-lab-viet-dts"
+  },
+  "exercises": [
+    {
+      "title": "Lab 10 — declare a whole package",
+      "language": "typescript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "type-level mutation: wrong calls must be refused"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-10-6-lab-viet-dts"
+      ],
+      "problemHtml": "<p>The lab in miniature. The <code>labflow-slug</code> package has no types. Write a <code>declare module 'labflow-slug'</code> block that types all four exports: <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, <code>isSlug(value: string): boolean</code>. The correct uses must compile, the wrong uses must be refused. No <code>any</code>, no <code>@ts-</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and every <code>// expect</code> line of kiem/sai.ts is refused.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>types.d.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>kiem/dung.ts</code>.</li>\n  <li>Each line of <code>kiem/sai.ts</code> that ends in <code>// expect TSxxxx</code> is refused with exactly that code (TS2345, TS2554, TS2322, TS2339); its other lines still compile.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab thu nhỏ. Package <code>labflow-slug</code> không có kiểu. Viết một khối <code>declare module 'labflow-slug'</code> gõ kiểu cả bốn export: <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, <code>isSlug(value: string): boolean</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối. Không <code>any</code>, không <code>@ts-</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>types.d.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>kiem/dung.ts</code>.</li>\n  <li>Mỗi dòng của <code>kiem/sai.ts</code> kết thúc bằng <code>// expect TSxxxx</code> bị từ chối với đúng mã đó (TS2345, TS2554, TS2322, TS2339); các dòng khác vẫn biên dịch.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): types.d.ts (TypeScript, the course tsconfig).|||Tệp của bạn: types.d.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "kiem/sai.ts, line 2: export const s1 = slugify(42);|||kiem/sai.ts, dòng 2: export const s1 = slugify(42);",
+          "output": "error TS2345",
+          "explanation": "With the right types, tsc refuses this call/assignment with exactly this error code. With missing or too loose types (any, string, number[]…) the line compiles and the check fails.|||Có kiểu đúng thì tsc từ chối lời gọi/phép gán này với đúng mã lỗi đó. Thiếu kiểu hoặc kiểu quá lỏng (any, string, number[]…) thì dòng biên dịch được và kiểm trượt."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Read kiem/sai.ts: each \"// expect TSxxxx\" line is a WRONG call that your types must refuse. If a line compiles, your type is too loose there (any, string instead of a literal union, an optional parameter…).|||Đọc kiem/sai.ts: mỗi dòng \"// expect TSxxxx\" là một lời gọi SAI mà kiểu của bạn phải từ chối. Dòng nào còn biên dịch được là kiểu ở đó quá lỏng (any, string thay cho union literal, tham số tuỳ chọn…).",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "types.d.ts",
+          "language": "typescript",
+          "code": "// Type every export of labflow-slug.\ndeclare module 'labflow-slug' {\n  // SLUG_MAX, slugify, truncate, isSlug\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nconst s: string = slugify('Phong Lab');\nconst t: string = truncate('hello world', 5);\nconst ok: boolean = isSlug('be-201');\nconst max: number = SLUG_MAX;\nexport { s, t, ok, max };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nexport const s1 = slugify(42); // expect TS2345\nexport const s2 = truncate('x'); // expect TS2554\nexport const s3: number = slugify('x'); // expect TS2322\nexport const s4 = SLUG_MAX.toUpperCase(); // expect TS2339\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "types.d.ts",
+          "language": "typescript",
+          "code": "declare module 'labflow-slug' {\n  export const SLUG_MAX: number;\n  export function slugify(text: string): string;\n  export function truncate(text: string, max: number): string;\n  export function isSlug(value: string): boolean;\n}\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nconst s: string = slugify('Phong Lab');\nconst t: string = truncate('hello world', 5);\nconst ok: boolean = isSlug('be-201');\nconst max: number = SLUG_MAX;\nexport { s, t, ok, max };\n"
+        },
+        {
+          "name": "kiem/sai.ts",
+          "language": "typescript",
+          "code": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nexport const s1 = slugify(42); // expect TS2345\nexport const s2 = truncate('x'); // expect TS2554\nexport const s3: number = slugify('x'); // expect TS2322\nexport const s4 = SLUG_MAX.toUpperCase(); // expect TS2339\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — the module is declared but empty — the imports are never typed; SLUG_MAX typed string — S4 slips (toUpperCase is valid on a string) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — the module is declared but empty — the imports are never typed; SLUG_MAX typed string — S4 slips (toUpperCase is valid on a string) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "kiem/dung.ts": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nconst s: string = slugify('Phong Lab');\nconst t: string = truncate('hello world', 5);\nconst ok: boolean = isSlug('be-201');\nconst max: number = SLUG_MAX;\nexport { s, t, ok, max };\n",
+          "kiem/sai.ts": "import { slugify, truncate, isSlug, SLUG_MAX } from 'labflow-slug';\nexport const s1 = slugify(42); // expect TS2345\nexport const s2 = truncate('x'); // expect TS2554\nexport const s3: number = slugify('x'); // expect TS2322\nexport const s4 = SLUG_MAX.toUpperCase(); // expect TS2339\n"
+        },
+        "tepHoc": [
+          "types.d.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "kiem/dung.ts"
+            ],
+            "moTa": "tsc (strict): types.d.ts + kiem/dung.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 2,
+            "ma": [
+              "TS2345"
+            ],
+            "moTa": "kiem/sai.ts:2 is refused with TS2345 — export const s1 = slugify(42); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 3,
+            "ma": [
+              "TS2554"
+            ],
+            "moTa": "kiem/sai.ts:3 is refused with TS2554 — export const s2 = truncate('x'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 4,
+            "ma": [
+              "TS2322"
+            ],
+            "moTa": "kiem/sai.ts:4 is refused with TS2322 — export const s3: number = slugify('x'); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "phai-loi",
+            "tep": "kiem/sai.ts",
+            "dong": 5,
+            "ma": [
+              "TS2339"
+            ],
+            "moTa": "kiem/sai.ts:5 is refused with TS2339 — export const s4 = SLUG_MAX.toUpperCase(); · dòng này phải bị tsc từ chối"
+          },
+          {
+            "kiem": "khong-loi-la",
+            "tep": "kiem/sai.ts",
+            "moTa": "every other line of kiem/sai.ts still compiles · các dòng còn lại vẫn biên dịch"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "the module is declared but empty — the imports are never typed — caught by: tsc (strict): types.d.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2345 — export const s1 = slugify(42); (+4)|||the module is declared but empty — the imports are never typed — máy chấm bắt ở: tsc (strict): types.d.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:2 is refused with TS2345 — export const s1 = slugify(42); (+4)"
+        },
+        {
+          "loi": "SLUG_MAX typed string — S4 slips (toUpperCase is valid on a string) — caught by: tsc (strict): types.d.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2339 — export const s4 = SLUG_MAX.toUpperCase();|||SLUG_MAX typed string — S4 slips (toUpperCase is valid on a string) — máy chấm bắt ở: tsc (strict): types.d.ts + kiem/dung.ts compile with 0 errors; kiem/sai.ts:5 is refused with TS2339 — export const s4 = SLUG_MAX.toUpperCase();"
+        }
+      ]
+    }
+  ]
+}

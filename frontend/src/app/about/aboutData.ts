@@ -179,21 +179,283 @@ export const INCIDENTS: { accent: string; symptom: Bi; cause: Bi; fix: Bi }[] = 
   },
 ];
 
-/** Self-assessment by the site owner — NOT a measurement. Shown labelled as such. */
-export const SELF_ASSESSED_SKILLS: { name: string; level: number }[] = [
-  { name: 'Java', level: 95 },
-  { name: 'Spring Boot', level: 90 },
-  { name: 'Node.JS', level: 72 },
-  { name: 'JavaScript', level: 85 },
-  { name: 'TypeScript', level: 80 },
-  { name: 'React', level: 85 },
-  { name: 'Next.js', level: 80 },
-  { name: 'Golang', level: 60 },
-  { name: 'Mobile App', level: 68 },
-  { name: 'VPS', level: 90 },
-  { name: 'Linux', level: 88 },
-  { name: 'Docker', level: 80 },
-  { name: 'PostgreSQL', level: 85 },
-  { name: 'Redis', level: 75 },
-  { name: 'AWS', level: 65 },
+/**
+ * The real products a skill is used in — keys match `BUILT[].id` in
+ * `aboutProducts.ts`, so the "used in" chips deep-link to the real thing and can
+ * never drift from the product list.
+ */
+export type ProductKey = 'ctwork' | 'cuongmini' | 'site' | 'desktop' | 'ios' | 'labflow';
+
+/** The eight skill groups, each coloured by its TECH_STACK accent. */
+export type SkillCategoryId =
+  | 'backend' | 'frontend' | 'data' | 'infra' | 'ai' | 'realtime' | 'app' | 'creative';
+
+export const SKILL_CATEGORIES: { id: SkillCategoryId; label: Bi; accent: string }[] = [
+  { id: 'backend', label: L('Backend', 'Backend'), accent: '#6366f1' },
+  { id: 'frontend', label: L('Frontend', 'Frontend'), accent: '#8b5cf6' },
+  { id: 'data', label: L('Dữ liệu', 'Data'), accent: '#d946ef' },
+  { id: 'infra', label: L('Hạ tầng & DevOps', 'Infra & DevOps'), accent: '#22d3ee' },
+  { id: 'ai', label: L('AI', 'AI'), accent: '#34d399' },
+  { id: 'realtime', label: L('Thời gian thực', 'Real-time'), accent: '#fbbf24' },
+  { id: 'app', label: L('Mobile & Desktop', 'Mobile & Desktop'), accent: '#f472b6' },
+  { id: 'creative', label: L('3D & Thiết kế', '3D & Design'), accent: '#a78bfa' },
+];
+
+/**
+ * Self-assessment by the site owner — NOT a measurement, shown labelled as such.
+ * `know` is what he can actually do in that skill; `usedIn` is the real products
+ * that use it. Levels are honest and deliberately modest where he is still a
+ * learner (Golang, SQL Server, Three.js, Figma).
+ */
+export interface SelfSkill {
+  name: string;
+  level: number;
+  category: SkillCategoryId;
+  know: Bi;
+  usedIn: ProductKey[];
+}
+
+export const SELF_ASSESSED_SKILLS: SelfSkill[] = [
+  // ── Backend ──────────────────────────────────────────────────────────────
+  {
+    name: 'Java', level: 95, category: 'backend', usedIn: ['labflow'],
+    know: L(
+      'Ngôn ngữ mình vững nhất: OOP, generics, collections, đa luồng — nền cho Spring Boot.',
+      'My strongest language: OOP, generics, collections, concurrency — the base under Spring Boot.',
+    ),
+  },
+  {
+    name: 'Spring Boot', level: 90, category: 'backend', usedIn: ['labflow'],
+    know: L(
+      'REST API, JPA/Hibernate, Spring Security, phân lớp controller–service–repository gọn gàng.',
+      'REST APIs, JPA/Hibernate, Spring Security, and a clean controller–service–repository split.',
+    ),
+  },
+  {
+    name: 'Node.js', level: 72, category: 'backend', usedIn: ['site', 'ctwork', 'cuongmini'],
+    know: L(
+      'Express, middleware, xác thực JWT, job nền theo lịch — chạy toàn bộ API của trang này.',
+      'Express, middleware, JWT auth, scheduled background jobs — it runs this whole site’s API.',
+    ),
+  },
+  {
+    name: 'Golang', level: 60, category: 'backend', usedIn: [],
+    know: L(
+      'Đang học: goroutine, channel, viết API nhỏ và công cụ dòng lệnh.',
+      'Learning it: goroutines, channels, small APIs and command-line tools.',
+    ),
+  },
+  // ── Frontend ─────────────────────────────────────────────────────────────
+  {
+    name: 'TypeScript', level: 80, category: 'frontend', usedIn: ['site', 'ctwork', 'desktop', 'cuongmini'],
+    know: L(
+      'Kiểu chặt từ API xuống tới UI, dùng chung giữa backend và frontend.',
+      'Types all the way from the API down to the UI, shared between backend and frontend.',
+    ),
+  },
+  {
+    name: 'JavaScript', level: 85, category: 'frontend', usedIn: ['site', 'ctwork'],
+    know: L(
+      'ES hiện đại, bất đồng bộ, DOM — nền tảng trước khi lên TypeScript.',
+      'Modern ES, async, the DOM — the ground under the TypeScript.',
+    ),
+  },
+  {
+    name: 'React', level: 85, category: 'frontend', usedIn: ['site', 'ctwork', 'desktop'],
+    know: L(
+      'Hook, state, component tái dùng; Zustand và TanStack Query cho dữ liệu.',
+      'Hooks, state, reusable components; Zustand and TanStack Query for data.',
+    ),
+  },
+  {
+    name: 'Next.js', level: 80, category: 'frontend', usedIn: ['site', 'ctwork'],
+    know: L(
+      'App Router, server/client component, SSR và route API — chính trang web này.',
+      'App Router, server/client components, SSR and API routes — this very site.',
+    ),
+  },
+  // ── Data ─────────────────────────────────────────────────────────────────
+  {
+    name: 'PostgreSQL', level: 85, category: 'data', usedIn: ['site', 'ctwork', 'labflow'],
+    know: L(
+      'Thiết kế lược đồ, chỉ mục, truy vấn, migration có phiên bản; pgvector cho tìm theo ngữ nghĩa.',
+      'Schema design, indexes, queries, versioned migrations; pgvector for semantic search.',
+    ),
+  },
+  {
+    name: 'Prisma', level: 85, category: 'data', usedIn: ['site', 'ctwork'],
+    know: L(
+      'ORM chính: mô hình quan hệ, quan hệ ngược, migration, truy vấn an toàn kiểu.',
+      'My main ORM: relational models, back-relations, migrations, type-safe queries.',
+    ),
+  },
+  {
+    name: 'Redis', level: 75, category: 'data', usedIn: ['site', 'ctwork'],
+    know: L(
+      'Cache, giới hạn tần suất, adapter cho Socket.IO, hàng đợi nhẹ.',
+      'Caching, rate limiting, the Socket.IO adapter, light queues.',
+    ),
+  },
+  {
+    name: 'SQL Server', level: 62, category: 'data', usedIn: [],
+    know: L(
+      'Học ở trường (DBI202): T-SQL, truy vấn và nối bảng; PostgreSQL mới là thứ mình dùng hằng ngày.',
+      'From coursework (DBI202): T-SQL, queries and joins; PostgreSQL is my day-to-day.',
+    ),
+  },
+  // ── Infra & DevOps ─────────────────────────────────────────────────────────
+  {
+    name: 'VPS', level: 90, category: 'infra', usedIn: ['site'],
+    know: L(
+      'Tự quản máy chủ: người dùng, cổng, tường lửa, chứng chỉ TLS, giám sát đĩa và bộ nhớ.',
+      'I run my own server: users, ports, firewall, TLS certs, disk and memory monitoring.',
+    ),
+  },
+  {
+    name: 'Linux', level: 88, category: 'infra', usedIn: ['site'],
+    know: L(
+      'Dòng lệnh, systemd, quyền, log, SSH — môi trường mình làm việc hằng ngày.',
+      'Shell, systemd, permissions, logs, SSH — where I work every day.',
+    ),
+  },
+  {
+    name: 'Docker', level: 80, category: 'infra', usedIn: ['site', 'ctwork'],
+    know: L(
+      'Multi-stage build, compose, ảnh gọn, kiểm libc↔engine Prisma trước khi đẩy.',
+      'Multi-stage builds, compose, slim images, libc↔engine checks before shipping.',
+    ),
+  },
+  {
+    name: 'Nginx', level: 75, category: 'infra', usedIn: ['site'],
+    know: L(
+      'Reverse proxy, TLS, HTTP/2, header cache, giới hạn tần suất theo IP.',
+      'Reverse proxy, TLS, HTTP/2, cache headers, per-IP rate limiting.',
+    ),
+  },
+  {
+    name: 'GitHub Actions', level: 78, category: 'infra', usedIn: ['site', 'ctwork', 'desktop'],
+    know: L(
+      'CI kiểm kiểu và lint, dựng ảnh Docker, phát hành app desktop tự động.',
+      'CI type and lint checks, Docker image builds, automated desktop-app releases.',
+    ),
+  },
+  {
+    name: 'AWS', level: 65, category: 'infra', usedIn: [],
+    know: L(
+      'S3 (dùng qua API tương thích của Cloudflare R2), IAM, EC2 ở mức cơ bản.',
+      'S3 (via Cloudflare R2’s compatible API), IAM, basic EC2.',
+    ),
+  },
+  // ── AI ───────────────────────────────────────────────────────────────────
+  {
+    name: 'LLM integration', level: 78, category: 'ai', usedIn: ['site', 'cuongmini', 'ctwork'],
+    know: L(
+      'Nhiều nhà cung cấp sau một cổng: gọi tool, stream, cầu dao, trần chi phí theo ngày.',
+      'Many providers behind one gateway: tool calls, streaming, circuit breakers, daily cost caps.',
+    ),
+  },
+  {
+    name: 'RAG + embeddings', level: 68, category: 'ai', usedIn: ['site', 'cuongmini'],
+    know: L(
+      'pgvector, Transformers.js, tìm theo ngữ nghĩa; chặn prompt injection và cổng lọc dữ liệu cá nhân.',
+      'pgvector, Transformers.js, semantic search; prompt-injection screening and a PII gate.',
+    ),
+  },
+  // ── Real-time ──────────────────────────────────────────────────────────────
+  {
+    name: 'Socket.IO / WebSocket', level: 70, category: 'realtime', usedIn: ['ctwork', 'site'],
+    know: L(
+      'Chat và cập nhật trực tiếp, phòng, adapter Redis; WebSocket thuần cho thiết bị phần cứng.',
+      'Live chat and updates, rooms, a Redis adapter; raw WebSocket for hardware devices.',
+    ),
+  },
+  // ── Mobile & Desktop ─────────────────────────────────────────────────────────
+  {
+    name: 'SwiftUI / iOS', level: 62, category: 'app', usedIn: ['ctwork', 'ios'],
+    know: L(
+      'App CT Work native cho iPhone và iPad đã lên App Store: SwiftUI, đồng bộ trực tiếp với web.',
+      'The native CT Work iPhone & iPad app is on the App Store: SwiftUI, live-synced with the web.',
+    ),
+  },
+  {
+    name: 'Electron', level: 72, category: 'app', usedIn: ['desktop', 'ctwork'],
+    know: L(
+      'App máy tính cho macOS, Windows và Linux, tự cập nhật từ bản phát hành công khai trên GitHub.',
+      'Desktop apps for macOS, Windows and Linux, auto-updating from public GitHub releases.',
+    ),
+  },
+  // ── 3D & Design ────────────────────────────────────────────────────────────
+  {
+    name: 'Three.js / WebGL', level: 45, category: 'creative', usedIn: ['site'],
+    know: L(
+      'Đang học: cảnh 3D, nạp tài nguyên, sân chơi 3D trên trang.',
+      'Learning it: 3D scenes, asset loading, the 3D playground on the site.',
+    ),
+  },
+  {
+    name: 'Figma', level: 55, category: 'creative', usedIn: [],
+    know: L(
+      'Dựng mẫu giao diện và luồng màn hình trước khi viết code.',
+      'Wireframing the UI and screen flows before I write the code.',
+    ),
+  },
+];
+
+/**
+ * "How it all runs" — the real system as tiers, top (what people use) to bottom
+ * (data & AI), all on one Docker-managed VPS. Product nodes deep-link to the real
+ * thing; infra nodes are not links (they have no public page). Accents reuse the
+ * TECH_STACK / nav palette. Used by `SystemMap`.
+ */
+export interface MapNode {
+  id: string;
+  label: Txt;
+  sub: Bi;
+  accent: string;
+  /** A real internal destination; omit for infra with no public page. */
+  href?: string;
+}
+export interface MapTier {
+  id: string;
+  label: Bi;
+  nodes: MapNode[];
+}
+
+export const SYSTEM_MAP: MapTier[] = [
+  {
+    id: 'products',
+    label: L('Thứ mọi người dùng', 'What people use'),
+    nodes: [
+      { id: 'ctwork', label: 'CT Work', sub: L('Web · máy tính · iOS', 'Web · desktop · iOS'), accent: '#6366f1', href: '/work' },
+      { id: 'cuongmini', label: 'CuongMini', sub: L('Trợ lý AI', 'AI assistant'), accent: '#34d399', href: '/chat' },
+      { id: 'site', label: 'cuongthai.com', sub: L('Nền tảng học', 'Learning platform'), accent: '#8b5cf6', href: '/' },
+      { id: 'labflow', label: 'LabFlow AI', sub: L('Đồ án tốt nghiệp', 'Graduation project'), accent: '#f472b6', href: '/projects/labflow-ai' },
+      { id: 'apps', label: L('App máy tính & iOS', 'Desktop & iOS apps'), sub: L('Electron · SwiftUI', 'Electron · SwiftUI'), accent: '#a78bfa', href: '/download' },
+    ],
+  },
+  {
+    id: 'edge',
+    label: L('Lối vào', 'Edge'),
+    nodes: [
+      { id: 'nginx', label: 'Nginx', sub: L('Reverse proxy · TLS · HTTP/2', 'Reverse proxy · TLS · HTTP/2'), accent: '#22d3ee' },
+    ],
+  },
+  {
+    id: 'app',
+    label: L('Ứng dụng', 'Application'),
+    nodes: [
+      { id: 'next', label: 'Next.js', sub: L('Frontend · SSR', 'Frontend · SSR'), accent: '#8b5cf6' },
+      { id: 'node', label: L('Node + Express', 'Node + Express'), sub: L('API · xác thực · job nền', 'API · auth · background jobs'), accent: '#6366f1' },
+    ],
+  },
+  {
+    id: 'data',
+    label: L('Dữ liệu & AI', 'Data & AI'),
+    nodes: [
+      { id: 'postgres', label: 'PostgreSQL', sub: L('Prisma · pgvector', 'Prisma · pgvector'), accent: '#d946ef' },
+      { id: 'redis', label: 'Redis', sub: L('Cache · hàng đợi · real-time', 'Cache · queues · real-time'), accent: '#f43f5e' },
+      { id: 'llm', label: L('Cổng LLM', 'LLM gateway'), sub: L('Nhiều nhà cung cấp', 'Many providers'), accent: '#34d399' },
+      { id: 'r2', label: 'Cloudflare R2', sub: L('Lưu trữ media (S3)', 'Media storage (S3)'), accent: '#fbbf24' },
+    ],
+  },
 ];

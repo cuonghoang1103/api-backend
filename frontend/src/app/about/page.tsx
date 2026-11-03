@@ -36,9 +36,11 @@ import Footer from '@/components/home/Footer';
 import codebase from '@/data/codebaseStats.json';
 import { MENU_HUE, MENU_LABEL, MENU_ORDER, type MenuId } from '@/components/layout/nav/navLabels';
 import { NAV_TREE, type NavItem } from '@/components/layout/nav/navTree';
-import { INCIDENTS, SELF_ASSESSED_SKILLS, TECH_STACK, tx } from './aboutData';
+import { INCIDENTS, TECH_STACK, tx } from './aboutData';
 import { BIO, OWNER, OWNER_TODO, PLACEHOLDER_LABEL, aboutCopy } from './aboutCopy';
 import { BUILT } from './aboutProducts';
+import SkillsExplorer from '@/components/about/SkillsExplorer';
+import SystemMap from '@/components/about/SystemMap';
 import s from './about.module.css';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -179,6 +181,7 @@ export default function AboutPage() {
   };
 
   const [openIncident, setOpenIncident] = useState<number | null>(0);
+  const [openSkill, setOpenSkill] = useState<string | null>(null);
 
   // Latest articles — the old page showed them; a failed fetch just hides the block.
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -593,22 +596,22 @@ export default function AboutPage() {
                   <h3 className={s.h3}>{c.skillsTitle}</h3>
                   <span className={s.meta}>{c.skillsNote}</span>
                 </div>
-                <div className={s.skills}>
-                  {SELF_ASSESSED_SKILLS.map((sk, i) => (
-                    <div key={sk.name} className={s.skill}>
-                      <div className={s.skillTop}><span>{sk.name}</span><span>{sk.level}%</span></div>
-                      <div className={s.bar}>
-                        <motion.i
-                          style={{ width: `${sk.level}%` }}
-                          initial={reduce ? false : { scaleX: 0 }}
-                          whileInView={{ scaleX: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.7, delay: (i % 6) * 0.04, ease: EASE }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                <p className={s.body} style={{ marginBottom: '1.5rem' }}>{c.skillsIntro}</p>
+                <SkillsExplorer
+                  lang={lang}
+                  reduce={reduce}
+                  products={BUILT}
+                  open={openSkill}
+                  onToggle={setOpenSkill}
+                />
+              </div>
+
+              <div className={s.sub}>
+                <div className={s.subHead}>
+                  <h3 className={s.h3}>{c.runTitle}</h3>
                 </div>
+                <p className={s.body} style={{ marginBottom: '1.75rem' }}>{c.runIntro}</p>
+                <SystemMap lang={lang} reduce={reduce} legend={c.runLegend} />
               </div>
 
               <div className={s.sub}>

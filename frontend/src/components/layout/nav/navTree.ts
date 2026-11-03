@@ -65,6 +65,47 @@ export interface NavMenu {
 
 export const NAV_TREE: NavMenu[] = [
   {
+    id: 'about',
+    columns: 2,
+    sections: [
+      {
+        id: 'site',
+        heading: { en: 'CuongThai', vi: 'CuongThai' },
+        items: [
+          { href: '/about', icon: User,
+            title: { en: 'About this site & me', vi: 'Về trang này & về mình' },
+            desc: { en: 'What CuongThai is, what you can do here, and who builds it.', vi: 'CuongThai là gì, làm được gì ở đây, và ai đang làm nó.' },
+            keywords: 'gioi thieu about me' },
+          { href: '/about/bao-mat', icon: ShieldCheck,
+            title: { en: 'Security & privacy', vi: 'Bảo mật & quyền riêng tư' },
+            desc: { en: 'How your data is stored and protected.', vi: 'Dữ liệu của bạn được lưu và bảo vệ thế nào.' },
+            keywords: 'bao mat' },
+        ],
+      },
+      {
+        id: 'hire',
+        heading: { en: 'Work with me', vi: 'Hợp tác' },
+        items: [
+          { href: '/about/studio', icon: Store,
+            title: { en: 'Studio', vi: 'Studio' },
+            desc: { en: 'What the studio builds, with case studies.', vi: 'Studio làm gì, kèm các dự án mẫu.' } },
+          { href: '/about/nhan-du-an', icon: Send,
+            title: { en: 'Start a project', vi: 'Gửi yêu cầu dự án' },
+            desc: { en: 'Pick a package and send a request.', vi: 'Chọn gói và gửi yêu cầu.' },
+            keywords: 'nhan du an' },
+          { href: '/about/quy-trinh', icon: Workflow,
+            title: { en: 'How projects run', vi: 'Quy trình làm dự án' },
+            desc: { en: 'Every stage from intake to maintenance.', vi: 'Từng giai đoạn từ tiếp nhận tới bảo trì.' },
+            keywords: 'quy trinh' },
+        ],
+      },
+    ],
+    footer: {
+      text: { en: 'Prefer to talk first? Message me directly.', vi: 'Muốn trao đổi trước? Nhắn trực tiếp cho mình.' },
+      cta: { href: '/about#contact', label: { en: 'Contact', vi: 'Liên hệ' } },
+    },
+  },
+  {
     id: 'learn',
     columns: 2,
     sections: [
@@ -324,47 +365,6 @@ export const NAV_TREE: NavMenu[] = [
     footer: {
       text: { en: 'Looking for someone? Search by name.', vi: 'Đang tìm ai đó? Tìm theo tên.' },
       cta: { href: '/friends', label: { en: 'Find people', vi: 'Tìm người' } },
-    },
-  },
-  {
-    id: 'about',
-    columns: 2,
-    sections: [
-      {
-        id: 'site',
-        heading: { en: 'CuongThai', vi: 'CuongThai' },
-        items: [
-          { href: '/about', icon: User,
-            title: { en: 'About this site & me', vi: 'Về trang này & về mình' },
-            desc: { en: 'What CuongThai is, what you can do here, and who builds it.', vi: 'CuongThai là gì, làm được gì ở đây, và ai đang làm nó.' },
-            keywords: 'gioi thieu about me' },
-          { href: '/about/bao-mat', icon: ShieldCheck,
-            title: { en: 'Security & privacy', vi: 'Bảo mật & quyền riêng tư' },
-            desc: { en: 'How your data is stored and protected.', vi: 'Dữ liệu của bạn được lưu và bảo vệ thế nào.' },
-            keywords: 'bao mat' },
-        ],
-      },
-      {
-        id: 'hire',
-        heading: { en: 'Work with me', vi: 'Hợp tác' },
-        items: [
-          { href: '/about/studio', icon: Store,
-            title: { en: 'Studio', vi: 'Studio' },
-            desc: { en: 'What the studio builds, with case studies.', vi: 'Studio làm gì, kèm các dự án mẫu.' } },
-          { href: '/about/nhan-du-an', icon: Send,
-            title: { en: 'Start a project', vi: 'Gửi yêu cầu dự án' },
-            desc: { en: 'Pick a package and send a request.', vi: 'Chọn gói và gửi yêu cầu.' },
-            keywords: 'nhan du an' },
-          { href: '/about/quy-trinh', icon: Workflow,
-            title: { en: 'How projects run', vi: 'Quy trình làm dự án' },
-            desc: { en: 'Every stage from intake to maintenance.', vi: 'Từng giai đoạn từ tiếp nhận tới bảo trì.' },
-            keywords: 'quy trinh' },
-        ],
-      },
-    ],
-    footer: {
-      text: { en: 'Prefer to talk first? Message me directly.', vi: 'Muốn trao đổi trước? Nhắn trực tiếp cho mình.' },
-      cta: { href: '/about#contact', label: { en: 'Contact', vi: 'Liên hệ' } },
     },
   },
 ];

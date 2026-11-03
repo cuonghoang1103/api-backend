@@ -238,12 +238,8 @@ function MessagesPageInner() {
   }
 
   return (
-    // Page background is a fixed-positioned animated
-    // galaxy (suns, planets, stars, nebulas). The root
-    // container is transparent so the canvas shows through.
-    // The three messenger panels each carry their own
-    // gradient so they read as solid surfaces floating over
-    // the space scene.
+    // The messenger uses its own dark backdrop (below) instead of the global
+    // page background. The three panels each carry a solid gradient.
     <div
       className="relative min-h-dvh pt-16"
       // The global mobile bottom-nav is hidden on /messages (see Navbar), so
@@ -253,9 +249,14 @@ function MessagesPageInner() {
       // makes the composer always sit flush above the safe area.
       style={{ ...MAU_TOI, ['--app-chrome-bottom' as string]: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      {/* Soft, eye-friendly dark backdrop (replaces the busy starfield). */}
+      {/* Soft, eye-friendly dark backdrop (replaces the busy starfield).
+          z-0, NOT -z-10: a seasonal theme (chủ đề mùa) paints a fixed canvas
+          at z-index -1 on <body>, so a -z-10 backdrop sat BEHIND it and the
+          summer/beach scene bled through the messenger (reported 03/11/2026).
+          At z-0 this covers the seasonal bg while still sitting below the top
+          nav (z-40), the panels (later in DOM) and every overlay. */}
       <div
-        className="pointer-events-none fixed inset-0 -z-10"
+        className="pointer-events-none fixed inset-0 z-0"
         aria-hidden
         style={{
           background:

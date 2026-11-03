@@ -1,0 +1,30 @@
+/** Giảng theo slide — Lab 7 TOTP của LabFlow ID (deck auth-lab-7, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-7', "LabFlow ID's TOTP, from scratch", 'TOTP của LabFlow ID, viết từ gốc', [
+  [1, "Lab 7 — LabFlow ID's TOTP, from scratch",
+    `<p>You write TOTP: base32, HOTP (HMAC + dynamic truncation), TOTP (the clock as counter), and verify with a skew window. The grader checks you against the RFC 4226 and RFC 6238 published vectors.</p>`,
+    `<p>Bạn viết TOTP: base32, HOTP (HMAC + cắt động), TOTP (đồng hồ làm counter), và xác minh với cửa sổ lệch. Máy chấm kiểm bạn với vector công bố của RFC 4226 và RFC 6238.</p>`],
+  [2, 'What you build', `<p>base32Encode/Decode · hotp(key, counter, {digits}) · totp(secret, {time, step, digits}) · verifyTotp(secret, code, {window}). node:crypto only — no library.</p>`,
+    `<p>base32Encode/Decode · hotp(key, counter, {digits}) · totp(secret, {time, step, digits}) · verifyTotp(secret, code, {window}). Chỉ node:crypto — không thư viện.</p>`],
+  [3, 'Setup', `<p>cp -r lab7/starter lab7/my; node scripts/cham-lab-7.mjs lab7/my. No database, no network — just the algorithm and the RFC vectors.</p>`,
+    `<p>cp -r lab7/starter lab7/my; node scripts/cham-lab-7.mjs lab7/my. Không cơ sở dữ liệu, không mạng — chỉ thuật toán và vector RFC.</p>`],
+  [4, 'How it is graded: 6 checks, 10 pts, pass 7',
+    `<p>T1 base32 round-trip · T2 HOTP RFC 4226 (counter 0–9) · T3 TOTP RFC 6238 (8 digits) · T4 6-digit over a 30s step · T5 ±1 skew window · T6 rejects a wrong/empty code without crashing.</p>`,
+    `<p>T1 base32 khứ hồi · T2 HOTP RFC 4226 (counter 0–9) · T3 TOTP RFC 6238 (8 chữ số) · T4 6 chữ số trên bước 30s · T5 cửa sổ lệch ±1 · T6 từ chối mã sai/rỗng mà không sập.</p>`],
+  [5, 'The vectors are the point',
+    `<p>You are not trusted to "look right" — your code must reproduce secret "12345678901234567890", t=59 → 94287082, and the other five, exactly. A primitive you cannot test against the standard you do not understand.</p>`,
+    `<p>Bạn không được tin vì "trông đúng" — mã của bạn phải tái tạo bí mật "12345678901234567890", t=59 → 94287082, và năm cái kia, chính xác. Một nguyên thuỷ bạn không kiểm được với chuẩn là cái bạn chưa hiểu.</p>`],
+  [6, 'A first attempt that "works"',
+    `<p>It generates correct 6-digit codes — but hardcodes 6 digits (so the 8-digit RFC vectors fail) and verifies only the exact current step (no skew). 5.5/10: a user whose clock drifts a few seconds is locked out.</p>`,
+    `<p>Nó sinh mã 6 chữ số đúng — nhưng hardcode 6 chữ số (nên vector RFC 8 chữ số trượt) và chỉ xác minh đúng bước hiện tại (không lệch). 5,5/10: một người đồng hồ trôi vài giây bị khoá ra ngoài.</p>`],
+  [7, 'The reference',
+    `<p>src/totp/index.js scores 10/10 and is the same ~30 lines shown in lesson 7.2; the project's 43 tests (including the RFC vectors) stay green.</p>`,
+    `<p>src/totp/index.js đạt 10/10 và là cùng ~30 dòng hiện ở bài 7.2; 43 test của dự án (gồm vector RFC) vẫn xanh.</p>`],
+  [8, 'Hints',
+    `<p>Dynamic truncation: the low 4 bits of the last HMAC byte pick a 4-byte offset; mask the top bit; modulo 10^digits. The counter is floor(time/step). verifyTotp loops w from −window to +window.</p>`,
+    `<p>Cắt động: 4 bit thấp của byte HMAC cuối chọn offset 4 byte; che bit cao; modulo 10^digits. Counter là floor(time/step). verifyTotp lặp w từ −window tới +window.</p>`],
+  [9, 'Done when',
+    `<p>≥ 7/10 twice in a row (aim for 10); your totp() reproduces all six RFC 6238 vectors; verifyTotp accepts ±1 step and rejects beyond. Next — 7.6: the chapter check.</p>`,
+    `<p>≥ 7/10 hai lần liên tiếp (nhắm 10); totp() của bạn tái tạo cả sáu vector RFC 6238; verifyTotp nhận ±1 bước và từ chối xa hơn. Tiếp theo — 7.6: kiểm tra chương.</p>`],
+]);

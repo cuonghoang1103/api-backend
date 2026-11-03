@@ -1,0 +1,491 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-7-3-dang-ky-va-khoi-phuc",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-7-3-dang-ky-va-khoi-phuc"
+  },
+  "exercises": [
+    {
+      "title": "7.3-1 — Enroll a factor, read the run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.7 (real run):<pre>$ curl -s -b jar -X POST localhost:4800/mfa/totp/begin\n  secret 3566NXPPKNME…   otpauth otpauth://totp/LabFlow%20ID:an%40student.labflow.examp…\n$ # the authenticator app shows 338694 — confirm it (and receive recovery codes ONCE):\n  → {\"ok\":true,\"enabled\":true}   recovery: yfrz-rgbs 3ji6-bw4v rbfc-9wy4 … (10 total)\n$ # step up at login with a fresh 6-digit code:\n{\"ok\":true,\"via\":\"totp\"}\n$ # lost the phone — the single-use recovery code yfrz-rgbs works instead:\n{\"ok\":true,\"via\":\"recovery\",\"remaining\":9}\n$ # that recovery code is now spent — reusing it fails:\n{\"error\":\"BAD_CODE\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.7 (chạy thật):<pre>$ curl -s -b jar -X POST localhost:4800/mfa/totp/begin\n  secret 3566NXPPKNME…   otpauth otpauth://totp/LabFlow%20ID:an%40student.labflow.examp…\n$ # the authenticator app shows 338694 — confirm it (and receive recovery codes ONCE):\n  → {\"ok\":true,\"enabled\":true}   recovery: yfrz-rgbs 3ji6-bw4v rbfc-9wy4 … (10 total)\n$ # step up at login with a fresh 6-digit code:\n{\"ok\":true,\"via\":\"totp\"}\n$ # lost the phone — the single-use recovery code yfrz-rgbs works instead:\n{\"ok\":true,\"via\":\"recovery\",\"remaining\":9}\n$ # that recovery code is now spent — reusing it fails:\n{\"error\":\"BAD_CODE\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The confirm step tests the whole loop before trusting it.|||Bước confirm thử cả vòng trước khi tin.",
+        "A recovery path is only as strong as its channel.|||Một đường khôi phục chỉ mạnh bằng kênh của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-1 — Enroll a factor, read the run\n\nAnswer in the answer panel (no code needed).\n\n1. The secret is stored before a code is verified, but the factor is only enabled after confirm. Why confirm first?Bí mật được lưu trước khi một mã được xác minh, nhưng yếu tố chỉ bật sau confirm. Vì sao confirm trước?\n2. Confirm returns ten recovery codes, once. How are they stored, and how many times does each work?Confirm trả mười mã khôi phục, một lần. Chúng lưu thế nào, và mỗi cái chạy mấy lần?\n3. Why is a \"reset my 2FA\" link sent by email a bad recovery path?Vì sao một link \"reset 2FA\" gửi qua email là một đường khôi phục tồi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-1 — Enroll a factor, read the run — answer key\n\n1. The secret is stored before a code is verified, but the factor is only enabled after confirm. Why confirm first?Bí mật được lưu trước khi một mã được xác minh, nhưng yếu tố chỉ bật sau confirm. Vì sao confirm trước?\n   Answer: b) To prove the app scanned the right secret and the clocks agree — else the user is locked out next login\n   Confirm-before-trust catches a mis-scan or a wrong clock while the user can still fix it; skip it and they are locked out with no working factor (7.3).VI: Xác nhận-trước-khi-tin bắt một lần quét nhầm hay đồng hồ sai khi người dùng còn sửa được; bỏ nó và họ bị khoá không còn yếu tố chạy được (7.3).\n\n2. Confirm returns ten recovery codes, once. How are they stored, and how many times does each work?Confirm trả mười mã khôi phục, một lần. Chúng lưu thế nào, và mỗi cái chạy mấy lần?\n   Answer: b) As SHA-256 digests, each usable exactly once\n   Recovery codes are credentials: stored as digests, shown once, single-use — the demo shows a reused code returning BAD_CODE (7.3).VI: Mã khôi phục là tín vật: lưu dạng digest, hiện một lần, dùng một lần — demo cho thấy một mã dùng lại trả BAD_CODE (7.3).\n\n3. Why is a \"reset my 2FA\" link sent by email a bad recovery path?Vì sao một link \"reset 2FA\" gửi qua email là một đường khôi phục tồi?\n   Answer: c) It moves the trust back to the email account — the weak channel the factor was meant to backstop\n   Every recovery path is a front door (Ch 6); an email reset re-weakens everything to the email account. Offline codes the user holds are better (7.3).VI: Mỗi đường khôi phục là một cửa trước (Ch 6); một reset qua email làm yếu lại mọi thứ về tài khoản email. Mã ngoại tuyến người dùng giữ tốt hơn (7.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> To prove the app scanned the right secret and the clocks agree — else the user is locked out next login</p><p>Confirm-before-trust catches a mis-scan or a wrong clock while the user can still fix it; skip it and they are locked out with no working factor (7.3).</p><p><i>VI: Xác nhận-trước-khi-tin bắt một lần quét nhầm hay đồng hồ sai khi người dùng còn sửa được; bỏ nó và họ bị khoá không còn yếu tố chạy được (7.3).</i></p></li><li><p><b>b)</b> As SHA-256 digests, each usable exactly once</p><p>Recovery codes are credentials: stored as digests, shown once, single-use — the demo shows a reused code returning BAD_CODE (7.3).</p><p><i>VI: Mã khôi phục là tín vật: lưu dạng digest, hiện một lần, dùng một lần — demo cho thấy một mã dùng lại trả BAD_CODE (7.3).</i></p></li><li><p><b>c)</b> It moves the trust back to the email account — the weak channel the factor was meant to backstop</p><p>Every recovery path is a front door (Ch 6); an email reset re-weakens everything to the email account. Offline codes the user holds are better (7.3).</p><p><i>VI: Mỗi đường khôi phục là một cửa trước (Ch 6); một reset qua email làm yếu lại mọi thứ về tài khoản email. Mã ngoại tuyến người dùng giữ tốt hơn (7.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The secret is stored before a code is verified, but the factor is only enabled after confirm. Why confirm first?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bí mật được lưu trước khi một mã được xác minh, nhưng yếu tố chỉ bật sau confirm. Vì sao confirm trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To let the server, rather than the app, choose the first valid code"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To prove the app scanned the right secret and the clocks agree — else the user is locked out next login"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To deliberately slow enrollment down and discourage casual sign-ups"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the generated secret is cryptographically invalid until it is confirmed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Confirm-before-trust catches a mis-scan or a wrong clock while the user can still fix it; skip it and they are locked out with no working factor (7.3).</p><p><i>VI: Xác nhận-trước-khi-tin bắt một lần quét nhầm hay đồng hồ sai khi người dùng còn sửa được; bỏ nó và họ bị khoá không còn yếu tố chạy được (7.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Confirm returns ten recovery codes, once. How are they stored, and how many times does each work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Confirm trả mười mã khôi phục, một lần. Chúng lưu thế nào, và mỗi cái chạy mấy lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Not stored — recomputed each login"
+              },
+              {
+                "ma": "b",
+                "noiDung": "As SHA-256 digests, each usable exactly once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Encrypted, reusable until expiry"
+              },
+              {
+                "ma": "d",
+                "noiDung": "As plaintext, reusable"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Recovery codes are credentials: stored as digests, shown once, single-use — the demo shows a reused code returning BAD_CODE (7.3).</p><p><i>VI: Mã khôi phục là tín vật: lưu dạng digest, hiện một lần, dùng một lần — demo cho thấy một mã dùng lại trả BAD_CODE (7.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a \"reset my 2FA\" link sent by email a bad recovery path?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một link \"reset 2FA\" gửi qua email là một đường khôi phục tồi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A link in an email cannot safely carry a one-time reset token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Opening the link would print the raw TOTP secret into the message body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It moves the trust back to the email account — the weak channel the factor was meant to backstop"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Email delivery is too slow for a user who is locked out and waiting"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every recovery path is a front door (Ch 6); an email reset re-weakens everything to the email account. Offline codes the user holds are better (7.3).</p><p><i>VI: Mỗi đường khôi phục là một cửa trước (Ch 6); một reset qua email làm yếu lại mọi thứ về tài khoản email. Mã ngoại tuyến người dùng giữ tốt hơn (7.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Enabling the factor before a code verifies.|||Bật yếu tố trước khi một mã xác minh."
+        },
+        {
+          "loi": "Storing recovery codes in plaintext.|||Lưu mã khôi phục dạng gốc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "enrollment",
+          "vi": "đăng ký"
+        },
+        {
+          "en": "recovery code",
+          "vi": "mã khôi phục"
+        }
+      ]
+    },
+    {
+      "title": "7.3-2 — Write consumeRecovery(code, codes): single-use",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A recovery code is single-use. Given a presented <code>code</code> and the list of live <code>codes</code>, return <code>{ ok, remaining }</code>: if the code is present, <code>ok:true</code> and <code>remaining</code> is the list with that code removed; if absent, <code>ok:false</code> and <code>remaining</code> unchanged. (In the real system you compare digests, not plaintext — the logic is the same.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một mã khôi phục dùng một lần. Cho một <code>code</code> nhập và danh sách <code>codes</code> còn sống, trả <code>{ ok, remaining }</code>: nếu mã có mặt, <code>ok:true</code> và <code>remaining</code> là danh sách đã bỏ mã đó; nếu vắng, <code>ok:false</code> và <code>remaining</code> giữ nguyên. (Hệ thật so digest, không so bản gốc — logic như nhau.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "consumeRecovery(\"b\", [\"a\",\"b\",\"c\"])",
+          "output": "{\"ok\":true,\"remaining\":[\"a\",\"c\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "indexOf tells you if it is present and where.|||indexOf cho biết nó có mặt không và ở đâu.",
+        "Remove exactly the one matched index.|||Bỏ đúng một chỉ số khớp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { ok, remaining } */\nfunction consumeRecovery(code, codes) {\n  // Write your solution here\n  return { ok: false, remaining: codes };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction consumeRecovery(code, codes) {\n  const i = codes.indexOf(code);\n  if (i < 0) return { ok: false, remaining: codes };\n  return { ok: true, remaining: codes.filter((_, j) => j !== i) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Single-use means a consumed code is dropped, so a copy an attacker saw is already dead; an absent code changes nothing (7.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Dùng một lần nghĩa là một mã đã tiêu bị bỏ, nên một bản kẻ tấn công thấy đã chết; một mã vắng không đổi gì (7.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "present ⇒ removed",
+              "vi": "có mặt ⇒ bỏ"
+            },
+            "goi": "consumeRecovery(\"b\", [\"a\",\"b\",\"c\"])",
+            "mongDoi": {
+              "ok": true,
+              "remaining": [
+                "a",
+                "c"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "absent ⇒ unchanged",
+              "vi": "vắng ⇒ giữ nguyên"
+            },
+            "goi": "consumeRecovery(\"x\", [\"a\",\"b\"])",
+            "mongDoi": {
+              "ok": false,
+              "remaining": [
+                "a",
+                "b"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "last code",
+              "vi": "mã cuối"
+            },
+            "goi": "consumeRecovery(\"a\", [\"a\"])",
+            "mongDoi": {
+              "ok": true,
+              "remaining": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Removing all copies or none.|||Bỏ tất cả bản hoặc không bỏ gì."
+        },
+        {
+          "loi": "Returning ok:true for an absent code.|||Trả ok:true cho một mã vắng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single-use",
+          "vi": "dùng một lần"
+        }
+      ]
+    },
+    {
+      "title": "7.3-3 — Order the enrollment",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order enrolling a TOTP factor, from begin to a recovery-ready account.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp việc đăng ký một yếu tố TOTP, từ begin tới một tài khoản sẵn-khôi-phục.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The factor is enabled only after a code verifies.|||Yếu tố chỉ bật sau khi một mã xác minh.",
+        "Recovery codes come last.|||Mã khôi phục tới cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-3 — Order the enrollment\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-3 — Order the enrollment — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m1) begin: generate a secret, store it UNCONFIRMED, return the otpauth URI  →  m3) The app scans the QR and shows a code  →  m4) confirm: verify one code, then mark the factor enabled  →  m2) Issue ten recovery codes, shown once, stored as digests\n   Store unconfirmed → the app computes a code → confirm enables it → only then issue recovery codes (7.3).VI: Lưu chưa xác nhận → app tính một mã → confirm bật nó → chỉ khi đó phát mã khôi phục (7.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Store unconfirmed → the app computes a code → confirm enables it → only then issue recovery codes (7.3).</p><p><i>VI: Lưu chưa xác nhận → app tính một mã → confirm bật nó → chỉ khi đó phát mã khôi phục (7.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "begin: generate a secret, store it UNCONFIRMED, return the otpauth URI"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Issue ten recovery codes, shown once, stored as digests"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The app scans the QR and shows a code"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "confirm: verify one code, then mark the factor enabled"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>Store unconfirmed → the app computes a code → confirm enables it → only then issue recovery codes (7.3).</p><p><i>VI: Lưu chưa xác nhận → app tính một mã → confirm bật nó → chỉ khi đó phát mã khôi phục (7.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Enabling before confirm.|||Bật trước confirm."
+        },
+        {
+          "loi": "Issuing recovery codes at begin.|||Phát mã khôi phục lúc begin."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "otpauth:// URI",
+          "vi": "URI otpauth://"
+        }
+      ]
+    },
+    {
+      "title": "7.3-4 — Recovery design → why",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each recovery design choice with its reason.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi lựa chọn thiết kế khôi phục với lý do.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two choices are about the stored form, two about human use.|||Hai lựa chọn về dạng lưu, hai về việc con người dùng.",
+        "A digest protects a dump; single-use protects against replay.|||Một digest bảo vệ một bản dump; dùng một lần chống phát lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-4 — Recovery design → why\n\nAnswer in the answer panel (no code needed).\n\n1. Choice → reasonLựa chọn → lý do\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.3-4 — Recovery design → why — answer key\n\n1. Choice → reasonLựa chọn → lý do\n   - r1.q: a dump is hashes, not working codes\n   - r2.q: a seen copy is already dead\n   - r3.q: humans copy these onto paper\n   - r4.q: the real fix for device loss\n   Digests protect a dump; single-use kills replay; an unambiguous alphabet survives handwriting; a second factor beats any recovery code (7.3).VI: Digest bảo vệ một bản dump; dùng một lần giết phát lại; một bảng chữ không nhập nhằng sống qua chữ viết tay; một yếu tố thứ hai thắng mọi mã khôi phục (7.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Digests protect a dump; single-use kills replay; an unambiguous alphabet survives handwriting; a second factor beats any recovery code (7.3).</p><p><i>VI: Digest bảo vệ một bản dump; dùng một lần giết phát lại; một bảng chữ không nhập nhằng sống qua chữ viết tay; một yếu tố thứ hai thắng mọi mã khôi phục (7.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choice → reason</p><p style=\"opacity:.75;font-size:.92em\"><i>Lựa chọn → lý do</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Choice"
+              },
+              {
+                "ma": "q",
+                "ten": "Reason",
+                "luaChon": [
+                  "a dump is hashes, not working codes",
+                  "a seen copy is already dead",
+                  "humans copy these onto paper",
+                  "the real fix for device loss"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "store as SHA-256 digests"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "single-use"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "no l/o/0/1, grouped xxxx-xxxx"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "encourage a second authenticator"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "a dump is hashes, not working codes",
+              "r2.q": "a seen copy is already dead",
+              "r3.q": "humans copy these onto paper",
+              "r4.q": "the real fix for device loss"
+            },
+            "giaiThich": "<p>Digests protect a dump; single-use kills replay; an unambiguous alphabet survives handwriting; a second factor beats any recovery code (7.3).</p><p><i>VI: Digest bảo vệ một bản dump; dùng một lần giết phát lại; một bảng chữ không nhập nhằng sống qua chữ viết tay; một yếu tố thứ hai thắng mọi mã khôi phục (7.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking recovery codes replace a second authenticator.|||Tưởng mã khôi phục thay một bộ xác thực thứ hai."
+        },
+        {
+          "loi": "Confusing the hashed-storage reason with the single-use reason.|||Lẫn lý do lưu-băm với lý do dùng-một-lần."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

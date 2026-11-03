@@ -1,0 +1,450 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-7-5-trien-khai-passkey",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-7-5-trien-khai-passkey"
+  },
+  "exercises": [
+    {
+      "title": "7.5-1 — What the server stores, read the run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.7 stored, from the ceremony:<pre>A real Chromium with a virtual authenticator runs the two ceremonies against LabFlow ID:\n  1. register  — navigator.credentials.create → server verifyRegistration: verified=true\n     stored credential id a_aihV0MtSpL3nfX… (public key 56 b64 chars, counter 1)\n  2. authenticate — navigator.credentials.get → server verifyAuthentication: verified=true</pre></p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.7 đã lưu, từ nghi thức:<pre>A real Chromium with a virtual authenticator runs the two ceremonies against LabFlow ID:\n  1. register  — navigator.credentials.create → server verifyRegistration: verified=true\n     stored credential id a_aihV0MtSpL3nfX… (public key 56 b64 chars, counter 1)\n  2. authenticate — navigator.credentials.get → server verifyAuthentication: verified=true</pre></p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A pre-signed assertion is the attack a fresh challenge prevents.|||Một assertion ký trước là cú tấn công mà một challenge mới ngăn.",
+        "The enumeration rule follows you to the login door.|||Luật dò tài khoản theo bạn tới cửa đăng nhập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-1 — What the server stores, read the run\n\nAnswer in the answer panel (no code needed).\n\n1. One row per authenticator holds a credential id, a public key and a counter. Why must the challenge be server-made and one-shot?Một dòng mỗi bộ xác thực giữ credential id, khoá công khai và counter. Vì sao challenge phải do máy chủ tạo và dùng một lần?\n2. auth/options should return the same shape whether or not the email has passkeys. Why?auth/options nên trả cùng hình dạng dù email có passkey hay không. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-1 — What the server stores, read the run — answer key\n\n1. One row per authenticator holds a credential id, a public key and a counter. Why must the challenge be server-made and one-shot?Một dòng mỗi bộ xác thực giữ credential id, khoá công khai và counter. Vì sao challenge phải do máy chủ tạo và dùng một lần?\n   Answer: c) A client-chosen or reused challenge can be pre-signed; a fresh server challenge makes each assertion one-shot\n   Freshness is half the security: a reusable or client-chosen challenge lets an attacker prepare a signature in advance (7.5).VI: Độ tươi là nửa sự an toàn: một challenge dùng lại hay do client chọn cho kẻ tấn công chuẩn bị một chữ ký trước (7.5).\n\n2. auth/options should return the same shape whether or not the email has passkeys. Why?auth/options nên trả cùng hình dạng dù email có passkey hay không. Vì sao?\n   Answer: c) Otherwise it is an enumeration oracle revealing which emails have passkeys (6.4)\n   Differing responses by passkey existence let an attacker enumerate users — the Chapter 6 rule applies at the login door (7.5, 6.4).VI: Phản hồi khác nhau theo sự tồn tại passkey cho kẻ tấn công dò người dùng — luật Chương 6 áp ở cửa đăng nhập (7.5, 6.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A client-chosen or reused challenge can be pre-signed; a fresh server challenge makes each assertion one-shot</p><p>Freshness is half the security: a reusable or client-chosen challenge lets an attacker prepare a signature in advance (7.5).</p><p><i>VI: Độ tươi là nửa sự an toàn: một challenge dùng lại hay do client chọn cho kẻ tấn công chuẩn bị một chữ ký trước (7.5).</i></p></li><li><p><b>c)</b> Otherwise it is an enumeration oracle revealing which emails have passkeys (6.4)</p><p>Differing responses by passkey existence let an attacker enumerate users — the Chapter 6 rule applies at the login door (7.5, 6.4).</p><p><i>VI: Phản hồi khác nhau theo sự tồn tại passkey cho kẻ tấn công dò người dùng — luật Chương 6 áp ở cửa đăng nhập (7.5, 6.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>One row per authenticator holds a credential id, a public key and a counter. Why must the challenge be server-made and one-shot?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dòng mỗi bộ xác thực giữ credential id, khoá công khai và counter. Vì sao challenge phải do máy chủ tạo và dùng một lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So the signature counter stays small and never overflows its column"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So the challenge stays short enough to fit inside the QR code the app scans"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A client-chosen or reused challenge can be pre-signed; a fresh server challenge makes each assertion one-shot"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the relying-party ID must be embedded inside the challenge bytes"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Freshness is half the security: a reusable or client-chosen challenge lets an attacker prepare a signature in advance (7.5).</p><p><i>VI: Độ tươi là nửa sự an toàn: một challenge dùng lại hay do client chọn cho kẻ tấn công chuẩn bị một chữ ký trước (7.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>auth/options should return the same shape whether or not the email has passkeys. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>auth/options nên trả cùng hình dạng dù email có passkey hay không. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To keep every authenticator’s signature counter in sync across devices"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the WebAuthn browser API refuses options with an empty credential list"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Otherwise it is an enumeration oracle revealing which emails have passkeys (6.4)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To save bandwidth by not listing credential ids that will not be used"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Differing responses by passkey existence let an attacker enumerate users — the Chapter 6 rule applies at the login door (7.5, 6.4).</p><p><i>VI: Phản hồi khác nhau theo sự tồn tại passkey cho kẻ tấn công dò người dùng — luật Chương 6 áp ở cửa đăng nhập (7.5, 6.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the challenge can be reused.|||Tưởng challenge dùng lại được."
+        },
+        {
+          "loi": "Revealing \"no passkeys for that user\".|||Lộ \"không passkey cho người đó\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "challenge",
+          "vi": "challenge"
+        },
+        {
+          "en": "signature counter",
+          "vi": "bộ đếm chữ ký"
+        }
+      ]
+    },
+    {
+      "title": "7.5-2 — Write counterOk(stored, presented): clone detection",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Each authenticator bumps a signature counter per use. The server stores the last value and expects the next to be strictly higher. Return <code>true</code> if the presented counter is acceptable (greater than the stored one), <code>false</code> if it stayed the same or went backwards — a sign of a cloned credential.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi bộ xác thực tăng một bộ đếm chữ ký mỗi lần dùng. Máy chủ lưu giá trị cuối và mong cái kế cao hơn hẳn. Trả <code>true</code> nếu counter nhập được chấp nhận (lớn hơn cái đã lưu), <code>false</code> nếu nó giữ nguyên hoặc đi lùi — dấu hiệu một credential bị sao chép.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "counterOk(4, 5)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Strictly greater, not greater-or-equal.|||Lớn hơn hẳn, không phải lớn-hơn-hoặc-bằng.",
+        "Equal means no increment happened — suspicious.|||Bằng nghĩa là không có tăng — đáng ngờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if the presented counter is acceptable */\nfunction counterOk(stored, presented) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction counterOk(stored, presented) {\n  // The signature counter must strictly increase; a value that does not is a cloned authenticator.\n  return presented > stored;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A counter that does not strictly increase means two copies of the credential are in use — the WebAuthn clone-detection signal (7.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Một counter không tăng hẳn nghĩa là hai bản của credential đang dùng — tín hiệu phát hiện sao chép của WebAuthn (7.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "increased ⇒ ok",
+              "vi": "tăng ⇒ ok"
+            },
+            "goi": "counterOk(4, 5)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "unchanged ⇒ clone",
+              "vi": "không đổi ⇒ bản sao"
+            },
+            "goi": "counterOk(5, 5)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "backwards ⇒ clone",
+              "vi": "đi lùi ⇒ bản sao"
+            },
+            "goi": "counterOk(9, 3)",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using >= instead of >.|||Dùng >= thay vì >."
+        },
+        {
+          "loi": "Accepting a backwards counter.|||Nhận một counter đi lùi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clone detection",
+          "vi": "phát hiện sao chép"
+        }
+      ]
+    },
+    {
+      "title": "7.5-3 — Order a passwordless migration",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the steps of moving a user from \"password only\" to \"passwordless\", without a lockout.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước chuyển một người dùng từ \"chỉ mật khẩu\" sang \"không mật khẩu\", không bị khoá.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Never flip a switch — walk to passwordless.|||Đừng bật một công tắc — đi tới không-mật-khẩu.",
+        "Drop the password last, after a second passkey.|||Bỏ mật khẩu cuối, sau một passkey thứ hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-3 — Order a passwordless migration\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-3 — Order a passwordless migration — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m3) Offer passkeys alongside the password  →  m2) Prompt enrollment after a successful login  →  m1) Encourage a second authenticator and keep recovery codes  →  m4) Offer to drop the password only once two passkeys work\n   Add passkeys next to the password, prompt enrollment, ensure a second factor + recovery, then drop the password last (7.5).VI: Thêm passkey cạnh mật khẩu, nhắc đăng ký, bảo đảm một yếu tố thứ hai + khôi phục, rồi bỏ mật khẩu cuối (7.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Add passkeys next to the password, prompt enrollment, ensure a second factor + recovery, then drop the password last (7.5).</p><p><i>VI: Thêm passkey cạnh mật khẩu, nhắc đăng ký, bảo đảm một yếu tố thứ hai + khôi phục, rồi bỏ mật khẩu cuối (7.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Encourage a second authenticator and keep recovery codes"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Prompt enrollment after a successful login"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Offer passkeys alongside the password"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Offer to drop the password only once two passkeys work"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>Add passkeys next to the password, prompt enrollment, ensure a second factor + recovery, then drop the password last (7.5).</p><p><i>VI: Thêm passkey cạnh mật khẩu, nhắc đăng ký, bảo đảm một yếu tố thứ hai + khôi phục, rồi bỏ mật khẩu cuối (7.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping the password after one passkey.|||Bỏ mật khẩu sau một passkey."
+        },
+        {
+          "loi": "Removing recovery during migration.|||Gỡ khôi phục trong lúc di trú."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "passwordless migration",
+          "vi": "di trú không mật khẩu"
+        }
+      ]
+    },
+    {
+      "title": "7.5-4 — Stored field → purpose",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each stored passkey field with what it is for.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi trường passkey lưu trữ với công dụng của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only the public key verifies; the private key is never stored.|||Chỉ khoá công khai xác minh; khoá riêng không bao giờ lưu.",
+        "The id is the lookup key; transports are only a hint.|||id là khoá tra; transports chỉ là một gợi ý."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-4 — Stored field → purpose\n\nAnswer in the answer panel (no code needed).\n\n1. Field → purposeTrường → công dụng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.5-4 — Stored field → purpose — answer key\n\n1. Field → purposeTrường → công dụng\n   - r1.q: looked up at login\n   - r2.q: verifies the signature\n   - r3.q: clone detection\n   - r4.q: a UI hint\n   The id finds the row, the public key checks the signature, the counter catches clones, transports hint how to reach the authenticator — the private key is never stored (7.5).VI: id tìm dòng, khoá công khai kiểm chữ ký, counter bắt bản sao, transports gợi ý cách với tới bộ xác thực — khoá riêng không bao giờ lưu (7.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The id finds the row, the public key checks the signature, the counter catches clones, transports hint how to reach the authenticator — the private key is never stored (7.5).</p><p><i>VI: id tìm dòng, khoá công khai kiểm chữ ký, counter bắt bản sao, transports gợi ý cách với tới bộ xác thực — khoá riêng không bao giờ lưu (7.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Field → purpose</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường → công dụng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Field"
+              },
+              {
+                "ma": "q",
+                "ten": "Purpose",
+                "luaChon": [
+                  "looked up at login",
+                  "verifies the signature",
+                  "clone detection",
+                  "a UI hint"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "credential id"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "public key"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "counter"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "transports"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "looked up at login",
+              "r2.q": "verifies the signature",
+              "r3.q": "clone detection",
+              "r4.q": "a UI hint"
+            },
+            "giaiThich": "<p>The id finds the row, the public key checks the signature, the counter catches clones, transports hint how to reach the authenticator — the private key is never stored (7.5).</p><p><i>VI: id tìm dòng, khoá công khai kiểm chữ ký, counter bắt bản sao, transports gợi ý cách với tới bộ xác thực — khoá riêng không bao giờ lưu (7.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the counter logs the user in.|||Tưởng counter đăng nhập người dùng."
+        },
+        {
+          "loi": "Thinking transports are security-critical.|||Tưởng transports là trọng yếu bảo mật."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

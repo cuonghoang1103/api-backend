@@ -1,0 +1,460 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-7-2-totp",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-7-2-totp"
+  },
+  "exercises": [
+    {
+      "title": "7.2-1 — TOTP against the RFC, read the run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.7 (real run):<pre>RFC 6238 Appendix B (SHA-1, 8 digits) — our totp() vs the published vector:\n  t=         59  ours 94287082  ✓ matches RFC\n  t= 1111111109  ours 07081804  ✓ matches RFC\n  t= 1111111111  ours 14050471  ✓ matches RFC\n  t= 1234567890  ours 89005924  ✓ matches RFC\n  t= 2000000000  ours 69279037  ✓ matches RFC\n  t=20000000000  ours 65353130  ✓ matches RFC\n  ⇒ all six RFC vectors: PASS\n\nSame secret, 6 digits — our totp() vs otplib at three fixed times:\n  t=1700000000  ours 496665  otplib 496665  ✓\n  t=1700000030  ours 073872  otplib 073872  ✓\n  t=1700000060  ours 469942  otplib 469942  ✓\n\nClock skew — a code from the previous 30s window is still accepted with window=1:\n  code from step -1  → accepted=true (offset -1)\n  code from step +0  → accepted=true (offset 0)\n  code from step +1  → accepted=true (offset 1)\n  code from step +2  → accepted=false (outside ±1 window)</pre></p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.7 (chạy thật):<pre>RFC 6238 Appendix B (SHA-1, 8 digits) — our totp() vs the published vector:\n  t=         59  ours 94287082  ✓ matches RFC\n  t= 1111111109  ours 07081804  ✓ matches RFC\n  t= 1111111111  ours 14050471  ✓ matches RFC\n  t= 1234567890  ours 89005924  ✓ matches RFC\n  t= 2000000000  ours 69279037  ✓ matches RFC\n  t=20000000000  ours 65353130  ✓ matches RFC\n  ⇒ all six RFC vectors: PASS\n\nSame secret, 6 digits — our totp() vs otplib at three fixed times:\n  t=1700000000  ours 496665  otplib 496665  ✓\n  t=1700000030  ours 073872  otplib 073872  ✓\n  t=1700000060  ours 469942  otplib 469942  ✓\n\nClock skew — a code from the previous 30s window is still accepted with window=1:\n  code from step -1  → accepted=true (offset -1)\n  code from step +0  → accepted=true (offset 0)\n  code from step +1  → accepted=true (offset 1)\n  code from step +2  → accepted=false (outside ±1 window)</pre></p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The RFC publishes inputs and outputs on purpose.|||RFC công bố đầu vào và đầu ra có chủ đích.",
+        "±1 covers drift, not guessing.|||±1 phủ trôi, không phải đoán."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2-1 — TOTP against the RFC, read the run\n\nAnswer in the answer panel (no code needed).\n\n1. The hand-written totp() reproduces t=59 → 94287082 and matches otplib. What does that prove?totp() viết tay tái tạo t=59 → 94287082 và khớp otplib. Điều đó chứng minh gì?\n2. A code from the previous 30s step is accepted with window=1; one three steps away is rejected. Why a window at all?Một mã từ bước 30s trước được nhận với window=1; một cái cách ba bước bị từ chối. Vì sao cần cửa sổ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2-1 — TOTP against the RFC, read the run — answer key\n\n1. The hand-written totp() reproduces t=59 → 94287082 and matches otplib. What does that prove?totp() viết tay tái tạo t=59 → 94287082 và khớp otplib. Điều đó chứng minh gì?\n   Answer: b) It conforms to RFC 6238 — the published vectors are the standard’s own conformance test\n   RFC 6238 ships test vectors so any implementation can prove conformance; reproducing them (and matching otplib) is the proof (7.2).VI: RFC 6238 kèm vector thử để mọi cài đặt chứng minh tuân chuẩn; tái tạo chúng (và khớp otplib) là bằng chứng (7.2).\n\n2. A code from the previous 30s step is accepted with window=1; one three steps away is rejected. Why a window at all?Một mã từ bước 30s trước được nhận với window=1; một cái cách ba bước bị từ chối. Vì sao cần cửa sổ?\n   Answer: b) Clock drift and typing delay — ±1 step (~±30s) covers them without making the code meaningfully reusable\n   Phone clocks drift and typing takes time; ±1 covers real drift while keeping the code effectively one-time. Widening it lengthens the replay window (7.2).VI: Đồng hồ điện thoại trôi và gõ mất thời gian; ±1 phủ trôi thật mà vẫn giữ mã gần như dùng-một-lần. Nới nó kéo dài cửa sổ phát lại (7.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It conforms to RFC 6238 — the published vectors are the standard’s own conformance test</p><p>RFC 6238 ships test vectors so any implementation can prove conformance; reproducing them (and matching otplib) is the proof (7.2).</p><p><i>VI: RFC 6238 kèm vector thử để mọi cài đặt chứng minh tuân chuẩn; tái tạo chúng (và khớp otplib) là bằng chứng (7.2).</i></p></li><li><p><b>b)</b> Clock drift and typing delay — ±1 step (~±30s) covers them without making the code meaningfully reusable</p><p>Phone clocks drift and typing takes time; ±1 covers real drift while keeping the code effectively one-time. Widening it lengthens the replay window (7.2).</p><p><i>VI: Đồng hồ điện thoại trôi và gõ mất thời gian; ±1 phủ trôi thật mà vẫn giữ mã gần như dùng-một-lần. Nới nó kéo dài cửa sổ phát lại (7.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The hand-written totp() reproduces t=59 → 94287082 and matches otplib. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>totp() viết tay tái tạo t=59 → 94287082 và khớp otplib. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That the otplib package is installed and importable in the project"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It conforms to RFC 6238 — the published vectors are the standard’s own conformance test"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That the system clock on the machine is set to the correct time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "That HMAC-SHA1 is secure against hash-collision attacks"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>RFC 6238 ships test vectors so any implementation can prove conformance; reproducing them (and matching otplib) is the proof (7.2).</p><p><i>VI: RFC 6238 kèm vector thử để mọi cài đặt chứng minh tuân chuẩn; tái tạo chúng (và khớp otplib) là bằng chứng (7.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A code from the previous 30s step is accepted with window=1; one three steps away is rejected. Why a window at all?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một mã từ bước 30s trước được nhận với window=1; một cái cách ba bước bị từ chối. Vì sao cần cửa sổ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the shared secret is rotated at the start of each step"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Clock drift and typing delay — ±1 step (~±30s) covers them without making the code meaningfully reusable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To deliberately let the user guess the code two or three times"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the SHA-1 HMAC is too slow to compute inside one step"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Phone clocks drift and typing takes time; ±1 covers real drift while keeping the code effectively one-time. Widening it lengthens the replay window (7.2).</p><p><i>VI: Đồng hồ điện thoại trôi và gõ mất thời gian; ±1 phủ trôi thật mà vẫn giữ mã gần như dùng-một-lần. Nới nó kéo dài cửa sổ phát lại (7.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking matching otplib is luck.|||Tưởng khớp otplib là may."
+        },
+        {
+          "loi": "Thinking a bigger window is safer.|||Tưởng cửa sổ lớn hơn an toàn hơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "test vector",
+          "vi": "vector thử"
+        },
+        {
+          "en": "skew window",
+          "vi": "cửa sổ lệch"
+        }
+      ]
+    },
+    {
+      "title": "7.2-2 — Write dynamicTruncate(hmacBytes, digits): the HOTP core",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Given the 20 HMAC bytes and a digit count, return the code. Dynamic truncation (RFC 4226): the low 4 bits of the LAST byte give an offset; read 4 bytes there as a 31-bit number (mask the top bit of the first); take it modulo 10^digits; left-pad with zeros. (This is the whole of HOTP after the HMAC — the HMAC itself needs a library, so it is given to you here.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho 20 byte HMAC và số chữ số, trả về mã. Cắt động (RFC 4226): 4 bit thấp của byte CUỐI cho một offset; đọc 4 byte ở đó như một số 31 bit (che bit cao của byte đầu); lấy modulo 10^digits; đệm 0 bên trái. (Đây là toàn bộ HOTP sau HMAC — chính HMAC cần một thư viện, nên nó được cho sẵn ở đây.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "dynamicTruncate([204,147,207,24,80,141,148,147,76,100,182,93,139,167,102,127,183,205,228,176], 6)",
+          "output": "\"755224\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "offset = last byte & 0x0f.|||offset = byte cuối & 0x0f.",
+        "Mask the first byte with 0x7f to clear the sign bit.|||Che byte đầu bằng 0x7f để xoá bit dấu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ a zero-padded code of 'digits' digits */\nfunction dynamicTruncate(h, digits = 6) {\n  // Write your solution here\n  return '000000';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction dynamicTruncate(h, digits = 6) {\n  const off = h[h.length - 1] & 0x0f;\n  const bin = ((h[off] & 0x7f) << 24) | (h[off + 1] << 16) | (h[off + 2] << 8) | h[off + 3];\n  return String(bin % 10 ** digits).padStart(digits, '0');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The offset is chosen by the hash, so the code does not depend on a fixed slice; masking the sign bit keeps the 31-bit number positive (RFC 4226).</p>",
+      "solutionExplanationHtmlVi": "<p>Offset do hash chọn, nên mã không phụ thuộc một lát cố định; che bit dấu giữ số 31 bit dương (RFC 4226).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "RFC counter 0, 6 digits",
+              "vi": "RFC counter 0, 6 chữ số"
+            },
+            "goi": "dynamicTruncate([204,147,207,24,80,141,148,147,76,100,182,93,139,167,102,127,183,205,228,176], 6)",
+            "mongDoi": "755224"
+          },
+          {
+            "moTa": {
+              "en": "same bytes, 8 digits",
+              "vi": "cùng byte, 8 chữ số"
+            },
+            "goi": "dynamicTruncate([204,147,207,24,80,141,148,147,76,100,182,93,139,167,102,127,183,205,228,176], 8)",
+            "mongDoi": "84755224",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "RFC counter 1",
+              "vi": "RFC counter 1"
+            },
+            "goi": "dynamicTruncate([117,164,138,25,212,203,225,0,100,78,138,193,57,126,234,116,122,45,51,171], 6)",
+            "mongDoi": "287082",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a fixed offset instead of the hash-chosen one.|||Dùng offset cố định thay vì cái do-hash-chọn."
+        },
+        {
+          "loi": "Forgetting to mask the top bit (negative numbers).|||Quên che bit cao (số âm)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dynamic truncation",
+          "vi": "cắt động"
+        }
+      ]
+    },
+    {
+      "title": "7.2-3 — Write totpCounter(time, step, t0): the clock as the counter",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>TOTP is HOTP whose counter is the number of <code>step</code>-second windows since <code>t0</code>: <code>floor((time − t0) / step)</code>. Default <code>step = 30</code>, <code>t0 = 0</code>. This is the only thing TOTP adds over HOTP.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>TOTP là HOTP với counter là số cửa sổ <code>step</code> giây kể từ <code>t0</code>: <code>floor((time − t0) / step)</code>. Mặc định <code>step = 30</code>, <code>t0 = 0</code>. Đây là thứ duy nhất TOTP thêm so với HOTP.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "totpCounter(59)",
+          "output": "1",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use Math.floor, not rounding.|||Dùng Math.floor, không làm tròn.",
+        "Subtract t0 before dividing.|||Trừ t0 trước khi chia."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ the integer counter for a given unix time */\nfunction totpCounter(time, step = 30, t0 = 0) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction totpCounter(time, step = 30, t0 = 0) {\n  return Math.floor((time - t0) / step);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every step seconds the counter ticks and the code changes; flooring makes a whole window share one counter (7.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi step giây counter nhích và mã đổi; floor khiến cả một cửa sổ chung một counter (7.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "t=59 ⇒ 1",
+              "vi": "t=59 ⇒ 1"
+            },
+            "goi": "totpCounter(59)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "a later time",
+              "vi": "một thời điểm sau"
+            },
+            "goi": "totpCounter(1234567890)",
+            "mongDoi": 41152263,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "with t0=60",
+              "vi": "với t0=60"
+            },
+            "goi": "totpCounter(100, 30, 60)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "t=0 ⇒ 0",
+              "vi": "t=0 ⇒ 0"
+            },
+            "goi": "totpCounter(0)",
+            "mongDoi": 0,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding instead of flooring.|||Làm tròn thay vì floor."
+        },
+        {
+          "loi": "Forgetting t0.|||Quên t0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TOTP",
+          "vi": "TOTP"
+        }
+      ]
+    },
+    {
+      "title": "7.2-4 — HOTP vs TOTP",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each statement with HOTP or TOTP.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi phát biểu với HOTP hay TOTP.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The truncation is shared.|||Phần cắt là chung.",
+        "Only TOTP involves time.|||Chỉ TOTP dính thời gian."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2-4 — HOTP vs TOTP\n\nAnswer in the answer panel (no code needed).\n\n1. Statement → whichPhát biểu → cái nào\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.2-4 — HOTP vs TOTP — answer key\n\n1. Statement → whichPhát biểu → cái nào\n   - r1.q: both\n   - r2.q: TOTP\n   - r3.q: HOTP\n   - r4.q: TOTP\n   Both share the HMAC + truncation core; TOTP differs only by making the counter the clock (7.2).VI: Cả hai chung lõi HMAC + cắt; TOTP khác chỉ ở chỗ lấy đồng hồ làm counter (7.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both share the HMAC + truncation core; TOTP differs only by making the counter the clock (7.2).</p><p><i>VI: Cả hai chung lõi HMAC + cắt; TOTP khác chỉ ở chỗ lấy đồng hồ làm counter (7.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Statement → which</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu → cái nào</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Statement"
+              },
+              {
+                "ma": "q",
+                "ten": "Which",
+                "luaChon": [
+                  "HOTP",
+                  "TOTP",
+                  "both"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "HMAC + dynamic truncation"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "the counter is floor(time / 30)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "the counter is an incrementing integer"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "the code changes every 30 seconds"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "both",
+              "r2.q": "TOTP",
+              "r3.q": "HOTP",
+              "r4.q": "TOTP"
+            },
+            "giaiThich": "<p>Both share the HMAC + truncation core; TOTP differs only by making the counter the clock (7.2).</p><p><i>VI: Cả hai chung lõi HMAC + cắt; TOTP khác chỉ ở chỗ lấy đồng hồ làm counter (7.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking truncation is TOTP-only.|||Tưởng cắt chỉ của TOTP."
+        },
+        {
+          "loi": "Thinking HOTP uses the clock.|||Tưởng HOTP dùng đồng hồ."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

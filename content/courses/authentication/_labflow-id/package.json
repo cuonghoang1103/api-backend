@@ -15,10 +15,12 @@
     "test": "node --test --test-reporter=spec \"test/**/*.test.js\""
   },
   "dependencies": {
+    "@simplewebauthn/server": "^14.0.3",
     "argon2": "0.45.1",
     "bcrypt": "6.0.0",
     "express": "5.3.0",
     "jose": "6.1.0",
+    "otplib": "^12.0.1",
     "pg": "8.23.1",
     "pino": "10.4.0",
     "redis": "6.3.0"

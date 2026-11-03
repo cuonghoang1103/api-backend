@@ -1,3 +1,5 @@
+// src/server.js — LabFlow ID v0.7 (end of Chapter 7). Chapter 6 added the account lifecycle; Chapter 7 adds a SECOND factor:
+//   TOTP (RFC 6238, src/totp), single-use recovery codes, and passkeys (WebAuthn, src/webauthn over @simplewebauthn).
 // src/server.js — LabFlow ID v0.5 (end of Chapter 5). Fixed so far:
 //   hole 1 — argon2id in PostgreSQL, measured parameters, upgrade on login (Chapter 2);
 //   hole 3 — CSPRNG session ids, only their SHA-256 stored (Chapter 1);
@@ -19,6 +21,10 @@ import { refreshLayer, pgStore as refreshStore } from './refresh/index.js';
 import { lifecycle, pgStore as lifecycleStore } from './lifecycle/index.js';
 import { sendEmail } from './email/index.js';
 import { normalizeEmail } from './email/normalize.js';
+import { generateSecret, verifyTotp, otpauthURI } from './totp/index.js';
+import { generateRecoveryCodes, consumeRecoveryCode, recoveryDigest } from './totp/recovery.js';
+import { totpStore, recoveryStore, passkeyStore } from './mfa/store.js';
+import { makeWebAuthn } from './webauthn/index.js';
 import { tokenDigest } from './crypto/index.js';
 import { log, requestLog } from './log.js';
 
@@ -230,7 +236,71 @@ app.post('/sign-out-everywhere', needSession, async (req, res) => {
   res.json({ ok: true, ended: await sessions.endAll(req.session.userId), revokedFamilies });
 });
 
+// ── Chapter 7: a second factor ─────────────────────────────────────────────────────────────────────────────────────
+// lesson 7.3: enroll TOTP. begin ⇒ a secret + otpauth URI (unconfirmed); confirm ⇒ prove one code, then recovery codes.
+app.post('/mfa/totp/begin', needSession, async (req, res) => {
+  const u = await users.findById(req.session.userId);
+  const secret = generateSecret();
+  await totpStore.put(u.id, secret);                                   // stored UNCONFIRMED until a code is proven
+  res.json({ secret, otpauth: otpauthURI({ secret, label: u.email, issuer: 'LabFlow ID' }) });
+});
+app.post('/mfa/totp/confirm', needSession, async (req, res) => {
+  const t = await totpStore.get(req.session.userId);
+  if (!t) return res.status(400).json({ error: 'NO_ENROLLMENT' });
+  if (!verifyTotp(t.secret, req.body?.code, { window: 1 }).ok) return res.status(401).json({ error: 'BAD_CODE' });
+  await totpStore.confirm(req.session.userId);
+  const { codes, digests } = generateRecoveryCodes(10);               // shown ONCE, stored as digests (lesson 7.3)
+  await recoveryStore.replaceAll(req.session.userId, digests);
+  res.json({ ok: true, enabled: true, recoveryCodes: codes });        // the only time the codes are returned
+});
+// lesson 7.1/7.3: the step-up check at login — a TOTP code, or a single-use recovery code when the phone is gone.
+app.post('/mfa/totp/verify', needSession, async (req, res) => {
+  const t = await totpStore.get(req.session.userId);
+  if (!t?.confirmedAt) return res.status(400).json({ error: 'NOT_ENABLED' });
+  if (req.body?.code && verifyTotp(t.secret, req.body.code, { window: 1 }).ok) return res.json({ ok: true, via: 'totp' });
+  if (req.body?.recovery) {
+    const live = await recoveryStore.liveDigests(req.session.userId);
+    const r = consumeRecoveryCode(req.body.recovery, live.map((x) => x.digest));
+    if (r.ok) { await recoveryStore.markUsed(live[r.index].id); return res.json({ ok: true, via: 'recovery', remaining: r.remaining.length }); }
+  }
+  res.status(401).json({ error: 'BAD_CODE' });
+});
+
+// lesson 7.4/7.5: passkeys. Two ceremonies; the RP ID + expected origin bind every assertion to this site.
+const WA = makeWebAuthn({ rpID: process.env.RP_ID ?? 'localhost', origin: process.env.RP_ORIGIN ?? `http://localhost:${process.env.PORT ?? 4800}` });
+const waChallenges = new Map();                                        // userId → the challenge we just issued (demo: in memory)
+app.post('/webauthn/register/options', needSession, async (req, res) => {
+  const u = await users.findById(req.session.userId);
+  const existing = (await passkeyStore.listForUser(u.id)).map((k) => ({ id: k.id, transports: k.transports }));
+  const options = await WA.registrationOptions(u, existing);
+  waChallenges.set('reg:' + u.id, options.challenge);
+  res.json(options);
+});
+app.post('/webauthn/register/verify', needSession, async (req, res) => {
+  const v = await WA.verifyRegistration(req.body, waChallenges.get('reg:' + req.session.userId)).catch(() => ({ verified: false }));
+  if (!v.verified) return res.status(400).json({ error: 'VERIFY_FAILED' });
+  const c = v.registrationInfo.credential;
+  await passkeyStore.add(req.session.userId, { id: c.id, publicKey: Buffer.from(c.publicKey).toString('base64'), counter: c.counter, transports: req.body?.response?.transports });
+  res.json({ ok: true, registered: true });
+});
+app.post('/webauthn/auth/options', async (req, res) => {
+  const u = await users.findByEmail(normalizeEmail(req.body?.email) ?? '');
+  const keys = u ? await passkeyStore.listForUser(u.id) : [];
+  const options = await WA.authenticationOptions(keys.map((k) => ({ id: k.id, transports: k.transports })));
+  if (u) waChallenges.set('auth:' + u.id, options.challenge);
+  res.json(options);                                                   // same shape whether or not the user exists (6.4)
+});
+app.post('/webauthn/auth/verify', async (req, res) => {
+  const stored = await passkeyStore.getById(req.body?.id ?? '');
+  if (!stored) return res.status(400).json({ error: 'UNKNOWN_CREDENTIAL' });
+  const v = await WA.verifyAuthentication(req.body, waChallenges.get('auth:' + stored.userId),
+    { id: stored.id, publicKey: new Uint8Array(Buffer.from(stored.publicKey, 'base64')), counter: stored.counter }).catch(() => ({ verified: false }));
+  if (!v.verified) return res.status(401).json({ error: 'VERIFY_FAILED' });
+  await passkeyStore.bumpCounter(stored.id, v.authenticationInfo.newCounter);   // clone detection (lesson 7.5)
+  res.json({ ok: true, userId: stored.userId });
+});
+
 app.use((err, req, res, next) => res.status(err.status ?? 500).json({ error: err.type ?? 'INTERNAL' }));
 
 const port = Number(process.env.PORT ?? 4800);
-app.listen(port, () => log.info(`LabFlow ID v0.6 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));
+app.listen(port, () => log.info(`LabFlow ID v0.7 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));

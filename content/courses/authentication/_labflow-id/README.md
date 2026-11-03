@@ -1,7 +1,7 @@
 # LabFlow ID — dự án xuyên khoá Authentication (cuongthai.com/courses/authentication)
 
 Dịch vụ danh tính của nền tảng LabFlow (cùng thế giới với LabFlow API của khoá API Design và LabFlow Lite của khoá Testing).
-Ảnh chụp này = **cuối Chương 6** (v0.6). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
+Ảnh chụp này = **cuối Chương 7** (v0.7). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
 
 Chương 4 thêm `src/jwt/` (base64url, keyring, sign, verify, jwks — EdDSA/HS256, 7 claim, JWKS + kid, xoay khoá; đối chiếu `jose` 6.1.0),
 `POST /token` + `/.well-known/jwks.json`, `demo4/`, `lab4/` + `scripts/cham-lab-4.mjs`, `test/jwt.test.js`.
@@ -12,31 +12,36 @@ Chương 6 thêm `src/lifecycle/` (token một lần: issue/consume theo mục �
 `src/email/` (hộp thư giả + `normalize.js`: NFKC + cờ trộn hệ chữ), `sql/004_lifecycle.sql` (cột `email_verified_at` + `status` trên `users`, bảng `one_time_tokens`),
 `POST /sign-up` (chống dò, băm cả hai nhánh) + `GET|POST /verify-email` + `/forgot-password`(`-naive`) + `/reset-password` + `/me/email` + `/me/delete`
 trong `src/server.js`, `demo6/`, `lab6/` + `scripts/cham-lab-6.mjs` (Lab 6, 6 phép), `test/lifecycle.test.js`.
+Chương 7 thêm `src/totp/` (TOTP viết tay RFC 6238/4226 + recovery codes), `src/webauthn/` (passkey trên @simplewebauthn/server),
+`src/mfa/store.js`, `sql/005_mfa.sql` (bảng `totp_secrets`, `recovery_codes`, `passkeys`), các tuyến `/mfa/totp/*` + `/webauthn/*` trong
+`src/server.js`, `demo7/` (vector RFC + Chromium thật qua Playwright virtual authenticator), `lab7/` + `scripts/cham-lab-7.mjs` (Lab 7, 6 phép), `test/totp.test.js`.
+DEPS MỚI: `@simplewebauthn/server`, `otplib` — chạy `npm ci` (ảnh chụp này KHÔNG kèm node_modules).
 
 ```bash
 npm ci                                   # Node 22.12+ (khoá đo trên 22.23.3)
 mkdir -p wordlists && curl -sLo wordlists/10k-most-common.txt \
   https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10k-most-common.txt
-npm test                                 # 39 test: crypto(6)+passwords(5)+sessions(4)+jwt(10)+refresh(7)+lifecycle(7) — không cần CSDL
+npm test                                 # 43 test: …+lifecycle(7)+totp(4) [HOTP/TOTP RFC 4226+6238, recovery] — không cần CSDL
 node scripts/cham-lab-1.mjs src/crypto   # 10/10 · lab1/yeu 2/10 · lab1/starter 0/10
 node scripts/cham-lab-2.mjs src/passwords # 10/10 · lab2/yeu 3.5/10 · lab2/starter 0/10 (kho giả, không cần CSDL)
 node scripts/cham-lab-3.mjs src/sessions  # 10/10 · lab3/yeu 2/10 · lab3/starter 0/10 (cổng 4806/4807 + Chromium của Playwright)
 node scripts/cham-lab-4.mjs lab4/tham-khao # 10/10 · lab4/yeu 3.5/10 · lab4/starter 0/10 (không cần CSDL — gọi makeVerifier)
 node scripts/cham-lab-5.mjs lab5/tham-khao # 10/10 · lab5/yeu 3.5/10 · lab5/starter 0/10 (không cần CSDL — kho trong bộ nhớ + đồng hồ giả)
 node scripts/cham-lab-6.mjs lab6/tham-khao # 10/10 · lab6/yeu 3/10 · lab6/starter 0/10 (không cần CSDL — kho trong bộ nhớ + đồng hồ giả)
+node scripts/cham-lab-7.mjs lab7/tham-khao # 10/10 · lab7/yeu 5,5/10 · lab7/starter 0/10 (không cần CSDL — vector RFC 4226/6238)
 
 # Từ Chương 2 máy chủ cần PostgreSQL 17:
 docker run -d --name labflow-id-pg -p 127.0.0.1:4832:5432 \
   -e POSTGRES_USER=labflow -e POSTGRES_PASSWORD=labflow-demo-pw -e POSTGRES_DB=labflow_id postgres:17
 export DATABASE_URL=postgres://labflow:labflow-demo-pw@127.0.0.1:4832/labflow_id
 npm run migrate && npm run seed          # users + sessions (002: hết hạn, last_seen, auth_at, ip/ua); An/Bình/Cô Lan bằng argon2id
-npm start                                # LabFlow ID v0.6 trên http://localhost:4800 (phiên + access JWT + refresh token xoay vòng)
+npm start                                # LabFlow ID v0.7 trên http://localhost:4800 (…+ TOTP/recovery + passkey WebAuthn)
 # demo3/where.mjs + redis-store.mjs cần Redis: docker run -d --name labflow-id-redis -p 127.0.0.1:4833:6379 redis:7
 ```
 
 | Thư mục | Nội dung |
 |---|---|
-| `src/` | máy chủ v0.6 (`server.js`), `db.js` (pg), `users.js`, `jwt/` (Lab 4), `refresh/` (Lab 5), `sessions/` (Lab 3), `passwords/` (Lab 2), `crypto/` (Lab 1), `lifecycle/` (Lab 6), `email/` (hộp thư giả), `log.js`; `store.js` (JSON) chỉ còn cho demo0 |
+| `src/` | máy chủ v0.7 (`server.js`), `db.js` (pg), `users.js`, `jwt/` (Lab 4), `refresh/` (Lab 5), `sessions/` (Lab 3), `passwords/` (Lab 2), `crypto/` (Lab 1), `lifecycle/` (Lab 6), `email/` (hộp thư giả), `totp/` (Lab 7: TOTP RFC 6238 + recovery), `webauthn/` (passkey trên @simplewebauthn), `mfa/` (kho TOTP/recovery/passkey), `log.js`; `store.js` (JSON) chỉ còn cho demo0 |
 | `sql/` | migration (`001_users.sql`…`004_lifecycle.sql`), áp bằng `scripts/migrate.mjs` |
 | `demo0/` | thí nghiệm Mục 0 |
 | `demo1/` | thí nghiệm Chương 1 |

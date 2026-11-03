@@ -254,6 +254,42 @@
       "name": "Lab 6 Account lifecycle",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 6-1 — Write consumeToken(rec, purpose, now) · Lab 6-2 — Write shouldSendReset(user): the anti-enumeration gate · Lab 6-3 — Read the reference grade"
+    },
+    {
+      "slug": "auth-7-1-yeu-to-thu-hai",
+      "name": "7.1 Second factor",
+      "level": "BEGINNER",
+      "description": "Luyện: 7.1-1 — The step-up, read the real run · 7.1-2 — Write isTwoFactor(a, b): two DIFFERENT families · 7.1-3 — Order factors by phishing resistance · 7.1-4 — Factor → family"
+    },
+    {
+      "slug": "auth-7-2-totp",
+      "name": "7.2 TOTP",
+      "level": "BEGINNER",
+      "description": "Luyện: 7.2-1 — TOTP against the RFC, read the run · 7.2-2 — Write dynamicTruncate(hmacBytes, digits): the HOTP core · 7.2-3 — Write totpCounter(time, step, t0): the clock as the counter · 7.2-4 — HOTP vs TOTP"
+    },
+    {
+      "slug": "auth-7-3-dang-ky-va-khoi-phuc",
+      "name": "7.3 Enroll & recovery",
+      "level": "BEGINNER",
+      "description": "Luyện: 7.3-1 — Enroll a factor, read the run · 7.3-2 — Write consumeRecovery(code, codes): single-use · 7.3-3 — Order the enrollment · 7.3-4 — Recovery design → why"
+    },
+    {
+      "slug": "auth-7-4-passkey",
+      "name": "7.4 Passkeys",
+      "level": "BEGINNER",
+      "description": "Luyện: 7.4-1 — The passkey ceremony, read the run · 7.4-2 — Write originAllowed(signedOrigin, expected): the one line · 7.4-3 — Order the authentication ceremony · 7.4-4 — Password/TOTP vs passkey under attack"
+    },
+    {
+      "slug": "auth-7-5-trien-khai-passkey",
+      "name": "7.5 Shipping passkeys",
+      "level": "BEGINNER",
+      "description": "Luyện: 7.5-1 — What the server stores, read the run · 7.5-2 — Write counterOk(stored, presented): clone detection · 7.5-3 — Order a passwordless migration · 7.5-4 — Stored field → purpose"
+    },
+    {
+      "slug": "auth-7-7-lab-totp",
+      "name": "Lab 7 TOTP from scratch",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 7-1 — Write base32Encode(bytes): RFC 4648, no padding · Lab 7-2 — Write base32Decode(str): back to bytes · Lab 7-3 — Read the reference grade"
     }
   ]
 }

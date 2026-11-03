@@ -1,0 +1,487 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-7-4-passkey",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-7-4-passkey"
+  },
+  "exercises": [
+    {
+      "title": "7.4-1 — The passkey ceremony, read the run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.7, a real Chromium virtual authenticator:<pre>A real Chromium with a virtual authenticator runs the two ceremonies against LabFlow ID:\n  1. register  — navigator.credentials.create → server verifyRegistration: verified=true\n     stored credential id a_aihV0MtSpL3nfX… (public key 56 b64 chars, counter 1)\n  2. authenticate — navigator.credentials.get → server verifyAuthentication: verified=true\n\nThe one line that kills phishing — re-verify the SAME real assertion with a phishing origin/RP ID:\n  expectedOrigin = http://localhost:4811  → verified=true\n  expectedOrigin = https://evil.example  → verified=false   (the authenticator signed over the real origin; the signature cannot match a lie)\n\n⇒ a passkey is bound to localhost. A phishing page on another origin gets a signature the real server rejects — nothing to steal and replay.</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.7, một Chromium thật với bộ xác thực ảo:<pre>A real Chromium with a virtual authenticator runs the two ceremonies against LabFlow ID:\n  1. register  — navigator.credentials.create → server verifyRegistration: verified=true\n     stored credential id a_aihV0MtSpL3nfX… (public key 56 b64 chars, counter 1)\n  2. authenticate — navigator.credentials.get → server verifyAuthentication: verified=true\n\nThe one line that kills phishing — re-verify the SAME real assertion with a phishing origin/RP ID:\n  expectedOrigin = http://localhost:4811  → verified=true\n  expectedOrigin = https://evil.example  → verified=false   (the authenticator signed over the real origin; the signature cannot match a lie)\n\n⇒ a passkey is bound to localhost. A phishing page on another origin gets a signature the real server rejects — nothing to steal and replay.</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The signature covers more than the challenge.|||Chữ ký phủ nhiều hơn challenge.",
+        "What does the server NOT have?|||Máy chủ KHÔNG có cái gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-1 — The passkey ceremony, read the run\n\nAnswer in the answer panel (no code needed).\n\n1. The SAME real assertion verifies against the true origin but FAILS against https://evil.example. Why?CÙNG chữ ký thật verify với origin thật nhưng THẤT BẠI với https://evil.example. Vì sao?\n2. The server stored a credential id, a public key and a counter. Why is a dump of that table not catastrophic?Máy chủ lưu một credential id, một khoá công khai và một counter. Vì sao một bản dump bảng đó không thảm hoạ?\n3. Why is a passkey often \"two factors in one tap\"?Vì sao một passkey thường là \"hai yếu tố trong một cú chạm\"?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-1 — The passkey ceremony, read the run — answer key\n\n1. The SAME real assertion verifies against the true origin but FAILS against https://evil.example. Why?CÙNG chữ ký thật verify với origin thật nhưng THẤT BẠI với https://evil.example. Vì sao?\n   Answer: b) The authenticator signed over the real origin; a check against a different origin cannot accept that signature\n   WebAuthn signs the challenge AND the requesting origin; verifying against a different origin fails — origin binding is what kills phishing (7.4).VI: WebAuthn ký challenge VÀ origin đã hỏi; xác minh với một origin khác thất bại — gắn origin là cái giết lừa đảo (7.4).\n\n2. The server stored a credential id, a public key and a counter. Why is a dump of that table not catastrophic?Máy chủ lưu một credential id, một khoá công khai và một counter. Vì sao một bản dump bảng đó không thảm hoạ?\n   Answer: a) A signature still needs the private key, which never left the device — public keys cannot impersonate anyone\n   The private key never leaves the authenticator; the server holds only public material, useless to forge a signature (7.4, 7.5).VI: Khoá riêng không bao giờ rời bộ xác thực; máy chủ chỉ giữ phần công khai, vô dụng để giả một chữ ký (7.4, 7.5).\n\n3. Why is a passkey often \"two factors in one tap\"?Vì sao một passkey thường là \"hai yếu tố trong một cú chạm\"?\n   Answer: b) The private key is something you HAVE; unlocking it with a biometric/PIN adds something you ARE/KNOW\n   The device (have) plus the user-verification biometric/PIN (are/know) make a passkey two factors in one gesture (7.4).VI: Thiết bị (có) cộng xác minh người dùng sinh-trắc/PIN (là/biết) khiến một passkey là hai yếu tố trong một cử chỉ (7.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The authenticator signed over the real origin; a check against a different origin cannot accept that signature</p><p>WebAuthn signs the challenge AND the requesting origin; verifying against a different origin fails — origin binding is what kills phishing (7.4).</p><p><i>VI: WebAuthn ký challenge VÀ origin đã hỏi; xác minh với một origin khác thất bại — gắn origin là cái giết lừa đảo (7.4).</i></p></li><li><p><b>a)</b> A signature still needs the private key, which never left the device — public keys cannot impersonate anyone</p><p>The private key never leaves the authenticator; the server holds only public material, useless to forge a signature (7.4, 7.5).</p><p><i>VI: Khoá riêng không bao giờ rời bộ xác thực; máy chủ chỉ giữ phần công khai, vô dụng để giả một chữ ký (7.4, 7.5).</i></p></li><li><p><b>b)</b> The private key is something you HAVE; unlocking it with a biometric/PIN adds something you ARE/KNOW</p><p>The device (have) plus the user-verification biometric/PIN (are/know) make a passkey two factors in one gesture (7.4).</p><p><i>VI: Thiết bị (có) cộng xác minh người dùng sinh-trắc/PIN (là/biết) khiến một passkey là hai yếu tố trong một cử chỉ (7.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The SAME real assertion verifies against the true origin but FAILS against https://evil.example. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>CÙNG chữ ký thật verify với origin thật nhưng THẤT BẠI với https://evil.example. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The public key was silently rotated between the two verification attempts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The authenticator signed over the real origin; a check against a different origin cannot accept that signature"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server keeps evil.example on a blocklist of known phishing domains and refuses it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The challenge issued for the real origin had already expired by the second verification"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>WebAuthn signs the challenge AND the requesting origin; verifying against a different origin fails — origin binding is what kills phishing (7.4).</p><p><i>VI: WebAuthn ký challenge VÀ origin đã hỏi; xác minh với một origin khác thất bại — gắn origin là cái giết lừa đảo (7.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The server stored a credential id, a public key and a counter. Why is a dump of that table not catastrophic?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chủ lưu một credential id, một khoá công khai và một counter. Vì sao một bản dump bảng đó không thảm hoạ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A signature still needs the private key, which never left the device — public keys cannot impersonate anyone"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The passkeys table is read-only, so an attacker cannot modify stored rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The public key column is encrypted at rest, so a dump cannot read it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The signature counter on each row blocks any login after a dump is detected"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The private key never leaves the authenticator; the server holds only public material, useless to forge a signature (7.4, 7.5).</p><p><i>VI: Khoá riêng không bao giờ rời bộ xác thực; máy chủ chỉ giữ phần công khai, vô dụng để giả một chữ ký (7.4, 7.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a passkey often \"two factors in one tap\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một passkey thường là \"hai yếu tố trong một cú chạm\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It signs the challenge twice with two different private keys for redundancy"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The private key is something you HAVE; unlocking it with a biometric/PIN adds something you ARE/KNOW"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It asks the user to type two separate one-time codes during the ceremony"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It verifies the assertion against two independent servers before accepting"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The device (have) plus the user-verification biometric/PIN (are/know) make a passkey two factors in one gesture (7.4).</p><p><i>VI: Thiết bị (có) cộng xác minh người dùng sinh-trắc/PIN (là/biết) khiến một passkey là hai yếu tố trong một cử chỉ (7.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a blocklist stops the phishing origin.|||Tưởng một blocklist chặn origin lừa đảo."
+        },
+        {
+          "loi": "Thinking the server stores the private key.|||Tưởng máy chủ lưu khoá riêng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "origin binding",
+          "vi": "gắn origin"
+        },
+        {
+          "en": "passkey",
+          "vi": "passkey"
+        }
+      ]
+    },
+    {
+      "title": "7.4-2 — Write originAllowed(signedOrigin, expected): the one line",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The heart of verification: return <code>true</code> only if the origin the authenticator signed is one the server expects. <code>expected</code> may be a single origin string or an array of allowed origins. An exact match is required — a phishing origin is never in the list, so its assertion is rejected.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trái tim của xác minh: trả <code>true</code> chỉ khi origin bộ xác thực đã ký là một cái máy chủ mong. <code>expected</code> có thể là một chuỗi origin hoặc một mảng origin được phép. Phải khớp CHÍNH XÁC — một origin lừa đảo không bao giờ trong danh sách, nên assertion của nó bị từ chối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "originAllowed(\"https://id.labflow.example\", \"https://id.labflow.example\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise expected to an array, then check membership.|||Chuẩn hoá expected về mảng, rồi kiểm thành viên.",
+        "Require an exact string match — no prefix/suffix tricks.|||Đòi khớp chuỗi chính xác — không mẹo tiền tố/hậu tố."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only if signedOrigin is an allowed origin */\nfunction originAllowed(signedOrigin, expected) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction originAllowed(signedOrigin, expected) {\n  const list = Array.isArray(expected) ? expected : [expected];\n  return list.includes(signedOrigin);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exact-match origin checking is the anti-phishing line; a substring check would accept evil-labflow.example (7.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Kiểm origin khớp chính xác là dòng chống lừa đảo; một kiểm chuỗi con sẽ nhận evil-labflow.example (7.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "exact match",
+              "vi": "khớp chính xác"
+            },
+            "goi": "originAllowed(\"https://id.labflow.example\", \"https://id.labflow.example\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "phishing ⇒ false",
+              "vi": "lừa đảo ⇒ false"
+            },
+            "goi": "originAllowed(\"https://evil.example\", \"https://id.labflow.example\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "in the allow-list",
+              "vi": "trong danh sách cho phép"
+            },
+            "goi": "originAllowed(\"https://app.labflow.example\", [\"https://id.labflow.example\",\"https://app.labflow.example\"])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "lookalike ⇒ false",
+              "vi": "nhìn-giống ⇒ false"
+            },
+            "goi": "originAllowed(\"https://evil-labflow.example\", \"https://labflow.example\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using includes() on the string (substring match).|||Dùng includes() trên chuỗi (khớp chuỗi con)."
+        },
+        {
+          "loi": "Accepting any https origin.|||Nhận bất kỳ origin https nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "expected origin",
+          "vi": "origin mong đợi"
+        }
+      ]
+    },
+    {
+      "title": "7.4-3 — Order the authentication ceremony",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order one passkey login, from the server challenge to a verified user.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp một lần đăng nhập passkey, từ challenge của máy chủ tới một người dùng đã xác minh.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The server starts it with a challenge.|||Máy chủ bắt đầu bằng một challenge.",
+        "The counter bump is last.|||Tăng counter là cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-3 — Order the authentication ceremony\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-3 — Order the authentication ceremony — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m3) Server mints a fresh challenge and sends the allowed credential ids  →  m1) The authenticator signs the challenge + the page origin with the private key  →  m4) Server verifies the signature against the stored public key and its expected origin  →  m2) The signature counter is bumped and the user is logged in\n   Challenge → sign over challenge+origin → verify against the public key + expected origin → bump counter (7.4, 7.5).VI: Challenge → ký lên challenge+origin → xác minh với khoá công khai + origin mong đợi → tăng counter (7.4, 7.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Challenge → sign over challenge+origin → verify against the public key + expected origin → bump counter (7.4, 7.5).</p><p><i>VI: Challenge → ký lên challenge+origin → xác minh với khoá công khai + origin mong đợi → tăng counter (7.4, 7.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The authenticator signs the challenge + the page origin with the private key"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The signature counter is bumped and the user is logged in"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Server mints a fresh challenge and sends the allowed credential ids"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Server verifies the signature against the stored public key and its expected origin"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m1",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>Challenge → sign over challenge+origin → verify against the public key + expected origin → bump counter (7.4, 7.5).</p><p><i>VI: Challenge → ký lên challenge+origin → xác minh với khoá công khai + origin mong đợi → tăng counter (7.4, 7.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Signing before the challenge exists.|||Ký trước khi có challenge."
+        },
+        {
+          "loi": "Verifying before signing.|||Xác minh trước khi ký."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ceremony",
+          "vi": "nghi thức"
+        },
+        {
+          "en": "challenge",
+          "vi": "challenge"
+        }
+      ]
+    },
+    {
+      "title": "7.4-4 — Password/TOTP vs passkey under attack",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For each attack, does a passkey survive it?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cú tấn công, một passkey sống qua không?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three attacks are defeated by design; one is about the device itself.|||Ba cú bị đánh bại từ thiết kế; một cú về chính thiết bị.",
+        "Origin binding, public-key storage and no-password each defeat one.|||Gắn origin, lưu khoá-công-khai và không-mật-khẩu mỗi cái đánh bại một."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-4 — Password/TOTP vs passkey under attack\n\nAnswer in the answer panel (no code needed).\n\n1. Attack → passkey survives?Tấn công → passkey sống?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.4-4 — Password/TOTP vs passkey under attack — answer key\n\n1. Attack → passkey survives?Tấn công → passkey sống?\n   - r1.q: yes\n   - r2.q: yes\n   - r3.q: yes\n   - r4.q: no\n   Origin binding beats relay; only public keys are stored; there is no password to reuse — but an unlocked device holding the passkey is the credential (7.4).VI: Gắn origin thắng chuyển tiếp; chỉ khoá công khai được lưu; không có mật khẩu để dùng lại — nhưng một thiết bị mở khoá giữ passkey là cái tín vật (7.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Origin binding beats relay; only public keys are stored; there is no password to reuse — but an unlocked device holding the passkey is the credential (7.4).</p><p><i>VI: Gắn origin thắng chuyển tiếp; chỉ khoá công khai được lưu; không có mật khẩu để dùng lại — nhưng một thiết bị mở khoá giữ passkey là cái tín vật (7.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Attack → passkey survives?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tấn công → passkey sống?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Attack"
+              },
+              {
+                "ma": "q",
+                "ten": "Survives?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "fake site relays the challenge"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "server database is dumped"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "password reused from another breach"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "unlocked stolen device with a resident passkey"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "yes",
+              "r2.q": "yes",
+              "r3.q": "yes",
+              "r4.q": "no"
+            },
+            "giaiThich": "<p>Origin binding beats relay; only public keys are stored; there is no password to reuse — but an unlocked device holding the passkey is the credential (7.4).</p><p><i>VI: Gắn origin thắng chuyển tiếp; chỉ khoá công khai được lưu; không có mật khẩu để dùng lại — nhưng một thiết bị mở khoá giữ passkey là cái tín vật (7.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking an unlocked stolen device is also safe.|||Tưởng một thiết bị mở khoá bị trộm cũng an toàn."
+        },
+        {
+          "loi": "Thinking a database dump lets an attacker sign in.|||Tưởng một bản dump cho kẻ tấn công đăng nhập."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

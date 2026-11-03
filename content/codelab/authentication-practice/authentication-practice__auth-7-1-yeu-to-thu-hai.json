@@ -1,0 +1,479 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-7-1-yeu-to-thu-hai",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-7-1-yeu-to-thu-hai"
+  },
+  "exercises": [
+    {
+      "title": "7.1-1 — The step-up, read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.7 (real run):<pre>$ curl -s -b jar -X POST localhost:4800/mfa/totp/begin\n  secret 3566NXPPKNME…   otpauth otpauth://totp/LabFlow%20ID:an%40student.labflow.examp…\n$ # the authenticator app shows 338694 — confirm it (and receive recovery codes ONCE):\n  → {\"ok\":true,\"enabled\":true}   recovery: yfrz-rgbs 3ji6-bw4v rbfc-9wy4 … (10 total)\n$ # step up at login with a fresh 6-digit code:\n{\"ok\":true,\"via\":\"totp\"}\n$ # lost the phone — the single-use recovery code yfrz-rgbs works instead:\n{\"ok\":true,\"via\":\"recovery\",\"remaining\":9}\n$ # that recovery code is now spent — reusing it fails:\n{\"error\":\"BAD_CODE\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.7 (chạy thật):<pre>$ curl -s -b jar -X POST localhost:4800/mfa/totp/begin\n  secret 3566NXPPKNME…   otpauth otpauth://totp/LabFlow%20ID:an%40student.labflow.examp…\n$ # the authenticator app shows 338694 — confirm it (and receive recovery codes ONCE):\n  → {\"ok\":true,\"enabled\":true}   recovery: yfrz-rgbs 3ji6-bw4v rbfc-9wy4 … (10 total)\n$ # step up at login with a fresh 6-digit code:\n{\"ok\":true,\"via\":\"totp\"}\n$ # lost the phone — the single-use recovery code yfrz-rgbs works instead:\n{\"ok\":true,\"via\":\"recovery\",\"remaining\":9}\n$ # that recovery code is now spent — reusing it fails:\n{\"error\":\"BAD_CODE\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which attacker holds the password but not the phone?|||Kẻ tấn công nào giữ mật khẩu mà không giữ điện thoại?",
+        "The session remembers the factor between prompts.|||Phiên nhớ yếu tố giữa các lần hỏi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-1 — The step-up, read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. The step-up runs AFTER the password check and returns { via: \"totp\" }. What does a second factor defend against?Step-up chạy SAU phép kiểm mật khẩu và trả { via: \"totp\" }. Một yếu tố thứ hai phòng cái gì?\n2. When the phone is gone, the step-up accepts { via: \"recovery\", remaining: 9 }, and a reused recovery code returns BAD_CODE. Why single-use?Khi mất điện thoại, step-up nhận { via: \"recovery\", remaining: 9 }, và một mã khôi phục dùng lại trả BAD_CODE. Vì sao dùng một lần?\n3. Why ask the factor at login and before sensitive actions, not on every request?Vì sao hỏi yếu tố lúc đăng nhập và trước hành động nhạy cảm, không phải mỗi request?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-1 — The step-up, read the real run — answer key\n\n1. The step-up runs AFTER the password check and returns { via: \"totp\" }. What does a second factor defend against?Step-up chạy SAU phép kiểm mật khẩu và trả { via: \"totp\" }. Một yếu tố thứ hai phòng cái gì?\n   Answer: d) An attacker who has the password — leaked, reused, guessed or phished\n   A second factor stops someone who has the password but not the second-family factor; it does not help against a compromised device or a stolen session (7.1).VI: Một yếu tố thứ hai chặn người có mật khẩu nhưng không có yếu tố họ-thứ-hai; nó không giúp với một thiết bị bị chiếm hay một phiên bị trộm (7.1).\n\n2. When the phone is gone, the step-up accepts { via: \"recovery\", remaining: 9 }, and a reused recovery code returns BAD_CODE. Why single-use?Khi mất điện thoại, step-up nhận { via: \"recovery\", remaining: 9 }, và một mã khôi phục dùng lại trả BAD_CODE. Vì sao dùng một lần?\n   Answer: c) So an intercepted recovery code cannot be replayed after the user has spent it\n   Recovery codes are single-use credentials: once consumed, a code is removed, so a copy an attacker saw is already dead (7.3).VI: Mã khôi phục là tín vật dùng một lần: tiêu xong, một mã bị bỏ, nên một bản kẻ tấn công thấy đã chết (7.3).\n\n3. Why ask the factor at login and before sensitive actions, not on every request?Vì sao hỏi yếu tố lúc đăng nhập và trước hành động nhạy cảm, không phải mỗi request?\n   Answer: b) The session carries the factor after login; step-up re-asks only where it matters most\n   Re-prompting every request is unusable; the session carries the factor, and step-up re-asks before high-value actions to shrink the stolen-session window (7.1).VI: Hỏi lại mỗi request thì không dùng được; phiên mang yếu tố, và step-up hỏi lại trước hành động giá trị cao để thu cửa sổ phiên-bị-trộm (7.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> An attacker who has the password — leaked, reused, guessed or phished</p><p>A second factor stops someone who has the password but not the second-family factor; it does not help against a compromised device or a stolen session (7.1).</p><p><i>VI: Một yếu tố thứ hai chặn người có mật khẩu nhưng không có yếu tố họ-thứ-hai; nó không giúp với một thiết bị bị chiếm hay một phiên bị trộm (7.1).</i></p></li><li><p><b>c)</b> So an intercepted recovery code cannot be replayed after the user has spent it</p><p>Recovery codes are single-use credentials: once consumed, a code is removed, so a copy an attacker saw is already dead (7.3).</p><p><i>VI: Mã khôi phục là tín vật dùng một lần: tiêu xong, một mã bị bỏ, nên một bản kẻ tấn công thấy đã chết (7.3).</i></p></li><li><p><b>b)</b> The session carries the factor after login; step-up re-asks only where it matters most</p><p>Re-prompting every request is unusable; the session carries the factor, and step-up re-asks before high-value actions to shrink the stolen-session window (7.1).</p><p><i>VI: Hỏi lại mỗi request thì không dùng được; phiên mang yếu tố, và step-up hỏi lại trước hành động giá trị cao để thu cửa sổ phiên-bị-trộm (7.1).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The step-up runs AFTER the password check and returns { via: \"totp\" }. What does a second factor defend against?</p><p style=\"opacity:.75;font-size:.92em\"><i>Step-up chạy SAU phép kiểm mật khẩu và trả { via: \"totp\" }. Một yếu tố thứ hai phòng cái gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A weak hashing algorithm"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A session token already stolen"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Malware already running on the unlocked device"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An attacker who has the password — leaked, reused, guessed or phished"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A second factor stops someone who has the password but not the second-family factor; it does not help against a compromised device or a stolen session (7.1).</p><p><i>VI: Một yếu tố thứ hai chặn người có mật khẩu nhưng không có yếu tố họ-thứ-hai; nó không giúp với một thiết bị bị chiếm hay một phiên bị trộm (7.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>When the phone is gone, the step-up accepts { via: \"recovery\", remaining: 9 }, and a reused recovery code returns BAD_CODE. Why single-use?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi mất điện thoại, step-up nhận { via: \"recovery\", remaining: 9 }, và một mã khôi phục dùng lại trả BAD_CODE. Vì sao dùng một lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So the server is able to store the codes safely in plaintext"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So the codes never expire and work years after enrollment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So an intercepted recovery code cannot be replayed after the user has spent it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So that all ten recovery codes fit on a single screen at enrollment"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Recovery codes are single-use credentials: once consumed, a code is removed, so a copy an attacker saw is already dead (7.3).</p><p><i>VI: Mã khôi phục là tín vật dùng một lần: tiêu xong, một mã bị bỏ, nên một bản kẻ tấn công thấy đã chết (7.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why ask the factor at login and before sensitive actions, not on every request?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao hỏi yếu tố lúc đăng nhập và trước hành động nhạy cảm, không phải mỗi request?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the browser caches the factor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The session carries the factor after login; step-up re-asks only where it matters most"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because verifying a code is too slow to do often"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the code changes every 30 seconds"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Re-prompting every request is unusable; the session carries the factor, and step-up re-asks before high-value actions to shrink the stolen-session window (7.1).</p><p><i>VI: Hỏi lại mỗi request thì không dùng được; phiên mang yếu tố, và step-up hỏi lại trước hành động giá trị cao để thu cửa sổ phiên-bị-trộm (7.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking 2FA stops device malware.|||Tưởng 2FA chặn mã độc thiết bị."
+        },
+        {
+          "loi": "Thinking the factor is asked on every click.|||Tưởng yếu tố bị hỏi mỗi cú bấm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "second factor",
+          "vi": "yếu tố thứ hai"
+        },
+        {
+          "en": "step-up authentication",
+          "vi": "xác thực nâng cấp"
+        }
+      ]
+    },
+    {
+      "title": "7.1-2 — Write isTwoFactor(a, b): two DIFFERENT families",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> only if two authenticators are genuine two-factor — i.e. from two <b>different</b> families (know / have / are). Map: <code>password/pin/question → know</code>, <code>totp/sms/push/key/passkey → have</code>, <code>fingerprint/face → are</code>. Two of the same family (e.g. password + question) is <b>one</b> factor.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> chỉ khi hai bộ xác thực là hai-yếu-tố thật — tức từ hai họ <b>khác nhau</b> (biết / có / là). Ánh xạ: <code>password/pin/question → know</code>, <code>totp/sms/push/key/passkey → have</code>, <code>fingerprint/face → are</code>. Hai cái cùng họ (vd password + question) là <b>một</b> yếu tố.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isTwoFactor(\"password\", \"totp\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build a label → family map, then compare families.|||Dựng một map nhãn → họ, rồi so họ.",
+        "Same family ⇒ false, even if the labels differ.|||Cùng họ ⇒ false, dù nhãn khác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only if a and b are from different factor families */\nfunction isTwoFactor(a, b) {\n  // Write your solution here\n  return a !== b;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction isTwoFactor(a, b) {\n  // True only when the two factors come from DIFFERENT families (know / have / are).\n  const fam = { password: 'know', pin: 'know', question: 'know', totp: 'have', sms: 'have', push: 'have', key: 'have', passkey: 'have', fingerprint: 'are', face: 'are' };\n  return !!fam[a] && !!fam[b] && fam[a] !== fam[b];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two factors must come from different families so they fail on different days; two things you know leak together (7.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Hai yếu tố phải từ các họ khác nhau để hỏng vào các ngày khác nhau; hai thứ bạn biết rò cùng nhau (7.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "know + have",
+              "vi": "biết + có"
+            },
+            "goi": "isTwoFactor(\"password\", \"totp\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "know + know ⇒ one factor",
+              "vi": "biết + biết ⇒ một yếu tố"
+            },
+            "goi": "isTwoFactor(\"password\", \"question\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "have + are",
+              "vi": "có + là"
+            },
+            "goi": "isTwoFactor(\"passkey\", \"fingerprint\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown ⇒ false",
+              "vi": "lạ ⇒ false"
+            },
+            "goi": "isTwoFactor(\"password\", \"nonsense\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning true for password + security question.|||Trả true cho password + câu hỏi bảo mật."
+        },
+        {
+          "loi": "Returning true when a label is unknown.|||Trả true khi một nhãn lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "factor family",
+          "vi": "họ yếu tố"
+        }
+      ]
+    },
+    {
+      "title": "7.1-3 — Order factors by phishing resistance",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order these second factors from MOST phishable to least (SMS easiest to abuse → passkey impossible).</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các yếu tố thứ hai từ DỄ lừa nhất tới khó nhất (SMS dễ lạm dụng nhất → passkey bất khả).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which one has a weak delivery channel on top of being relayable?|||Cái nào có một kênh chuyển phát yếu bên trên việc chuyển tiếp được?",
+        "Only one is origin-bound.|||Chỉ một cái gắn origin."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-3 — Order factors by phishing resistance\n\nAnswer in the answer panel (no code needed).\n\n1. Most phishable → leastDễ lừa nhất → khó nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-3 — Order factors by phishing resistance — answer key\n\n1. Most phishable → leastDễ lừa nhất → khó nhất\n   Answer: m2) SMS code — SIM-swap or SS7 redirects the channel  →  m1) TOTP / push — relayed to the real site within the window  →  m3) Passkey — signed over the origin, a relayed challenge is worthless\n   SMS adds a redirectable channel on top of being relayable; TOTP/push are relayable; a passkey is origin-bound and cannot be relayed (7.1, 7.4).VI: SMS thêm một kênh chuyển hướng được bên trên việc chuyển tiếp được; TOTP/push chuyển tiếp được; một passkey gắn origin và không chuyển tiếp được (7.1, 7.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SMS adds a redirectable channel on top of being relayable; TOTP/push are relayable; a passkey is origin-bound and cannot be relayed (7.1, 7.4).</p><p><i>VI: SMS thêm một kênh chuyển hướng được bên trên việc chuyển tiếp được; TOTP/push chuyển tiếp được; một passkey gắn origin và không chuyển tiếp được (7.1, 7.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Most phishable → least</p><p style=\"opacity:.75;font-size:.92em\"><i>Dễ lừa nhất → khó nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "TOTP / push — relayed to the real site within the window"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "SMS code — SIM-swap or SS7 redirects the channel"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Passkey — signed over the origin, a relayed challenge is worthless"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>SMS adds a redirectable channel on top of being relayable; TOTP/push are relayable; a passkey is origin-bound and cannot be relayed (7.1, 7.4).</p><p><i>VI: SMS thêm một kênh chuyển hướng được bên trên việc chuyển tiếp được; TOTP/push chuyển tiếp được; một passkey gắn origin và không chuyển tiếp được (7.1, 7.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting passkey as phishable.|||Đặt passkey là lừa được."
+        },
+        {
+          "loi": "Thinking SMS is the strongest.|||Tưởng SMS mạnh nhất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "phishing resistance",
+          "vi": "chống lừa đảo"
+        }
+      ]
+    },
+    {
+      "title": "7.1-4 — Factor → family",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each authenticator with its family.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi bộ xác thực với họ của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A phone and a key are both \"have\".|||Một điện thoại và một khoá đều \"có\".",
+        "A fingerprint is inherent.|||Một vân tay là vốn có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-4 — Factor → family\n\nAnswer in the answer panel (no code needed).\n\n1. Factor → familyYếu tố → họ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 7.1-4 — Factor → family — answer key\n\n1. Factor → familyYếu tố → họ\n   - r1.q: know\n   - r2.q: have\n   - r3.q: have\n   - r4.q: are\n   Passwords are known; phones and keys are had; biometrics are inherent — two factors need two different columns (7.1).VI: Mật khẩu là biết; điện thoại và khoá là có; sinh trắc là vốn có — hai yếu tố cần hai cột khác nhau (7.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Passwords are known; phones and keys are had; biometrics are inherent — two factors need two different columns (7.1).</p><p><i>VI: Mật khẩu là biết; điện thoại và khoá là có; sinh trắc là vốn có — hai yếu tố cần hai cột khác nhau (7.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Factor → family</p><p style=\"opacity:.75;font-size:.92em\"><i>Yếu tố → họ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Factor"
+              },
+              {
+                "ma": "q",
+                "ten": "Family",
+                "luaChon": [
+                  "know",
+                  "have",
+                  "are"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "password"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "TOTP app"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "security key"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "fingerprint"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "know",
+              "r2.q": "have",
+              "r3.q": "have",
+              "r4.q": "are"
+            },
+            "giaiThich": "<p>Passwords are known; phones and keys are had; biometrics are inherent — two factors need two different columns (7.1).</p><p><i>VI: Mật khẩu là biết; điện thoại và khoá là có; sinh trắc là vốn có — hai yếu tố cần hai cột khác nhau (7.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a TOTP app \"know\".|||Gọi một app TOTP là \"biết\"."
+        },
+        {
+          "loi": "Calling a fingerprint \"have\".|||Gọi một vân tay là \"có\"."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

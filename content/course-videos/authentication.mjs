@@ -85,6 +85,7 @@ export default {
     'auth-7-3-dang-ky-va-khoi-phuc': { yt: '61PuyaIvk54', credit: 'Mobile Jon — Setting up and Using FIDO2 Passkeys in Microsoft Entra' },    // Setting up and Using FIDO2 Passkeys in Microsoft Entra
     'auth-7-4-passkey': { yt: 'KRlyv9mftTo', credit: 'FIDO Alliance — Passkeys 101: Technical Principles of FIDO' },                 // Passkeys 101: Technical Principles of FIDO
     'auth-7-5-trien-khai-passkey': { yt: 'hxmFNUuu8qg', credit: 'Conf42 — Implementing FIDO2 and WebAuthn for a Secure Future | Sairam Durgaraju | Conf42 Python 2025' },      // Implementing FIDO2 and WebAuthn for a Secure Future | Sairam Durgaraju | Conf42 Python 2025
+    'auth-7-7-lab-totp': { yt: 'S_crOiB_MXw', credit: '' },  // 04/11/2026: Lab 7 (viết TOTP từ gốc) — dùng tạm video TOTP của 7.2 tới khi có bản ghi riêng; CHẠY verify-youtube-videos --fix-credits
 
     /* ── Chương 8 — OAuth 2.1 và OpenID Connect ── */
     'auth-8-1-oauth-la-gi': { yt: 'u9dxjB0KgPg', credit: 'José Cruz (IT Architect) — OAuth 2.0 Authorization Code Flow & OpenID Connect – Complete Walkthrough' },          // OAuth 2.0 Authorization Code Flow & OpenID Connect – Complete Walkthrough

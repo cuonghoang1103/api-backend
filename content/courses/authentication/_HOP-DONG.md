@@ -352,4 +352,18 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   200 request, bản đúng (không await) ~0,01–0,06 ms chìm trong nhiễu; reset ⇒ cookie refresh cũ REVOKED + link reset lần hai USED; xoá ⇒ xác thực
   lại REAUTH_FAILED nếu sai, status=deleted + thu hồi tất cả ⇒ đăng nhập lại hỏng như email lạ. Chuẩn: OWASP (Authentication, Forgot Password,
   WSTG dò tài khoản) + GDPR Điều 17. Môi trường soạn: `auth2-pg` (postgres:17, 4832) + hộp thư giả ghi tệp theo `LFID_MAIL_DIR`; demo thuần lớp không cần CSDL.
-- **TẠM DỪNG sau Ch6 ngày 04/11 (theo yêu cầu chủ kênh — soạn trọn khoá, dừng báo soát MỖI chương); tiếp theo là Ch7** (đa yếu tố & passkey: TOTP RFC 6238, WebAuthn, §11) — chưa bắt đầu.
+- **04/11/2026 — Ch7 trọn:** 5 bài + Lab 7 (`auth-7-7-lab-totp`, máy chấm `scripts/cham-lab-7.mjs` 6 phép, kiểm với vector
+  RFC 4226/6238 — không CSDL) + quiz 10 câu (A3 B2 C2 D3, slug `auth-7-6-quiz`); bài ~190k ký tự cả chương (depth-audit đạt);
+  6 deck 58 slide AUTH/v1 (đã đẩy, 0 lỗi kiem-lap-day + kiem-tran); Code Lab +6 module/22 đề (track 47 module/182 đề, 0 lỗi
+  nội dung + 0 cảnh báo đáp-án-dài, máy chấm trình duyệt: mọi lời giải đạt + mọi starter trượt); liên kết chéo (api-design 6.1 ↔ 7.1,
+  auth 1.4 ↔ 7.2, auth 1.2 ↔ 7.3, auth 3.4 ↔ 7.4, auth 6.5 ↔ 7.5); video YouTube 7.1–7.5 đã có (Lab 7 video dùng tạm 7.2, credit rỗng).
+  `_labflow-id` = v0.7 (`src/totp/` TOTP tự viết RFC 6238/4226 + recovery, `src/webauthn/` passkey trên `@simplewebauthn/server`,
+  `src/mfa/store.js`, `sql/005_mfa.sql`: `totp_secrets`+`recovery_codes`+`passkeys`; tuyến `/mfa/totp/begin|confirm|verify`,
+  `/webauthn/register|auth/options|verify`; `demo7/`, `test/totp.test.js` ⇒ npm test 43 pass; DEPS MỚI `@simplewebauthn/server`+`otplib`).
+  **Số đo thật (macOS arm64, Node 22.23.3, PG 17.11, Chromium Playwright):** TOTP tự viết tái tạo CẢ 6 vector RFC 6238 Appendix B
+  (`t=59 → 94287082`…) và khớp `otplib` từng chữ số; cửa sổ lệch ±1 nhận bước trước/sau, 3 bước là từ chối; enroll begin→confirm
+  (mã hiện tại)→{enabled}+10 recovery; step-up `{via:'totp'}` hoặc `{via:'recovery',remaining:9}`, recovery dùng lại ⇒ BAD_CODE;
+  **passkey ĐO BẰNG CHROMIUM THẬT (virtual authenticator qua Playwright CDP):** đăng ký + xác thực `verified=true`, rồi CÙNG assertion
+  xác minh lại với `expectedOrigin=https://evil.example` ⇒ `verified=false` (gắn origin = chống lừa đảo). Chuẩn: NIST SP 800-63B,
+  RFC 6238/4226, W3C WebAuthn L3, FIDO. Môi trường: `auth2-pg` (4832) + `npm i` thêm 2 dep; demo passkey tự chạy express :4811 + Chromium.
+- **TẠM DỪNG sau Ch7 ngày 04/11 (theo yêu cầu chủ kênh — soạn trọn khoá, dừng báo soát MỖI chương); tiếp theo là Ch8** (OAuth 2.1 + OpenID Connect, §11) — chưa bắt đầu.

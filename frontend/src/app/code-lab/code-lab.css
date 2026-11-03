@@ -1012,3 +1012,57 @@ html.theme-dark .cl-toc-cokind > [data-kind="lab"] { background: #e2e8f0; color:
 .cl-note-sql b { color: var(--text-primary); }
 .cl-note-sql summary { cursor: pointer; }
 .cl-note-sql p { margin: 0; }
+
+/* ───────── Sự cố & Lỗi — banner lối vào ở trang chủ (03/11/2026) ───────── */
+.cl-suco-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 2.5rem;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background:
+    linear-gradient(120deg, rgba(234, 88, 12, 0.10), rgba(234, 88, 12, 0) 60%),
+    var(--bg-card);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: transform 0.18s var(--cl-ease, ease), box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.cl-suco-banner:hover {
+  transform: translateY(-2px);
+  border-color: rgba(234, 88, 12, 0.5);
+  box-shadow: 0 10px 30px -14px rgba(234, 88, 12, 0.45);
+}
+.cl-suco-banner:active { transform: translateY(0); }
+.cl-suco-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #ea580c;
+  background: rgba(234, 88, 12, 0.12);
+}
+.cl-suco-tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cl-suco-tx b { font-size: 15px; font-weight: 700; }
+.cl-suco-tx span { font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
+.cl-suco-go {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ea580c;
+  background: rgba(234, 88, 12, 0.10);
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .cl-suco-go span { display: none; }
+  .cl-suco-go { padding: 8px; }
+}

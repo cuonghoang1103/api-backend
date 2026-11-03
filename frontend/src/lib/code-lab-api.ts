@@ -32,6 +32,9 @@ import type {
   ChecklistThayMuc,
   CodeSubmission,
   CodeCatalogEntry,
+  IncidentListResponse,
+  IncidentDetail,
+  IncidentComment,
 } from '@/types/code-lab';
 import type { Diem, KetQuaKiem, TestsJson } from '@/components/code-lab/cham/kieu';
 import type { DocBlock } from '@/types/exp-hub';
@@ -193,6 +196,20 @@ export const codeLabApi = {
     api.post<Ok<CodeProgress>>(`${BASE}/exercises/${exerciseId}/progress`, body),
   myProgress: (trackId?: number) =>
     api.get<Ok<MyProgressItem[]>>(`${BASE}/progress/mine`, { params: trackId ? { trackId } : {} }),
+
+  // ─── Sự cố & Lỗi ──────────────────────────────────────────────
+  listIncidents: (params: { q?: string; tag?: string; trackId?: number; status?: string; page?: number; pageSize?: number } = {}) =>
+    api.get<Ok<IncidentListResponse>>(`${BASE}/incidents`, { params }),
+  getIncident: (id: number) => api.get<Ok<IncidentDetail>>(`${BASE}/incidents/${id}`),
+  createIncident: (form: FormData) =>
+    api.post<Ok<IncidentDetail>>(`${BASE}/incidents`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  updateIncident: (id: number, form: FormData) =>
+    api.patch<Ok<IncidentDetail>>(`${BASE}/incidents/${id}`, form, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  deleteIncident: (id: number) => api.delete<Ok<{ id: number }>>(`${BASE}/incidents/${id}`),
+  addIncidentComment: (id: number, body: string) =>
+    api.post<Ok<IncidentComment>>(`${BASE}/incidents/${id}/comments`, { body }),
+  deleteIncidentComment: (id: number, commentId: number) =>
+    api.delete<Ok<{ id: number }>>(`${BASE}/incidents/${id}/comments/${commentId}`),
 };
 
 // ─── Admin / editor ─────────────────────────────────────────────

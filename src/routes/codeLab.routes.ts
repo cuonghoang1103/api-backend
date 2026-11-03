@@ -45,6 +45,7 @@ import * as workspace from '../services/codeLab.workspace.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson, hoiBaiGiang } from '../services/codeLab.lesson.service.js';
 import * as phongLab from '../services/labRoom/phongLab.service.js';
+import * as incidents from '../services/codeLab.incident.service.js';
 import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
@@ -722,6 +723,78 @@ router.post('/admin/ai/lesson/commit', authenticate, requireRole('ADMIN', 'EDITO
 });
 router.delete('/modules/:id(\\d+)/lesson', authenticate, requireRole('ADMIN', 'EDITOR'), async (req, res: Response<ApiResponse>, next) => {
   try { await clearLesson(parseInt(req.params.id)); res.json({ success: true, message: 'Lesson cleared' }); } catch (e) { next(e); }
+});
+
+// ─── Sự cố & Lỗi (03/11/2026) ───────────────────────────────────
+// Người học chia sẻ sự cố/lỗi thật + cách khắc phục, kèm ảnh. Công khai để
+// đọc; cần đăng nhập để đăng/bình luận. Ảnh lưu riêng tư R2, phục vụ URL ký.
+const incidentImageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024, files: 4 },
+});
+const incidentWriteLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req: Request): string => `codelab-incident:${req.user?.userId ?? req.ip ?? 'anon'}`,
+  message: { success: false, message: 'Bạn thao tác hơi nhanh — nghỉ chút rồi thử lại nhé.', code: 'CL_INCIDENT_RATE' },
+});
+
+router.get('/incidents', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await incidents.listIncidents({
+      q: req.query.q ? String(req.query.q) : undefined,
+      tag: req.query.tag ? String(req.query.tag) : undefined,
+      trackId: req.query.trackId ? Number(req.query.trackId) : undefined,
+      status: req.query.status ? String(req.query.status) : undefined,
+      page: req.query.page ? Number(req.query.page) : undefined,
+      pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
+    });
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.get('/incidents/:id(\\d+)', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await incidents.getIncident(parseInt(req.params.id), { countView: true }) });
+  } catch (e) { next(e); }
+});
+
+router.post('/incidents', authenticate, incidentWriteLimiter, incidentImageUpload.array('images', 4), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const files = (req.files as Express.Multer.File[] | undefined)?.map((f) => ({ buffer: f.buffer, originalname: f.originalname })) ?? [];
+    const data = await incidents.createIncident(req.user!.userId, req.body, files);
+    res.status(201).json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.patch('/incidents/:id(\\d+)', authenticate, incidentWriteLimiter, incidentImageUpload.array('images', 4), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const files = (req.files as Express.Multer.File[] | undefined)?.map((f) => ({ buffer: f.buffer, originalname: f.originalname })) ?? [];
+    const data = await incidents.updateIncident(req.user!.userId, req.user!.roles, parseInt(req.params.id), req.body, files);
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.delete('/incidents/:id(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await incidents.deleteIncident(req.user!.userId, req.user!.roles, parseInt(req.params.id)) });
+  } catch (e) { next(e); }
+});
+
+router.post('/incidents/:id(\\d+)/comments', authenticate, incidentWriteLimiter, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await incidents.addComment(req.user!.userId, parseInt(req.params.id), req.body?.body);
+    res.status(201).json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.delete('/incidents/:id(\\d+)/comments/:cid(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await incidents.deleteComment(req.user!.userId, req.user!.roles, parseInt(req.params.id), parseInt(req.params.cid));
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
 });
 
 export default router;

@@ -362,6 +362,9 @@ model User {
   codeSubmissions CodeSubmission[]
   // Phòng Lab: một phòng luyện có mục tiêu LOC, do chính người dùng lập.
   labRooms        CodeLabRoom[]
+  // Sự cố & Lỗi — người học chia sẻ sự cố/lỗi gặp phải + cách khắc phục.
+  codeLabIncidents        CodeLabIncident[]
+  codeLabIncidentComments CodeLabIncidentComment[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
@@ -8254,6 +8257,7 @@ model CodeTrack {
   modules     CodeModule[]
   exercises   CodeExercise[]
   labRooms    CodeLabRoom[]
+  incidents   CodeLabIncident[]
   // Additional groups this track is featured in (besides its primary group).
   extraGroups CodeGroupTrackLink[] @relation("TrackExtraGroups")
 
@@ -17504,4 +17508,62 @@ model WorkDeleteRequest {
   @@index([classId, status], map: "idx_work_delete_req_class")
   @@index([status, expiresAt], map: "idx_work_delete_req_status")
   @@map("work_delete_requests")
+}
+
+// ─────────────────────────────────────────────────────────────
+// Code Lab — "Sự cố & Lỗi" (03/11/2026)
+// Người học chia sẻ một sự cố/lỗi thật gặp phải: đang làm gì, lỗi/log ra
+// sao, khắc phục thế nào / rút ra bài học gì, kèm ảnh chụp màn hình. Người
+// khác vào bình luận. CHỈ THÊM — không đụng bảng cũ.
+// ─────────────────────────────────────────────────────────────
+model CodeLabIncident {
+  id      Int @id @default(autoincrement())
+  userId  Int @map("user_id")
+  /// Gắn (tuỳ chọn) với một track để lọc theo môn/công nghệ. SetNull: xoá
+  /// track thì sự cố vẫn còn, chỉ mất liên kết.
+  trackId Int? @map("track_id")
+
+  title     String  @db.VarChar(200)
+  /// "Mình đang làm gì" — bối cảnh.
+  context   String  @db.Text
+  /// Log / thông báo lỗi nguyên văn (có thể trống).
+  errorText String? @map("error_text") @db.Text
+  /// Cách khắc phục / bài học rút ra (có thể trống nếu chưa giải quyết xong).
+  solution  String? @db.Text
+
+  tags      String[] @default([])
+  /// Khoá R2 của ảnh đính kèm (ảnh phục vụ qua URL ký sẵn, không bao giờ lộ khoá trần).
+  imageKeys String[] @default([]) @map("image_keys")
+
+  /// 'OPEN' | 'RESOLVED'
+  status     String @default("OPEN") @db.VarChar(12)
+  viewCount  Int    @default(0) @map("view_count")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track    CodeTrack?               @relation(fields: [trackId], references: [id], onDelete: SetNull)
+  comments CodeLabIncidentComment[]
+
+  @@index([status, createdAt(sort: Desc)], map: "idx_cl_incident_recent")
+  @@index([userId, createdAt(sort: Desc)], map: "idx_cl_incident_user")
+  @@index([trackId], map: "idx_cl_incident_track")
+  @@map("code_lab_incidents")
+}
+
+model CodeLabIncidentComment {
+  id         Int @id @default(autoincrement())
+  incidentId Int @map("incident_id")
+  userId     Int @map("user_id")
+
+  body String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  incident CodeLabIncident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId, createdAt], map: "idx_cl_incident_comment")
+  @@map("code_lab_incident_comments")
 }

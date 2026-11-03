@@ -1068,6 +1068,7 @@ for route in \
     landing/stats \
     code-lab/groups \
     code-lab/lab-rooms \
+    code-lab/incidents \
     roadmaps \
     exams \
     maker-lab/projects \

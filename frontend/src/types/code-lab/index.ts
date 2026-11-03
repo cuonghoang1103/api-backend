@@ -414,3 +414,69 @@ export interface LabRoomChatTurn {
   role: 'user' | 'assistant';
   content: string;
 }
+
+// ─── Sự cố & Lỗi (03/11/2026) ────────────────────────────────────
+export interface IncidentAuthor {
+  id: number;
+  username: string;
+  fullName: string | null;
+  displayName: string | null;
+  avatarUrl: string | null;
+}
+
+export interface IncidentTrackRef {
+  id: number;
+  slug: string;
+  name: string;
+  color: string | null;
+}
+
+export interface IncidentComment {
+  id: number;
+  body: string;
+  author: IncidentAuthor;
+  createdAt: string;
+}
+
+export interface IncidentListItem {
+  id: number;
+  title: string;
+  context: string;
+  errorText: string | null;
+  solution: string | null;
+  tags: string[];
+  status: 'OPEN' | 'RESOLVED';
+  viewCount: number;
+  commentCount: number;
+  imageCount: number;
+  coverUrl: string | null;
+  track: IncidentTrackRef | null;
+  author: IncidentAuthor;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IncidentDetail {
+  id: number;
+  title: string;
+  context: string;
+  errorText: string | null;
+  solution: string | null;
+  tags: string[];
+  status: 'OPEN' | 'RESOLVED';
+  viewCount: number;
+  images: string[];
+  track: IncidentTrackRef | null;
+  author: IncidentAuthor;
+  createdAt: string;
+  updatedAt: string;
+  comments: IncidentComment[];
+}
+
+export interface IncidentListResponse {
+  items: IncidentListItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}

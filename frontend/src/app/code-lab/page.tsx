@@ -17,7 +17,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  Search, X, Loader2, ArrowRight, GraduationCap, BookOpen, Boxes, CheckCircle2, FlaskConical, Hourglass, Sparkles, Target,
+  Search, X, Loader2, ArrowRight, GraduationCap, BookOpen, Boxes, CheckCircle2, FlaskConical, Hourglass, Sparkles, Target, AlertTriangle, MessageCircle,
 } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { docTruyVan, ghiTruyVan } from '@/components/sach-hoc/moiTruong';
@@ -244,6 +244,20 @@ export default function CodeLabHubPage() {
           )}
         </aside>
       </section>
+
+      {/* ————— Sự cố & Lỗi ————— */}
+      <Link
+        href="/code-lab/su-co"
+        className="cl-suco-banner cl-in cl-in-3"
+        aria-label="Sự cố & Lỗi — chia sẻ kinh nghiệm gỡ lỗi"
+      >
+        <span className="cl-suco-ic" aria-hidden><AlertTriangle size={20} /></span>
+        <span className="cl-suco-tx">
+          <b>Sự cố &amp; Lỗi</b>
+          <span>Gặp lỗi lạ khi code? Chia sẻ sự cố, cách bạn gỡ, kèm ảnh — và học từ lỗi của mọi người.</span>
+        </span>
+        <span className="cl-suco-go"><MessageCircle size={15} /> <span>Vào xem</span> <ArrowRight size={15} /></span>
+      </Link>
 
       {/* ————— 1. Môn học (Academy) ————— */}
       <section className="mb-10" aria-labelledby="h-academy">

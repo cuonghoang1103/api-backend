@@ -6,7 +6,7 @@
 export type MenuId = 'learn' | 'practice' | 'tools' | 'community' | 'about';
 export type Locale = 'en' | 'vi';
 
-export const MENU_ORDER: MenuId[] = ['learn', 'practice', 'tools', 'community', 'about'];
+export const MENU_ORDER: MenuId[] = ['about', 'learn', 'practice', 'tools', 'community'];
 
 export const MENU_LABEL: Record<MenuId, { en: string; vi: string }> = {
   learn: { en: 'Learn', vi: 'Học' },

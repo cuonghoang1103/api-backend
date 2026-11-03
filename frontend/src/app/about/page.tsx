@@ -447,12 +447,6 @@ export default function AboutPage() {
           </div>
 
           <div className={s.hire} style={{ marginTop: '1rem' }}>
-            <div className={s.feature} data-static="true" style={{ ['--hue' as string]: MENU_HUE.community }}>
-              <div>
-                <div className={s.featureTitle}>{c.mentorTitle}</div>
-                <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{c.mentorBody}</p>
-              </div>
-            </div>
             <Link href="/about/studio" className={s.feature} style={{ ['--hue' as string]: MENU_HUE.about }}>
               <div>
                 <div className={s.featureTitle}>{c.studioTitle}</div>

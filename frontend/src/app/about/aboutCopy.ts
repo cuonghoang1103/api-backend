@@ -116,6 +116,13 @@ const C = {
     cvOther: 'Other formats:',
     skillsTitle: 'Skills, self-assessed',
     skillsNote: 'My own estimate, not a test score.',
+    skillsIntro: 'Grouped by what they do. Tap one for the proficiency bar, what I actually know, and the real products that use it.',
+    skillKnow: 'What I know',
+    skillUsedIn: 'Used in',
+    runTitle: 'How it all runs',
+    runIntro:
+      'One VPS, Docker-managed, from the apps people open down to the database and the AI. Tap a product to open the real thing.',
+    runLegend: 'All on one self-managed server',
     incidentsTitle: 'Production incidents I have fixed',
     incidentsBody:
       'Anyone can list technologies. These are real failures on this site, what caused them, and what changed afterwards.',
@@ -198,6 +205,13 @@ const C = {
     cvOther: 'Định dạng khác:',
     skillsTitle: 'Kỹ năng, tự đánh giá',
     skillsNote: 'Do mình tự ước lượng, không phải điểm bài kiểm tra.',
+    skillsIntro: 'Nhóm theo công việc chúng làm. Chạm vào một kỹ năng để xem thanh thành thạo, mình thực sự biết gì, và sản phẩm thật nào đang dùng nó.',
+    skillKnow: 'Mình làm được gì',
+    skillUsedIn: 'Dùng trong',
+    runTitle: 'Bộ máy vận hành',
+    runIntro:
+      'Một VPS, quản lý bằng Docker, từ app người dùng mở xuống tới cơ sở dữ liệu và AI. Chạm vào một sản phẩm để mở thứ thật.',
+    runLegend: 'Tất cả trên một máy chủ mình tự quản',
     incidentsTitle: 'Sự cố production mình đã xử lý',
     incidentsBody:
       'Ai cũng liệt kê được công nghệ. Đây là những lần trang này hỏng thật, nguyên nhân, và điều đã thay đổi sau đó.',

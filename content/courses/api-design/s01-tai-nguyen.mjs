@@ -1612,12 +1612,22 @@ Keep-Alive: timeout=5
   <span class="lc-body"><span class="lc-title">Web Foundations 6.2 — HTTP methods, measured</span><span class="lc-sub">POST twice, PUT vs PATCH in real output, a prefetch that deletes, forms that turn PUT into GET</span></span>
   <span class="lc-cta">Open lesson</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-2-mapping-modifiers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">A PATCH body, as a type — TS 7.2: Mapping modifiers</span><span class="lc-sub">Same: a PATCH sends only the fields that change, so its body is the resource with every field optional. Different: in TypeScript that body is <code>Partial&lt;T&gt;</code> = <code>{ [K in keyof T]?: T[K] }</code> — a mapped type that adds the <code>?</code> modifier — and <code>-?</code> / <code>-readonly</code> build the full and editable forms, all checked at compile time.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 6.2 — HTTP method, đo thật</span><span class="lc-sub">POST hai lần, PUT và PATCH bằng output thật, prefetch tự xoá, form biến PUT thành GET</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-2-mapping-modifiers" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Một PATCH body, theo kiểu — TS 7.2: Modifier ánh xạ</span><span class="lc-sub">Giống: một PATCH chỉ gửi những trường thay đổi, nên body là tài nguyên với mọi trường optional. Khác: trong TypeScript body đó là <code>Partial&lt;T&gt;</code> = <code>{ [K in keyof T]?: T[K] }</code> — một mapped type thêm modifier <code>?</code> — và <code>-?</code> / <code>-readonly</code> dựng bản đầy đủ và bản sửa được, đều kiểm lúc biên dịch.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

@@ -38,6 +38,9 @@ export const MA_THEM_TS6 = {
   // new Repo<{ name }>() violates T extends { id: number }: tsc 7.0.2 reports TS2741 (property id missing),
   // TypeScript 6.0.3 reports TS2344 (does not satisfy the constraint) — accept both (measured 03/11/2026).
   'ts-cl-lab-6': { 'kiem/sai.ts:5': ['TS2344'] },
+  // emit('booking:created', { id: 1 }) — a payload missing a property: tsc 7.0.2 reports TS2741 (property 'lab'
+  // missing), TypeScript 6.0.3 reports TS2345 (argument not assignable, same cause) — accept both (measured 04/11/2026).
+  'ts-cl-lab-7': { 'kiem/sai.ts:5': ['TS2345'] },
 };
 
 /** regex cấm ⇒ chữ người đọc được (bỏ \\b, \\s, ký tự thoát) — chỉ để hiện, máy chấm dùng regex gốc. */

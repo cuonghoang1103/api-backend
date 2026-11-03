@@ -1177,6 +1177,11 @@ end trước start          spec: nhận     zod: nhận</div>
   <li>Document and Zod agree on shape, differ on normalisation (“   ”); business rules live in the handler (422).</li>
   <li>Found by reading: a v1 field name in a v2 error message — contract checks only check structure.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-1-mapped-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deriving a type so it cannot drift — TS 7.1: Mapped types</span><span class="lc-sub">Same: a type computed from one source of truth never drifts, so you never hand-maintain a copy that falls out of date. Different: there a generator turns an OpenAPI document into client types as a build step; in TypeScript a mapped type <code>{ [K in keyof T]: … }</code> derives a form, <code>Readonly</code> or <code>Record</code> from another type at compile time, with no generator — and <code>Readonly</code>/<code>Record</code> are themselves mapped types.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1368,6 +1373,11 @@ end trước start          spec: nhận     zod: nhận</div>
   <li>Tài liệu và Zod khớp về hình dạng, khác về chuẩn hoá (“   ”); luật nghiệp vụ nằm ở handler (422).</li>
   <li>Đọc mới thấy: tên trường v1 trong câu báo lỗi v2 — kiểm hợp đồng chỉ kiểm cấu trúc.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-1-mapped-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Suy một cái kiểu để nó không trôi — TS 7.1: Mapped types</span><span class="lc-sub">Giống: một kiểu tính từ một nguồn sự thật không bao giờ trôi, nên bạn không bao giờ bảo trì tay một bản sao cũ dần. Khác: ở đó một bộ sinh biến một tài liệu OpenAPI thành type client như một bước build; trong TypeScript một mapped type <code>{ [K in keyof T]: … }</code> suy ra một form, <code>Readonly</code> hay <code>Record</code> từ một kiểu khác ngay lúc biên dịch, không cần bộ sinh — và <code>Readonly</code>/<code>Record</code> tự chúng là mapped type.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

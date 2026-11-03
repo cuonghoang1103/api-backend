@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 7 Hệ sự kiện có kiểu (deck ts-lab-7, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-lab-7', 'Lab 7 — A typed event system', 'Lab 7 — Hệ sự kiện có kiểu', [
+  [1, 'Lab 7 — A typed event system',
+    `<p>LabFlow emits events — a booking created, confirmed, cancelled — and every part of the app subscribes. The teammate’s version uses string names and any payloads: it compiles, scores 5/10, and a typo or a wrong payload ships silently. You rebuild it with the chapter’s advanced types until the grader says 10/10.</p>`,
+    `<p>LabFlow phát sự kiện — một lượt đặt được tạo, xác nhận, huỷ — và mọi phần đăng ký nghe. Bản của đồng đội dùng tên string và payload any: nó biên dịch, được 5/10, và một lỗi gõ hay payload sai lên sản phẩm âm thầm. Bạn dựng lại bằng các kiểu nâng cao của chương tới khi máy chấm báo 10/10.</p>`],
+  [2, 'The task',
+    `<p>Rebuild with: BookingEvent as a template literal over BookingAction, an EventPayloads map and EventName = keyof it, PayloadOf as a conditional type, a generic on/emit whose handler payload is EventPayloads[K], and two mapped types Frozen and Patch. The grader runs tsc and Node for ten points.</p>`,
+    `<p>Dựng lại với: BookingEvent là template literal trên BookingAction, một bản đồ EventPayloads và EventName = keyof nó, PayloadOf là một conditional type, một on/emit generic mà payload của handler là EventPayloads[K], và hai mapped type Frozen và Patch. Máy chấm chạy tsc và Node cho mười điểm.</p>`],
+  [3, 'Zero errors — and why that proves nothing',
+    `<p>The starter compiles with no errors, because string event names accept any string and any payloads accept any value. The bus works for every event by checking none. A model built on string/any refuses nothing — valid is not the same as precise.</p>`,
+    `<p>Bản khởi đầu biên dịch không lỗi, vì tên sự kiện string nhận chuỗi gì cũng được và payload any nhận giá trị gì cũng được. Bus chạy cho mọi sự kiện bằng cách không kiểm cái nào. Một mô hình dựng trên string/any chẳng từ chối gì — hợp lệ không phải chính xác.</p>`],
+  [4, 'The grader — the starter scores 5',
+    `<p>A, B and D pass (the loose types compile, and the runtime happens to work), but C fails (any) and E is 0/8 — every wrong use slips through. The point of the lab is E: make the event names and payloads a closed, checked set, so a typo or a wrong payload is a compile error.</p>`,
+    `<p>A, B và D qua (kiểu lỏng biên dịch được, và lúc chạy tình cờ đúng), nhưng C trượt (any) và E là 0/8 — mọi cách dùng sai lọt. Mấu chốt của lab là E: làm tên sự kiện và payload thành một tập đóng, được kiểm, để một lỗi gõ hay payload sai là lỗi biên dịch.</p>`],
+  [5, 'The eight wrong uses',
+    `<p>Each wrong use compiles against the string/any starter; your advanced types must refuse each: a typo’d event name is TS2345 or TS2322 (template literal, 7.4), a wrong payload TS2741/TS2551/TS2345 (payload map and PayloadOf), a bad PayloadOf TS2344, a Frozen reassign TS2540, a Patch typo TS2353.</p>`,
+    `<p>Mỗi cách dùng sai biên dịch với bản string/any; kiểu nâng cao của bạn phải từ chối từng cái: một tên sự kiện gõ sai là TS2345 hay TS2322 (template literal, 7.4), một payload sai TS2741/TS2551/TS2345 (bản đồ payload và PayloadOf), một PayloadOf sai TS2344, một Frozen gán lại TS2540, một Patch gõ sai TS2353.</p>`],
+  [6, 'Attempt A: a non-generic bus (7.5/10)',
+    `<p>The event names are typed, but on(name: EventName, handler: (p: unknown)) drops the correlation between the name and its payload: B fails (a handler cannot read p.id), S2 slips (any payload is accepted), and S3 gives the wrong code. And Frozen<T> = T does nothing, so S6 is not refused. The per-event generic is the whole value.</p>`,
+    `<p>Tên sự kiện có kiểu, nhưng on(name: EventName, handler: (p: unknown)) đánh rơi mối liên hệ giữa tên và payload: B trượt (một handler không đọc được p.id), S2 lọt (payload nào cũng nhận), và S3 báo sai mã. Và Frozen<T> = T chẳng làm gì, nên S6 không bị từ chối. Toàn bộ giá trị nằm ở generic theo từng sự kiện.</p>`],
+  [7, 'Attempt B: a loose Patch (9.5/10)',
+    `<p>The bus, the template literal names, PayloadOf and Frozen are all right, so seven of the eight wrong uses are refused. But Patch<T> = { [key: string]: unknown } is an open index signature, so a misspelled key (S7) is accepted. Make it a mapped type { [K in keyof T]?: T[K] } and the last point comes back.</p>`,
+    `<p>Bus, tên template literal, PayloadOf và Frozen đều đúng, nên bảy trong tám cách dùng sai bị từ chối. Nhưng Patch<T> = { [key: string]: unknown } là một index signature mở, nên một khoá gõ sai (S7) được nhận. Làm nó một mapped type { [K in keyof T]?: T[K] } thì điểm cuối trở lại.</p>`],
+  [8, 'The reference: 10/10',
+    `<p>Template literal names, a mapped payload map, a conditional PayloadOf, and two mapped types — each pulling its weight. The handler map is initialised with [] for every event, which is what lets the generic on push into handlers[name] with no cast; add an event to EventPayloads and the initialiser forces you to add it here too.</p>`,
+    `<p>Tên template literal, một bản đồ payload ánh xạ, một PayloadOf conditional, và hai mapped type — mỗi cái gánh phần của nó. Bản đồ handler được khởi tạo [] cho mọi sự kiện, đó là thứ cho on generic push vào handlers[name] mà không cast; thêm một sự kiện vào EventPayloads thì bộ khởi tạo bắt bạn thêm vào đây.</p>`],
+  [9, 'Before you call it done',
+    `<p>npm run lab7 prints 10/10; no any, as or !; event names are a template literal type; you can say which advanced type refuses each S1–S8. string/any scored 5, the typed version 10 — a closed set the compiler checks. Next chapter: utility types — Partial, Pick, Omit, Record — the mapped types given names.</p>`,
+    `<p>npm run lab7 in 10/10; không any, as hay !; tên sự kiện là một template literal type; bạn nói được kiểu nâng cao nào từ chối từng S1–S8. string/any được 5, bản có kiểu 10 — một tập đóng trình biên dịch kiểm. Chương sau: utility types — Partial, Pick, Omit, Record — các mapped type được đặt tên.</p>`],
+]);

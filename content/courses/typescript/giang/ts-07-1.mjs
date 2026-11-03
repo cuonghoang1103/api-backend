@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.1 Mapped types (deck ts-07-1, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-07-1', 'Mapped types', 'Mapped types (kiểu ánh xạ)', [
+  [1, 'Mapped types',
+    `<p>Chapter 6 made types reusable across types; Chapter 7 makes types computed from other types — the machinery behind Partial, Readonly, Record and the typed event system of Lab 7. The first tool is the mapped type: walk every key of a type and build a new one from it.</p>`,
+    `<p>Chương 6 làm kiểu dùng lại được qua nhiều kiểu; Chương 7 làm những kiểu tính ra từ kiểu khác — bộ máy đằng sau Partial, Readonly, Record và hệ sự kiện có kiểu của Lab 7. Công cụ đầu tiên là mapped type: đi qua mỗi khoá của một kiểu và dựng một kiểu mới từ nó.</p>`],
+  [2, 'What you will take away from this chapter',
+    `<p>By the end you write mapped types, add and remove the ? and readonly modifiers, read conditional types and infer, and build string types with template literals — then pass Lab 7, a typed event system. Today: the mapped type, and why a derived type never drifts.</p>`,
+    `<p>Cuối chương bạn viết mapped type, thêm và gỡ modifier ? và readonly, đọc conditional type và infer, và dựng kiểu chuỗi bằng template literal — rồi qua Lab 7, một hệ sự kiện có kiểu. Hôm nay: mapped type, và vì sao một kiểu suy ra không bao giờ trôi.</p>`],
+  [3, 'The problem: two types that must agree, by hand',
+    `<p>An admin form needs a "string version" of a Lab. Written by hand, LabForm is already wrong: it has no floor, and tsc cannot tell, because it is a separate type with no link to Lab. This is the same drift that broke the seed in 5.4 — a copy that fell out of sync, with 0 errors.</p>`,
+    `<p>Một form quản trị cần một "bản chuỗi" của Lab. Viết tay thì LabForm đã sai: nó không có floor, và tsc không bắt được, vì nó là một kiểu riêng không liên kết với Lab. Đây cùng kiểu trôi làm vỡ seed ở 5.4 — một bản sao lệch nhịp, với 0 lỗi.</p>`],
+  [4, 'The fix: map every key',
+    `<p>A mapped type reads [K in keyof T] — "for every key K of T" — and gives each one a type. Stringify of Lab is computed from Lab; add a field to Lab and the form gains it automatically. It is the keyof and indexed access of 6.2, now used to build a type instead of read one.</p>`,
+    `<p>Một mapped type đọc [K in keyof T] — "với mỗi khoá K của T" — và cho mỗi cái một kiểu. Stringify của Lab tính ra từ Lab; thêm một trường vào Lab thì form tự có nó. Đây là keyof và truy cập theo chỉ mục của 6.2, giờ dùng để dựng một kiểu thay vì đọc một kiểu.</p>`],
+  [5, 'Readonly<T>, written out',
+    `<p>Put readonly in front of the mapped key and every field becomes read-only — reassigning capacity is TS2540. This is the built-in Readonly<T>; you rarely write it, but seeing it as a mapped type is how you understand Readonly, Partial and the rest of the utility types in Chapter 8.</p>`,
+    `<p>Đặt readonly trước khoá ánh xạ và mọi trường thành chỉ đọc — gán lại capacity là TS2540. Đây là Readonly<T> dựng sẵn; bạn hiếm khi tự viết, nhưng thấy nó là một mapped type là cách hiểu Readonly, Partial và phần còn lại của utility types ở Chương 8.</p>`],
+  [6, 'Record is a mapped type too',
+    `<p>Mapping over a union of keys, { [K in LabCode]: number } is one entry per lab — exactly Record<LabCode, number> from 4.4. Mapped types unify two things you have met: deriving a shape from another shape, and a closed table over a union.</p>`,
+    `<p>Ánh xạ qua một union khoá, { [K in LabCode]: number } là một mục mỗi lab — đúng Record<LabCode, number> của 4.4. Mapped type gộp hai thứ bạn đã gặp: suy một dáng từ dáng khác, và một bảng đóng trên một union.</p>`],
+  [7, 'Transforming the value, not just the key',
+    `<p>The right-hand side can be any type expression using K and T[K]: here every field becomes a function returning it. This is how a library turns a data shape into a shape of getters, validators or React props — and 7.4 adds renaming the keys as well.</p>`,
+    `<p>Vế phải có thể là biểu thức kiểu bất kỳ dùng K và T[K]: ở đây mọi trường thành một hàm trả về nó. Đây là cách một thư viện biến một dáng dữ liệu thành một dáng getter, validator hay props React — và 7.4 thêm việc đổi tên cả khoá.</p>`],
+  [8, 'Which mapped type, when',
+    `<p>The identity map is the template to edit; a string map makes a form; readonly gives Readonly<T>; a union of keys gives Record; a value expression transforms the field. One tool, many shapes, all derived from a single source of truth.</p>`,
+    `<p>Map đồng nhất là khuôn để sửa; một map chuỗi làm một form; readonly cho Readonly<T>; một union khoá cho Record; một biểu thức giá trị biến đổi trường. Một công cụ, nhiều dáng, đều suy từ một nguồn sự thật duy nhất.</p>`],
+  [9, 'Practice &amp; what is next',
+    `<p>Practice: a hand-written BookingView has drifted (missing seats) — replace it with Stringify<Booking> so it is derived. Next, 7.2: a mapped type can add or remove the two modifiers every field carries, ? and readonly — Partial, Required, Mutable.</p>`,
+    `<p>Luyện tập: một BookingView viết tay đã trôi (thiếu seats) — thay nó bằng Stringify<Booking> để nó được suy ra. Tiếp, 7.2: một mapped type thêm hoặc gỡ được hai modifier mà mọi trường mang, ? và readonly — Partial, Required, Mutable.</p>`],
+]);

@@ -4918,5 +4918,559 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-7-1-a",
+    "bai": "typescript-7-1-mapped-types",
+    "tieuDe": "Derive a form type with a mapped type|||Suy một kiểu form bằng mapped type",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p><code>LabForm</code> is hand-written and has drifted (it is missing <code>floor</code>). Replace it with a mapped type <code>Stringify&lt;T&gt; = { [K in keyof T]: string }</code> so the form is derived from <code>Lab</code> and can never drift.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, kiem/sai.ts refused, test passes.</p>|||<p><code>LabForm</code> viết tay và đã trôi (thiếu <code>floor</code>). Thay nó bằng một mapped type <code>Stringify&lt;T&gt; = { [K in keyof T]: string }</code> để form được suy từ <code>Lab</code> và không bao giờ trôi.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, kiem/sai.ts bị từ chối, test qua.</p>",
+    "khoiDau": {
+      "src/form.ts": "export type Lab = { code: string; capacity: number; floor: number };\n\n// Hand-written and already out of date (no floor).\nexport type LabForm = { code: string; capacity: string };\n\nexport function toForm(lab: Lab): LabForm {\n  return { code: lab.code, capacity: String(lab.capacity) };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { LabForm } from '../src/form.ts';\nconst f: LabForm = { code: 'BE-201', capacity: '40', floor: '2' }; // all three fields, all strings\nexport { f };\n",
+      "kiem/sai.ts": "import type { LabForm } from '../src/form.ts';\nconst missing: LabForm = { code: 'BE-201', capacity: '40' }; // expect TS2741\nexport { missing };\n",
+      "test/form.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toForm } from '../src/form.ts';\ntest('toForm', () => assert.deepEqual(toForm({ code: 'BE-201', capacity: 40, floor: 2 }), { code: 'BE-201', capacity: '40', floor: '2' }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/form.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/form.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/form.ts": "export type Lab = { code: string; capacity: number; floor: number };\n\n// Derived from Lab: every field becomes a string, and new fields appear automatically.\nexport type Stringify<T> = { [K in keyof T]: string };\nexport type LabForm = Stringify<Lab>;\n\nexport function toForm(lab: Lab): LabForm {\n  return { code: lab.code, capacity: String(lab.capacity), floor: String(lab.floor) };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still hand-written and missing floor",
+        "tep": {
+          "src/form.ts": "export type Lab = { code: string; capacity: number; floor: number };\nexport type LabForm = { code: string; capacity: string };\nexport function toForm(lab: Lab): LabForm { return { code: lab.code, capacity: String(lab.capacity) }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-1-b",
+    "bai": "typescript-7-1-mapped-types",
+    "tieuDe": "Readonly by hand with a mapped type|||Readonly viết tay bằng mapped type",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>Write <code>Frozen&lt;T&gt; = { readonly [K in keyof T]: T[K] }</code> so every field is read-only. The starter is an identity alias, so a field can be reassigned.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the reassignment in kiem/sai.ts is TS2540.</p>|||<p>Viết <code>Frozen&lt;T&gt; = { readonly [K in keyof T]: T[K] }</code> để mọi trường chỉ đọc. Bản khởi đầu là một bí danh đồng nhất, nên một trường gán lại được.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và phép gán lại trong kiem/sai.ts là TS2540.</p>",
+    "khoiDau": {
+      "src/frozen.ts": "// Does nothing — an identity alias.\nexport type Frozen<T> = T;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Frozen } from '../src/frozen.ts';\nconst lab: Frozen<{ code: string; capacity: number }> = { code: 'BE-201', capacity: 40 };\nconst seats: number = lab.capacity; // reading is fine\nexport { seats };\n",
+      "kiem/sai.ts": "import type { Frozen } from '../src/frozen.ts';\nconst lab: Frozen<{ code: string; capacity: number }> = { code: 'BE-201', capacity: 40 };\nlab.capacity = 50; // expect TS2540\nexport { lab };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/frozen.ts": "// Readonly<T>, written out: every field read-only.\nexport type Frozen<T> = { readonly [K in keyof T]: T[K] };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "identity alias — the field is still writable",
+        "tep": {
+          "src/frozen.ts": "export type Frozen<T> = T;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-1-c",
+    "bai": "typescript-7-1-mapped-types",
+    "tieuDe": "A value-transforming mapped type (getters)|||Một mapped type biến đổi giá trị (getter)",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>Write <code>Getters&lt;T&gt; = { [K in keyof T]: () =&gt; T[K] }</code> so every field becomes a function returning its value. The starter returns the values directly.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Viết <code>Getters&lt;T&gt; = { [K in keyof T]: () =&gt; T[K] }</code> để mọi trường thành một hàm trả về giá trị của nó. Bản khởi đầu trả giá trị trực tiếp.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/getters.ts": "export type Lab = { code: string; capacity: number };\n\n// Wrong: returns the values, not functions returning them.\nexport type Getters<T> = { [K in keyof T]: T[K] };\n\nexport function toGetters(lab: Lab): Getters<Lab> {\n  return { code: lab.code, capacity: lab.capacity };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { toGetters } from '../src/getters.ts';\nconst g = toGetters({ code: 'BE-201', capacity: 40 });\nconst code: string = g.code();     // calling the getter\nconst cap: number = g.capacity();\nexport { code, cap };\n",
+      "test/getters.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toGetters } from '../src/getters.ts';\ntest('getters', () => { const g = toGetters({ code: 'BE-201', capacity: 40 }); assert.equal(g.code(), 'BE-201'); assert.equal(g.capacity(), 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/getters.test.ts"
+      ],
+      "chay": [
+        "node --test test/getters.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/getters.ts": "export type Lab = { code: string; capacity: number };\n\n// Every field becomes a function returning its value.\nexport type Getters<T> = { [K in keyof T]: () => T[K] };\n\nexport function toGetters(lab: Lab): Getters<Lab> {\n  return { code: () => lab.code, capacity: () => lab.capacity };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "values not functions — kiem/dung.ts cannot call g.code()",
+        "tep": {
+          "src/getters.ts": "export type Lab = { code: string; capacity: number };\nexport type Getters<T> = { [K in keyof T]: T[K] };\nexport function toGetters(lab: Lab): Getters<Lab> { return { code: lab.code, capacity: lab.capacity }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-2-a",
+    "bai": "typescript-7-2-mapping-modifiers",
+    "tieuDe": "Partial by hand: a PATCH body|||Partial viết tay: một PATCH body",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>Write <code>Patch&lt;T&gt; = { [K in keyof T]?: T[K] }</code> so an update may carry any subset. The starter demands all fields.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Viết <code>Patch&lt;T&gt; = { [K in keyof T]?: T[K] }</code> để một cập nhật mang bất kỳ tập con nào. Bản khởi đầu đòi mọi trường.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number };\n\n// Wrong: no ? modifier, so every field is required.\nexport type Patch<T> = { [K in keyof T]: T[K] };\n\nexport function apply(b: Booking, patch: Patch<Booking>): Booking {\n  return { ...b, ...patch };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { apply } from '../src/patch.ts';\ndeclare const b: { id: number; lab: string; seats: number };\nconst r = apply(b, { seats: 30 }); // only one field\nexport { r };\n",
+      "test/patch.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { apply } from '../src/patch.ts';\nconst b = { id: 1, lab: 'BE-201', seats: 40 };\ntest('apply', () => assert.deepEqual(apply(b, { seats: 30 }), { id: 1, lab: 'BE-201', seats: 30 }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/patch.test.ts"
+      ],
+      "chay": [
+        "node --test test/patch.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number };\n\n// Partial<T>: add the optional modifier to every field.\nexport type Patch<T> = { [K in keyof T]?: T[K] };\n\nexport function apply(b: Booking, patch: Patch<Booking>): Booking {\n  return { ...b, ...patch };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "no ? — every field still required, { seats } is refused",
+        "tep": {
+          "src/patch.ts": "export type Booking = { id: number; lab: string; seats: number };\nexport type Patch<T> = { [K in keyof T]: T[K] };\nexport function apply(b: Booking, patch: Patch<Booking>): Booking { return { ...b, ...patch }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-2-b",
+    "bai": "typescript-7-2-mapping-modifiers",
+    "tieuDe": "Required by hand: remove the optional|||Required viết tay: gỡ optional",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Write <code>Complete&lt;T&gt; = { [K in keyof T]-?: T[K] }</code> so every field is required. The starter copies <code>T</code> unchanged, so optional fields stay optional.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts, and the value missing a field in kiem/sai.ts is refused.</p>|||<p>Viết <code>Complete&lt;T&gt; = { [K in keyof T]-?: T[K] }</code> để mọi trường bắt buộc. Bản khởi đầu chép <code>T</code> nguyên, nên trường optional vẫn optional.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts, và giá trị thiếu một trường trong kiem/sai.ts bị từ chối.</p>",
+    "khoiDau": {
+      "src/complete.ts": "export type Draft = { title: string; body?: string; tags?: string[] };\n\n// Wrong: copies T unchanged, so body and tags stay optional.\nexport type Complete<T> = { [K in keyof T]: T[K] };\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Complete } from '../src/complete.ts';\ntype Draft = { title: string; body?: string; tags?: string[] };\nconst done: Complete<Draft> = { title: 'Hi', body: 'text', tags: [] }; // all three present\nexport { done };\n",
+      "kiem/sai.ts": "import type { Complete } from '../src/complete.ts';\ntype Draft = { title: string; body?: string; tags?: string[] };\nconst partial: Complete<Draft> = { title: 'Hi' }; // expect TS2739\nexport { partial };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/complete.ts": "export type Draft = { title: string; body?: string; tags?: string[] };\n\n// Required<T>: remove the optional modifier from every field.\nexport type Complete<T> = { [K in keyof T]-?: T[K] };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "copies T unchanged — body/tags stay optional",
+        "tep": {
+          "src/complete.ts": "export type Draft = { title: string; body?: string; tags?: string[] };\nexport type Complete<T> = { [K in keyof T]: T[K] };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-2-c",
+    "bai": "typescript-7-2-mapping-modifiers",
+    "tieuDe": "Mutable: remove readonly|||Mutable: gỡ readonly",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Write <code>Mutable&lt;T&gt; = { -readonly [K in keyof T]: T[K] }</code> so a copy of a frozen type can be reassigned. The starter keeps readonly.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Viết <code>Mutable&lt;T&gt; = { -readonly [K in keyof T]: T[K] }</code> để một bản sao của một kiểu đóng băng gán lại được. Bản khởi đầu giữ readonly.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/mutable.ts": "export type Lab = { readonly code: string; readonly capacity: number };\n\n// Wrong: keeps readonly, so the copy cannot be reassigned.\nexport type Mutable<T> = { [K in keyof T]: T[K] };\n\nexport function thaw(lab: Lab): Mutable<Lab> {\n  return { code: lab.code, capacity: lab.capacity };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { thaw } from '../src/mutable.ts';\nconst d = thaw({ code: 'BE-201', capacity: 40 });\nd.capacity = 50; // must be allowed — readonly removed\nexport { d };\n",
+      "test/mutable.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { thaw } from '../src/mutable.ts';\ntest('thaw', () => { const d = thaw({ code: 'BE-201', capacity: 40 }); d.capacity = 50; assert.equal(d.capacity, 50); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/mutable.test.ts"
+      ],
+      "chay": [
+        "node --test test/mutable.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/mutable.ts": "export type Lab = { readonly code: string; readonly capacity: number };\n\n// Remove the readonly modifier from every field.\nexport type Mutable<T> = { -readonly [K in keyof T]: T[K] };\n\nexport function thaw(lab: Lab): Mutable<Lab> {\n  return { code: lab.code, capacity: lab.capacity };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "keeps readonly — d.capacity = 50 is refused in kiem/dung.ts",
+        "tep": {
+          "src/mutable.ts": "export type Lab = { readonly code: string; readonly capacity: number };\nexport type Mutable<T> = { [K in keyof T]: T[K] };\nexport function thaw(lab: Lab): Mutable<Lab> { return { code: lab.code, capacity: lab.capacity }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-3-a",
+    "bai": "typescript-7-3-conditional-infer",
+    "tieuDe": "ElementType with infer|||ElementType với infer",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>Write <code>ElementType&lt;T&gt; = T extends readonly (infer E)[] ? E : T</code> so it gives the element type of an array. The starter is <code>any</code>, so a wrong value slips.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the wrong value in kiem/sai.ts is TS2322.</p>|||<p>Viết <code>ElementType&lt;T&gt; = T extends readonly (infer E)[] ? E : T</code> để nó cho kiểu phần tử của một mảng. Bản khởi đầu là <code>any</code>, nên một giá trị sai lọt.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị sai trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/element.ts": "// Wrong: any erases the element type.\nexport type ElementType<T> = any;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { ElementType } from '../src/element.ts';\nconst a: ElementType<string[]> = 'BE-201'; // string\nconst n: ElementType<number[]> = 42;        // number\nexport { a, n };\n",
+      "kiem/sai.ts": "import type { ElementType } from '../src/element.ts';\nconst bad: ElementType<number[]> = 'not a number'; // expect TS2322\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/element.ts": "// infer E captures the element type of an array; a non-array falls to T.\nexport type ElementType<T> = T extends readonly (infer E)[] ? E : T;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "any — the wrong value is accepted",
+        "tep": {
+          "src/element.ts": "export type ElementType<T> = any;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-3-b",
+    "bai": "typescript-7-3-conditional-infer",
+    "tieuDe": "ReturnType with infer|||ReturnType với infer",
+    "doKho": "MEDIUM",
+    "phut": 10,
+    "moTa": "<p>Write <code>Return&lt;F&gt; = F extends (...args: never[]) =&gt; infer R ? R : never</code> so it captures a function’s return type. The starter is <code>any</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the wrong value in kiem/sai.ts is TS2322.</p>|||<p>Viết <code>Return&lt;F&gt; = F extends (...args: never[]) =&gt; infer R ? R : never</code> để nó bắt kiểu trả về của một hàm. Bản khởi đầu là <code>any</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và giá trị sai trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/return.ts": "export function make(): { id: number; name: string } {\n  return { id: 1, name: 'An' };\n}\n\n// Wrong: any erases the return type.\nexport type Return<F> = any;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { Return, make } from '../src/return.ts';\nconst r: Return<typeof make> = { id: 1, name: 'An' }; // { id; name }\nconst id: number = r.id;\nexport { id };\n",
+      "kiem/sai.ts": "import type { Return, make } from '../src/return.ts';\nconst bad: Return<typeof make> = { id: 'oops', name: 'An' }; // expect TS2322\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/return.ts": "export function make(): { id: number; name: string } {\n  return { id: 1, name: 'An' };\n}\n\n// infer R captures the type after the arrow (ReturnType<F>).\nexport type Return<F> = F extends (...args: never[]) => infer R ? R : never;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "any — the wrong-shaped value is accepted",
+        "tep": {
+          "src/return.ts": "export function make(): { id: number; name: string } { return { id: 1, name: 'An' }; }\nexport type Return<F> = any;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-3-c",
+    "bai": "typescript-7-3-conditional-infer",
+    "tieuDe": "NonNullable: drop null and undefined|||NonNullable: bỏ null và undefined",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Write <code>NoNull&lt;T&gt; = T extends null | undefined ? never : T</code> so it removes null/undefined, distributing over a union. The starter is <code>any</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and assigning null in kiem/sai.ts is TS2322.</p>|||<p>Viết <code>NoNull&lt;T&gt; = T extends null | undefined ? never : T</code> để nó bỏ null/undefined, distribute qua một union. Bản khởi đầu là <code>any</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và gán null trong kiem/sai.ts là TS2322.</p>",
+    "khoiDau": {
+      "src/nonull.ts": "// Wrong: any keeps null in.\nexport type NoNull<T> = any;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { NoNull } from '../src/nonull.ts';\nconst s: NoNull<string | null | undefined> = 'a note'; // string\nexport { s };\n",
+      "kiem/sai.ts": "import type { NoNull } from '../src/nonull.ts';\nconst bad: NoNull<string | null> = null; // expect TS2322\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/nonull.ts": "// Distributes over the union, dropping null and undefined (NonNullable<T>).\nexport type NoNull<T> = T extends null | undefined ? never : T;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "any — null is accepted",
+        "tep": {
+          "src/nonull.ts": "export type NoNull<T> = any;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-4-a",
+    "bai": "typescript-7-4-template-literal-types",
+    "tieuDe": "Event names with a template literal type|||Tên sự kiện bằng template literal type",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>Write <code>BookingEvent</code> as a template literal type <code>booking:&lt;action&gt;</code> over <code>BookingAction</code>, so a typo is a compile error. The starter is <code>string</code>.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the typo in kiem/sai.ts is TS2345 or TS2820.</p>|||<p>Viết <code>BookingEvent</code> như một template literal type <code>booking:&lt;action&gt;</code> trên <code>BookingAction</code>, để một lỗi gõ là lỗi biên dịch. Bản khởi đầu là <code>string</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và lỗi gõ trong kiem/sai.ts là TS2345 hoặc TS2820.</p>",
+    "khoiDau": {
+      "src/events.ts": "export type BookingAction = 'created' | 'confirmed' | 'cancelled';\n\n// Wrong: any string is accepted.\nexport type BookingEvent = string;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { BookingEvent } from '../src/events.ts';\nconst e1: BookingEvent = 'booking:created';\nconst e2: BookingEvent = 'booking:cancelled';\nexport { e1, e2 };\n",
+      "kiem/sai.ts": "import type { BookingEvent } from '../src/events.ts';\nconst bad: BookingEvent = 'booking:creatd'; // expect TS2820\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/events.ts": "export type BookingAction = 'created' | 'confirmed' | 'cancelled';\n\n// One event name per action — a closed, checked set.\nexport type BookingEvent = `booking:${BookingAction}`;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "string — the typo is accepted",
+        "tep": {
+          "src/events.ts": "export type BookingAction = 'created' | 'confirmed' | 'cancelled';\nexport type BookingEvent = string;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-4-b",
+    "bai": "typescript-7-4-template-literal-types",
+    "tieuDe": "Getter keys with key remapping|||Khoá getter bằng key remapping",
+    "doKho": "HARD",
+    "phut": 12,
+    "moTa": "<p>Write <code>Getters&lt;T&gt;</code> that renames each key to <code>get&lt;Key&gt;</code> and makes the value a function: <code>{ [K in keyof T as \\`get\\${Capitalize&lt;K &amp; string&gt;}\\`]: () =&gt; T[K] }</code>. The starter keeps the original keys.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Viết <code>Getters&lt;T&gt;</code> đổi tên mỗi khoá thành <code>get&lt;Key&gt;</code> và làm giá trị một hàm: <code>{ [K in keyof T as \\`get\\${Capitalize&lt;K &amp; string&gt;}\\`]: () =&gt; T[K] }</code>. Bản khởi đầu giữ khoá gốc.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/getters.ts": "export type Lab = { code: string; capacity: number };\n\n// Wrong: keeps the original keys (code, capacity), not getCode/getCapacity.\nexport type Getters<T> = { [K in keyof T]: () => T[K] };\n\nexport function toGetters(lab: Lab): Getters<Lab> {\n  return { code: () => lab.code, capacity: () => lab.capacity };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { toGetters } from '../src/getters.ts';\nconst g = toGetters({ code: 'BE-201', capacity: 40 });\nconst code: string = g.getCode();       // renamed key\nconst cap: number = g.getCapacity();\nexport { code, cap };\n",
+      "test/getters.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toGetters } from '../src/getters.ts';\ntest('getters', () => { const g = toGetters({ code: 'BE-201', capacity: 40 }); assert.equal(g.getCode(), 'BE-201'); assert.equal(g.getCapacity(), 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/getters.test.ts"
+      ],
+      "chay": [
+        "node --test test/getters.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/getters.ts": "export type Lab = { code: string; capacity: number };\n\n// Rename each key to get<Key> with 'as' and a template literal.\nexport type Getters<T> = {\n  [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];\n};\n\nexport function toGetters(lab: Lab): Getters<Lab> {\n  return { getCode: () => lab.code, getCapacity: () => lab.capacity };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "original keys kept — g.getCode() does not exist",
+        "tep": {
+          "src/getters.ts": "export type Lab = { code: string; capacity: number };\nexport type Getters<T> = { [K in keyof T]: () => T[K] };\nexport function toGetters(lab: Lab): Getters<Lab> { return { code: () => lab.code, capacity: () => lab.capacity }; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-7-4-c",
+    "bai": "typescript-7-4-template-literal-types",
+    "tieuDe": "A permission key from two unions|||Một khoá quyền từ hai union",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Write <code>PermissionKey = \\`\\${Resource}:\\${Method}\\`</code> so only <code>resource:method</code> strings are valid. The starter is <code>string</code>, so a malformed key slips.</p><p><strong>Done when:</strong> tsc clean on kiem/dung.ts and the malformed key in kiem/sai.ts is TS2322 or TS2820.</p>|||<p>Viết <code>PermissionKey = \\`\\${Resource}:\\${Method}\\`</code> để chỉ chuỗi <code>resource:method</code> hợp lệ. Bản khởi đầu là <code>string</code>, nên một khoá sai dạng lọt.</p><p><strong>Đạt khi:</strong> tsc sạch trên kiem/dung.ts và khoá sai dạng trong kiem/sai.ts là TS2322 hoặc TS2820.</p>",
+    "khoiDau": {
+      "src/perm.ts": "export type Resource = 'lab' | 'booking' | 'user';\nexport type Method = 'get' | 'create' | 'delete';\n\n// Wrong: any string is accepted.\nexport type PermissionKey = string;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import type { PermissionKey } from '../src/perm.ts';\nconst ok: PermissionKey = 'lab:get';\nconst another: PermissionKey = 'booking:delete';\nexport { ok, another };\n",
+      "kiem/sai.ts": "import type { PermissionKey } from '../src/perm.ts';\nconst bad: PermissionKey = 'labget'; // expect TS2820\nexport { bad };\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/perm.ts": "export type Resource = 'lab' | 'booking' | 'user';\nexport type Method = 'get' | 'create' | 'delete';\n\n// Every resource:method combination — a closed, checked set.\nexport type PermissionKey = `${Resource}:${Method}`;\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "string — the malformed key is accepted",
+        "tep": {
+          "src/perm.ts": "export type Resource = 'lab' | 'booking' | 'user';\nexport type Method = 'get' | 'create' | 'delete';\nexport type PermissionKey = string;\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-7",
+    "bai": "typescript-7-6-lab-he-su-kien",
+    "tieuDe": "Lab 7 — a typed event system|||Lab 7 — hệ sự kiện có kiểu",
+    "doKho": "HARD",
+    "phut": 30,
+    "moTa": "<p>The lab in miniature. Rewrite the <code>string</code>/<code>any</code> event system with the chapter’s types: a template literal <code>BookingEvent</code>, an <code>EventPayloads</code> map, a generic <code>on</code>/<code>emit</code> whose handler payload is <code>EventPayloads[K]</code>, and a <code>Frozen</code> mapped type. The correct uses must compile, the wrong uses must be refused, and the tests must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, tests green.</p>|||<p>Lab thu nhỏ. Viết lại hệ sự kiện <code>string</code>/<code>any</code> bằng các kiểu của chương: một template literal <code>BookingEvent</code>, một bản đồ <code>EventPayloads</code>, một <code>on</code>/<code>emit</code> generic mà payload của handler là <code>EventPayloads[K]</code>, và một mapped type <code>Frozen</code>. Các cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/events.ts": "// A teammate's string/any version — it compiles, but refuses nothing.\nexport type BookingEvent = string;\nexport type EventName = string;\nexport type EventPayloads = { [event: string]: any };\n\nexport class EventBus {\n  private handlers: { [event: string]: Array<(p: any) => void> } = {};\n  on(name: string, handler: (p: any) => void): void { (this.handlers[name] ??= []).push(handler); }\n  emit(name: string, payload: any): void { for (const h of this.handlers[name] ?? []) h(payload); }\n}\nexport type Frozen<T> = T;\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { EventBus } from '../src/events.ts';\nimport type { BookingEvent, Frozen } from '../src/events.ts';\nconst bus = new EventBus();\nbus.on('booking:created', (p) => console.log(p.id, p.lab));   // p is { id; lab }\nbus.on('booking:cancelled', (p) => console.log(p.reason));    // p is { id; reason }\nbus.emit('booking:created', { id: 1, lab: 'BE-201' });\nconst name: BookingEvent = 'booking:confirmed';\nconst frozen: Frozen<{ code: string }> = { code: 'BE-201' };\nconst code: string = frozen.code;\nexport { name, code };\n",
+      "kiem/sai.ts": "import { EventBus } from '../src/events.ts';\nimport type { BookingEvent, Frozen } from '../src/events.ts';\ndeclare const bus: EventBus;\nbus.emit('booking:creatd', { id: 1, lab: 'BE-201' }); // expect TS2345\nbus.emit('booking:created', { id: 1 }); // expect TS2741\nconst e: BookingEvent = 'booking:expired'; // expect TS2322\nconst f: Frozen<{ code: string }> = { code: 'BE-201' };\nf.code = 'x'; // expect TS2540\nexport { e, f };\n",
+      "test/events.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { EventBus } from '../src/events.ts';\ntest('bus', () => {\n  const bus = new EventBus();\n  const ids: number[] = [];\n  bus.on('booking:created', (p) => ids.push(p.id));\n  bus.emit('booking:created', { id: 1, lab: 'BE-201' });\n  bus.emit('booking:created', { id: 2, lab: 'AL-301' });\n  bus.emit('booking:cancelled', { id: 1, reason: 'x' });\n  assert.deepEqual(ids, [1, 2]);\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/events.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/events.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/events.ts": "export type BookingAction = 'created' | 'confirmed' | 'cancelled';\nexport type BookingEvent = `booking:${BookingAction}`;\n\nexport type EventPayloads = {\n  'booking:created': { id: number; lab: string };\n  'booking:confirmed': { id: number };\n  'booking:cancelled': { id: number; reason: string };\n};\nexport type EventName = keyof EventPayloads;\nexport type PayloadOf<E extends EventName> = EventPayloads[E];\n\ntype HandlerMap = { [K in EventName]: Array<(payload: EventPayloads[K]) => void> };\n\nexport class EventBus {\n  private handlers: HandlerMap = {\n    'booking:created': [],\n    'booking:confirmed': [],\n    'booking:cancelled': [],\n  };\n  on<K extends EventName>(name: K, handler: (payload: EventPayloads[K]) => void): void {\n    this.handlers[name].push(handler);\n  }\n  emit<K extends EventName>(name: K, payload: EventPayloads[K]): void {\n    for (const handler of this.handlers[name]) handler(payload);\n  }\n}\nexport type Frozen<T> = { readonly [K in keyof T]: T[K] };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the string/any starter kept — wrong uses slip through",
+        "tep": {
+          "src/events.ts": "export type BookingEvent = string;\nexport type EventName = string;\nexport type EventPayloads = { [event: string]: any };\nexport class EventBus {\n  private handlers: { [event: string]: Array<(p: any) => void> } = {};\n  on(name: string, handler: (p: any) => void): void { (this.handlers[name] ??= []).push(handler); }\n  emit(name: string, payload: any): void { for (const h of this.handlers[name] ?? []) h(payload); }\n}\nexport type Frozen<T> = T;\n"
+        }
+      },
+      {
+        "nhan": "typed names but non-generic bus — handler payload is unknown, kiem/dung.ts loses it",
+        "tep": {
+          "src/events.ts": "export type BookingAction = 'created' | 'confirmed' | 'cancelled';\nexport type BookingEvent = `booking:${BookingAction}`;\nexport type EventPayloads = { 'booking:created': { id: number; lab: string }; 'booking:confirmed': { id: number }; 'booking:cancelled': { id: number; reason: string } };\nexport type EventName = keyof EventPayloads;\ntype HandlerMap = { [K in EventName]: Array<(p: unknown) => void> };\nexport class EventBus {\n  private handlers: HandlerMap = { 'booking:created': [], 'booking:confirmed': [], 'booking:cancelled': [] };\n  on(name: EventName, handler: (p: unknown) => void): void { this.handlers[name].push(handler); }\n  emit(name: EventName, payload: unknown): void { for (const h of this.handlers[name]) h(payload); }\n}\nexport type Frozen<T> = { readonly [K in keyof T]: T[K] };\n"
+        }
+      }
+    ]
   }
 ]

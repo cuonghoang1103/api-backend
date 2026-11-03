@@ -306,9 +306,21 @@ typescript: 'typescript-practice',
   **3 cặp liên kết chéo hai chiều** (react `rx-2-1-use-state` ↔ 6.1 useState là generic; api-design `api-2-3-envelope` ↔ 6.3 Result<T,E>; `api-2-2-validation` ↔ 6.4 generic chỉ-trả-về = phép ép kiểu).
   ⚠ Bẫy đã gặp: parameter property `constructor(readonly x)` ⇒ **TS1294** dưới `erasableSyntaxOnly` (dạy ở 6.3 như một điểm). Soạn MỘT phiên, KHÔNG fork.
   Ảnh chụp `_labflow-ts` cuối Ch6: 56 test, lab1–6 tham khảo 10/10.
-- **⏸ TẠM DỪNG sau Chương 6 (03/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 7** (Kiểu nâng cao — §9: tên sự kiện `booking:${Action}`,
-  DTO ánh xạ; Lab 7 hệ sự kiện có kiểu — mapped/conditional/template literal types). Làm y Ch5/Ch6: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`,
-  deck→kiem-slide→render→R2 `TS/v1`, đề Code Lab `ts` + nguon + `_track.json` + xuat-de + doi-chieu, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`,
+- 04/11/2026 — **Chương 7 trọn**: 4 bài (slug giữ: 7.1 mapped-types, 7.2 mapping-modifiers, 7.3 conditional-infer, 7.4 template-literal-types;
+  nguồn bài + giảng ~169k/6) + Lab 7 (MỚI `typescript-7-6-lab-he-su-kien`) + quiz 10 câu (slug giữ `typescript-7-5-quiz`); tệp chương `s07-advanced-types.mjs`.
+  5 deck / 41 slide đẩy `TS/v1` (ts-07-1 9, ts-07-2 7, ts-07-3 8, ts-07-4 8, ts-lab-7 9; 0 lỗi kiem-slide). 13 đề Code Lab `ts` mới (ts-cl-7-1 a–c,
+  7-2 a–c, 7-3 a–c, 7-4 a–c, ts-cl-lab-7; 14 sai mẫu) — kiem-de-ts **119/119** (tsc 7.0.2), codelab-xuat-de 13 sạch, máy chấm trình duyệt TS 6.0.3 **591/591**
+  (một lệch 6↔7 đã vá: `emit('booking:created', { id: 1 })` thiếu trường ⇒ TS 7.0.2 TS2741, TS 6.0.3 TS2345 ⇒ thêm `MA_THEM_TS6['ts-cl-lab-7']` trong `_chung.mjs`);
+  track `typescript-practice` thêm 5 module (⇒ 41 module / 119 đề). LabFlow TS thêm `src/rules/events.ts` + `events.test.ts` (2 test ⇒ `npm test` = **58**) =
+  lời giải Lab 7 (template literal `BookingEvent` = `booking:${BookingAction}`, bản đồ `EventPayloads`, conditional `PayloadOf`, `EventBus` generic theo sự kiện với
+  `HandlerMap` khởi tạo đủ mọi sự kiện ⇒ `on`/`emit` không cast, `Frozen`/`Patch` mapped), `demo7/` (20 demo đo thật cho 4 bài), `lab7/` (starter string/any,
+  `kiem/{sai 8 dòng,dung}`, test, `yeu`=tên có kiểu nhưng bus `unknown`, `vua`=đúng trừ `Patch` index-signature), `scripts/cham-lab-7.mjs` (`npm run lab7`; A2·B1·C1·D2·E 8×0,5).
+  Số đo Lab 7: khởi đầu **5/10** · `yeu` **7.5/10** · `vua` **9.5/10** · tham khảo **10/10**.
+  **3 cặp liên kết chéo hai chiều** (api-design `api-7-2-sinh-code` ↔ 7.1 suy kiểu không trôi; `api-1-2-phuong-thuc` ↔ 7.2 PATCH body = Partial; `api-2-4-i18n` ↔ 7.4 khoá câu chữ = template literal).
+  Ảnh chụp `_labflow-ts` cuối Ch7 (verify sạch: npm ci + tsc 0 lỗi + 58 test + lab7 5/7.5/9.5/10): 58 test, lab1–6 + events 10/10. Soạn MỘT phiên, KHÔNG fork.
+- **⏸ TẠM DỪNG sau Chương 7 (04/11/2026, chờ chủ kênh soát mẫu). Việc tiếp theo: Chương 8** (§9 — Utility types: Partial, Required, Pick, Omit, Record, ReturnType…
+  đặt tên cho các mapped/conditional type của Ch7). Làm y Ch5/Ch6/Ch7: MỘT phiên KHÔNG fork, dựng demos thật rồi sinh `_ma`, deck→kiem-slide→render→R2 `TS/v1`,
+  đề Code Lab `ts` + nguon + `_track.json` + xuat-de + máy chấm trình duyệt, liên kết chéo hai chiều, cập nhật ảnh chụp `_labflow-ts`,
   `git rev-parse HEAD` lại ngay trước commit-tree (phiên khác cũng commit vào main). Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.

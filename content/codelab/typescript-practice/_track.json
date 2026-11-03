@@ -224,6 +224,36 @@
       "name": "6.6 Lab 6 — A generic repository",
       "level": "ADVANCED",
       "description": "1 đề: Lab 6 — a generic repository (Result, Repo, pluck, groupBy)"
+    },
+    {
+      "slug": "typescript-7-1-mapped-types",
+      "name": "7.1 — Mapped types",
+      "level": "ADVANCED",
+      "description": "3 đề: Derive a form type with a mapped type · Readonly by hand · A value-transforming mapped type (getters)"
+    },
+    {
+      "slug": "typescript-7-2-mapping-modifiers",
+      "name": "7.2 — Mapping modifiers: add & remove ? and readonly",
+      "level": "ADVANCED",
+      "description": "3 đề: Partial by hand (a PATCH body) · Required with -? · Mutable with -readonly"
+    },
+    {
+      "slug": "typescript-7-3-conditional-infer",
+      "name": "7.3 — Conditional types & infer",
+      "level": "ADVANCED",
+      "description": "3 đề: ElementType with infer · ReturnType with infer · NonNullable (drop null/undefined)"
+    },
+    {
+      "slug": "typescript-7-4-template-literal-types",
+      "name": "7.4 — Template literal types",
+      "level": "ADVANCED",
+      "description": "3 đề: Event names with a template literal · Getter keys with key remapping · A permission key from two unions"
+    },
+    {
+      "slug": "typescript-7-6-lab-he-su-kien",
+      "name": "7.6 Lab 7 — A typed event system",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 7 — a typed event system (template literal + mapped + conditional)"
     }
   ]
 }

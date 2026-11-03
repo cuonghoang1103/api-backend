@@ -3288,6 +3288,11 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
   <li>Normalise Vietnamese input to NFC; fold accents (and đ/Đ by hand) for search; sort with a Vietnamese collator.</li>
   <li>Send ISO dates and integer amounts; formatting for a locale is the client’s job.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-4-template-literal-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Message keys that cannot be mistyped — TS 7.4: Template literal types</span><span class="lc-sub">Same: a closed set of message keys, one value for each, so a missing or misspelled key is caught, not shipped. Different: TypeScript builds the key type from two unions in a template literal (<code>&#96;&#36;{Resource}:&#36;{Field}&#96;</code>) and a <code>Record</code> over it forces a value for every combination — a typo is refused at compile time as TS2820, with a suggestion.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -3759,6 +3764,11 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
   <li>Chuẩn hoá chữ tiếng Việt nhận vào về NFC; gấp dấu (và đ/Đ bằng tay) khi tìm kiếm; sắp xếp bằng collator tiếng Việt.</li>
   <li>Gửi ngày giờ ISO và số tiền nguyên; định dạng theo locale là việc của client.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-7-4-template-literal-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Khoá câu chữ không thể gõ sai — TS 7.4: Template literal types</span><span class="lc-sub">Giống: một tập khoá câu chữ đóng, mỗi khoá một giá trị, nên khoá thiếu hay gõ sai bị bắt chứ không lên sản phẩm. Khác: TypeScript dựng kiểu khoá từ hai union trong một template literal (<code>&#96;&#36;{Resource}:&#36;{Field}&#96;</code>) và một <code>Record</code> qua nó ép mọi tổ hợp phải có giá trị — một lỗi gõ bị từ chối lúc biên dịch là TS2820, kèm gợi ý.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

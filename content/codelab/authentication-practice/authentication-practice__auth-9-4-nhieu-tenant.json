@@ -1,0 +1,397 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-9-4-nhieu-tenant",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-9-4-nhieu-tenant"
+  },
+  "exercises": [
+    {
+      "title": "9.4-1 — The boundary that must not leak",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID serves FPT HCM and FPT HN from one database. A tenant is a hard wall — checked first, above every role.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID phục vụ FPT HCM và FPT HN từ một cơ sở dữ liệu. Một tenant là một bức tường cứng — kiểm trước, trên mọi vai.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A 403 is an admission that the thing exists.|||Một 403 là một sự thừa nhận rằng món đồ tồn tại.",
+        "The tenant check is above every grant.|||Phép kiểm tenant ở trên mọi quyền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.4-1 — The boundary that must not leak\n\nAnswer in the answer panel (no code needed).\n\n1. Why must a cross-tenant request return 404, not 403?Vì sao một yêu cầu khác tenant phải trả 404, không 403?\n2. Where in can() is the tenant compared, relative to the role?Trong can(), tenant được so ở đâu, so với vai?\n3. When is a 403 (not 404) the honest, correct answer?Khi nào một 403 (không 404) là câu trả lời trung thực, đúng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.4-1 — The boundary that must not leak — answer key\n\n1. Why must a cross-tenant request return 404, not 403?Vì sao một yêu cầu khác tenant phải trả 404, không 403?\n   Answer: b) A 403 confirms the resource EXISTS, enabling enumeration across the wall; 404 (same as \"not found\") reveals nothing\n   Returning the same 404 as a missing id means a cross-tenant probe cannot tell existing ids from fake ones (9.4, the 6.4 rule).VI: Trả cùng cái 404 như một id thiếu nghĩa là một cú dò khác tenant không phân biệt được id có thật với id giả (9.4, luật 6.4).\n\n2. Where in can() is the tenant compared, relative to the role?Trong can(), tenant được so ở đâu, so với vai?\n   Answer: d) First, before any role — even ADMIN's \"*\" is checked after, so an admin never crosses tenants\n   The tenant line is first; \"*\" is checked after it, so the wall sits above every grant, admin included (9.4).VI: Dòng tenant là đầu tiên; \"*\" kiểm sau nó, nên bức tường ở trên mọi quyền, kể cả admin (9.4).\n\n3. When is a 403 (not 404) the honest, correct answer?Khi nào một 403 (không 404) là câu trả lời trung thực, đúng?\n   Answer: a) When the resource IS in the user's own tenant but no model grants the action — existence is not a secret there\n   Within your own tenant, existence is not a secret, so an honest 403 leaks nothing; 404 is reserved for cross-tenant/missing (9.4).VI: Trong tenant của chính bạn, sự tồn tại không phải bí mật, nên một 403 trung thực không lộ gì; 404 dành cho khác-tenant/thiếu (9.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A 403 confirms the resource EXISTS, enabling enumeration across the wall; 404 (same as \"not found\") reveals nothing</p><p>Returning the same 404 as a missing id means a cross-tenant probe cannot tell existing ids from fake ones (9.4, the 6.4 rule).</p><p><i>VI: Trả cùng cái 404 như một id thiếu nghĩa là một cú dò khác tenant không phân biệt được id có thật với id giả (9.4, luật 6.4).</i></p></li><li><p><b>d)</b> First, before any role — even ADMIN's \"*\" is checked after, so an admin never crosses tenants</p><p>The tenant line is first; \"*\" is checked after it, so the wall sits above every grant, admin included (9.4).</p><p><i>VI: Dòng tenant là đầu tiên; \"*\" kiểm sau nó, nên bức tường ở trên mọi quyền, kể cả admin (9.4).</i></p></li><li><p><b>a)</b> When the resource IS in the user's own tenant but no model grants the action — existence is not a secret there</p><p>Within your own tenant, existence is not a secret, so an honest 403 leaks nothing; 404 is reserved for cross-tenant/missing (9.4).</p><p><i>VI: Trong tenant của chính bạn, sự tồn tại không phải bí mật, nên một 403 trung thực không lộ gì; 404 dành cho khác-tenant/thiếu (9.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why must a cross-tenant request return 404, not 403?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một yêu cầu khác tenant phải trả 404, không 403?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The 403 status is reserved only for expired or revoked sessions, while 404 is used for every other failure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A 403 confirms the resource EXISTS, enabling enumeration across the wall; 404 (same as \"not found\") reveals nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Browsers silently refuse to display the body of a 403 response that comes from a different tenant origin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 404 response is measurably faster for the server to produce than a 403, so it is preferred for performance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Returning the same 404 as a missing id means a cross-tenant probe cannot tell existing ids from fake ones (9.4, the 6.4 rule).</p><p><i>VI: Trả cùng cái 404 như một id thiếu nghĩa là một cú dò khác tenant không phân biệt được id có thật với id giả (9.4, luật 6.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Where in can() is the tenant compared, relative to the role?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong can(), tenant được so ở đâu, so với vai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only for non-admins; admins skip the tenant check"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Last, after all role, ownership and relationship checks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is not compared in can(); the database handles it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "First, before any role — even ADMIN's \"*\" is checked after, so an admin never crosses tenants"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The tenant line is first; \"*\" is checked after it, so the wall sits above every grant, admin included (9.4).</p><p><i>VI: Dòng tenant là đầu tiên; \"*\" kiểm sau nó, nên bức tường ở trên mọi quyền, kể cả admin (9.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>When is a 403 (not 404) the honest, correct answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào một 403 (không 404) là câu trả lời trung thực, đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "When the resource IS in the user's own tenant but no model grants the action — existence is not a secret there"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whenever the user lacks any role at all, regardless of which tenant the requested resource belongs to"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for requests that come from administrators, since an admin is entitled to a more specific error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Never under any circumstances — the gate should always answer 404 to be safe against enumeration"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Within your own tenant, existence is not a secret, so an honest 403 leaks nothing; 404 is reserved for cross-tenant/missing (9.4).</p><p><i>VI: Trong tenant của chính bạn, sự tồn tại không phải bí mật, nên một 403 trung thực không lộ gì; 404 dành cho khác-tenant/thiếu (9.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning 403 for another tenant's resource.|||Trả 403 cho tài nguyên của tenant khác."
+        },
+        {
+          "loi": "Letting ADMIN skip the tenant check.|||Cho ADMIN bỏ qua phép kiểm tenant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "multi-tenancy",
+          "vi": "nhiều tenant"
+        },
+        {
+          "en": "enumeration",
+          "vi": "dò"
+        }
+      ]
+    },
+    {
+      "title": "9.4-2 — Write statusFor(ctx): 404, not 403, across tenants",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Map a request to an HTTP status from <code>ctx = { hasUser, exists, sameTenant, granted }</code>: no user ⇒ <code>401</code>; the resource is missing OR in another tenant ⇒ <code>404</code> (the two must be indistinguishable); same tenant but not granted ⇒ <code>403</code>; otherwise ⇒ <code>200</code>. The order matters: a cross-tenant resource must look exactly like a missing one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ánh xạ một yêu cầu tới một mã HTTP từ <code>ctx = { hasUser, exists, sameTenant, granted }</code>: không user ⇒ <code>401</code>; tài nguyên thiếu HOẶC ở tenant khác ⇒ <code>404</code> (hai cái phải không phân biệt được); cùng tenant nhưng không được cấp ⇒ <code>403</code>; còn lại ⇒ <code>200</code>. Thứ tự quan trọng: một tài nguyên khác tenant phải trông giống hệt một cái thiếu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "statusFor({\"hasUser\":true,\"exists\":true,\"sameTenant\":true,\"granted\":true})",
+          "output": "200",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Combine \"missing\" and \"other tenant\" into the SAME 404 branch.|||Gộp \"thiếu\" và \"khác tenant\" vào CÙNG nhánh 404.",
+        "Only reach the 403 branch when the resource is in your tenant.|||Chỉ tới nhánh 403 khi tài nguyên trong tenant của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ctx = { hasUser, exists, sameTenant, granted } ⇒ 401 | 404 | 403 | 200 */\nfunction statusFor(ctx) {\n  // Write your solution here\n  return 200;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction statusFor(ctx) {\n  // ctx = { hasUser, exists, sameTenant, granted }. Map one request to an HTTP status.\n  if (!ctx.hasUser) return 401;                       // no session\n  if (!ctx.exists || !ctx.sameTenant) return 404;     // missing OR other tenant — indistinguishable\n  if (!ctx.granted) return 403;                        // same tenant, no grant — honest \"you cannot\"\n  return 200;                                          // allowed\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A cross-tenant resource and a missing one both answer 404, so existence never leaks; 403 is reserved for same-tenant no-grant (9.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Một tài nguyên khác tenant và một cái thiếu đều trả 404, nên sự tồn tại không bao giờ rò; 403 dành cho cùng-tenant-thiếu-quyền (9.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "allowed ⇒ 200",
+              "vi": "được phép ⇒ 200"
+            },
+            "goi": "statusFor({\"hasUser\":true,\"exists\":true,\"sameTenant\":true,\"granted\":true})",
+            "mongDoi": 200
+          },
+          {
+            "moTa": {
+              "en": "same tenant, no grant ⇒ 403",
+              "vi": "cùng tenant, không quyền ⇒ 403"
+            },
+            "goi": "statusFor({\"hasUser\":true,\"exists\":true,\"sameTenant\":true,\"granted\":false})",
+            "mongDoi": 403,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "other tenant ⇒ 404",
+              "vi": "tenant khác ⇒ 404"
+            },
+            "goi": "statusFor({\"hasUser\":true,\"exists\":true,\"sameTenant\":false,\"granted\":true})",
+            "mongDoi": 404,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "missing ⇒ 404 (same as other tenant)",
+              "vi": "thiếu ⇒ 404 (giống tenant khác)"
+            },
+            "goi": "statusFor({\"hasUser\":true,\"exists\":false,\"sameTenant\":true,\"granted\":true})",
+            "mongDoi": 404,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "no user ⇒ 401",
+              "vi": "không user ⇒ 401"
+            },
+            "goi": "statusFor({\"hasUser\":false,\"exists\":true,\"sameTenant\":true,\"granted\":true})",
+            "mongDoi": 401,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning 403 for a cross-tenant resource (leaking its existence).|||Trả 403 cho một tài nguyên khác tenant (lộ sự tồn tại)."
+        },
+        {
+          "loi": "Checking granted before the tenant, so a probe learns the id exists.|||Kiểm granted trước tenant, nên một cú dò biết id tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tenant boundary",
+          "vi": "ranh giới tenant"
+        },
+        {
+          "en": "404 not 403",
+          "vi": "404 không 403"
+        }
+      ]
+    },
+    {
+      "title": "9.4-3 — Request → status",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each request against An's FPT-HCM booking to the status the gate returns.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi yêu cầu lên lượt đặt FPT-HCM của An với mã cổng trả.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only one caller is in another tenant.|||Chỉ một người gọi ở tenant khác.",
+        "The other-tenant status matches a missing id.|||Mã khác-tenant khớp một id thiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.4-3 — Request → status\n\nAnswer in the answer panel (no code needed).\n\n1. Request → statusYêu cầu → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.4-3 — Request → status — answer key\n\n1. Request → statusYêu cầu → mã\n   - r1.q: 200\n   - r2.q: 403\n   - r3.q: 404\n   Owner 200; same-tenant-no-grant 403 (honest); other-tenant 404, identical to a missing id (9.4).VI: Chủ 200; cùng-tenant-thiếu-quyền 403 (trung thực); khác-tenant 404, giống hệt một id thiếu (9.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Owner 200; same-tenant-no-grant 403 (honest); other-tenant 404, identical to a missing id (9.4).</p><p><i>VI: Chủ 200; cùng-tenant-thiếu-quyền 403 (trung thực); khác-tenant 404, giống hệt một id thiếu (9.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → status</p><p style=\"opacity:.75;font-size:.92em\"><i>Yêu cầu → mã</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Caller"
+              },
+              {
+                "ma": "q",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "403",
+                  "404"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "An, the owner"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Binh, same tenant, not owner"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "a student from FPT HN"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "200",
+              "r2.q": "403",
+              "r3.q": "404"
+            },
+            "giaiThich": "<p>Owner 200; same-tenant-no-grant 403 (honest); other-tenant 404, identical to a missing id (9.4).</p><p><i>VI: Chủ 200; cùng-tenant-thiếu-quyền 403 (trung thực); khác-tenant 404, giống hệt một id thiếu (9.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the HN student a 403.|||Cho sinh viên HN một 403."
+        },
+        {
+          "loi": "Giving Binh a 404.|||Cho Bình một 404."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "403 vs 404",
+          "vi": "403 với 404"
+        }
+      ]
+    }
+  ]
+}

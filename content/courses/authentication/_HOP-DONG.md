@@ -379,4 +379,17 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   `{ ok, sub: usr_1, email }`; PKCE code + verifier SAI ⇒ `invalid_grant`; nonce sai ⇒ `bad_nonce`; aud sai ⇒ `bad_aud`;
   redirect_uri ngoài danh sách ⇒ HTTP 400 `invalid_redirect_uri` (KHÔNG redirect). Chuẩn: OAuth 2.1/RFC 9700, RFC 7636 (PKCE),
   OpenID Connect Core, RFC 8725. Môi trường: `auth2-pg` (4832); demo tự chạy client express :4810.
-- **TẠM DỪNG sau Ch8 ngày 04/11 (đang chạy liên tục Ch8→Ch10 theo yêu cầu chủ kênh); tiếp theo là Ch9** (phân quyền RBAC/ABAC/ReBAC, đa tenant, §11) — đang làm.
+- **04/11/2026 — Ch9 trọn:** 5 bài + Lab 9 (`auth-9-7-lab-can`, máy chấm `scripts/cham-lab-9.mjs` 6 phép 10 điểm đạt 7, hàm thuần —
+  không CSDL, không mạng) + quiz 10 câu (A3 B2 C3 D2, slug `auth-9-6-quiz`); depth-audit đạt (content-check 87 bài 0 lỗi); 6 deck 51 slide
+  AUTH/v1 (đã đẩy, 0 lỗi kiem-slide); Code Lab +6 module/18 đề (track 222 đề, 0 lỗi nội dung + 0 cảnh báo đáp-án-dài, máy chấm trình duyệt
+  920/920); liên kết chéo (api-design 6.2 ↔ 9.1/9.2/9.3/9.5, auth 6.4 ↔ 9.4 luật một-câu-trả-lời); video YouTube Lab 9 dùng tạm id 9.1,
+  credit rỗng (ĐỪNG bịa id). `_labflow-id` = v0.9 (phân quyền): `src/authz/policy.js` cổng duy nhất `can(user, action, resource)` gộp
+  RBAC (`ROLE_GRANTS`) + ABAC (sở hữu lượt đặt) + ReBAC (trưởng khoa của phòng), **tenant kiểm TRƯỚC mọi vai** + `explain()`;
+  `src/authz/gate.js` middleware `authorize(action, loadResource)` tự nạp tài nguyên ⇒ 401/404/403, **khác tenant = 404 giống hệt thiếu**
+  (chống dò, luật 6.4 ở cửa tài nguyên); `demo9/authz-matrix.mjs` (một câu hỏi, năm đáp án đúng) + `demo9/http-gate.mjs` (cổng thật HTTP :4812);
+  `test/authz.test.js` ⇒ npm test **48 pass**.
+  **Số đo thật (macOS arm64, Node 22.23.3, không CSDL, không mạng — hàm thuần + express :4812):** ma trận huỷ lượt đặt của An: chủ ALLOW (ABAC),
+  bạn cùng vai deny, trưởng khoa SE ALLOW (ReBAC), admin cùng tenant ALLOW (RBAC), admin FPT-HN deny (tenant trước); cổng HTTP: owner 200,
+  cùng-tenant-thiếu-quyền 403, sinh viên HN 404 = id không tồn tại 404; máy chấm Lab 9: tham-khảo 10/10, yếu (vai trước, thiếu tenant+ReBAC)
+  6,5/10, khởi đầu 1,5/10. Chuẩn: OWASP Top 10 A01 (Broken Access Control), NIST RBAC + ABAC (SP 800-162), Google Zanzibar (ReBAC).
+- **TẠM DỪNG sau Ch9 ngày 04/11 (đang chạy liên tục Ch8→Ch10 theo yêu cầu chủ kênh); tiếp theo là Ch10** (tấn công theo tần suất trên LabFlow ID: nhồi mật khẩu, relay phishing, cướp phiên, MFA fatigue, pre-hijacking, race — lỗ 6) — tiếp theo.

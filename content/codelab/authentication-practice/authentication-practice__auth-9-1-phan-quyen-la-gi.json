@@ -1,0 +1,363 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-9-1-phan-quyen-la-gi",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-9-1-phan-quyen-la-gi"
+  },
+  "exercises": [
+    {
+      "title": "9.1-1 — Where authentication ends",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.9 guards rooms and bookings across two tenants. This is authorization — a different job from the login.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.9 canh phòng và lượt đặt qua hai tenant. Đây là phân quyền — một việc khác với đăng nhập.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Authentication answers \"who?\"; authorization answers \"what may you do?\".|||Xác thực trả lời \"ai?\"; phân quyền trả lời \"được làm gì?\".",
+        "A missing check is the common face of Broken Access Control.|||Một phép kiểm thiếu là khuôn mặt phổ biến của Kiểm soát truy cập hỏng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.1-1 — Where authentication ends\n\nAnswer in the answer panel (no code needed).\n\n1. A route verifies the session, loads a booking by its id, and returns it — nothing else. What is the flaw?Một tuyến xác minh phiên, nạp một lượt đặt theo id, trả về — không gì khác. Lỗ hổng là gì?\n2. Why is \"deny by default\" the safe way to build the gate?Vì sao \"từ chối mặc định\" là cách an toàn để dựng cổng?\n3. Hiding the \"cancel\" button from students — is that authorization?Ẩn nút \"huỷ\" với sinh viên — đó có phải phân quyền không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.1-1 — Where authentication ends — answer key\n\n1. A route verifies the session, loads a booking by its id, and returns it — nothing else. What is the flaw?Một tuyến xác minh phiên, nạp một lượt đặt theo id, trả về — không gì khác. Lỗ hổng là gì?\n   Answer: b) An IDOR: authentication is fine but authorization is missing — change the id, read anyone's booking\n   Knowing WHO is calling is not knowing they MAY see this object; the missing ownership check is an IDOR — OWASP #1 (9.1).VI: Biết AI đang gọi không phải biết họ ĐƯỢC xem đối tượng này; thiếu phép kiểm sở hữu là một IDOR — OWASP #1 (9.1).\n\n2. Why is \"deny by default\" the safe way to build the gate?Vì sao \"từ chối mặc định\" là cách an toàn để dựng cổng?\n   Answer: d) A forgotten grant then fails CLOSED — an action nobody granted is denied to everyone\n   The decision starts at \"no\"; only a rule flips it to yes, so a new or forgotten action is forbidden, not silently allowed (9.1).VI: Quyết định bắt đầu ở \"không\"; chỉ một luật lật thành có, nên một hành động mới hay bị quên thì bị cấm, không âm thầm cho phép (9.1).\n\n3. Hiding the \"cancel\" button from students — is that authorization?Ẩn nút \"huỷ\" với sinh viên — đó có phải phân quyền không?\n   Answer: b) No — it is UI decoration; the API still answers curl, so the real check must be server-side\n   The API route answers curl, mobile apps and scripts that render no buttons; every rule in this chapter lives on the server (9.1).VI: Tuyến API trả lời curl, app di động và script không vẽ nút; mọi luật chương này sống ở máy chủ (9.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> An IDOR: authentication is fine but authorization is missing — change the id, read anyone's booking</p><p>Knowing WHO is calling is not knowing they MAY see this object; the missing ownership check is an IDOR — OWASP #1 (9.1).</p><p><i>VI: Biết AI đang gọi không phải biết họ ĐƯỢC xem đối tượng này; thiếu phép kiểm sở hữu là một IDOR — OWASP #1 (9.1).</i></p></li><li><p><b>d)</b> A forgotten grant then fails CLOSED — an action nobody granted is denied to everyone</p><p>The decision starts at \"no\"; only a rule flips it to yes, so a new or forgotten action is forbidden, not silently allowed (9.1).</p><p><i>VI: Quyết định bắt đầu ở \"không\"; chỉ một luật lật thành có, nên một hành động mới hay bị quên thì bị cấm, không âm thầm cho phép (9.1).</i></p></li><li><p><b>b)</b> No — it is UI decoration; the API still answers curl, so the real check must be server-side</p><p>The API route answers curl, mobile apps and scripts that render no buttons; every rule in this chapter lives on the server (9.1).</p><p><i>VI: Tuyến API trả lời curl, app di động và script không vẽ nút; mọi luật chương này sống ở máy chủ (9.1).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A route verifies the session, loads a booking by its id, and returns it — nothing else. What is the flaw?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tuyến xác minh phiên, nạp một lượt đặt theo id, trả về — không gì khác. Lỗ hổng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing is wrong once the session cookie is valid and signed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An IDOR: authentication is fine but authorization is missing — change the id, read anyone's booking"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The response is simply missing a caching header for performance"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The id in the URL should be encrypted so attackers cannot read it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Knowing WHO is calling is not knowing they MAY see this object; the missing ownership check is an IDOR — OWASP #1 (9.1).</p><p><i>VI: Biết AI đang gọi không phải biết họ ĐƯỢC xem đối tượng này; thiếu phép kiểm sở hữu là một IDOR — OWASP #1 (9.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is \"deny by default\" the safe way to build the gate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao \"từ chối mặc định\" là cách an toàn để dựng cổng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It lets administrators perform every action without any checks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It writes a log line for every request, which deters attackers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It computes the decision measurably faster than the alternatives"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A forgotten grant then fails CLOSED — an action nobody granted is denied to everyone"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The decision starts at \"no\"; only a rule flips it to yes, so a new or forgotten action is forbidden, not silently allowed (9.1).</p><p><i>VI: Quyết định bắt đầu ở \"không\"; chỉ một luật lật thành có, nên một hành động mới hay bị quên thì bị cấm, không âm thầm cho phép (9.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Hiding the \"cancel\" button from students — is that authorization?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ẩn nút \"huỷ\" với sinh viên — đó có phải phân quyền không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — but only because students can still see the button in the HTML"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — it is UI decoration; the API still answers curl, so the real check must be server-side"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — if the button is gone the action is impossible to perform"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — browsers enforce hidden controls for every connected client"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The API route answers curl, mobile apps and scripts that render no buttons; every rule in this chapter lives on the server (9.1).</p><p><i>VI: Tuyến API trả lời curl, app di động và script không vẽ nút; mọi luật chương này sống ở máy chủ (9.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a valid session is enough to return any object.|||Tưởng một phiên hợp lệ là đủ để trả bất kỳ đối tượng nào."
+        },
+        {
+          "loi": "Treating a hidden button as a security control.|||Coi một nút bị ẩn là một control bảo mật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IDOR",
+          "vi": "IDOR"
+        },
+        {
+          "en": "Broken Access Control",
+          "vi": "Kiểm soát truy cập hỏng"
+        }
+      ]
+    },
+    {
+      "title": "9.1-2 — Write allows(grants, action): deny by default",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> only if <code>grants</code> (an array of action strings) grants <code>action</code>: a <code>'*'</code> blanket grants everything, or the exact <code>action</code> appears in the list. Everything else — including an empty list or a non-array — is <code>false</code> (deny by default).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> chỉ khi <code>grants</code> (một mảng chuỗi hành động) cấp <code>action</code>: một tấm bao trọn <code>'*'</code> cấp mọi thứ, hoặc đúng <code>action</code> có trong danh sách. Còn lại — kể cả danh sách rỗng hay không phải mảng — là <code>false</code> (từ chối mặc định).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "allows([\"room:read\",\"booking:create\"], \"booking:create\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Array.prototype.includes answers both the \"*\" and the exact-match cases.|||Array.prototype.includes trả lời cả trường hợp \"*\" lẫn khớp chính xác.",
+        "Default the answer to false; only a rule makes it true.|||Để mặc định là false; chỉ một luật làm nó true."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if grants (array) grants action; deny by default */\nfunction allows(grants, action) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction allows(grants, action) {\n  // Deny by default: only a '*' blanket or an exact action in the list grants it.\n  if (!Array.isArray(grants)) return false;\n  return grants.includes('*') || grants.includes(action);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Deny by default means the function returns true only on an explicit match; a forgotten or unknown action falls through to false (9.1, 9.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Từ chối mặc định nghĩa là hàm chỉ trả true khi khớp rõ ràng; một hành động bị quên hay lạ rơi xuống false (9.1, 9.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "exact match ⇒ true",
+              "vi": "khớp chính xác ⇒ true"
+            },
+            "goi": "allows([\"room:read\",\"booking:create\"], \"booking:create\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "not granted ⇒ false",
+              "vi": "chưa cấp ⇒ false"
+            },
+            "goi": "allows([\"room:read\"], \"booking:cancel\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "blanket ⇒ true",
+              "vi": "bao trọn ⇒ true"
+            },
+            "goi": "allows([\"*\"], \"anything:at:all\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "empty ⇒ false",
+              "vi": "rỗng ⇒ false"
+            },
+            "goi": "allows([], \"booking:read\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning true for an unknown action (forgetting deny by default).|||Trả true cho một hành động lạ (quên từ chối mặc định)."
+        },
+        {
+          "loi": "Crashing when grants is not an array.|||Sập khi grants không phải mảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deny by default",
+          "vi": "từ chối mặc định"
+        }
+      ]
+    },
+    {
+      "title": "9.1-3 — Order the three structural rules",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the three rules as the lesson introduces them, from the base policy outward.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp ba luật theo thứ tự bài giới thiệu, từ chính sách gốc ra ngoài.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The safe baseline comes first.|||Mốc an toàn đến trước.",
+        "The resource rule needs the gate to exist.|||Luật tài nguyên cần cổng tồn tại trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.1-3 — Order the three structural rules\n\nAnswer in the answer panel (no code needed).\n\n1. Base → structureGốc → cấu trúc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.1-3 — Order the three structural rules — answer key\n\n1. Base → structureGốc → cấu trúc\n   Answer: m2) Deny by default — the answer starts at NO; a rule must flip it  →  m1) One gate — every decision goes through a single can(user, action, resource)  →  m3) Decide on the resource — may THIS user act on THIS booking in THIS tenant\n   Start from \"no\", funnel every decision through one gate, and decide on the resource, not just the role (9.1).VI: Bắt đầu từ \"không\", dồn mọi quyết định qua một cổng, và quyết định trên tài nguyên, không chỉ vai (9.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Start from \"no\", funnel every decision through one gate, and decide on the resource, not just the role (9.1).</p><p><i>VI: Bắt đầu từ \"không\", dồn mọi quyết định qua một cổng, và quyết định trên tài nguyên, không chỉ vai (9.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Base → structure</p><p style=\"opacity:.75;font-size:.92em\"><i>Gốc → cấu trúc</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "One gate — every decision goes through a single can(user, action, resource)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Deny by default — the answer starts at NO; a rule must flip it"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Decide on the resource — may THIS user act on THIS booking in THIS tenant"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Start from \"no\", funnel every decision through one gate, and decide on the resource, not just the role (9.1).</p><p><i>VI: Bắt đầu từ \"không\", dồn mọi quyết định qua một cổng, và quyết định trên tài nguyên, không chỉ vai (9.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting \"one gate\" before \"deny by default\".|||Đặt \"một cổng\" trước \"từ chối mặc định\"."
+        },
+        {
+          "loi": "Deciding on the role alone.|||Quyết định chỉ trên vai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "the gate",
+          "vi": "cổng"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # LabFlow ID — dự án xuyên khoá Authentication (cuongthai.com/courses/authentication)
 
 Dịch vụ danh tính của nền tảng LabFlow (cùng thế giới với LabFlow API của khoá API Design và LabFlow Lite của khoá Testing).
-Ảnh chụp này = **cuối Chương 8** (v0.8). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
+Ảnh chụp này = **cuối Chương 9** (v0.9). Hợp đồng soạn: `content/courses/authentication/_HOP-DONG.md`.
 
 Chương 4 thêm `src/jwt/` (base64url, keyring, sign, verify, jwks — EdDSA/HS256, 7 claim, JWKS + kid, xoay khoá; đối chiếu `jose` 6.1.0),
 `POST /token` + `/.well-known/jwks.json`, `demo4/`, `lab4/` + `scripts/cham-lab-4.mjs`, `test/jwt.test.js`.
@@ -19,12 +19,16 @@ DEPS MỚI: `@simplewebauthn/server`, `otplib` — chạy `npm ci` (ảnh chụp
 Chương 8 thêm `src/oidc/` (provider: discovery + authorize + token PKCE; client: begin + 7 phép; verify.js lõi thuần),
 `sql/006_oidc.sql` (bảng `oauth_clients`), tuyến `/.well-known/openid-configuration` + `/oauth/authorize` + `/oauth/token` trong
 `src/server.js`, `demo8/oidc-flow.mjs` (provider :4800 + client :4810 chạy thật, không trình duyệt), `lab8/` + `scripts/cham-lab-8.mjs` (Lab 8, 6 phép), `test/oidc.test.js`.
+Chương 9 thêm `src/authz/` (`policy.js`: cổng duy nhất `can(user, action, resource)` gộp RBAC `ROLE_GRANTS` + ABAC sở hữu + ReBAC trưởng khoa,
+tenant kiểm TRƯỚC + `explain()`; `gate.js`: middleware `authorize(action, loadResource)` tự nạp tài nguyên ⇒ 401/404/403, khác tenant = 404),
+`demo9/authz-matrix.mjs` (một câu hỏi, năm đáp án) + `demo9/http-gate.mjs` (cổng thật qua HTTP :4812, bốn kết cục), `lab9/` + `scripts/cham-lab-9.mjs`
+(Lab 9, 6 phép, đạt 7), `test/authz.test.js`. Thuần — không CSDL, không mạng.
 
 ```bash
 npm ci                                   # Node 22.12+ (khoá đo trên 22.23.3)
 mkdir -p wordlists && curl -sLo wordlists/10k-most-common.txt \
   https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10k-most-common.txt
-npm test                                 # 46 test: …+totp(4)+oidc(3) [7 phép ID token, PKCE] — không cần CSDL
+npm test                                 # 48 test: …+totp(4)+oidc(3)+authz(2) [can() + gate 404-không-403] — không cần CSDL
 node scripts/cham-lab-1.mjs src/crypto   # 10/10 · lab1/yeu 2/10 · lab1/starter 0/10
 node scripts/cham-lab-2.mjs src/passwords # 10/10 · lab2/yeu 3.5/10 · lab2/starter 0/10 (kho giả, không cần CSDL)
 node scripts/cham-lab-3.mjs src/sessions  # 10/10 · lab3/yeu 2/10 · lab3/starter 0/10 (cổng 4806/4807 + Chromium của Playwright)
@@ -33,13 +37,14 @@ node scripts/cham-lab-5.mjs lab5/tham-khao # 10/10 · lab5/yeu 3.5/10 · lab5/st
 node scripts/cham-lab-6.mjs lab6/tham-khao # 10/10 · lab6/yeu 3/10 · lab6/starter 0/10 (không cần CSDL — kho trong bộ nhớ + đồng hồ giả)
 node scripts/cham-lab-7.mjs lab7/tham-khao # 10/10 · lab7/yeu 5,5/10 · lab7/starter 0/10 (không cần CSDL — vector RFC 4226/6238)
 node scripts/cham-lab-8.mjs lab8/tham-khao # 10/10 · lab8/yeu 3/10 · lab8/starter 0/10 (không cần CSDL — 7 phép ID token)
+node scripts/cham-lab-9.mjs lab9/tham-khao # 10/10 · lab9/yeu 6,5/10 · lab9/starter 1,5/10 (không cần CSDL — can() RBAC/ABAC/ReBAC/tenant)
 
 # Từ Chương 2 máy chủ cần PostgreSQL 17:
 docker run -d --name labflow-id-pg -p 127.0.0.1:4832:5432 \
   -e POSTGRES_USER=labflow -e POSTGRES_PASSWORD=labflow-demo-pw -e POSTGRES_DB=labflow_id postgres:17
 export DATABASE_URL=postgres://labflow:labflow-demo-pw@127.0.0.1:4832/labflow_id
 npm run migrate && npm run seed          # users + sessions (002: hết hạn, last_seen, auth_at, ip/ua); An/Bình/Cô Lan bằng argon2id
-npm start                                # LabFlow ID v0.8 trên http://localhost:4800 (…+ OIDC provider: /oauth/authorize, /oauth/token, discovery)
+npm start                                # LabFlow ID v0.9 trên http://localhost:4800 (…+ OIDC provider: /oauth/authorize, /oauth/token, discovery)
 # demo3/where.mjs + redis-store.mjs cần Redis: docker run -d --name labflow-id-redis -p 127.0.0.1:4833:6379 redis:7
 ```
 

@@ -1,0 +1,396 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-9-2-rbac",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-9-2-rbac"
+  },
+  "exercises": [
+    {
+      "title": "9.2-1 — Roles grant actions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>RBAC: a user has a role, a role grants a fixed set of actions, kept in one ROLE_GRANTS table.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>RBAC: một người dùng có một vai, một vai cấp một tập hành động cố định, giữ trong một bảng ROLE_GRANTS.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The grant table is the single source of truth.|||Bảng quyền là nguồn sự thật duy nhất.",
+        "Deny by default makes forgotten grants safe.|||Từ chối mặc định làm các quyền bị quên an toàn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.2-1 — Roles grant actions\n\nAnswer in the answer panel (no code needed).\n\n1. Why name actions \"booking:create\", not \"the bookings page\"?Vì sao đặt tên hành động \"booking:create\", không phải \"trang lượt đặt\"?\n2. A teammate writes if (user.role === 'Admin') in one controller. Name the two separate problems.Một đồng đội viết if (user.role === 'Admin') trong một controller. Gọi tên hai vấn đề riêng.\n3. A brand-new action nobody added to any role — who may do it?Một hành động mới chưa ai thêm vào vai nào — ai được làm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.2-1 — Roles grant actions — answer key\n\n1. Why name actions \"booking:create\", not \"the bookings page\"?Vì sao đặt tên hành động \"booking:create\", không phải \"trang lượt đặt\"?\n   Answer: b) A page ties authorization to the UI; an action (verb on a resource) protects web, mobile and scripts alike\n   The API has no pages; naming the action protects every client, not just the web UI (9.2).VI: API không có trang; đặt tên hành động bảo vệ mọi client, không chỉ giao diện web (9.2).\n\n2. A teammate writes if (user.role === 'Admin') in one controller. Name the two separate problems.Một đồng đội viết if (user.role === 'Admin') trong một controller. Gọi tên hai vấn đề riêng.\n   Answer: a) It scatters the policy outside the one gate, and 'Admin' never matches the stored 'ADMIN' (case drift)\n   One is structural (policy belongs in one table/gate); one is a concrete case-mismatch bug — scattered role strings rot this way (9.2).VI: Một cái là cấu trúc (chính sách thuộc một bảng/cổng); một cái là lỗi lệch chữ hoa/thường — chuỗi vai rải rác mục ruỗng kiểu này (9.2).\n\n3. A brand-new action nobody added to any role — who may do it?Một hành động mới chưa ai thêm vào vai nào — ai được làm?\n   Answer: d) Nobody — the lookup finds no match and deny-by-default forbids it for everyone\n   can() returns true only on a match; an ungranted action falls through to false — a forgotten grant fails closed (9.2).VI: can() chỉ trả true khi khớp; một hành động chưa cấp rơi xuống false — một quyền bị quên hỏng đóng (9.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A page ties authorization to the UI; an action (verb on a resource) protects web, mobile and scripts alike</p><p>The API has no pages; naming the action protects every client, not just the web UI (9.2).</p><p><i>VI: API không có trang; đặt tên hành động bảo vệ mọi client, không chỉ giao diện web (9.2).</i></p></li><li><p><b>a)</b> It scatters the policy outside the one gate, and 'Admin' never matches the stored 'ADMIN' (case drift)</p><p>One is structural (policy belongs in one table/gate); one is a concrete case-mismatch bug — scattered role strings rot this way (9.2).</p><p><i>VI: Một cái là cấu trúc (chính sách thuộc một bảng/cổng); một cái là lỗi lệch chữ hoa/thường — chuỗi vai rải rác mục ruỗng kiểu này (9.2).</i></p></li><li><p><b>d)</b> Nobody — the lookup finds no match and deny-by-default forbids it for everyone</p><p>can() returns true only on a match; an ungranted action falls through to false — a forgotten grant fails closed (9.2).</p><p><i>VI: can() chỉ trả true khi khớp; một hành động chưa cấp rơi xuống false — một quyền bị quên hỏng đóng (9.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why name actions \"booking:create\", not \"the bookings page\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đặt tên hành động \"booking:create\", không phải \"trang lượt đặt\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A page name simply cannot be stored as a key in the ROLE_GRANTS object, whereas an action verb can be stored there"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A page ties authorization to the UI; an action (verb on a resource) protects web, mobile and scripts alike"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The Express framework forbids the word \"page\" from appearing anywhere inside a registered route definition"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Action names like booking:create are shorter strings, so the gate compares them measurably faster at runtime"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The API has no pages; naming the action protects every client, not just the web UI (9.2).</p><p><i>VI: API không có trang; đặt tên hành động bảo vệ mọi client, không chỉ giao diện web (9.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A teammate writes if (user.role === 'Admin') in one controller. Name the two separate problems.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đồng đội viết if (user.role === 'Admin') trong một controller. Gọi tên hai vấn đề riêng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It scatters the policy outside the one gate, and 'Admin' never matches the stored 'ADMIN' (case drift)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It needs a database index, and the role should be a number not a string"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is too slow, and it should be wrapped in a try/catch for safety"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is perfectly fine; role checks belong in each controller"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One is structural (policy belongs in one table/gate); one is a concrete case-mismatch bug — scattered role strings rot this way (9.2).</p><p><i>VI: Một cái là cấu trúc (chính sách thuộc một bảng/cổng); một cái là lỗi lệch chữ hoa/thường — chuỗi vai rải rác mục ruỗng kiểu này (9.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A brand-new action nobody added to any role — who may do it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một hành động mới chưa ai thêm vào vai nào — ai được làm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the user who wrote the code that added the action"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only ADMIN, because ADMIN can always do new things"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Everybody, until an admin explicitly forbids it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nobody — the lookup finds no match and deny-by-default forbids it for everyone"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>can() returns true only on a match; an ungranted action falls through to false — a forgotten grant fails closed (9.2).</p><p><i>VI: can() chỉ trả true khi khớp; một hành động chưa cấp rơi xuống false — một quyền bị quên hỏng đóng (9.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Naming permissions after UI pages.|||Đặt tên quyền theo trang giao diện."
+        },
+        {
+          "loi": "Scattering role-string checks through controllers.|||Rải phép kiểm chuỗi vai khắp controller."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RBAC",
+          "vi": "RBAC"
+        },
+        {
+          "en": "grant table",
+          "vi": "bảng quyền"
+        }
+      ]
+    },
+    {
+      "title": "9.2-2 — Write roleCan(role, action): the RBAC lookup",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Using the <code>ROLE_GRANTS</code> table below, return <code>true</code> if <code>role</code> grants <code>action</code>. <code>ADMIN</code> holds <code>'*'</code> (a blanket). An unknown role has no grants. This is pure RBAC — no tenant or ownership here.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng bảng <code>ROLE_GRANTS</code> dưới đây, trả <code>true</code> nếu <code>role</code> cấp <code>action</code>. <code>ADMIN</code> giữ <code>'*'</code> (bao trọn). Một vai lạ không có quyền. Đây là RBAC thuần — chưa có tenant hay sở hữu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "roleCan(\"STUDENT\", \"booking:create\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Look the role up in the table, default to an empty list.|||Tra vai trong bảng, mặc định một danh sách rỗng.",
+        "\"*\" is a blanket; check it before the exact action.|||\"*\" là bao trọn; kiểm nó trước hành động chính xác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ROLE_GRANTS = {\n  STUDENT: ['room:read', 'booking:read', 'booking:create'],\n  TEACHER: ['room:read', 'booking:read', 'booking:create'],\n  DEPT_HEAD: ['room:read', 'booking:read', 'booking:create', 'room:manage'],\n  ADMIN: ['*'],\n};\n/** ⇒ true if role grants action (RBAC) */\nfunction roleCan(role, action) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ROLE_GRANTS = {\n  STUDENT: ['room:read', 'booking:read', 'booking:create'],\n  TEACHER: ['room:read', 'booking:read', 'booking:create'],\n  DEPT_HEAD: ['room:read', 'booking:read', 'booking:create', 'room:manage'],\n  ADMIN: ['*'],\n};\n// Reference solution\nfunction roleCan(role, action) {\n  // RBAC lookup: the role's grant list, with '*' as a blanket. Unknown role ⇒ no grants ⇒ false.\n  const grants = ROLE_GRANTS[role] || [];\n  return grants.includes('*') || grants.includes(action);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RBAC is a lookup of the role's grant list; the one table is the single source of truth, and \"*\" is the ADMIN blanket (9.2).</p>",
+      "solutionExplanationHtmlVi": "<p>RBAC là một lần tra danh sách quyền của vai; một bảng là nguồn sự thật duy nhất, và \"*\" là tấm bao trọn của ADMIN (9.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "STUDENT may create ⇒ true",
+              "vi": "STUDENT được tạo ⇒ true"
+            },
+            "goi": "roleCan(\"STUDENT\", \"booking:create\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "STUDENT no room:manage ⇒ false",
+              "vi": "STUDENT không room:manage ⇒ false"
+            },
+            "goi": "roleCan(\"STUDENT\", \"room:manage\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "DEPT_HEAD may manage ⇒ true",
+              "vi": "DEPT_HEAD được quản lý ⇒ true"
+            },
+            "goi": "roleCan(\"DEPT_HEAD\", \"room:manage\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "ADMIN blanket ⇒ true",
+              "vi": "ADMIN bao trọn ⇒ true"
+            },
+            "goi": "roleCan(\"ADMIN\", \"booking:cancel\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown role ⇒ false",
+              "vi": "vai lạ ⇒ false"
+            },
+            "goi": "roleCan(\"GHOST\", \"room:read\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Crashing on an unknown role instead of returning false.|||Sập với một vai lạ thay vì trả false."
+        },
+        {
+          "loi": "Forgetting that ADMIN's \"*\" grants everything.|||Quên rằng \"*\" của ADMIN cấp mọi thứ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "role",
+          "vi": "vai"
+        },
+        {
+          "en": "action",
+          "vi": "hành động"
+        }
+      ]
+    },
+    {
+      "title": "9.2-3 — Role → what it adds",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each role to the capability it adds over a STUDENT.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi vai với khả năng nó thêm so với một STUDENT.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two roles share the same grants in this table.|||Hai vai cùng quyền trong bảng này.",
+        "ADMIN's blanket is still scoped to its tenant.|||Tấm bao trọn của ADMIN vẫn trong phạm vi tenant."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.2-3 — Role → what it adds\n\nAnswer in the answer panel (no code needed).\n\n1. Role → addsVai → thêm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 9.2-3 — Role → what it adds — answer key\n\n1. Role → addsVai → thêm\n   - r1.q: nothing beyond STUDENT\n   - r2.q: room:manage\n   - r3.q: a blanket (* within its tenant)\n   TEACHER and STUDENT share the same grants here; DEPT_HEAD adds room:manage; ADMIN is \"*\", still tenant-scoped (9.2).VI: TEACHER và STUDENT cùng quyền ở đây; DEPT_HEAD thêm room:manage; ADMIN là \"*\", vẫn trong phạm vi tenant (9.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TEACHER and STUDENT share the same grants here; DEPT_HEAD adds room:manage; ADMIN is \"*\", still tenant-scoped (9.2).</p><p><i>VI: TEACHER và STUDENT cùng quyền ở đây; DEPT_HEAD thêm room:manage; ADMIN là \"*\", vẫn trong phạm vi tenant (9.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Role → adds</p><p style=\"opacity:.75;font-size:.92em\"><i>Vai → thêm</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Role"
+              },
+              {
+                "ma": "q",
+                "ten": "Adds",
+                "luaChon": [
+                  "nothing beyond STUDENT",
+                  "room:manage",
+                  "a blanket (* within its tenant)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "TEACHER"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "DEPT_HEAD"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "ADMIN"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "nothing beyond STUDENT",
+              "r2.q": "room:manage",
+              "r3.q": "a blanket (* within its tenant)"
+            },
+            "giaiThich": "<p>TEACHER and STUDENT share the same grants here; DEPT_HEAD adds room:manage; ADMIN is \"*\", still tenant-scoped (9.2).</p><p><i>VI: TEACHER và STUDENT cùng quyền ở đây; DEPT_HEAD thêm room:manage; ADMIN là \"*\", vẫn trong phạm vi tenant (9.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a TEACHER can manage rooms.|||Tưởng một TEACHER quản lý được phòng."
+        },
+        {
+          "loi": "Thinking ADMIN crosses tenants.|||Tưởng ADMIN vượt tenant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "blanket grant",
+          "vi": "quyền bao trọn"
+        }
+      ]
+    }
+  ]
+}

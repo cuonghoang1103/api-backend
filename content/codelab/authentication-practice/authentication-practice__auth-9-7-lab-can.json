@@ -1,0 +1,385 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-9-7-lab-can",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-9-7-lab-can"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9-1 — The order is the lesson",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lab 9: write can() — tenant first, then RBAC, then ABAC ownership, then ReBAC dept head, else deny by default.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 9: viết can() — tenant trước, rồi RBAC, rồi sở hữu ABAC, rồi trưởng khoa ReBAC, không thì từ chối mặc định.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Tenant first means it is checked above even ADMIN.|||Tenant trước nghĩa là nó được kiểm trên cả ADMIN.",
+        "The yeu bug is about order, not a crash.|||Lỗi yếu là về thứ tự, không phải một cú sập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9-1 — The order is the lesson\n\nAnswer in the answer panel (no code needed).\n\n1. The \"yeu\" attempt checks the role first and the tenant never. It passes a one-tenant demo but scores 6.5/10. Why?Lần thử \"yếu\" kiểm vai trước và tenant thì không bao giờ. Nó qua demo một-tenant nhưng đạt 6,5/10. Vì sao?\n2. Why must the tenant check come BEFORE the RBAC check?Vì sao phép kiểm tenant phải tới TRƯỚC phép kiểm RBAC?\n3. What must a null user or resource produce?Một user hay resource null phải cho ra gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9-1 — The order is the lesson — answer key\n\n1. The \"yeu\" attempt checks the role first and the tenant never. It passes a one-tenant demo but scores 6.5/10. Why?Lần thử \"yếu\" kiểm vai trước và tenant thì không bao giờ. Nó qua demo một-tenant nhưng đạt 6,5/10. Vì sao?\n   Answer: c) An FPT-HN admin reaches an FPT-HCM booking (T3), and a dept head cannot cancel in their own dept (no ReBAC, T5)\n   The bug is a check in the wrong ORDER plus a missing model — invisible until a second tenant exists (Lab 9, 9.4).VI: Lỗi là một phép kiểm sai THỨ TỰ cộng một mô hình thiếu — vô hình cho tới khi có một tenant thứ hai (Lab 9, 9.4).\n\n2. Why must the tenant check come BEFORE the RBAC check?Vì sao phép kiểm tenant phải tới TRƯỚC phép kiểm RBAC?\n   Answer: d) So a cross-tenant ADMIN is denied before \"*\" is ever considered — the wall is above every grant\n   If the role ran first, an admin's \"*\" would grant access to another tenant's resource before the wall was checked (Lab 9, 9.4).VI: Nếu vai chạy trước, \"*\" của một admin sẽ cấp truy cập tài nguyên của tenant khác trước khi bức tường được kiểm (Lab 9, 9.4).\n\n3. What must a null user or resource produce?Một user hay resource null phải cho ra gì?\n   Answer: b) A safe false — never a crash\n   Guard the inputs first: a missing user or resource is a safe false, so malformed input never 500s (Lab 9).VI: Chặn đầu vào trước: một user hay resource thiếu là một false an toàn, nên đầu vào dị dạng không bao giờ 500 (Lab 9).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> An FPT-HN admin reaches an FPT-HCM booking (T3), and a dept head cannot cancel in their own dept (no ReBAC, T5)</p><p>The bug is a check in the wrong ORDER plus a missing model — invisible until a second tenant exists (Lab 9, 9.4).</p><p><i>VI: Lỗi là một phép kiểm sai THỨ TỰ cộng một mô hình thiếu — vô hình cho tới khi có một tenant thứ hai (Lab 9, 9.4).</i></p></li><li><p><b>d)</b> So a cross-tenant ADMIN is denied before \"*\" is ever considered — the wall is above every grant</p><p>If the role ran first, an admin's \"*\" would grant access to another tenant's resource before the wall was checked (Lab 9, 9.4).</p><p><i>VI: Nếu vai chạy trước, \"*\" của một admin sẽ cấp truy cập tài nguyên của tenant khác trước khi bức tường được kiểm (Lab 9, 9.4).</i></p></li><li><p><b>b)</b> A safe false — never a crash</p><p>Guard the inputs first: a missing user or resource is a safe false, so malformed input never 500s (Lab 9).</p><p><i>VI: Chặn đầu vào trước: một user hay resource thiếu là một false an toàn, nên đầu vào dị dạng không bao giờ 500 (Lab 9).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The \"yeu\" attempt checks the role first and the tenant never. It passes a one-tenant demo but scores 6.5/10. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần thử \"yếu\" kiểm vai trước và tenant thì không bao giờ. Nó qua demo một-tenant nhưng đạt 6,5/10. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It actually passes every check correctly; the 6.5 is just a rounding error in the way the grader totals points"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is simply too slow to evaluate and times out on the hidden cases that the grader runs only on submit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An FPT-HN admin reaches an FPT-HCM booking (T3), and a dept head cannot cancel in their own dept (no ReBAC, T5)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It throws an unhandled exception on every incoming request and crashes the grader before any check can run"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The bug is a check in the wrong ORDER plus a missing model — invisible until a second tenant exists (Lab 9, 9.4).</p><p><i>VI: Lỗi là một phép kiểm sai THỨ TỰ cộng một mô hình thiếu — vô hình cho tới khi có một tenant thứ hai (Lab 9, 9.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why must the tenant check come BEFORE the RBAC check?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao phép kiểm tenant phải tới TRƯỚC phép kiểm RBAC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because tenants are optional and roles are mandatory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because RBAC is slower and should run last for performance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "There is no reason; either order gives the same result"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So a cross-tenant ADMIN is denied before \"*\" is ever considered — the wall is above every grant"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>If the role ran first, an admin's \"*\" would grant access to another tenant's resource before the wall was checked (Lab 9, 9.4).</p><p><i>VI: Nếu vai chạy trước, \"*\" của một admin sẽ cấp truy cập tài nguyên của tenant khác trước khi bức tường được kiểm (Lab 9, 9.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What must a null user or resource produce?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một user hay resource null phải cho ra gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A thrown error so the caller knows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A safe false — never a crash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "true, to fail open for convenience"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 500 status code from the function"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Guard the inputs first: a missing user or resource is a safe false, so malformed input never 500s (Lab 9).</p><p><i>VI: Chặn đầu vào trước: một user hay resource thiếu là một false an toàn, nên đầu vào dị dạng không bao giờ 500 (Lab 9).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the role before the tenant.|||Kiểm vai trước tenant."
+        },
+        {
+          "loi": "Letting a null input throw.|||Để một đầu vào null ném lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deny by default",
+          "vi": "từ chối mặc định"
+        },
+        {
+          "en": "tenant boundary",
+          "vi": "ranh giới tenant"
+        }
+      ]
+    },
+    {
+      "title": "Lab 9-2 — Write can(user, action, resource): the whole gate",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Write LabFlow's one gate. In this order: a null <code>user</code> or <code>resource</code> ⇒ <code>false</code>; <b>tenant</b> — <code>resource.tenantId !== user.tenantId</code> ⇒ <code>false</code> (first, even for ADMIN); <b>RBAC</b> — <code>ROLE_GRANTS[user.role]</code> includes <code>'*'</code> or the action ⇒ <code>true</code>; <b>ABAC</b> — <code>'booking:cancel'</code> and <code>resource.ownerId === user.id</code> ⇒ <code>true</code>; <b>ReBAC</b> — <code>'booking:cancel'</code> and <code>DEPT_HEAD</code> and <code>resource.departmentId === user.departmentId</code> ⇒ <code>true</code>; otherwise <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết cổng duy nhất của LabFlow. Theo thứ tự: một <code>user</code> hay <code>resource</code> null ⇒ <code>false</code>; <b>tenant</b> — <code>resource.tenantId !== user.tenantId</code> ⇒ <code>false</code> (đầu tiên, kể cả với ADMIN); <b>RBAC</b> — <code>ROLE_GRANTS[user.role]</code> chứa <code>'*'</code> hoặc action ⇒ <code>true</code>; <b>ABAC</b> — <code>'booking:cancel'</code> và <code>resource.ownerId === user.id</code> ⇒ <code>true</code>; <b>ReBAC</b> — <code>'booking:cancel'</code> và <code>DEPT_HEAD</code> và <code>resource.departmentId === user.departmentId</code> ⇒ <code>true</code>; còn lại <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "can({\"id\":\"u1\",\"role\":\"STUDENT\",\"tenantId\":\"hcm\",\"departmentId\":\"se\"}, \"booking:create\", {\"tenantId\":\"hcm\",\"ownerId\":\"u9\",\"departmentId\":\"se\"})",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Return false on a null input before touching any property.|||Trả false với một đầu vào null trước khi chạm thuộc tính nào.",
+        "Put the tenant comparison before the role lookup.|||Đặt phép so tenant trước lần tra vai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ROLE_GRANTS = {\n  STUDENT: ['room:read', 'booking:read', 'booking:create'],\n  TEACHER: ['room:read', 'booking:read', 'booking:create'],\n  DEPT_HEAD: ['room:read', 'booking:read', 'booking:create', 'room:manage'],\n  ADMIN: ['*'],\n};\n/** ⇒ true if user may perform action on resource; deny by default, tenant first */\nfunction can(user, action, resource) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ROLE_GRANTS = {\n  STUDENT: ['room:read', 'booking:read', 'booking:create'],\n  TEACHER: ['room:read', 'booking:read', 'booking:create'],\n  DEPT_HEAD: ['room:read', 'booking:read', 'booking:create', 'room:manage'],\n  ADMIN: ['*'],\n};\n// Reference solution\nfunction can(user, action, resource) {\n  // The whole gate, in order. Tenant FIRST — even ADMIN never crosses it.\n  if (!user || !resource) return false;\n  if (resource.tenantId !== user.tenantId) return false;                                         // tenant boundary\n  const grants = ROLE_GRANTS[user.role] || [];\n  if (grants.includes('*') || grants.includes(action)) return true;                              // RBAC\n  if (action === 'booking:cancel' && resource.ownerId === user.id) return true;                  // ABAC\n  if (action === 'booking:cancel' && user.role === 'DEPT_HEAD' && resource.departmentId === user.departmentId) return true;  // ReBAC\n  return false;                                                                                  // deny by default\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>can() combines four models behind the tenant boundary; the order makes the wall sit above every grant, and deny-by-default closes the rest (Lab 9, 9.2–9.5).</p>",
+      "solutionExplanationHtmlVi": "<p>can() gộp bốn mô hình sau ranh giới tenant; thứ tự làm bức tường ở trên mọi quyền, và từ-chối-mặc-định đóng phần còn lại (Lab 9, 9.2–9.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "STUDENT create ⇒ true (RBAC)",
+              "vi": "STUDENT tạo ⇒ true (RBAC)"
+            },
+            "goi": "can({\"id\":\"u1\",\"role\":\"STUDENT\",\"tenantId\":\"hcm\",\"departmentId\":\"se\"}, \"booking:create\", {\"tenantId\":\"hcm\",\"ownerId\":\"u9\",\"departmentId\":\"se\"})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "owner cancel ⇒ true (ABAC)",
+              "vi": "chủ huỷ ⇒ true (ABAC)"
+            },
+            "goi": "can({\"id\":\"u1\",\"role\":\"STUDENT\",\"tenantId\":\"hcm\",\"departmentId\":\"se\"}, \"booking:cancel\", {\"tenantId\":\"hcm\",\"ownerId\":\"u1\",\"departmentId\":\"se\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "peer cancel ⇒ false",
+              "vi": "bạn cùng vai huỷ ⇒ false"
+            },
+            "goi": "can({\"id\":\"u2\",\"role\":\"STUDENT\",\"tenantId\":\"hcm\",\"departmentId\":\"se\"}, \"booking:cancel\", {\"tenantId\":\"hcm\",\"ownerId\":\"u1\",\"departmentId\":\"se\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "SE head ⇒ true (ReBAC)",
+              "vi": "trưởng SE ⇒ true (ReBAC)"
+            },
+            "goi": "can({\"id\":\"u9\",\"role\":\"DEPT_HEAD\",\"tenantId\":\"hcm\",\"departmentId\":\"se\"}, \"booking:cancel\", {\"tenantId\":\"hcm\",\"ownerId\":\"u1\",\"departmentId\":\"se\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "cross-tenant ADMIN ⇒ false (tenant first)",
+              "vi": "ADMIN khác tenant ⇒ false (tenant trước)"
+            },
+            "goi": "can({\"id\":\"u0\",\"role\":\"ADMIN\",\"tenantId\":\"hn\",\"departmentId\":null}, \"booking:cancel\", {\"tenantId\":\"hcm\",\"ownerId\":\"u1\",\"departmentId\":\"se\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "null user ⇒ false",
+              "vi": "user null ⇒ false"
+            },
+            "goi": "can(null, \"booking:read\", {\"tenantId\":\"hcm\",\"ownerId\":\"u1\",\"departmentId\":\"se\"})",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the role before the tenant (a cross-tenant admin then slips through).|||Kiểm vai trước tenant (một admin khác tenant lọt qua)."
+        },
+        {
+          "loi": "Letting any DEPT_HEAD cancel any booking, ignoring the department.|||Cho bất kỳ DEPT_HEAD nào huỷ bất kỳ lượt đặt nào, bỏ qua khoa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "the gate",
+          "vi": "cổng"
+        },
+        {
+          "en": "RBAC/ABAC/ReBAC",
+          "vi": "RBAC/ABAC/ReBAC"
+        }
+      ]
+    },
+    {
+      "title": "Lab 9-3 — Grade each attempt",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order these three can() attempts from the lowest grade to the highest.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp ba lần thử can() này từ điểm thấp nhất tới cao nhất.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The starter is the least correct.|||Bản khởi đầu ít đúng nhất.",
+        "The yeu attempt is close but fails the tenant and ReBAC checks.|||Lần thử yếu gần đạt nhưng trượt tenant và ReBAC."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9-3 — Grade each attempt\n\nAnswer in the answer panel (no code needed).\n\n1. Lowest → highestThấp → cao\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9-3 — Grade each attempt — answer key\n\n1. Lowest → highestThấp → cao\n   Answer: m2) The empty starter (returns true always) — 1.5/10  →  m1) The \"yeu\" attempt (role first, no tenant, no ReBAC) — 6.5/10  →  m3) The reference (tenant first, all four models) — 10/10\n   The starter grants everything; the yeu attempt leaks across tenants and misses ReBAC; the reference passes all six checks (Lab 9).VI: Bản khởi đầu cấp mọi thứ; lần thử yếu rò xuyên tenant và thiếu ReBAC; bản tham khảo qua cả sáu phép (Lab 9).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The starter grants everything; the yeu attempt leaks across tenants and misses ReBAC; the reference passes all six checks (Lab 9).</p><p><i>VI: Bản khởi đầu cấp mọi thứ; lần thử yếu rò xuyên tenant và thiếu ReBAC; bản tham khảo qua cả sáu phép (Lab 9).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Lowest → highest</p><p style=\"opacity:.75;font-size:.92em\"><i>Thấp → cao</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The \"yeu\" attempt (role first, no tenant, no ReBAC) — 6.5/10"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The empty starter (returns true always) — 1.5/10"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The reference (tenant first, all four models) — 10/10"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>The starter grants everything; the yeu attempt leaks across tenants and misses ReBAC; the reference passes all six checks (Lab 9).</p><p><i>VI: Bản khởi đầu cấp mọi thứ; lần thử yếu rò xuyên tenant và thiếu ReBAC; bản tham khảo qua cả sáu phép (Lab 9).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the yeu attempt passes (it is 6.5, below 7).|||Tưởng lần thử yếu đạt (nó 6,5, dưới 7)."
+        },
+        {
+          "loi": "Thinking the starter scores zero (it scores some partial points).|||Tưởng bản khởi đầu được 0 (nó được ít điểm lẻ)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pass = 7/10",
+          "vi": "đạt = 7/10"
+        }
+      ]
+    }
+  ]
+}

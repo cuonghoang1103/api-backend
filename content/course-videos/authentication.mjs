@@ -102,6 +102,7 @@ export default {
     'auth-9-3-abac-rebac': { yt: 'zFQHn1nk-uw', credit: 'Dipesh Malvia — Node js & Express Attribute Based Authorization Tutorial | How to Manage User Roles and Permission' },            // Node js & Express Attribute Based Authorization Tutorial
     'auth-9-4-nhieu-tenant': { yt: '7HHohzuh5Bs', credit: 'Djamware Tutorial — Authentication Role Permission API using Node Express MySQL' },          // Authentication Role Permission API using Node Express MySQL
     'auth-9-5-dat-phep-kiem-o-dau': { yt: 'tNnXLE1l9PI', credit: 'Evoqys — Node.js Admin Middleware: Role-Based Access Control with Prisma ORM | Mastering Authorization' },   // Node.js Admin Middleware: Role-Based Access Control
+    'auth-9-7-lab-can': { yt: 'qprypVZ6Pxo', credit: '' },  // 04/11/2026: Lab 9 (viết can() — một cổng RBAC/ABAC/ReBAC/tenant) — dùng tạm video Authorization 101 của 9.1 tới khi có bản ghi riêng; CHẠY verify-youtube-videos --fix-credits
 
     /* ── Chương 10 — Các đòn tấn công, theo thứ tự hay gặp ── */
     'auth-10-1-nhoi-tin-vat': { yt: 'DFANIs0CugI', credit: 'Imperva, a Thales Company — OWASP Automated Threats Explained - Credential Cracking | Credential Stuffing' },         // OWASP Automated Threats Explained - Credential Cracking | Credential Stuffing

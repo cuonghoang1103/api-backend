@@ -1508,6 +1508,11 @@ Keep-Alive: timeout=5
   <span class="lc-body"><span class="lc-title">A type is not a check — TypeScript 6.4: Generics in practice</span><span class="lc-sub">Same: putting a type on incoming data proves nothing — <code>parseJson&lt;User[]&gt;(body)</code> is as unchecked as trusting the body because it is typed. Different: there a Zod schema validates at runtime and returns a 400; the TypeScript lesson names the anti-pattern — a return-only generic is a cast in disguise — and the honest fix, return <code>unknown</code> and narrow with a guard.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-13-1-boundary-zod" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The schema that does the checking — TypeScript 13.1: The boundary problem & Zod</span><span class="lc-sub">Same: data from outside must be validated before use, and a type alone does not check it. Different: here a Zod schema is one definition that both validates at run time and infers the TypeScript type — reading an undeclared field is TS2339 and bad data throws, so the 400 you return in this API lesson has a schema behind it.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2125,6 +2130,11 @@ Keep-Alive: timeout=5
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Một cái kiểu không phải một phép kiểm — TypeScript 6.4: Generics thực chiến</span><span class="lc-sub">Giống: dán một cái kiểu lên dữ liệu đến không chứng minh gì — <code>parseJson&lt;User[]&gt;(body)</code> không được kiểm y như tin body vì nó có kiểu. Khác: ở đó một schema Zod kiểm lệ lúc chạy và trả 400; bài TypeScript gọi tên phản-khuôn-mẫu — một generic chỉ-trả-về là một phép ép kiểu trá hình — và cách sửa trung thực, trả <code>unknown</code> rồi narrow bằng một guard.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-13-1-boundary-zod" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cái schema làm việc kiểm — TypeScript 13.1: Vấn đề tại biên & Zod</span><span class="lc-sub">Giống: dữ liệu từ ngoài phải được validate trước khi dùng, và một cái kiểu một mình không kiểm nó. Khác: ở đây một schema Zod là một định nghĩa vừa validate lúc chạy vừa suy ra kiểu TypeScript — đọc một trường không khai là TS2339 và dữ liệu xấu ném, nên cái 400 bạn trả ở bài API này có một schema đứng sau.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

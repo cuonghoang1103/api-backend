@@ -404,6 +404,36 @@
       "name": "12.6 Lab 12 — A typed component & hook",
       "level": "ADVANCED",
       "description": "1 đề: Lab 12 — a typed BookingForm hook (CreateBooking + typed handlers)"
+    },
+    {
+      "slug": "typescript-13-1-boundary-zod",
+      "name": "13.1 — The boundary problem & Zod",
+      "level": "ADVANCED",
+      "description": "2 đề: Read a field the schema has · Validate at the boundary"
+    },
+    {
+      "slug": "typescript-13-2-parse-safeparse",
+      "name": "13.2 — parse vs safeParse",
+      "level": "ADVANCED",
+      "description": "2 đề: Narrow a safeParse result · Read the error on failure"
+    },
+    {
+      "slug": "typescript-13-3-schema-source-of-truth",
+      "name": "13.3 — Schema as the single source of truth",
+      "level": "ADVANCED",
+      "description": "2 đề: Derive the type, do not copy it · One schema, many functions"
+    },
+    {
+      "slug": "typescript-13-4-types-from-prisma",
+      "name": "13.4 — Types from Prisma",
+      "level": "ADVANCED",
+      "description": "2 đề: Do not set a server field · A lookup may miss"
+    },
+    {
+      "slug": "typescript-13-6-lab-schema-nguon-su-that",
+      "name": "13.6 Lab 13 — A schema as the single source of truth",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 13 — validate at the boundary (Zod schema + safeParse)"
     }
   ]
 }

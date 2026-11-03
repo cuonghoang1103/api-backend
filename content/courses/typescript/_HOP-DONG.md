@@ -372,7 +372,17 @@ typescript: 'typescript-practice',
   `demo12/` (demo mô hình React tự-chứa: props/TS2339+TS2741, useState setter/TS2345, nullable/TS18047, ChangeEvent/TS2339+TS2322, context null/TS18047, generic List). LabFlow TS: `npm test` giữ **60**.
   **4 cặp liên kết chéo hai chiều** (react `rx-1-2-props` ↔ 12.1 props có kiểu; `rx-2-1-use-state` ↔ 12.2 hook có kiểu; `rx-2-2-su-kien` ↔ 12.3 sự kiện có kiểu; `rx-5-1-context` ↔ 12.4 context có kiểu).
   Soạn MỘT phiên, KHÔNG fork; `git rev-parse HEAD` lại ngay trước commit-tree.
-- **⏸ Tiếp theo: Chương 13–16** (chờ chủ kênh soát Ch10–12 + gom deploy). Làm y Ch5–12: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
+- 04/11/2026 — **Chương 13 trọn** (thay placeholder cũ một tệp — placeholder dùng zod/@prisma/client với output CHƯA đo): 4 bài (slug giữ: 13.1 boundary-zod,
+  13.2 parse-safeparse, 13.3 schema-source-of-truth, 13.4 types-from-prisma) + Lab 13 (MỚI `typescript-13-6-lab-schema-nguon-su-that`) + quiz 10 câu (slug giữ `typescript-13-5-quiz`); tệp chương `s13-zod-prisma.mjs` soạn lại.
+  **KHÔNG cài zod/@prisma/client** — mô hình kiểu TỰ-CHỨA (`zod.ts`: z.object/string/number, parse/safeParse, `Infer`; `prisma.ts`: kiểu sinh Booking/CreateInput/findUnique), đúng dáng zod + Prisma, đo thật tsc 7.0.2 + Node 22.23.3 với @types/node (mọi demo chạy được).
+  5 deck / **33 slide** đẩy `TS/v1` (ts-13-1..4 mỗi cái 6, ts-lab-13 **9**; 0 lỗi kiem-slide). **9 đề Code Lab `ts`** (ts-cl-13-1 a–b, 13-2 a–b, 13-3 a–b, 13-4 a–b, ts-cl-lab-13; 10 sai mẫu)
+  — kiem-de-ts **177/177** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **10/10 đề ch13 xanh** (KHÔNG cần MA_THEM_TS6 — mã 2339/2741/2345/2322/2353/18047 khớp 6↔7); track +5 module (⇒ **71 module / 177 đề**).
+  Lab 13 (máy chấm `cham-lab-13.mjs`, chạy hàm THẬT): `createBooking(raw: unknown)` — schema Zod validate body, kiểu suy ra là `BookingInput` duy nhất, trả `{ success; data } | { success; error }`.
+  A biên dịch · B cách dùng đúng · C no any/as/! · D valid parse + invalid rejected · E 8 cách dùng sai. Số đo: any stub **5** · cast thay validate **7** · as thừa **9** · tham khảo **10**.
+  `demo13/` (demo mô hình Zod/Prisma tự-chứa: parse/infer TS2339, badinput ném, safeParse TS2339, drift TS2741, Prisma create TS2353, findUnique TS18047). LabFlow TS: `npm test` giữ **60**.
+  **2 cặp liên kết chéo hai chiều** (api-design `api-2-2-validation` ↔ 13.1 Zod validate ở biên; prisma-orm `pr-2-1-model-va-kieu` ↔ 13.4 kiểu sinh dùng ở biên).
+  Soạn MỘT phiên, KHÔNG fork; `git rev-parse HEAD` lại ngay trước commit-tree.
+- **⏸ Tiếp theo: Chương 14–16** (chờ chủ kênh soát + gom deploy). Làm y Ch5–13: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

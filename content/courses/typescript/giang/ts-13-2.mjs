@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 13.2 parse vs safeParse (deck ts-13-2, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-13-2', 'parse vs safeParse', 'parse so với safeParse', [
+  [1, 'parse vs safeParse',
+    `<p>A schema can fail, and there are two ways to handle that. <code>parse</code> throws on invalid data — good when a failure is exceptional. <code>safeParse</code> returns a result you must read — good when a failure is expected, like a form the user got wrong. The result is a discriminated union, so the compiler forces you to handle both outcomes.</p>`,
+    `<p>Một schema có thể thất bại, và có hai cách xử lý. <code>parse</code> ném khi dữ liệu không hợp lệ — tốt khi một thất bại là ngoại lệ. <code>safeParse</code> trả một kết quả bạn phải đọc — tốt khi một thất bại là chuyện dự kiến, như một form người dùng điền sai. Kết quả là một discriminated union, nên trình biên dịch buộc bạn xử lý cả hai kết cục.</p>`],
+  [2, 'safeParse returns a discriminated result',
+    `<p><code>safeParse</code> returns <code>{ success: true; data }</code> or <code>{ success: false; error }</code>. Narrow on <code>success</code>: on the true branch you reach <code>data</code> (the typed value), on the false branch you reach <code>error</code> (the issues). It is the Chapter 5 discriminated union again, this time tagging a validation outcome.</p>`,
+    `<p><code>safeParse</code> trả <code>{ success: true; data }</code> hoặc <code>{ success: false; error }</code>. Thu hẹp theo <code>success</code>: ở nhánh true bạn với tới <code>data</code> (giá trị có kiểu), ở nhánh false bạn với tới <code>error</code> (các issue). Lại là discriminated union của Chương 5, lần này gắn nhãn một kết cục validate.</p>`],
+  [3, 'You cannot read data without checking',
+    `<p>Read <code>result.data</code> without checking <code>result.success</code> and it is TS2339 — <code>data</code> does not exist on the failure branch. The compiler forces the narrowing: a form handler cannot reach the parsed value without having handled the invalid case first, so there is no path where bad data is silently used.</p>`,
+    `<p>Đọc <code>result.data</code> mà không kiểm <code>result.success</code> và nó là TS2339 — <code>data</code> không tồn tại ở nhánh thất bại. Trình biên dịch ép phép thu hẹp: một handler form không với tới giá trị đã parse mà chưa xử lý trường hợp không hợp lệ, nên không có đường nào dữ liệu xấu bị dùng âm thầm.</p>`],
+  [4, 'When to throw, when to return',
+    `<p>Use <code>parse</code> when invalid data should never happen and you want it to blow up loudly (config at startup, data you control). Use <code>safeParse</code> when invalid data is part of normal flow and you will show a message (user input, a third-party API). Both validate the same way; they differ only in how a failure is delivered.</p>`,
+    `<p>Dùng <code>parse</code> khi dữ liệu không hợp lệ không bao giờ nên xảy ra và bạn muốn nó nổ to tiếng (config lúc khởi động, dữ liệu bạn kiểm soát). Dùng <code>safeParse</code> khi dữ liệu không hợp lệ là một phần của luồng bình thường và bạn sẽ hiện một thông báo (đầu vào người dùng, một API bên thứ ba). Cả hai validate như nhau; chúng chỉ khác ở cách một thất bại được trao.</p>`],
+  [5, 'At a glance',
+    `<p><code>parse(unknown): T</code> throws; <code>safeParse(unknown)</code> returns <code>{ success: true; data } | { success: false; error }</code>. Narrow on <code>success</code> before reading <code>data</code> (unchecked is TS2339). Throw for the exceptional, return for the expected — the type makes the choice visible at every call site.</p>`,
+    `<p><code>parse(unknown): T</code> ném; <code>safeParse(unknown)</code> trả <code>{ success: true; data } | { success: false; error }</code>. Thu hẹp theo <code>success</code> trước khi đọc <code>data</code> (chưa kiểm là TS2339). Ném cho ngoại lệ, trả cho dự kiến — kiểu làm lựa chọn hiện rõ ở mọi chỗ gọi.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: a function reads <code>result.data.seats</code> without narrowing — TS2339; return <code>result.success ? result.data.seats : 0</code> and it runs. Next, 13.3: define the schema once and derive the type from it, so a hand-written copy can never drift.</p>`,
+    `<p>Luyện tập: một hàm đọc <code>result.data.seats</code> mà không thu hẹp — TS2339; trả <code>result.success ? result.data.seats : 0</code> và nó chạy. Tiếp, 13.3: định nghĩa schema một lần và suy kiểu từ nó, để một bản chép tay không bao giờ trôi.</p>`],
+]);

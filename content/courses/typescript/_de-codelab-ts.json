@@ -7633,5 +7633,407 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-13-1-a",
+    "bai": "typescript-13-1-boundary-zod",
+    "tieuDe": "Read a field the schema has|||Đọc một trường schema có",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>The schema has <code>lab</code> and <code>seats</code>, but the code reads <code>booking.name</code> on the inferred type (TS2339). Read a field the schema declares.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Schema có <code>lab</code> và <code>seats</code>, nhưng code đọc <code>booking.name</code> trên kiểu suy ra (TS2339). Đọc một trường schema khai.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/input.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = z.Infer<typeof BookingInput>;\nexport function label(raw: unknown): string {\n  const b: BookingInput = BookingInput.parse(raw);\n  // The schema has lab, not name.\n  return b.name;\n}\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/input.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label } from '../src/input.ts';\ntest('label reads a declared field', () => { assert.equal(label({ lab: 'BE-201', seats: 40 }), 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/input.ts",
+        "src/zod.ts",
+        "test/input.test.ts"
+      ],
+      "chay": [
+        "node --test test/input.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/input.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = z.Infer<typeof BookingInput>;\nexport function label(raw: unknown): string {\n  const b: BookingInput = BookingInput.parse(raw);\n  return b.lab;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads b.name (TS2339)",
+        "tep": {
+          "src/input.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = z.Infer<typeof BookingInput>;\nexport function label(raw: unknown): string { const b: BookingInput = BookingInput.parse(raw); return b.name; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-1-b",
+    "bai": "typescript-13-1-boundary-zod",
+    "tieuDe": "Validate at the boundary|||Validate ở biên",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>Build the schema so <code>parse</code> accepts a valid body and rejects an invalid one. The stub schema is missing <code>seats</code>, so a body with a string <code>seats</code> is wrongly accepted — add <code>seats: z.number()</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes (invalid data throws).</p>|||<p>Dựng schema để <code>parse</code> nhận một body hợp lệ và từ chối một body không hợp lệ. Schema stub thiếu <code>seats</code>, nên một body có <code>seats</code> là string bị nhận sai — thêm <code>seats: z.number()</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua (dữ liệu không hợp lệ ném).</p>",
+    "khoiDau": {
+      "src/input.ts": "import * as z from './zod.ts';\n// The schema is missing seats, so it does not validate it.\nexport const BookingInput = z.object({ lab: z.string() });\nexport function parse(raw: unknown) { return BookingInput.parse(raw); }\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/input.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parse } from '../src/input.ts';\ntest('valid body parses', () => { const b = parse({ lab: 'BE-201', seats: 40 }); assert.equal(b.seats, 40); });\ntest('a string seats is rejected', () => { assert.throws(() => parse({ lab: 'BE-201', seats: 'forty' })); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/input.ts",
+        "src/zod.ts",
+        "test/input.test.ts"
+      ],
+      "chay": [
+        "node --test test/input.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/input.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function parse(raw: unknown) { return BookingInput.parse(raw); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "schema still missing seats — the string-seats test fails (no throw) and b.seats is TS error",
+        "tep": {
+          "src/input.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string() });\nexport function parse(raw: unknown) { return BookingInput.parse(raw); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-2-a",
+    "bai": "typescript-13-2-parse-safeparse",
+    "tieuDe": "Narrow a safeParse result|||Thu hẹp một kết quả safeParse",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The result of <code>safeParse</code> is <code>{ success: true; data } | { success: false; error }</code>. Reading <code>result.data</code> without checking <code>result.success</code> is TS2339. Narrow first.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Kết quả của <code>safeParse</code> là <code>{ success: true; data } | { success: false; error }</code>. Đọc <code>result.data</code> mà không kiểm <code>result.success</code> là TS2339. Thu hẹp trước.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function labOrNone(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  // data is only on the success branch.\n  return result.data.lab;\n}\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/check.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labOrNone } from '../src/check.ts';\ntest('valid -> lab, invalid -> none', () => { assert.equal(labOrNone({ lab: 'BE-201', seats: 40 }), 'BE-201'); assert.equal(labOrNone({ lab: 1 }), 'none'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/check.ts",
+        "src/zod.ts",
+        "test/check.test.ts"
+      ],
+      "chay": [
+        "node --test test/check.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function labOrNone(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  return result.success ? result.data.lab : 'none';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads result.data without narrowing (TS2339)",
+        "tep": {
+          "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function labOrNone(raw: unknown): string { const result = BookingInput.safeParse(raw); return result.data.lab; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-2-b",
+    "bai": "typescript-13-2-parse-safeparse",
+    "tieuDe": "Read the error on failure|||Đọc error khi thất bại",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>On the failure branch you reach <code>error</code>, not <code>data</code>. The code reads <code>result.error</code> after confirming success — but <code>error</code> is only on the failure branch (TS2339). Return the first issue message when <code>!result.success</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Ở nhánh thất bại bạn với tới <code>error</code>, không phải <code>data</code>. Code đọc <code>result.error</code> sau khi xác nhận success — nhưng <code>error</code> chỉ ở nhánh thất bại (TS2339). Trả thông báo issue đầu khi <code>!result.success</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function problem(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  if (result.success) return '';\n  // error is on the failure branch — but this reads it after the wrong guard.\n  return result.data.lab;\n}\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/check.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { problem } from '../src/check.ts';\ntest('valid -> empty, invalid -> a message', () => { assert.equal(problem({ lab: 'BE-201', seats: 40 }), ''); assert.ok(problem({ lab: 1 }).length > 0); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/check.ts",
+        "src/zod.ts",
+        "test/check.test.ts"
+      ],
+      "chay": [
+        "node --test test/check.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function problem(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  if (result.success) return '';\n  return result.error.issues[0]?.message ?? 'invalid';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads result.data on the failure branch (TS2339)",
+        "tep": {
+          "src/check.ts": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function problem(raw: unknown): string { const result = BookingInput.safeParse(raw); if (result.success) return ''; return result.data.lab; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-3-a",
+    "bai": "typescript-13-3-schema-source-of-truth",
+    "tieuDe": "Derive the type, do not copy it|||Suy kiểu, đừng chép",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>A hand-written type claims a <code>purpose</code> the schema never had, so assigning the parsed value to it is TS2741. Derive the type with <code>z.Infer</code> instead, so it is always in step with the schema.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một kiểu viết tay đòi một <code>purpose</code> schema không có, nên gán giá trị đã parse cho nó là TS2741. Suy kiểu bằng <code>z.Infer</code> thay vào đó, để nó luôn khớp schema.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\n// A hand-written type that drifted from the schema.\ntype BookingInput = { lab: string; seats: number; purpose: string };\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parse } from '../src/model.ts';\ntest('parse returns the schema shape', () => { const b = parse({ lab: 'BE-201', seats: 40 }); assert.equal(b.lab, 'BE-201'); assert.equal(b.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/model.ts",
+        "src/zod.ts",
+        "test/model.test.ts"
+      ],
+      "chay": [
+        "node --test test/model.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = z.Infer<typeof BookingInput>;\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "keeps the drifted hand-written type (TS2741)",
+        "tep": {
+          "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = { lab: string; seats: number; purpose: string };\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-3-b",
+    "bai": "typescript-13-3-schema-source-of-truth",
+    "tieuDe": "One schema, many functions|||Một schema, nhiều hàm",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>The schema gained a <code>seats</code> field, but a hand-written type used by a function was not updated, so it is missing <code>seats</code> (TS2741 when the parsed value is returned). Replace the hand-written type with <code>z.Infer</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Schema có thêm một trường <code>seats</code>, nhưng một kiểu viết tay mà một hàm dùng không được cập nhật, nên nó thiếu <code>seats</code> (TS2741 khi trả giá trị đã parse). Thay kiểu viết tay bằng <code>z.Infer</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\n// Stale copy: the schema has seats, this type does not.\ntype BookingInput = { lab: string };\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "test/model.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parse } from '../src/model.ts';\ntest('parse returns lab and seats', () => { const b = parse({ lab: 'BE-201', seats: 40 }); assert.equal(b.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/model.ts",
+        "src/zod.ts",
+        "test/model.test.ts"
+      ],
+      "chay": [
+        "node --test test/model.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = z.Infer<typeof BookingInput>;\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "keeps the stale { lab } type — seats is missing and the test fails",
+        "tep": {
+          "src/model.ts": "import * as z from './zod.ts';\nexport const BookingInput = z.object({ lab: z.string(), seats: z.number() });\ntype BookingInput = { lab: string };\nexport function parse(raw: unknown): BookingInput { return BookingInput.parse(raw); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-4-a",
+    "bai": "typescript-13-4-types-from-prisma",
+    "tieuDe": "Do not set a server field|||Đừng đặt trường của server",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>BookingCreateInput</code> has no <code>id</code> — the database assigns it. The code passes <code>id</code> into <code>create</code> (TS2353). Pass only the fields the client owns.</p><p><strong>Done when:</strong> tsc clean (src + kiem/dung.ts).</p>|||<p><code>BookingCreateInput</code> không có <code>id</code> — CSDL gán nó. Code truyền <code>id</code> vào <code>create</code> (TS2353). Chỉ truyền các trường client sở hữu.</p><p><strong>Đạt khi:</strong> tsc sạch (src + kiem/dung.ts).</p>",
+    "khoiDau": {
+      "src/repo.ts": "import type { PrismaClient, Booking } from './prisma.ts';\nexport async function makeBooking(db: PrismaClient): Promise<Booking> {\n  // id is server-owned — BookingCreateInput does not accept it.\n  return db.booking.create({ data: { lab: 'BE-201', seats: 40, id: 1 } });\n}\n"
+    },
+    "coDinh": {
+      "src/prisma.ts": "export type Booking = { id: number; lab: string; seats: number; createdAt: string };\nexport type BookingCreateInput = { lab: string; seats: number };\nexport interface BookingDelegate {\n  create(args: { data: BookingCreateInput }): Promise<Booking>;\n  findUnique(args: { where: { id: number } }): Promise<Booking | null>;\n}\nexport type PrismaClient = { booking: BookingDelegate };\n",
+      "kiem/dung.ts": "import type { PrismaClient } from '../src/prisma.ts';\nimport { makeBooking } from '../src/repo.ts';\nexport async function call(db: PrismaClient) { return makeBooking(db); }\n",
+      "test/repo.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport type { PrismaClient } from '../src/prisma.ts';\nimport { makeBooking } from '../src/repo.ts';\nconst db: PrismaClient = { booking: { create: async ({ data }) => ({ id: 1, lab: data.lab, seats: data.seats, createdAt: 'now' }), findUnique: async () => null } };\ntest('makeBooking creates with the client fields', async () => { const b = await makeBooking(db); assert.equal(b.lab, 'BE-201'); assert.equal(b.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/repo.ts",
+        "src/prisma.ts",
+        "kiem/dung.ts"
+      ],
+      "chay": [
+        "node --test test/repo.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/repo.ts": "import type { PrismaClient, Booking } from './prisma.ts';\nexport async function makeBooking(db: PrismaClient): Promise<Booking> {\n  return db.booking.create({ data: { lab: 'BE-201', seats: 40 } });\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still passes id into create (TS2353)",
+        "tep": {
+          "src/repo.ts": "import type { PrismaClient, Booking } from './prisma.ts';\nexport async function makeBooking(db: PrismaClient): Promise<Booking> { return db.booking.create({ data: { lab: 'BE-201', seats: 40, id: 1 } }); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-13-4-b",
+    "bai": "typescript-13-4-types-from-prisma",
+    "tieuDe": "A lookup may miss|||Một lookup có thể trượt",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p><code>findUnique</code> returns <code>Booking | null</code>, so reading <code>row.seats</code> without checking is TS18047. Narrow the null case and return a fallback.</p><p><strong>Done when:</strong> tsc clean (src + kiem/dung.ts).</p>|||<p><code>findUnique</code> trả <code>Booking | null</code>, nên đọc <code>row.seats</code> mà không kiểm là TS18047. Thu hẹp trường hợp null và trả một giá trị dự phòng.</p><p><strong>Đạt khi:</strong> tsc sạch (src + kiem/dung.ts).</p>",
+    "khoiDau": {
+      "src/repo.ts": "import type { PrismaClient } from './prisma.ts';\nexport async function seatsOf(db: PrismaClient, id: number): Promise<number> {\n  const row = await db.booking.findUnique({ where: { id } });\n  // row may be null.\n  return row.seats;\n}\n"
+    },
+    "coDinh": {
+      "src/prisma.ts": "export type Booking = { id: number; lab: string; seats: number; createdAt: string };\nexport type BookingCreateInput = { lab: string; seats: number };\nexport interface BookingDelegate {\n  create(args: { data: BookingCreateInput }): Promise<Booking>;\n  findUnique(args: { where: { id: number } }): Promise<Booking | null>;\n}\nexport type PrismaClient = { booking: BookingDelegate };\n",
+      "kiem/dung.ts": "import type { PrismaClient } from '../src/prisma.ts';\nimport { seatsOf } from '../src/repo.ts';\nexport async function call(db: PrismaClient) { return seatsOf(db, 1); }\n",
+      "test/repo.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport type { PrismaClient } from '../src/prisma.ts';\nimport { seatsOf } from '../src/repo.ts';\nconst mk = (found: boolean): PrismaClient => ({ booking: { create: async ({ data }) => ({ id: 1, lab: data.lab, seats: data.seats, createdAt: 'now' }), findUnique: async () => (found ? { id: 1, lab: 'BE-201', seats: 40, createdAt: 'now' } : null) } });\ntest('missing -> 0, found -> seats', async () => { assert.equal(await seatsOf(mk(false), 1), 0); assert.equal(await seatsOf(mk(true), 1), 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/repo.ts",
+        "src/prisma.ts",
+        "kiem/dung.ts"
+      ],
+      "chay": [
+        "node --test test/repo.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/repo.ts": "import type { PrismaClient } from './prisma.ts';\nexport async function seatsOf(db: PrismaClient, id: number): Promise<number> {\n  const row = await db.booking.findUnique({ where: { id } });\n  return row === null ? 0 : row.seats;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads row.seats without narrowing (TS18047)",
+        "tep": {
+          "src/repo.ts": "import type { PrismaClient } from './prisma.ts';\nexport async function seatsOf(db: PrismaClient, id: number): Promise<number> { const row = await db.booking.findUnique({ where: { id } }); return row.seats; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-13",
+    "bai": "typescript-13-6-lab-schema-nguon-su-that",
+    "tieuDe": "Lab 13 — validate at the boundary|||Lab 13 — validate ở biên",
+    "doKho": "HARD",
+    "phut": 20,
+    "moTa": "<p>The lab in miniature. Build <code>BookingInput = object({ lab: string(), seats: number() })</code>, derive the type with <code>Infer</code>, and write <code>createBooking(raw)</code> that <code>safeParse</code>s and returns <code>{ success: true; data } | { success: false; error }</code>. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test green.</p>|||<p>Lab thu nhỏ. Dựng <code>BookingInput = object({ lab: string(), seats: number() })</code>, suy kiểu bằng <code>Infer</code>, và viết <code>createBooking(raw)</code> dùng <code>safeParse</code> và trả <code>{ success: true; data } | { success: false; error }</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/schema.ts": "import { object, string, number } from './zod.ts';\n\n// A teammate stubbed the type with any and trusts the input.\nexport type BookingInput = any;\nexport type Created = { success: true; data: BookingInput } | { success: false; error: string };\n\nexport function createBooking(raw: any): Created {\n  return { success: true, data: raw };\n}\n"
+    },
+    "coDinh": {
+      "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+      "kiem/dung.ts": "import type { BookingInput, Created } from '../src/schema.ts';\nimport { createBooking } from '../src/schema.ts';\nconst b: BookingInput = { lab: 'BE-201', seats: 40 };\nconst ok: Created = { success: true, data: b };\nconst r = createBooking({ lab: 'BE-201', seats: 40 });\nexport const lab: string = r.success ? r.data.lab : 'none';\nexport { b, ok };\n",
+      "kiem/sai.ts": "import type { BookingInput, Created } from '../src/schema.ts';\nimport { createBooking } from '../src/schema.ts';\nexport const s1: BookingInput = { lab: 'BE-201' }; // expect TS2741\nexport const s2: BookingInput = { lab: 'BE-201', seats: 40, purpose: 'x' }; // expect TS2353\nexport const s3: BookingInput = { lab: 'BE-201', seats: 'forty' }; // expect TS2322\nexport const s4: string = createBooking({}).data.lab; // expect TS2339\nexport const s5: Created = { success: true }; // expect TS2322\n",
+      "test/schema.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking } from '../src/schema.ts';\ntest('valid parses, invalid is rejected', () => { const a = createBooking({ lab: 'BE-201', seats: 40 }); assert.equal(a.success, true); if (a.success) assert.equal(a.data.lab, 'BE-201'); const b = createBooking({ lab: 'BE-201', seats: 'x' }); assert.equal(b.success, false); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/schema.ts",
+        "src/zod.ts",
+        "kiem/dung.ts",
+        "test/schema.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/schema.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/schema.ts": "import { object, string, number, type Infer } from './zod.ts';\n\nexport const BookingInput = object({ lab: string(), seats: number() });\nexport type BookingInput = Infer<typeof BookingInput>;\nexport type Created = { success: true; data: BookingInput } | { success: false; error: string };\n\nexport function createBooking(raw: unknown): Created {\n  const result = BookingInput.safeParse(raw);\n  if (!result.success) return { success: false, error: result.error.issues[0]?.message ?? 'invalid' };\n  return { success: true, data: result.data };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any stub kept — wrong uses slip and invalid data is trusted",
+        "tep": {
+          "src/schema.ts": "import { object, string, number } from './zod.ts';\nexport type BookingInput = any;\nexport type Created = { success: true; data: BookingInput } | { success: false; error: string };\nexport function createBooking(raw: any): Created { return { success: true, data: raw }; }\n"
+        }
+      },
+      {
+        "nhan": "casts instead of validating — the invalid-body test fails",
+        "tep": {
+          "src/schema.ts": "import { object, string, number, type Infer } from './zod.ts';\nexport const BookingInput = object({ lab: string(), seats: number() });\nexport type BookingInput = Infer<typeof BookingInput>;\nexport type Created = { success: true; data: BookingInput } | { success: false; error: string };\nexport function createBooking(raw: unknown): Created { return { success: true, data: raw as BookingInput }; }\n"
+        }
+      }
+    ]
   }
 ]

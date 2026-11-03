@@ -1,0 +1,282 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-13-2-parse-safeparse",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-13-2-parse-safeparse"
+  },
+  "exercises": [
+    {
+      "title": "Narrow a safeParse result",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-13-2-parse-safeparse"
+      ],
+      "problemHtml": "<p>The result of <code>safeParse</code> is <code>{ success: true; data } | { success: false; error }</code>. Reading <code>result.data</code> without checking <code>result.success</code> is TS2339. Narrow first.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/check.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/check.ts</code>, <code>src/zod.ts</code>, <code>test/check.test.ts</code>.</li>\n  <li><code>node --test test/check.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kết quả của <code>safeParse</code> là <code>{ success: true; data } | { success: false; error }</code>. Đọc <code>result.data</code> mà không kiểm <code>result.success</code> là TS2339. Thu hẹp trước.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/check.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/check.ts</code>, <code>src/zod.ts</code>, <code>test/check.test.ts</code>.</li>\n  <li><code>node --test test/check.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/check.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/check.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/check.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/check.ts",
+          "language": "typescript",
+          "code": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function labOrNone(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  // data is only on the success branch.\n  return result.data.lab;\n}\n"
+        },
+        {
+          "name": "src/zod.ts",
+          "language": "typescript",
+          "code": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n"
+        },
+        {
+          "name": "test/check.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labOrNone } from '../src/check.ts';\ntest('valid -> lab, invalid -> none', () => { assert.equal(labOrNone({ lab: 'BE-201', seats: 40 }), 'BE-201'); assert.equal(labOrNone({ lab: 1 }), 'none'); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/check.ts",
+          "language": "typescript",
+          "code": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function labOrNone(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  return result.success ? result.data.lab : 'none';\n}\n"
+        },
+        {
+          "name": "src/zod.ts",
+          "language": "typescript",
+          "code": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n"
+        },
+        {
+          "name": "test/check.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labOrNone } from '../src/check.ts';\ntest('valid -> lab, invalid -> none', () => { assert.equal(labOrNone({ lab: 'BE-201', seats: 40 }), 'BE-201'); assert.equal(labOrNone({ lab: 1 }), 'none'); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — reads result.data without narrowing (TS2339) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — reads result.data without narrowing (TS2339) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+          "test/check.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { labOrNone } from '../src/check.ts';\ntest('valid -> lab, invalid -> none', () => { assert.equal(labOrNone({ lab: 'BE-201', seats: 40 }), 'BE-201'); assert.equal(labOrNone({ lab: 1 }), 'none'); });\n"
+        },
+        "tepHoc": [
+          "src/check.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/check.ts",
+              "src/zod.ts",
+              "test/check.test.ts"
+            ],
+            "moTa": "tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/check.test.ts",
+            "moTa": "node --test test/check.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "reads result.data without narrowing (TS2339) — caught by: tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors; node --test test/check.test.ts exits 0|||reads result.data without narrowing (TS2339) — máy chấm bắt ở: tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors; node --test test/check.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Read the error on failure",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-13-2-parse-safeparse"
+      ],
+      "problemHtml": "<p>On the failure branch you reach <code>error</code>, not <code>data</code>. The code reads <code>result.error</code> after confirming success — but <code>error</code> is only on the failure branch (TS2339). Return the first issue message when <code>!result.success</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/check.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/check.ts</code>, <code>src/zod.ts</code>, <code>test/check.test.ts</code>.</li>\n  <li><code>node --test test/check.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ở nhánh thất bại bạn với tới <code>error</code>, không phải <code>data</code>. Code đọc <code>result.error</code> sau khi xác nhận success — nhưng <code>error</code> chỉ ở nhánh thất bại (TS2339). Trả thông báo issue đầu khi <code>!result.success</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/check.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/check.ts</code>, <code>src/zod.ts</code>, <code>test/check.test.ts</code>.</li>\n  <li><code>node --test test/check.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/check.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/check.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/check.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/check.ts",
+          "language": "typescript",
+          "code": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function problem(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  if (result.success) return '';\n  // error is on the failure branch — but this reads it after the wrong guard.\n  return result.data.lab;\n}\n"
+        },
+        {
+          "name": "src/zod.ts",
+          "language": "typescript",
+          "code": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n"
+        },
+        {
+          "name": "test/check.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { problem } from '../src/check.ts';\ntest('valid -> empty, invalid -> a message', () => { assert.equal(problem({ lab: 'BE-201', seats: 40 }), ''); assert.ok(problem({ lab: 1 }).length > 0); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/check.ts",
+          "language": "typescript",
+          "code": "import * as z from './zod.ts';\nconst BookingInput = z.object({ lab: z.string(), seats: z.number() });\nexport function problem(raw: unknown): string {\n  const result = BookingInput.safeParse(raw);\n  if (result.success) return '';\n  return result.error.issues[0]?.message ?? 'invalid';\n}\n"
+        },
+        {
+          "name": "src/zod.ts",
+          "language": "typescript",
+          "code": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n"
+        },
+        {
+          "name": "test/check.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { problem } from '../src/check.ts';\ntest('valid -> empty, invalid -> a message', () => { assert.equal(problem({ lab: 'BE-201', seats: 40 }), ''); assert.ok(problem({ lab: 1 }).length > 0); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — reads result.data on the failure branch (TS2339) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — reads result.data on the failure branch (TS2339) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/zod.ts": "export type ZodIssue = { path: string[]; message: string };\nexport type ZodError = { issues: ZodIssue[] };\nexport type SafeResult<T> = { success: true; data: T } | { success: false; error: ZodError };\nexport interface Schema<T> {\n  parse(input: unknown): T;\n  safeParse(input: unknown): SafeResult<T>;\n}\nexport type Infer<S> = S extends Schema<infer T> ? T : never;\nfunction make<T>(check: (input: unknown) => T): Schema<T> {\n  return {\n    parse(input) { return check(input); },\n    safeParse(input) {\n      try { return { success: true, data: check(input) }; }\n      catch (e) { return { success: false, error: { issues: [{ path: [], message: (e as Error).message }] } }; }\n    },\n  };\n}\nexport function string(): Schema<string> {\n  return make((i) => { if (typeof i !== 'string') throw new Error('expected string'); return i; });\n}\nexport function number(): Schema<number> {\n  return make((i) => { if (typeof i !== 'number') throw new Error('expected number'); return i; });\n}\ntype Shape = Record<string, Schema<unknown>>;\ntype Output<T extends Shape> = { [K in keyof T]: Infer<T[K]> };\nexport function object<T extends Shape>(shape: T): Schema<Output<T>> {\n  return make((i) => {\n    if (typeof i !== 'object' || i === null) throw new Error('expected object');\n    const row = i as Record<string, unknown>;\n    const out: Record<string, unknown> = {};\n    for (const [key, schema] of Object.entries(shape)) out[key] = schema.parse(row[key]);\n    return out as Output<T>;\n  });\n}\n",
+          "test/check.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { problem } from '../src/check.ts';\ntest('valid -> empty, invalid -> a message', () => { assert.equal(problem({ lab: 'BE-201', seats: 40 }), ''); assert.ok(problem({ lab: 1 }).length > 0); });\n"
+        },
+        "tepHoc": [
+          "src/check.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/check.ts",
+              "src/zod.ts",
+              "test/check.test.ts"
+            ],
+            "moTa": "tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/check.test.ts",
+            "moTa": "node --test test/check.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "reads result.data on the failure branch (TS2339) — caught by: tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors; node --test test/check.test.ts exits 0|||reads result.data on the failure branch (TS2339) — máy chấm bắt ở: tsc (strict): src/check.ts + src/check.ts, src/zod.ts, test/check.test.ts compile with 0 errors; node --test test/check.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

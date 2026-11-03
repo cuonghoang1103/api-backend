@@ -172,6 +172,11 @@ error: Error validating model "Post": At most one field must be marked as the id
 <a class="link-card" href="https://www.postgresql.org/docs/current/datatype-numeric.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — numeric types</span><span class="lc-sub">postgresql.org · The primary source on NUMERIC versus DOUBLE PRECISION, and why the money answer is not a matter of taste</span></span></a>
 <a class="link-card" href="/courses/postgresql/learn${REF}"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">CuongThai course — PostgreSQL, data types chapter</span><span class="lc-sub">The same types from the database side, with the storage sizes and the operators each one supports</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Pick the right scalar type for twelve real columns, then justify each against the SQL it generates</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-13-4-types-from-prisma" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">These types, used at the boundary — TypeScript 13.4: Types from Prisma</span><span class="lc-sub">Same: a model in the schema generates a TypeScript type you use without writing it. Different: there you see how a field’s scalar type becomes a TS type; the TypeScript chapter uses the generated types at the edge — passing a server-owned <code>id</code> to <code>create</code> is TS2353 and a <code>findUnique</code> that may miss is <code>T | null</code> (TS18047).</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -326,6 +331,11 @@ error: Error validating model "Post": At most one field must be marked as the id
 <a class="link-card" href="https://www.postgresql.org/docs/current/datatype-numeric.html" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL — kiểu số</span><span class="lc-sub">postgresql.org · Nguồn gốc về NUMERIC so với DOUBLE PRECISION, và vì sao câu trả lời cho tiền không phải chuyện sở thích</span></span></a>
 <a class="link-card" href="/courses/postgresql/learn${REF}"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — PostgreSQL, chương kiểu dữ liệu</span><span class="lc-sub">Cũng những kiểu đó nhìn từ phía cơ sở dữ liệu, kèm kích thước lưu trữ và các toán tử mỗi kiểu hỗ trợ</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/prisma-orm${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Prisma ORM"</span><span class="lc-sub">Chọn kiểu vô hướng đúng cho mười hai cột thật, rồi biện minh từng lựa chọn dựa trên SQL nó sinh ra</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-13-4-types-from-prisma" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Các kiểu này, dùng ở biên — TypeScript 13.4: Kiểu từ Prisma</span><span class="lc-sub">Giống: một model trong schema sinh một kiểu TypeScript bạn dùng mà không viết. Khác: ở đó bạn thấy kiểu vô hướng của một trường trở thành một kiểu TS ra sao; chương TypeScript dùng các kiểu sinh ở rìa — truyền một <code>id</code> của server cho <code>create</code> là TS2353 và một <code>findUnique</code> có thể trượt là <code>T | null</code> (TS18047).</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },

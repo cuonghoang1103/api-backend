@@ -7,8 +7,12 @@
  * — cột trái là chữ của chương, dính khi cuộn; cột phải là các cảnh 3D cắt
  * nối nhau như phim (bộ máy ở `cinema.tsx`, token + stamp ở
  * `broadsheet.module.css`). Chương: ① lời mở + hồ sơ · ② số liệu đếm được ·
- * ③ năm sản phẩm, mỗi sản phẩm một cảnh · ④ năng lực · ⑤ cam kết + quy mô ·
+ * ③ sáu sản phẩm, mỗi sản phẩm một cảnh · ④ năng lực · ⑤ cam kết + quy mô ·
  * ⑥ lối sang Quy trình (chính) và Nhận dự án (phụ).
+ *
+ * 03/11/2026: trang riêng nhưng nối hai chiều với /about (thanh bước có lối về
+ * "Giới thiệu", lời mở có link sang trang cá nhân); CT Work mang huy hiệu App
+ * Store chính thức; thêm CuongMini Code.
  *
  * ⛔ Cùng luật với /about (đọc đầu `app/about/page.tsx`): mọi con số phải ĐẾM
  * ĐƯỢC từ đúng hai nguồn — `useAboutStats()` (DB) và `codebaseStats.json`
@@ -25,6 +29,7 @@ import { CinemaProvider, Scene } from './cinema';
 import { CAPABILITIES, PRINCIPLES, PRODUCTS, SIZE_NOTES, type Bi, type ChartNode, type Product } from './content';
 import s from './broadsheet.module.css';
 import ProductStage from './ProductStage';
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
 import { caseHref } from './caseSlugs';
 
 type Row = [string, number | null];
@@ -60,7 +65,13 @@ export default function StudioClient({ stageCount }: { stageCount: number }) {
     [L('Hình thức', 'Type'), L('Studio phần mềm độc lập', 'Independent software studio')],
     [L('Người phụ trách', 'Lead'), L('Cường — kỹ sư chính, chịu trách nhiệm toàn bộ dự án', 'Cường — lead engineer, accountable for the whole project')],
     [L('Quy mô', 'Size'), L('Một kỹ sư chính; mời thêm cộng sự theo vai khi dự án cần, ghi rõ trong đề xuất', 'One lead engineer; specialists join by role when a project needs them, named in the proposal')],
-    [L('Sản phẩm đang vận hành', 'Running in production'), 'cuongthai.com'],
+    [
+      L('Sản phẩm đang vận hành', 'Running in production'),
+      L(
+        'cuongthai.com · CT Work (web, máy tính, iOS trên App Store) · CuongMini Code · app CuongThai cho máy tính',
+        'cuongthai.com · CT Work (web, desktop, iOS on the App Store) · CuongMini Code · the CuongThai desktop app',
+      ),
+    ],
     [L('Tài liệu', 'Documents'), L('Tiếng Việt, kèm thuật ngữ tiếng Anh', 'Vietnamese, with English terminology')],
     [
       L('Liên hệ', 'Contact'),
@@ -98,6 +109,9 @@ export default function StudioClient({ stageCount }: { stageCount: number }) {
                     </Link>
                     <Link href="/about/nhan-du-an" className={s.link}>
                       {L('Gửi yêu cầu', 'Send a request')}
+                    </Link>
+                    <Link href="/about#me" className={s.link}>
+                      {L('Về Cường', 'About Cường')}
                     </Link>
                   </div>
                   <p className={s.body}>
@@ -166,7 +180,7 @@ export default function StudioClient({ stageCount }: { stageCount: number }) {
           >
             {PRODUCTS.map((pr, i) => (
               <Scene key={pr.id} label={pr.name} closing={i === PRODUCTS.length - 1}>
-                <ProductScene pr={pr} p={p} L={L} />
+                <ProductScene pr={pr} p={p} L={L} lang={lang} />
               </Scene>
             ))}
           </Chapter>
@@ -359,7 +373,7 @@ function Figures({ title, note, rows, f }: { title: string; note: string; rows: 
   );
 }
 
-function ProductScene({ pr, p, L }: { pr: Product; p: (b: Bi) => string; L: (vi: string, en: string) => string }) {
+function ProductScene({ pr, p, L, lang }: { pr: Product; p: (b: Bi) => string; L: (vi: string, en: string) => string; lang: 'vi' | 'en' }) {
   return (
     <>
       <header className={s.productHead}>
@@ -380,6 +394,11 @@ function ProductScene({ pr, p, L }: { pr: Product; p: (b: Bi) => string; L: (vi:
           </dd>
         </div>
       </dl>
+      {pr.appStore && (
+        <div className={s.store}>
+          <AppStoreBadge href={pr.appStore} lang={lang} appName={pr.name} height={44} />
+        </div>
+      )}
       {((pr.href && pr.linkLabel) || caseHref(pr.id)) && (
         <div className={s.actions}>
           {pr.href && pr.linkLabel && (

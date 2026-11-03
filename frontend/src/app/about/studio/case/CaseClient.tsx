@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useAboutStats, fmt } from '@/components/about/useAboutData';
 import { StudioShell, useStudioLang } from '@/components/studio/StudioUI';
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
 import type { Bi } from '../content';
 import type { ArchNode, CaseStudy, Metric, MetricGroup } from '../cases';
 import b from '../broadsheet.module.css';
@@ -120,6 +121,9 @@ export default function CaseClient({
                 </li>
               ))}
             </ul>
+          )}
+          {cs.appStore && (
+            <AppStoreBadge href={cs.appStore} lang={lang} appName={cs.name} height={44} />
           )}
         </header>
 

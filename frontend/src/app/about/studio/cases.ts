@@ -16,6 +16,7 @@
  * ⛔ Không đưa lên trang: địa chỉ IP, cổng SSH, tên máy, tên container, đường
  * dẫn trên máy chủ, tên secret/biến môi trường chứa khoá.
  */
+import { CTWORK_APP_STORE } from '@/lib/appLinks';
 import codebase from '@/data/codebaseStats.json';
 import type { Bi } from './content';
 
@@ -92,6 +93,8 @@ export interface CaseStudy {
   metrics: MetricGroup[];
   stack: { group: Bi; items: string[] }[];
   links: { href: string; label: Bi; note?: Bi }[];
+  /** Trang App Store (đã kiểm là công khai) — hiện huy hiệu chính thức của Apple. */
+  appStore?: string;
   /** Một câu nói thẳng giới hạn / trạng thái — hiện ngay dưới phần mở. */
   caveat?: Bi;
 }
@@ -496,7 +499,10 @@ const CTWORK: CaseStudy = {
   status: ['Đang dùng hằng ngày', 'In daily use'],
   period: ['Từ 23/09/2026 (commit đầu tiên của module)', 'Since 23 Sep 2026 (the module’s first commit)'],
   role: ['Một kỹ sư chính: thiết kế, lập trình, vận hành', 'One lead engineer: design, build, operations'],
-  platforms: ['Web · iOS · link chia sẻ công khai', 'Web · iOS · public share link'],
+  platforms: [
+    'Web · app máy tính riêng (macOS, Windows, Linux) · iPhone & iPad trên App Store · link chia sẻ công khai',
+    'Web · its own desktop app (macOS, Windows, Linux) · iPhone & iPad on the App Store · public share link',
+  ],
   context: [
     [
       'Quy trình làm dự án của studio có nhiều giai đoạn, mỗi giai đoạn có tài liệu và cổng chất lượng. Cần một nơi mà việc, cổng, rủi ro và hồ sơ gắn được vào nhau — và người ngoài (khách, giảng viên) xem được tiến độ mà không cần tài khoản.',
@@ -726,7 +732,11 @@ const CTWORK: CaseStudy = {
     { group: ['Tích hợp', 'Integrations'], items: ['GitHub', 'GitLab', 'iCalendar (.ics)', 'API token'] },
     { group: ['Kiểm thử', 'Testing'], items: ['node:test (tsx --test)', 'Kiểm thử trên cơ sở dữ liệu thật'] },
   ],
-  links: [{ href: '/work', label: ['Mở CT Work', 'Open CT Work'], note: ['Cần đăng nhập', 'Sign-in required'] }],
+  links: [
+    { href: '/work', label: ['Mở CT Work', 'Open CT Work'], note: ['Cần đăng nhập', 'Sign-in required'] },
+    { href: '/download/ct-work', label: ['App máy tính', 'Desktop app'], note: ['macOS · Windows · Linux', 'macOS · Windows · Linux'] },
+  ],
+  appStore: CTWORK_APP_STORE,
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

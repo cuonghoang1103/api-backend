@@ -9,7 +9,7 @@
  * Token màu ở `studio.module.css`. Không hook nào đứng sau return sớm.
  */
 import Link from 'next/link';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import Footer from '@/components/home/Footer';
 import s from './studio.module.css';
@@ -61,6 +61,17 @@ export function FlowSteps({ current }: { current: 1 | 2 | 3 }) {
       className="border-b border-[color:var(--s-line)] bg-[var(--s-paper)]"
     >
       <ol className="max-w-6xl mx-auto px-4 flex items-stretch gap-0 overflow-x-auto [scrollbar-width:none]">
+        {/* Lối về trang Giới thiệu chung (03/11/2026) — studio là trang riêng nhưng nối hai chiều với /about. */}
+        <li className="flex items-center shrink-0">
+          <Link
+            href="/about"
+            className="flex items-center gap-1.5 py-3.5 text-sm whitespace-nowrap text-[color:var(--s-muted)] hover:text-[color:var(--s-ink)]"
+          >
+            <ArrowLeft className="w-4 h-4" aria-hidden />
+            <span>{L('Giới thiệu', 'About')}</span>
+          </Link>
+          <span aria-hidden className="mx-3 sm:mx-5 h-4 w-px bg-[var(--s-line-strong)]" />
+        </li>
         {FLOW.map((f, i) => {
           const done = f.n < current;
           const on = f.n === current;

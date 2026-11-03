@@ -476,6 +476,12 @@
   color: var(--c-ink-2);
   overflow-wrap: anywhere;
 }
+/* Apple's App Store badge (CT Work). The badge keeps its own clear space. */
+.store {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
 /* Typographic diagram — rules, not boxes. Never a mock UI. */
 .chart {

@@ -6,6 +6,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-moti
 import { ArrowUpRight, Layers3, Monitor, Smartphone, Terminal } from 'lucide-react';
 import { PRODUCTS } from './content';
 import { caseHref } from './caseSlugs';
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
 import s from './showroom.module.css';
 
 /** Architectural exhibit, not a fabricated screenshot of a shipped interface. */
@@ -45,6 +46,7 @@ export default function ProductStage({ lang }: { lang: 'vi' | 'en' }) {
           {p.href && <Link href={p.href}>{L('Khám phá sản phẩm', 'Explore product')}<ArrowUpRight size={16} aria-hidden="true" /></Link>}
           {caseHref(p.id) && <Link href={caseHref(p.id)!}>{L('Xem case study', 'Read the case study')}<ArrowUpRight size={16} aria-hidden="true" /></Link>}
         </div>
+        {p.appStore && <AppStoreBadge href={p.appStore} lang={lang} appName={p.name} height={40} />}
       </div>
     </div>
   );

@@ -6,6 +6,8 @@
  * không lời khen. Sơ đồ của từng sản phẩm (`chart`) chỉ dựng lại những gì
  * phần mô tả `what` đã nói — không thêm tính năng, không thêm con số.
  */
+import { CTWORK_APP_STORE } from '@/lib/appLinks';
+
 export type Bi = readonly [string, string];
 
 /** Một nút trong sơ đồ sản phẩm. `note` là chú thích nhỏ dưới tên. */
@@ -36,10 +38,14 @@ export interface Product {
   status: Bi;
   href?: string;
   linkLabel?: Bi;
+  /** App Store page (verified public listing) — renders Apple's badge. CT Work only. */
+  appStore?: string;
   chart: ProductChart;
 }
 
-/** Sản phẩm THẬT, mô tả theo README / package.json của repo. */
+/** Sản phẩm THẬT, mô tả theo README / package.json của repo.
+ *  03/11/2026: CT Work có app iOS trên App Store + app desktop riêng; thêm CuongMini
+ *  (extension VS Code trên Marketplace/Open VSX, CLI). Link kiểm ở `lib/appLinks.ts`. */
 export const PRODUCTS: Product[] = [
   {
     id: 'site',
@@ -69,13 +75,14 @@ export const PRODUCTS: Product[] = [
     name: 'CT Work',
     kind: ['Quản lý dự án kiểu Jira', 'Jira-style project management'],
     what: [
-      'Board, backlog, sprint, báo cáo burndown/velocity, quản lý kiểm thử và trợ lý AI. Đây là công cụ chạy dự án khách hàng theo quy trình ở bước 3 — khách theo dõi tiến độ qua link chia sẻ.',
-      'Boards, backlog, sprints, burndown/velocity reports, test management and an AI assistant. It runs client projects through the process in step 3 — clients follow progress via a share link.',
+      'Board, backlog, sprint, báo cáo burndown/velocity, quản lý kiểm thử và trợ lý AI. Đây là công cụ chạy dự án khách hàng theo quy trình ở bước 3 — khách theo dõi tiến độ qua link chia sẻ. Có trên web, app máy tính riêng (macOS, Windows, Linux) và app iPhone/iPad trên App Store.',
+      'Boards, backlog, sprints, burndown/velocity reports, test management and an AI assistant. It runs client projects through the process in step 3 — clients follow progress via a share link. On the web, as its own desktop app (macOS, Windows, Linux) and as an iPhone/iPad app on the App Store.',
     ],
-    stack: ['Next.js', 'Express', 'PostgreSQL', 'WebSocket'],
-    status: ['Đang dùng hằng ngày', 'In daily use'],
+    stack: ['Next.js', 'Express', 'PostgreSQL', 'WebSocket', 'Electron', 'SwiftUI'],
+    status: ['Đang dùng hằng ngày · app iOS lên App Store 11/2026', 'In daily use · iOS app on the App Store since Nov 2026'],
     href: '/work',
     linkLabel: ['Mở CT Work', 'Open CT Work'],
+    appStore: CTWORK_APP_STORE,
     chart: {
       kind: 'chain',
       from: [
@@ -86,6 +93,29 @@ export const PRODUCTS: Product[] = [
       ],
       to: [{ label: ['Link chia sẻ', 'Share link'], note: ['Khách theo dõi tiến độ', 'Clients follow progress'] }],
       caption: ['Đường đi của một việc, từ backlog tới tay khách.', 'How a task travels, from backlog to the client.'],
+    },
+  },
+  {
+    id: 'cuongmini',
+    name: 'CuongMini Code',
+    kind: ['Trợ lý lập trình AI', 'AI coding assistant'],
+    what: [
+      'Trợ lý AI của trang chạy ngay trong VS Code, Cursor (extension trên VS Code Marketplace và Open VSX) và trong terminal (CuongMini CLI): đọc và sửa code, chạy lệnh, hỏi trước khi làm. Đăng nhập bằng tài khoản cuongthai.com, dùng chung bộ máy AI Code của app desktop.',
+      'The site’s AI assistant inside VS Code and Cursor (an extension on the VS Code Marketplace and Open VSX) and in the terminal (CuongMini CLI): it reads and edits code, runs commands and asks before it acts. Sign in with a cuongthai.com account; it shares the AI Code engine of the desktop app.',
+    ],
+    stack: ['TypeScript', 'VS Code API', 'Node.js', 'MCP'],
+    status: ['Phát hành công khai', 'Publicly released'],
+    href: '/ai-code',
+    linkLabel: ['Trang cài đặt', 'Install page'],
+    chart: {
+      kind: 'fan',
+      from: [
+        { label: ['VS Code · Cursor', 'VS Code · Cursor'], note: ['Extension', 'Extension'] },
+        { label: ['Terminal', 'Terminal'], note: ['CLI', 'CLI'] },
+        { label: ['App desktop', 'Desktop app'], note: ['AI Code', 'AI Code'] },
+      ],
+      to: [{ label: ['Một tài khoản', 'One account'], note: ['cuongthai.com · một bộ máy AI', 'cuongthai.com · one AI engine'] }],
+      caption: ['Ba lối vào, một tài khoản, một bộ máy AI.', 'Three ways in, one account, one AI engine.'],
     },
   },
   {
